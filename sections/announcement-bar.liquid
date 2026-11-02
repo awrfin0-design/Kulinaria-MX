@@ -1,0 +1,21 @@
+<div class="announcement" {{ section.shopify_attributes }}>
+  {{ section.settings.text }}
+  {%- if section.settings.show_countdown -%}
+    <span data-cutoff> · cierra en <strong data-cutoff-value>…</strong></span>
+  {%- endif -%}
+  {%- if section.settings.link != blank and section.settings.link_label != blank -%}
+    · <a href="{{ section.settings.link }}">{{ section.settings.link_label }}</a>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Barra de anuncio",
+  "settings": [
+    { "type": "text", "id": "text", "label": "Texto", "default": "Cierre de pedidos: sábados a las 10:00 AM." },
+    { "type": "checkbox", "id": "show_countdown", "label": "Mostrar cuenta regresiva", "default": true },
+    { "type": "text", "id": "link_label", "label": "Texto del enlace", "default": "Ver el menú" },
+    { "type": "url", "id": "link", "label": "Enlace" }
+  ]
+}
+{% endschema %}

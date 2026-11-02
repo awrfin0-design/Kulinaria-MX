@@ -1,0 +1,61 @@
+{%- liquid
+  assign base = settings.price_selecto
+  assign trial_extra = base | times: settings.trial_markup | divided_by: 100.0
+  assign trial_price = base | plus: trial_extra | round
+  assign block_features = section.settings.block_features | newline_to_br | split: '<br />'
+  assign trial_features = section.settings.trial_features | newline_to_br | split: '<br />'
+-%}
+<section class="section section--raised" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="section__head section__head--center">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.heading }}</h2>
+      <div class="divider-gold"><i></i></div>
+      <p class="lede" style="margin-inline:auto">{{ section.settings.text }}</p>
+      <p><span class="countdown" data-cutoff>La semana de prueba se puede comprar hasta el sábado 10:00 AM · quedan <strong data-cutoff-value>…</strong></span></p>
+    </div>
+
+    <div class="grid grid--2" style="max-width:980px;margin-inline:auto">
+      <article class="card plan-card plan-card--featured">
+        <span class="plan-card__flag">Recomendado</span>
+        <span class="eyebrow">{{ section.settings.block_name }}</span>
+        <p class="plan-card__price gold-text">Desde ${{ base }}<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / platillo</small></p>
+        <p class="text-muted">{{ section.settings.block_desc }}</p>
+        <ul class="plan-list">{%- for f in block_features -%}{%- if f != blank -%}<li>{{ f }}</li>{%- endif -%}{%- endfor -%}</ul>
+        <a class="btn btn--gold btn--block" style="margin-top:auto" href="{{ section.settings.block_product.url | default: settings.plans_url }}">{{ section.settings.block_cta }}</a>
+      </article>
+
+      <article class="card plan-card">
+        <span class="eyebrow">{{ section.settings.trial_name }}</span>
+        <p class="plan-card__price">${{ trial_price }}<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / platillo</small></p>
+        <p class="text-muted">{{ section.settings.trial_desc }} <strong style="color:var(--gold-300)">{{ settings.trial_markup }}% más cara</strong> que el precio prorrateado del bloque.</p>
+        <ul class="plan-list">{%- for f in trial_features -%}{%- if f != blank -%}<li>{{ f }}</li>{%- endif -%}{%- endfor -%}</ul>
+        <a class="btn btn--outline btn--block" style="margin-top:auto" href="{{ section.settings.trial_product.url | default: settings.plans_url }}">{{ section.settings.trial_cta }}</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Comparador de planes",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Planes" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Elige cómo quieres empezar" },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "La suscripción se contrata en bloques de 4 semanas. Si prefieres probar, puedes comprar una sola semana." },
+    { "type": "header", "content": "Bloque de 4 semanas" },
+    { "type": "text", "id": "block_name", "label": "Nombre", "default": "Bloque de 4 semanas" },
+    { "type": "textarea", "id": "block_desc", "label": "Descripción", "default": "Suscripción renovable con entrega semanal. Es la opción con mejor precio." },
+    { "type": "textarea", "id": "block_features", "label": "Beneficios (uno por línea)", "default": "Precio prorrateado más bajo\nSelección automática si no eliges antes del sábado\nPausas flexibles con saldo a favor\nCódigo de referencia propio y monedero" },
+    { "type": "product", "id": "block_product", "label": "Producto de suscripción (con planes de venta)" },
+    { "type": "text", "id": "block_cta", "label": "Botón", "default": "Elegir bloque de 4 semanas" },
+    { "type": "header", "content": "Semana de prueba" },
+    { "type": "text", "id": "trial_name", "label": "Nombre", "default": "Semana de prueba" },
+    { "type": "textarea", "id": "trial_desc", "label": "Descripción", "default": "Una sola semana para conocer el servicio." },
+    { "type": "textarea", "id": "trial_features", "label": "Beneficios (uno por línea)", "default": "Sin compromiso de renovación\nCompra hasta el sábado 10:00 AM\nPago digital, sin efectivo" },
+    { "type": "product", "id": "trial_product", "label": "Producto de la semana de prueba" },
+    { "type": "text", "id": "trial_cta", "label": "Botón", "default": "Probar una semana" }
+  ],
+  "presets": [{ "name": "Comparador de planes" }]
+}
+{% endschema %}

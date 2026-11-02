@@ -1,0 +1,104 @@
+{%- liquid
+  assign mf = product.metafields.kulinaria
+  assign tier = mf.tier.value | default: 'selecto'
+  assign allergens = mf.allergens.value | join: '|'
+  assign ingredients = mf.ingredients.value | join: '|'
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+<section class="section" {{ section.shopify_attributes }}>
+  <div class="container product" data-dish-detail data-allergens="{{ allergens | escape }}" data-ingredients="{{ ingredients | escape }}">
+
+    {%- comment -%} One single top-down plated photo per dish. {%- endcomment -%}
+    <div class="product__media surface-walnut">
+      {%- if product.featured_image -%}
+        {{ product.featured_image | image_url: width: 1100 | image_tag: loading: 'eager', alt: product.featured_image.alt | default: product.title }}
+      {%- else -%}
+        <span class="dish__ph surface-slate" style="font-size:6rem" aria-hidden="true">K</span>
+      {%- endif -%}
+    </div>
+
+    <div class="product__info">
+      <div>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:var(--space-md)">
+          {% render 'tier-badge', tier: tier %}
+          {%- if mf.category.value != blank -%}<span class="eyebrow" style="margin:0">{{ mf.category.value | replace: '-', ' ' }}</span>{%- endif -%}
+        </div>
+        <h1 style="font-size:clamp(2rem,3.4vw,3rem)">{{ product.title }}</h1>
+        <p class="tagline" style="font-size:2rem;margin:0" data-price>{{ current_variant.price | money_without_trailing_zeros }}</p>
+      </div>
+
+      <div class="alert" data-allergen-alert hidden role="alert"></div>
+
+      {%- if product.description != blank -%}<div class="richtext lede" style="color:var(--cream-200)">{{ product.description }}</div>{%- endif -%}
+
+      {%- if mf.calories.value or mf.carbs.value -%}
+        <div class="spec-list">
+          {%- if mf.calories.value -%}<div class="spec"><b>{{ mf.calories.value }}</b><span>Calorías (kcal)</span></div>{%- endif -%}
+          {%- if mf.carbs.value -%}<div class="spec"><b>{{ mf.carbs.value }} g</b><span>Carbohidratos</span></div>{%- endif -%}
+        </div>
+        <p class="legal-note">{{ settings.protein_note }}</p>
+      {%- endif -%}
+
+      {%- if mf.ingredients.value.size > 0 -%}
+        <div>
+          <h3>Ingredientes</h3>
+          <p class="text-muted">Declaración explícita de cada ingrediente para la prevención de alergias.</p>
+          <div class="chips">{%- for i in mf.ingredients.value -%}<span class="chip" style="cursor:default">{{ i }}</span>{%- endfor -%}</div>
+        </div>
+      {%- endif -%}
+
+      {%- if mf.allergens.value.size > 0 -%}
+        <div>
+          <h3>Contiene</h3>
+          <div class="chips">{%- for a in mf.allergens.value -%}<span class="tier-badge tier-badge--exclusivo">{{ a }}</span>{%- endfor -%}</div>
+        </div>
+      {%- endif -%}
+
+      {%- form 'product', product, id: 'product-form', class: 'product-form' -%}
+        {%- if product.variants.size > 1 -%}
+          <div class="field"><label for="variant">Opción</label>
+            <select class="select" id="variant" name="id">
+              {%- for v in product.variants -%}<option value="{{ v.id }}" {% if v == current_variant %}selected{% endif %} {% unless v.available %}disabled{% endunless %}>{{ v.title }} · {{ v.price | money_without_trailing_zeros }}</option>{%- endfor -%}
+            </select></div>
+        {%- else -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+        {%- endif -%}
+
+        {% render 'selling-plan-picker', product: product %}
+
+        <div class="btn-row" style="align-items:center">
+          <input class="input qty" type="number" name="quantity" value="1" min="1" aria-label="Cantidad">
+          <button class="btn btn--gold" type="submit" data-add {% unless current_variant.available %}disabled{% endunless %}>
+            {%- if current_variant.available -%}{{ 'products.add_to_selection' | t }}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
+          </button>
+        </div>
+      {%- endform -%}
+
+      <p class="text-muted" style="font-size:.85rem">Confirma tu selección antes del sábado 10:00 AM · quedan <strong data-cutoff style="color:var(--gold-300)"><span data-cutoff-value>…</span></strong></p>
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "image": {{ product.featured_image | image_url: width: 1100 | prepend: 'https:' | json }},
+  "description": {{ product.description | strip_html | json }},
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "price": {{ current_variant.price | divided_by: 100.0 | json }},
+    "availability": "{% if current_variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+    "url": {{ canonical_url | json }}
+  }
+}
+</script>
+
+{% schema %}
+{
+  "name": "Ficha de platillo",
+  "settings": []
+}
+{% endschema %}

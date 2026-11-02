@@ -1,0 +1,68 @@
+{%- liquid
+  assign kind = section.settings.kind
+-%}
+<section class="section" {% if kind == 'embajador' %}id="alta"{% elsif kind == 'carta' %}id="cotizacion"{% endif %} {{ section.shopify_attributes }}>
+  <div class="container" style="max-width:860px">
+    <div class="section__head">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.heading }}</h2>
+      <div class="divider-gold"><i></i></div>
+      {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+
+    {%- form 'contact', id: 'kulinaria-contact' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="alert alert--ok" role="status">{{ section.settings.success }}</p>
+      {%- endif -%}
+      {%- if form.errors -%}
+        <div class="alert alert--warn" role="alert">{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+
+      <input type="hidden" name="contact[Solicitud]" value="{{ kind }}">
+      <div class="form-grid">
+        <div class="field"><label for="cf-name">Nombre completo</label><input class="input" id="cf-name" name="contact[name]" required autocomplete="name"></div>
+        <div class="field"><label for="cf-email">Correo</label><input class="input" id="cf-email" type="email" name="contact[email]" required autocomplete="email"></div>
+        <div class="field"><label for="cf-phone">Teléfono / WhatsApp</label><input class="input" id="cf-phone" type="tel" name="contact[phone]" required autocomplete="tel"></div>
+
+        {%- if kind == 'carta' -%}
+          <div class="field"><label for="cf-type">Tipo de experiencia</label>
+            <select class="select" id="cf-type" name="contact[Tipo de experiencia]">
+              <option>Chef privado a domicilio</option><option>Cena romántica de sábado</option><option>Evento especial</option>
+            </select></div>
+          <div class="field"><label for="cf-date">Fecha deseada</label><input class="input" id="cf-date" type="date" name="contact[Fecha]"></div>
+          <div class="field"><label for="cf-guests">Número de invitados</label><input class="input" id="cf-guests" type="number" min="1" name="contact[Invitados]"></div>
+        {%- elsif kind == 'embajador' -%}
+          <div class="field"><label for="cf-role">Soy</label>
+            <select class="select" id="cf-role" name="contact[Perfil]">
+              <option>Entrenador personal</option><option>Dueño de gimnasio</option><option>Cliente que quiere recomendar</option>
+            </select></div>
+          <div class="field"><label for="cf-org">Gimnasio / marca personal</label><input class="input" id="cf-org" name="contact[Organización]"></div>
+          <div class="field"><label for="cf-ig">Instagram</label><input class="input" id="cf-ig" name="contact[Instagram]" placeholder="@usuario"></div>
+          <div class="field"><label for="cf-code">Código de referencia deseado</label><input class="input" id="cf-code" name="contact[Código deseado]" placeholder="JUANFIT" style="text-transform:uppercase"></div>
+        {%- endif -%}
+      </div>
+
+      <div class="field"><label for="cf-body">Cuéntanos más</label><textarea class="textarea" id="cf-body" name="contact[body]" required></textarea></div>
+      {%- if kind == 'carta' -%}
+        <p class="legal-note">Esta sección no tiene precios publicados ni carrito: cada experiencia se cotiza de forma privada.</p>
+      {%- endif -%}
+      <button class="btn btn--gold" type="submit">{{ section.settings.button_label }}</button>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Formulario de contacto",
+  "settings": [
+    { "type": "select", "id": "kind", "label": "Tipo de formulario", "default": "general", "options": [
+      { "value": "general", "label": "General" }, { "value": "carta", "label": "Cotización Carta Kulinaria" }, { "value": "embajador", "label": "Alta de embajador" } ] },
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Contacto" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Escríbenos" },
+    { "type": "textarea", "id": "text", "label": "Texto" },
+    { "type": "text", "id": "button_label", "label": "Botón", "default": "Enviar" },
+    { "type": "text", "id": "success", "label": "Mensaje de éxito", "default": "Gracias. Te contactaremos muy pronto." }
+  ],
+  "presets": [{ "name": "Formulario de contacto" }]
+}
+{% endschema %}

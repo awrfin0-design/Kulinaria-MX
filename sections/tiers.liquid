@@ -1,0 +1,65 @@
+<section class="section" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="section__head section__head--center">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.heading }}</h2>
+      <div class="divider-gold"><i></i></div>
+      {%- if section.settings.text != blank -%}<p class="lede" style="margin-inline:auto">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+
+    <div class="grid grid--4">
+      {%- for block in section.blocks -%}
+        {%- case block.settings.tier -%}
+          {%- when 'exclusivo' -%}{%- assign price = settings.price_exclusivo -%}
+          {%- when 'signature' -%}{%- assign price = settings.price_signature -%}
+          {%- when 'reserve' -%}{%- assign price = settings.price_reserve -%}
+          {%- else -%}{%- assign price = settings.price_selecto -%}
+        {%- endcase -%}
+        <article class="card tier-card{% if block.settings.tier == 'reserve' %} tier-card--reserve{% endif %}" {{ block.shopify_attributes }}>
+          {% render 'tier-badge', tier: block.settings.tier %}
+          <p class="tier-card__price gold-text">${{ price }}<small> MXN</small></p>
+          <p class="text-muted" style="margin:0">por platillo</p>
+          <div class="divider-gold" style="margin:var(--space-md) auto"><i></i></div>
+          <p class="text-muted">{{ block.settings.text }}</p>
+        </article>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.note != blank -%}<p class="text-muted" style="text-align:center;margin-top:var(--space-lg)">{{ section.settings.note }}</p>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Niveles del menú",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Niveles" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Cuatro niveles, un mismo estándar" },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Cada nivel suma $60 MXN fijos sobre el anterior. El precio incluye el empaque óptimo y la preparación del chef." },
+    { "type": "text", "id": "note", "label": "Nota al pie", "default": "Los precios se muestran por platillo. Se editan en Personalizar tema, Niveles y precios." }
+  ],
+  "blocks": [
+    {
+      "type": "tier",
+      "name": "Nivel",
+      "settings": [
+        { "type": "select", "id": "tier", "label": "Nivel", "default": "selecto", "options": [
+          { "value": "selecto", "label": "Selecto" }, { "value": "exclusivo", "label": "Exclusivo ($)" },
+          { "value": "signature", "label": "Signature ($$)" }, { "value": "reserve", "label": "Reserve ($$$)" } ] },
+        { "type": "textarea", "id": "text", "label": "Descripción", "default": "Menú base diario y de alta rotación." }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Niveles del menú",
+      "blocks": [
+        { "type": "tier", "settings": { "tier": "selecto", "text": "Nuestro menú base diario: cocina saludable, balanceada y dietas adaptables con pollo, cerdo o res magra." } },
+        { "type": "tier", "settings": { "tier": "exclusivo", "text": "Cocciones más lentas y elaboraciones sofisticadas: costras de frutos secos y reducciones artesanales." } },
+        { "type": "tier", "settings": { "tier": "signature", "text": "Recetas con sello de autor: cortes premium e ingredientes de temporada." } },
+        { "type": "tier", "settings": { "tier": "reserve", "text": "La máxima gama: cortes Prime y mariscos selectos, acondicionados para recalentar." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

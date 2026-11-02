@@ -1,0 +1,16 @@
+<section class="section surface-walnut" style="min-height:60vh;display:grid;place-items:center" {{ section.shopify_attributes }}>
+  <div class="container" style="text-align:center">
+    <p class="eyebrow">Error 404</p>
+    <h1>Esta página se quemó en la parrilla</h1>
+    <div class="divider-gold" style="margin-inline:auto"><i></i></div>
+    <p class="lede" style="margin-inline:auto">No encontramos lo que buscas. Vuelve al menú de la semana o elige tu plan.</p>
+    <div class="btn-row" style="justify-content:center">
+      <a class="btn btn--gold" href="/collections/menu-semanal">Ver el menú</a>
+      <a class="btn btn--outline" href="{{ routes.root_url }}">Ir al inicio</a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "404", "settings": [] }
+{% endschema %}

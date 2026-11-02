@@ -1,0 +1,48 @@
+<section class="section--tight section" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="section__head">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.heading }}</h2>
+    </div>
+    <div class="chips">
+      {%- for block in section.blocks -%}
+        <a class="chip" href="{{ section.settings.target | default: '/collections/menu-semanal' }}?dieta={{ block.settings.slug }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Enfoque nutricional",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Enfoque nutricional" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Filtra el menú según tu estilo de vida" },
+    { "type": "url", "id": "target", "label": "Página del menú", "default": "/collections/menu-semanal" }
+  ],
+  "blocks": [
+    {
+      "type": "chip",
+      "name": "Etiqueta",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Texto", "default": "Keto" },
+        { "type": "text", "id": "slug", "label": "Código (metacampo diets)", "default": "keto" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Enfoque nutricional",
+      "blocks": [
+        { "type": "chip", "settings": { "label": "Keto", "slug": "keto" } },
+        { "type": "chip", "settings": { "label": "Libre de gluten", "slug": "sin-gluten" } },
+        { "type": "chip", "settings": { "label": "Vegetariano", "slug": "vegetariano" } },
+        { "type": "chip", "settings": { "label": "Basado en plantas / Vegano", "slug": "vegano" } },
+        { "type": "chip", "settings": { "label": "Bajas calorías", "slug": "bajo-calorias" } },
+        { "type": "chip", "settings": { "label": "Bajos carbohidratos", "slug": "bajo-carbos" } },
+        { "type": "chip", "settings": { "label": "Alta proteína / Rendimiento", "slug": "alto-proteina" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

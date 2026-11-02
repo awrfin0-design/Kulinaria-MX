@@ -1,0 +1,39 @@
+{
+  "sections": {
+    "plans": { "type": "plans-compare", "settings": {} },
+    "tiers": {
+      "type": "tiers",
+      "settings": { "eyebrow": "Niveles", "heading": "Cuatro niveles, un mismo estándar", "text": "Cada nivel suma $60 MXN fijos sobre el anterior." },
+      "blocks": {
+        "t1": { "type": "tier", "settings": { "tier": "selecto", "text": "Menú base diario y de alta rotación." } },
+        "t2": { "type": "tier", "settings": { "tier": "exclusivo", "text": "Cocciones lentas y elaboraciones sofisticadas." } },
+        "t3": { "type": "tier", "settings": { "tier": "signature", "text": "Recetas de autor con cortes premium." } },
+        "t4": { "type": "tier", "settings": { "tier": "reserve", "text": "Prime y mariscos selectos." } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4"]
+    },
+    "calendar": {
+      "type": "feature-grid",
+      "settings": { "eyebrow": "Calendario del ciclo", "heading": "Así corre tu semana", "columns": "4", "background": "raised", "numbered": true },
+      "blocks": {
+        "k1": { "type": "item", "settings": { "title": "Sábado 10:00 AM", "text": "<p>Cierre de pedidos. Si no elegiste, a las 10:01 AM se arma tu pedido automático.</p>" } },
+        "k2": { "type": "item", "settings": { "title": "Lunes a miércoles", "text": "<p>Entregas de la primera mitad de la semana. Pausa hasta el viernes 7:00 PM.</p>" } },
+        "k3": { "type": "item", "settings": { "title": "Martes 10:00 AM", "text": "<p>Último momento para pausar las entregas de jueves y viernes.</p>" } },
+        "k4": { "type": "item", "settings": { "title": "Jueves y viernes", "text": "<p>Entregas de la segunda mitad. Viernes 7:00 PM es el corte de renovación.</p>" } }
+      },
+      "block_order": ["k1", "k2", "k3", "k4"]
+    },
+    "faq": {
+      "type": "faq",
+      "settings": { "eyebrow": "Políticas clave", "heading": "Lo que debes saber antes de suscribirte", "background": "base" },
+      "blocks": {
+        "q1": { "type": "item", "settings": { "question": "Pago digital, cero efectivo", "answer": "<p>Toda suscripción o renovación se cobra en la página web al hacer el pedido. Los repartidores no llevan efectivo ni cambio.</p>" } },
+        "q2": { "type": "item", "settings": { "question": "Sin reembolso tras liquidar", "answer": "<p>Los insumos se compran en volumen, por lo que no hay cancelación del contrato vigente ni devolución de dinero. Si pausas a tiempo, las comidas no preparadas se guardan como saldo a favor.</p>" } },
+        "q3": { "type": "item", "settings": { "question": "Caducidad por inactividad", "answer": "<p>Tras una pausa tienes 30 días naturales para reanudar. Pasado ese plazo el contrato se cancela y se pierde el saldo acumulado.</p>" } }
+      },
+      "block_order": ["q1", "q2", "q3"]
+    },
+    "cta": { "type": "cta-banner", "settings": {} }
+  },
+  "order": ["plans", "tiers", "calendar", "faq", "cta"]
+}

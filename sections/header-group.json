@@ -1,0 +1,22 @@
+{
+  "name": "Encabezado",
+  "type": "header",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "settings": {
+        "text": "Cierre de pedidos: sábados a las 10:00 AM.",
+        "show_countdown": true,
+        "link_label": "Ver el menú",
+        "link": "/collections/menu-semanal"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu"
+      }
+    }
+  },
+  "order": ["announcement", "header"]
+}

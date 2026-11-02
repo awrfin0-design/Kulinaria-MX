@@ -1,0 +1,67 @@
+{%- liquid
+  assign allergy_list = 'Gluten,Lácteos,Frutos secos,Mariscos' | split: ','
+  assign allergy_more = 'Soya,Huevo,Ajonjolí,Pescado,Cacahuate,Nuez,Almendra,Mostaza,Apio,Sulfitos,Maíz,Fresa,Aguacate' | split: ','
+  assign suggest_list = 'Cebolla,Cilantro,Carne de puerco,Pasas,Jitomate,Champiñones' | split: ','
+  assign diet_list = 'Keto,Libre de gluten,Vegetariano,Vegano' | split: ','
+-%}
+<section class="section" {{ section.shopify_attributes }}>
+  <div class="container" style="max-width:860px">
+    <div class="section__head">
+      <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+      <h2>{{ section.settings.heading }}</h2>
+      <div class="divider-gold"><i></i></div>
+      <p class="lede">{{ section.settings.text }}</p>
+    </div>
+
+    <form data-profile-form class="panel panel--gold" novalidate>
+      <h3>Bloque 1 · Alergias y restricciones médicas <span class="tier-badge tier-badge--exclusivo" style="vertical-align:middle;margin-left:8px">Crítico</span></h3>
+      <p class="text-muted">Los platillos que contengan estos ingredientes (o trazas) se bloquean por completo en tu menú.</p>
+      <div class="check-grid">
+        {%- for a in allergy_list -%}
+          <label class="check"><input type="checkbox" name="allergy" value="{{ a }}"> <span>{{ a }}</span></label>
+        {%- endfor -%}
+      </div>
+      <div class="field"><label for="allergy-other">Otras alergias</label>
+        <input class="input" id="allergy-other" name="allergy_other" list="allergy-list" placeholder="Separa con comas: soya, huevo, ajonjolí">
+        <datalist id="allergy-list">
+          {%- for a in allergy_more -%}<option value="{{ a }}"></option>{%- endfor -%}
+        </datalist></div>
+
+      <hr style="border:0;border-top:1px solid var(--border);margin:var(--space-xl) 0">
+
+      <h3>Bloque 2 · Ingredientes que no me gustan</h3>
+      <p class="text-muted">Escribe un ingrediente y presiona Enter. Filtramos el menú o sustituimos el ingrediente cuando la cocina lo permite.</p>
+      <div class="tag-input" data-tags><input type="text" data-tag-input placeholder="Ej. jitomate" aria-label="Agregar ingrediente"></div>
+      <div class="chips" style="margin-top:12px">
+        {%- for s in suggest_list -%}
+          <button class="chip" type="button" data-suggest="{{ s }}">+ {{ s }}</button>
+        {%- endfor -%}
+      </div>
+
+      <hr style="border:0;border-top:1px solid var(--border);margin:var(--space-xl) 0">
+
+      <h3>Preferencias dietéticas</h3>
+      <div class="check-grid">
+        {%- for d in diet_list -%}
+          <label class="check"><input type="checkbox" name="diet" value="{{ d }}"> <span>{{ d }}</span></label>
+        {%- endfor -%}
+      </div>
+
+      <p class="legal-note">{{ settings.allergy_disclaimer }}</p>
+      <button class="btn btn--gold" type="submit">Guardar mi perfil</button>
+      <p class="alert alert--ok form-msg" data-profile-msg hidden role="status">Perfil guardado. El menú ya se filtra con tus datos y tus siguientes pedidos lo incluirán.</p>
+    </form>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Perfil de alergias",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Tu perfil" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Cuéntanos qué no puedes (o no quieres) comer" },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Este cuestionario es obligatorio al inscribirte. Evita errores en la cocina y mejora tu experiencia." }
+  ],
+  "presets": [{ "name": "Perfil de alergias" }]
+}
+{% endschema %}

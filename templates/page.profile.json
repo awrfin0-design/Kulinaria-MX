@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "profile": { "type": "profile-form", "settings": {} }
+  },
+  "order": ["profile"]
+}

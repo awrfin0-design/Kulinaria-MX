@@ -1,0 +1,66 @@
+<footer class="site-footer" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        {% render 'logo' %}
+        <p class="text-muted" style="margin-top:var(--space-md);max-width:34ch">Servicio premium de comida saludable a domicilio, adaptada al estilo de vida de cada cliente.</p>
+        {% render 'social-links' %}
+      </div>
+
+      <div>
+        <h4>Explorar</h4>
+        <ul>
+          {%- assign explore = linklists[section.settings.menu_explore] -%}
+          {%- if explore.links.size > 0 -%}
+            {%- for link in explore.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
+          {%- else -%}
+            <li><a href="/collections/menu-semanal">Menú semanal</a></li>
+            <li><a href="/pages/planes">Planes</a></li>
+            <li><a href="/pages/carta-kulinaria">Carta Kulinaria</a></li>
+            <li><a href="/collections/kulinaria-store">Kulinaria Store</a></li>
+            <li><a href="/pages/embajadores">Embajadores</a></li>
+          {%- endif -%}
+        </ul>
+      </div>
+
+      <div>
+        <h4>Ayuda</h4>
+        <ul>
+          {%- assign help = linklists[section.settings.menu_help] -%}
+          {%- if help.links.size > 0 -%}
+            {%- for link in help.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
+          {%- else -%}
+            <li><a href="/pages/nosotros">Nosotros</a></li>
+            <li><a href="/pages/filosofia">Filosofía</a></li>
+            <li><a href="/pages/ayuda">Ayuda y legales</a></li>
+            <li><a href="/pages/perfil">Mi perfil de alergias</a></li>
+          {%- endif -%}
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          {%- if settings.contact_phone != blank -%}<li><a href="tel:{{ settings.contact_phone | remove: ' ' }}">{{ settings.contact_phone }}</a></li>{%- endif -%}
+          {%- if settings.contact_email != blank -%}<li><a href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }}</a></li>{%- endif -%}
+          {%- if settings.whatsapp_number != blank -%}<li><a href="https://wa.me/{{ settings.whatsapp_number }}" rel="noopener">WhatsApp</a></li>{%- endif -%}
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}. Todos los derechos reservados.</span>
+      <span>Pago 100% digital · No se acepta efectivo</span>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Pie de página",
+  "settings": [
+    { "type": "link_list", "id": "menu_explore", "label": "Menú: Explorar", "default": "footer" },
+    { "type": "link_list", "id": "menu_help", "label": "Menú: Ayuda" }
+  ]
+}
+{% endschema %}

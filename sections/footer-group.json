@@ -1,0 +1,14 @@
+{
+  "name": "Pie de página",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "menu_explore": "footer",
+        "menu_help": "ayuda"
+      }
+    }
+  },
+  "order": ["footer"]
+}

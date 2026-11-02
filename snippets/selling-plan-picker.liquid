@@ -1,0 +1,33 @@
+{%- comment -%}
+  Subscription plan picker. Renders the selling plans configured by the subscription app
+  (Shopify Subscriptions / Recharge / Seal ...) so the cart line carries `selling_plan`.
+  Param: product
+{%- endcomment -%}
+{%- if product.selling_plan_groups.size > 0 -%}
+  <fieldset class="plan-picker">
+    <legend>Cómo quieres recibirlo</legend>
+    {%- unless product.requires_selling_plan -%}
+      <label>
+        <input type="radio" name="selling_plan" value="" checked>
+        <span><strong>Compra única</strong><br><small class="text-muted">Un solo pago, sin renovación.</small></span>
+      </label>
+    {%- endunless -%}
+    {%- for group in product.selling_plan_groups -%}
+      {%- for plan in group.selling_plans -%}
+        <label>
+          <input type="radio" name="selling_plan" value="{{ plan.id }}"
+            {%- if product.requires_selling_plan and forloop.first and forloop.parentloop.first %} checked{% endif %}>
+          <span>
+            <strong>{{ plan.name }}</strong>
+            {%- if plan.description != blank -%}<br><small class="text-muted">{{ plan.description }}</small>{%- endif -%}
+            {%- for adj in plan.price_adjustments -%}
+              {%- if adj.value_type == 'percentage' and adj.value != 0 -%}
+                <br><small class="text-accent" style="color:var(--gold-300)">{% if adj.value > 0 %}+{% endif %}{{ adj.value }}%</small>
+              {%- endif -%}
+            {%- endfor -%}
+          </span>
+        </label>
+      {%- endfor -%}
+    {%- endfor -%}
+  </fieldset>
+{%- endif -%}

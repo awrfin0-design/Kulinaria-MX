@@ -1,0 +1,103 @@
+<section class="section" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="section__head">
+      <span class="eyebrow">Mi selección</span>
+      <h1 style="font-size:clamp(2.2rem,4vw,3.4rem)">{{ 'cart.title' | t }}</h1>
+      <div class="divider-gold"><i></i></div>
+    </div>
+
+    {%- if cart.item_count == 0 -%}
+      <div class="panel" style="text-align:center">
+        <p class="lede" style="margin-inline:auto">{{ 'cart.empty' | t }}</p>
+        <div class="btn-row" style="justify-content:center">
+          <a class="btn btn--gold" href="/collections/menu-semanal">Ver el menú de la semana</a>
+          <a class="btn btn--outline" href="{{ settings.plans_url }}">{{ settings.cta_label }}</a>
+        </div>
+      </div>
+    {%- else -%}
+      <form action="{{ routes.cart_url }}" method="post" class="cart" data-cart-form>
+        <div>
+          {%- for item in cart.items -%}
+            <div class="cart-line">
+              <a href="{{ item.url }}">
+                {%- if item.image -%}{{ item.image | image_url: width: 192 | image_tag: loading: 'lazy', alt: item.product.title }}{%- else -%}<span class="dish__ph surface-slate" style="width:96px;font-size:2rem">K</span>{%- endif -%}
+              </a>
+              <div>
+                <h3 style="margin:0 0 4px"><a href="{{ item.url }}">{{ item.product.title }}</a></h3>
+                {%- unless item.product.has_only_default_variant -%}<p class="text-muted" style="margin:0">{{ item.variant.title }}</p>{%- endunless -%}
+                {%- if item.selling_plan_allocation -%}<p class="cart-line__plan" style="margin:0">{{ item.selling_plan_allocation.selling_plan.name }}</p>{%- endif -%}
+                {%- if item.properties._regalo_bienvenida -%}<p class="cart-line__plan" style="margin:0">Regalo de bienvenida</p>{%- endif -%}
+                <a class="btn btn--ghost" style="padding-left:0" href="{{ item.url_to_remove }}">Quitar</a>
+              </div>
+              <div style="text-align:right">
+                <input class="input qty" type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Cantidad de {{ item.product.title | escape }}">
+                <p class="dish__price" style="margin:8px 0 0">
+                  {%- if item.original_line_price != item.final_line_price -%}<s class="text-muted" style="font-size:.9rem">{{ item.original_line_price | money }}</s> {%- endif -%}
+                  {{ item.final_line_price | money }}
+                </p>
+              </div>
+            </div>
+          {%- endfor -%}
+          <button class="btn btn--outline" type="submit" name="update" style="margin-top:var(--space-lg)">Actualizar cantidades</button>
+        </div>
+
+        <aside class="summary">
+          <div class="panel">
+            <h3>Código de referencia</h3>
+            <p class="text-muted">Si un entrenador, amigo o gimnasio te recomendó, escribe su código. Un cliente solo puede quedar ligado a un código.</p>
+            <div class="field">
+              <label for="ref">Código</label>
+              <input class="input" id="ref" name="attributes[codigo_referencia]" value="{{ cart.attributes.codigo_referencia }}" placeholder="JUANFIT" data-referral autocomplete="off" style="text-transform:uppercase">
+            </div>
+            <p class="alert alert--ok" data-referral-msg hidden>Código guardado. Se valida al confirmar el pago de tu primer bloque.</p>
+
+            <div data-gift hidden style="margin-top:var(--space-lg)">
+              <h3>Tu regalo de bienvenida</h3>
+              <p class="text-muted">Elige uno sin costo con tu primer bloque de 4 semanas.</p>
+              {%- assign gift_col = settings.welcome_gift_collection -%}
+              <div class="gift-options">
+                {%- if gift_col != blank -%}
+                  {%- for product in gift_col.products -%}
+                    {%- for variant in product.variants -%}
+                      <label><input type="radio" name="gift" value="{{ variant.id }}" {% if forloop.parentloop.first and forloop.first %}checked{% endif %}>
+                        <span>{{ product.title }}{% unless product.has_only_default_variant %} · {{ variant.title }}{% endunless %} <s class="text-muted">{{ variant.price | money_without_trailing_zeros }}</s> <strong style="color:var(--gold-300)">$0</strong></span></label>
+                    {%- endfor -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  <p class="alert">Asigna la colección de regalos en Personalizar tema, Suscripción y contrato.</p>
+                {%- endif -%}
+              </div>
+              {%- if gift_col != blank -%}<button class="btn btn--outline btn--block" type="button" data-gift-add style="margin-top:var(--space-md)">Agregar regalo</button>{%- endif -%}
+            </div>
+          </div>
+
+          <div class="panel panel--gold">
+            {%- if cart.total_discount > 0 -%}
+              <p class="alert alert--ok">¡Te ahorraste {{ cart.total_discount | money }}{% if cart.attributes.codigo_referencia != blank %} gracias a tu código de referencia{% endif %}!</p>
+            {%- endif -%}
+            <div class="summary__row"><span class="text-muted">Subtotal</span><span>{{ cart.items_subtotal_price | money }}</span></div>
+            <div class="summary__row" style="margin-top:var(--space-md)"><strong>Total</strong><span class="summary__total gold-text">{{ cart.total_price | money }}</span></div>
+            <p class="text-muted" style="font-size:.85rem">Pago 100% digital. No se acepta efectivo.</p>
+
+            <label class="check" style="margin:var(--space-lg) 0">
+              <input type="checkbox" name="attributes[contrato_aceptado]" value="sí" data-contract {% if cart.attributes.contrato_aceptado == 'sí' %}checked{% endif %}>
+              <span>
+                {{ 'cart.contract_label' | t }}
+                {%- if settings.contract_page != blank %} <a href="{{ settings.contract_page.url }}" target="_blank" rel="noopener" style="color:var(--gold-300);text-decoration:underline">Leer contrato</a>{% endif -%}
+              </span>
+            </label>
+
+            <button class="btn btn--gold btn--block" type="submit" name="checkout" data-checkout disabled>{{ 'cart.checkout' | t }}</button>
+          </div>
+        </aside>
+      </form>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Carrito",
+  "settings": []
+}
+{% endschema %}

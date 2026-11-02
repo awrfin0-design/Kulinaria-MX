@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kulinaria MX — Vista previa del sitio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&family=Jost:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>/* ==========================================================================
+   Kulinaria MX theme — tokens mirror the Figma design system
+   (Gold / Ink / Walnut / Cream; Playfair Display · Cormorant Garamond · Jost)
+   ========================================================================== */
+:root {
+  --gold-100:#F6EBC3; --gold-200:#EDDB9B; --gold-300:#E2C36B; --gold-400:#D0A648; --gold-500:#BC8F2F; --gold-600:#97701F; --gold-700:#6B4F15;
+  --ink-950:#050505; --ink-900:#0B0B0C; --ink-800:#141415; --ink-700:#1E1E20; --ink-600:#2B2B2E; --ink-400:#5E5E64; --ink-200:#9A9AA0;
+  --walnut-900:#1A0F09; --walnut-800:#2A180D; --walnut-700:#3A2314; --walnut-600:#4E2F1B; --walnut-500:#64402A; --walnut-400:#82583A;
+  --cream-50:#FBF8F1; --cream-100:#F3EDE0; --cream-200:#E6DDC8; --cream-400:#BDB29A;
+  --ember-500:#C2461F;
+
+  --bg-base:var(--ink-900); --bg-raised:var(--ink-800); --bg-deep:var(--ink-950);
+  --text:var(--cream-50); --text-muted:var(--cream-400); --text-accent:var(--gold-300);
+  --border:var(--ink-600); --border-accent:var(--gold-500);
+
+  --gold-foil:linear-gradient(120deg,#8A6420 0%,#E9CF85 22%,#B58A35 45%,#F3E2A6 70%,#9A7222 100%);
+  --gold-soft:linear-gradient(120deg,#BC8F2F,#E2C36B 50%,#BC8F2F);
+
+  --font-display:"Playfair Display",Georgia,serif;
+  --font-accent:"Cormorant Garamond",Georgia,serif;
+  --font-body:"Jost","Helvetica Neue",Arial,sans-serif;
+
+  --space-xs:4px; --space-sm:8px; --space-md:16px; --space-lg:24px; --space-xl:40px; --space-2xl:64px; --space-3xl:104px;
+  --radius-sm:4px; --radius-md:8px; --radius-lg:16px;
+  --shadow-card:0 18px 36px -6px rgba(0,0,0,.45);
+  --shadow-plate:0 10px 24px rgba(0,0,0,.6);
+  --container:1240px;
+
+  /* textures: pure CSS / inline SVG, no raster images */
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='700' height='420'><filter id='w' x='0' y='0' width='100%25' height='100%25'><feTurbulence type='fractalNoise' baseFrequency='0.0035 0.28' numOctaves='4' seed='9'/><feColorMatrix values='0 0 0 0 0.04  0 0 0 0 0.015  0 0 0 0 0.005  2.4 0 0 0 -0.95'/></filter><rect width='100%25' height='100%25' filter='url(%23w)'/></svg>");
+  --speck:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='s'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23s)'/></svg>");
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg-base);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img,svg,video{max-width:100%;height:auto;display:block}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--gold-300)}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:500;line-height:1.15;margin:0 0 var(--space-md);letter-spacing:.005em}
+h1{font-size:clamp(2.4rem,5vw,4.4rem);font-weight:400}
+h2{font-size:clamp(1.9rem,3.4vw,2.9rem)}
+h3{font-size:1.35rem;font-weight:600}
+p{margin:0 0 var(--space-md)}
+ul{margin:0;padding:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold-300);outline-offset:3px}
+.skip-link{position:absolute;left:-9999px;top:0;background:var(--gold-400);color:#000;padding:var(--space-sm) var(--space-md);z-index:999}
+.skip-link:focus{left:var(--space-md);top:var(--space-md)}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.container{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:var(--space-lg)}
+.section{padding-block:var(--space-3xl)}
+.section--tight{padding-block:var(--space-2xl)}
+.section--raised{background:var(--bg-raised)}
+.section--deep{background:var(--bg-deep)}
+.section__head{max-width:760px;margin-bottom:var(--space-xl)}
+.section__head--center{margin-inline:auto;text-align:center}
+.eyebrow{font-family:var(--font-body);font-size:.75rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--text-accent);margin:0 0 var(--space-md);display:block}
+.lede{font-size:1.15rem;color:var(--text-muted);max-width:60ch}
+.tagline{font-family:var(--font-accent);font-style:italic;font-size:1.4rem;color:var(--gold-300)}
+.gold-text{background:var(--gold-foil);-webkit-background-clip:text;background-clip:text;color:transparent}
+.text-muted{color:var(--text-muted)}
+.divider-gold{display:flex;align-items:center;gap:12px;max-width:320px;margin:var(--space-lg) 0}
+.divider-gold::before,.divider-gold::after{content:"";height:1.5px;flex:1;background:linear-gradient(90deg,transparent,var(--gold-400))}
+.divider-gold::after{background:linear-gradient(270deg,transparent,var(--gold-400))}
+.divider-gold i{width:9px;height:9px;background:var(--gold-soft);transform:rotate(45deg)}
+.section__head--center .divider-gold{margin-inline:auto}
+
+/* ---------- textures ---------- */
+.surface-walnut{background-color:var(--walnut-800);background-image:var(--grain),
+  repeating-linear-gradient(180deg,rgba(255,226,188,.05) 0 2px,transparent 2px 7px),
+  linear-gradient(180deg,#4a2c19 0%,#2a180d 45%,#3a2314 100%);position:relative;isolation:isolate}
+.surface-walnut::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.62) 100%);z-index:-1;pointer-events:none}
+.surface-slate{background-color:var(--ink-900);background-image:var(--speck),radial-gradient(ellipse at 20% 0%,rgba(255,255,255,.07),transparent 60%),linear-gradient(135deg,#1e1e20,#0f0f10 55%,#070708)}
+.surface-foil{background:var(--gold-foil);color:var(--ink-950)}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 28px;border:1.5px solid transparent;border-radius:var(--radius-sm);
+  font-size:.78rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:filter .2s,background .2s,color .2s;text-align:center}
+.btn--gold{background:var(--gold-soft);color:var(--ink-950)}
+.btn--gold:hover{background:var(--gold-foil);color:var(--ink-950);filter:brightness(1.05)}
+.btn--outline{border-color:var(--gold-500);color:var(--gold-300);background:transparent}
+.btn--outline:hover{background:rgba(208,166,72,.14);color:var(--gold-200)}
+.btn--ghost{color:var(--gold-300);padding-inline:6px;border-radius:0;border-bottom-color:transparent}
+.btn--ghost:hover{border-bottom-color:var(--gold-300)}
+.btn[disabled],.btn[aria-disabled="true"]{opacity:.45;cursor:not-allowed;filter:grayscale(.4);pointer-events:none}
+.btn--block{width:100%}
+.btn-row{display:flex;flex-wrap:wrap;gap:var(--space-md);margin-top:var(--space-lg)}
+
+/* ---------- announcement + header ---------- */
+.announcement{background:var(--bg-deep);border-bottom:1px solid var(--border);font-size:.8rem;letter-spacing:.08em;text-align:center;padding:10px var(--space-md);color:var(--gold-300)}
+.announcement a{text-decoration:underline;text-underline-offset:3px}
+.site-header{position:sticky;top:0;z-index:50;background:rgba(5,5,5,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.site-header__inner{display:flex;align-items:center;justify-content:space-between;gap:var(--space-lg);min-height:84px}
+.site-nav{display:flex;gap:var(--space-xl);align-items:center}
+.site-nav a{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;padding:6px 0;border-bottom:1.5px solid transparent}
+.site-nav a:hover,.site-nav a[aria-current="page"]{color:var(--gold-300);border-bottom-color:var(--gold-400)}
+.header-actions{display:flex;align-items:center;gap:var(--space-md)}
+.icon-link{position:relative;display:inline-flex;padding:8px;color:var(--gold-300)}
+.icon-link svg{width:24px;height:24px}
+.cart-count{position:absolute;top:0;right:-2px;min-width:18px;height:18px;border-radius:9px;background:var(--gold-400);color:#000;font-size:.68rem;font-weight:600;display:grid;place-items:center;padding:0 4px}
+.nav-toggle{display:none;background:none;border:0;padding:8px;color:var(--gold-300);cursor:pointer}
+.nav-toggle svg{width:28px;height:28px}
+
+/* logo (typographic) */
+.logo{display:inline-flex;align-items:flex-end;line-height:1;color:var(--gold-300)}
+.logo__k{font-family:var(--font-display);font-weight:700;font-size:3.1rem;margin-right:-2px}
+.logo__word{display:flex;flex-direction:column;padding-bottom:6px}
+.logo__name{font-family:var(--font-display);font-size:1.7rem;letter-spacing:.01em}
+.logo__rule{height:1.5px;background:currentColor;margin:2px 0 3px;opacity:.9}
+.logo__tag{font-family:var(--font-accent);font-style:italic;font-size:.82rem;text-align:right;letter-spacing:.06em}
+.logo--gold .logo__k,.logo--gold .logo__name{background:var(--gold-foil);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo--gold .logo__tag{color:var(--gold-300)}
+.logo--lg .logo__k{font-size:7.5rem}.logo--lg .logo__name{font-size:4.2rem}.logo--lg .logo__tag{font-size:1.5rem}
+
+/* ---------- hero ---------- */
+.hero{padding-block:clamp(56px,9vw,120px);overflow:hidden}
+.hero__grid{display:grid;grid-template-columns:1.1fr .9fr;gap:var(--space-2xl);align-items:center}
+.hero__copy h1{margin-bottom:var(--space-lg)}
+.plate{position:relative;aspect-ratio:1;border-radius:50%;max-width:520px;margin-inline:auto;width:100%;display:grid;place-items:center;
+  box-shadow:var(--shadow-plate),inset 0 0 0 10px rgba(0,0,0,.35),inset 0 0 0 11px rgba(255,255,255,.06)}
+.plate img{border-radius:50%;width:78%;aspect-ratio:1;object-fit:cover}
+.plate--logo{padding:12%}
+.plate--logo .logo{transform:scale(1.4)}
+.panel{background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-xl)}
+.panel--gold{border-color:var(--border-accent)}
+.panel--slate{border-color:rgba(188,143,47,.5);box-shadow:var(--shadow-card)}
+
+/* ---------- grids / cards ---------- */
+.grid{display:grid;gap:var(--space-lg)}
+.grid--2{grid-template-columns:repeat(2,1fr)}.grid--3{grid-template-columns:repeat(3,1fr)}.grid--4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-xl);display:flex;flex-direction:column;gap:var(--space-sm);height:100%}
+.card h3{margin-bottom:var(--space-sm)}
+.card__num{font-family:var(--font-display);font-size:2.6rem;line-height:1;color:var(--gold-400)}
+.card .richtext p:last-child{margin-bottom:0}
+.richtext ul{padding-left:1.2em;margin:0 0 var(--space-md)}
+.richtext li{margin-bottom:6px}
+.richtext a{color:var(--gold-300);text-decoration:underline;text-underline-offset:3px}
+.card--link{transition:border-color .2s,transform .2s}
+.card--link:hover{border-color:var(--gold-500);transform:translateY(-3px)}
+.card--img{padding:0;overflow:hidden}
+.card--img img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.card--img .card__body{padding:var(--space-xl);display:flex;flex-direction:column;gap:var(--space-sm);flex:1}
+
+/* tiers */
+.tier-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1.5px solid var(--border);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
+.tier-badge--selecto{background:var(--bg-raised)}
+.tier-badge--exclusivo{background:var(--bg-raised);border-color:var(--gold-500);color:var(--gold-300)}
+.tier-badge--signature{background:var(--walnut-800);border-color:var(--gold-500);color:var(--gold-300)}
+.tier-badge--reserve{background:var(--gold-soft);border-color:transparent;color:var(--ink-950)}
+.tier-card{text-align:center;align-items:center}
+.tier-card__price{font-family:var(--font-display);font-size:3rem;line-height:1;margin:var(--space-md) 0 0}
+.tier-card__price small{font-size:1rem;color:var(--text-muted);font-family:var(--font-body)}
+.tier-card--reserve{background:var(--walnut-800);border-color:var(--gold-500)}
+
+/* chips / filters */
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{display:inline-flex;align-items:center;padding:9px 18px;border:1.5px solid var(--border);border-radius:999px;background:transparent;font-size:.8rem;letter-spacing:.08em;cursor:pointer;color:var(--text);transition:all .2s}
+.chip:hover{border-color:var(--gold-500);color:var(--gold-300)}
+.chip[aria-pressed="true"],.chip.is-active{background:var(--gold-soft);color:var(--ink-950);border-color:transparent}
+.filter-bar{display:grid;gap:var(--space-md);margin-bottom:var(--space-xl);padding:var(--space-lg);background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--radius-md)}
+.filter-bar__row{display:flex;flex-wrap:wrap;gap:var(--space-md);align-items:center}
+.filter-bar__label{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-accent);min-width:130px}
+
+/* dish card */
+.dish-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-lg)}
+.dish{position:relative;background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+.dish:hover{border-color:var(--gold-500);transform:translateY(-3px)}
+.dish__media{aspect-ratio:1;display:grid;place-items:center;overflow:hidden}
+.dish__media img{width:100%;height:100%;object-fit:cover}
+.dish__ph{width:62%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-family:var(--font-display);font-size:3.4rem;color:var(--gold-300);box-shadow:var(--shadow-plate),inset 0 0 0 6px rgba(255,255,255,.04)}
+.dish__body{padding:var(--space-lg);display:flex;flex-direction:column;gap:10px;flex:1}
+.dish__title{font-family:var(--font-display);font-size:1.15rem;line-height:1.25;margin:0}
+.dish__meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto}
+.dish__price{font-family:var(--font-display);font-size:1.3rem;color:var(--gold-300)}
+.dish__facts{font-size:.8rem;color:var(--text-muted)}
+.dish__blocked{position:absolute;inset:0;background:rgba(5,5,5,.86);display:none;align-items:center;justify-content:center;text-align:center;padding:var(--space-lg);font-size:.9rem;color:var(--cream-200);z-index:2}
+.dish__blocked strong{display:block;color:var(--ember-500);letter-spacing:.14em;text-transform:uppercase;font-size:.75rem;margin-bottom:6px}
+.dish.is-blocked .dish__blocked{display:flex}
+.dish.is-hidden{display:none}
+.compat{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.compat[data-low="true"]{color:var(--gold-300)}
+
+/* alerts */
+.alert{padding:var(--space-md) var(--space-lg);border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-raised);font-size:.95rem}
+.alert--warn{border-color:var(--ember-500);background:rgba(194,70,31,.1)}
+.alert--ok{border-color:var(--gold-500);background:rgba(208,166,72,.08)}
+.legal-note{font-size:.82rem;color:var(--text-muted);font-style:italic;border-left:2px solid var(--gold-600);padding-left:var(--space-md)}
+
+/* countdown */
+.countdown{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border:1px solid var(--border-accent);border-radius:999px;font-size:.85rem;letter-spacing:.06em}
+.countdown strong{font-family:var(--font-display);font-size:1.1rem;color:var(--gold-300);letter-spacing:0}
+
+/* plans */
+.plan-card{position:relative}
+.plan-card--featured{border-color:var(--gold-500);box-shadow:var(--shadow-card);background:linear-gradient(180deg,var(--walnut-800),var(--bg-raised) 60%)}
+.plan-card__flag{position:absolute;top:-13px;left:var(--space-xl);background:var(--gold-soft);color:#000;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+.plan-card__price{font-family:var(--font-display);font-size:2.6rem;line-height:1.05;margin:var(--space-sm) 0}
+.plan-card__price s{font-size:1.2rem;color:var(--text-muted);margin-left:8px}
+.plan-list{list-style:none;display:grid;gap:10px;margin:var(--space-md) 0 var(--space-lg)}
+.plan-list li{padding-left:28px;position:relative}
+.plan-list li::before{content:"";position:absolute;left:4px;top:.55em;width:8px;height:8px;background:var(--gold-soft);transform:rotate(45deg)}
+
+/* faq / accordion */
+.accordion{display:grid;gap:12px;max-width:900px}
+.accordion details{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-raised)}
+.accordion summary{cursor:pointer;list-style:none;padding:var(--space-lg);font-family:var(--font-display);font-size:1.1rem;display:flex;justify-content:space-between;gap:var(--space-md)}
+.accordion summary::-webkit-details-marker{display:none}
+.accordion summary::after{content:"+";color:var(--gold-300);font-size:1.5rem;line-height:1}
+.accordion details[open] summary::after{content:"–"}
+.accordion details[open]{border-color:var(--gold-600)}
+.accordion .richtext{padding:0 var(--space-lg) var(--space-lg);color:var(--text-muted)}
+
+/* product */
+.product{display:grid;grid-template-columns:1.05fr .95fr;gap:var(--space-2xl);align-items:start}
+.product__media{border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:1;display:grid;place-items:center}
+.product__media img{width:100%;height:100%;object-fit:cover}
+.product__info{display:grid;gap:var(--space-lg)}
+.spec-list{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-md)}
+.spec{background:var(--bg-raised);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-md) var(--space-lg)}
+.spec b{display:block;font-family:var(--font-display);font-size:1.5rem;color:var(--gold-300);font-weight:500}
+.spec span{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted)}
+.plan-picker{display:grid;gap:10px;border:0;padding:0;margin:0}
+.plan-picker legend{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-accent);margin-bottom:10px;padding:0}
+.plan-picker label{display:flex;gap:12px;align-items:flex-start;padding:var(--space-md) var(--space-lg);border:1.5px solid var(--border);border-radius:var(--radius-md);cursor:pointer}
+.plan-picker input{accent-color:var(--gold-400);margin-top:5px}
+.plan-picker label:has(input:checked){border-color:var(--gold-500);background:rgba(208,166,72,.07)}
+
+/* forms */
+.field{display:grid;gap:6px;margin-bottom:var(--space-md)}
+.field label,.label{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-accent)}
+.input,.select,.textarea{width:100%;background:var(--bg-deep);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;color:var(--text)}
+.input:focus,.select:focus,.textarea:focus{border-color:var(--gold-500);outline:none}
+.textarea{min-height:130px;resize:vertical}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0 var(--space-lg)}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:.95rem}
+.check input{accent-color:var(--gold-400);margin-top:5px;width:18px;height:18px}
+.check-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 20px;margin:var(--space-md) 0}
+.tag-input{display:flex;flex-wrap:wrap;gap:8px;padding:10px;background:var(--bg-deep);border:1.5px solid var(--border);border-radius:var(--radius-sm)}
+.tag-input input{flex:1;min-width:160px;background:none;border:0;outline:none;padding:6px}
+.tag{display:inline-flex;gap:8px;align-items:center;background:var(--walnut-700);border:1px solid var(--gold-600);border-radius:999px;padding:4px 12px;font-size:.85rem}
+.tag button{background:none;border:0;color:var(--gold-300);cursor:pointer;font-size:1.1rem;line-height:1;padding:0}
+.form-msg{margin-top:var(--space-md)}
+
+/* cart */
+.cart{display:grid;grid-template-columns:1.6fr 1fr;gap:var(--space-2xl);align-items:start}
+.cart-line{display:grid;grid-template-columns:96px 1fr auto;gap:var(--space-lg);padding:var(--space-lg) 0;border-bottom:1px solid var(--border);align-items:center}
+.cart-line img{width:96px;height:96px;object-fit:cover;border-radius:var(--radius-md)}
+.cart-line__plan{font-size:.82rem;color:var(--gold-300)}
+.qty{width:72px;text-align:center}
+.summary{position:sticky;top:110px;display:grid;gap:var(--space-lg)}
+.summary__row{display:flex;justify-content:space-between;gap:var(--space-md)}
+.summary__total{font-family:var(--font-display);font-size:1.7rem}
+.gift-options{display:grid;gap:10px}
+.gift-options label{display:flex;gap:12px;align-items:center;border:1.5px solid var(--border);border-radius:var(--radius-md);padding:12px 16px;cursor:pointer}
+.gift-options label:has(input:checked){border-color:var(--gold-500)}
+
+/* account */
+.account{display:grid;grid-template-columns:260px 1fr;gap:var(--space-2xl)}
+.account-nav{display:grid;gap:6px;align-content:start;position:sticky;top:110px}
+.account-nav a{padding:12px 16px;border-left:2px solid var(--border);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase}
+.account-nav a:hover{border-left-color:var(--gold-400)}
+.account-block{margin-bottom:var(--space-2xl);scroll-margin-top:110px}
+.pause-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-lg)}
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{padding:14px 12px;border-bottom:1px solid var(--border);text-align:left}
+.table th{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-accent);font-weight:500}
+
+/* footer */
+.site-footer{background:var(--bg-deep);border-top:1px solid var(--border);padding-top:var(--space-2xl);margin-top:0}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:var(--space-xl)}
+.footer-grid h4{font-family:var(--font-body);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--text-accent);font-weight:500}
+.footer-grid ul{list-style:none;display:grid;gap:10px}
+.footer-grid a{color:var(--text-muted)}.footer-grid a:hover{color:var(--gold-300)}
+.social{display:flex;gap:14px;margin-top:var(--space-md)}
+.social a{width:42px;height:42px;display:grid;place-items:center;border:1px solid var(--border);border-radius:50%;color:var(--gold-300)}
+.social a:hover{border-color:var(--gold-500)}
+.social svg{width:20px;height:20px}
+.footer-bottom{border-top:1px solid var(--border);margin-top:var(--space-2xl);padding-block:var(--space-lg);font-size:.8rem;color:var(--text-muted);display:flex;justify-content:space-between;gap:var(--space-md);flex-wrap:wrap}
+
+/* page header */
+.page-head{padding-block:var(--space-2xl) var(--space-xl)}
+.cta-banner{text-align:center;padding-block:var(--space-3xl)}
+.cta-banner .panel{max-width:960px;margin-inline:auto;padding:var(--space-2xl)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1100px){
+  .dish-grid,.grid--4{grid-template-columns:repeat(2,1fr)}
+  .grid--3{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:860px){
+  .section{padding-block:var(--space-2xl)}
+  .hero__grid,.product,.cart,.account{grid-template-columns:1fr}
+  .account-nav,.summary{position:static}
+  .site-nav{position:absolute;top:100%;left:0;right:0;background:var(--bg-deep);border-bottom:1px solid var(--border);flex-direction:column;align-items:flex-start;padding:var(--space-lg);gap:var(--space-md);display:none}
+  .site-nav.is-open{display:flex}
+  .nav-toggle{display:inline-flex}
+  .header-actions .btn{display:none}
+  .grid--2,.grid--3,.form-grid,.pause-grid,.check-grid,.spec-list{grid-template-columns:1fr}
+  .filter-bar__label{min-width:100%}
+  .plate{max-width:340px}
+}
+@media (max-width:560px){
+  .dish-grid,.grid--4{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .cart-line{grid-template-columns:72px 1fr}
+  .cart-line img{width:72px;height:72px}
+  .cart-line>:last-child{grid-column:1/-1}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+.preview-bar{background:#050505;border-bottom:1px solid var(--border);padding:8px 16px;font-size:.75rem;letter-spacing:.08em;color:var(--text-muted);display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.preview-bar a{color:var(--gold-300);text-decoration:underline;text-underline-offset:3px}
+</style></head>
+<body>
+<div class="preview-bar"><span>VISTA PREVIA estática del tema Shopify · datos de ejemplo</span>
+  <a href="#/home">Home</a><a href="#/menu">Menú</a><a href="#/ficha">Ficha</a><a href="#/planes">Planes</a><a href="#/carta">Carta</a><a href="#/embajadores">Embajadores</a><a href="#/tienda">Store</a><a href="#/perfil">Perfil</a><a href="#/carrito">Carrito</a><a href="#/cuenta">Cuenta</a></div>
+<div class="announcement">Cierre de pedidos: sábados a las 10:00 AM. <span data-cutoff>· cierra en <strong data-cutoff-value>…</strong></span> · <a href="#/menu">Ver el menú</a></div>
+<header class="site-header"><div class="container site-header__inner">
+  <a href="#/home" aria-label="Kulinaria"><span class="logo logo--gold" role="img" aria-label="Kulinaria"><span class="logo__k" aria-hidden="true">K</span><span class="logo__word" aria-hidden="true"><span class="logo__name">ulinaria</span><span class="logo__rule"></span><span class="logo__tag">Arte del fuego</span></span></span></a>
+  <nav class="site-nav" data-nav aria-label="Principal"><a href="#/menu">Menú</a><a href="#/planes">Planes</a><a href="#/carta">Carta Kulinaria</a><a href="#/embajadores">Embajadores</a><a href="#/tienda">Store</a><a href="#/perfil">Mi perfil</a></nav>
+  <div class="header-actions"><a class="icon-link" href="#/cuenta" aria-label="Mi cuenta"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+    <a class="icon-link" href="#/carrito" aria-label="Carrito"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="cart-count">2</span></a>
+    <a class="btn btn--gold" href="#/planes">Elegir mi plan</a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Menú"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button></div></div></header>
+<main id="main"><div data-page="home" hidden><section class="hero surface-walnut"><div class="container hero__grid">
+      <div class="hero__copy"><span class="eyebrow">Comida saludable premium a domicilio</span><h1>Tu semana, servida como una pieza de autor</h1><div class="divider-gold"><i></i></div>
+      <p class="lede" style="color:var(--cream-200)">Platillos preparados por chefs, adaptados a tu estilo de vida y entregados en envases de vidrio. Elige tu bloque de 4 semanas y olvídate de cocinar.</p><p><span class="countdown" data-cutoff>Cierre de pedidos en <strong data-cutoff-value>…</strong></span></p>
+      <div class="btn-row"><a class="btn btn--gold" href="#/planes">Elegir mi plan</a><a class="btn btn--outline" href="#/menu">Ver el menú de la semana</a></div></div>
+      <div class="plate surface-slate"><div class="plate--logo"><span class="logo logo--gold" role="img" aria-label="Kulinaria"><span class="logo__k" aria-hidden="true">K</span><span class="logo__word" aria-hidden="true"><span class="logo__name">ulinaria</span><span class="logo__rule"></span><span class="logo__tag">Arte del fuego</span></span></span></div></div></div></section><section class="section section--raised"><div class="container"><div class="section__head"><span class="eyebrow">Cómo funciona</span><h2>Tres pasos y tu semana está resuelta</h2><div class="divider-gold"><i></i></div></div><div class="grid grid--3"><div class="card"><span class="card__num">01</span><h3>Elige tu plan</h3><div class="richtext text-muted"><p>Bloques de 4 semanas con entrega semanal. ¿Quieres probar? Compra una sola semana.</p></div></div><div class="card"><span class="card__num">02</span><h3>Elige tus platillos</h3><div class="richtext text-muted"><p>Un menú rotativo de 8 a 10 opciones. Confirma antes del sábado a las 10:00 AM o nosotros armamos tu pedido.</p></div></div><div class="card"><span class="card__num">03</span><h3>Recíbelo en casa</h3><div class="richtext text-muted"><p>Entrega a domicilio en envases de vidrio de alta calidad. Pago 100% digital.</p></div></div></div></div></section><section class="section "><div class="container"><div class="section__head"><span class="eyebrow">Menú de la semana</span><h2>Esta semana en Kulinaria</h2><div class="divider-gold"><i></i></div><p class="lede">Un menú rotativo de 8 a 10 platillos. Cada uno con una sola foto del emplatado final, vista desde arriba.</p></div><div class="dish-grid">
+    <article class="dish" data-dish data-category="diario-premium" data-tier="selecto" data-diets="keto"
+      data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas">
+      <a class="dish__media surface-walnut" href="#/ficha" aria-label="Pollo a las hierbas con puré rústico"><span class="dish__ph surface-slate" aria-hidden="true">K</span></a>
+      <div class="dish__body">
+        <div><span class="tier-badge tier-badge--selecto">Selecto</span></div>
+        <h3 class="dish__title"><a href="#/ficha">Pollo a las hierbas con puré rústico</a></h3>
+        <p class="dish__facts">480 kcal · 22 g carbohidratos</p>
+        <span class="compat" data-compat></span>
+        <div class="dish__meta"><span class="dish__price">$160</span><a class="btn btn--outline" href="#/ficha">Ver ficha</a></div>
+      </div>
+      <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+    </article>
+    <article class="dish" data-dish data-category="bowls-de-la-semana" data-tier="selecto" data-diets="alto-proteina|sin-gluten"
+      data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+      <a class="dish__media surface-walnut" href="#/ficha" aria-label="Bowl de res magra y quinoa"><span class="dish__ph surface-slate" aria-hidden="true">K</span></a>
+      <div class="dish__body">
+        <div><span class="tier-badge tier-badge--selecto">Selecto</span></div>
+        <h3 class="dish__title"><a href="#/ficha">Bowl de res magra y quinoa</a></h3>
+        <p class="dish__facts">560 kcal · 34 g carbohidratos</p>
+        <span class="compat" data-compat></span>
+        <div class="dish__meta"><span class="dish__price">$160</span><a class="btn btn--outline" href="#/ficha">Ver ficha</a></div>
+      </div>
+      <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+    </article>
+    <article class="dish" data-dish data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos"
+      data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Espárragos|Jitomate cherry|Limón">
+      <a class="dish__media surface-walnut" href="#/ficha" aria-label="Salmón gourmet en costra de almendras"><span class="dish__ph surface-slate" aria-hidden="true">K</span></a>
+      <div class="dish__body">
+        <div><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span></div>
+        <h3 class="dish__title"><a href="#/ficha">Salmón gourmet en costra de almendras</a></h3>
+        <p class="dish__facts">520 kcal · 14 g carbohidratos</p>
+        <span class="compat" data-compat></span>
+        <div class="dish__meta"><span class="dish__price">$220</span><a class="btn btn--outline" href="#/ficha">Ver ficha</a></div>
+      </div>
+      <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+    </article>
+    <article class="dish" data-dish data-category="desayunos-premium" data-tier="selecto" data-diets="vegetariano|bajo-calorias"
+      data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+      <a class="dish__media surface-walnut" href="#/ficha" aria-label="Omelette de claras con espinaca"><span class="dish__ph surface-slate" aria-hidden="true">K</span></a>
+      <div class="dish__body">
+        <div><span class="tier-badge tier-badge--selecto">Selecto</span></div>
+        <h3 class="dish__title"><a href="#/ficha">Omelette de claras con espinaca</a></h3>
+        <p class="dish__facts">310 kcal · 8 g carbohidratos</p>
+        <span class="compat" data-compat></span>
+        <div class="dish__meta"><span class="dish__price">$160</span><a class="btn btn--outline" href="#/ficha">Ver ficha</a></div>
+      </div>
+      <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+    </article></div><div class="btn-row"><a class="btn btn--outline" href="#/menu">Ver el menú completo</a></div></div></section><section class="section "><div class="container"><div class="section__head section__head--center"><span class="eyebrow">Niveles</span><h2>Cuatro niveles, un mismo estándar</h2><div class="divider-gold"><i></i></div><p class="lede">Cada nivel suma $60 MXN fijos sobre el anterior. El precio incluye el empaque óptimo y la preparación del chef.</p></div><div class="grid grid--4"><article class="card tier-card"><span class="tier-badge tier-badge--selecto">Selecto</span><p class="tier-card__price gold-text">$160<small> MXN</small></p><p class="text-muted" style="margin:0">por platillo</p><div class="divider-gold" style="margin:16px auto"><i></i></div><p class="text-muted">Menú base diario: cocina saludable, balanceada y dietas adaptables.</p></article><article class="card tier-card"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span><p class="tier-card__price gold-text">$220<small> MXN</small></p><p class="text-muted" style="margin:0">por platillo</p><div class="divider-gold" style="margin:16px auto"><i></i></div><p class="text-muted">Cocciones lentas y elaboraciones sofisticadas.</p></article><article class="card tier-card"><span class="tier-badge tier-badge--signature">Signature $$</span><p class="tier-card__price gold-text">$280<small> MXN</small></p><p class="text-muted" style="margin:0">por platillo</p><div class="divider-gold" style="margin:16px auto"><i></i></div><p class="text-muted">Recetas con sello de autor y cortes premium.</p></article><article class="card tier-card tier-card--reserve"><span class="tier-badge tier-badge--reserve">Reserve $$$</span><p class="tier-card__price gold-text">$340<small> MXN</small></p><p class="text-muted" style="margin:0">por platillo</p><div class="divider-gold" style="margin:16px auto"><i></i></div><p class="text-muted">Cortes Prime y mariscos selectos, listos para recalentar.</p></article></div></div></section><section class="section section--raised"><div class="container"><div class="section__head"><span class="eyebrow">Enfoque nutricional</span><h2>Filtra el menú según tu estilo de vida</h2><div class="divider-gold"><i></i></div></div><div class="chips"><a class="chip" href="#/menu">Keto</a><a class="chip" href="#/menu">Libre de gluten</a><a class="chip" href="#/menu">Vegetariano</a><a class="chip" href="#/menu">Vegano</a><a class="chip" href="#/menu">Bajas calorías</a><a class="chip" href="#/menu">Bajos carbohidratos</a><a class="chip" href="#/menu">Alta proteína</a></div></div></section><section class="section "><div class="container"><div class="section__head section__head--center"><span class="eyebrow">Planes</span><h2>Elige cómo quieres empezar</h2><div class="divider-gold"><i></i></div><p class="lede">La suscripción se contrata en bloques de 4 semanas. Si prefieres probar, puedes comprar una sola semana.</p></div><div class="grid grid--2" style="max-width:980px;margin-inline:auto">
+  <article class="card plan-card plan-card--featured"><span class="plan-card__flag">Recomendado</span><span class="eyebrow">Bloque de 4 semanas</span>
+    <p class="plan-card__price gold-text">Desde $160<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / platillo</small></p>
+    <p class="text-muted">Suscripción renovable con entrega semanal. Es la opción con mejor precio.</p>
+    <ul class="plan-list"><li>Precio prorrateado más bajo</li><li>Selección automática si no eliges antes del sábado</li><li>Pausas flexibles con saldo a favor</li><li>Código de referencia propio y monedero</li></ul>
+    <a class="btn btn--gold btn--block" style="margin-top:auto" href="#/registro">Elegir bloque de 4 semanas</a></article>
+  <article class="card plan-card"><span class="eyebrow">Semana de prueba</span>
+    <p class="plan-card__price">$184<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / platillo</small></p>
+    <p class="text-muted">Una sola semana para conocer el servicio. <strong style="color:var(--gold-300)">15% más cara</strong> que el precio prorrateado del bloque.</p>
+    <ul class="plan-list"><li>Sin compromiso de renovación</li><li>Compra hasta el sábado 10:00 AM</li><li>Pago digital, sin efectivo</li></ul>
+    <a class="btn btn--outline btn--block" style="margin-top:auto" href="#/registro">Probar una semana</a></article></div></div></section><section class="section section--raised"><div class="container"><div class="section__head"><span class="eyebrow">Más Kulinaria</span><h2>Experiencias y comunidad</h2><div class="divider-gold"><i></i></div></div><div class="grid grid--3"><div class="card"><span class="eyebrow">Fuera de la suscripción</span><h3>Carta Kulinaria</h3><div class="richtext text-muted"><p>Chef privado a domicilio y cenas románticas de los sábados. Cotización privada, sin precios.</p></div><a class="btn btn--ghost" style="margin-top:auto;align-self:flex-start" href="#/carta">Conocer la carta</a></div><div class="card"><span class="eyebrow">Entrenadores y gimnasios</span><h3>Programa de Embajadores</h3><div class="richtext text-muted"><p>Recomienda Kulinaria y gana bonos, ropa deportiva y estatus de Entrenador Personal de Alta Clase.</p></div><a class="btn btn--ghost" style="margin-top:auto;align-self:flex-start" href="#/embajadores">Ver el programa</a></div><div class="card"><span class="eyebrow">Fit Apparel</span><h3>Kulinaria Store</h3><div class="richtext text-muted"><p>Playera oficial y vaso mezclador premium. Gratis con tu primer bloque si llegas con código.</p></div><a class="btn btn--ghost" style="margin-top:auto;align-self:flex-start" href="#/tienda">Ir a la tienda</a></div></div></div></section><section class="section "><div class="container"><div class="section__head"><span class="eyebrow">Ayuda</span><h2>Preguntas frecuentes</h2><div class="divider-gold"><i></i></div></div><div class="accordion"><details><summary>¿Hasta cuándo puedo elegir mis platillos?</summary><div class='richtext'><p>Hasta el sábado a las 10:00 AM. Si no eliges, armamos tu pedido con tu plan, historial y alergias.</p></div></details><details><summary>¿Puedo pausar mi suscripción?</summary><div class='richtext'><p>Sí: jueves y viernes hasta el martes 10:00 AM; lunes a miércoles hasta el viernes 7:00 PM. Lo no preparado queda como saldo.</p></div></details><details><summary>¿Cómo se paga?</summary><div class='richtext'><p>Todo se cobra de forma digital en la web. No se acepta efectivo.</p></div></details></div></div></section><section class="cta-banner surface-walnut"><div class="container"><div class="panel panel--slate surface-slate">
+      <span class="eyebrow">Arte del fuego</span><h2>Empieza tu bloque de 4 semanas</h2><div class="divider-gold" style="margin-inline:auto"><i></i></div>
+      <p class="lede" style="margin-inline:auto">Elige tu plan, cuéntanos tus alergias y nosotros nos encargamos del resto.</p><p><span class="countdown" data-cutoff>Cierre de pedidos en <strong data-cutoff-value>…</strong></span></p>
+      <div class="btn-row" style="justify-content:center"><a class="btn btn--gold" href="#/planes">Elegir mi plan</a></div></div></div></section></div><div data-page="menu" hidden><section class="section "><div class="container"><div class="section__head"><span class="eyebrow">Menú de la semana</span><h1 style="font-size:clamp(2.2rem,4vw,3.4rem)">Menú semanal</h1><div class="divider-gold"><i></i></div><p><span class="countdown" data-cutoff>Confirma tus platillos antes del sábado 10:00 AM · quedan <strong data-cutoff-value>…</strong></span></p><p class="legal-note">Si no registras tus opciones a tiempo, se genera un pedido automático con tu plan, historial y perfil de alergias.</p></div><div class="filter-bar" data-filters><div class="filter-bar__row"><span class="filter-bar__label">Categoría</span><div class="chips"><button class="chip" type="button" data-filter="category" data-value="all" aria-pressed="true">Todo</button><button class="chip" type="button" data-filter="category" data-value="desayunos-premium" aria-pressed="false">Desayunos Premium</button><button class="chip" type="button" data-filter="category" data-value="al-fuego-y-mar" aria-pressed="false">Al Fuego y Mar</button><button class="chip" type="button" data-filter="category" data-value="bowls-de-la-semana" aria-pressed="false">Bowls de la Semana</button><button class="chip" type="button" data-filter="category" data-value="diario-premium" aria-pressed="false">Diario Premium</button><button class="chip" type="button" data-filter="category" data-value="kulinaria-junior" aria-pressed="false">Kulinaria Junior</button></div></div><div class="filter-bar__row"><span class="filter-bar__label">Enfoque</span><div class="chips"><button class="chip" type="button" data-filter="diet" data-value="keto" aria-pressed="false">Keto</button><button class="chip" type="button" data-filter="diet" data-value="sin-gluten" aria-pressed="false">Libre de gluten</button><button class="chip" type="button" data-filter="diet" data-value="vegetariano" aria-pressed="false">Vegetariano</button><button class="chip" type="button" data-filter="diet" data-value="vegano" aria-pressed="false">Vegano</button><button class="chip" type="button" data-filter="diet" data-value="bajo-calorias" aria-pressed="false">Bajas calorías</button><button class="chip" type="button" data-filter="diet" data-value="bajo-carbos" aria-pressed="false">Bajos carbohidratos</button><button class="chip" type="button" data-filter="diet" data-value="alto-proteina" aria-pressed="false">Alta proteína</button></div></div><div class="filter-bar__row"><span class="filter-bar__label">Nivel</span><div class="chips"><button class="chip" type="button" data-filter="tier" data-value="all" aria-pressed="true">Todos</button><button class="chip" type="button" data-filter="tier" data-value="selecto" aria-pressed="false">Selecto</button><button class="chip" type="button" data-filter="tier" data-value="exclusivo" aria-pressed="false">Exclusivo $</button><button class="chip" type="button" data-filter="tier" data-value="signature" aria-pressed="false">Signature $$</button><button class="chip" type="button" data-filter="tier" data-value="reserve" aria-pressed="false">Reserve $$$</button></div></div><div class="filter-bar__row" style="justify-content:space-between"><span class="text-muted"><strong data-count>8</strong> platillos</span><a class="btn btn--ghost" href="#/perfil">Declara tus alergias para filtrar el menú</a></div></div><div class="dish-grid">
+    <article class="dish" data-dish data-category="diario-premium" data-tier="selecto" data-diets="keto"
+      data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas">
+      <a class="dish__media surface-walnut" href="#/ficha" aria-label="Pollo a las hierbas con puré rústico"><span class="dish__ph surface-slate" aria-hidden="true">K</span></a>
+      <div class="dish__body">
+        <div><span class="tier-badge tier-badge--selecto">Selecto</span></div>
+        <h3 class="dish__title"><a href="#/ficha">Pollo a las hierbas con puré rústico</a></h3>
+        <p class="dish__facts">480 kcal · 22 g carbohidratos</p>
+        <span class="compat" data-compat></span>
+        <div class="dish__meta"><span class="dish__price">$160</span><a class="btn btn--outline" href="#/ficha">Ver ficha</a></div>
+      </div>
+      <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+    </article>
+    <article class="dish" data-dish data-category="bowls-de-la-semana" data-tier="selecto" data-diets="alto-proteina|sin-gluten"
+      data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+      <a class="dish__media surface-walnut" href="#/ficha" aria-label="Bowl de res magra y quinoa"><span class="dish__ph surface-slate" aria-hidden="true">K</span></a>
+      <div class="dish__body">
+        <div><span class="tier-badge tier-badge--selecto">Selecto</span></div>
+        <h3 class="dish__title"><a href="#/ficha">Bowl de res magra y quinoa</a></h3>
+        <p class="dish__facts">560 kcal · 34 g carbohidratos</p>
+        <span class="compat" data-compat></span>
+        <div class="dish__meta"><span class="dish__price">$160</span><a class="btn btn--outline" href="#/ficha">Ver ficha</a></div>
+      </div>
+      <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+    </article>
+    <article class="dish" data-dish data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos"
+      data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Espárragos|Jitomate cherry|Limón">
+      <a class="dish__media surface-walnut" href="#/ficha" aria-label="Salmón gourmet en costra de almendras"><span class="dish__ph surface-slate" aria-hidden="true">K</span></a>
+      <div class="dish__body">
+        <div><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span></div>
+        <h3 class="dish__title"><a href="#/ficha">Salmón gourmet en costra de almendras</a></h3>
+        <p class="dish__facts">520 kcal · 14 g carbohidratos</p>
+        <span class="compat" data-compat></span>
+        <div class="dish__meta"><span class="dish__price">$220</span><a class="btn btn--outline" href="#/ficha">Ver ficha</a></div>
+      </div>
+      <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+    </article>
+    <article class="dish" data-dish data-category="desayunos-premium" data-tier="selecto" data-diets="vegetariano|bajo-calorias"
+      data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+      <a class="dish__media surface-walnut" href="#/ficha" aria-label="Omelette de claras con espinaca"><span class="dish__ph surface-slate" aria-hidden="true">K</span></a>
+      <div class="dish__body">
+        <div><span class="tier-badge tier-badge--selecto">Selecto</span></div>
+        <h3 class="dish__title"><a href="#/ficha">Omelette de claras con espinaca</a></h3>
+        <p class="dish__facts">310 kcal · 8 g carbohidratos</p>
+        <span class="compat" data-compat></span>
+        <div class="dish__meta"><span class="dish__price">$160</span><a class="btn btn--outline" href="#/ficha">Ver ficha</a></div>
+      </div>
+      <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+    </article>
+    <article class="dish" data-dish data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten"
+      data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+      <a class="dish__media surface-walnut" href="#/ficha" aria-label="Arrachera al carbón con maíz y espárragos"><span class="dish__ph surface-slate" aria-hidden="true">K</span></a>
+      <div class="dish__body">
+        <div><span class="tier-badge tier-badge--signature">Signature $$</span></div>
+        <h3 class="dish__title"><a href="#/ficha">Arrachera al carbón con maíz y espárragos</a></h3>
+        <p class="dish__facts">640 kcal · 28 g carbohidratos</p>
+        <span class="compat" data-compat></span>
+        <div class="dish__meta"><span class="dish__price">$280</span><a class="btn btn--outline" href="#/ficha">Ver ficha</a></div>
+      </div>
+      <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+    </article>
+    <article class="dish" data-dish data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten"
+      data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+      <a class="dish__media surface-walnut" href="#/ficha" aria-label="Filete Prime con verduras asadas"><span class="dish__ph surface-slate" aria-hidden="true">K</span></a>
+      <div class="dish__body">
+        <div><span class="tier-badge tier-badge--reserve">Reserve $$$</span></div>
+        <h3 class="dish__title"><a href="#/ficha">Filete Prime con verduras asadas</a></h3>
+        <p class="dish__facts">710 kcal · 16 g carbohidratos</p>
+        <span class="compat" data-compat></span>
+        <div class="dish__meta"><span class="dish__price">$340</span><a class="btn btn--outline" href="#/ficha">Ver ficha</a></div>
+      </div>
+      <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+    </article>
+    <article class="dish" data-dish data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten"
+      data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+      <a class="dish__media surface-walnut" href="#/ficha" aria-label="Bowl vegano de garbanzo y tahini"><span class="dish__ph surface-slate" aria-hidden="true">K</span></a>
+      <div class="dish__body">
+        <div><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span></div>
+        <h3 class="dish__title"><a href="#/ficha">Bowl vegano de garbanzo y tahini</a></h3>
+        <p class="dish__facts">450 kcal · 52 g carbohidratos</p>
+        <span class="compat" data-compat></span>
+        <div class="dish__meta"><span class="dish__price">$220</span><a class="btn btn--outline" href="#/ficha">Ver ficha</a></div>
+      </div>
+      <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+    </article>
+    <article class="dish" data-dish data-category="kulinaria-junior" data-tier="selecto" data-diets=""
+      data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+      <a class="dish__media surface-walnut" href="#/ficha" aria-label="Mini pasta de pollo para peques"><span class="dish__ph surface-slate" aria-hidden="true">K</span></a>
+      <div class="dish__body">
+        <div><span class="tier-badge tier-badge--selecto">Selecto</span></div>
+        <h3 class="dish__title"><a href="#/ficha">Mini pasta de pollo para peques</a></h3>
+        <p class="dish__facts">380 kcal · 44 g carbohidratos</p>
+        <span class="compat" data-compat></span>
+        <div class="dish__meta"><span class="dish__price">$160</span><a class="btn btn--outline" href="#/ficha">Ver ficha</a></div>
+      </div>
+      <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+    </article></div><p class="alert" data-empty hidden>Ningún platillo coincide con los filtros elegidos.</p></div></section></div><div data-page="ficha" hidden><section class="section "><div class="container"><div class="product" data-dish-detail data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+  <div class="product__media surface-walnut"><span class="dish__ph surface-slate" style="font-size:6rem" aria-hidden="true">K</span></div>
+  <div class="product__info">
+    <div><div style="display:flex;gap:12px;align-items:center;margin-bottom:16px"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span><span class="eyebrow" style="margin:0">al fuego y mar</span></div>
+    <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Salmón gourmet en costra de almendras</h1><p class="tagline" style="font-size:2rem;margin:0">$220</p></div>
+    <div class="alert" data-allergen-alert hidden role="alert"></div>
+    <div class="richtext lede" style="color:var(--cream-200)"><p>Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry rostizado.</p></div>
+    <div class="spec-list"><div class="spec"><b>520</b><span>Calorías (kcal)</span></div><div class="spec"><b>14 g</b><span>Carbohidratos</span></div></div>
+    <p class="legal-note">El peso de la proteína se establece en bruto antes de su cocción. La contracción natural durante el proceso de preparación culinaria puede dar como resultado un peso inferior al publicado, quedando sujeto a variaciones.</p>
+    <div><h3>Ingredientes</h3><p class="text-muted">Declaración explícita de cada ingrediente para la prevención de alergias.</p><div class="chips"><span class="chip" style="cursor:default">Salmón</span><span class="chip" style="cursor:default">Almendra</span><span class="chip" style="cursor:default">Eneldo</span><span class="chip" style="cursor:default">Espárragos</span><span class="chip" style="cursor:default">Jitomate cherry</span><span class="chip" style="cursor:default">Limón</span></div></div>
+    <div><h3>Contiene</h3><div class="chips"><span class="tier-badge tier-badge--exclusivo">Frutos secos</span><span class="tier-badge tier-badge--exclusivo">Pescado</span></div></div>
+    <form onsubmit="event.preventDefault();location.hash='#/carrito'">
+      <fieldset class="plan-picker"><legend>Cómo quieres recibirlo</legend>
+        <label><input type="radio" name="selling_plan" checked><span><strong>Bloque de 4 semanas (pago anticipado, entrega semanal)</strong><br><small class="text-muted">Un pago por bloque. 4 entregas semanales.</small></span></label>
+        <label><input type="radio" name="selling_plan"><span><strong>Compra única</strong><br><small class="text-muted">Un solo pago, sin renovación.</small></span></label></fieldset>
+      <div class="btn-row" style="align-items:center"><input class="input qty" type="number" value="1" min="1" aria-label="Cantidad"><button class="btn btn--gold" type="submit" data-add>Agregar a mi selección</button></div></form>
+  </div></div></div></section></div><div data-page="planes" hidden><section class="section "><div class="container"><div class="section__head section__head--center"><span class="eyebrow">Planes</span><h2>Elige cómo quieres empezar</h2><div class="divider-gold"><i></i></div><p class="lede">La suscripción se contrata en bloques de 4 semanas. Si prefieres probar, puedes comprar una sola semana.</p></div><div class="grid grid--4"><article class="card tier-card"><span class="tier-badge tier-badge--selecto">Selecto</span><p class="tier-card__price gold-text">$160<small> MXN</small></p><p class="text-muted" style="margin:0">por platillo</p><div class="divider-gold" style="margin:16px auto"><i></i></div><p class="text-muted">Menú base diario y de alta rotación.</p></article><article class="card tier-card"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span><p class="tier-card__price gold-text">$220<small> MXN</small></p><p class="text-muted" style="margin:0">por platillo</p><div class="divider-gold" style="margin:16px auto"><i></i></div><p class="text-muted">Cocciones lentas y elaboraciones sofisticadas.</p></article><article class="card tier-card"><span class="tier-badge tier-badge--signature">Signature $$</span><p class="tier-card__price gold-text">$280<small> MXN</small></p><p class="text-muted" style="margin:0">por platillo</p><div class="divider-gold" style="margin:16px auto"><i></i></div><p class="text-muted">Recetas de autor con cortes premium.</p></article><article class="card tier-card tier-card--reserve"><span class="tier-badge tier-badge--reserve">Reserve $$$</span><p class="tier-card__price gold-text">$340<small> MXN</small></p><p class="text-muted" style="margin:0">por platillo</p><div class="divider-gold" style="margin:16px auto"><i></i></div><p class="text-muted">Prime y mariscos selectos.</p></article></div></div></section><section class="section section--raised"><div class="container"><div class="section__head"><span class="eyebrow">Calendario del ciclo</span><h2>Así corre tu semana</h2><div class="divider-gold"><i></i></div></div><div class="grid grid--4"><div class="card"><span class="card__num">01</span><h3>Sábado 10:00 AM</h3><div class="richtext text-muted"><p>Cierre de pedidos. Si no elegiste, a las 10:01 AM se arma tu pedido automático.</p></div></div><div class="card"><span class="card__num">02</span><h3>Lunes a miércoles</h3><div class="richtext text-muted"><p>Primera mitad de entregas. Pausa hasta el viernes 7:00 PM.</p></div></div><div class="card"><span class="card__num">03</span><h3>Martes 10:00 AM</h3><div class="richtext text-muted"><p>Último momento para pausar entregas de jueves y viernes.</p></div></div><div class="card"><span class="card__num">04</span><h3>Jueves y viernes</h3><div class="richtext text-muted"><p>Segunda mitad de entregas. Viernes 7:00 PM: corte de renovación.</p></div></div></div></div></section><section class="section "><div class="container"><div class="section__head"><span class="eyebrow">Políticas clave</span><h2>Lo que debes saber antes de suscribirte</h2><div class="divider-gold"><i></i></div></div><div class="accordion"><details><summary>Pago digital, cero efectivo</summary><div class='richtext'><p>Toda suscripción o renovación se cobra en la web al hacer el pedido.</p></div></details><details><summary>Sin reembolso tras liquidar</summary><div class='richtext'><p>Los insumos se compran en volumen: no hay cancelación ni devolución. Si pausas a tiempo, lo no preparado queda como saldo.</p></div></details><details><summary>Caducidad por inactividad</summary><div class='richtext'><p>Tras una pausa tienes 30 días naturales para reanudar; después el contrato se cancela y se pierde el saldo.</p></div></details></div></div></section><section class="cta-banner surface-walnut"><div class="container"><div class="panel panel--slate surface-slate">
+      <span class="eyebrow">Arte del fuego</span><h2>Empieza tu bloque de 4 semanas</h2><div class="divider-gold" style="margin-inline:auto"><i></i></div>
+      <p class="lede" style="margin-inline:auto">Elige tu plan, cuéntanos tus alergias y nosotros nos encargamos del resto.</p><p><span class="countdown" data-cutoff>Cierre de pedidos en <strong data-cutoff-value>…</strong></span></p>
+      <div class="btn-row" style="justify-content:center"><a class="btn btn--gold" href="#/planes">Elegir mi plan</a></div></div></div></section></div><div data-page="carta" hidden><section class="hero surface-walnut"><div class="container hero__grid">
+      <div class="hero__copy"><span class="eyebrow">Fuera del menú de suscripción</span><h1>Carta Kulinaria</h1><div class="divider-gold"><i></i></div>
+      <p class="lede" style="color:var(--cream-200)">Experiencias ultra-premium de diseño exclusivo: chef privado a domicilio y cenas románticas de los sábados.</p>
+      <div class="btn-row"><a class="btn btn--gold" href="#cotizacion">Solicitar cotización privada</a></div></div>
+      <div class="plate surface-slate"><div class="plate--logo"><span class="logo logo--gold" role="img" aria-label="Kulinaria"><span class="logo__k" aria-hidden="true">K</span><span class="logo__word" aria-hidden="true"><span class="logo__name">ulinaria</span><span class="logo__rule"></span><span class="logo__tag">Arte del fuego</span></span></span></div></div></div></section><section class="section "><div class="container"><div class="section__head"><span class="eyebrow">Experiencias</span><h2>Diseñadas a tu medida</h2><div class="divider-gold"><i></i></div></div><div class="grid grid--3"><div class="card"><h3>Chef privado a domicilio</h3><div class="richtext text-muted"><p>Un menú de autor preparado en tu casa para eventos especiales.</p></div></div><div class="card"><h3>Cenas románticas de los sábados</h3><div class="richtext text-muted"><p>Una noche pensada al detalle: ambientación, menú y servicio.</p></div></div><div class="card"><h3>Eventos especiales</h3><div class="richtext text-muted"><p>Cumpleaños, aniversarios y reuniones íntimas con sello Kulinaria.</p></div></div></div></div></section><section class="section section--raised"><div class="container"><div class="section__head"><span class="eyebrow">Cotización privada</span><h2>Cuéntanos tu evento</h2><div class="divider-gold"><i></i></div><p class="lede">Esta sección no usa carrito ni precios publicados.</p></div><form onsubmit="event.preventDefault();this.querySelector('.alert').hidden=false" id="cotizacion" style="max-width:860px">
+  <div class="form-grid"><div class="field"><label>Nombre completo</label><input class="input" required></div><div class="field"><label>Correo</label><input class="input" type="email" required></div>
+  <div class="field"><label>Teléfono / WhatsApp</label><input class="input" type="tel" required></div><div class="field"><label>Tipo de experiencia</label><select class="select"><option>Chef privado a domicilio</option><option>Cena romántica de sábado</option><option>Evento especial</option></select></div>
+  <div class="field"><label>Fecha deseada</label><input class="input" type="date"></div><div class="field"><label>Invitados</label><input class="input" type="number" min="1"></div></div>
+  <div class="field"><label>Cuéntanos más</label><textarea class="textarea"></textarea></div><button class="btn btn--gold" type="submit">Solicitar cotización</button>
+  <p class="alert alert--ok form-msg" hidden>Gracias. Te contactaremos muy pronto.</p></form></div></section></div><div data-page="embajadores" hidden><section class="hero surface-walnut"><div class="container hero__grid">
+      <div class="hero__copy"><span class="eyebrow">Programa de embajadores</span><h1>Recomienda Kulinaria y gana con cada cliente</h1><div class="divider-gold"><i></i></div>
+      <p class="lede" style="color:var(--cream-200)">Tres ramas para crecer juntos: entrenadores (ropa y efectivo), clientes (crédito interno) y gimnasios aliados (alto volumen).</p>
+      <div class="btn-row"><a class="btn btn--gold" href="#alta">Quiero ser embajador</a></div></div>
+      <div class="plate surface-slate"><div class="plate--logo"><span class="logo logo--gold" role="img" aria-label="Kulinaria"><span class="logo__k" aria-hidden="true">K</span><span class="logo__word" aria-hidden="true"><span class="logo__name">ulinaria</span><span class="logo__rule"></span><span class="logo__tag">Arte del fuego</span></span></span></div></div></div></section><section class="section "><div class="container"><div class="section__head"><span class="eyebrow">Tres ramas</span><h2>Elige cómo quieres participar</h2><div class="divider-gold"><i></i></div></div><div class="grid grid--3"><div class="card"><span class="eyebrow">Ropa y efectivo</span><h3>Entrenadores</h3><div class="richtext text-muted"><p>Bono en efectivo, kit Fit Edition, video cooperativo y estatus web premium.</p></div></div><div class="card"><span class="eyebrow">Crédito interno viral</span><h3>Clientes</h3><div class="richtext text-muted"><p>Comparte tu código y gana saldo a favor por cada amigo que compre su primer bloque.</p></div></div><div class="card"><span class="eyebrow">Alto volumen</span><h3>Gimnasios aliados</h3><div class="richtext text-muted"><p>Monetización pasiva con comisiones en efectivo y bono de élite.</p></div></div></div></div></section><section class="section section--raised"><div class="container"><div class="section__head"><span class="eyebrow">Entrenadores</span><h2>De la meta inicial al crecimiento continuo</h2><div class="divider-gold"><i></i></div></div><div class="grid grid--3"><div class="card"><span class="card__num">01</span><h3>Meta inicial</h3><div class="richtext text-muted"><ul><li>Mínimo 10 clientes nuevos recomendados.</li><li>Cada uno con 1 bloque de 4 semanas.</li><li>Facturas liquidadas.</li></ul></div></div><div class="card"><span class="card__num">02</span><h3>Activación (primeros 10)</h3><div class="richtext text-muted"><ul><li>Bono de $1,500 MXN en efectivo.</li><li>Kit Gear Kulinaria Fit Edition.</li><li>Video promocional cooperativo.</li><li>Estatus web: Entrenador Personal de Alta Clase.</li></ul></div></div><div class="card"><span class="card__num">03</span><h3>Incentivos continuos</h3><div class="richtext text-muted"><ul><li>Vía A: $100 MXN por cada renovación.</li><li>Vía B: $1,500 MXN cada 10 clientes nuevos pagados.</li></ul></div></div></div></div></section><section class="section "><div class="container"><div class="section__head"><span class="eyebrow">Gimnasios aliados</span><h2>Una alianza de monetización pasiva</h2><div class="divider-gold"><i></i></div></div><div class="grid grid--3"><div class="card"><h3>Código institucional</h3><div class="richtext text-muted"><p>Alta como Gimnasio Aliado con código único (ej. GYM_ZONE).</p></div></div><div class="card"><h3>Comisiones</h3><div class="richtext text-muted"><ul><li>$100 MXN por cliente nuevo.</li><li>$100 MXN por cada renovación.</li></ul></div></div><div class="card"><h3>Gimnasio Embajador</h3><div class="richtext text-muted"><p>A los 100 clientes activos: bono único de $10,000 MXN y video promocional cruzado.</p></div></div></div></div></section><section class="section section--raised"><div class="container"><div class="section__head"><span class="eyebrow">Reglas claras</span><h2>Primero en registrar, primero en ganar</h2><div class="divider-gold"><i></i></div></div><div class="accordion"><details><summary>Un cliente, un código</summary><div class='richtext'><p>Un cliente solo puede estar ligado a un código. Si lo registra un entrenador, el código del gimnasio ya no aplica.</p></div></details><details><summary>No interferencia</summary><div class='richtext'><p>El gimnasio no re-apadrina clientes de entrenadores; intentarlo es motivo de rescisión inmediata.</p></div></details></div></div></section></div><div data-page="tienda" hidden><section class="section "><div class="container"><div class="section__head"><span class="eyebrow">Kulinaria Store</span><h2>Fit Apparel</h2><div class="divider-gold"><i></i></div><p class="lede">Playera oficial y vaso mezclador premium. Con código de referencia válido y tu primer bloque pagado, elige uno gratis.</p></div><div class="dish-grid"><article class="dish"><a class="dish__media surface-slate" href="#/carrito"><span class="dish__ph surface-walnut">K</span></a><div class="dish__body"><h3 class="dish__title">Playera oficial Kulinaria</h3><div class="dish__meta"><span class="dish__price">$399</span><a class="btn btn--outline" href="#/carrito">Ver</a></div></div></article><article class="dish"><a class="dish__media surface-slate" href="#/carrito"><span class="dish__ph surface-walnut">K</span></a><div class="dish__body"><h3 class="dish__title">Vaso mezclador (shaker) premium</h3><div class="dish__meta"><span class="dish__price">$299</span><a class="btn btn--outline" href="#/carrito">Ver</a></div></div></article></div></div></section></div><div data-page="perfil" hidden><section class="section "><div class="container"><div class="section__head"><span class="eyebrow">Tu perfil</span><h2>Cuéntanos qué no puedes (o no quieres) comer</h2><div class="divider-gold"><i></i></div><p class="lede">Este cuestionario es obligatorio al inscribirte.</p></div>
+<form data-profile-form class="panel panel--gold" novalidate style="max-width:860px">
+  <h3>Bloque 1 · Alergias y restricciones médicas <span class="tier-badge tier-badge--exclusivo" style="vertical-align:middle;margin-left:8px">Crítico</span></h3>
+  <p class="text-muted">Los platillos que contengan estos ingredientes se bloquean por completo en tu menú.</p>
+  <div class="check-grid"><label class="check"><input type="checkbox" name="allergy" value="Gluten"> <span>Gluten</span></label><label class="check"><input type="checkbox" name="allergy" value="Lácteos"> <span>Lácteos</span></label><label class="check"><input type="checkbox" name="allergy" value="Frutos secos"> <span>Frutos secos</span></label><label class="check"><input type="checkbox" name="allergy" value="Mariscos"> <span>Mariscos</span></label></div>
+  <div class="field"><label for="ao">Otras alergias</label><input class="input" id="ao" name="allergy_other" placeholder="Separa con comas: soya, huevo, ajonjolí"></div>
+  <hr style="border:0;border-top:1px solid var(--border);margin:40px 0">
+  <h3>Bloque 2 · Ingredientes que no me gustan</h3>
+  <div class="tag-input" data-tags><input type="text" data-tag-input placeholder="Ej. jitomate" aria-label="Agregar ingrediente"></div>
+  <div class="chips" style="margin-top:12px"><button class="chip" type="button" data-suggest="Cebolla">+ Cebolla</button><button class="chip" type="button" data-suggest="Cilantro">+ Cilantro</button><button class="chip" type="button" data-suggest="Carne de puerco">+ Carne de puerco</button><button class="chip" type="button" data-suggest="Pasas">+ Pasas</button></div>
+  <p class="legal-note" style="margin-top:24px">El sitio cruza los ingredientes con el perfil que declaraste. Eres responsable de declarar con detalle tus alergias y restricciones.</p>
+  <button class="btn btn--gold" type="submit">Guardar mi perfil</button>
+  <p class="alert alert--ok form-msg" data-profile-msg hidden role="status">Perfil guardado. Abre el menú: ya se filtra con tus datos.</p>
+</form></div></section></div><div data-page="carrito" hidden><section class="section "><div class="container"><div class="section__head"><span class="eyebrow">Mi selección</span><h2>Mi selección</h2><div class="divider-gold"><i></i></div></div>
+<form class="cart" data-cart-form onsubmit="event.preventDefault()">
+  <div>
+    <div class="cart-line"><span class="dish__ph surface-slate" style="width:96px;font-size:2rem">K</span>
+      <div><h3 style="margin:0 0 4px">Bowl de res magra y quinoa</h3><p class="cart-line__plan" style="margin:0">Bloque de 4 semanas (pago anticipado, entrega semanal)</p><a class="btn btn--ghost" style="padding-left:0" href="#">Quitar</a></div>
+      <div style="text-align:right"><input class="input qty" type="number" value="5" min="0"><p class="dish__price" style="margin:8px 0 0">$800</p></div></div>
+    <div class="cart-line"><span class="dish__ph surface-slate" style="width:96px;font-size:2rem">K</span>
+      <div><h3 style="margin:0 0 4px">Salmón gourmet en costra de almendras</h3><p class="cart-line__plan" style="margin:0">Bloque de 4 semanas (pago anticipado, entrega semanal)</p><a class="btn btn--ghost" style="padding-left:0" href="#">Quitar</a></div>
+      <div style="text-align:right"><input class="input qty" type="number" value="5" min="0"><p class="dish__price" style="margin:8px 0 0">$1,100</p></div></div>
+  </div>
+  <aside class="summary">
+    <div class="panel"><h3>Código de referencia</h3><p class="text-muted">Si un entrenador, amigo o gimnasio te recomendó, escribe su código.</p>
+      <div class="field"><label for="ref">Código</label><input class="input" id="ref" data-referral placeholder="JUANFIT" autocomplete="off" style="text-transform:uppercase"></div>
+      <p class="alert alert--ok" data-referral-msg hidden>Código guardado. Se valida al confirmar el pago de tu primer bloque.</p>
+      <div data-gift hidden style="margin-top:24px"><h3>Tu regalo de bienvenida</h3><p class="text-muted">Elige uno sin costo con tu primer bloque.</p>
+        <div class="gift-options"><label><input type="radio" name="gift" checked><span>Playera oficial Kulinaria <s class="text-muted">$399</s> <strong style="color:var(--gold-300)">$0</strong></span></label>
+        <label><input type="radio" name="gift"><span>Vaso mezclador premium <s class="text-muted">$299</s> <strong style="color:var(--gold-300)">$0</strong></span></label></div></div></div>
+    <div class="panel panel--gold"><div class="summary__row"><span class="text-muted">Subtotal</span><span>$1,900</span></div>
+      <div class="summary__row" style="margin-top:16px"><strong>Total</strong><span class="summary__total gold-text">$1,900</span></div>
+      <p class="text-muted" style="font-size:.85rem">Pago 100% digital. No se acepta efectivo.</p>
+      <label class="check" style="margin:24px 0"><input type="checkbox" data-contract><span>Acepto el contrato de adhesión y los términos de servicio de Kulinaria MX, incluida la selección automática de los sábados, las reglas de renovación y la política de no reembolso.</span></label>
+      <button class="btn btn--gold btn--block" type="submit" data-checkout disabled>Continuar al pago</button></div></aside></form></div></section></div><div data-page="cuenta" hidden><section class="section "><div class="container"><div class="section__head"><span class="eyebrow">Mi cuenta</span><h1 style="font-size:clamp(2.2rem,4vw,3.4rem)">Hola, Ramón</h1><div class="divider-gold"><i></i></div>
+<p class="lede">Tienes el control total de tu semana: elige tus platillos, pausa tu bloque, revisa tu saldo y comparte tu código.</p></div>
+<div class="account"><nav class="account-nav" aria-label="Mi cuenta"><a href="#cuenta-semana">Mi semana</a><a href="#cuenta-pausas">Pausar entregas</a><a href="#cuenta-monedero">Monedero</a><a href="#cuenta-ref">Mis referidos</a></nav>
+<div>
+  <div class="account-block" id="cuenta-semana"><h2>Mi semana</h2><div class="panel panel--gold"><p class="countdown" data-cutoff>Confirma tus platillos antes del sábado 10:00 AM · quedan <strong data-cutoff-value>…</strong></p>
+    <p class="text-muted">Si no registras tus opciones a tiempo, el sábado a las 10:01 AM se genera un pedido automático con tu plan, historial y alergias registradas.</p>
+    <div class="btn-row"><a class="btn btn--gold" href="#/menu">Elegir platillos</a><a class="btn btn--outline" href="#">Administrar suscripción</a></div></div></div>
+  <div class="account-block" id="cuenta-pausas"><h2>Pausar próximo bloque de entregas</h2><p class="text-muted">Las ventanas se bloquean automáticamente (hora de Ciudad de México).</p>
+    <div class="pause-grid">
+      <div class="card"><h3>Entregas de jueves y viernes</h3><p class="text-muted">Pausa a más tardar el martes a las 10:00 AM.</p>
+        <a class="btn btn--outline" data-pause-lock data-lock-day="2" data-lock-hour="10" href="#">Pausar próximo bloque de entregas</a>
+        <p class="alert alert--warn" data-lock-msg hidden>Tiempo límite de pausa agotado para el siguiente periodo</p><p class="text-muted" data-lock-left style="font-size:.85rem"></p></div>
+      <div class="card"><h3>Entregas de lunes a miércoles</h3><p class="text-muted">Pausa a más tardar el viernes a las 7:00 PM. Si no pausas, tu nuevo pedido se asigna el sábado a las 10:00 AM.</p>
+        <a class="btn btn--outline" data-pause-lock data-lock-day="5" data-lock-hour="19" href="#">Pausar próximo bloque de entregas</a>
+        <p class="alert alert--warn" data-lock-msg hidden>Tiempo límite de pausa agotado para el siguiente periodo</p><p class="text-muted" data-lock-left style="font-size:.85rem"></p></div></div></div>
+  <div class="account-block" id="cuenta-monedero"><h2>Monedero</h2><div class="grid grid--2"><div class="card"><span class="eyebrow">Saldo a favor</span><p class="tier-card__price gold-text" style="margin:0">$150</p><p class="text-muted">Crédito interno (nunca efectivo). Úsalo en tu siguiente bloque o en Kulinaria Fit Apparel.</p></div>
+    <div class="card"><span class="eyebrow">Kulinaria Store</span><p class="text-muted">Playera oficial, vaso mezclador y la futura línea Fit Apparel.</p><a class="btn btn--outline" style="margin-top:auto;align-self:flex-start" href="#/tienda">Ir a la tienda</a></div></div></div>
+  <div class="account-block" id="cuenta-ref"><h2>Mis referidos</h2><div class="panel panel--gold"><span class="eyebrow">Tu código de referencia</span><p class="tier-card__price gold-text" style="margin:0;letter-spacing:.06em">KUL48213</p>
+    <p class="text-muted">Recibes $150 MXN de saldo por cada amigo que compre su primer bloque. A los 10 recomendados, bono de $500 MXN.</p>
+    <div style="height:10px;border-radius:5px;background:var(--ink-600);overflow:hidden;margin:16px 0"><div style="height:100%;width:30%;background:var(--gold-foil)"></div></div><p class="text-muted" style="margin:0">3 de 10 recomendados con bloques pagados.</p></div></div>
+</div></div></div></section></div></main>
+<footer class="site-footer"><div class="container"><div class="footer-grid">
+  <div><span class="logo logo--gold" role="img" aria-label="Kulinaria"><span class="logo__k" aria-hidden="true">K</span><span class="logo__word" aria-hidden="true"><span class="logo__name">ulinaria</span><span class="logo__rule"></span><span class="logo__tag">Arte del fuego</span></span></span><p class="text-muted" style="margin-top:16px;max-width:34ch">Servicio premium de comida saludable a domicilio, adaptada al estilo de vida de cada cliente.</p>
+    <div class="social"><a href="#" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><circle cx="17.5" cy="6.5" r="0.9"/></svg></a><a href="#" aria-label="TikTok"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg></a><a href="#" aria-label="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M9 9.5c.4 2.2 2.3 4.2 5 5.2l1.4-1.4-2-1-.9.8c-.8-.4-1.5-1.1-1.9-1.9l.8-.9-1-2z"/></svg></a></div></div>
+  <div><h4>Explorar</h4><ul><li><a href="#/menu">Menú semanal</a></li><li><a href="#/planes">Planes</a></li><li><a href="#/carta">Carta Kulinaria</a></li><li><a href="#/tienda">Kulinaria Store</a></li><li><a href="#/embajadores">Embajadores</a></li></ul></div>
+  <div><h4>Ayuda</h4><ul><li><a href="#/home">Nosotros</a></li><li><a href="#/home">Filosofía</a></li><li><a href="#/planes">Ayuda y legales</a></li><li><a href="#/perfil">Mi perfil de alergias</a></li></ul></div>
+  <div><h4>Contacto</h4><ul><li>+52 000 000 0000</li><li>correo@dominio.com</li><li>WhatsApp</li></ul></div></div>
+  <div class="footer-bottom"><span>© 2026 Kulinaria MX. Todos los derechos reservados.</span><span>Pago 100% digital · No se acepta efectivo</span></div></div></footer>
+<script>
+(function(){
+  var pages=[].slice.call(document.querySelectorAll('[data-page]'));
+  function route(){
+    var h=(location.hash||'#/home');
+    if(h.indexOf('#/')!==0) return;           // in-page anchors (#cotizacion, #alta, …)
+    var k=h.slice(2)||'home';
+    var found=false;
+    pages.forEach(function(p){ var on=p.getAttribute('data-page')===k; p.hidden=!on; if(on) found=true; });
+    if(!found){ pages[0].hidden=false; }
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange',route); route();
+})();
+</script>
+<script>/* Kulinaria MX — storefront behaviour (vanilla JS, no dependencies)
+   Modules: nav, weekly cutoff countdown, pause locks, menu filters,
+   allergen/dislike profile (hard + soft filters), cart (contract, referral, gift). */
+(function () {
+  'use strict';
+
+  var cfg = window.KULINARIA || {};
+  var TZ = cfg.timezone || 'America/Mexico_City';
+  var PROFILE_KEY = 'kulinaria_profile';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  /* ---------- helpers ---------- */
+  var norm = function (s) {
+    return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+  };
+
+  // Current wall-clock time in the store timezone.
+  function mxNow() {
+    var parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: TZ, hour12: false, weekday: 'short',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    }).formatToParts(new Date());
+    var o = {};
+    parts.forEach(function (p) { o[p.type] = p.value; });
+    var dow = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 }[o.weekday];
+    var h = parseInt(o.hour, 10) % 24;
+    return { dow: dow, minutes: h * 60 + parseInt(o.minute, 10), seconds: parseInt(o.second, 10) };
+  }
+
+  /* ---------- weekly cycle ----------
+     Cycle starts Saturday at cutoff (default 10:00). Orders must be confirmed
+     before the next cutoff; pause windows are offsets inside the cycle. */
+  var cutoffMin = (cfg.cutoffHour != null ? cfg.cutoffHour : 10) * 60;
+  function minutesUntilCutoff() {
+    var n = mxNow();
+    var diff = ((6 - n.dow + 7) % 7) * 1440 + (cutoffMin - n.minutes);
+    if (diff <= 0) diff += 7 * 1440;
+    return diff;
+  }
+  function minutesIntoCycle() { return 7 * 1440 - minutesUntilCutoff(); }
+
+  function fmtCountdown(mins) {
+    var d = Math.floor(mins / 1440), h = Math.floor((mins % 1440) / 60), m = mins % 60;
+    var out = [];
+    if (d) out.push(d + ' d');
+    out.push(h + ' h');
+    out.push(m + ' min');
+    return out.join(' ');
+  }
+
+  function initCountdown() {
+    var els = $$('[data-cutoff]');
+    if (!els.length) return;
+    var tick = function () {
+      var txt = fmtCountdown(minutesUntilCutoff());
+      els.forEach(function (el) {
+        var out = $('[data-cutoff-value]', el) || el;
+        out.textContent = txt;
+      });
+    };
+    tick();
+    setInterval(tick, 30000);
+  }
+
+  /* Pause locks: <button data-pause-lock data-lock-day="2" data-lock-hour="10"> ...
+     lock-day is the weekday of the deadline (0=Sun..6=Sat) inside the Sat->Fri cycle. */
+  function initPauseLocks() {
+    var btns = $$('[data-pause-lock]');
+    if (!btns.length) return;
+    var apply = function () {
+      var into = minutesIntoCycle();
+      btns.forEach(function (b) {
+        var day = parseInt(b.getAttribute('data-lock-day'), 10);
+        var hour = parseInt(b.getAttribute('data-lock-hour'), 10);
+        var dayOffset = (day - 6 + 7) % 7; // days after Saturday
+        var deadline = dayOffset * 1440 + hour * 60 - cutoffMin;
+        if (deadline < 0) deadline += 7 * 1440;
+        var locked = into >= deadline;
+        b.disabled = locked;
+        b.setAttribute('aria-disabled', locked ? 'true' : 'false');
+        var msg = b.parentNode.querySelector('[data-lock-msg]');
+        if (msg) {
+          msg.hidden = !locked;
+        }
+        var left = b.parentNode.querySelector('[data-lock-left]');
+        if (left) left.textContent = locked ? '' : 'Quedan ' + fmtCountdown(deadline - into) + ' para pausar.';
+      });
+    };
+    apply();
+    setInterval(apply, 30000);
+  }
+
+  /* ---------- profile (allergies + dislikes) ---------- */
+  function loadProfile() {
+    var p = { allergies: [], dislikes: [] };
+    try { p = Object.assign(p, JSON.parse(localStorage.getItem(PROFILE_KEY) || '{}')); } catch (e) {}
+    var c = $('#kulinaria-customer');
+    if (c) {
+      try {
+        var d = JSON.parse(c.textContent);
+        if (d.allergies && d.allergies.length) p.allergies = Array.from(new Set(p.allergies.concat(d.allergies)));
+        if (d.dislikes && d.dislikes.length) p.dislikes = Array.from(new Set(p.dislikes.concat(d.dislikes)));
+      } catch (e) {}
+    }
+    return p;
+  }
+  function saveProfile(p) {
+    try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch (e) {}
+    // Mirror to cart attributes so every order carries the kitchen-critical data.
+    fetch('/cart/update.js', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ attributes: {
+        alergias: p.allergies.join(', '),
+        no_me_gustan: p.dislikes.join(', '),
+        dietas: (p.diets || []).join(', ')
+      } })
+    }).catch(function () {});
+  }
+
+  // Hard filter (allergies) hides / blocks; soft filter (dislikes) lowers compatibility.
+  function applyProfile() {
+    var p = loadProfile();
+    var al = p.allergies.map(norm), dl = p.dislikes.map(norm);
+    $$('[data-dish]').forEach(function (card) {
+      var tags = (card.getAttribute('data-allergens') || '').split('|').map(norm).filter(Boolean);
+      var ings = (card.getAttribute('data-ingredients') || '').split('|').map(norm).filter(Boolean);
+      var hard = al.some(function (a) { return tags.indexOf(a) > -1 || ings.indexOf(a) > -1; });
+      var soft = dl.filter(function (d) { return ings.some(function (i) { return i.indexOf(d) > -1; }) || tags.indexOf(d) > -1; });
+      var compat = hard ? 0 : (soft.length ? Math.max(40, 100 - soft.length * 30) : 100);
+      card.classList.toggle('is-blocked', hard);
+      var badge = $('[data-compat]', card);
+      if (badge) {
+        badge.textContent = (al.length || dl.length) ? 'Compatibilidad ' + compat + '%' : '';
+        badge.setAttribute('data-low', compat < 100 ? 'true' : 'false');
+      }
+      $$('button[type="submit"],[data-add]', card).forEach(function (b) { b.disabled = hard; });
+      card.setAttribute('data-compat-value', compat);
+    });
+    var alert = $('[data-allergen-alert]');
+    if (alert) {
+      var card = $('[data-dish-detail]');
+      if (card && (al.length || dl.length)) {
+        var tags = (card.getAttribute('data-allergens') || '').split('|').map(norm);
+        var ings = (card.getAttribute('data-ingredients') || '').split('|').map(norm);
+        var hit = al.filter(function (a) { return tags.indexOf(a) > -1 || ings.indexOf(a) > -1; });
+        var soft = dl.filter(function (d) { return ings.some(function (i) { return i.indexOf(d) > -1; }); });
+        alert.hidden = !(hit.length || soft.length);
+        if (hit.length) {
+          alert.className = 'alert alert--warn';
+          alert.textContent = 'No apto para tu perfil: contiene ' + hit.join(', ') + '.';
+          $$('[data-add]').forEach(function (b) { b.disabled = true; });
+        } else if (soft.length) {
+          alert.className = 'alert alert--ok';
+          alert.textContent = 'Contiene ingredientes que marcaste como "no me gustan": ' + soft.join(', ') + '.';
+        }
+      }
+    }
+  }
+
+  function initProfileForm() {
+    var form = $('[data-profile-form]');
+    if (!form) return;
+    var p = loadProfile();
+    var tagsBox = $('[data-tags]', form), tagInput = $('[data-tag-input]', form);
+    var renderTags = function () {
+      $$('.tag', tagsBox).forEach(function (t) { t.remove(); });
+      p.dislikes.forEach(function (d, i) {
+        var t = document.createElement('span'); t.className = 'tag'; t.textContent = d + ' ';
+        var x = document.createElement('button'); x.type = 'button'; x.setAttribute('aria-label', 'Quitar ' + d); x.textContent = '×';
+        x.addEventListener('click', function () { p.dislikes.splice(i, 1); renderTags(); });
+        t.appendChild(x); tagsBox.insertBefore(t, tagInput);
+      });
+    };
+    $$('input[name="allergy"]', form).forEach(function (c) { c.checked = p.allergies.map(norm).indexOf(norm(c.value)) > -1; });
+    $$('input[name="diet"]', form).forEach(function (c) { c.checked = (p.diets || []).map(norm).indexOf(norm(c.value)) > -1; });
+    var other = $('[name="allergy_other"]', form);
+    if (other) other.value = p.allergies.filter(function (a) {
+      return !$$('input[name="allergy"]', form).some(function (c) { return norm(c.value) === norm(a); });
+    }).join(', ');
+    renderTags();
+    var addTag = function (v) {
+      v = v.trim(); if (!v) return;
+      if (p.dislikes.map(norm).indexOf(norm(v)) < 0) p.dislikes.push(v);
+      tagInput.value = ''; renderTags();
+    };
+    tagInput.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addTag(tagInput.value); } });
+    $$('[data-suggest]', form).forEach(function (b) { b.addEventListener('click', function () { addTag(b.getAttribute('data-suggest')); }); });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var al = $$('input[name="allergy"]:checked', form).map(function (c) { return c.value; });
+      if (other && other.value) other.value.split(',').forEach(function (v) { if (v.trim()) al.push(v.trim()); });
+      p.allergies = al;
+      p.diets = $$('input[name="diet"]:checked', form).map(function (c) { return c.value; });
+      saveProfile(p); applyProfile();
+      var msg = $('[data-profile-msg]', form);
+      if (msg) { msg.hidden = false; }
+    });
+  }
+
+  /* ---------- menu filters ---------- */
+  function initFilters() {
+    var bar = $('[data-filters]');
+    if (!bar) return;
+    var state = { category: 'all', diets: [], tier: 'all' };
+    var scope = bar.closest('section') || document;
+    var run = function () {
+      $$('[data-dish]', scope).forEach(function (c) {
+        var okCat = state.category === 'all' || c.getAttribute('data-category') === state.category;
+        var diets = (c.getAttribute('data-diets') || '').split('|');
+        var okDiet = state.diets.every(function (d) { return diets.indexOf(d) > -1; });
+        var okTier = state.tier === 'all' || c.getAttribute('data-tier') === state.tier;
+        c.classList.toggle('is-hidden', !(okCat && okDiet && okTier));
+      });
+      var vis = $$('[data-dish]:not(.is-hidden)', scope).length;
+      var empty = $('[data-empty]', scope); if (empty) empty.hidden = vis > 0;
+      var count = $('[data-count]', scope); if (count) count.textContent = vis;
+    };
+    $$('[data-filter]', bar).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var g = b.getAttribute('data-filter'), v = b.getAttribute('data-value');
+        if (g === 'diet') {
+          var on = b.getAttribute('aria-pressed') !== 'true';
+          b.setAttribute('aria-pressed', on);
+          state.diets = state.diets.filter(function (x) { return x !== v; });
+          if (on) state.diets.push(v);
+        } else {
+          $$('[data-filter="' + g + '"]', bar).forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+          state[g] = v;
+        }
+        run();
+      });
+    });
+    // deep link: ?categoria=bowls&dieta=keto
+    var q = new URLSearchParams(location.search);
+    if (q.get('categoria')) { var cb = $('[data-filter="category"][data-value="' + q.get('categoria') + '"]', bar); if (cb) cb.click(); }
+    if (q.get('dieta')) { var db = $('[data-filter="diet"][data-value="' + q.get('dieta') + '"]', bar); if (db) db.click(); }
+    run();
+  }
+
+  /* ---------- cart ---------- */
+  function initCart() {
+    var form = $('[data-cart-form]');
+    if (!form) return;
+    var contract = $('[data-contract]', form), checkout = $('[data-checkout]', form);
+    var gate = function () { if (checkout) checkout.disabled = !(contract && contract.checked); };
+    if (contract) { contract.addEventListener('change', gate); gate(); }
+
+    var ref = $('[data-referral]', form), refMsg = $('[data-referral-msg]', form), giftBox = $('[data-gift]', form);
+    var saved = ''; try { saved = localStorage.getItem('kulinaria_ref') || ''; } catch (e) {}
+    if (ref && !ref.value && saved) ref.value = saved;
+    var showGift = function () { if (giftBox) giftBox.hidden = !(ref && ref.value.trim().length >= 3); };
+    if (ref) {
+      ref.addEventListener('input', function () { ref.value = ref.value.toUpperCase().replace(/[^A-Z0-9_]/g, ''); showGift(); });
+      ref.addEventListener('change', function () {
+        try { localStorage.setItem('kulinaria_ref', ref.value); } catch (e) {}
+        fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ attributes: { codigo_referencia: ref.value } }) })
+          .then(function () { if (refMsg) { refMsg.hidden = !ref.value; } }).catch(function () {});
+      });
+      showGift();
+    }
+    // Welcome gift: added as a $0 line (price enforced by the automatic discount / Shopify Function).
+    $$('[data-gift-add]', form).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var checked = $('input[name="gift"]:checked', form);
+        if (!checked) return;
+        b.disabled = true;
+        fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: [{ id: parseInt(checked.value, 10), quantity: 1,
+            properties: { _regalo_bienvenida: 'true', Talla: ($('[name="gift_size"]', form) || {}).value || '' } }] }) })
+          .then(function () { location.reload(); }).catch(function () { b.disabled = false; });
+      });
+    });
+  }
+
+  /* Remember a referral code typed at sign-up so the cart can pick it up. */
+  function initRefSave() {
+    $$('[data-ref-save]').forEach(function (i) {
+      var saved = ''; try { saved = localStorage.getItem('kulinaria_ref') || ''; } catch (e) {}
+      if (saved && !i.value) i.value = saved;
+      i.addEventListener('input', function () {
+        i.value = i.value.toUpperCase().replace(/[^A-Z0-9_]/g, '');
+        try { localStorage.setItem('kulinaria_ref', i.value); } catch (e) {}
+      });
+    });
+  }
+
+  /* ---------- nav ---------- */
+  function initNav() {
+    var t = $('[data-nav-toggle]'), n = $('[data-nav]');
+    if (!t || !n) return;
+    t.addEventListener('click', function () {
+      var open = n.classList.toggle('is-open');
+      t.setAttribute('aria-expanded', open);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    initNav(); initCountdown(); initPauseLocks(); initFilters(); initProfileForm(); initCart(); initRefSave(); applyProfile();
+  });
+})();
+</script>
+</body></html>

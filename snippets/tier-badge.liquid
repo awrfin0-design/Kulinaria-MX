@@ -1,0 +1,12 @@
+{%- comment -%}
+  Menu level badge. Param: tier = selecto | exclusivo | signature | reserve
+  Selecto $160 base; +$60 per level (Exclusivo $, Signature $$, Reserve $$$).
+{%- endcomment -%}
+{%- assign tier_key = tier | downcase | strip -%}
+{%- case tier_key -%}
+  {%- when 'exclusivo' -%}{%- assign label = 'Exclusivo $' -%}
+  {%- when 'signature' -%}{%- assign label = 'Signature $$' -%}
+  {%- when 'reserve' -%}{%- assign label = 'Reserve $$$' -%}
+  {%- else -%}{%- assign tier_key = 'selecto' -%}{%- assign label = 'Selecto' -%}
+{%- endcase -%}
+<span class="tier-badge tier-badge--{{ tier_key }}">{{ label }}</span>

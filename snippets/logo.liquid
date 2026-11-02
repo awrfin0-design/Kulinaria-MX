@@ -1,0 +1,13 @@
+{%- comment -%}
+  Typographic Kulinaria logo (recreation). Replace with the official SVG by uploading
+  it and swapping this snippet's markup for an <img> or inline <svg>.
+  Params: size ('lg' optional), tone ('gold' default | 'cream')
+{%- endcomment -%}
+<span class="logo logo--{{ tone | default: 'gold' }}{% if size == 'lg' %} logo--lg{% endif %}" role="img" aria-label="{{ shop.name | default: 'Kulinaria' }}">
+  <span class="logo__k" aria-hidden="true">K</span>
+  <span class="logo__word" aria-hidden="true">
+    <span class="logo__name">ulinaria</span>
+    <span class="logo__rule"></span>
+    <span class="logo__tag">{{ settings.brand_tagline | default: 'Arte del fuego' }}</span>
+  </span>
+</span>

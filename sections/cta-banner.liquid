@@ -1,0 +1,36 @@
+<section class="cta-banner surface-walnut" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="panel panel--slate surface-slate">
+      <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+      <h2>{{ section.settings.heading }}</h2>
+      <div class="divider-gold" style="margin-inline:auto"><i></i></div>
+      <p class="lede" style="margin-inline:auto">{{ section.settings.text }}</p>
+      {%- if section.settings.show_countdown -%}
+        <p><span class="countdown" data-cutoff>Cierre de pedidos en <strong data-cutoff-value>…</strong></span></p>
+      {%- endif -%}
+      <div class="btn-row" style="justify-content:center">
+        <a class="btn btn--gold" href="{{ section.settings.button_link | default: settings.plans_url }}">{{ section.settings.button_label }}</a>
+        {%- if section.settings.button2_label != blank -%}
+          <a class="btn btn--outline" href="{{ section.settings.button2_link }}">{{ section.settings.button2_label }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Llamado a la acción",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Arte del fuego" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Empieza tu bloque de 4 semanas" },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Elige tu plan, cuéntanos tus alergias y nosotros nos encargamos del resto." },
+    { "type": "checkbox", "id": "show_countdown", "label": "Mostrar cuenta regresiva", "default": true },
+    { "type": "text", "id": "button_label", "label": "Botón", "default": "Elegir mi plan" },
+    { "type": "url", "id": "button_link", "label": "Enlace" },
+    { "type": "text", "id": "button2_label", "label": "Botón secundario" },
+    { "type": "url", "id": "button2_link", "label": "Enlace secundario" }
+  ],
+  "presets": [{ "name": "Llamado a la acción" }]
+}
+{% endschema %}

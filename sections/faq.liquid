@@ -1,0 +1,43 @@
+<section class="section {% if section.settings.background == 'raised' %}section--raised{% endif %}" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="section__head">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.heading }}</h2>
+      <div class="divider-gold"><i></i></div>
+      {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+    <div class="accordion">
+      {%- for block in section.blocks -%}
+        <details {% if forloop.first and section.settings.open_first %}open{% endif %} {{ block.shopify_attributes }}>
+          <summary>{{ block.settings.question }}</summary>
+          <div class="richtext">{{ block.settings.answer }}</div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Preguntas / cláusulas",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Ayuda" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Preguntas frecuentes" },
+    { "type": "textarea", "id": "text", "label": "Texto" },
+    { "type": "checkbox", "id": "open_first", "label": "Abrir la primera", "default": false },
+    { "type": "select", "id": "background", "label": "Fondo", "default": "base", "options": [
+      { "value": "base", "label": "Negro" }, { "value": "raised", "label": "Negro elevado" } ] }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Pregunta",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Pregunta", "default": "Pregunta" },
+        { "type": "richtext", "id": "answer", "label": "Respuesta", "default": "<p>Respuesta.</p>" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Preguntas / cláusulas", "blocks": [{ "type": "item" }, { "type": "item" }] }]
+}
+{% endschema %}

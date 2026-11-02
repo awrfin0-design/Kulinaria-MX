@@ -1,0 +1,22 @@
+{
+  "general": {
+    "skip_to_content": "Saltar al contenido",
+    "cart": "Carrito",
+    "account": "Mi cuenta",
+    "menu": "Menú",
+    "close": "Cerrar",
+    "search": "Buscar",
+    "page_not_found": "Página no encontrada"
+  },
+  "products": {
+    "add_to_selection": "Agregar a mi selección",
+    "sold_out": "Agotado",
+    "from": "Desde"
+  },
+  "cart": {
+    "title": "Mi selección",
+    "empty": "Aún no has elegido platillos.",
+    "checkout": "Continuar al pago",
+    "contract_label": "Acepto el contrato de adhesión y los términos de servicio de Kulinaria MX, incluida la selección automática de los sábados, las reglas de renovación y la política de no reembolso."
+  }
+}
