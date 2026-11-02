@@ -36,7 +36,7 @@
 
     {%- if section.settings.button_label != blank -%}
       <div class="btn-row" {% if section.settings.center %}style="justify-content:center"{% endif %}>
-        <a class="btn btn--gold" href="{{ section.settings.button_link | default: settings.plans_url }}">{{ section.settings.button_label }}</a>
+        <a class="btn btn--gold" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.button_label }}</a>
       </div>
     {%- endif -%}
   </div>

@@ -1,0 +1,13 @@
+{
+  "name": "kulinaria-theme-render",
+  "private": true,
+  "type": "module",
+  "description": "Renders the Liquid theme with mock Shopify data to produce preview/index.html and run page checks.",
+  "scripts": {
+    "build": "node render.mjs",
+    "test": "node test.mjs"
+  },
+  "dependencies": {
+    "liquidjs": "^10.30.1"
+  }
+}

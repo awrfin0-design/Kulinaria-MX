@@ -3,8 +3,8 @@
     <a href="{{ routes.root_url }}" aria-label="{{ shop.name }}">{% render 'logo' %}</a>
 
     <nav class="site-nav" data-nav aria-label="Principal">
-      {%- assign menu = linklists[section.settings.menu] -%}
-      {%- if menu.links.size > 0 -%}
+      {%- assign menu = section.settings.menu -%}
+      {%- if menu != blank and menu.links.size > 0 -%}
         {%- for link in menu.links -%}
           <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title }}</a>
         {%- endfor -%}
@@ -23,7 +23,7 @@
         {% render 'icon', name: 'bag' %}
         {%- if cart.item_count > 0 -%}<span class="cart-count">{{ cart.item_count }}</span>{%- endif -%}
       </a>
-      <a class="btn btn--gold" href="{{ settings.plans_url }}">{{ settings.cta_label }}</a>
+      <a class="btn btn--gold" href="{{ settings.plans_url | default: '/pages/planes' }}">{{ settings.cta_label }}</a>
       <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="{{ 'general.menu' | t }}">{% render 'icon', name: 'menu' %}</button>
     </div>
   </div>

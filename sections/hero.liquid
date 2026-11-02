@@ -12,10 +12,10 @@
 
       <div class="btn-row">
         {%- if section.settings.button_label != blank -%}
-          <a class="btn btn--gold" href="{{ section.settings.button_link | default: settings.plans_url }}">{{ section.settings.button_label }}</a>
+          <a class="btn btn--gold" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.button_label }}</a>
         {%- endif -%}
         {%- if section.settings.button2_label != blank -%}
-          <a class="btn btn--outline" href="{{ section.settings.button2_link }}">{{ section.settings.button2_label }}</a>
+          <a class="btn btn--outline" href="{{ section.settings.button2_link | default: '/collections/menu-semanal' }}">{{ section.settings.button2_label }}</a>
         {%- endif -%}
       </div>
     </div>
@@ -40,7 +40,7 @@
     { "type": "text", "id": "button_label", "label": "Botón principal", "default": "Elegir mi plan" },
     { "type": "url", "id": "button_link", "label": "Enlace del botón principal" },
     { "type": "text", "id": "button2_label", "label": "Botón secundario", "default": "Ver el menú de la semana" },
-    { "type": "url", "id": "button2_link", "label": "Enlace del botón secundario", "default": "/collections/menu-semanal" },
+    { "type": "url", "id": "button2_link", "label": "Enlace del botón secundario" },
     { "type": "checkbox", "id": "show_countdown", "label": "Mostrar cuenta regresiva de cierre", "default": true },
     { "type": "image_picker", "id": "plate_image", "label": "Foto del platillo (vista cenital, sobre pizarra)", "info": "Si está vacío se muestra el logotipo sobre la placa de pizarra." }
   ],

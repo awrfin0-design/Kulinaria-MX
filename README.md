@@ -1,7 +1,7 @@
 # Kulinaria MX — Shopify theme
 
 Custom Online Store 2.0 theme (Liquid) for **Kulinaria MX**: premium, subscription-based healthy meal delivery.
-Design tokens mirror the Figma design system (gold · ink · dark walnut; Playfair Display, Cormorant Garamond, Jost).
+Design tokens mirror the Figma design system (gold · ink · dark walnut) with a hand-lettered type system: **Kaushan Script** (brushed display script), **Alegreya** (calligraphic serif for reading), **Alegreya Sans** (small caps labels) and **Bodoni Moda** (logo).
 
 ```
 assets/      kulinaria.css (tokens + components), kulinaria.js (countdown, pause locks, filters, allergen profile, cart)
@@ -12,7 +12,8 @@ sections/    25 sections (header/footer groups, hero, feature-grid, dishes, tier
 snippets/    icon, logo, dish-card, tier-badge, selling-plan-picker, social-links
 templates/   JSON templates for every page in the approved sitemap
 docs/        subscriptions.md · backend-requirements.md · metafields.md
-preview/     index.html — standalone, self-contained HTML preview of the site
+preview/     index.html — standalone preview, generated from the real Liquid templates (31 pages)
+scripts/render/  Liquid render harness + end-to-end tests (see below)
 ```
 
 ## Pages (sitemap → template)
@@ -49,10 +50,38 @@ preview/     index.html — standalone, self-contained HTML preview of the site
 The theme is the storefront. Several rules in the business brief are *server-side* (charging, auto-selecting meals every Saturday, referral payouts…).
 [`docs/backend-requirements.md`](docs/backend-requirements.md) maps every rule to the Shopify feature/app that must enforce it.
 
+## Typography
+
+| Role | Font | Where |
+|---|---|---|
+| Display script | Kaushan Script | `h1`, `h2`, prices, tagline, numerals |
+| Reading serif | Alegreya (400/500/700, italic) | body copy, card titles, accordions |
+| Labels | Alegreya Sans (500/700), uppercase tracked | eyebrows, buttons, chips, nav, form labels |
+| Logo | Bodoni Moda | `snippets/logo.liquid` (typographic stand-in for the official logo) |
+
+Tokens live at the top of `assets/kulinaria.css` (`--font-display`, `--font-heading`, `--font-body`, `--font-label`, `--font-logo`);
+the Google Fonts link is in `layout/theme.liquid`. The "flame" ornament that replaces the usual divider is a CSS-masked inline SVG (`--flame`).
+
+## Preview and tests
+
+`preview/index.html` is **not hand-written**: `scripts/render` loads the real layout, JSON templates, sections and snippets with
+[liquidjs](https://liquidjs.com) plus mock store data (`scripts/render/mock.mjs`), then stitches every page into one navigable file.
+If a section breaks, the preview breaks, so it doubles as a smoke test of the Liquid.
+
+```bash
+cd scripts/render && npm install
+node render.mjs                       # rebuilds ../../preview/index.html and fails on dead links
+NODE_PATH=$(npm root -g) node test.mjs [screenshotDir]   # 150+ browser checks (needs Playwright)
+```
+
+The suite visits all 31 pages, clicks the real header/footer/CTA links, checks the headline font, filters, allergy blocking, product alerts,
+cart/contract gating, referral + gift flow, pause locks at fixed Mexico City times, forms, and overflow at 1440 / 820 / 390 px.
+The mock engine is not Shopify itself: still run `shopify theme check` and preview on a dev store before launch.
+
 ## Quality checks
 
 ```bash
 npm i -g @shopify/cli     # then:
 shopify theme check
 ```
-The theme currently passes `theme-check` with no errors (only informational warnings for Google Fonts and hard-coded `/collections` paths).
+The theme passes `theme-check` with no errors (only informational warnings for Google Fonts and hard-coded `/collections` paths).

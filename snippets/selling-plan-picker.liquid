@@ -12,11 +12,13 @@
         <span><strong>Compra única</strong><br><small class="text-muted">Un solo pago, sin renovación.</small></span>
       </label>
     {%- endunless -%}
+    {%- assign plan_n = 0 -%}
     {%- for group in product.selling_plan_groups -%}
       {%- for plan in group.selling_plans -%}
+        {%- assign plan_n = plan_n | plus: 1 -%}
         <label>
           <input type="radio" name="selling_plan" value="{{ plan.id }}"
-            {%- if product.requires_selling_plan and forloop.first and forloop.parentloop.first %} checked{% endif %}>
+            {%- if product.requires_selling_plan and plan_n == 1 %} checked{% endif %}>
           <span>
             <strong>{{ plan.name }}</strong>
             {%- if plan.description != blank -%}<br><small class="text-muted">{{ plan.description }}</small>{%- endif -%}

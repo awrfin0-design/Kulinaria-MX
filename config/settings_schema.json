@@ -45,7 +45,7 @@
   {
     "name": "Suscripción y contrato",
     "settings": [
-      { "type": "url", "id": "plans_url", "label": "Página de planes", "default": "/pages/planes" },
+      { "type": "url", "id": "plans_url", "label": "Página de planes" },
       { "type": "text", "id": "cta_label", "label": "Texto del botón principal", "default": "Elegir mi plan" },
       { "type": "page", "id": "contract_page", "label": "Página del contrato de adhesión" },
       { "type": "collection", "id": "welcome_gift_collection", "label": "Colección de regalos de bienvenida", "info": "Playera oficial y vaso mezclador. El precio $0 lo aplica un descuento automático." },

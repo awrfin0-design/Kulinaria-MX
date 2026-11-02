@@ -6,7 +6,7 @@
       <p class="text-muted">{{ order.created_at | date: '%d/%m/%Y' }} · {{ order.financial_status_label }} · {{ order.fulfillment_status_label }}</p>
       <a class="btn btn--ghost" href="{{ routes.account_url }}">← Volver a mi cuenta</a>
     </div>
-    <table class="table">
+    <div class="table-wrap"><table class="table">
       <thead><tr><th>Platillo</th><th>Cantidad</th><th style="text-align:right">Total</th></tr></thead>
       <tbody>
         {%- for line in order.line_items -%}
@@ -22,7 +22,7 @@
         {%- if order.total_discounts > 0 -%}<tr><td colspan="2" style="text-align:right">Descuentos</td><td style="text-align:right">-{{ order.total_discounts | money }}</td></tr>{%- endif -%}
         <tr><td colspan="2" style="text-align:right"><strong>Total</strong></td><td style="text-align:right"><strong>{{ order.total_price | money }}</strong></td></tr>
       </tfoot>
-    </table>
+    </table></div>
     {%- if order.shipping_address -%}
       <div class="card" style="margin-top:var(--space-xl)"><h3>Dirección de entrega</h3><p class="text-muted">{{ order.shipping_address | format_address }}</p></div>
     {%- endif -%}

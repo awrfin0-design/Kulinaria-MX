@@ -10,8 +10,8 @@
       <div>
         <h4>Explorar</h4>
         <ul>
-          {%- assign explore = linklists[section.settings.menu_explore] -%}
-          {%- if explore.links.size > 0 -%}
+          {%- assign explore = section.settings.menu_explore -%}
+          {%- if explore != blank and explore.links.size > 0 -%}
             {%- for link in explore.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
           {%- else -%}
             <li><a href="/collections/menu-semanal">Menú semanal</a></li>
@@ -26,8 +26,8 @@
       <div>
         <h4>Ayuda</h4>
         <ul>
-          {%- assign help = linklists[section.settings.menu_help] -%}
-          {%- if help.links.size > 0 -%}
+          {%- assign help = section.settings.menu_help -%}
+          {%- if help != blank and help.links.size > 0 -%}
             {%- for link in help.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
           {%- else -%}
             <li><a href="/pages/nosotros">Nosotros</a></li>

@@ -84,7 +84,7 @@
   "@context": "https://schema.org/",
   "@type": "Product",
   "name": {{ product.title | json }},
-  "image": {{ product.featured_image | image_url: width: 1100 | prepend: 'https:' | json }},
+  {%- if product.featured_image %}"image": {{ product.featured_image | image_url: width: 1100 | prepend: 'https:' | json }},{% endif %}
   "description": {{ product.description | strip_html | json }},
   "offers": {
     "@type": "Offer",

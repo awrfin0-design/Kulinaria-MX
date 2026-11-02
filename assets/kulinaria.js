@@ -137,25 +137,23 @@
       $$('button[type="submit"],[data-add]', card).forEach(function (b) { b.disabled = hard; });
       card.setAttribute('data-compat-value', compat);
     });
-    var alert = $('[data-allergen-alert]');
-    if (alert) {
-      var card = $('[data-dish-detail]');
-      if (card && (al.length || dl.length)) {
-        var tags = (card.getAttribute('data-allergens') || '').split('|').map(norm);
-        var ings = (card.getAttribute('data-ingredients') || '').split('|').map(norm);
-        var hit = al.filter(function (a) { return tags.indexOf(a) > -1 || ings.indexOf(a) > -1; });
-        var soft = dl.filter(function (d) { return ings.some(function (i) { return i.indexOf(d) > -1; }); });
-        alert.hidden = !(hit.length || soft.length);
-        if (hit.length) {
-          alert.className = 'alert alert--warn';
-          alert.textContent = 'No apto para tu perfil: contiene ' + hit.join(', ') + '.';
-          $$('[data-add]').forEach(function (b) { b.disabled = true; });
-        } else if (soft.length) {
-          alert.className = 'alert alert--ok';
-          alert.textContent = 'Contiene ingredientes que marcaste como "no me gustan": ' + soft.join(', ') + '.';
-        }
+    $$('[data-dish-detail]').forEach(function (detail) {
+      var alert = $('[data-allergen-alert]', detail);
+      if (!alert) return;
+      var tags = (detail.getAttribute('data-allergens') || '').split('|').map(norm).filter(Boolean);
+      var ings = (detail.getAttribute('data-ingredients') || '').split('|').map(norm).filter(Boolean);
+      var hit = al.filter(function (a) { return tags.indexOf(a) > -1 || ings.indexOf(a) > -1; });
+      var soft = dl.filter(function (d) { return ings.some(function (i) { return i.indexOf(d) > -1; }); });
+      alert.hidden = !(hit.length || soft.length);
+      $$('[data-add]', detail).forEach(function (b) { b.disabled = hit.length > 0; });
+      if (hit.length) {
+        alert.className = 'alert alert--warn';
+        alert.textContent = 'No apto para tu perfil: contiene ' + hit.join(', ') + '.';
+      } else if (soft.length) {
+        alert.className = 'alert alert--ok';
+        alert.textContent = 'Contiene ingredientes que marcaste como "no me gustan": ' + soft.join(', ') + '.';
       }
-    }
+    });
   }
 
   function initProfileForm() {
@@ -231,10 +229,23 @@
         run();
       });
     });
-    // deep link: ?categoria=bowls&dieta=keto
-    var q = new URLSearchParams(location.search);
-    if (q.get('categoria')) { var cb = $('[data-filter="category"][data-value="' + q.get('categoria') + '"]', bar); if (cb) cb.click(); }
-    if (q.get('dieta')) { var db = $('[data-filter="diet"][data-value="' + q.get('dieta') + '"]', bar); if (db) db.click(); }
+    // deep link: ?categoria=bowls&dieta=keto  (also works as #/menu?categoria=bowls)
+    var deepLink = function () {
+      var qs = location.search || (location.hash.indexOf('?') > -1 ? location.hash.slice(location.hash.indexOf('?')) : '');
+      var q = new URLSearchParams(qs);
+      if (!q.get('categoria') && !q.get('dieta')) return;
+      // a new deep link replaces whatever was selected before
+      $$('[data-filter="diet"][aria-pressed="true"]', bar).forEach(function (x) { x.click(); });
+      var allCat = $('[data-filter="category"][data-value="all"]', bar); if (allCat) allCat.click();
+      var allTier = $('[data-filter="tier"][data-value="all"]', bar); if (allTier) allTier.click();
+      if (q.get('categoria')) { var cb = $('[data-filter="category"][data-value="' + q.get('categoria') + '"]', bar); if (cb) cb.click(); }
+      if (q.get('dieta')) {
+        var db = $('[data-filter="diet"][data-value="' + q.get('dieta') + '"]', bar);
+        if (db && db.getAttribute('aria-pressed') !== 'true') db.click();
+      }
+    };
+    deepLink();
+    window.addEventListener('hashchange', deepLink);
     run();
   }
 
@@ -263,13 +274,16 @@
     // Welcome gift: added as a $0 line (price enforced by the automatic discount / Shopify Function).
     $$('[data-gift-add]', form).forEach(function (b) {
       b.addEventListener('click', function () {
-        var checked = $('input[name="gift"]:checked', form);
+        var checked = $('input[name="gift"]:checked', form) || $('input[name="gift"]', form);
         if (!checked) return;
         b.disabled = true;
         fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items: [{ id: parseInt(checked.value, 10), quantity: 1,
             properties: { _regalo_bienvenida: 'true', Talla: ($('[name="gift_size"]', form) || {}).value || '' } }] }) })
-          .then(function () { location.reload(); }).catch(function () { b.disabled = false; });
+          .then(function () {
+            var ev = new CustomEvent('kulinaria:cart-updated', { cancelable: true });
+            if (document.dispatchEvent(ev)) location.reload(); else b.disabled = false;
+          }).catch(function () { b.disabled = false; });
       });
     });
   }

@@ -11,7 +11,7 @@
         <p class="lede" style="margin-inline:auto">{{ 'cart.empty' | t }}</p>
         <div class="btn-row" style="justify-content:center">
           <a class="btn btn--gold" href="/collections/menu-semanal">Ver el menú de la semana</a>
-          <a class="btn btn--outline" href="{{ settings.plans_url }}">{{ settings.cta_label }}</a>
+          <a class="btn btn--outline" href="{{ settings.plans_url | default: '/pages/planes' }}">{{ settings.cta_label }}</a>
         </div>
       </div>
     {%- else -%}
@@ -49,7 +49,6 @@
               <label for="ref">Código</label>
               <input class="input" id="ref" name="attributes[codigo_referencia]" value="{{ cart.attributes.codigo_referencia }}" placeholder="JUANFIT" data-referral autocomplete="off" style="text-transform:uppercase">
             </div>
-            <p class="alert alert--ok" data-referral-msg hidden>Código guardado. Se valida al confirmar el pago de tu primer bloque.</p>
 
             <div data-gift hidden style="margin-top:var(--space-lg)">
               <h3>Tu regalo de bienvenida</h3>
@@ -57,9 +56,11 @@
               {%- assign gift_col = settings.welcome_gift_collection -%}
               <div class="gift-options">
                 {%- if gift_col != blank -%}
+                  {%- assign gift_n = 0 -%}
                   {%- for product in gift_col.products -%}
                     {%- for variant in product.variants -%}
-                      <label><input type="radio" name="gift" value="{{ variant.id }}" {% if forloop.parentloop.first and forloop.first %}checked{% endif %}>
+                      {%- assign gift_n = gift_n | plus: 1 -%}
+                      <label><input type="radio" name="gift" value="{{ variant.id }}" {% if gift_n == 1 %}checked{% endif %}>
                         <span>{{ product.title }}{% unless product.has_only_default_variant %} · {{ variant.title }}{% endunless %} <s class="text-muted">{{ variant.price | money_without_trailing_zeros }}</s> <strong style="color:var(--gold-300)">$0</strong></span></label>
                     {%- endfor -%}
                   {%- endfor -%}
@@ -69,6 +70,7 @@
               </div>
               {%- if gift_col != blank -%}<button class="btn btn--outline btn--block" type="button" data-gift-add style="margin-top:var(--space-md)">Agregar regalo</button>{%- endif -%}
             </div>
+            <p class="alert alert--ok" data-referral-msg hidden style="margin-top:var(--space-md)">Código guardado. Se valida al confirmar el pago de tu primer bloque.</p>
           </div>
 
           <div class="panel panel--gold">
