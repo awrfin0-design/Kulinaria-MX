@@ -1337,6 +1337,16 @@ button.text-link{background:none;border:0;border-radius:0;cursor:pointer;padding
 .fn-tier--any .fn-tier__price{font-size:1.5rem;white-space:nowrap;padding-block:.35rem}
 .funnel__bar{width:calc(100% - 2*clamp(20px,4vw,48px));max-width:calc(var(--container) - 2*clamp(20px,4vw,48px))}
 
+/* v8.1: inline logo sits on the text line without stretching it */
+.wordmark{vertical-align:middle;margin-block:-.5em;margin-inline:.15em}
+.wordmark img{height:1.3em;width:auto}
+h1 .wordmark img,h2 .wordmark img,h3 .wordmark img{height:1.45em}
+.wordmark img.wm-cream,.wordmark img.wm-gold{display:none}
+h1 .wordmark img,h2 .wordmark img{height:1.2em}
+h3 .wordmark img,.dish__title .wordmark img,.card h3 .wordmark img{height:1.05em}
+.eyebrow .wordmark img,.label .wordmark img,.page-head__crumbs .wordmark img{height:2.6em}
+.eyebrow .wordmark{margin-block:-1em}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -1937,7 +1947,7 @@ button.text-link{background:none;border:0;border-radius:0;cursor:pointer;padding
   <div class="container">
     <div class="rail" data-rail>
       <div class="rail__head">
-        <div class="section__head"><span class="eyebrow">Menú de la semana</span><h2>Esta semana <em>en Kulinaria</em></h2><p class="lede">Un menú rotativo de 8 a 10 platillos. Cada uno con una sola foto del emplatado final, vista desde arriba.</p></div><div class="rail__nav">
+        <div class="section__head"><span class="eyebrow">Menú de la semana</span><h2>Esta semana <em>en <span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-black.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-cream.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true"></span></em></h2><p class="lede">Un menú rotativo de 8 a 10 platillos. Cada uno con una sola foto del emplatado final, vista desde arriba.</p></div><div class="rail__nav">
             <button class="rail-btn" type="button" data-rail-prev aria-label="Anterior">←</button>
             <button class="rail-btn" type="button" data-rail-next aria-label="Siguiente">→</button>
           </div></div>
@@ -2485,7 +2495,7 @@ Pago digital, sin efectivo</li></ul>
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Ruta de navegación">
           <a href="#/home">Inicio</a><i aria-hidden="true">/</i><span>Kulinaria Store</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Kulinaria <em>Store</em></h1><p class="hero__sub">Línea Fit Apparel: playera oficial y vaso mezclador premium.</p></div>
+        <span class="hero__rule" aria-hidden="true"></span><h1><span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-black.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-cream.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true"></span> <em>Store</em></h1><p class="hero__sub">Línea Fit Apparel: playera oficial y vaso mezclador premium.</p></div>
     </div>
   </div></header>
 
@@ -5404,7 +5414,7 @@ Pago digital, sin efectivo</li></ul>
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Ruta de navegación">
           <a href="#/home">Inicio</a><i aria-hidden="true">/</i><span>Embajadores</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Recomienda Kulinaria y gana <em>con cada cliente</em></h1><p class="hero__sub">Tres ramas para crecer juntos: entrenadores (ropa y efectivo), clientes (crédito interno) y gimnasios aliados (flujo de efectivo de alto volumen).</p><div class="hero__cta">
+        <span class="hero__rule" aria-hidden="true"></span><h1>Recomienda <span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-black.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-cream.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true"></span> y gana <em>con cada cliente</em></h1><p class="hero__sub">Tres ramas para crecer juntos: entrenadores (ropa y efectivo), clientes (crédito interno) y gimnasios aliados (flujo de efectivo de alto volumen).</p><div class="hero__cta">
             <a class="arrow-link" href="#/pg/embajadores-solicitar"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Quiero ser embajador</a></div></div>
     </div>
@@ -7343,7 +7353,7 @@ Pago digital, sin efectivo</li></ul>
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Ruta de navegación">
           <a href="#/home">Inicio</a><i aria-hidden="true">/</i><span>Iniciar sesión</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Tu cuenta <em>Kulinaria</em></h1><p class="hero__sub">Entra para elegir tus platillos, pausar entregas y ver tu monedero.</p></div>
+        <span class="hero__rule" aria-hidden="true"></span><h1>Tu cuenta <em><span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-black.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-cream.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true"></span></em></h1><p class="hero__sub">Entra para elegir tus platillos, pausar entregas y ver tu monedero.</p></div>
     </div>
   </div></header>
 
@@ -8032,7 +8042,7 @@ Pago digital, sin efectivo</li></ul>
   <div class="container">
     <div class="rail" data-rail>
       <div class="rail__head">
-        <div class="section__head"><span class="eyebrow">This week's menu</span><h2>This week <em>at Kulinaria</em></h2><p class="lede">A rotating menu of 8 to 10 dishes. Each with a single photo of the final plating, seen from above.</p></div><div class="rail__nav">
+        <div class="section__head"><span class="eyebrow">This week's menu</span><h2>This week <em>at <span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-black.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-cream.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true"></span></em></h2><p class="lede">A rotating menu of 8 to 10 dishes. Each with a single photo of the final plating, seen from above.</p></div><div class="rail__nav">
             <button class="rail-btn" type="button" data-rail-prev aria-label="Previous">←</button>
             <button class="rail-btn" type="button" data-rail-next aria-label="Next">→</button>
           </div></div>
@@ -8580,7 +8590,7 @@ Digital payment, no cash</li></ul>
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Breadcrumb">
           <a href="#/home">Home</a><i aria-hidden="true">/</i><span>Kulinaria Store</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Kulinaria <em>Store</em></h1><p class="hero__sub">Fit Apparel line: official tee and premium shaker cup.</p></div>
+        <span class="hero__rule" aria-hidden="true"></span><h1><span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-black.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-cream.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true"></span> <em>Store</em></h1><p class="hero__sub">Fit Apparel line: official tee and premium shaker cup.</p></div>
     </div>
   </div></header>
 
@@ -11499,7 +11509,7 @@ Digital payment, no cash</li></ul>
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Breadcrumb">
           <a href="#/home">Home</a><i aria-hidden="true">/</i><span>Ambassadors</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Recommend Kulinaria and earn <em>with every client</em></h1><p class="hero__sub">Three branches to grow together: trainers (apparel and cash), clients (store credit) and partner gyms (high-volume cash flow).</p><div class="hero__cta">
+        <span class="hero__rule" aria-hidden="true"></span><h1>Recommend <span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-black.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-cream.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true"></span> and earn <em>with every client</em></h1><p class="hero__sub">Three branches to grow together: trainers (apparel and cash), clients (store credit) and partner gyms (high-volume cash flow).</p><div class="hero__cta">
             <a class="arrow-link" href="#/pg/embajadores-solicitar"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>I want to be an ambassador</a></div></div>
     </div>
@@ -13438,7 +13448,7 @@ Digital payment, no cash</li></ul>
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Breadcrumb">
           <a href="#/home">Home</a><i aria-hidden="true">/</i><span>Sign in</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Your <em>Kulinaria</em> account</h1><p class="hero__sub">Sign in to choose your dishes, pause deliveries and see your wallet.</p></div>
+        <span class="hero__rule" aria-hidden="true"></span><h1>Your <em><span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-black.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-cream.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true"></span></em> account</h1><p class="hero__sub">Sign in to choose your dishes, pause deliveries and see your wallet.</p></div>
     </div>
   </div></header>
 
@@ -14565,6 +14575,7 @@ Digital payment, no cash</li></ul>
 
 
   // the client wants the logo wherever the word "Kulinaria" appears in the copy (accessible name kept for screen readers)
+  var initWordmarkScan = function () {};
   function initWordmark() {
     var L = cfg.logos; if (!L) return;
     var SKIP = /^(SCRIPT|STYLE|TEXTAREA|INPUT|SELECT|OPTION|TITLE|NOSCRIPT|SVG|IMG|BUTTON)$/;
@@ -14593,6 +14604,7 @@ Digital payment, no cash</li></ul>
       });
     };
     scan(document.body);
+    initWordmarkScan = function () { scan(document.body); };
     document.addEventListener('kx:scan', function () { scan(document.body); });
   }
 
@@ -14846,12 +14858,13 @@ Digital payment, no cash</li></ul>
     });
   }
 
+  // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
+  var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    initLoader(); initTheme(); initParticles(); initMenu();
-    initCountdown(); initSteps(); initFunnel(); initPauseLocks(); initFilters(); initProfileForm(); initCart(); initRefSave(); applyProfile();
-    initSplit(); initReveal(); initChrome(); initScrollVars(); initPointer(); initRail();
-    initVideos(); initBand(); initWordmark(); initFire(); initTilt(); initPeek();
+    [initWordmark, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
+    window.addEventListener('load', function () { run(initWordmarkScan); });
   });
 })();
 </script>

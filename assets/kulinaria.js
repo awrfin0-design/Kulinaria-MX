@@ -664,6 +664,7 @@
 
 
   // the client wants the logo wherever the word "Kulinaria" appears in the copy (accessible name kept for screen readers)
+  var initWordmarkScan = function () {};
   function initWordmark() {
     var L = cfg.logos; if (!L) return;
     var SKIP = /^(SCRIPT|STYLE|TEXTAREA|INPUT|SELECT|OPTION|TITLE|NOSCRIPT|SVG|IMG|BUTTON)$/;
@@ -692,6 +693,7 @@
       });
     };
     scan(document.body);
+    initWordmarkScan = function () { scan(document.body); };
     document.addEventListener('kx:scan', function () { scan(document.body); });
   }
 
@@ -945,11 +947,12 @@
     });
   }
 
+  // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
+  var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    initLoader(); initTheme(); initParticles(); initMenu();
-    initCountdown(); initSteps(); initFunnel(); initPauseLocks(); initFilters(); initProfileForm(); initCart(); initRefSave(); applyProfile();
-    initSplit(); initReveal(); initChrome(); initScrollVars(); initPointer(); initRail();
-    initVideos(); initBand(); initWordmark(); initFire(); initTilt(); initPeek();
+    [initWordmark, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
+    window.addEventListener('load', function () { run(initWordmarkScan); });
   });
 })();

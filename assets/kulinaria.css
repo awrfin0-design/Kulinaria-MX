@@ -1306,3 +1306,13 @@ button.text-link{background:none;border:0;border-radius:0;cursor:pointer;padding
 .funnel__stage .container{max-width:var(--container);margin-inline:auto;width:100%;padding-inline:clamp(20px,4vw,48px)}
 .fn-tier--any .fn-tier__price{font-size:1.5rem;white-space:nowrap;padding-block:.35rem}
 .funnel__bar{width:calc(100% - 2*clamp(20px,4vw,48px));max-width:calc(var(--container) - 2*clamp(20px,4vw,48px))}
+
+/* v8.1: inline logo sits on the text line without stretching it */
+.wordmark{vertical-align:middle;margin-block:-.5em;margin-inline:.15em}
+.wordmark img{height:1.3em;width:auto}
+h1 .wordmark img,h2 .wordmark img,h3 .wordmark img{height:1.45em}
+.wordmark img.wm-cream,.wordmark img.wm-gold{display:none}
+h1 .wordmark img,h2 .wordmark img{height:1.2em}
+h3 .wordmark img,.dish__title .wordmark img,.card h3 .wordmark img{height:1.05em}
+.eyebrow .wordmark img,.label .wordmark img,.page-head__crumbs .wordmark img{height:2.6em}
+.eyebrow .wordmark{margin-block:-1em}

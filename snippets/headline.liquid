@@ -2,7 +2,8 @@
   Headline with a brand-script emphasis: text between asterisks becomes <em> (Kaushan Script), e.g. "Tres pasos y tu semana *está resuelta*".
   Param: text
 {%- endcomment -%}
-{%- assign hl_parts = text | escape | split: '*' -%}
+{%- capture hl_wm -%}<span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="{{ 'logo-black.webp' | asset_url }}" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="{{ 'logo-cream.webp' | asset_url }}" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="{{ 'logo.webp' | asset_url }}" width="700" height="342" alt="" aria-hidden="true"></span>{%- endcapture -%}
+{%- assign hl_parts = text | escape | replace: 'Kulinaria', hl_wm | split: '*' -%}
 {%- for hl_part in hl_parts -%}
   {%- assign hl_odd = forloop.index0 | modulo: 2 -%}
   {%- if hl_odd == 1 -%}<em>{{ hl_part }}</em>{%- else -%}{{ hl_part }}{%- endif -%}
