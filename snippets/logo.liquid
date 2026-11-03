@@ -1,13 +1,30 @@
 {%- comment -%}
-  Typographic Kulinaria logo (recreation). Replace with the official SVG by uploading
-  it and swapping this snippet's markup for an <img> or inline <svg>.
-  Params: size ('lg' optional), tone ('gold' default | 'cream')
+  Official Kulinaria logo artwork (transparent PNG, extracted from the brand PDF).
+  Params:
+    tone: 'gold' (default, full colour) | 'cream' | 'black'  -> logo.png / logo-cream.png / logo-black.png
+    mark: true -> the K + flame monogram only (logo-mark.png)
+    height: optional CSS height (e.g. '56px'); width follows the artwork ratio
+  Replace the files in /assets (same names) with the high-resolution originals when available.
 {%- endcomment -%}
-<span class="logo logo--{{ tone | default: 'gold' }}{% if size == 'lg' %} logo--lg{% endif %}" role="img" aria-label="{{ shop.name | default: 'Kulinaria' }}">
-  <span class="logo__k" aria-hidden="true">K</span>
-  <span class="logo__word" aria-hidden="true">
-    <span class="logo__name">ulinaria</span>
-    <span class="logo__rule"></span>
-    <span class="logo__tag">{{ settings.brand_tagline | default: 'Arte del fuego' }}</span>
-  </span>
-</span>
+{%- liquid
+  assign tone_key = tone | default: 'gold'
+  if mark
+    assign file = 'logo-mark.png'
+    assign w = 356
+    assign h = 363
+  else
+    case tone_key
+      when 'cream'
+        assign file = 'logo-cream.png'
+      when 'black'
+        assign file = 'logo-black.png'
+      else
+        assign file = 'logo.png'
+    endcase
+    assign w = 817
+    assign h = 399
+  endif
+-%}
+<img class="logo{% if mark %} logo--mark{% endif %}" src="{{ file | asset_url }}" width="{{ w }}" height="{{ h }}"
+  alt="{% if mark %}{{ shop.name | default: 'Kulinaria' }}{% else %}{{ shop.name | default: 'Kulinaria' }}, {{ settings.brand_tagline | default: 'Arte del fuego' }}{% endif %}"
+  {%- if height %} style="height:{{ height }};width:auto"{% endif %} decoding="async">

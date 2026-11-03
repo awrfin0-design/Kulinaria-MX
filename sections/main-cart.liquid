@@ -20,7 +20,7 @@
           {%- for item in cart.items -%}
             <div class="cart-line">
               <a href="{{ item.url }}">
-                {%- if item.image -%}{{ item.image | image_url: width: 192 | image_tag: loading: 'lazy', alt: item.product.title }}{%- else -%}<span class="dish__ph surface-slate" style="width:96px;font-size:2rem">K</span>{%- endif -%}
+                {%- if item.image -%}{{ item.image | image_url: width: 192 | image_tag: loading: 'lazy', alt: item.product.title }}{%- else -%}<span class="dish__ph surface-slate" style="width:96px;font-size:2rem">{% render 'logo', mark: true %}</span>{%- endif -%}
               </a>
               <div>
                 <h3 style="margin:0 0 4px"><a href="{{ item.url }}">{{ item.product.title }}</a></h3>

@@ -107,7 +107,7 @@ export async function renderSite() {
     }
   };
 
-  state.renderSection = async (type, id, given = {}, blocksGiven = {}, order = null) => {
+  state.renderSection = async (type, id, given = {}, blocksGiven = {}, order = null, group = '') => {
     if (!parsedCache.has(type)) {
       let src = read(`sections/${type}.liquid`);
       const m = src.match(/\{%-?\s*schema\s*-?%\}([\s\S]*?)\{%-?\s*endschema\s*-?%\}/);
@@ -129,13 +129,13 @@ export async function renderSite() {
     });
     const section = { id, settings, blocks, block_order: blockIds, shopify_attributes: '' };
     const html = await engine.render(tpl, { ...current, section });
-    return `<div id="shopify-section-${id}" class="shopify-section">${html}</div>`;
+    return `<div id="shopify-section-${id}" class="shopify-section${group ? ' shopify-section-group-' + group : ''}">${html}</div>`;
   };
 
   state.renderGroup = async (name) => {
     const g = JSON.parse(read(`sections/${name}.json`));
     let out = '';
-    for (const id of g.order) out += await state.renderSection(g.sections[id].type, id, g.sections[id].settings, g.sections[id].blocks || {}, g.sections[id].block_order || null);
+    for (const id of g.order) out += await state.renderSection(g.sections[id].type, id, g.sections[id].settings, g.sections[id].blocks || {}, g.sections[id].block_order || null, name);
     return out;
   };
 
@@ -225,7 +225,13 @@ export async function renderSite() {
   const bar = `<details class="preview-bar"><summary><strong>VISTA PREVIA</strong> · generada desde las plantillas Liquid del tema con datos de ejemplo · <u>ver todas las páginas</u></summary><div class="preview-bar__links">${barLinks}</div></details>`;
   before = before.replace(/<body([^>]*)>/, (m, attrs) => `<body${attrs}>${bar}`);
   after = after.replace('</body>', () => `<script>${PREVIEW_JS}</script></body>`);
-  const doc = `${before}<main id="main" tabindex="-1">\n${pagesHtml}\n</main>${after}`;
+  let doc = `${before}<main id="main" tabindex="-1">\n${pagesHtml}\n</main>${after}`;
+  const ASSET_FILES = ['logo.png', 'logo-cream.png', 'logo-black.png', 'logo-mark.png', 'favicon.png'];
+  const table = Object.fromEntries(ASSET_FILES.map((f) => [f, 'data:image/png;base64,' + fs.readFileSync(path.join(ROOT, 'assets', f)).toString('base64')]));
+  const PIXEL = 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
+  doc = doc.replace(/<img([^>]*?)src="assets\/([^"]+\.png)"/g, (m, pre, f) => `<img${pre}src="${PIXEL}" data-asset="${f}"`);
+  doc = doc.replace(/<link rel="icon" type="image\/png" href="assets\/favicon\.png">/, () => `<link rel="icon" type="image/png" href="${table['favicon.png']}">`);
+  doc = doc.replace('</body>', () => `<script>(function(){var A=${JSON.stringify({ 'logo.png': table['logo.png'], 'logo-cream.png': table['logo-cream.png'], 'logo-black.png': table['logo-black.png'], 'logo-mark.png': table['logo-mark.png'] })};[].forEach.call(document.querySelectorAll('img[data-asset]'),function(i){i.src=A[i.getAttribute('data-asset')]||i.src;});})();</script></body>`);
 
   return { doc, routes, dead, store };
 }
@@ -237,6 +243,9 @@ const PREVIEW_CSS = `
 .preview-bar strong{color:var(--gold-300);letter-spacing:.16em}
 .preview-bar__links{display:flex;gap:8px 16px;flex-wrap:wrap;justify-content:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
 .preview-bar a{color:var(--gold-300);text-decoration:underline;text-underline-offset:3px}
+.preview-bar a{color:var(--gold-300)}
+[data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
+@keyframes pageIn{from{opacity:0;translate:0 16px}}
 .preview-toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--bg-raised);border:1px solid var(--gold-500);color:var(--text);padding:14px 22px;border-radius:8px;box-shadow:var(--shadow-card);z-index:200;max-width:90vw;font-family:var(--font-label);font-size:1rem}
 `;
 
@@ -260,7 +269,7 @@ const PREVIEW_JS = `
     });
     if (nav) nav.classList.remove('is-open');
     var pb = document.querySelector('.preview-bar'); if (pb) pb.open = false;
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }
   window.addEventListener('hashchange', route); route();
 

@@ -1,4 +1,4 @@
-<section class="cta-banner surface-walnut" {{ section.shopify_attributes }}>
+<section class="cta-banner surface-walnut" data-scroll {{ section.shopify_attributes }}>
   <div class="container">
     <div class="panel panel--slate surface-slate">
       <span class="eyebrow">{{ section.settings.eyebrow }}</span>
@@ -9,7 +9,7 @@
         <p><span class="countdown" data-cutoff>Cierre de pedidos en <strong data-cutoff-value>…</strong></span></p>
       {%- endif -%}
       <div class="btn-row" style="justify-content:center">
-        <a class="btn btn--gold" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.button_label }}</a>
+        <a class="btn btn--gold" data-magnetic href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.button_label }}</a>
         {%- if section.settings.button2_label != blank -%}
           <a class="btn btn--outline" href="{{ section.settings.button2_link }}">{{ section.settings.button2_label }}</a>
         {%- endif -%}

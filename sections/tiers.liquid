@@ -1,13 +1,12 @@
 <section class="section" {{ section.shopify_attributes }}>
   <div class="container">
-    <div class="section__head section__head--center">
+    <div class="section__head">
       {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
       <h2>{{ section.settings.heading }}</h2>
-      <div class="divider-gold"><i></i></div>
-      {%- if section.settings.text != blank -%}<p class="lede" style="margin-inline:auto">{{ section.settings.text }}</p>{%- endif -%}
+      {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
     </div>
 
-    <div class="grid grid--4">
+    <div class="tier-ladder">
       {%- for block in section.blocks -%}
         {%- case block.settings.tier -%}
           {%- when 'exclusivo' -%}{%- assign price = settings.price_exclusivo -%}
@@ -15,16 +14,15 @@
           {%- when 'reserve' -%}{%- assign price = settings.price_reserve -%}
           {%- else -%}{%- assign price = settings.price_selecto -%}
         {%- endcase -%}
-        <article class="card tier-card{% if block.settings.tier == 'reserve' %} tier-card--reserve{% endif %}" {{ block.shopify_attributes }}>
-          {% render 'tier-badge', tier: block.settings.tier %}
-          <p class="tier-card__price gold-text">${{ price }}<small> MXN</small></p>
-          <p class="text-muted" style="margin:0">por platillo</p>
-          <div class="divider-gold" style="margin:var(--space-md) auto"><i></i></div>
-          <p class="text-muted">{{ block.settings.text }}</p>
+        <article class="tier-row tier-row--{{ block.settings.tier }}" {{ block.shopify_attributes }}>
+          <span class="tier-row__n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+          <div>{% render 'tier-badge', tier: block.settings.tier %}</div>
+          <p class="tier-row__text">{{ block.settings.text }}</p>
+          <p class="tier-row__price gold-text">${{ price }}<small>MXN / platillo</small></p>
         </article>
       {%- endfor -%}
     </div>
-    {%- if section.settings.note != blank -%}<p class="text-muted" style="text-align:center;margin-top:var(--space-lg)">{{ section.settings.note }}</p>{%- endif -%}
+    {%- if section.settings.note != blank -%}<p class="text-muted" style="margin-top:var(--space-lg)">{{ section.settings.note }}</p>{%- endif -%}
   </div>
 </section>
 

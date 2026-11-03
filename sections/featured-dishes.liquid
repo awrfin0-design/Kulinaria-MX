@@ -1,33 +1,44 @@
+{%- assign rail = false -%}
+{%- if section.settings.layout == 'rail' -%}{%- assign rail = true -%}{%- endif -%}
 <section class="section section--raised" {{ section.shopify_attributes }}>
   <div class="container">
-    <div class="section__head">
-      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-      <h2>{{ section.settings.heading }}</h2>
-      <div class="divider-gold"><i></i></div>
-      {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
-    </div>
+    <div class="rail" {% if rail %}data-rail{% endif %}>
+      <div class="rail__head">
+        <div class="section__head">
+          {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+          <h2>{{ section.settings.heading }}</h2>
+          {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
+        </div>
+        {%- if rail -%}
+          <div class="rail__nav">
+            <button class="rail-btn" type="button" data-rail-prev aria-label="Anterior">←</button>
+            <button class="rail-btn" type="button" data-rail-next aria-label="Siguiente">→</button>
+          </div>
+        {%- endif -%}
+      </div>
 
-    <div class="dish-grid">
-      {%- if section.settings.collection != blank -%}
-        {%- for product in section.settings.collection.products limit: section.settings.limit -%}
-          {% render 'dish-card', product: product %}
-        {%- endfor -%}
-      {%- else -%}
-        {%- for i in (1..4) -%}
-          <article class="dish">
-            <div class="dish__media surface-walnut"><span class="dish__ph surface-slate" aria-hidden="true">K</span></div>
-            <div class="dish__body">
-              <div>{% render 'tier-badge', tier: 'selecto' %}</div>
-              <h3 class="dish__title">Platillo de ejemplo {{ i }}</h3>
-              <div class="dish__meta"><span class="dish__price">${{ settings.price_selecto }}</span></div>
-            </div>
-          </article>
-        {%- endfor -%}
-      {%- endif -%}
+      <div class="{% if rail %}rail__track{% else %}dish-grid{% endif %}" {% if rail %}tabindex="0" role="region" aria-label="{{ section.settings.heading | escape }}"{% endif %}>
+        {%- if section.settings.collection != blank -%}
+          {%- for product in section.settings.collection.products limit: section.settings.limit -%}
+            {% render 'dish-card', product: product %}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..4) -%}
+            <article class="dish">
+              <div class="dish__media surface-walnut"><span class="dish__ph surface-slate" aria-hidden="true">{% render 'logo', mark: true %}</span></div>
+              <div class="dish__body">
+                <div>{% render 'tier-badge', tier: 'selecto' %}</div>
+                <h3 class="dish__title">Platillo de ejemplo {{ i }}</h3>
+                <div class="dish__meta"><span class="dish__price">${{ settings.price_selecto }}</span></div>
+              </div>
+            </article>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
     </div>
 
     {%- if section.settings.button_label != blank -%}
-      <div class="btn-row"><a class="btn btn--outline" href="{{ section.settings.button_link | default: section.settings.collection.url }}">{{ section.settings.button_label }}</a></div>
+      <div class="btn-row"><a class="btn btn--outline" href="{{ section.settings.button_link | default: section.settings.collection.url | default: '/collections/menu-semanal' }}">{{ section.settings.button_label }}</a></div>
     {%- endif -%}
   </div>
 </section>
@@ -36,11 +47,13 @@
 {
   "name": "Platillos destacados",
   "settings": [
+    { "type": "select", "id": "layout", "label": "Diseño", "default": "rail", "options": [
+      { "value": "rail", "label": "Carrusel (arrastrar / flechas)" }, { "value": "grid", "label": "Cuadrícula" } ] },
     { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Menú de la semana" },
     { "type": "text", "id": "heading", "label": "Título", "default": "Esta semana en Kulinaria" },
     { "type": "textarea", "id": "text", "label": "Texto", "default": "Un menú rotativo de 8 a 10 platillos. Elige antes del sábado a las 10:00 AM." },
     { "type": "collection", "id": "collection", "label": "Colección" },
-    { "type": "range", "id": "limit", "label": "Cantidad", "min": 2, "max": 12, "step": 1, "default": 4 },
+    { "type": "range", "id": "limit", "label": "Cantidad", "min": 2, "max": 12, "step": 1, "default": 6 },
     { "type": "text", "id": "button_label", "label": "Botón", "default": "Ver el menú completo" },
     { "type": "url", "id": "button_link", "label": "Enlace del botón" }
   ],

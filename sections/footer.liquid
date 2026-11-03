@@ -2,7 +2,7 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        {% render 'logo' %}
+        {% render 'logo', tone: 'gold' %}
         <p class="text-muted" style="margin-top:var(--space-md);max-width:34ch">Servicio premium de comida saludable a domicilio, adaptada al estilo de vida de cada cliente.</p>
         {% render 'social-links' %}
       </div>
@@ -47,6 +47,8 @@
         </ul>
       </div>
     </div>
+
+    <p class="footer-mega" data-scroll="in" aria-hidden="true">Arte del fuego</p>
 
     <div class="footer-bottom">
       <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}. Todos los derechos reservados.</span>

@@ -18,16 +18,38 @@
         "eyebrow": "Cómo funciona",
         "heading": "Tres pasos y tu semana está resuelta",
         "columns": "3",
-        "numbered": true,
-        "background": "raised",
-        "button_label": "Elegir mi plan"
+        "background": "base",
+        "button_label": "Elegir mi plan",
+        "layout": "stack"
       },
       "blocks": {
-        "s1": { "type": "item", "settings": { "title": "Elige tu plan", "text": "<p>Bloques de 4 semanas con entrega semanal. ¿Quieres probar? Compra una sola semana.</p>" } },
-        "s2": { "type": "item", "settings": { "title": "Elige tus platillos", "text": "<p>Cada semana, un menú rotativo de 8 a 10 opciones. Confirma antes del sábado a las 10:00 AM o nosotros armamos tu pedido.</p>" } },
-        "s3": { "type": "item", "settings": { "title": "Recíbelo en casa", "text": "<p>Entrega a domicilio en envases de vidrio de alta calidad, listos para calentar. Pago 100% digital.</p>" } }
+        "s1": {
+          "type": "item",
+          "settings": {
+            "title": "Elige tu plan",
+            "text": "<p>Bloques de 4 semanas con entrega semanal. ¿Quieres probar? Compra una sola semana.</p>"
+          }
+        },
+        "s2": {
+          "type": "item",
+          "settings": {
+            "title": "Elige tus platillos",
+            "text": "<p>Cada semana, un menú rotativo de 8 a 10 opciones. Confirma antes del sábado a las 10:00 AM o nosotros armamos tu pedido.</p>"
+          }
+        },
+        "s3": {
+          "type": "item",
+          "settings": {
+            "title": "Recíbelo en casa",
+            "text": "<p>Entrega a domicilio en envases de vidrio de alta calidad, listos para calentar. Pago 100% digital.</p>"
+          }
+        }
       },
-      "block_order": ["s1", "s2", "s3"]
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ]
     },
     "dishes": {
       "type": "featured-dishes",
@@ -36,8 +58,9 @@
         "heading": "Esta semana en Kulinaria",
         "text": "Un menú rotativo de 8 a 10 platillos. Cada uno con una sola foto del emplatado final, vista desde arriba.",
         "collection": "menu-semanal",
-        "limit": 4,
-        "button_label": "Ver el menú completo"
+        "limit": 6,
+        "button_label": "Ver el menú completo",
+        "layout": "rail"
       }
     },
     "tiers": {
@@ -48,12 +71,41 @@
         "text": "Cada nivel suma $60 MXN fijos sobre el anterior. El precio incluye el empaque óptimo y la preparación del chef."
       },
       "blocks": {
-        "t1": { "type": "tier", "settings": { "tier": "selecto", "text": "Nuestro menú base diario: cocina saludable, balanceada y dietas adaptables (Keto, sin gluten, vegetariano) con pollo, cerdo o res magra." } },
-        "t2": { "type": "tier", "settings": { "tier": "exclusivo", "text": "Cocciones más lentas y elaboraciones sofisticadas: costras de frutos secos y reducciones artesanales." } },
-        "t3": { "type": "tier", "settings": { "tier": "signature", "text": "Recetas con sello de autor: cortes premium e ingredientes de temporada que no verás en un meal prep común." } },
-        "t4": { "type": "tier", "settings": { "tier": "reserve", "text": "La máxima gama: cortes Prime y mariscos selectos, acondicionados para mantener su calidad al recalentar." } }
+        "t1": {
+          "type": "tier",
+          "settings": {
+            "tier": "selecto",
+            "text": "Nuestro menú base diario: cocina saludable, balanceada y dietas adaptables (Keto, sin gluten, vegetariano) con pollo, cerdo o res magra."
+          }
+        },
+        "t2": {
+          "type": "tier",
+          "settings": {
+            "tier": "exclusivo",
+            "text": "Cocciones más lentas y elaboraciones sofisticadas: costras de frutos secos y reducciones artesanales."
+          }
+        },
+        "t3": {
+          "type": "tier",
+          "settings": {
+            "tier": "signature",
+            "text": "Recetas con sello de autor: cortes premium e ingredientes de temporada que no verás en un meal prep común."
+          }
+        },
+        "t4": {
+          "type": "tier",
+          "settings": {
+            "tier": "reserve",
+            "text": "La máxima gama: cortes Prime y mariscos selectos, acondicionados para mantener su calidad al recalentar."
+          }
+        }
       },
-      "block_order": ["t1", "t2", "t3", "t4"]
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ]
     },
     "categories": {
       "type": "feature-grid",
@@ -61,31 +113,135 @@
         "eyebrow": "Categorías",
         "heading": "Del desayuno a la cena, al fuego y al mar",
         "columns": "3",
-        "background": "base"
+        "background": "base",
+        "layout": "index"
       },
       "blocks": {
-        "c1": { "type": "item", "settings": { "title": "Desayunos Premium", "text": "<p>Para empezar el día con intención.</p>", "link": "/collections/menu-semanal?categoria=desayunos-premium" } },
-        "c2": { "type": "item", "settings": { "title": "Al Fuego y Mar", "text": "<p>Cortes, aves y pesca premium.</p>", "link": "/collections/menu-semanal?categoria=al-fuego-y-mar" } },
-        "c3": { "type": "item", "settings": { "title": "Bowls de la Semana", "text": "<p>Frescos, completos y de temporada.</p>", "link": "/collections/menu-semanal?categoria=bowls-de-la-semana" } },
-        "c4": { "type": "item", "settings": { "title": "Balanceado / Diario Premium", "text": "<p>La base de tu semana.</p>", "link": "/collections/menu-semanal?categoria=diario-premium" } },
-        "c5": { "type": "item", "settings": { "title": "Kulinaria Junior", "text": "<p>Platillos pensados para los más pequeños.</p>", "link": "/collections/menu-semanal?categoria=kulinaria-junior" } },
-        "c6": { "type": "item", "settings": { "title": "Entradas y complementos", "text": "<p>Sopas, cremas, postres y snacks saludables, batidos y bebidas.</p>", "link": "/collections/menu-semanal?categoria=sopas-y-entradas" } }
+        "c1": {
+          "type": "item",
+          "settings": {
+            "title": "Desayunos Premium",
+            "text": "<p>Para empezar el día con intención.</p>",
+            "link": "/collections/menu-semanal?categoria=desayunos-premium"
+          }
+        },
+        "c2": {
+          "type": "item",
+          "settings": {
+            "title": "Al Fuego y Mar",
+            "text": "<p>Cortes, aves y pesca premium.</p>",
+            "link": "/collections/menu-semanal?categoria=al-fuego-y-mar"
+          }
+        },
+        "c3": {
+          "type": "item",
+          "settings": {
+            "title": "Bowls de la Semana",
+            "text": "<p>Frescos, completos y de temporada.</p>",
+            "link": "/collections/menu-semanal?categoria=bowls-de-la-semana"
+          }
+        },
+        "c4": {
+          "type": "item",
+          "settings": {
+            "title": "Balanceado / Diario Premium",
+            "text": "<p>La base de tu semana.</p>",
+            "link": "/collections/menu-semanal?categoria=diario-premium"
+          }
+        },
+        "c5": {
+          "type": "item",
+          "settings": {
+            "title": "Kulinaria Junior",
+            "text": "<p>Platillos pensados para los más pequeños.</p>",
+            "link": "/collections/menu-semanal?categoria=kulinaria-junior"
+          }
+        },
+        "c6": {
+          "type": "item",
+          "settings": {
+            "title": "Entradas y complementos",
+            "text": "<p>Sopas, cremas, postres y snacks saludables, batidos y bebidas.</p>",
+            "link": "/collections/menu-semanal?categoria=sopas-y-entradas"
+          }
+        }
       },
-      "block_order": ["c1", "c2", "c3", "c4", "c5", "c6"]
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5",
+        "c6"
+      ]
     },
     "diets": {
       "type": "diet-chips",
-      "settings": { "eyebrow": "Enfoque nutricional", "heading": "Filtra el menú según tu estilo de vida", "target": "/collections/menu-semanal" },
-      "blocks": {
-        "d1": { "type": "chip", "settings": { "label": "Keto", "slug": "keto" } },
-        "d2": { "type": "chip", "settings": { "label": "Libre de gluten", "slug": "sin-gluten" } },
-        "d3": { "type": "chip", "settings": { "label": "Vegetariano", "slug": "vegetariano" } },
-        "d4": { "type": "chip", "settings": { "label": "Basado en plantas / Vegano", "slug": "vegano" } },
-        "d5": { "type": "chip", "settings": { "label": "Bajas calorías", "slug": "bajo-calorias" } },
-        "d6": { "type": "chip", "settings": { "label": "Bajos carbohidratos", "slug": "bajo-carbos" } },
-        "d7": { "type": "chip", "settings": { "label": "Alta proteína / Rendimiento", "slug": "alto-proteina" } }
+      "settings": {
+        "eyebrow": "Enfoque nutricional",
+        "heading": "Filtra el menú según tu estilo de vida",
+        "target": "/collections/menu-semanal"
       },
-      "block_order": ["d1", "d2", "d3", "d4", "d5", "d6", "d7"]
+      "blocks": {
+        "d1": {
+          "type": "chip",
+          "settings": {
+            "label": "Keto",
+            "slug": "keto"
+          }
+        },
+        "d2": {
+          "type": "chip",
+          "settings": {
+            "label": "Libre de gluten",
+            "slug": "sin-gluten"
+          }
+        },
+        "d3": {
+          "type": "chip",
+          "settings": {
+            "label": "Vegetariano",
+            "slug": "vegetariano"
+          }
+        },
+        "d4": {
+          "type": "chip",
+          "settings": {
+            "label": "Basado en plantas / Vegano",
+            "slug": "vegano"
+          }
+        },
+        "d5": {
+          "type": "chip",
+          "settings": {
+            "label": "Bajas calorías",
+            "slug": "bajo-calorias"
+          }
+        },
+        "d6": {
+          "type": "chip",
+          "settings": {
+            "label": "Bajos carbohidratos",
+            "slug": "bajo-carbos"
+          }
+        },
+        "d7": {
+          "type": "chip",
+          "settings": {
+            "label": "Alta proteína / Rendimiento",
+            "slug": "alto-proteina"
+          }
+        }
+      },
+      "block_order": [
+        "d1",
+        "d2",
+        "d3",
+        "d4",
+        "d5",
+        "d6",
+        "d7"
+      ]
     },
     "plans": {
       "type": "plans-compare",
@@ -98,16 +254,39 @@
         "heading": "Cada ingrediente, a la vista",
         "text": "<p>Para prevenir alergias, declaramos de forma explícita cada ingrediente y cruzamos el menú con tu perfil.</p>",
         "columns": "3",
-        "background": "raised",
+        "background": "base",
         "button_label": "Completar mi perfil",
-        "button_link": "/pages/perfil"
+        "button_link": "/pages/perfil",
+        "layout": "sticky"
       },
       "blocks": {
-        "a1": { "type": "item", "settings": { "title": "Ingredientes explícitos", "text": "<p>La ficha de cada platillo detalla todos sus ingredientes y alérgenos.</p>" } },
-        "a2": { "type": "item", "settings": { "title": "Alertas automáticas", "text": "<p>Al iniciar sesión bloqueamos o advertimos si un platillo contiene algo no apto para ti.</p>" } },
-        "a3": { "type": "item", "settings": { "title": "Gramaje en crudo", "text": "<p>El peso de la proteína se indica en bruto; la cocción puede reducirlo de forma natural.</p>" } }
+        "a1": {
+          "type": "item",
+          "settings": {
+            "title": "Ingredientes explícitos",
+            "text": "<p>La ficha de cada platillo detalla todos sus ingredientes y alérgenos.</p>"
+          }
+        },
+        "a2": {
+          "type": "item",
+          "settings": {
+            "title": "Alertas automáticas",
+            "text": "<p>Al iniciar sesión bloqueamos o advertimos si un platillo contiene algo no apto para ti.</p>"
+          }
+        },
+        "a3": {
+          "type": "item",
+          "settings": {
+            "title": "Gramaje en crudo",
+            "text": "<p>El peso de la proteína se indica en bruto; la cocción puede reducirlo de forma natural.</p>"
+          }
+        }
       },
-      "block_order": ["a1", "a2", "a3"]
+      "block_order": [
+        "a1",
+        "a2",
+        "a3"
+      ]
     },
     "more": {
       "type": "feature-grid",
@@ -115,14 +294,46 @@
         "eyebrow": "Más Kulinaria",
         "heading": "Experiencias y comunidad",
         "columns": "3",
-        "background": "base"
+        "background": "base",
+        "layout": "grid"
       },
       "blocks": {
-        "m1": { "type": "item", "settings": { "eyebrow": "Fuera de la suscripción", "title": "Carta Kulinaria", "text": "<p>Chef privado a domicilio y cenas románticas de los sábados. Cotización privada, sin precios publicados.</p>", "link_label": "Conocer la carta", "link": "/pages/carta-kulinaria" } },
-        "m2": { "type": "item", "settings": { "eyebrow": "Entrenadores y gimnasios", "title": "Programa de Embajadores", "text": "<p>Recomienda Kulinaria y gana bonos, ropa deportiva y estatus como Entrenador Personal de Alta Clase.</p>", "link_label": "Ver el programa", "link": "/pages/embajadores" } },
-        "m3": { "type": "item", "settings": { "eyebrow": "Fit Apparel", "title": "Kulinaria Store", "text": "<p>Playera oficial y vaso mezclador premium. Gratis con tu primer bloque si llegas con código de referencia.</p>", "link_label": "Ir a la tienda", "link": "/collections/kulinaria-store" } }
+        "m1": {
+          "type": "item",
+          "settings": {
+            "eyebrow": "Fuera de la suscripción",
+            "title": "Carta Kulinaria",
+            "text": "<p>Chef privado a domicilio y cenas románticas de los sábados. Cotización privada, sin precios publicados.</p>",
+            "link_label": "Conocer la carta",
+            "link": "/pages/carta-kulinaria"
+          }
+        },
+        "m2": {
+          "type": "item",
+          "settings": {
+            "eyebrow": "Entrenadores y gimnasios",
+            "title": "Programa de Embajadores",
+            "text": "<p>Recomienda Kulinaria y gana bonos, ropa deportiva y estatus como Entrenador Personal de Alta Clase.</p>",
+            "link_label": "Ver el programa",
+            "link": "/pages/embajadores"
+          }
+        },
+        "m3": {
+          "type": "item",
+          "settings": {
+            "eyebrow": "Fit Apparel",
+            "title": "Kulinaria Store",
+            "text": "<p>Playera oficial y vaso mezclador premium. Gratis con tu primer bloque si llegas con código de referencia.</p>",
+            "link_label": "Ir a la tienda",
+            "link": "/collections/kulinaria-store"
+          }
+        }
       },
-      "block_order": ["m1", "m2", "m3"]
+      "block_order": [
+        "m1",
+        "m2",
+        "m3"
+      ]
     },
     "proof": {
       "type": "feature-grid",
@@ -131,31 +342,154 @@
         "heading": "Lo que dicen nuestros clientes",
         "text": "<p>Sustituye estos textos por reseñas reales de clientes.</p>",
         "columns": "3",
-        "background": "raised"
+        "background": "raised",
+        "layout": "grid"
       },
       "blocks": {
-        "p1": { "type": "item", "settings": { "title": "Testimonio por definir", "text": "<p>“Reemplaza este texto con la reseña de un cliente.”</p>" } },
-        "p2": { "type": "item", "settings": { "title": "Testimonio por definir", "text": "<p>“Reemplaza este texto con la reseña de un cliente.”</p>" } },
-        "p3": { "type": "item", "settings": { "title": "Testimonio por definir", "text": "<p>“Reemplaza este texto con la reseña de un cliente.”</p>" } }
+        "p1": {
+          "type": "item",
+          "settings": {
+            "title": "Testimonio por definir",
+            "text": "<p>“Reemplaza este texto con la reseña de un cliente.”</p>"
+          }
+        },
+        "p2": {
+          "type": "item",
+          "settings": {
+            "title": "Testimonio por definir",
+            "text": "<p>“Reemplaza este texto con la reseña de un cliente.”</p>"
+          }
+        },
+        "p3": {
+          "type": "item",
+          "settings": {
+            "title": "Testimonio por definir",
+            "text": "<p>“Reemplaza este texto con la reseña de un cliente.”</p>"
+          }
+        }
       },
-      "block_order": ["p1", "p2", "p3"]
+      "block_order": [
+        "p1",
+        "p2",
+        "p3"
+      ]
     },
     "faq": {
       "type": "faq",
-      "settings": { "eyebrow": "Ayuda", "heading": "Preguntas frecuentes", "background": "base" },
-      "blocks": {
-        "q1": { "type": "item", "settings": { "question": "¿Hasta cuándo puedo elegir mis platillos?", "answer": "<p>Hasta el sábado a las 10:00 AM. Si no eliges, el sistema arma tu pedido con tu plan, tu historial y tus alergias registradas.</p>" } },
-        "q2": { "type": "item", "settings": { "question": "¿Puedo pausar mi suscripción?", "answer": "<p>Sí. Pausa las entregas de jueves y viernes a más tardar el martes a las 10:00 AM, y las de lunes a miércoles a más tardar el viernes a las 7:00 PM. Lo no preparado queda como saldo a favor.</p>" } },
-        "q3": { "type": "item", "settings": { "question": "¿Cómo se paga?", "answer": "<p>Todo se cobra de forma digital en la web al hacer el pedido. No se acepta efectivo.</p>" } },
-        "q4": { "type": "item", "settings": { "question": "¿Qué pasa con los envases de vidrio?", "answer": "<p>Cuídalos: un envase dañado o extraviado genera un cargo mínimo de $100 MXN. Lavarlos no es obligatorio.</p>" } },
-        "q5": { "type": "item", "settings": { "question": "¿Hay reembolsos?", "answer": "<p>Compramos los insumos en volumen, por eso una vez liquidada la suscripción no hay cancelación ni devolución de dinero.</p>" } }
+      "settings": {
+        "eyebrow": "Ayuda",
+        "heading": "Preguntas frecuentes",
+        "background": "base"
       },
-      "block_order": ["q1", "q2", "q3", "q4", "q5"]
+      "blocks": {
+        "q1": {
+          "type": "item",
+          "settings": {
+            "question": "¿Hasta cuándo puedo elegir mis platillos?",
+            "answer": "<p>Hasta el sábado a las 10:00 AM. Si no eliges, el sistema arma tu pedido con tu plan, tu historial y tus alergias registradas.</p>"
+          }
+        },
+        "q2": {
+          "type": "item",
+          "settings": {
+            "question": "¿Puedo pausar mi suscripción?",
+            "answer": "<p>Sí. Pausa las entregas de jueves y viernes a más tardar el martes a las 10:00 AM, y las de lunes a miércoles a más tardar el viernes a las 7:00 PM. Lo no preparado queda como saldo a favor.</p>"
+          }
+        },
+        "q3": {
+          "type": "item",
+          "settings": {
+            "question": "¿Cómo se paga?",
+            "answer": "<p>Todo se cobra de forma digital en la web al hacer el pedido. No se acepta efectivo.</p>"
+          }
+        },
+        "q4": {
+          "type": "item",
+          "settings": {
+            "question": "¿Qué pasa con los envases de vidrio?",
+            "answer": "<p>Cuídalos: un envase dañado o extraviado genera un cargo mínimo de $100 MXN. Lavarlos no es obligatorio.</p>"
+          }
+        },
+        "q5": {
+          "type": "item",
+          "settings": {
+            "question": "¿Hay reembolsos?",
+            "answer": "<p>Compramos los insumos en volumen, por eso una vez liquidada la suscripción no hay cancelación ni devolución de dinero.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ]
     },
     "cta": {
       "type": "cta-banner",
       "settings": {}
+    },
+    "marquee": {
+      "type": "marquee",
+      "settings": {
+        "label": "Arte del fuego",
+        "speed": 45
+      },
+      "blocks": {
+        "m1": {
+          "type": "item",
+          "settings": {
+            "text": "Arte del fuego"
+          }
+        },
+        "m2": {
+          "type": "item",
+          "settings": {
+            "text": "Selecto"
+          }
+        },
+        "m3": {
+          "type": "item",
+          "settings": {
+            "text": "Exclusivo"
+          }
+        },
+        "m4": {
+          "type": "item",
+          "settings": {
+            "text": "Signature"
+          }
+        },
+        "m5": {
+          "type": "item",
+          "settings": {
+            "text": "Reserve"
+          }
+        }
+      },
+      "block_order": [
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5"
+      ]
     }
   },
-  "order": ["hero", "how", "dishes", "tiers", "categories", "diets", "plans", "safety", "more", "proof", "faq", "cta"]
+  "order": [
+    "hero",
+    "marquee",
+    "how",
+    "dishes",
+    "tiers",
+    "categories",
+    "diets",
+    "plans",
+    "safety",
+    "more",
+    "proof",
+    "faq",
+    "cta"
+  ]
 }

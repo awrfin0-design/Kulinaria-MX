@@ -1,10 +1,9 @@
-<section class="hero surface-walnut" {{ section.shopify_attributes }}>
+<section class="hero surface-walnut" data-scroll data-tilt {{ section.shopify_attributes }}>
   <div class="container hero__grid">
     <div class="hero__copy">
       {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
       <h1>{{ section.settings.heading }}</h1>
-      <div class="divider-gold"><i></i></div>
-      <p class="lede" style="color:var(--cream-200)">{{ section.settings.text }}</p>
+      <p class="lede">{{ section.settings.text }}</p>
 
       {%- if section.settings.show_countdown -%}
         <p><span class="countdown" data-cutoff>Cierre de pedidos en <strong data-cutoff-value>…</strong></span></p>
@@ -12,7 +11,7 @@
 
       <div class="btn-row">
         {%- if section.settings.button_label != blank -%}
-          <a class="btn btn--gold" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.button_label }}</a>
+          <a class="btn btn--gold" data-magnetic href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.button_label }}</a>
         {%- endif -%}
         {%- if section.settings.button2_label != blank -%}
           <a class="btn btn--outline" href="{{ section.settings.button2_link | default: '/collections/menu-semanal' }}">{{ section.settings.button2_label }}</a>
@@ -28,6 +27,7 @@
       {%- endif -%}
     </div>
   </div>
+  <span class="hero__scroll" aria-hidden="true"><i></i>Desliza</span>
 </section>
 
 {% schema %}

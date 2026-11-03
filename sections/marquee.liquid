@@ -1,0 +1,33 @@
+<section class="marquee" aria-label="{{ section.settings.label | escape }}" style="--speed:{{ section.settings.speed }}s" {{ section.shopify_attributes }}>
+  <div class="marquee__track">
+    {%- for i in (1..4) -%}
+      <div class="marquee__group"{% unless forloop.first %} aria-hidden="true"{% endunless %}>
+        {%- for block in section.blocks -%}
+          <span class="marquee__item" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Cinta en movimiento",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Etiqueta de accesibilidad", "default": "Arte del fuego" },
+    { "type": "range", "id": "speed", "label": "Duración del ciclo (segundos)", "min": 15, "max": 120, "step": 5, "default": 45 }
+  ],
+  "blocks": [
+    { "type": "item", "name": "Texto", "settings": [ { "type": "text", "id": "text", "label": "Texto", "default": "Arte del fuego" } ] }
+  ],
+  "presets": [
+    { "name": "Cinta en movimiento", "blocks": [
+      { "type": "item", "settings": { "text": "Arte del fuego" } },
+      { "type": "item", "settings": { "text": "Selecto" } },
+      { "type": "item", "settings": { "text": "Exclusivo" } },
+      { "type": "item", "settings": { "text": "Signature" } },
+      { "type": "item", "settings": { "text": "Reserve" } }
+    ] }
+  ]
+}
+{% endschema %}

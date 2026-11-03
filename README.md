@@ -1,14 +1,14 @@
 # Kulinaria MX — Shopify theme
 
 Custom Online Store 2.0 theme (Liquid) for **Kulinaria MX**: premium, subscription-based healthy meal delivery.
-Design tokens mirror the Figma design system (gold · ink · dark walnut) with a hand-lettered type system: **Kaushan Script** (brushed display script), **Alegreya** (calligraphic serif for reading), **Alegreya Sans** (small caps labels) and **Bodoni Moda** (logo).
+Design tokens mirror the Figma design system (gold · ink · dark walnut) with a hand-lettered type system: **Kaushan Script** (brushed display script), **Alegreya** (calligraphic serif for reading), and **Alegreya Sans** (small caps labels). The logo is the official artwork (see Logo).
 
 ```
 assets/      kulinaria.css (tokens + components), kulinaria.js (countdown, pause locks, filters, allergen profile, cart)
 config/      settings_schema.json (brand, cycle, tier prices, subscription & contract settings)
 layout/      theme.liquid
 locales/     es.default.json
-sections/    25 sections (header/footer groups, hero, feature-grid, dishes, tiers, plans, faq, forms, product, cart, account…)
+sections/    26 sections (header/footer groups, hero, feature-grid, dishes, tiers, plans, faq, forms, product, cart, account…)
 snippets/    icon, logo, dish-card, tier-badge, selling-plan-picker, social-links
 templates/   JSON templates for every page in the approved sitemap
 docs/        subscriptions.md · backend-requirements.md · metafields.md
@@ -57,10 +57,29 @@ The theme is the storefront. Several rules in the business brief are *server-sid
 | Display script | Kaushan Script | `h1`, `h2`, prices, tagline, numerals |
 | Reading serif | Alegreya (400/500/700, italic) | body copy, card titles, accordions |
 | Labels | Alegreya Sans (500/700), uppercase tracked | eyebrows, buttons, chips, nav, form labels |
-| Logo | Bodoni Moda | `snippets/logo.liquid` (typographic stand-in for the official logo) |
 
-Tokens live at the top of `assets/kulinaria.css` (`--font-display`, `--font-heading`, `--font-body`, `--font-label`, `--font-logo`);
+Tokens live at the top of `assets/kulinaria.css` (`--font-display`, `--font-heading`, `--font-body`, `--font-label`);
 the Google Fonts link is in `layout/theme.liquid`. The "flame" ornament that replaces the usual divider is a CSS-masked inline SVG (`--flame`).
+
+## Design and motion (v2)
+
+Minimal, editorial and kinetic. Everything is CSS + a small vanilla JS layer (`assets/kulinaria.js`), progressive and reduced-motion safe:
+
+- **Pill buttons** that fill from the cursor entry point, with an arrow that slides in; **magnetic** primary CTAs.
+- **Scroll choreography**: reading-progress bar, header that glass-blurs and hides on scroll-down / returns on scroll-up, headline words that rise in, staggered reveals, hero parallax with a light ring that orbits the plate as you scroll, footer wordmark drift.
+- **Sticky sections**: filter pill on the menu, product photo, order summary, account nav, and two content layouts (`stack` = cards pile up while scrolling, `sticky` = intro stays pinned).
+- **Distinct layouts** per content type: marquee ribbon, editorial **index** list for categories, **price ladder** for tiers, draggable **carousel** for dishes, spotlight cards.
+- `feature-grid` has a **Diseño** setting (grid / stack / sticky / index); `featured-dishes` has carrusel / cuadrícula.
+- Safety: nothing is hidden without JS; `prefers-reduced-motion` shows everything immediately; a 3.5 s failsafe (`.no-motion`) reveals content if the script never starts.
+
+## Logo
+
+`snippets/logo.liquid` renders the official artwork (K with flame ribbon, gold wordmark, rule, tagline) from transparent PNGs in `assets/`:
+`logo.png` (gold), `logo-cream.png`, `logo-black.png` (for gold foil backgrounds), `logo-mark.png` (K only, used as the dish placeholder) and `favicon.png`.
+Usage: `{% render 'logo' %}`, `{% render 'logo', tone: 'cream' %}`, `{% render 'logo', mark: true %}`. Copies live in `brand/logo/` for Figma/print.
+
+> The PNGs were extracted from the brand PDF (about 300 px wide, upscaled 3x). Replace the files in `assets/` and `brand/logo/` with the
+> high-resolution original (ideally SVG/PDF vector) and keep the same names; nothing else needs to change.
 
 ## Preview and tests
 
