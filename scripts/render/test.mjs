@@ -414,8 +414,9 @@ ok('dish cards use their own photos, not the logo placeholder', media.dishPhotos
 await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(1500);
 const hv = await page.evaluate(() => { const v = document.querySelector('[data-page="home"] [data-slide].is-on video'); return { playing: !v.paused && v.currentTime > 0, src: v.src.slice(0, 5), poster: !!v.poster }; });
 ok('hero video is playing (blob source) with a poster', hv.playing && hv.src === 'blob:' && hv.poster, JSON.stringify(hv));
-await page.waitForTimeout(8500);
-ok('hero alternates between its two videos', await page.evaluate(() => { const s = [...document.querySelectorAll('[data-page="home"] [data-slide]')]; return s.length === 2 && s[1].classList.contains('is-on') && !s[0].classList.contains('is-on'); }));
+const slideOn = () => page.evaluate(() => [...document.querySelectorAll('[data-page="home"] [data-slide]')].findIndex((x) => x.classList.contains('is-on')));
+const s0 = await slideOn(); await page.waitForTimeout(8600); const s1 = await slideOn();
+ok('hero alternates between its two videos', s0 !== -1 && s1 !== -1 && s0 !== s1 && (await page.$$('[data-page="home"] [data-slide]')).length === 2, `${s0} -> ${s1}`);
 await page.click('[data-page="home"] [data-media-toggle]'); await page.waitForTimeout(300);
 ok('hero pause button stops the video', await page.evaluate(() => [...document.querySelectorAll('[data-page="home"] [data-hero] video')].every((v) => v.paused)));
 await page.click('[data-page="home"] [data-media-toggle]');
