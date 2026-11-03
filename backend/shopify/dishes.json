@@ -1,0 +1,306 @@
+[
+ {
+  "handle": "pollo-a-las-hierbas",
+  "title": "Pollo a las hierbas con puré rústico",
+  "description": "Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de papa.",
+  "price": 160,
+  "type": "diario-premium",
+  "image": "photo-dish-0.webp",
+  "card_description": "Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de pap",
+  "metafields": {
+   "tier": "selecto",
+   "category": "diario-premium",
+   "allergens": [
+    "Lácteos"
+   ],
+   "ingredients": [
+    "Pollo",
+    "Papa",
+    "Mantequilla",
+    "Hierbas finas"
+   ],
+   "diets": [
+    "keto"
+   ],
+   "calories": 480,
+   "carbs": 22
+  }
+ },
+ {
+  "handle": "bowl-res-quinoa",
+  "title": "Bowl de res magra y quinoa",
+  "description": "Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.",
+  "price": 160,
+  "type": "bowls-de-la-semana",
+  "image": "photo-dish-1.webp",
+  "card_description": "Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.",
+  "metafields": {
+   "tier": "selecto",
+   "category": "bowls-de-la-semana",
+   "allergens": [],
+   "ingredients": [
+    "Res magra",
+    "Quinoa",
+    "Aguacate",
+    "Cilantro"
+   ],
+   "diets": [
+    "alto-proteina",
+    "sin-gluten"
+   ],
+   "calories": 560,
+   "carbs": 34
+  }
+ },
+ {
+  "handle": "salmon-costra-almendras",
+  "title": "Salmón gourmet en costra de almendras",
+  "description": "Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry rostizado.",
+  "price": 220,
+  "type": "al-fuego-y-mar",
+  "image": "photo-dish-2.webp",
+  "card_description": "Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry rosti",
+  "metafields": {
+   "tier": "exclusivo",
+   "category": "al-fuego-y-mar",
+   "allergens": [
+    "Frutos secos",
+    "Pescado"
+   ],
+   "ingredients": [
+    "Salmón",
+    "Almendra",
+    "Eneldo",
+    "Espárragos",
+    "Jitomate cherry",
+    "Limón"
+   ],
+   "diets": [
+    "keto",
+    "bajo-carbos"
+   ],
+   "calories": 520,
+   "carbs": 14
+  }
+ },
+ {
+  "handle": "omelette-claras-espinaca",
+  "title": "Omelette de claras con espinaca",
+  "description": "Claras esponjosas con espinaca salteada y champiñones.",
+  "price": 160,
+  "type": "desayunos-premium",
+  "image": "photo-dish-3.webp",
+  "card_description": "Claras esponjosas con espinaca salteada y champiñones.",
+  "metafields": {
+   "tier": "selecto",
+   "category": "desayunos-premium",
+   "allergens": [
+    "Huevo"
+   ],
+   "ingredients": [
+    "Claras",
+    "Espinaca",
+    "Champiñones"
+   ],
+   "diets": [
+    "vegetariano",
+    "bajo-calorias"
+   ],
+   "calories": 310,
+   "carbs": 8
+  }
+ },
+ {
+  "handle": "arrachera-carbon",
+  "title": "Arrachera al carbón con maíz y espárragos",
+  "description": "Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.",
+  "price": 280,
+  "type": "al-fuego-y-mar",
+  "image": "photo-dish-4.webp",
+  "card_description": "Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.",
+  "metafields": {
+   "tier": "signature",
+   "category": "al-fuego-y-mar",
+   "allergens": [],
+   "ingredients": [
+    "Arrachera",
+    "Maíz",
+    "Espárragos",
+    "Micro hierbas"
+   ],
+   "diets": [
+    "alto-proteina",
+    "sin-gluten"
+   ],
+   "calories": 640,
+   "carbs": 28
+  }
+ },
+ {
+  "handle": "filete-prime",
+  "title": "Filete Prime con verduras asadas",
+  "description": "Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin perder su punto.",
+  "price": 340,
+  "type": "al-fuego-y-mar",
+  "image": "photo-dish-5.webp",
+  "card_description": "Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin perder",
+  "metafields": {
+   "tier": "reserve",
+   "category": "al-fuego-y-mar",
+   "allergens": [],
+   "ingredients": [
+    "Res Prime",
+    "Brócoli",
+    "Zanahoria",
+    "Mantequilla"
+   ],
+   "diets": [
+    "keto",
+    "alto-proteina",
+    "sin-gluten"
+   ],
+   "calories": 710,
+   "carbs": 16
+  }
+ },
+ {
+  "handle": "bowl-vegano-garbanzo",
+  "title": "Bowl vegano de garbanzo y tahini",
+  "description": "Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.",
+  "price": 220,
+  "type": "bowls-de-la-semana",
+  "image": "photo-dish-6.webp",
+  "card_description": "Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.",
+  "metafields": {
+   "tier": "exclusivo",
+   "category": "bowls-de-la-semana",
+   "allergens": [
+    "Ajonjolí"
+   ],
+   "ingredients": [
+    "Garbanzo",
+    "Tahini",
+    "Pepino",
+    "Cebolla"
+   ],
+   "diets": [
+    "vegano",
+    "vegetariano",
+    "sin-gluten"
+   ],
+   "calories": 450,
+   "carbs": 52
+  }
+ },
+ {
+  "handle": "crema-calabaza",
+  "title": "Crema de calabaza asada",
+  "description": "Calabaza rostizada al fuego, crema ligera y semillas tostadas.",
+  "price": 160,
+  "type": "sopas-y-entradas",
+  "image": "photo-dish-8.webp",
+  "card_description": "Calabaza rostizada al fuego, crema ligera y semillas tostadas.",
+  "metafields": {
+   "tier": "selecto",
+   "category": "sopas-y-entradas",
+   "allergens": [
+    "Lácteos"
+   ],
+   "ingredients": [
+    "Calabaza",
+    "Crema",
+    "Semillas de calabaza",
+    "Tomillo"
+   ],
+   "diets": [
+    "vegetariano",
+    "sin-gluten",
+    "bajo-calorias"
+   ],
+   "calories": 220,
+   "carbs": 18
+  }
+ },
+ {
+  "handle": "brownie-proteico",
+  "title": "Brownie proteico con frambuesa",
+  "description": "Brownie de cacao oscuro con proteína y frambuesas frescas.",
+  "price": 220,
+  "type": "postres-y-snacks",
+  "image": "photo-dish-9.webp",
+  "card_description": "Brownie de cacao oscuro con proteína y frambuesas frescas.",
+  "metafields": {
+   "tier": "exclusivo",
+   "category": "postres-y-snacks",
+   "allergens": [
+    "Huevo",
+    "Lácteos"
+   ],
+   "ingredients": [
+    "Cacao",
+    "Huevo",
+    "Frambuesa",
+    "Proteína"
+   ],
+   "diets": [
+    "alto-proteina"
+   ],
+   "calories": 260,
+   "carbs": 14
+  }
+ },
+ {
+  "handle": "batido-verde",
+  "title": "Batido verde de pepino y kiwi",
+  "description": "Espinaca, pepino, kiwi y limón, listo para llevar.",
+  "price": 160,
+  "type": "batidos-y-bebidas",
+  "image": "photo-dish-10.webp",
+  "card_description": "Espinaca, pepino, kiwi y limón, listo para llevar.",
+  "metafields": {
+   "tier": "selecto",
+   "category": "batidos-y-bebidas",
+   "allergens": [],
+   "ingredients": [
+    "Espinaca",
+    "Pepino",
+    "Kiwi",
+    "Limón"
+   ],
+   "diets": [
+    "vegano",
+    "vegetariano",
+    "sin-gluten",
+    "bajo-calorias"
+   ],
+   "calories": 150,
+   "carbs": 20
+  }
+ },
+ {
+  "handle": "pasta-pollo-junior",
+  "title": "Mini pasta de pollo para peques",
+  "description": "Pasta corta con pollo desmenuzado y salsa suave de jitomate.",
+  "price": 160,
+  "type": "kulinaria-junior",
+  "image": "photo-dish-7.webp",
+  "card_description": "Pasta corta con pollo desmenuzado y salsa suave de jitomate.",
+  "metafields": {
+   "tier": "selecto",
+   "category": "kulinaria-junior",
+   "allergens": [
+    "Gluten",
+    "Lácteos"
+   ],
+   "ingredients": [
+    "Pasta",
+    "Pollo",
+    "Queso",
+    "Jitomate"
+   ],
+   "diets": [],
+   "calories": 380,
+   "carbs": 44
+  }
+ }
+]

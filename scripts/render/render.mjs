@@ -305,7 +305,7 @@ const PREVIEW_JS = `
     for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i);
     return (cache[name] = URL.createObjectURL(new Blob([u], { type: mime(name) })));
   }
-  function resolve(u) { var n = String(u).replace(/^.*assets\\//, '').split('?')[0]; return A[n] ? blob(n) : u; }
+  function resolve(u) { var n = String(u).replace(/^.*assets\\//, '').split('?')[0]; if (!A[n]) return u; return /\\.mp4$/.test(n) ? blob(n) : 'data:' + mime(n) + ';base64,' + A[n]; }
 
   // active language: unwrap its <template>s (same effect as Shopify serving /en/)
   var lang = 'es'; try { lang = localStorage.getItem('kx-lang') || 'es'; } catch (e) {}

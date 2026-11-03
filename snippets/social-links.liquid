@@ -2,5 +2,5 @@
   {%- if settings.instagram_url != blank -%}<a href="{{ settings.instagram_url }}" aria-label="Instagram" rel="noopener" target="_blank">{% render 'icon', name: 'instagram' %}</a>{%- endif -%}
   {%- if settings.tiktok_url != blank -%}<a href="{{ settings.tiktok_url }}" aria-label="TikTok" rel="noopener" target="_blank">{% render 'icon', name: 'tiktok' %}</a>{%- endif -%}
   {%- if settings.facebook_url != blank -%}<a href="{{ settings.facebook_url }}" aria-label="Facebook" rel="noopener" target="_blank">{% render 'icon', name: 'facebook' %}</a>{%- endif -%}
-  {%- if settings.whatsapp_number != blank -%}<a href="https://wa.me/{{ settings.whatsapp_number }}" aria-label="WhatsApp" rel="noopener" target="_blank">{% render 'icon', name: 'whatsapp' %}</a>{%- endif -%}
+  {%- if settings.whatsapp_number != blank -%}<a href="https://api.whatsapp.com/send/?phone={{ settings.whatsapp_number }}&type=phone_number&app_absent=0" aria-label="WhatsApp" rel="noopener" target="_blank">{% render 'icon', name: 'whatsapp' %}</a>{%- endif -%}
 </div>

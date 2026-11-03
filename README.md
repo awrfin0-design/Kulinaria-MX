@@ -97,6 +97,15 @@ On confirm, the details become **cart attributes** (they appear on the order as 
 
 See [`backend/README.md`](backend/README.md): `backend/shopify/setup.mjs` creates the metafields, collections, pages, nested menu and webhooks; `backend/google-sheets/Code.gs` keeps **Clientes / Pedidos / Platillos / Semana** in a Google Sheet (downloadable as Excel). These need to be run against the live store.
 
+## v7: fits the screen, one-page ordering
+
+- **Everything fits the screen.** Heroes, the funnel, showcases, dish rails, page heads, the CTA and the fire band are capped to the viewport height (`svh`) on phone and desktop. Photos are rounded rectangular product cards (no arch shapes).
+- **Order funnel pinned on the homepage.** It starts directly under the marquee; scrolling through it walks the five steps (it will not pass the dishes step until a dish is chosen), steps also advance by click, and a small **Skip** button jumps past it.
+- **Logo instead of the word.** Every "Kulinaria" in the copy is replaced by the logo (`initWordmark`; ink/cream/gold per theme; screen readers still read the word).
+- **Fire band** is a plain looping background video (no scroll scrubbing). **Loader** is animated (orbiting ingredients, flame, live percentage) and waits only for the first-screen image (2.6 s max). Preview images are embedded as data URIs.
+- **Client login** link in the header (needs Customer accounts set to *Classic*).
+- **Dish card description**: product metafield `kulinaria.card_description`; see `docs/menu-management.md`, `docs/parity.md` (preview vs Shopify) and `backend/shopify/seed-dishes.mjs`.
+
 ## Languages (i18n)
 
 Spanish (default) and English ship in `locales/`. Every string in sections, snippets and JS comes from there (`{{ 'cart.title' | t }}`; JS strings are injected into `window.KULINARIA.i18n`). The header/menu language switcher is Shopify's native `{% form 'localization' %}`: enable English in *Settings → Languages* and it appears automatically. Merchant-edited content (headings in the theme editor, product text) is translated with Translate & Adapt; [`docs/i18n.md`](docs/i18n.md) explains this and how to add a language. The preview includes the English storefront (`scripts/render/content.en.json` holds the English text of the sample content).

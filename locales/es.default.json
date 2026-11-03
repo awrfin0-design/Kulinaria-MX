@@ -463,7 +463,8 @@
     "finish": "Confirmar y continuar",
     "saved": "Guardamos tu selección y tus datos para la próxima vez. Siguiente paso: tu contrato y pago.",
     "remembered": "Recordamos tus datos de la última vez.",
-    "reset": "Empezar de nuevo"
+    "reset": "Empezar de nuevo",
+    "skip": "Saltar al menú"
   },
   "sitemap": {
     "pedido": "Armar mi pedido",

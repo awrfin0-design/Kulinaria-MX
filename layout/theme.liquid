@@ -40,7 +40,8 @@
         cutoffHour: {{ settings.cutoff_hour | default: 10 | json }},
         lang: {{ request.locale.iso_code | default: 'es' | json }},
         routes: { cart: {{ routes.cart_url | json }}, cartAdd: {{ routes.cart_add_url | json }}, account: {{ routes.account_url | json }} },
-        media: { fire: {{ 'video-fire.mp4' | asset_url | json }}, band: {{ 'video-band.mp4' | asset_url | json }} },
+        media: { fire: {{ 'video-fire.mp4' | asset_url | json }} },
+        logos: { ink: {{ 'logo-black.webp' | asset_url | json }}, cream: {{ 'logo-cream.webp' | asset_url | json }}, gold: {{ 'logo.webp' | asset_url | json }} },
         i18n: {
           pauseLeft: {{ 'js.pause_left' | t | json }}, compat: {{ 'js.compat' | t | json }},
           notSuitable: {{ 'js.not_suitable' | t | json }}, dislikeHit: {{ 'js.dislike_hit' | t | json }},
@@ -58,9 +59,15 @@
 
     <div class="loader" id="loader" role="status" aria-label="{{ 'loader.label' | t }}">
       <div class="loader__inner">
-        <span class="loader__ring"><i></i>{% render 'logo', mark: true %}</span>
+        <div class="loader__stage" aria-hidden="true">
+          <span class="loader__orbit loader__orbit--a"><svg viewBox="0 0 24 24"><path d="M12 2C6 6 4 12 6 20c8-1 14-7 14-14-3-1-6-.7-8-4z" fill="currentColor"/></svg></span>
+          <span class="loader__orbit loader__orbit--b"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="currentColor" opacity=".5"/></svg></span>
+          <span class="loader__orbit loader__orbit--c"><svg viewBox="0 0 24 24"><path d="M12 2c1 6 8 8 8 15a8 8 0 0 1-16 0c0-3 2-5 3.500-7 .5 2 1.500 3 3 3.500C9.500 8.500 10.500 5 12 2z" fill="currentColor"/></svg></span>
+          <span class="loader__ring"><i></i>{% render 'logo', mark: true %}</span>
+        </div>
         <p class="loader__tag">{{ 'loader.tagline' | t }}</p>
-        <span class="loader__bar" aria-hidden="true"><i></i></span>
+        <span class="loader__bar" aria-hidden="true"><i data-loader-bar></i></span>
+        <span class="loader__pct" aria-hidden="true"><b data-loader-pct>0</b>%</span>
       </div>
     </div>
 

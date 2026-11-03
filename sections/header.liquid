@@ -13,6 +13,9 @@
       <a class="site-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">{% render 'logo', tone: 'auto' %}</a>
 
       <div class="header-actions">
+        <a class="header-login" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}">
+          {% render 'icon', name: 'user' %}<span>{% if customer %}{{ 'general.account' | t }}{% else %}{{ 'login.title' | t }}{% endif %}</span>
+        </a>
         <a class="icon-link" href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t }}">
           {% render 'icon', name: 'bag' %}
           {%- if cart.item_count > 0 -%}<span class="cart-count">{{ cart.item_count }}</span>{%- endif -%}

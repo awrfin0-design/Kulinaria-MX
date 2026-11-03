@@ -1,38 +1,38 @@
 {%- comment -%}
   Official Kulinaria logo artwork (transparent PNG, extracted from the brand PDF).
   Params:
-    tone: 'gold' (default, full colour) | 'cream' | 'black' | 'auto' (ink on the light theme, gold on dark)  -> logo.png / logo-cream.png / logo-black.png
-    mark: true -> the K + flame monogram only (logo-mark.png)
+    tone: 'gold' (default, full colour) | 'cream' | 'black' | 'auto' (ink on the light theme, gold on dark)  -> logo.webp / logo-cream.webp / logo-black.webp
+    mark: true -> the K + flame monogram only (logo-mark.webp)
     height: optional CSS height (e.g. '56px'); width follows the artwork ratio
   Replace the files in /assets (same names) with the high-resolution originals when available.
 {%- endcomment -%}
 {%- liquid
   assign tone_key = tone | default: 'gold'
   if mark
-    assign file = 'logo-mark.png'
+    assign file = 'logo-mark.webp'
     assign w = 356
     assign h = 363
   else
     case tone_key
       when 'cream'
-        assign file = 'logo-cream.png'
+        assign file = 'logo-cream.webp'
       when 'black'
-        assign file = 'logo-black.png'
+        assign file = 'logo-black.webp'
       else
-        assign file = 'logo.png'
+        assign file = 'logo.webp'
     endcase
-    assign w = 817
-    assign h = 399
+    assign w = 700
+    assign h = 342
   endif
 -%}
 {%- if tone_key == 'invert' and mark != true -%}
   {%- assign alt_text2 = shop.name | default: 'Kulinaria' | append: ', ' | append: settings.brand_tagline | default: 'Arte del fuego' -%}
-  <img class="logo logo--cream" src="{{ 'logo-cream.png' | asset_url }}" width="817" height="399" alt="{{ alt_text2 | escape }}" decoding="async">
-  <img class="logo logo--gold" src="{{ 'logo.png' | asset_url }}" width="817" height="399" alt="" aria-hidden="true" decoding="async">
+  <img class="logo logo--cream" src="{{ 'logo-cream.webp' | asset_url }}" width="700" height="342" alt="{{ alt_text2 | escape }}" decoding="async">
+  <img class="logo logo--gold" src="{{ 'logo.webp' | asset_url }}" width="700" height="342" alt="" aria-hidden="true" decoding="async">
 {%- elsif tone_key == 'auto' and mark != true -%}
   {%- assign alt_text = shop.name | default: 'Kulinaria' | append: ', ' | append: settings.brand_tagline | default: 'Arte del fuego' -%}
-  <img class="logo logo--ink" src="{{ 'logo-black.png' | asset_url }}" width="817" height="399" alt="{{ alt_text | escape }}" decoding="async">
-  <img class="logo logo--gold" src="{{ 'logo.png' | asset_url }}" width="817" height="399" alt="" aria-hidden="true" decoding="async">
+  <img class="logo logo--ink" src="{{ 'logo-black.webp' | asset_url }}" width="700" height="342" alt="{{ alt_text | escape }}" decoding="async">
+  <img class="logo logo--gold" src="{{ 'logo.webp' | asset_url }}" width="700" height="342" alt="" aria-hidden="true" decoding="async">
 {%- else -%}
 <img class="logo{% if mark %} logo--mark{% endif %}" src="{{ file | asset_url }}" width="{{ w }}" height="{{ h }}"
   alt="{% if mark %}{{ shop.name | default: 'Kulinaria' }}{% else %}{{ shop.name | default: 'Kulinaria' }}, {{ settings.brand_tagline | default: 'Arte del fuego' }}{% endif %}"

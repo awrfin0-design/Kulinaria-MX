@@ -9,5 +9,5 @@
   {{ image | image_url: width: width | default: 1200 | image_tag: loading: loading, class: class, alt: alt }}
 {%- elsif art != blank and art != 'none' -%}
   {%- assign art_file = 'photo-' | append: art | append: '.webp' -%}
-  <img src="{{ art_file | asset_url }}" width="1200" height="800" alt="{{ alt | escape }}" class="{{ class }}" loading="{{ loading }}" decoding="async">
+  <img src="{{ art_file | asset_url }}" width="1200" height="800" alt="{{ alt | escape }}" class="{{ class }}" loading="{{ loading }}"{% if eager %} fetchpriority="high"{% endif %} decoding="async">
 {%- endif -%}

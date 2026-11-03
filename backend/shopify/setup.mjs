@@ -43,7 +43,7 @@ const DEFS = [
   ['CUSTOMER', 'referrals_paid', 'Referidos con bloque pagado', 'number_integer'], ['CUSTOMER', 'wallet_balance', 'Saldo del monedero (MXN)', 'number_decimal'],
   ['PRODUCT', 'tier', 'Nivel (selecto|exclusivo|signature|reserve)', 'single_line_text_field'], ['PRODUCT', 'category', 'Categoría (slug)', 'single_line_text_field'],
   ['PRODUCT', 'allergens', 'Alérgenos', 'list.single_line_text_field'], ['PRODUCT', 'ingredients', 'Ingredientes', 'list.single_line_text_field'],
-  ['PRODUCT', 'diets', 'Dietas (slugs)', 'list.single_line_text_field'], ['PRODUCT', 'calories', 'Calorías (kcal)', 'number_integer'], ['PRODUCT', 'carbs', 'Carbohidratos (g)', 'number_integer'],
+  ['PRODUCT', 'diets', 'Dietas (slugs)', 'list.single_line_text_field'], ['PRODUCT', 'card_description', 'Descripción corta de la tarjeta (máx. 90 caracteres)', 'single_line_text_field'], ['PRODUCT', 'calories', 'Calorías (kcal)', 'number_integer'], ['PRODUCT', 'carbs', 'Carbohidratos (g)', 'number_integer'],
 ];
 for (const [owner, key, name, type] of DEFS) {
   await run(`metafield ${owner.toLowerCase()}.kulinaria.${key}`,

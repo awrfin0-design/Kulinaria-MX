@@ -43,7 +43,7 @@
         <ul>
           {%- if settings.contact_phone != blank -%}<li><a href="tel:{{ settings.contact_phone | remove: ' ' }}">{{ settings.contact_phone }}</a></li>{%- endif -%}
           {%- if settings.contact_email != blank -%}<li><a href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }}</a></li>{%- endif -%}
-          {%- if settings.whatsapp_number != blank -%}<li><a href="https://wa.me/{{ settings.whatsapp_number }}" rel="noopener">WhatsApp</a></li>{%- endif -%}
+          {%- if settings.whatsapp_number != blank -%}<li><a href="https://api.whatsapp.com/send/?phone={{ settings.whatsapp_number }}&type=phone_number&app_absent=0" rel="noopener">WhatsApp</a></li>{%- endif -%}
         </ul>
       </div>
     </div>

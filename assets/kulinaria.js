@@ -586,10 +586,32 @@
         var rem = $('[data-fn-remembered]', holder); if (rem) { rem.hidden = !(st.remembered && st.step === 4); rem.textContent = T_('remembered'); }
       };
 
+      // the funnel is pinned: its track is taller than the screen, and scrolling through the track walks through the steps.
+      // Steps still advance with clicks (the scroll position follows), and "skip" jumps past the whole thing.
+      var track = $('[data-fn-track]', holder), stage = $('[data-fn-stage]', holder), lock = false, lockTimer = null;
+      var geom = function () {
+        var top = track.getBoundingClientRect().top + window.scrollY, stick = parseFloat(getComputedStyle(stage).top) || 0;
+        return { top: top - stick, range: Math.max(1, track.offsetHeight - stage.offsetHeight) };
+      };
+      var posFor = function (n) { var g = geom(); return g.top + g.range * ((n + 0.5) / steps.length); };
       var go = function (n) {
         n = Math.max(0, Math.min(steps.length - 1, n)); st.step = n; say(''); persist(); render();
-        var top = holder.getBoundingClientRect().top + window.scrollY - 120; if (window.scrollY > top) window.scrollTo({ top: top, behavior: REDUCE ? 'auto' : 'smooth' });
+        if (!track) return;
+        lock = true; clearTimeout(lockTimer); lockTimer = setTimeout(function () { lock = false; }, REDUCE ? 150 : 950);
+        window.scrollTo({ top: posFor(n), behavior: REDUCE ? 'auto' : 'smooth' });
       };
+      if (track) {
+        window.addEventListener('scroll', raf(function () {
+          if (lock) return;
+          var g = geom(), p = (window.scrollY - g.top) / g.range;
+          if (p < -0.02 || p > 1.02) return;
+          var target = Math.max(0, Math.min(steps.length - 1, Math.floor(p * steps.length)));
+          target = Math.min(target, count() > 0 ? steps.length - 1 : 1);       // can't scroll past the dishes until one is chosen
+          if (target !== st.step) { st.step = target; say(''); persist(); render(); }
+        }), { passive: true });
+        var skip = $('[data-fn-skip]', holder);
+        if (skip) skip.addEventListener('click', function () { window.scrollTo({ top: track.getBoundingClientRect().bottom + window.scrollY - 12, behavior: REDUCE ? 'auto' : 'smooth' }); });
+      }
 
       // choices
       $$('[data-diet]', holder).forEach(function (b) { b.addEventListener('click', function () { st.diet = b.getAttribute('data-diet'); persist(); render(); setTimeout(function () { go(1); }, REDUCE ? 0 : 280); }); });
@@ -658,6 +680,39 @@
     });
   }
 
+
+  // the client wants the logo wherever the word "Kulinaria" appears in the copy (accessible name kept for screen readers)
+  function initWordmark() {
+    var L = cfg.logos; if (!L) return;
+    var SKIP = /^(SCRIPT|STYLE|TEXTAREA|INPUT|SELECT|OPTION|TITLE|NOSCRIPT|SVG|IMG|BUTTON)$/;
+    var re = /Kulinaria/g;
+    var make = function () {
+      var w = document.createElement('span'); w.className = 'wordmark';
+      var vh = document.createElement('span'); vh.className = 'visually-hidden'; vh.textContent = 'Kulinaria'; w.appendChild(vh);
+      [['wm-ink', L.ink], ['wm-cream', L.cream], ['wm-gold', L.gold]].forEach(function (x) {
+        var i = document.createElement('img'); i.className = x[0]; i.alt = ''; i.setAttribute('aria-hidden', 'true'); i.decoding = 'async'; i.src = resolve(x[1]); w.appendChild(i);
+      });
+      return w;
+    };
+    var scan = function (rootEl) {
+      var walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT, {
+        acceptNode: function (n) {
+          if (!re.test(n.nodeValue)) { re.lastIndex = 0; return NodeFilter.FILTER_REJECT; } re.lastIndex = 0;
+          var p = n.parentNode; if (!p || SKIP.test(p.nodeName) || p.closest('.wordmark,.logo,.footer-mega,[data-no-wordmark],a.sitemap__top,.page-head__crumbs,.loader,.site-footer__legal,.footer-bottom,.countdown')) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+      var nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(function (n) {
+        var parts = n.nodeValue.split('Kulinaria'), frag = document.createDocumentFragment();
+        parts.forEach(function (t, i) { if (t) frag.appendChild(document.createTextNode(t)); if (i < parts.length - 1) frag.appendChild(make()); });
+        n.parentNode.replaceChild(frag, n);
+      });
+    };
+    scan(document.body);
+    document.addEventListener('kx:scan', function () { scan(document.body); });
+  }
+
   /* =====================================================================
      Experience layer: theme, loader, particles, menu, video, tilt, peek
      ===================================================================== */
@@ -669,14 +724,27 @@
 
   function initLoader() {
     if (!root.classList.contains('has-loader')) return;
-    var t0 = performance.now();
-    var done = function () {
-      setTimeout(function () {
-        root.classList.add('is-loaded');
-        try { sessionStorage.setItem('kx-seen', '1'); } catch (e) {}
-      }, Math.max(0, 1400 - (performance.now() - t0)));
+    var t0 = performance.now(), pct = $('[data-loader-pct]'), bar = $('[data-loader-bar]'), done = false, MIN = 1300, MAX = 2600;
+    var finish = function () {
+      if (done) return; done = true;
+      root.classList.add('is-loaded');
+      try { sessionStorage.setItem('kx-seen', '1'); } catch (e) {}
     };
-    if (document.readyState === 'complete') done(); else window.addEventListener('load', done);
+    var tick = function () {
+      var el = performance.now() - t0, v = Math.min(100, Math.round(100 * Math.min(1, el / MIN)));
+      if (pct) pct.textContent = v; if (bar) bar.style.transform = 'scaleX(' + (v / 100) + ')';
+      if (!done) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+    // ready = markup parsed and the first-screen image decoded (or the safety timeout), not "every asset downloaded"
+    var hero = $('.hero__media--light img, .hero__media--dark img, .page-head__bg img');
+    var ready = function () {
+      var wait = Math.max(0, MIN - (performance.now() - t0));
+      setTimeout(finish, wait);
+    };
+    var imgReady = hero && !hero.complete ? new Promise(function (r) { hero.addEventListener('load', r, { once: true }); hero.addEventListener('error', r, { once: true }); }) : Promise.resolve();
+    Promise.race([imgReady, new Promise(function (r) { setTimeout(r, MAX - 600); })]).then(ready);
+    setTimeout(finish, MAX);
   }
 
   function paintTheme(t) {
@@ -899,7 +967,7 @@
     initLoader(); initTheme(); initParticles(); initMenu();
     initCountdown(); initSteps(); initFunnel(); initPauseLocks(); initFilters(); initProfileForm(); initCart(); initRefSave(); applyProfile();
     initSplit(); initReveal(); initChrome(); initScrollVars(); initPointer(); initRail();
-    initVideos(); initBand(); initFire(); initTilt(); initPeek();
+    initVideos(); initBand(); initWordmark(); initFire(); initTilt(); initPeek();
     document.documentElement.classList.add('motion-ready');
   });
 })();

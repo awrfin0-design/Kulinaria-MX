@@ -316,7 +316,7 @@ ok('page index is reachable at #/indice', await (async () => { await page.goto(`
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(400);
 
 // header = logo + cart + burger only
-ok('header holds only the logo, the announcement link, the cart and the burger', (await page.$$('.site-header a, .site-header button')).length === 4);
+ok('header holds only the logo, the announcement link, the login, the cart and the burger', (await page.$$('.site-header a, .site-header button')).length === 5);
 ok('no fake-wood background anywhere', await page.evaluate(() => !/wood/i.test(getComputedStyle(document.querySelector('.bg-fx'), '::before').backgroundImage) && !document.querySelector('style').textContent.includes('photo-wood')));
 
 // burger -> full sitemap
@@ -482,12 +482,9 @@ ok('home photos all load (hero, rows, dishes, showcases, CTA)', media.n >= 12 &&
 ok('dish cards use their own photos, not the logo placeholder', media.dishPhotos >= 6);
 
 // scroll-driven video band
-const bandY = await page.evaluate(() => { const b = document.querySelector('[data-page="home"] [data-band]'); return b.getBoundingClientRect().top + scrollY; });
-const bandH = await page.evaluate(() => { const b = document.querySelector('[data-page="home"] [data-band]'); return b.offsetHeight - innerHeight; });
-const times = [];
-for (const f of [0.1, 0.5, 0.9]) { await page.evaluate((y) => window.scrollTo(0, y), bandY + bandH * f); await page.waitForTimeout(1300); times.push(await page.$eval('[data-page="home"] [data-scrub]', (v) => +v.currentTime.toFixed(2))); }
-ok('scroll scrubs the band video forward', times[0] < times[1] && times[1] < times[2], times.join(' -> '));
-ok('band text lines light up with progress', (await page.$$eval('[data-page="home"] .band__line.is-on', (e) => e.length)) === 3);
+await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .band'); window.scrollTo(0, b.getBoundingClientRect().top + scrollY - 100); }); await page.waitForTimeout(2200);
+const bandInfo = await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .band'), v = b.querySelector('video'); return { pos: getComputedStyle(b.querySelector('.band__pin')).position, h: b.offsetHeight, vh: innerHeight, playing: !v.paused && v.currentTime > 0, loop: v.loop, lines: [...b.querySelectorAll('.band__line')].every((l) => parseFloat(getComputedStyle(l).opacity) === 1) }; });
+ok('the fire band is a plain background loop: no pinning or scroll scrubbing, fits the screen, text always visible', bandInfo.pos === 'relative' && bandInfo.h <= bandInfo.vh && bandInfo.playing && bandInfo.loop && bandInfo.lines, JSON.stringify(bandInfo));
 
 // fire inside the circle-arrow button and inside pill buttons
 await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(600);
@@ -512,7 +509,7 @@ ok('carousel cards have a coverflow angle', await page.$$eval('[data-page="home"
 await page.evaluate(() => { const r = document.querySelector('[data-page="home"] .fg--index'); window.scrollTo(0, r.getBoundingClientRect().top + window.scrollY - 100); }); await page.waitForTimeout(700);
 const row = await page.$eval('[data-page="home"] .index-row[data-peek]', (e) => { const r = e.getBoundingClientRect(); return { x: r.left + 200, y: r.top + r.height / 2 }; });
 await page.mouse.move(row.x, row.y); await page.mouse.move(row.x + 10, row.y + 4); await page.waitForTimeout(600);
-ok('hovering a category row shows its photo next to the cursor', await page.evaluate(() => { const p = document.querySelector('.peek'); return !!p && p.classList.contains('is-on') && /^blob:/.test(p.querySelector('img').src); }));
+ok('hovering a category row shows its photo next to the cursor', await page.evaluate(() => { const p = document.querySelector('.peek'); return !!p && p.classList.contains('is-on') && /^(blob|data):/.test(p.querySelector('img').src); }));
 
 
 // ---- v5: one palette per theme, the same motif everywhere, seamless switching
@@ -522,8 +519,9 @@ ok('light palette = white + olive green', (await tok('--brand')) === '#4f6330' &
 await page.evaluate(() => localStorage.setItem('kx-theme', 'dark')); await page.reload(); await page.waitForTimeout(800);
 ok('dark palette = black + gold + ivory', (await tok('--brand')) === '#e2c36b' && (await tok('--bg-base')) === '#0d0c0a' && (await tok('--text')) === '#f3ebd9');
 ok('dark hero shows its own twin photo (not the light one)', await page.evaluate(() => getComputedStyle(document.querySelector('[data-page="home"] .hero__media--dark')).display !== 'none' && getComputedStyle(document.querySelector('[data-page="home"] .hero__media--light')).display === 'none'));
+await page.evaluate(() => window.scrollTo(0, 0));
 await page.waitForFunction(() => { const v = document.querySelector('[data-page="home"] .hero__media--dark video'); return v && !v.paused && v.currentTime > 0.2; }, null, { timeout: 20000 }).catch(() => {});
-ok('the ingredient-waterfall video plays over the dark hero (blob source, faded in)', await page.evaluate(() => { const v = document.querySelector('[data-page="home"] .hero__media--dark video'); return !v.paused && v.currentTime > 0 && v.classList.contains('is-on') && v.src.startsWith('blob:'); }));
+ok('the ingredient-waterfall video plays over the dark hero (blob source, faded in)', await page.evaluate(() => { const v = document.querySelector('[data-page="home"] .hero__media--dark video'); window.__wf = [v.paused, v.currentTime, v.className]; return !v.paused && v.currentTime > 0 && v.classList.contains('is-on') && /^(blob|data):/.test(v.currentSrc || v.src); }));
 ok('footer is deep black in dark mode and deep olive in light mode', await (async () => {
   const dark = await page.evaluate(() => getComputedStyle(document.querySelector('.site-footer')).backgroundImage);
   await page.evaluate(() => localStorage.setItem('kx-theme', 'light')); await page.reload(); await page.waitForTimeout(700);
@@ -607,6 +605,59 @@ ok('/pages/pedido hosts the same funnel under the photo header', !!(await page.$
   ok('the built-in menu (used when no nested navigation exists) lists every page of the Miro sitemap', (snip.match(/class="sitemap__group"/g) || []).length === 10 && missingInFallback.length === 0, missingInFallback.join(' '));
   const ov = fs.readFileSync(path.join(ROOT, 'sections/menu-overlay.liquid'), 'utf8');
   ok('the menu overlay falls back to that complete sitemap', /render 'sitemap-default'/.test(ov));
+}
+
+
+// =====================================================================  v7: fit the screen, product cards, wordmark, spacing
+for (const [w, h] of [[1440, 900], [390, 844], [820, 1180]]) {
+  await page.setViewportSize({ width: w, height: h });
+  await page.goto(`${URL0}#/home`); await page.waitForTimeout(700);
+  const fit = await page.evaluate(() => {
+    const vh = innerHeight, q = (sel) => [...document.querySelectorAll(`[data-page="home"] ${sel}`)];
+    const tall = [];
+    const chk = (name, els, max) => els.forEach((e) => { const r = e.getBoundingClientRect(); if (r.height > max + 1) tall.push(`${name}:${Math.round(r.height)}>${Math.round(max)}`); });
+    chk('hero', q('.hero'), vh); chk('funnel-stage', q('.funnel__stage'), vh); chk('showcase-photo', q('.showcase__frame'), vh * 0.7);
+    chk('rail-card', q('.rail .dish'), vh * 0.8); chk('row-photo', q('.card__photo'), vh * 0.5); chk('cta', q('.cta-banner'), vh); chk('band', q('.band'), vh);
+    return tall;
+  });
+  ok(`home sections fit the screen @${w}x${h}`, fit.length === 0, fit.join(' '));
+}
+await page.setViewportSize({ width: 1440, height: 900 });
+await page.goto(`${URL0}#/home`); await page.waitForTimeout(800);
+const gap = await page.evaluate(() => { const m = document.querySelector('[data-page="home"] .marquee').getBoundingClientRect(), f = document.querySelector('[data-page="home"] [data-fn-stage]').getBoundingClientRect(); return Math.round(f.top - m.bottom); });
+ok('the funnel starts right under the marquee (< 40px gap)', gap >= 0 && gap < 40, String(gap));
+const shapes = await page.evaluate(() => { const r = (sel) => { const e = document.querySelector(`[data-page="home"] ${sel}`); return e ? getComputedStyle(e).borderTopLeftRadius + '|' + getComputedStyle(e).borderBottomLeftRadius : null; }; return { dish: r('.rail .dish'), media: r('.dish__media'), frame: r('.showcase__frame'), fnDish: r('.fn-dish') }; });
+ok('photos are rectangular rounded cards (no arch shapes)', Object.values(shapes).filter(Boolean).every((v) => { const [a, b] = v.split('|').map(parseFloat); return a <= 30 && Math.abs(a - b) < 1 || (a === 0 && b === 0) || (a <= 30 && b <= 30); }), JSON.stringify(shapes));
+// the word "Kulinaria" is the logo
+const wm = await page.evaluate(() => { const h = [...document.querySelectorAll('[data-page="home"] h2')].find((x) => /Esta semana|This week/.test(x.getAttribute('aria-label') || x.textContent)); const w = h && h.querySelector('.wordmark img'); return { has: !!w, loaded: !!w && w.naturalWidth > 100 }; });
+ok('"Esta semana en Kulinaria" shows the logo instead of the word', wm.has && wm.loaded, JSON.stringify(wm));
+const leftover = await page.evaluate(() => { const bad = []; const w = document.createTreeWalker(document.querySelector('[data-page="home"]'), NodeFilter.SHOW_TEXT); while (w.nextNode()) { const n = w.currentNode; if (/Kulinaria/.test(n.nodeValue) && !/Kulinaria Junior/.test(n.nodeValue) && !n.parentNode.closest('.wordmark,.visually-hidden,script,style,[data-no-wordmark]')) bad.push(n.nodeValue.trim().slice(0, 40)); } return bad; });
+ok('no bare "Kulinaria" word is left in the home copy', leftover.length === 0, leftover.join(' | '));
+// pinned funnel: scrolling through the track walks through the steps, skip jumps past it
+await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.reload(); await page.waitForTimeout(900);
+const trk = await page.evaluate(() => { const t = document.querySelector('[data-page="home"] [data-fn-track]'), st = document.querySelector('[data-page="home"] [data-fn-stage]'); return { top: t.getBoundingClientRect().top + scrollY, h: t.offsetHeight, sh: st.offsetHeight }; });
+await page.evaluate((y) => window.scrollTo(0, y), trk.top - 90); await page.waitForTimeout(500);
+await page.evaluate((y) => window.scrollTo(0, y), trk.top - 90 + Math.round((trk.h - trk.sh) * 0.3)); await page.waitForTimeout(700);
+ok('the funnel stays pinned while scrolling and the step follows the scroll (never past dishes without a dish)', await page.evaluate(() => { const st = document.querySelector('[data-page="home"] [data-fn-stage]').getBoundingClientRect(); const on = [...document.querySelectorAll('[data-page="home"] [data-fn-step]')].findIndex((x) => x.classList.contains('is-on')); return Math.abs(st.top - 92) < 30 && on === 1; }));
+await page.evaluate((y) => window.scrollTo(0, y), trk.top - 90 + (trk.h - trk.sh) * 0.95); await page.waitForTimeout(700);
+ok('without a dish the funnel does not run past the dishes step', await page.evaluate(() => [...document.querySelectorAll('[data-page="home"] [data-fn-step]')].findIndex((x) => x.classList.contains('is-on')) === 1));
+await page.evaluate((y) => window.scrollTo(0, y), trk.top - 90 + 200); await page.waitForTimeout(500);
+await page.click('[data-page="home"] [data-fn-skip]'); await page.waitForTimeout(1500);
+ok('"skip" jumps past the funnel to the next section', await page.evaluate(() => { const t = document.querySelector('[data-page="home"] [data-fn-track]').getBoundingClientRect(); return t.bottom < innerHeight * 0.4; }));
+// client login is visible
+ok('header offers the client login', await page.$eval('.site-header .header-login', (a) => /login|sesi|cuenta|account/i.test(a.textContent) && /login|cuenta/.test(a.getAttribute('href'))));
+// dish cards carry their own short description
+ok('dish cards show a short description', (await page.$$eval('[data-page="home"] .rail .dish .dish__desc', (d) => d.length)) >= 4);
+// loader: ready quickly and animated
+{
+  const lctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const lp = await lctx.newPage(); const t0 = Date.now();
+  await lp.goto(`${URL0}#/home`);
+  const orbit = await lp.evaluate(() => document.querySelectorAll('.loader__orbit').length === 3 && getComputedStyle(document.querySelector('.loader__orbit')).animationName !== 'none');
+  await lp.waitForFunction(() => document.documentElement.classList.contains('is-loaded'), null, { timeout: 8000 });
+  const dt = Date.now() - t0;
+  ok('loader is animated (3 orbiting ingredients) and finishes in under 4 s', orbit && dt < 4000, `${orbit} ${dt}ms`);
+  await lctx.close();
 }
 
 // ---- screenshots for eyeballing

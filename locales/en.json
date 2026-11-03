@@ -463,7 +463,8 @@
     "finish": "Confirm and continue",
     "saved": "We saved your selection and details for next time. Next step: your contract and payment.",
     "remembered": "We remembered your details from last time.",
-    "reset": "Start over"
+    "reset": "Start over",
+    "skip": "Skip to the menu"
   },
   "sitemap": {
     "pedido": "Build my order",
