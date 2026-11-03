@@ -6,14 +6,14 @@
     </div>
     <div class="container band__content">
       {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-      <h2>{{ section.settings.heading }}</h2>
+      <h2>{% render 'headline', text: section.settings.heading %}</h2>
       <ol class="band__lines">
         {%- for block in section.blocks -%}
           <li class="band__line" style="--i:{{ forloop.index0 }}" {{ block.shopify_attributes }}><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{{ block.settings.text }}</li>
         {%- endfor -%}
       </ol>
       {%- if section.settings.button_label != blank -%}
-        <div class="btn-row"><a class="btn btn--gold" href="{{ section.settings.button_link | default: '/collections/menu-semanal' }}">{{ section.settings.button_label }}</a></div>
+        <div class="btn-row"><a class="arrow-link" href="{{ section.settings.button_link | default: '/collections/menu-semanal' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ section.settings.button_label }}</a></div>
       {%- endif -%}
     </div>
     <div class="band__meter" aria-hidden="true"><i></i></div>

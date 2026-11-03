@@ -9,7 +9,7 @@
   <div class="container">
     <div class="section__head section__head--center">
       {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-      <h2>{{ section.settings.heading }}</h2>
+      <h2>{% render 'headline', text: section.settings.heading %}</h2>
       <div class="divider-gold"><i></i></div>
       <p class="lede" style="margin-inline:auto">{{ section.settings.text }}</p>
       <p><span class="countdown" data-cutoff>{{ 'cutoff.trial_until' | t }} <strong data-cutoff-value>…</strong></span></p>

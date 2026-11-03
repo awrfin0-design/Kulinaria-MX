@@ -6,8 +6,9 @@
         "parent_label": "Nosotros",
         "parent_link": "/pages/nosotros",
         "eyebrow": "Historia y fundador",
-        "heading": "Historia y fundador",
-        "text": "Relato de la marca y presentación del fundador. Contenido por definir."
+        "heading": "Historia *y fundador*",
+        "text": "Relato de la marca y presentación del fundador. Contenido por definir.",
+        "art": "air-chef"
       },
       "blocks": {
         "n0": {
@@ -50,7 +51,7 @@
       "type": "showcase",
       "settings": {
         "eyebrow": "El fundador",
-        "heading": "Cocina de autor, entregada en tu puerta",
+        "heading": "Cocina de autor, entregada *en tu puerta*",
         "text": "<p>Aquí va el relato de la marca y la presentación del fundador. Reemplaza este texto y la foto desde el editor del tema.</p>",
         "art": "hero",
         "reverse": false,

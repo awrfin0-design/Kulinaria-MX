@@ -1,6 +1,23 @@
 {
   "sections": {
-    "main": { "type": "main-collection", "settings": { "layout": "store" } }
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "art": "air-chef",
+        "heading": "Kulinaria *Store*",
+        "text": "Línea Fit Apparel: playera oficial y vaso mezclador premium.",
+        "eyebrow": "Kulinaria Store"
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "layout": "store"
+      }
+    }
   },
-  "order": ["main"]
+  "order": [
+    "head",
+    "main"
+  ]
 }

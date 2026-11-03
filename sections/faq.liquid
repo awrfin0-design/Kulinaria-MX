@@ -2,7 +2,7 @@
   <div class="container">
     <div class="section__head">
       {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-      <h2>{{ section.settings.heading }}</h2>
+      <h2>{% render 'headline', text: section.settings.heading %}</h2>
       <div class="divider-gold"><i></i></div>
       {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
     </div>

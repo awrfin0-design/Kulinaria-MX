@@ -4,15 +4,16 @@
       "type": "page-head",
       "settings": {
         "eyebrow": "Filosofía",
-        "heading": "El privilegio de pertenecer",
-        "text": "Una interfaz limpia, un servicio directo y platillos que se sienten exclusivos. Así entendemos la comida saludable."
+        "heading": "El privilegio *de pertenecer*",
+        "text": "Una interfaz limpia, un servicio directo y platillos que se sienten exclusivos. Así entendemos la comida saludable.",
+        "art": "air-steak"
       }
     },
     "s1": {
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Principios",
-        "heading": "Lo que nos guía",
+        "heading": "Lo que *nos guía*",
         "columns": "3",
         "background": "base",
         "layout": "stack"
@@ -50,7 +51,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Por qué así",
-        "heading": "Eficiencia que se nota en el plato",
+        "heading": "Eficiencia que se nota *en el plato*",
         "text": "<p>Compramos los alimentos en volumen para mantener costos eficientes. Por eso trabajamos con bloques de 4 semanas y planificamos cada ciclo con precisión.</p>",
         "columns": "2",
         "background": "raised"
@@ -79,7 +80,7 @@
     "s3": {
       "type": "cta-banner",
       "settings": {
-        "heading": "Conoce el menú de la semana",
+        "heading": "Conoce el menú *de la semana*",
         "button_label": "Ver el menú",
         "button_link": "/collections/menu-semanal"
       }

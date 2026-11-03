@@ -6,8 +6,9 @@
         "parent_label": "Ayuda y legales",
         "parent_link": "/pages/ayuda",
         "eyebrow": "Contrato y términos",
-        "heading": "Contrato de adhesión y términos de servicio",
-        "text": "Resumen de las cláusulas principales. La versión completa se acepta durante el registro, antes del pago."
+        "heading": "Contrato de adhesión y *términos de servicio*",
+        "text": "Resumen de las cláusulas principales. La versión completa se acepta durante el registro, antes del pago.",
+        "art": "air-glass"
       },
       "blocks": {
         "n0": {
@@ -42,7 +43,7 @@
       "type": "faq",
       "settings": {
         "eyebrow": "Ayuda y legales",
-        "heading": "Contrato de adhesión y términos de servicio",
+        "heading": "Contrato de adhesión y *términos de servicio*",
         "text": "Resumen de las cláusulas principales. La versión completa se acepta durante el registro, antes del pago.",
         "open_first": true,
         "background": "base"
@@ -135,7 +136,7 @@
     "s2": {
       "type": "cta-banner",
       "settings": {
-        "heading": "Empieza tu bloque de 4 semanas",
+        "heading": "Empieza tu bloque *de 4 semanas*",
         "text": "Elige tu plan, cuéntanos tus alergias y nosotros nos encargamos del resto.",
         "button_label": "Elegir mi plan",
         "button_link": "/pages/planes",

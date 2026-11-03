@@ -5,22 +5,32 @@
 -%}
 <section class="hero hero--{{ size }}" data-scroll data-tilt data-hero {{ section.shopify_attributes }}>
   <div class="hero__bg" aria-hidden="true">
-    <div class="hero__slide is-on" data-slide>
-      {%- if section.settings.image != blank -%}
-        {{ section.settings.image | image_url: width: 2200 | image_tag: loading: 'eager', alt: '' }}
-      {%- else -%}
-        <picture>
-          <source media="(max-width: 860px)" srcset="{{ art_m | asset_url }}">
-          {% render 'photo', art: art, alt: '', eager: true %}
-        </picture>
-      {%- endif -%}
-    </div>
+    {%- assign themes = 'light,dark' | split: ',' -%}
+    {%- for theme in themes -%}
+      {%- assign art_key = art -%}
+      {%- if theme == 'dark' -%}{%- assign art_key = art | append: '-dark' -%}{%- endif -%}
+      {%- assign art_m = 'photo-' | append: art_key | append: '-m.webp' -%}
+      {%- assign vfile = 'video-hero-' | append: theme | append: '.mp4' -%}
+      {%- assign vposter = 'video-hero-' | append: theme | append: '-poster.webp' -%}
+      <div class="hero__media hero__media--{{ theme }}">
+        {%- if theme == 'light' and section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 2200 | image_tag: loading: 'eager', alt: '' }}
+        {%- else -%}
+          <picture>
+            <source media="(max-width: 860px)" srcset="{{ art_m | asset_url }}">
+            {% render 'photo', art: art_key, alt: '', eager: true %}
+          </picture>
+        {%- endif -%}
+        <video class="hero__video" muted loop playsinline preload="none" poster="{{ vposter | asset_url }}" data-video-src="{{ vfile | asset_url }}" data-ambient data-hero-video></video>
+      </div>
+    {%- endfor -%}
+    <div class="hero__dim"></div>
   </div>
 
   <div class="container hero__grid">
     <div class="hero__copy">
       <span class="hero__rule" aria-hidden="true"></span>
-      <h1>{{ section.settings.heading }}{%- if section.settings.heading_em != blank %} <em>{{ section.settings.heading_em }}</em>{% endif -%}</h1>
+      <h1>{{ section.settings.heading | escape }}{%- if section.settings.heading_em != blank %} <em>{{ section.settings.heading_em | escape }}</em>{% endif -%}</h1>
       {%- if section.settings.text != blank -%}<p class="hero__sub">{{ section.settings.text }}</p>{%- endif -%}
 
       {%- if section.settings.show_countdown -%}
@@ -37,6 +47,7 @@
       </div>
     </div>
   </div>
+  <button class="hero__toggle" type="button" data-media-toggle aria-pressed="false" aria-label="{{ 'media.pause' | t }}">{% render 'icon', name: 'pause' %}</button>
   <span class="hero__scroll" aria-hidden="true"><i></i>{{ 'hero.scroll' | t }}</span>
 </section>
 

@@ -6,8 +6,9 @@
         "parent_label": "Embajadores",
         "parent_link": "/pages/embajadores",
         "eyebrow": "Directorio",
-        "heading": "Entrenadores Personales de Alta Clase",
-        "text": "Espacio destacado para embajadores validados."
+        "heading": "Entrenadores Personales de *Alta Clase*",
+        "text": "Espacio destacado para embajadores validados.",
+        "art": "air-chef"
       },
       "blocks": {
         "n0": {
@@ -74,7 +75,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Directorio",
-        "heading": "Entrenadores Personales de Alta Clase",
+        "heading": "Entrenadores Personales de *Alta Clase*",
         "text": "<p>Espacio destacado para embajadores validados. Agrega aquí sus perfiles.</p>",
         "columns": "4",
         "background": "base"
@@ -121,7 +122,7 @@
       "settings": {
         "kind": "embajador",
         "eyebrow": "Alta",
-        "heading": "Solicita tu código de embajador",
+        "heading": "Solicita tu código *de embajador*",
         "text": "Cuéntanos quién eres y te contactamos para activar tu código.",
         "button_label": "Enviar solicitud"
       }

@@ -1,4 +1,21 @@
 {
-  "sections": { "main": { "type": "main-login", "settings": {} } },
-  "order": ["main"]
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "art": "air-bowl",
+        "heading": "Tu cuenta *Kulinaria*",
+        "text": "Entra para elegir tus platillos, pausar entregas y ver tu monedero.",
+        "eyebrow": "Iniciar sesión"
+      }
+    },
+    "main": {
+      "type": "main-login",
+      "settings": {}
+    }
+  },
+  "order": [
+    "head",
+    "main"
+  ]
 }

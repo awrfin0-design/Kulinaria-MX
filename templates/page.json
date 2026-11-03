@@ -1,6 +1,18 @@
 {
   "sections": {
-    "main": { "type": "main-page", "settings": {} }
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "art": "air-glass"
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "settings": {}
+    }
   },
-  "order": ["main"]
+  "order": [
+    "head",
+    "main"
+  ]
 }

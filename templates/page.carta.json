@@ -4,10 +4,11 @@
       "type": "page-head",
       "settings": {
         "eyebrow": "Carta Kulinaria",
-        "heading": "Una cena de autor, fuera del menú",
+        "heading": "Una cena de autor, *fuera del menú*",
         "text": "Experiencias ultra-premium de diseño exclusivo: chef privado a domicilio para eventos especiales y las cenas románticas de los sábados.",
         "button_label": "Solicitar cotización privada",
-        "button_link": "/pages/carta-cotizacion"
+        "button_link": "/pages/carta-cotizacion",
+        "art": "air-romance"
       },
       "blocks": {
         "n0": {
@@ -58,7 +59,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Experiencias",
-        "heading": "Diseñadas a tu medida",
+        "heading": "Diseñadas a *tu medida*",
         "columns": "3",
         "background": "base"
       },
@@ -95,7 +96,7 @@
       "type": "showcase",
       "settings": {
         "eyebrow": "Sin precios, sin carrito",
-        "heading": "Cada experiencia se cotiza de forma privada",
+        "heading": "Cada experiencia se cotiza *de forma privada*",
         "text": "<p>Esta sección no usa carrito ni precios publicados. Cuéntanos tu evento y diseñamos la propuesta contigo.</p>",
         "art": "dinner",
         "reverse": false,
@@ -109,7 +110,7 @@
       "settings": {
         "kind": "carta",
         "eyebrow": "Cotización privada",
-        "heading": "Cuéntanos tu evento",
+        "heading": "Cuéntanos *tu evento*",
         "text": "Esta sección no usa carrito ni precios publicados. Cada experiencia se cotiza de forma privada.",
         "button_label": "Solicitar cotización"
       }

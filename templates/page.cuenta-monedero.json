@@ -6,8 +6,9 @@
         "parent_label": "Mi cuenta",
         "parent_link": "/account",
         "eyebrow": "Monedero",
-        "heading": "Monedero",
-        "text": "Crédito interno y saldo a favor."
+        "heading": "*Monedero*",
+        "text": "Crédito interno y saldo a favor.",
+        "art": "air-romance"
       }
     },
     "s1": {

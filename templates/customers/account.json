@@ -1,4 +1,20 @@
 {
-  "sections": { "main": { "type": "main-account", "settings": {} } },
-  "order": ["main"]
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "art": "air-breakfast",
+        "heading": "Mi *cuenta*",
+        "text": "Tienes el control total de tu semana: elige, pausa, revisa tu saldo y comparte tu código."
+      }
+    },
+    "main": {
+      "type": "main-account",
+      "settings": {}
+    }
+  },
+  "order": [
+    "head",
+    "main"
+  ]
 }

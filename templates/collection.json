@@ -1,7 +1,31 @@
 {
   "sections": {
-    "main": { "type": "main-collection", "settings": { "layout": "menu" } },
-    "cta": { "type": "cta-banner", "settings": { "heading": "¿Aún no tienes plan?", "text": "Elige tu bloque de 4 semanas para ordenar tus platillos cada semana." } }
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "art": "air-bowl",
+        "heading": "Menú de la *semana*",
+        "text": "Un menú rotativo de 8 a 10 platillos. Confirma antes del sábado a las 10:00 AM.",
+        "eyebrow": "Menú semanal"
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "layout": "menu"
+      }
+    },
+    "cta": {
+      "type": "cta-banner",
+      "settings": {
+        "heading": "¿Aún no *tienes plan?*",
+        "text": "Elige tu bloque de 4 semanas para ordenar tus platillos cada semana."
+      }
+    }
   },
-  "order": ["main", "cta"]
+  "order": [
+    "head",
+    "main",
+    "cta"
+  ]
 }

@@ -6,10 +6,11 @@
         "parent_label": "Embajadores",
         "parent_link": "/pages/embajadores",
         "eyebrow": "Entrenadores",
-        "heading": "Entrenadores: ropa y efectivo",
+        "heading": "Entrenadores: ropa *y efectivo*",
         "text": "Requisito, activación e incentivos continuos para entrenadores personales.",
         "button_label": "Solicitar mi código",
-        "button_link": "/pages/embajadores-solicitar"
+        "button_link": "/pages/embajadores-solicitar",
+        "art": "air-bowl"
       },
       "blocks": {
         "n0": {
@@ -76,7 +77,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Entrenadores",
-        "heading": "De la meta inicial al crecimiento continuo",
+        "heading": "De la meta inicial *al crecimiento continuo*",
         "columns": "3",
         "background": "raised",
         "layout": "stack"
@@ -114,7 +115,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Directorio",
-        "heading": "Entrenadores Personales de Alta Clase",
+        "heading": "Entrenadores Personales de *Alta Clase*",
         "text": "<p>Espacio destacado para embajadores validados. Agrega aquí sus perfiles.</p>",
         "columns": "4",
         "background": "base"
@@ -161,7 +162,7 @@
       "settings": {
         "kind": "embajador",
         "eyebrow": "Alta",
-        "heading": "Solicita tu código de embajador",
+        "heading": "Solicita tu código *de embajador*",
         "text": "Cuéntanos quién eres y te contactamos para activar tu código.",
         "button_label": "Enviar solicitud"
       }

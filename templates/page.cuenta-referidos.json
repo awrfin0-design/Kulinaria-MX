@@ -6,8 +6,9 @@
         "parent_label": "Mi cuenta",
         "parent_link": "/account",
         "eyebrow": "Mis referidos",
-        "heading": "Mis referidos",
-        "text": "Tu código y el progreso de tus referidos."
+        "heading": "Mis *referidos*",
+        "text": "Tu código y el progreso de tus referidos.",
+        "art": "air-fish"
       }
     },
     "s1": {

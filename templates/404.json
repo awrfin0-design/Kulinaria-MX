@@ -1,4 +1,21 @@
 {
-  "sections": { "main": { "type": "main-404", "settings": {} } },
-  "order": ["main"]
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "art": "air-steak",
+        "heading": "Error *404*",
+        "text": "Esta página se quemó en la parrilla.",
+        "eyebrow": "Página no encontrada"
+      }
+    },
+    "main": {
+      "type": "main-404",
+      "settings": {}
+    }
+  },
+  "order": [
+    "head",
+    "main"
+  ]
 }

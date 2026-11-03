@@ -8,9 +8,6 @@
 <section class="section" {{ section.shopify_attributes }}>
   <div class="container">
     <div class="section__head">
-      <span class="eyebrow">{% if layout == 'menu' %}{{ 'collection.weekly_menu' | t }}{% else %}{{ 'nav.store' | t }}{% endif %}</span>
-      <h1 style="font-size:clamp(2.6rem,6vw,5rem)">{{ collection.title }}</h1>
-      {%- if collection.description != blank -%}<div class="lede richtext">{{ collection.description }}</div>{%- endif -%}
       {%- if layout == 'menu' -%}
         <p style="margin-top:var(--space-lg)"><span class="countdown" data-cutoff>{{ 'cutoff.confirm_dishes' | t }} <strong data-cutoff-value>…</strong></span></p>
         <p class="legal-note">{{ 'cutoff.auto_order' | t }}</p>

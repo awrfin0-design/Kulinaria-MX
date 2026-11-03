@@ -4,10 +4,11 @@
       "type": "page-head",
       "settings": {
         "eyebrow": "La marca",
-        "heading": "Arte del fuego",
+        "heading": "Arte *del fuego*",
         "text": "Servicio premium de comida saludable a domicilio, adaptada al estilo de vida del cliente. Una experiencia exclusiva, directa y elegante.",
         "button_label": "Elegir mi plan",
-        "button_link": "/pages/planes"
+        "button_link": "/pages/planes",
+        "art": "air-chef"
       },
       "blocks": {
         "n0": {
@@ -50,7 +51,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "La marca",
-        "heading": "Cocina de autor, entregada en tu puerta",
+        "heading": "Cocina de autor, entregada *en tu puerta*",
         "columns": "3",
         "background": "base"
       },
@@ -87,7 +88,7 @@
       "type": "showcase",
       "settings": {
         "eyebrow": "Calidad",
-        "heading": "Cuidamos cada detalle",
+        "heading": "Cuidamos *cada detalle*",
         "text": "<p>Proteínas de excelente calidad, cortes premium y mariscos selectos, en contenedores de vidrio de alta calidad.</p>",
         "art": "containers",
         "reverse": false,

@@ -6,8 +6,9 @@
         "parent_label": "Ayuda y legales",
         "parent_link": "/pages/ayuda",
         "eyebrow": "Aviso de privacidad",
-        "heading": "Aviso de privacidad",
-        "text": "Cómo cuidamos tus datos personales, de entrega y de salud alimentaria."
+        "heading": "Aviso *de privacidad*",
+        "text": "Cómo cuidamos tus datos personales, de entrega y de salud alimentaria.",
+        "art": "air-glass"
       },
       "blocks": {
         "n0": {

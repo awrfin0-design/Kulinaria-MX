@@ -6,8 +6,9 @@
         "parent_label": "Carta Kulinaria",
         "parent_link": "/pages/carta-kulinaria",
         "eyebrow": "Cotización privada",
-        "heading": "Cuéntanos tu evento",
-        "text": "Nombre, fecha, tipo de evento, invitados, alergias y contacto. Te respondemos con una propuesta privada."
+        "heading": "Cuéntanos *tu evento*",
+        "text": "Nombre, fecha, tipo de evento, invitados, alergias y contacto. Te respondemos con una propuesta privada.",
+        "art": "air-romance"
       },
       "blocks": {
         "n0": {
@@ -59,7 +60,7 @@
       "settings": {
         "kind": "carta",
         "eyebrow": "Cotización privada",
-        "heading": "Cuéntanos tu evento",
+        "heading": "Cuéntanos *tu evento*",
         "text": "Esta sección no usa carrito ni precios publicados. Cada experiencia se cotiza de forma privada.",
         "button_label": "Solicitar cotización"
       }

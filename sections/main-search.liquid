@@ -3,7 +3,7 @@
   <div class="container">
     <div class="section__head">
       <span class="eyebrow">{{ 'general.search' | t }}</span>
-      <h1 style="font-size:clamp(2.2rem,4vw,3.4rem)">{% if search.performed %}{{ 'search.results_for' | t }}{{ search.terms | escape }}"{% else %}{{ 'general.search' | t }}{% endif %}</h1>
+      <h2 style="font-size:clamp(2.2rem,4vw,3.4rem)">{% if search.performed %}{{ 'search.results_for' | t }}{{ search.terms | escape }}"{% else %}{{ 'general.search' | t }}{% endif %}</h2>
     </div>
     <form action="{{ routes.search_url }}" method="get" role="search" class="btn-row" style="margin-bottom:var(--space-xl)">
       <input class="input" style="max-width:420px" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t }}" aria-label="{{ 'general.search' | t }}">

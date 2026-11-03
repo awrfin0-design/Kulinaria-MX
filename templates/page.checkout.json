@@ -4,10 +4,11 @@
       "type": "page-head",
       "settings": {
         "eyebrow": "Checkout y contrato",
-        "heading": "Del carrito al pago, en un solo flujo",
+        "heading": "Del carrito al pago, en *un solo flujo*",
         "text": "Datos, alergias, plan, código, contrato y pago digital. El pago se completa en el checkout seguro de Shopify.",
         "button_label": "Ir a mi selección",
-        "button_link": "/cart"
+        "button_link": "/cart",
+        "art": "air-fish"
       },
       "blocks": {
         "n0": {

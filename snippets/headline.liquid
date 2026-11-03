@@ -1,0 +1,9 @@
+{%- comment -%}
+  Headline with a brand-script emphasis: text between asterisks becomes <em> (Kaushan Script), e.g. "Tres pasos y tu semana *está resuelta*".
+  Param: text
+{%- endcomment -%}
+{%- assign hl_parts = text | escape | split: '*' -%}
+{%- for hl_part in hl_parts -%}
+  {%- assign hl_odd = forloop.index0 | modulo: 2 -%}
+  {%- if hl_odd == 1 -%}<em>{{ hl_part }}</em>{%- else -%}{{ hl_part }}{%- endif -%}
+{%- endfor -%}

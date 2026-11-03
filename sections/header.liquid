@@ -1,4 +1,13 @@
 <header class="site-header" {{ section.shopify_attributes }}>
+  {%- if section.settings.announcement != blank -%}
+    <div class="site-header__ann">
+      <p class="announcement">
+        {{ section.settings.announcement }}
+        {%- if section.settings.show_countdown -%}<span data-cutoff> {{ 'cutoff.closes_in' | t }} <strong data-cutoff-value>…</strong></span>{%- endif -%}
+        {%- if section.settings.link != blank and section.settings.link_label != blank %} · <a href="{{ section.settings.link }}">{{ section.settings.link_label }}</a>{% endif -%}
+      </p>
+    </div>
+  {%- endif -%}
   <div class="container">
     <div class="site-header__bar">
       <a class="site-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">{% render 'logo', tone: 'auto' %}</a>
@@ -17,6 +26,11 @@
 {% schema %}
 {
   "name": "Encabezado",
-  "settings": []
+  "settings": [
+    { "type": "text", "id": "announcement", "label": "Anuncio superior", "default": "Cierre de pedidos: sábados a las 10:00 AM." },
+    { "type": "checkbox", "id": "show_countdown", "label": "Mostrar cuenta regresiva en el anuncio", "default": true },
+    { "type": "text", "id": "link_label", "label": "Texto del enlace del anuncio", "default": "Ver el menú" },
+    { "type": "url", "id": "link", "label": "Enlace del anuncio" }
+  ]
 }
 {% endschema %}

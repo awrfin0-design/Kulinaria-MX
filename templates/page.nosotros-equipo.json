@@ -6,10 +6,11 @@
         "parent_label": "Nosotros",
         "parent_link": "/pages/nosotros",
         "eyebrow": "Equipo de cocina",
-        "heading": "Chefs que dominan el fuego",
+        "heading": "Chefs que dominan *el fuego*",
         "text": "Técnicas de cocción lenta y elaboraciones de autor.",
         "button_label": "Ver el menú de la semana",
-        "button_link": "/collections/menu-semanal"
+        "button_link": "/collections/menu-semanal",
+        "art": "air-steak"
       },
       "blocks": {
         "n0": {
@@ -52,7 +53,7 @@
       "type": "showcase",
       "settings": {
         "eyebrow": "Equipo",
-        "heading": "El fuego, la paciencia y el detalle",
+        "heading": "El fuego, la paciencia *y el detalle*",
         "text": "<p>Chefs que dominan el fuego, las cocciones lentas y las reducciones artesanales.</p>",
         "art": "flames",
         "reverse": false,

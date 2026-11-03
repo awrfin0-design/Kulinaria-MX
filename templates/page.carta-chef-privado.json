@@ -6,10 +6,11 @@
         "parent_label": "Carta Kulinaria",
         "parent_link": "/pages/carta-kulinaria",
         "eyebrow": "Chef privado",
-        "heading": "Chef privado a domicilio",
+        "heading": "Chef privado *a domicilio*",
         "text": "Un menú de autor preparado en tu casa para eventos especiales.",
         "button_label": "Solicitar cotización",
-        "button_link": "/pages/carta-cotizacion"
+        "button_link": "/pages/carta-cotizacion",
+        "art": "air-chef"
       },
       "blocks": {
         "n0": {
@@ -60,7 +61,7 @@
       "type": "showcase",
       "settings": {
         "eyebrow": "Para eventos especiales",
-        "heading": "Cocina de autor en tu propia mesa",
+        "heading": "Cocina de autor en *tu propia mesa*",
         "text": "<p>Un chef Kulinaria llega a tu casa con el menú diseñado para ti: ingredientes premium, fuego y emplatado de autor.</p>",
         "art": "dinner",
         "reverse": false,
@@ -98,7 +99,7 @@
       "settings": {
         "kind": "carta",
         "eyebrow": "Cotización privada",
-        "heading": "Cuéntanos tu evento",
+        "heading": "Cuéntanos *tu evento*",
         "text": "Esta sección no usa carrito ni precios publicados. Cada experiencia se cotiza de forma privada.",
         "button_label": "Solicitar cotización"
       }

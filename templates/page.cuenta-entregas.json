@@ -6,8 +6,9 @@
         "parent_label": "Mi cuenta",
         "parent_link": "/account",
         "eyebrow": "Entregas y envases",
-        "heading": "Entregas y envases",
-        "text": "Dirección, espera de cortesía y envases."
+        "heading": "Entregas *y envases*",
+        "text": "Dirección, espera de cortesía y envases.",
+        "art": "air-glass"
       }
     },
     "s1": {

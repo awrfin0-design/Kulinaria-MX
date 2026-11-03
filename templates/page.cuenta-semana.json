@@ -6,8 +6,9 @@
         "parent_label": "Mi cuenta",
         "parent_link": "/account",
         "eyebrow": "Mi semana",
-        "heading": "Mi semana",
-        "text": "Platillos elegidos y cuenta regresiva al cierre del sábado."
+        "heading": "Mi *semana*",
+        "text": "Platillos elegidos y cuenta regresiva al cierre del sábado.",
+        "art": "air-breakfast"
       }
     },
     "s1": {

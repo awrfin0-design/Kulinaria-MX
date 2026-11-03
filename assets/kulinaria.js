@@ -325,29 +325,21 @@
   var FINE = mq('(pointer: fine)');
   var raf = function (fn) { var queued = false; return function () { if (queued) return; queued = true; requestAnimationFrame(function () { queued = false; fn(); }); }; };
 
-  // scroll progress bar, sticky/auto-hiding header, --hdr / --stick offsets
+  // scroll progress bar + compact header state (the header is position:fixed: its size never moves the page)
   function initChrome() {
-    var root = document.documentElement, hdr = $('.site-header');
+    var hdr = $('.site-header');
     var bar = document.createElement('div');
     bar.className = 'scroll-progress'; bar.setAttribute('aria-hidden', 'true'); document.body.appendChild(bar);
-    var last = window.scrollY;
-    var measure = function () { if (hdr) root.style.setProperty('--hdr', hdr.offsetHeight + 'px'); };
+    var stuck = false;
     var update = function () {
       var y = window.scrollY, max = root.scrollHeight - window.innerHeight;
       bar.style.setProperty('--sp', max > 0 ? Math.min(1, y / max).toFixed(4) : '0');
       if (!hdr) return;
-      hdr.classList.toggle('is-stuck', y > 24);
-      var hide = hdr.classList.contains('is-hidden');
-      if (REDUCE || document.body.classList.contains('menu-open')) hide = false;
-      else if (y > 280 && y > last + 6) hide = true;
-      else if (y < last - 6 || y <= 280) hide = false;
-      hdr.classList.toggle('is-hidden', hide);
-      root.style.setProperty('--stick', hide ? '0px' : hdr.offsetHeight + 'px');
-      last = y;
+      var next = stuck ? y > 8 : y > 56;           // hysteresis: no flicker around the threshold
+      if (next !== stuck) { stuck = next; hdr.classList.toggle('is-stuck', stuck); }
     };
     window.addEventListener('scroll', raf(update), { passive: true });
-    window.addEventListener('resize', function () { measure(); update(); });
-    measure(); update();
+    update();
   }
 
   // headline words rise in one by one (handles <em> inside the headline)
@@ -538,15 +530,27 @@
     if (document.readyState === 'complete') done(); else window.addEventListener('load', done);
   }
 
-  function setTheme(t, persist) {
+  function paintTheme(t) {
     root.setAttribute('data-theme', t);
-    if (persist) { try { localStorage.setItem('kx-theme', t); } catch (e) {} }
     $$('[data-theme-toggle]').forEach(function (b) {
       b.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
       b.setAttribute('aria-label', t === 'dark' ? T('toLight') : T('toDark'));
     });
-    var meta = $('meta[name="theme-color"]'); if (meta) meta.setAttribute('content', t === 'dark' ? '#14110E' : '#EEE6DA');
+    var meta = $('meta[name="theme-color"]'); if (meta) meta.setAttribute('content', t === 'dark' ? '#0D0C0A' : '#F5F4EC');
     document.dispatchEvent(new CustomEvent('kx:theme', { detail: t }));
+  }
+  function setTheme(t, persist) {
+    if (persist) { try { localStorage.setItem('kx-theme', t); } catch (e) {} }
+    if (!persist || REDUCE || !document.startViewTransition) {
+      root.classList.add('is-theming'); paintTheme(t);
+      requestAnimationFrame(function () { requestAnimationFrame(function () { root.classList.remove('is-theming'); }); });
+      return;
+    }
+    // one cross-fade of a snapshot: instant, no re-layout flicker
+    root.classList.add('is-theming');
+    var vt = document.startViewTransition(function () { paintTheme(t); });
+    var done = function () { root.classList.remove('is-theming'); };
+    vt.finished.then(done, done);
   }
   function initTheme() {
     setTheme(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light', false);
@@ -579,7 +583,7 @@
           g.addColorStop(0, 'rgba(255,224,150,' + a + ')'); g.addColorStop(1, 'rgba(255,200,90,0)');
           ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 5, 0, 6.283); ctx.fill();
         } else {
-          ctx.fillStyle = 'rgba(176,126,38,' + (a * 0.55) + ')'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.283); ctx.fill();
+          ctx.fillStyle = 'rgba(79,99,48,' + (a * 0.5) + ')'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.283); ctx.fill();
         }
       }
       if (running) requestAnimationFrame(frame);
@@ -636,45 +640,22 @@
 
   function initVideos() {
     var vids = $$('video[data-video-src]').filter(function (v) { return !v.hasAttribute('data-scrub'); });
-    if (REDUCE || SAVE) return;   // poster frames only
-    var hero = $('[data-hero]'), slides = hero ? $$('[data-slide]', hero) : [], paused = false, timer = null, cur = 0;
-    var vis = new Map();
+    vids.forEach(function (v) { v.addEventListener('playing', function () { v.classList.add('is-on'); }); });
+    var hero = $('[data-hero]'), paused = false;
+    var tg = hero && $('[data-media-toggle]', hero);
+    if (REDUCE || SAVE) { if (tg) tg.hidden = true; return; }   // poster frames only
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        var v = e.target; vis.set(v, e.isIntersecting);
-        var inHero = hero && hero.contains(v);
-        if (e.isIntersecting) {
-          if (inHero && (paused || !v.closest('[data-slide]').classList.contains('is-on'))) { if (!v.getAttribute('data-ready')) loadVideo(v); return; }
-          playVideo(v); if (v.hasAttribute('data-ambient')) v.classList.add('is-on');
-        } else if (!v.paused) v.pause();
+        var v = e.target;
+        if (e.isIntersecting) { if (!(paused && hero && hero.contains(v))) playVideo(v); }
+        else if (!v.paused) v.pause();
       });
     }, { threshold: 0.15 });
     vids.forEach(function (v) { io.observe(v); });
-
-    if (slides.length > 1) {
-      var show = function (i) {
-        slides.forEach(function (sl, k) {
-          var on = k === i; sl.classList.toggle('is-on', on);
-          var v = $('video', sl); if (!v) return;
-          if (on && !paused) playVideo(v); else if (!on) setTimeout(function () { if (!sl.classList.contains('is-on')) v.pause(); }, 1900);
-        });
-        cur = i;
-      };
-      var next = function () { show((cur + 1) % slides.length); };
-      timer = setInterval(next, 7500);
-      var tg = $('[data-media-toggle]', hero);
-      if (tg) tg.addEventListener('click', function () {
-        paused = !paused; tg.setAttribute('aria-pressed', paused ? 'true' : 'false'); tg.setAttribute('aria-label', paused ? T('play') : T('pause'));
-        $$('video', hero).forEach(function (v) { if (paused) v.pause(); else if (v.closest('[data-slide]').classList.contains('is-on')) playVideo(v); });
-        if (paused) clearInterval(timer); else timer = setInterval(next, 7500);
-      });
-    } else {
-      var tg1 = hero && $('[data-media-toggle]', hero);
-      if (tg1) tg1.addEventListener('click', function () {
-        paused = !paused; tg1.setAttribute('aria-pressed', paused ? 'true' : 'false'); tg1.setAttribute('aria-label', paused ? T('play') : T('pause'));
-        $$('video', hero).forEach(function (v) { if (paused) v.pause(); else playVideo(v); });
-      });
-    }
+    if (tg) tg.addEventListener('click', function () {
+      paused = !paused; tg.setAttribute('aria-pressed', paused ? 'true' : 'false'); tg.setAttribute('aria-label', paused ? T('play') : T('pause'));
+      $$('video', hero).forEach(function (v) { if (paused) v.pause(); else if (v.offsetParent !== null) playVideo(v); });
+    });
   }
 
   // video that scrubs with the scroll position

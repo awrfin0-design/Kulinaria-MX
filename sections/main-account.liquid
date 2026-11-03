@@ -14,7 +14,7 @@
   <div class="container">
     <div class="section__head">
       <span class="eyebrow">{{ 'general.account' | t }}</span>
-      <h1>{{ 'account.hello' | t }} {{ customer.first_name | default: customer.email }}</h1>
+      <h2>{{ 'account.hello' | t }} {{ customer.first_name | default: customer.email }}</h2>
       <p class="lede">{{ 'account.intro' | t }}</p>
       <p><a class="btn btn--ghost" href="{{ routes.account_logout_url }}">{{ 'account.logout' | t }}</a></p>
     </div>

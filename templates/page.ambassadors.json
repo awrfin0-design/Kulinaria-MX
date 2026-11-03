@@ -4,10 +4,11 @@
       "type": "page-head",
       "settings": {
         "eyebrow": "Embajadores",
-        "heading": "Recomienda Kulinaria y gana con cada cliente",
+        "heading": "Recomienda Kulinaria y gana *con cada cliente*",
         "text": "Tres ramas para crecer juntos: entrenadores (ropa y efectivo), clientes (crédito interno) y gimnasios aliados (flujo de efectivo de alto volumen).",
         "button_label": "Quiero ser embajador",
-        "button_link": "/pages/embajadores-solicitar"
+        "button_link": "/pages/embajadores-solicitar",
+        "art": "air-bowl"
       },
       "blocks": {
         "n0": {
@@ -74,7 +75,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Tres ramas",
-        "heading": "Elige cómo quieres participar",
+        "heading": "Elige cómo *quieres participar*",
         "columns": "3",
         "background": "base"
       },
@@ -114,7 +115,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Entrenadores",
-        "heading": "De la meta inicial al crecimiento continuo",
+        "heading": "De la meta inicial *al crecimiento continuo*",
         "columns": "3",
         "background": "raised",
         "layout": "stack"
@@ -152,7 +153,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Gimnasios aliados",
-        "heading": "Una alianza de monetización pasiva",
+        "heading": "Una alianza de *monetización pasiva*",
         "columns": "3",
         "background": "base"
       },
@@ -189,7 +190,7 @@
       "type": "faq",
       "settings": {
         "eyebrow": "Reglas claras",
-        "heading": "Primero en registrar, primero en ganar",
+        "heading": "Primero en registrar, *primero en ganar*",
         "background": "raised",
         "open_first": true
       },
@@ -226,7 +227,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Directorio",
-        "heading": "Entrenadores Personales de Alta Clase",
+        "heading": "Entrenadores Personales de *Alta Clase*",
         "text": "<p>Espacio destacado para embajadores validados. Agrega aquí sus perfiles.</p>",
         "columns": "4",
         "background": "base"
@@ -273,7 +274,7 @@
       "settings": {
         "kind": "embajador",
         "eyebrow": "Alta",
-        "heading": "Solicita tu código de embajador",
+        "heading": "Solicita tu código *de embajador*",
         "text": "Cuéntanos quién eres y te contactamos para activar tu código.",
         "button_label": "Enviar solicitud"
       }

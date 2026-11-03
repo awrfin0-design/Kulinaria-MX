@@ -1,11 +1,5 @@
 <section class="section" {{ section.shopify_attributes }}>
   <div class="container">
-    <div class="section__head">
-      <span class="eyebrow">{{ 'cart.title' | t }}</span>
-      <h1 style="font-size:clamp(2.2rem,4vw,3.4rem)">{{ 'cart.title' | t }}</h1>
-      <div class="divider-gold"><i></i></div>
-    </div>
-
     {%- if cart.item_count == 0 -%}
       <div class="panel" style="text-align:center">
         <p class="lede" style="margin-inline:auto">{{ 'cart.empty' | t }}</p>

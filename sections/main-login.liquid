@@ -3,7 +3,7 @@
     <div class="grid grid--2">
       <div class="panel panel--gold">
         <span class="eyebrow">{{ 'general.account' | t }}</span>
-        <h1 style="font-size:2.4rem">{{ 'login.title' | t }}</h1>
+        <h2 style="font-size:2.4rem">{{ 'login.title' | t }}</h2>
         {%- form 'customer_login', novalidate: 'novalidate' -%}
           {%- if form.errors -%}<div class="alert alert--warn" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
           <div class="field"><label for="login-email">{{ 'form.email' | t }}</label><input class="input" id="login-email" type="email" name="customer[email]" autocomplete="email" required></div>

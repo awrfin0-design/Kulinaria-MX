@@ -1,4 +1,21 @@
 {
-  "sections": { "main": { "type": "main-order", "settings": {} } },
-  "order": ["main"]
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "art": "air-chef",
+        "heading": "Detalle del *pedido*",
+        "text": "Tu pedido, su pago y su entrega.",
+        "eyebrow": "Pedido"
+      }
+    },
+    "main": {
+      "type": "main-order",
+      "settings": {}
+    }
+  },
+  "order": [
+    "head",
+    "main"
+  ]
 }

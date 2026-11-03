@@ -1,8 +1,6 @@
 <section class="section" {{ section.shopify_attributes }}>
   <div class="container" style="max-width:960px">
     <div class="section__head">
-      <span class="eyebrow">{{ 'addr.eyebrow' | t }}</span>
-      <h1 style="font-size:clamp(2rem,4vw,3rem)">{{ 'addr.title' | t }}</h1>
       <a class="btn btn--ghost" href="{{ routes.account_url }}">{{ 'general.back_account' | t }}</a>
     </div>
     {%- paginate customer.addresses by 10 -%}

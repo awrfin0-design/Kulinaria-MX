@@ -6,8 +6,9 @@
         "parent_label": "Nosotros",
         "parent_link": "/pages/nosotros",
         "eyebrow": "Calidad y envases",
-        "heading": "Cuidamos cada detalle",
-        "text": "Ingredientes premium y contenedores de vidrio de alta calidad."
+        "heading": "Cuidamos *cada detalle*",
+        "text": "Ingredientes premium y contenedores de vidrio de alta calidad.",
+        "art": "air-glass"
       },
       "blocks": {
         "n0": {
@@ -50,7 +51,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Calidad",
-        "heading": "Cuidamos cada detalle",
+        "heading": "Cuidamos *cada detalle*",
         "columns": "2",
         "background": "raised"
       },
@@ -79,7 +80,7 @@
       "type": "showcase",
       "settings": {
         "eyebrow": "Envases de vidrio",
-        "heading": "Hecho para tu refrigerador, pensado para tu semana",
+        "heading": "Hecho para tu refrigerador, pensado *para tu semana*",
         "text": "<p>Cada platillo llega en vidrio de alta calidad que conserva el sabor y se puede reutilizar. Solo calienta y disfruta.</p>",
         "art": "containers",
         "reverse": true

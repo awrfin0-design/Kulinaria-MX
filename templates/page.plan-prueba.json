@@ -6,10 +6,11 @@
         "parent_label": "Planes",
         "parent_link": "/pages/planes",
         "eyebrow": "Semana de prueba",
-        "heading": "Semana de prueba",
+        "heading": "Semana *de prueba*",
         "text": "Una sola semana para conocer el servicio, sin compromiso de renovación.",
         "button_label": "Probar una semana",
-        "button_link": "/account/register"
+        "button_link": "/account/register",
+        "art": "air-breakfast"
       },
       "blocks": {
         "n0": {
@@ -63,7 +64,7 @@
         "columns": "3",
         "background": "base",
         "eyebrow": "Cómo funciona",
-        "heading": "Probar es simple"
+        "heading": "Probar *es simple*"
       },
       "blocks": {
         "b0": {
@@ -99,7 +100,9 @@
     },
     "s2": {
       "type": "plans-compare",
-      "settings": {}
+      "settings": {
+        "heading": "Elige cómo *quieres empezar*"
+      }
     },
     "s3": {
       "type": "cta-banner",

@@ -17,7 +17,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Cómo funciona",
-        "heading": "Tres pasos y tu semana está resuelta",
+        "heading": "Tres pasos y tu *semana está resuelta*",
         "columns": "3",
         "background": "base",
         "button_label": "Elegir mi plan",
@@ -59,7 +59,7 @@
       "type": "featured-dishes",
       "settings": {
         "eyebrow": "Menú de la semana",
-        "heading": "Esta semana en Kulinaria",
+        "heading": "Esta semana *en Kulinaria*",
         "text": "Un menú rotativo de 8 a 10 platillos. Cada uno con una sola foto del emplatado final, vista desde arriba.",
         "collection": "menu-semanal",
         "limit": 6,
@@ -71,7 +71,7 @@
       "type": "tiers",
       "settings": {
         "eyebrow": "Niveles",
-        "heading": "Cuatro niveles, un mismo estándar",
+        "heading": "Cuatro niveles, un *mismo estándar*",
         "text": "Cada nivel suma $60 MXN fijos sobre el anterior. El precio incluye el empaque óptimo y la preparación del chef."
       },
       "blocks": {
@@ -115,7 +115,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Categorías",
-        "heading": "Del desayuno a la cena, al fuego y al mar",
+        "heading": "Del desayuno a la cena, al fuego *y al mar*",
         "columns": "3",
         "background": "base",
         "layout": "index"
@@ -189,7 +189,7 @@
       "type": "diet-chips",
       "settings": {
         "eyebrow": "Enfoque nutricional",
-        "heading": "Filtra el menú según tu estilo de vida",
+        "heading": "Filtra el menú según tu *estilo de vida*",
         "target": "/collections/menu-semanal"
       },
       "blocks": {
@@ -255,13 +255,15 @@
     },
     "plans": {
       "type": "plans-compare",
-      "settings": {}
+      "settings": {
+        "heading": "Elige cómo *quieres empezar*"
+      }
     },
     "safety": {
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Seguridad y transparencia",
-        "heading": "Cada ingrediente, a la vista",
+        "heading": "Cada ingrediente, a *la vista*",
         "text": "<p>Para prevenir alergias, declaramos de forma explícita cada ingrediente y cruzamos el menú con tu perfil.</p>",
         "columns": "3",
         "background": "base",
@@ -302,7 +304,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Más Kulinaria",
-        "heading": "Experiencias y comunidad",
+        "heading": "Experiencias *y comunidad*",
         "columns": "3",
         "background": "base",
         "layout": "grid"
@@ -352,7 +354,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Testimonios",
-        "heading": "Lo que dicen nuestros clientes",
+        "heading": "Lo que dicen *nuestros clientes*",
         "text": "<p>Sustituye estos textos por reseñas reales de clientes.</p>",
         "columns": "3",
         "background": "raised",
@@ -391,7 +393,7 @@
       "type": "faq",
       "settings": {
         "eyebrow": "Ayuda",
-        "heading": "Preguntas frecuentes",
+        "heading": "Preguntas *frecuentes*",
         "background": "base"
       },
       "blocks": {
@@ -493,7 +495,7 @@
       "type": "showcase",
       "settings": {
         "eyebrow": "Envases de vidrio",
-        "heading": "Hecho para tu refrigerador, pensado para tu semana",
+        "heading": "Hecho para tu refrigerador, pensado *para tu semana*",
         "text": "<p>Cada platillo llega en vidrio de alta calidad que conserva el sabor y se puede reutilizar. Solo calienta y disfruta.</p>",
         "badge": "Envases de vidrio",
         "button_label": "Ver el menú de la semana",
@@ -531,7 +533,7 @@
       "type": "media-band",
       "settings": {
         "eyebrow": "Arte del fuego",
-        "heading": "El fuego hace la diferencia",
+        "heading": "El fuego hace *la diferencia*",
         "button_label": "Ver el menú"
       },
       "blocks": {
@@ -564,7 +566,7 @@
       "type": "showcase",
       "settings": {
         "eyebrow": "Carta Kulinaria",
-        "heading": "Una cena de autor en tu mesa",
+        "heading": "Una cena de autor *en tu mesa*",
         "text": "<p>Chef privado a domicilio, cenas románticas de sábado y eventos especiales. Cada experiencia se cotiza de forma privada.</p>",
         "badge": "Chef privado",
         "button_label": "Conocer la Carta",

@@ -6,8 +6,9 @@
         "parent_label": "Planes",
         "parent_link": "/pages/planes",
         "eyebrow": "Ciclo y políticas",
-        "heading": "Así corre tu semana",
-        "text": "Cierre los sábados a las 10:00 AM, entregas de lunes a viernes, pausas los martes y los viernes."
+        "heading": "Así corre *tu semana*",
+        "text": "Cierre los sábados a las 10:00 AM, entregas de lunes a viernes, pausas los martes y los viernes.",
+        "art": "air-bowl"
       },
       "blocks": {
         "n0": {
@@ -58,7 +59,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Calendario del ciclo",
-        "heading": "Así corre tu semana",
+        "heading": "Así corre *tu semana*",
         "columns": "4",
         "background": "raised",
         "numbered": true
@@ -104,7 +105,7 @@
       "type": "faq",
       "settings": {
         "eyebrow": "Políticas clave",
-        "heading": "Lo que debes saber antes de suscribirte",
+        "heading": "Lo que debes saber *antes de suscribirte*",
         "background": "base"
       },
       "blocks": {
@@ -139,7 +140,7 @@
     "s3": {
       "type": "cta-banner",
       "settings": {
-        "heading": "¿Dudas sobre el contrato?",
+        "heading": "¿Dudas sobre *el contrato?*",
         "text": "Lee el contrato de adhesión completo antes de pagar.",
         "button_label": "Leer contrato",
         "button_link": "/pages/terminos",

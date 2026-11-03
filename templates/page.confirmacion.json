@@ -6,10 +6,11 @@
         "parent_label": "Checkout y contrato",
         "parent_link": "/pages/checkout",
         "eyebrow": "Confirmación",
-        "heading": "¡Tu bloque está confirmado!",
+        "heading": "¡Tu bloque *está confirmado!*",
         "text": "Gracias por unirte a Kulinaria. Esto es lo que sigue.",
         "button_label": "Ir a mi cuenta",
-        "button_link": "/account"
+        "button_link": "/account",
+        "art": "air-breakfast"
       },
       "blocks": {
         "n0": {

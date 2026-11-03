@@ -4,8 +4,9 @@
       "type": "page-head",
       "settings": {
         "eyebrow": "Planes",
-        "heading": "Elige cómo quieres empezar",
-        "text": "La suscripción se contrata en bloques de 4 semanas. Si prefieres probar, puedes comprar una sola semana."
+        "heading": "Elige cómo *quieres empezar*",
+        "text": "La suscripción se contrata en bloques de 4 semanas. Si prefieres probar, puedes comprar una sola semana.",
+        "art": "air-fish"
       },
       "blocks": {
         "n0": {
@@ -54,7 +55,9 @@
     },
     "s1": {
       "type": "plans-compare",
-      "settings": {}
+      "settings": {
+        "heading": "Elige cómo *quieres empezar*"
+      }
     },
     "s2": {
       "type": "feature-grid",
@@ -63,7 +66,7 @@
         "columns": "3",
         "background": "base",
         "eyebrow": "Qué incluye",
-        "heading": "Todo lo que recibes en cada platillo"
+        "heading": "Todo lo que recibes *en cada platillo*"
       },
       "blocks": {
         "b0": {
@@ -110,7 +113,7 @@
       "type": "tiers",
       "settings": {
         "eyebrow": "Niveles",
-        "heading": "Cuatro niveles, un mismo estándar",
+        "heading": "Cuatro niveles, un *mismo estándar*",
         "text": "Cada nivel suma $60 MXN fijos sobre el anterior."
       },
       "blocks": {
@@ -154,7 +157,7 @@
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Calendario del ciclo",
-        "heading": "Así corre tu semana",
+        "heading": "Así corre *tu semana*",
         "columns": "4",
         "background": "raised",
         "numbered": true
@@ -200,7 +203,7 @@
       "type": "faq",
       "settings": {
         "eyebrow": "Políticas clave",
-        "heading": "Lo que debes saber antes de suscribirte",
+        "heading": "Lo que debes saber *antes de suscribirte*",
         "background": "base"
       },
       "blocks": {

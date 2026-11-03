@@ -6,10 +6,11 @@
         "parent_label": "Planes",
         "parent_link": "/pages/planes",
         "eyebrow": "Bloque de 4 semanas",
-        "heading": "Bloque de 4 semanas",
+        "heading": "Bloque de *4 semanas*",
         "text": "Suscripción obligatoria y renovable. Es la opción recomendada y la de mejor precio por platillo.",
         "button_label": "Elegir bloque de 4 semanas",
-        "button_link": "/account/register"
+        "button_link": "/account/register",
+        "art": "air-glass"
       },
       "blocks": {
         "n0": {
@@ -63,7 +64,7 @@
         "columns": "3",
         "background": "base",
         "eyebrow": "Por qué el bloque",
-        "heading": "La opción lógica para tu semana"
+        "heading": "La opción lógica *para tu semana*"
       },
       "blocks": {
         "b0": {
@@ -110,7 +111,7 @@
       "type": "tiers",
       "settings": {
         "eyebrow": "Niveles",
-        "heading": "Cuatro niveles, un mismo estándar",
+        "heading": "Cuatro niveles, un *mismo estándar*",
         "text": "Cada nivel suma $60 MXN fijos sobre el anterior."
       },
       "blocks": {

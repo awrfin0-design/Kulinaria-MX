@@ -8,7 +8,7 @@
   <div class="container" style="max-width:860px">
     <div class="section__head">
       <span class="eyebrow">{{ section.settings.eyebrow }}</span>
-      <h2>{{ section.settings.heading }}</h2>
+      <h2>{% render 'headline', text: section.settings.heading %}</h2>
       <div class="divider-gold"><i></i></div>
       <p class="lede">{{ section.settings.text }}</p>
     </div>

@@ -8,7 +8,7 @@
       "type": "featured-dishes",
       "settings": {
         "eyebrow": "Sigue explorando",
-        "heading": "Más del menú de la semana",
+        "heading": "Más del menú *de la semana*",
         "text": "",
         "collection": "menu-semanal",
         "limit": 6,

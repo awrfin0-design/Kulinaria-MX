@@ -6,8 +6,9 @@
         "parent_label": "Mi cuenta",
         "parent_link": "/account",
         "eyebrow": "Pedidos y facturas",
-        "heading": "Pedidos y facturas",
-        "text": "Historial y facturas liquidadas."
+        "heading": "Pedidos *y facturas*",
+        "text": "Historial y facturas liquidadas.",
+        "art": "air-chef"
       }
     },
     "s1": {

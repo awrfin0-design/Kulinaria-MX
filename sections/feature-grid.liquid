@@ -8,10 +8,10 @@
     {%- if section.settings.heading != blank -%}
       <div class="section__head{% if section.settings.center and layout == 'grid' %} section__head--center{% endif %}">
         {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-        <h2>{{ section.settings.heading }}</h2>
+        <h2>{% render 'headline', text: section.settings.heading %}</h2>
         {%- if section.settings.text != blank -%}<div class="lede richtext">{{ section.settings.text }}</div>{%- endif -%}
         {%- if layout == 'sticky' and section.settings.button_label != blank -%}
-          <div class="btn-row"><a class="btn btn--gold" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.button_label }}</a></div>
+          <div class="btn-row"><a class="arrow-link" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ section.settings.button_label }}</a></div>
         {%- endif -%}
       </div>
     {%- endif -%}
@@ -45,7 +45,7 @@
             <h3>{{ block.settings.title }}</h3>
             <div class="richtext text-muted">{{ block.settings.text }}</div>
             {%- if block.settings.link != blank and block.settings.link_label != blank -%}
-              <a class="btn btn--ghost" style="margin-top:auto;align-self:flex-start" href="{{ block.settings.link }}">{{ block.settings.link_label }}</a>
+              <a class="text-link" style="margin-top:auto;align-self:flex-start" href="{{ block.settings.link }}">{{ block.settings.link_label }}</a>
             {%- endif -%}
             {%- if has_photo -%}</div>{%- endif -%}
           </{{ tag }}>
@@ -55,7 +55,7 @@
 
     {%- if section.settings.button_label != blank and layout != 'sticky' -%}
       <div class="fg__foot btn-row" {% if section.settings.center and layout == 'grid' %}style="justify-content:center"{% endif %}>
-        <a class="btn btn--gold" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.button_label }}</a>
+        <a class="arrow-link" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ section.settings.button_label }}</a>
       </div>
     {%- endif -%}
   </div>

@@ -1,4 +1,21 @@
 {
-  "sections": { "main": { "type": "main-addresses", "settings": {} } },
-  "order": ["main"]
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "art": "air-chef",
+        "heading": "Mis *direcciones*",
+        "text": "Dirección de entrega, referencias de acceso y suscriptor secundario.",
+        "eyebrow": "Mis direcciones"
+      }
+    },
+    "main": {
+      "type": "main-addresses",
+      "settings": {}
+    }
+  },
+  "order": [
+    "head",
+    "main"
+  ]
 }

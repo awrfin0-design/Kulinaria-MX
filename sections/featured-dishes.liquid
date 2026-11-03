@@ -6,7 +6,7 @@
       <div class="rail__head">
         <div class="section__head">
           {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-          <h2>{{ section.settings.heading }}</h2>
+          <h2>{% render 'headline', text: section.settings.heading %}</h2>
           {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
         </div>
         {%- if rail -%}
@@ -38,7 +38,7 @@
     </div>
 
     {%- if section.settings.button_label != blank -%}
-      <div class="btn-row"><a class="btn btn--outline" href="{{ section.settings.button_link | default: section.settings.collection.url | default: '/collections/menu-semanal' }}">{{ section.settings.button_label }}</a></div>
+      <div class="btn-row"><a class="arrow-link" href="{{ section.settings.button_link | default: section.settings.collection.url | default: '/collections/menu-semanal' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ section.settings.button_label }}</a></div>
     {%- endif -%}
   </div>
 </section>

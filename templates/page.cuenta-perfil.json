@@ -6,8 +6,9 @@
         "parent_label": "Mi cuenta",
         "parent_link": "/account",
         "eyebrow": "Alergias y gustos",
-        "heading": "Alergias y gustos",
-        "text": "Tu perfil para la selección automática."
+        "heading": "Alergias *y gustos*",
+        "text": "Tu perfil para la selección automática.",
+        "art": "air-bowl"
       }
     },
     "s1": {

@@ -1,6 +1,23 @@
 {
   "sections": {
-    "profile": { "type": "profile-form", "settings": {} }
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "art": "air-bowl",
+        "heading": "Mi perfil de *alergias*",
+        "text": "Cuéntanos qué no puedes (o no quieres) comer. Es obligatorio y evita errores en la cocina.",
+        "eyebrow": "Mi perfil de alergias"
+      }
+    },
+    "profile": {
+      "type": "profile-form",
+      "settings": {
+        "heading": "Cuéntanos qué no puedes (o *no quieres) comer*"
+      }
+    }
   },
-  "order": ["profile"]
+  "order": [
+    "head",
+    "profile"
+  ]
 }

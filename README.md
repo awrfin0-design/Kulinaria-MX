@@ -8,7 +8,7 @@ assets/      kulinaria.css (tokens + components), kulinaria.js (countdown, pause
 config/      settings_schema.json (brand, cycle, tier prices, subscription & contract settings)
 layout/      theme.liquid
 locales/     es.default.json (default) · en.json — all storefront strings (Shopify i18n)
-sections/    34 sections (header, sitemap menu, hero, page-head, showcase, scroll-video band, feature-grid, dishes, tiers, plans, faq, forms, product, cart, 5-step sign-up, account overview + panels…)
+sections/    33 sections (header, sitemap menu, hero, page-head, showcase, scroll-video band, feature-grid, dishes, tiers, plans, faq, forms, product, cart, 5-step sign-up, account overview + panels…)
 snippets/    icon, logo, photo, term, lang-switcher, theme-toggle, dish-card, tier-badge, selling-plan-picker, social-links
 templates/   JSON templates for every page in the approved sitemap
 docs/        subscriptions.md · backend-requirements.md · metafields.md · i18n.md · media.md
@@ -64,20 +64,22 @@ The theme is the storefront. Several rules in the business brief are *server-sid
 Tokens live at the top of `assets/kulinaria.css` (`--font-display`, `--font-heading`, `--font-body`, `--font-label`);
 the Google Fonts link is in `layout/theme.liquid`. The "flame" ornament that replaces the usual divider is a CSS-masked inline SVG (`--flame`).
 
-## Design and experience (v4)
+## Design and experience (v5)
 
-Light, editorial and airy: a flat warm-ivory canvas, hairlines instead of boxes, large type. Fonts are unchanged (Kaushan Script display, Alegreya reading, Alegreya Sans labels).
+One motif on every page: an airy photo, a serif headline with a brand-script phrase, a short rule, tracked-caps text and a circle-arrow button. Fonts are unchanged (Kaushan Script, Alegreya, Alegreya Sans).
 
-- **Hero** modelled on the client's reference: full-bleed photo (`photo-air-steak.webp`, a levitating seared cut with herbs, olive oil and spices), small rule, serif headline with the brand-script phrase in Kaushan, tracked-caps subtitle and a **circle-arrow button**. The text column stays on the left; a mobile crop (`-m.webp`) is served on phones.
-- **Header** = logo (ink on light, gold on dark) + cart + a two-line **burger**. The burger opens a full-screen **sitemap** (every page and subpage, from the nested `main-menu`), with language, theme, account and cart.
-- **No fake wood.** The wood texture was removed; the background is flat ivory (a very soft window-light streak) or deep charcoal in dark mode, with sparse gold dust.
-- **Light and dark mode** (light by default, remembered per visitor, applied before first paint). Colours are semantic tokens at the top of `assets/kulinaria.css`; the footer and CTA bands are always dark.
-- **Loading screen** (logo mark in a gold ring), once per session, with a failsafe.
-- **Photography and 3D.** Photo rows, showcases and dish cards; dish cards and showcase photos tilt with a moving glare; the carousel has a coverflow angle; the category index shows a photo that follows the cursor.
-- **Video** (see [`docs/media.md`](docs/media.md)): a scroll-scrubbed fire band, **fire inside buttons and the hero circle on hover**, a gold shimmer on the CTA band, a chef video in Carta / team sections.
-- **Inner pages** use `page-head` (breadcrumbs, title, intro, optional CTA, sub-navigation) and the `rows` / `grid` / `index` layouts of `feature-grid`.
-- **Sign-up** is a 5-step flow (account and delivery, backup contact, allergies and diet, plan and referral code, contract) that stores the allergy profile.
-- Safety: nothing is hidden without JS; `prefers-reduced-motion` shows everything immediately; failsafes never hide content.
+**Two palettes, both on semantic tokens** (top of `assets/kulinaria.css`; components never use raw colours):
+- **Light = white + olive green.** Off-white canvas, deep-green ink, olive accents and buttons; footer and scroll band in deep olive.
+- **Dark = black + gold + ivory.** Near-black canvas, ivory text, gold accents; secondary photos turn black-and-gold monochrome.
+- The toggle lives in the menu, is remembered, applied before first paint and switches through one snapshot cross-fade (View Transitions API, instant fallback), so there is no re-layout flicker. Both hero photos are always loaded, so nothing waits on the network.
+
+**Hero** (`sections/hero.liquid`): full-bleed photo per theme (`photo-air-steak` / `photo-air-steak-dark`, phone crops `-m`) with a 5-second **ingredient-waterfall video** (`video-hero-light/dark.mp4`) fading in over the still; the video starts and ends on the same frame, so it loops without a seam. It pauses off-screen and has a pause button; reduced-motion and Save-Data users get the still.
+
+**Every other page** opens with `page-head`: the same photo treatment (`photo-air-*` set: fish, bowl, romantic dinner, chef, breakfast, glass containers), breadcrumbs, headline, intro, CTA and the sub-navigation of its family. Headlines in every section support `*emphasis*` (rendered in the brand script by the `headline` snippet). Large photos are arch-shaped, the arch of the hero wall.
+
+**Header** is `position: fixed` and never changes size or shifts the page; it only fades in a glass background and shrinks its own logo. The announcement lives inside it and collapses on scroll. The burger opens the full sitemap built from the nested `main-menu`.
+
+Also: loading screen, gold/olive dust on the background, scroll-scrubbed fire band, fire inside buttons, 3D tilt on dish cards and photos, coverflow carousel, category photo preview, 5-step sign-up, editorial `rows` / `grid` / `index` layouts.
 
 ## Languages (i18n)
 

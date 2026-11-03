@@ -2,7 +2,7 @@
   <div class="container" style="max-width:960px">
     <div class="section__head">
       <span class="eyebrow">{{ 'account.order' | t }}</span>
-      <h1 style="font-size:clamp(2rem,4vw,3rem)">{{ order.name }}</h1>
+      <h2 style="font-size:clamp(2rem,4vw,3rem)">{{ order.name }}</h2>
       <p class="text-muted">{{ order.created_at | date: '%d/%m/%Y' }} · {{ order.financial_status_label }} · {{ order.fulfillment_status_label }}</p>
       <a class="btn btn--ghost" href="{{ routes.account_url }}">{{ 'general.back_account' | t }}</a>
     </div>

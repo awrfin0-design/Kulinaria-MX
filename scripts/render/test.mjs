@@ -49,7 +49,7 @@ for (const r of routes) {
   }, r.key);
   ok(`[${r.key}] only this page visible`, info.visible.length === 1 && info.visible[0] === r.key, info.visible.join(','));
   ok(`[${r.key}] has content`, info.len > 80, String(info.len));
-  ok(`[${r.key}] headline in the brand type system`, /Kaushan/.test(info.hFont) || (r.key === 'home' && /Alegreya/.test(info.hFont)), info.hFont);
+  ok(`[${r.key}] headline in the brand type system`, /Kaushan|Alegreya/.test(info.hFont), info.hFont);
 }
 
 // ---- all hash links across the whole document point to a real page
@@ -192,11 +192,20 @@ const p1 = await page.$eval('[data-page="home"] .hero', (e) => parseFloat(getCom
 ok('hero parallax progress follows scroll', p1 > p0 + 0.2, `${p0} -> ${p1}`);
 ok('scroll progress bar advances', parseFloat(await page.$eval('.scroll-progress', (e) => e.style.getPropertyValue('--sp'))) > 0.02);
 await page.evaluate(() => window.scrollTo(0, 1400)); await page.waitForTimeout(350);
-ok('header hides when scrolling down', await page.$eval('.site-header', (e) => e.classList.contains('is-hidden')));
-ok('sticky offset drops to 0 while header hidden', (await page.evaluate(() => document.documentElement.style.getPropertyValue('--stick'))) === '0px');
-await page.evaluate(() => window.scrollTo(0, 1100)); await page.waitForTimeout(350);
-ok('header returns when scrolling up', !(await page.$eval('.site-header', (e) => e.classList.contains('is-hidden'))));
-ok('header has glass background after scrolling', await page.$eval('.site-header', (e) => e.classList.contains('is-stuck')));
+ok('header is fixed and stays visible while scrolling (no hide/show flicker)', await page.$eval('.site-header', (e) => { const w = e.closest('.shopify-section'); return getComputedStyle(w).position === 'fixed' && Math.round(e.getBoundingClientRect().top) === 0 && !e.classList.contains('is-hidden'); }));
+ok('sticky offset is a constant', (await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--stick').trim())) === '92px');
+ok('header turns compact with a glass background after scrolling', await page.$eval('.site-header', (e) => e.classList.contains('is-stuck')));
+
+// regression: the header used to change height and shove the page while the first pixels scrolled
+{
+  await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
+  await page.evaluate(() => { window.__ys = []; window.__tops = []; const h = document.querySelector('.site-header'); const f = () => { window.__ys.push(window.scrollY); window.__tops.push(Math.round(h.getBoundingClientRect().top * 10) / 10); requestAnimationFrame(f); }; f(); });
+  for (let i = 0; i < 30; i++) { await page.mouse.wheel(0, 14); await page.waitForTimeout(36); }
+  await page.waitForTimeout(500);
+  const fl = await page.evaluate(() => { const ys = window.__ys; let back = 0; for (let i = 1; i < ys.length; i++) if (ys[i] < ys[i - 1] - 0.5) back++; return { back, tops: [...new Set(window.__tops)], n: ys.length }; });
+  ok('slow scroll from the top: the page never jumps back and the header never moves', fl.back === 0 && fl.tops.length === 1 && fl.tops[0] === 0, JSON.stringify(fl));
+  await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(300);
+}
 
 // reveals: after a full scroll-through every reveal target on the home page is revealed
 await scrollThrough(page);
@@ -219,7 +228,7 @@ ok('sticky split: intro stays pinned while cards scroll', head > 0 && head < 260
 
 // button fill + magnetic + spotlight
 await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(400);
-const btnSel = '[data-page="home"] .fg--rows .fg__foot .btn--gold';
+const btnSel = '[data-page="home"] .plan-card .btn--gold';
 const before = await page.$eval(btnSel, (e) => parseFloat(getComputedStyle(e, '::before').width));
 await page.locator(btnSel).scrollIntoViewIfNeeded(); await page.waitForTimeout(1600); await page.hover(btnSel); await page.waitForTimeout(1000);
 const after = await page.$eval(btnSel, (e) => parseFloat(getComputedStyle(e, '::before').width));
@@ -307,7 +316,7 @@ ok('page index is reachable at #/indice', await (async () => { await page.goto(`
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(400);
 
 // header = logo + cart + burger only
-ok('header holds only the logo, the cart and the burger', (await page.$$('.site-header a, .site-header button')).length === 3);
+ok('header holds only the logo, the announcement link, the cart and the burger', (await page.$$('.site-header a, .site-header button')).length === 4);
 ok('no fake-wood background anywhere', await page.evaluate(() => !/wood/i.test(getComputedStyle(document.querySelector('.bg-fx'), '::before').backgroundImage) && !document.querySelector('style').textContent.includes('photo-wood')));
 
 // burger -> full sitemap
@@ -453,7 +462,7 @@ ok('language switches back to Spanish', (await page.evaluate(() => document.docu
 // hero: photo like the reference (serif headline + italic brand phrase, circle-arrow button, no inline nav)
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(600);
 const hh = await page.evaluate(async () => {
-  const img = document.querySelector('[data-page="home"] .hero__slide img'); await new Promise((r) => (img.complete && img.naturalWidth > 1 ? r() : (img.onload = r)));
+  const img = document.querySelector('[data-page="home"] .hero__media--light img'); await new Promise((r) => (img.complete && img.naturalWidth > 1 ? r() : (img.onload = r)));
   const h1 = document.querySelector('[data-page="home"] .hero h1'), em = h1.querySelector('em'), hero = document.querySelector('[data-page="home"] .hero').getBoundingClientRect();
   const ir = img.getBoundingClientRect();
   return { imgW: img.naturalWidth, fills: ir.width >= hero.width - 2 && ir.height >= hero.height - 2, h1Font: getComputedStyle(h1).fontFamily, emFont: getComputedStyle(em).fontFamily, arrow: !!document.querySelector('[data-page="home"] .hero .arrow-link .arrow-link__c'), nav: !!document.querySelector('.site-nav') };
@@ -486,8 +495,8 @@ await page.hover('[data-page="home"] .hero .arrow-link'); await page.waitForTime
 ok('hovering the hero button ignites the fire video inside its circle', await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .hero .arrow-link'); const v = b.querySelector('.arrow-link__c .btn__fx video'); return b.classList.contains('is-fx') && !!v && !v.paused && parseFloat(getComputedStyle(b.querySelector('.btn__fx')).opacity) > 0.5; }));
 await page.mouse.move(5, 500); await page.waitForTimeout(1200);
 ok('fire stops when the pointer leaves', await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .hero .arrow-link'); return !b.classList.contains('is-fx') && b.querySelector('.btn__fx video').paused; }));
-await page.locator('[data-page="home"] .fg--rows .fg__foot .btn--gold').scrollIntoViewIfNeeded(); await page.waitForTimeout(1600); await page.hover('[data-page="home"] .fg--rows .fg__foot .btn--gold'); await page.waitForTimeout(1300);
-ok('pill buttons ignite too', await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .fg--rows .fg__foot .btn--gold'); return b.classList.contains('is-fx') && !!b.querySelector('.btn__fx video'); }));
+await page.locator('[data-page="home"] .plan-card .btn--gold').scrollIntoViewIfNeeded(); await page.waitForTimeout(1600); await page.hover('[data-page="home"] .plan-card .btn--gold'); await page.waitForTimeout(1300);
+ok('pill buttons ignite too', await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .plan-card .btn--gold'); return b.classList.contains('is-fx') && !!b.querySelector('.btn__fx video'); }));
 await page.mouse.move(5, 500);
 
 // 3D / pointer: hero photo drifts, dish tilt, coverflow, peek
@@ -504,6 +513,45 @@ await page.evaluate(() => { const r = document.querySelector('[data-page="home"]
 const row = await page.$eval('[data-page="home"] .index-row[data-peek]', (e) => { const r = e.getBoundingClientRect(); return { x: r.left + 200, y: r.top + r.height / 2 }; });
 await page.mouse.move(row.x, row.y); await page.mouse.move(row.x + 10, row.y + 4); await page.waitForTimeout(600);
 ok('hovering a category row shows its photo next to the cursor', await page.evaluate(() => { const p = document.querySelector('.peek'); return !!p && p.classList.contains('is-on') && /^blob:/.test(p.querySelector('img').src); }));
+
+
+// ---- v5: one palette per theme, the same motif everywhere, seamless switching
+await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(800);
+const tok = (n) => page.evaluate((n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim().toLowerCase(), n);
+ok('light palette = white + olive green', (await tok('--brand')) === '#4f6330' && (await tok('--bg-base')) === '#f5f4ec');
+await page.evaluate(() => localStorage.setItem('kx-theme', 'dark')); await page.reload(); await page.waitForTimeout(800);
+ok('dark palette = black + gold + ivory', (await tok('--brand')) === '#e2c36b' && (await tok('--bg-base')) === '#0d0c0a' && (await tok('--text')) === '#f3ebd9');
+ok('dark hero shows its own twin photo (not the light one)', await page.evaluate(() => getComputedStyle(document.querySelector('[data-page="home"] .hero__media--dark')).display !== 'none' && getComputedStyle(document.querySelector('[data-page="home"] .hero__media--light')).display === 'none'));
+await page.waitForFunction(() => { const v = document.querySelector('[data-page="home"] .hero__media--dark video'); return v && !v.paused && v.currentTime > 0.2; }, null, { timeout: 8000 }).catch(() => {});
+ok('the ingredient-waterfall video plays over the dark hero (blob source, faded in)', await page.evaluate(() => { const v = document.querySelector('[data-page="home"] .hero__media--dark video'); return !v.paused && v.currentTime > 0 && v.classList.contains('is-on') && v.src.startsWith('blob:'); }));
+ok('footer is deep black in dark mode and deep olive in light mode', await (async () => {
+  const dark = await page.evaluate(() => getComputedStyle(document.querySelector('.site-footer')).backgroundImage);
+  await page.evaluate(() => localStorage.setItem('kx-theme', 'light')); await page.reload(); await page.waitForTimeout(700);
+  const lightBg = await page.evaluate(() => getComputedStyle(document.querySelector('.site-footer')).backgroundImage);
+  return /13, 12, 10/.test(dark) && /28, 38, 20/.test(lightBg);
+})());
+// theme switching is instant: no transition storm, one snapshot cross-fade
+await page.reload(); await page.waitForTimeout(800);
+await page.click('.burger'); await page.waitForTimeout(1000);
+const sw = await page.evaluate(async () => { const t0 = performance.now(); document.querySelector('#menu-overlay [data-theme-toggle]').click(); await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))); const t1 = performance.now(); return { dt: t1 - t0, theme: document.documentElement.getAttribute('data-theme') }; });
+ok('theme switch lands within two frames', sw.theme === 'dark' && sw.dt < 250, JSON.stringify(sw));
+await page.waitForTimeout(800);
+ok('no stuck "is-theming" state after the switch', await page.evaluate(() => !document.documentElement.classList.contains('is-theming')));
+await page.keyboard.press('Escape'); await page.waitForTimeout(900);
+await page.evaluate(() => localStorage.setItem('kx-theme', 'light'));
+// the motif on every page: photo header, serif headline + script phrase, no raw markup
+await page.reload(); await page.waitForTimeout(600);
+const motif = { noPhoto: [], noEm: [], leak: [] };
+for (const r2 of routes.filter((r) => !r.key.startsWith('p/'))) {
+  await page.goto(`${URL0}#/${r2.key}`); await page.waitForTimeout(60);
+  const info = await page.$eval(`[data-page="${r2.key}"]`, (e) => ({ photo: !!e.querySelector('.page-head__bg img, .hero__media img'), em: !!e.querySelector('h1 em, h2 em'), star: /\*/.test(e.innerText) }));
+  if (!info.photo && r2.key !== 'home') motif.noPhoto.push(r2.key);
+  if (!info.em) motif.noEm.push(r2.key);
+  if (info.star) motif.leak.push(r2.key);
+}
+ok('every page opens with the photo header', motif.noPhoto.filter((k) => !['404'].includes(k)).length === 0, motif.noPhoto.join(' '));
+ok('every page has a serif headline with a brand-script phrase', motif.noEm.length === 0, motif.noEm.join(' '));
+ok('no raw emphasis asterisks leak into the page', motif.leak.length === 0, motif.leak.join(' '));
 
 // ---- screenshots for eyeballing
 if (shotDir) {

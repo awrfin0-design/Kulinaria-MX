@@ -6,10 +6,11 @@
         "parent_label": "Embajadores",
         "parent_link": "/pages/embajadores",
         "eyebrow": "Clientes referidos",
-        "heading": "Clientes: crédito interno viral",
+        "heading": "Clientes: crédito *interno viral*",
         "text": "Comparte tu código único y gana saldo por cada amigo que compre su primer bloque.",
         "button_label": "Ver mis referidos",
-        "button_link": "/pages/cuenta-referidos"
+        "button_link": "/pages/cuenta-referidos",
+        "art": "air-breakfast"
       },
       "blocks": {
         "n0": {
@@ -79,7 +80,7 @@
         "columns": "3",
         "background": "base",
         "eyebrow": "Cómo funciona",
-        "heading": "Gana mientras compartes"
+        "heading": "Gana *mientras compartes*"
       },
       "blocks": {
         "b0": {
@@ -116,7 +117,7 @@
     "s2": {
       "type": "cta-banner",
       "settings": {
-        "heading": "Empieza a compartir",
+        "heading": "Empieza *a compartir*",
         "text": "Tu código se genera automáticamente al registrarte.",
         "button_label": "Crear cuenta",
         "button_link": "/account/register",

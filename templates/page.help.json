@@ -4,10 +4,11 @@
       "type": "page-head",
       "settings": {
         "eyebrow": "Ayuda y legales",
-        "heading": "¿Necesitas ayuda?",
+        "heading": "¿Necesitas *ayuda?*",
         "text": "Reunimos el contrato de adhesión y las políticas en un solo lugar claro.",
         "button_label": "Leer contrato y términos",
-        "button_link": "/pages/terminos"
+        "button_link": "/pages/terminos",
+        "art": "air-glass"
       },
       "blocks": {
         "n0": {
@@ -45,7 +46,7 @@
         "columns": "3",
         "background": "base",
         "eyebrow": "Políticas",
-        "heading": "Lo que debes saber"
+        "heading": "Lo que *debes saber*"
       },
       "blocks": {
         "b0": {
@@ -116,7 +117,7 @@
       "type": "faq",
       "settings": {
         "eyebrow": "Ayuda",
-        "heading": "Preguntas frecuentes",
+        "heading": "Preguntas *frecuentes*",
         "background": "base"
       },
       "blocks": {
@@ -169,7 +170,7 @@
       "settings": {
         "kind": "general",
         "eyebrow": "Contacto",
-        "heading": "¿Necesitas ayuda?",
+        "heading": "¿Necesitas *ayuda?*",
         "text": "Escríbenos y te respondemos lo antes posible.",
         "button_label": "Enviar mensaje"
       }
