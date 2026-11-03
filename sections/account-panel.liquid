@@ -1,0 +1,130 @@
+{%- liquid
+  assign mf = customer.metafields.kulinaria
+  assign portal = settings.subscription_portal_url | default: routes.account_url
+  assign code = mf.referral_code.value
+  if code == blank
+    assign cid = customer.id | append: ''
+    assign code = cid | slice: -6, 6 | prepend: 'KUL'
+  endif
+  assign paid = mf.referrals_paid.value | default: 0
+  assign pct = paid | times: 10 | at_most: 100
+  assign wallet = mf.wallet_balance.value | default: 0
+-%}
+{%- assign panel = section.settings.panel -%}
+<section class="section" {{ section.shopify_attributes }}>
+  <div class="container">
+    {%- unless customer -%}
+      <div class="section__head">
+        <span class="eyebrow">{{ 'general.account' | t }}</span>
+        <h2>{{ 'account.login_needed' | t }}</h2>
+        <div class="btn-row"><a class="btn btn--gold" href="{{ routes.account_login_url }}">{{ 'login.title' | t }}</a><a class="btn btn--outline" href="{{ routes.account_register_url }}">{{ 'register.title' | t }}</a></div>
+      </div>
+    {%- else -%}
+    <div class="account">
+      <nav class="account-nav" aria-label="{{ 'general.account' | t }}">
+        <a href="{{ routes.account_url }}"{% if false %}{% endif %}>{{ 'account.overview' | t }}</a>
+        <a href="/pages/cuenta-semana"{% if section.settings.panel == 'semana' %} aria-current="page"{% endif %}>{{ 'account.my_week' | t }}</a>
+        <a href="/pages/cuenta-pausas"{% if section.settings.panel == 'pausas' %} aria-current="page"{% endif %}>{{ 'account.pause_deliveries' | t }}</a>
+        <a href="/pages/cuenta-monedero"{% if section.settings.panel == 'monedero' %} aria-current="page"{% endif %}>{{ 'account.wallet' | t }}</a>
+        <a href="/pages/cuenta-perfil"{% if section.settings.panel == 'perfil' %} aria-current="page"{% endif %}>{{ 'account.allergies_tastes' | t }}</a>
+        <a href="/pages/cuenta-referidos"{% if section.settings.panel == 'referidos' %} aria-current="page"{% endif %}>{{ 'account.my_referrals' | t }}</a>
+        <a href="/pages/cuenta-pedidos"{% if section.settings.panel == 'pedidos' %} aria-current="page"{% endif %}>{{ 'account.orders_invoices' | t }}</a>
+        <a href="/pages/cuenta-entregas"{% if section.settings.panel == 'entregas' %} aria-current="page"{% endif %}>{{ 'account.deliveries_containers' | t }}</a>
+        <a href="{{ routes.account_addresses_url }}">{{ 'account.manage_addresses' | t }}</a>
+      </nav>
+
+      <div class="account-content">
+        <div class="account-block" id="{{ panel }}">
+          {%- case panel -%}
+          {%- when 'semana' -%}
+        <h2>{{ 'account.my_week' | t }}</h2>
+        <div class="panel panel--gold">
+          <p class="countdown" data-cutoff>{{ 'cutoff.confirm_dishes' | t }} <strong data-cutoff-value>…</strong></p>
+          <p class="text-muted">{{ 'account.auto_order' | t }}</p>
+          <div class="btn-row"><a class="btn btn--gold" href="/collections/menu-semanal">{{ 'account.choose_dishes' | t }}</a><a class="btn btn--outline" href="{{ portal }}">{{ 'account.manage_subscription' | t }}</a></div>
+        </div>
+          {%- when 'pausas' -%}
+        <h2>{{ 'account.pause_next' | t }}</h2>
+        <p class="text-muted">{{ 'account.pause_intro' | t }}</p>
+        <div class="pause-grid">
+          <div class="card">
+            <h3>{{ 'account.thu_fri' | t }}</h3>
+            <p class="text-muted">{{ 'account.thu_fri_note' | t }}</p>
+            <a class="btn btn--outline" data-pause-lock data-lock-day="2" data-lock-hour="10" href="{{ portal }}">{{ 'account.pause_next' | t }}</a>
+            <p class="alert alert--warn" data-lock-msg hidden>{{ settings.pause_locked_message }}</p>
+            <p class="text-muted" data-lock-left style="font-size:.85rem"></p>
+          </div>
+          <div class="card">
+            <h3>{{ 'account.mon_wed' | t }}</h3>
+            <p class="text-muted">{{ 'account.mon_wed_note' | t }}</p>
+            <a class="btn btn--outline" data-pause-lock data-lock-day="5" data-lock-hour="19" href="{{ portal }}">{{ 'account.pause_next' | t }}</a>
+            <p class="alert alert--warn" data-lock-msg hidden>{{ settings.pause_locked_message }}</p>
+            <p class="text-muted" data-lock-left style="font-size:.85rem"></p>
+          </div>
+        </div>
+        <p class="legal-note" style="margin-top:var(--space-lg)">{{ 'account.pause_limit' | t }}</p>
+          {%- when 'monedero' -%}
+        <h2>{{ 'account.wallet' | t }}</h2>
+        <div class="grid grid--2">
+          <div class="card"><span class="eyebrow">{{ 'account.balance' | t }}</span><p class="tier-card__price gold-text" style="margin:0">{{ wallet | times: 100 | money_without_trailing_zeros }}</p><p class="text-muted">{{ 'account.wallet_text' | t }}</p></div>
+          <div class="card"><span class="eyebrow">{{ 'nav.store' | t }}</span><p class="text-muted">{{ 'account.store_text' | t }}</p><a class="btn btn--outline" style="margin-top:auto;align-self:flex-start" href="/collections/kulinaria-store">{{ 'account.go_store' | t }}</a></div>
+        </div>
+          {%- when 'perfil' -%}
+        <h2>{{ 'account.allergies_tastes' | t }}</h2>
+        <p class="text-muted">{{ 'account.profile_text' | t }}</p>
+        {%- if mf.allergies.value.size > 0 -%}<p>{{ 'account.registered_allergies' | t }} {%- for a in mf.allergies.value %} <span class="tier-badge tier-badge--exclusivo">{{ a }}</span>{%- endfor -%}</p>{%- endif -%}
+        <a class="btn btn--outline" href="/pages/perfil">{{ 'account.edit_profile' | t }}</a>
+          {%- when 'referidos' -%}
+        <h2>{{ 'account.my_referrals' | t }}</h2>
+        <div class="panel panel--gold">
+          <span class="eyebrow">{{ 'account.your_code' | t }}</span>
+          <p class="tier-card__price gold-text" style="margin:0;letter-spacing:.06em">{{ code }}</p>
+          <p class="text-muted">{{ 'account.referral_text' | t }}</p>
+          <div style="height:10px;border-radius:5px;background:var(--ink-600);overflow:hidden;margin:var(--space-md) 0"><div style="height:100%;width:{{ pct }}%;background:var(--gold-foil)"></div></div>
+          <p class="text-muted" style="margin:0">{{ paid }} {{ 'account.referral_progress' | t }}</p>
+        </div>
+          {%- when 'pedidos' -%}
+        <h2>{{ 'account.orders_invoices' | t }}</h2>
+        {%- paginate customer.orders by 10 -%}
+          {%- if customer.orders.size > 0 -%}
+            <div class="table-wrap"><table class="table">
+              <thead><tr><th>{{ 'account.order' | t }}</th><th>{{ 'account.date' | t }}</th><th>{{ 'account.payment' | t }}</th><th>{{ 'account.delivery' | t }}</th><th>{{ 'cart.total' | t }}</th></tr></thead>
+              <tbody>
+                {%- for order in customer.orders -%}
+                  <tr><td><a href="{{ order.customer_url }}">{{ order.name }}</a></td><td>{{ order.created_at | date: '%d/%m/%Y' }}</td><td>{{ order.financial_status_label }}</td><td>{{ order.fulfillment_status_label }}</td><td>{{ order.total_price | money }}</td></tr>
+                {%- endfor -%}
+              </tbody>
+            </table></div>
+            {%- if paginate.pages > 1 -%}<div class="btn-row">{%- if paginate.previous -%}<a class="btn btn--outline" href="{{ paginate.previous.url }}">{{ 'general.previous' | t }}</a>{%- endif -%}{%- if paginate.next -%}<a class="btn btn--outline" href="{{ paginate.next.url }}">{{ 'general.next' | t }}</a>{%- endif -%}</div>{%- endif -%}
+          {%- else -%}
+            <p class="alert">{{ 'account.no_orders' | t }}</p>
+          {%- endif -%}
+        {%- endpaginate -%}
+          {%- when 'entregas' -%}
+        <h2>{{ 'account.deliveries_containers' | t }}</h2>
+        <div class="grid grid--2">
+          <div class="card"><h3>{{ 'account.delivery_address' | t }}</h3>
+            {%- if customer.default_address -%}<p class="text-muted">{{ customer.default_address | format_address }}</p>{%- else -%}<p class="text-muted">{{ 'account.no_address' | t }}</p>{%- endif -%}
+            <a class="btn btn--outline" style="margin-top:auto;align-self:flex-start" href="{{ routes.account_addresses_url }}">{{ 'account.manage_addresses' | t }}</a></div>
+          <div class="card"><h3>{{ 'account.policies' | t }}</h3><ul class="plan-list" style="margin:0"><li>{{ 'account.policy_wait' | t }}</li><li>{{ 'account.policy_pickup' | t }}</li><li>{{ 'account.policy_glass_pre' | t }}{{ settings.glass_fee }} {{ 'account.policy_glass_post' | t }}</li></ul></div>
+        </div>
+          {%- endcase -%}
+        </div>
+      </div>
+    </div>
+    {%- endunless -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Panel de Mi cuenta",
+  "settings": [
+    { "type": "select", "id": "panel", "label": "Panel", "default": "semana", "options": [
+      { "value": "semana", "label": "Mi semana" }, { "value": "pausas", "label": "Pausar entregas" }, { "value": "monedero", "label": "Monedero" },
+      { "value": "perfil", "label": "Alergias y gustos" }, { "value": "referidos", "label": "Mis referidos" }, { "value": "pedidos", "label": "Pedidos y facturas" },
+      { "value": "entregas", "label": "Entregas y envases" } ] }
+  ],
+  "presets": [{ "name": "Panel de Mi cuenta" }]
+}
+{% endschema %}

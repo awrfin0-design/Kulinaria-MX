@@ -1,0 +1,151 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Ayuda y legales",
+        "parent_link": "/pages/ayuda",
+        "eyebrow": "Contrato y términos",
+        "heading": "Contrato de adhesión y términos de servicio",
+        "text": "Resumen de las cláusulas principales. La versión completa se acepta durante el registro, antes del pago."
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "Ayuda",
+            "link": "/pages/ayuda"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Contrato y términos",
+            "link": "/pages/terminos"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Aviso de privacidad",
+            "link": "/pages/privacidad"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2"
+      ]
+    },
+    "s1": {
+      "type": "faq",
+      "settings": {
+        "eyebrow": "Ayuda y legales",
+        "heading": "Contrato de adhesión y términos de servicio",
+        "text": "Resumen de las cláusulas principales. La versión completa se acepta durante el registro, antes del pago.",
+        "open_first": true,
+        "background": "base"
+      },
+      "blocks": {
+        "c1": {
+          "type": "item",
+          "settings": {
+            "question": "1. Registro del perfil y datos de envío",
+            "answer": "<p>Nombre completo del titular, dirección exacta (clúster, calle, lote, casa y referencias de acceso), teléfono principal y un suscriptor secundario: si el titular no está disponible, el pedido puede entregarse a esa segunda persona.</p>"
+          }
+        },
+        "c2": {
+          "type": "item",
+          "settings": {
+            "question": "2. Políticas, tiempos de espera y logística de reparto",
+            "answer": "<p>El repartidor otorga 5 minutos de cortesía fuera del domicilio. Pasado ese tiempo continúa su ruta y puedes pasar a recoger tu pedido sin costo adicional, acordando antes el horario con atención al cliente.</p>"
+          }
+        },
+        "c3": {
+          "type": "item",
+          "settings": {
+            "question": "3. Métodos de pago digitales",
+            "answer": "<p>Toda suscripción o renovación (bloques de 4 semanas o semana de prueba) se procesa digitalmente en la página web al hacer el pedido. No se acepta dinero en efectivo bajo ninguna circunstancia.</p>"
+          }
+        },
+        "c4": {
+          "type": "item",
+          "settings": {
+            "question": "4. Envases de vidrio y responsabilidad",
+            "answer": "<p>Cualquier problema, rotura o extravío de un recipiente bajo el cuidado del cliente genera un cobro mínimo de $100 MXN por envase. No es necesario lavarlos, aunque agradecemos que los enjuagues.</p>"
+          }
+        },
+        "c5": {
+          "type": "item",
+          "settings": {
+            "question": "5. Política de no reembolso y compras en volumen",
+            "answer": "<p>Los insumos se compran en volumen, por lo que una vez liquidada la suscripción no hay cancelación de contrato vigente ni devolución de dinero. Lo invertido no se pierde al pausar en tiempo: las comidas no preparadas quedan como saldo a favor.</p>"
+          }
+        },
+        "c6": {
+          "type": "item",
+          "settings": {
+            "question": "6. Ventanas de pausa operativa",
+            "answer": "<ul><li>Pausa de jueves y viernes: a más tardar el martes a las 10:00 AM.</li><li>Pausa de lunes a miércoles: a más tardar el viernes a las 7:00 PM.</li><li>Si no pausas antes del viernes 7:00 PM, tu nuevo pedido se asigna el sábado a las 10:00 AM con cargo al plan vigente.</li></ul>"
+          }
+        },
+        "c7": {
+          "type": "item",
+          "settings": {
+            "question": "7. Caducidad del contrato por inactividad",
+            "answer": "<p>Tras una pausa debes reanudar en un máximo de 30 días naturales. En su defecto el contrato se cancela de forma definitiva, se pierde el saldo acumulado y deberás pagar un nuevo contrato para volver.</p>"
+          }
+        },
+        "c8": {
+          "type": "item",
+          "settings": {
+            "question": "8. Especificación de gramajes (peso en crudo)",
+            "answer": "<p>Las cantidades de proteína corresponden al peso bruto en crudo antes de la preparación. La cocción, el sellado al fuego o la reducción provocan una merma natural, por lo que el peso neto servido será inferior al publicado.</p>"
+          }
+        },
+        "c9": {
+          "type": "item",
+          "settings": {
+            "question": "9. Exclusión de responsabilidad por alergias y alérgenos",
+            "answer": "<p>El usuario es el único responsable de declarar con detalle sus alergias y restricciones al inscribirse. El sitio genera alertas y bloqueos con base en los datos ingresados; Kulinaria queda exenta de responsabilidad por omisiones o errores del usuario al registrar su historial médico o alimentario.</p>"
+          }
+        },
+        "c10": {
+          "type": "item",
+          "settings": {
+            "question": "10. Selección automática de los sábados",
+            "answer": "<p>Si no registras tus platillos antes del sábado a las 10:00 AM, el sistema genera un pedido automático con tu plan, historial y, de forma obligatoria, tus alergias registradas.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5",
+        "c6",
+        "c7",
+        "c8",
+        "c9",
+        "c10"
+      ]
+    },
+    "s2": {
+      "type": "cta-banner",
+      "settings": {
+        "heading": "Empieza tu bloque de 4 semanas",
+        "text": "Elige tu plan, cuéntanos tus alergias y nosotros nos encargamos del resto.",
+        "button_label": "Elegir mi plan",
+        "button_link": "/pages/planes",
+        "show_countdown": false
+      }
+    }
+  },
+  "order": [
+    "head",
+    "s1",
+    "s2"
+  ]
+}

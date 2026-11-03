@@ -1,37 +1,14 @@
-{%- liquid
-  assign menu = section.settings.menu
-  assign inline_n = section.settings.inline_count | default: 3
--%}
-<header class="site-header tone-dark" {{ section.shopify_attributes }}>
+<header class="site-header" {{ section.shopify_attributes }}>
   <div class="container">
     <div class="site-header__bar">
-      <a class="site-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">{% render 'logo' %}</a>
-
-      <nav class="site-nav" data-nav aria-label="{{ 'nav.primary' | t }}">
-        {%- if menu != blank and menu.links.size > 0 -%}
-          {%- for link in menu.links limit: inline_n -%}
-            <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title }}</a>
-          {%- endfor -%}
-        {%- else -%}
-          <a href="/collections/menu-semanal">{{ 'nav.menu' | t }}</a>
-          <a href="/pages/planes">{{ 'nav.plans' | t }}</a>
-          <a href="/pages/carta-kulinaria">{{ 'nav.carta' | t }}</a>
-        {%- endif -%}
-        <button class="site-nav__more" type="button" data-menu-open aria-haspopup="dialog" aria-controls="menu-overlay" aria-expanded="false">
-          {{ 'nav.more' | t }}<i aria-hidden="true"></i>
-        </button>
-      </nav>
+      <a class="site-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">{% render 'logo', tone: 'auto' %}</a>
 
       <div class="header-actions">
-        {% render 'lang-switcher' %}
-        {% render 'theme-toggle' %}
-        <a class="icon-link" href="{{ routes.account_url }}" aria-label="{{ 'general.account' | t }}">{% render 'icon', name: 'user' %}</a>
         <a class="icon-link" href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t }}">
           {% render 'icon', name: 'bag' %}
           {%- if cart.item_count > 0 -%}<span class="cart-count">{{ cart.item_count }}</span>{%- endif -%}
         </a>
-        <a class="btn btn--gold btn--sm site-header__cta" href="{{ settings.plans_url | default: '/pages/planes' }}">{{ 'nav.cta' | t }}</a>
-        <button class="nav-toggle" type="button" data-menu-open aria-haspopup="dialog" aria-controls="menu-overlay" aria-expanded="false" aria-label="{{ 'nav.open' | t }}">{% render 'icon', name: 'menu' %}</button>
+        <button class="burger" type="button" data-menu-open aria-haspopup="dialog" aria-controls="menu-overlay" aria-expanded="false" aria-label="{{ 'nav.open' | t }}"><i></i><i></i></button>
       </div>
     </div>
   </div>
@@ -40,9 +17,6 @@
 {% schema %}
 {
   "name": "Encabezado",
-  "settings": [
-    { "type": "link_list", "id": "menu", "label": "Menú principal", "default": "main-menu" },
-    { "type": "range", "id": "inline_count", "label": "Enlaces visibles en la barra (el resto va en «Más»)", "min": 2, "max": 5, "step": 1, "default": 3 }
-  ]
+  "settings": []
 }
 {% endschema %}

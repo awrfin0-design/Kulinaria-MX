@@ -1,20 +1,14 @@
 {
   "sections": {
-    "hero": {
-      "type": "hero",
+    "head": {
+      "type": "page-head",
       "settings": {
         "eyebrow": "Filosofía",
         "heading": "El privilegio de pertenecer",
-        "text": "Una interfaz limpia, un servicio directo y platillos que se sienten exclusivos. Así entendemos la comida saludable.",
-        "button_label": "Ver el menú de la semana",
-        "button_link": "/collections/menu-semanal",
-        "button2_label": "",
-        "show_countdown": false,
-        "size": "compact",
-        "art": "flames"
+        "text": "Una interfaz limpia, un servicio directo y platillos que se sienten exclusivos. Así entendemos la comida saludable."
       }
     },
-    "principles": {
+    "s1": {
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Principios",
@@ -52,7 +46,7 @@
         "p3"
       ]
     },
-    "efficiency": {
+    "s2": {
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Por qué así",
@@ -82,7 +76,7 @@
         "e2"
       ]
     },
-    "cta": {
+    "s3": {
       "type": "cta-banner",
       "settings": {
         "heading": "Conoce el menú de la semana",
@@ -92,9 +86,9 @@
     }
   },
   "order": [
-    "hero",
-    "principles",
-    "efficiency",
-    "cta"
+    "head",
+    "s1",
+    "s2",
+    "s3"
   ]
 }

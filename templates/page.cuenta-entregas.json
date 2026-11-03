@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Mi cuenta",
+        "parent_link": "/account",
+        "eyebrow": "Entregas y envases",
+        "heading": "Entregas y envases",
+        "text": "Dirección, espera de cortesía y envases."
+      }
+    },
+    "s1": {
+      "type": "account-panel",
+      "settings": {
+        "panel": "entregas"
+      }
+    }
+  },
+  "order": [
+    "head",
+    "s1"
+  ]
+}

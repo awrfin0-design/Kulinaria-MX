@@ -1,0 +1,81 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Checkout y contrato",
+        "parent_link": "/pages/checkout",
+        "eyebrow": "Confirmación",
+        "heading": "¡Tu bloque está confirmado!",
+        "text": "Gracias por unirte a Kulinaria. Esto es lo que sigue.",
+        "button_label": "Ir a mi cuenta",
+        "button_link": "/account"
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "Checkout y contrato",
+            "link": "/pages/checkout"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Confirmación",
+            "link": "/pages/confirmacion"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1"
+      ]
+    },
+    "s1": {
+      "type": "feature-grid",
+      "settings": {
+        "layout": "rows",
+        "columns": "3",
+        "background": "base",
+        "heading": ""
+      },
+      "blocks": {
+        "b0": {
+          "type": "item",
+          "settings": {
+            "title": "Resumen del bloque",
+            "text": "<p>Tu plan, el nivel de tus platillos y el total pagado, en tu correo y en Mi cuenta.</p>"
+          }
+        },
+        "b1": {
+          "type": "item",
+          "settings": {
+            "title": "Primera entrega",
+            "text": "<p>Elige tus platillos antes del sábado a las 10:00 AM o armamos tu pedido con tus alergias registradas.</p>",
+            "link": "/collections/menu-semanal",
+            "link_label": "Elegir platillos"
+          }
+        },
+        "b2": {
+          "type": "item",
+          "settings": {
+            "title": "Tu código de referencia",
+            "text": "<p>Se genera automáticamente. Compártelo y gana saldo por cada amigo que pague su primer bloque.</p>",
+            "link": "/pages/cuenta-referidos",
+            "link_label": "Ver mi código"
+          }
+        }
+      },
+      "block_order": [
+        "b0",
+        "b1",
+        "b2"
+      ]
+    }
+  },
+  "order": [
+    "head",
+    "s1"
+  ]
+}

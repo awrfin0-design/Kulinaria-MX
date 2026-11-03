@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Mi cuenta",
+        "parent_link": "/account",
+        "eyebrow": "Pausar entregas",
+        "heading": "Pausar entregas",
+        "text": "Pausa tu próximo bloque antes de que se cierre la ventana."
+      }
+    },
+    "s1": {
+      "type": "account-panel",
+      "settings": {
+        "panel": "pausas"
+      }
+    }
+  },
+  "order": [
+    "head",
+    "s1"
+  ]
+}

@@ -1,26 +1,99 @@
-<section class="section" {{ section.shopify_attributes }}>
-  <div class="container" style="max-width:720px">
+{%- liquid
+  assign allergy_list = 'Gluten,Lácteos,Frutos secos,Mariscos' | split: ','
+  assign diet_list = 'Keto,Libre de gluten,Vegetariano,Vegano' | split: ','
+-%}
+<section class="section signup" {{ section.shopify_attributes }}>
+  <div class="container" style="max-width:860px">
     <div class="section__head">
       <span class="eyebrow">{{ 'register.eyebrow' | t }}</span>
-      <h1 style="font-size:clamp(2.2rem,4vw,3.2rem)">{{ 'register.title' | t }}</h1>
-      <div class="divider-gold"><i></i></div>
+      <h1>{{ 'register.title' | t }}</h1>
       <p class="lede">{{ 'register.text' | t }}</p>
     </div>
-    {%- form 'create_customer', novalidate: 'novalidate' -%}
+
+    {%- form 'create_customer', novalidate: 'novalidate', class: 'signup__form' -%}
       {%- if form.errors -%}<div class="alert alert--warn" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
-      <div class="form-grid">
-        <div class="field"><label for="reg-first">{{ 'form.first_name' | t }}</label><input class="input" id="reg-first" name="customer[first_name]" autocomplete="given-name" required></div>
-        <div class="field"><label for="reg-last">{{ 'form.last_name' | t }}</label><input class="input" id="reg-last" name="customer[last_name]" autocomplete="family-name" required></div>
-        <div class="field"><label for="reg-email">{{ 'form.email' | t }}</label><input class="input" id="reg-email" type="email" name="customer[email]" autocomplete="email" required></div>
-        <div class="field"><label for="reg-pass">{{ 'form.password' | t }}</label><input class="input" id="reg-pass" type="password" name="customer[password]" autocomplete="new-password" required></div>
+      <div class="steps" data-steps>
+        <ol class="steps__nav" aria-label="{{ 'reg.steps' | t }}">
+          <li data-step-dot class="is-on"><span>01</span>{{ 'reg.s1' | t }}</li>
+          <li data-step-dot><span>02</span>{{ 'reg.s2' | t }}</li>
+          <li data-step-dot><span>03</span>{{ 'reg.s3' | t }}</li>
+          <li data-step-dot><span>04</span>{{ 'reg.s4' | t }}</li>
+          <li data-step-dot><span>05</span>{{ 'reg.s5' | t }}</li>
+        </ol>
+        <div class="steps__bar" aria-hidden="true"><i data-steps-bar></i></div>
+
+        <fieldset class="step is-on" data-step>
+          <legend>{{ 'reg.s1_title' | t }}</legend>
+          <div class="form-grid">
+            <div class="field"><label for="reg-first">{{ 'form.first_name' | t }}</label><input class="input" id="reg-first" name="customer[first_name]" autocomplete="given-name" required></div>
+            <div class="field"><label for="reg-last">{{ 'form.last_name' | t }}</label><input class="input" id="reg-last" name="customer[last_name]" autocomplete="family-name" required></div>
+            <div class="field"><label for="reg-email">{{ 'form.email' | t }}</label><input class="input" id="reg-email" type="email" name="customer[email]" autocomplete="email" required></div>
+            <div class="field"><label for="reg-pass">{{ 'form.password' | t }}</label><input class="input" id="reg-pass" type="password" name="customer[password]" autocomplete="new-password" required></div>
+            <div class="field"><label for="reg-phone">{{ 'form.phone' | t }}</label><input class="input" id="reg-phone" type="tel" name="customer[phone]" autocomplete="tel"></div>
+            <div class="field"><label for="reg-zip">{{ 'addr.zip' | t }}</label><input class="input" id="reg-zip" name="address[zip]" autocomplete="postal-code"></div>
+          </div>
+          <div class="field"><label for="reg-street">{{ 'addr.street' | t }}</label><input class="input" id="reg-street" name="address[address1]" autocomplete="address-line1"></div>
+          <div class="field"><label for="reg-cluster">{{ 'addr.cluster' | t }}</label><input class="input" id="reg-cluster" name="address[address2]"></div>
+          <p class="text-muted">{{ 'addr.hint' | t }}</p>
+        </fieldset>
+
+        <fieldset class="step" data-step>
+          <legend>{{ 'reg.s2_title' | t }}</legend>
+          <p class="text-muted">{{ 'reg.s2_text' | t }}</p>
+          <div class="form-grid">
+            <div class="field"><label for="reg-sec-name">{{ 'form.full_name' | t }}</label><input class="input" id="reg-sec-name" name="customer[note][secundario_nombre]"></div>
+            <div class="field"><label for="reg-sec-phone">{{ 'form.phone' | t }}</label><input class="input" id="reg-sec-phone" type="tel" name="customer[note][secundario_telefono]"></div>
+          </div>
+        </fieldset>
+
+        <fieldset class="step" data-step>
+          <legend>{{ 'reg.s3_title' | t }} <span class="tier-badge tier-badge--exclusivo" style="margin-left:8px">{{ 'profile.critical' | t }}</span></legend>
+          <p class="text-muted">{{ 'profile.block1_text' | t }}</p>
+          <div class="check-grid">
+            {%- for a in allergy_list -%}
+              {%- assign ah = a | handleize -%}{%- assign ak = 'allergen.' | append: ah -%}
+              <label class="check"><input type="checkbox" name="allergy" value="{{ a }}"> <span>{{ ak | t }}</span></label>
+            {%- endfor -%}
+          </div>
+          <div class="field"><label for="reg-allergy-other">{{ 'profile.other_allergies' | t }}</label><input class="input" id="reg-allergy-other" name="allergy_other" placeholder="{{ 'profile.other_placeholder' | t }}"></div>
+          <div class="field"><label for="reg-dislikes">{{ 'profile.block2' | t }}</label><input class="input" id="reg-dislikes" name="dislikes" placeholder="{{ 'profile.tag_placeholder' | t }}"></div>
+          <p class="label" style="margin-top:var(--space-lg)">{{ 'profile.diets' | t }}</p>
+          <div class="check-grid">
+            {%- for d in diet_list -%}
+              {%- assign dh = d | handleize -%}{%- assign dk = 'diet.' | append: dh -%}
+              <label class="check"><input type="checkbox" name="diet" value="{{ d }}"> <span>{{ dk | t }}</span></label>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+
+        <fieldset class="step" data-step>
+          <legend>{{ 'reg.s4_title' | t }}</legend>
+          <div class="plan-picker">
+            <label><input type="radio" name="plan" value="block" checked><span><strong>{{ 'plans.block_name' | t }}</strong><br><small class="text-muted">{{ 'plans.block_short' | t }}</small></span></label>
+            <label><input type="radio" name="plan" value="trial"><span><strong>{{ 'plans.trial_name' | t }}</strong><br><small class="text-muted">{{ 'plans.trial_short' | t }}</small></span></label>
+          </div>
+          <div class="field" style="margin-top:var(--space-lg)">
+            <label for="reg-ref">{{ 'form.referral_optional' | t }}</label>
+            <input class="input" id="reg-ref" data-ref-save placeholder="JUANFIT" autocomplete="off" style="text-transform:uppercase">
+          </div>
+          <p class="text-muted">{{ 'reg.gift_note' | t }}</p>
+        </fieldset>
+
+        <fieldset class="step" data-step>
+          <legend>{{ 'reg.s5_title' | t }}</legend>
+          <p class="text-muted">{{ 'reg.s5_text' | t }}</p>
+          <label class="check" style="margin:var(--space-lg) 0"><input type="checkbox" name="contract" data-signup-contract required> <span>{{ 'cart.contract_label' | t }} <a href="/pages/terminos" target="_blank" rel="noopener" style="text-decoration:underline">{{ 'cart.read_contract' | t }}</a></span></label>
+          <input type="hidden" name="customer[tags]" value="suscriptor">
+          <button class="btn btn--gold" type="submit" data-signup-submit disabled>{{ 'register.title' | t }}</button>
+        </fieldset>
+
+        <div class="steps__actions">
+          <button class="text-link" type="button" data-step-prev hidden>{{ 'reg.back' | t }}</button>
+          <button class="btn btn--outline" type="button" data-step-next>{{ 'reg.next' | t }}</button>
+        </div>
       </div>
-      <div class="field">
-        <label for="reg-ref">{{ 'form.referral_optional' | t }}</label>
-        <input class="input" id="reg-ref" data-ref-save placeholder="JUANFIT" autocomplete="off" style="text-transform:uppercase">
-      </div>
-      <input type="hidden" name="customer[tags]" value="suscriptor">
-      <button class="btn btn--gold btn--block" type="submit">{{ 'register.title' | t }}</button>
     {%- endform -%}
+    <p class="text-muted" style="margin-top:var(--space-xl)">{{ 'reg.have_account' | t }} <a href="{{ routes.account_login_url }}" style="text-decoration:underline">{{ 'login.title' | t }}</a></p>
   </div>
 </section>
 

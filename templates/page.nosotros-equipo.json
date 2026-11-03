@@ -1,0 +1,98 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Nosotros",
+        "parent_link": "/pages/nosotros",
+        "eyebrow": "Equipo de cocina",
+        "heading": "Chefs que dominan el fuego",
+        "text": "Técnicas de cocción lenta y elaboraciones de autor.",
+        "button_label": "Ver el menú de la semana",
+        "button_link": "/collections/menu-semanal"
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "La marca",
+            "link": "/pages/nosotros"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Historia y fundador",
+            "link": "/pages/nosotros-historia"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Equipo de cocina",
+            "link": "/pages/nosotros-equipo"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Calidad y envases",
+            "link": "/pages/nosotros-calidad"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2",
+        "n3"
+      ]
+    },
+    "s1": {
+      "type": "showcase",
+      "settings": {
+        "eyebrow": "Equipo",
+        "heading": "El fuego, la paciencia y el detalle",
+        "text": "<p>Chefs que dominan el fuego, las cocciones lentas y las reducciones artesanales.</p>",
+        "art": "flames",
+        "reverse": false,
+        "video": "chef",
+        "video_main": true
+      },
+      "blocks": {
+        "p0": {
+          "type": "point",
+          "settings": {
+            "text": "Cocciones lentas"
+          }
+        },
+        "p1": {
+          "type": "point",
+          "settings": {
+            "text": "Reducciones artesanales"
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "text": "Cortes sellados al fuego"
+          }
+        }
+      },
+      "block_order": [
+        "p0",
+        "p1",
+        "p2"
+      ]
+    },
+    "s2": {
+      "type": "cta-banner",
+      "settings": {}
+    }
+  },
+  "order": [
+    "head",
+    "s1",
+    "s2"
+  ]
+}

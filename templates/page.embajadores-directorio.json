@@ -1,0 +1,135 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Embajadores",
+        "parent_link": "/pages/embajadores",
+        "eyebrow": "Directorio",
+        "heading": "Entrenadores Personales de Alta Clase",
+        "text": "Espacio destacado para embajadores validados."
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "Programa",
+            "link": "/pages/embajadores"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Entrenadores",
+            "link": "/pages/embajadores-entrenadores"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Clientes referidos",
+            "link": "/pages/embajadores-clientes"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Gimnasios aliados",
+            "link": "/pages/embajadores-gimnasios"
+          }
+        },
+        "n4": {
+          "type": "link",
+          "settings": {
+            "label": "Directorio",
+            "link": "/pages/embajadores-directorio"
+          }
+        },
+        "n5": {
+          "type": "link",
+          "settings": {
+            "label": "Reglas de alianza",
+            "link": "/pages/embajadores-reglas"
+          }
+        },
+        "n6": {
+          "type": "link",
+          "settings": {
+            "label": "Solicitar código",
+            "link": "/pages/embajadores-solicitar"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2",
+        "n3",
+        "n4",
+        "n5",
+        "n6"
+      ]
+    },
+    "s1": {
+      "type": "feature-grid",
+      "settings": {
+        "eyebrow": "Directorio",
+        "heading": "Entrenadores Personales de Alta Clase",
+        "text": "<p>Espacio destacado para embajadores validados. Agrega aquí sus perfiles.</p>",
+        "columns": "4",
+        "background": "base"
+      },
+      "blocks": {
+        "d1": {
+          "type": "item",
+          "settings": {
+            "title": "Entrenador por definir",
+            "text": "<p>Foto, nombre y código de referencia.</p>"
+          }
+        },
+        "d2": {
+          "type": "item",
+          "settings": {
+            "title": "Entrenador por definir",
+            "text": "<p>Foto, nombre y código de referencia.</p>"
+          }
+        },
+        "d3": {
+          "type": "item",
+          "settings": {
+            "title": "Entrenador por definir",
+            "text": "<p>Foto, nombre y código de referencia.</p>"
+          }
+        },
+        "d4": {
+          "type": "item",
+          "settings": {
+            "title": "Entrenador por definir",
+            "text": "<p>Foto, nombre y código de referencia.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "d1",
+        "d2",
+        "d3",
+        "d4"
+      ]
+    },
+    "s2": {
+      "type": "contact-form",
+      "settings": {
+        "kind": "embajador",
+        "eyebrow": "Alta",
+        "heading": "Solicita tu código de embajador",
+        "text": "Cuéntanos quién eres y te contactamos para activar tu código.",
+        "button_label": "Enviar solicitud"
+      }
+    }
+  },
+  "order": [
+    "head",
+    "s1",
+    "s2"
+  ]
+}

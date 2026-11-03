@@ -42,7 +42,17 @@
     "thu_fri_note": "Pausa a más tardar el martes a las 10:00 AM.",
     "wallet": "Monedero",
     "wallet_text": "Crédito interno (nunca efectivo). Úsalo como descuento en tu siguiente bloque o en Kulinaria Fit Apparel. Las comidas no preparadas por una pausa quedan aquí.",
-    "your_code": "Tu código de referencia"
+    "your_code": "Tu código de referencia",
+    "overview": "Resumen",
+    "login_needed": "Inicia sesión para ver tu cuenta",
+    "tile_semana": "Platillos elegidos y cuenta regresiva al cierre del sábado.",
+    "tile_pausas": "Pausa tu próximo bloque antes de que se cierre la ventana.",
+    "tile_monedero": "Crédito interno y saldo a favor.",
+    "tile_perfil": "Alergias y gustos para la selección automática.",
+    "tile_referidos": "Tu código y el progreso de tus referidos.",
+    "tile_pedidos": "Historial y facturas liquidadas.",
+    "tile_entregas": "Dirección, espera de cortesía y envases.",
+    "tile_direcciones": "Actualiza entrega y suscriptor secundario."
   },
   "addr": {
     "add": "Agregar dirección",
@@ -264,14 +274,16 @@
     "menu": "Menú",
     "more": "Más",
     "open": "Abrir menú",
-    "overlay_title": "Explora Kulinaria",
+    "overlay_title": "Mapa del sitio",
     "philosophy": "Filosofía",
     "plans": "Planes",
     "primary": "Principal",
     "secondary": "También te puede interesar",
     "store": "Kulinaria Store",
     "weekly_menu": "Menú semanal",
-    "write_us": "Escríbenos"
+    "write_us": "Escríbenos",
+    "breadcrumb": "Ruta de navegación",
+    "home": "Inicio"
   },
   "order": {
     "discounts": "Descuentos",
@@ -288,7 +300,11 @@
     "pct_more": "% más cara",
     "per_dish": "/ platillo",
     "recommended": "Recomendado",
-    "than_block": "que el precio prorrateado del bloque."
+    "than_block": "que el precio prorrateado del bloque.",
+    "block_name": "Bloque de 4 semanas",
+    "block_short": "Suscripción renovable con entrega semanal. La opción recomendada.",
+    "trial_name": "Semana de prueba",
+    "trial_short": "Una sola semana, 15% más cara que el prorrateo del bloque."
   },
   "product": {
     "calories": "Calorías (kcal)",
@@ -319,7 +335,7 @@
   },
   "register": {
     "eyebrow": "Únete",
-    "text": "Después de crear tu cuenta te pediremos tu perfil de alergias y tu dirección de entrega.",
+    "text": "Cinco pasos: tu cuenta, un contacto de respaldo, tus alergias, tu plan y el contrato.",
     "title": "Crear cuenta"
   },
   "reset": {
@@ -377,5 +393,24 @@
     "salmon": "Salmón",
     "tahini": "Tahini",
     "zanahoria": "Zanahoria"
+  },
+  "reg": {
+    "steps": "Pasos del registro",
+    "s1": "Cuenta",
+    "s2": "Respaldo",
+    "s3": "Alergias",
+    "s4": "Plan",
+    "s5": "Contrato",
+    "s1_title": "Cuenta y datos de envío",
+    "s2_title": "Suscriptor secundario",
+    "s2_text": "Un segundo número de respaldo: recibe el pedido si el titular no está disponible. Es opcional.",
+    "s3_title": "Alergias, gustos y dieta",
+    "s4_title": "Elige tu plan",
+    "gift_note": "Con un código válido y tu primer bloque pagado recibes un regalo de bienvenida a $0: playera o vaso mezclador.",
+    "s5_title": "Contrato de adhesión",
+    "s5_text": "Acepta el contrato antes de pagar. Incluye renovaciones, penalizaciones y la selección automática de los sábados.",
+    "back": "Atrás",
+    "next": "Continuar",
+    "have_account": "¿Ya tienes cuenta?"
   }
 }

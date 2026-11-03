@@ -1,0 +1,87 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "eyebrow": "Checkout y contrato",
+        "heading": "Del carrito al pago, en un solo flujo",
+        "text": "Datos, alergias, plan, código, contrato y pago digital. El pago se completa en el checkout seguro de Shopify.",
+        "button_label": "Ir a mi selección",
+        "button_link": "/cart"
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "Checkout y contrato",
+            "link": "/pages/checkout"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Confirmación",
+            "link": "/pages/confirmacion"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1"
+      ]
+    },
+    "s1": {
+      "type": "feature-grid",
+      "settings": {
+        "layout": "rows",
+        "columns": "3",
+        "background": "base",
+        "heading": ""
+      },
+      "blocks": {
+        "b0": {
+          "type": "item",
+          "settings": {
+            "title": "Carrito",
+            "text": "<p>Muestra tu ahorro (por ejemplo, «Te ahorraste $399 pesos gracias a tu entrenador») y suma el regalo de bienvenida a costo cero.</p>"
+          }
+        },
+        "b1": {
+          "type": "item",
+          "settings": {
+            "title": "Contrato de adhesión",
+            "text": "<p>Casilla de aceptación antes del pago, con renovaciones, penalizaciones y selección automática.</p>",
+            "link": "/pages/terminos",
+            "link_label": "Leer contrato"
+          }
+        },
+        "b2": {
+          "type": "item",
+          "settings": {
+            "title": "Pago digital",
+            "text": "<p>Todo se cobra en la web al pedir. Cero efectivo: los repartidores no llevan cambio.</p>"
+          }
+        },
+        "b3": {
+          "type": "item",
+          "settings": {
+            "title": "Confirmación",
+            "text": "<p>Resumen del bloque, primera entrega y tu código de referencia autogenerado.</p>",
+            "link": "/pages/confirmacion",
+            "link_label": "Ver ejemplo"
+          }
+        }
+      },
+      "block_order": [
+        "b0",
+        "b1",
+        "b2",
+        "b3"
+      ]
+    }
+  },
+  "order": [
+    "head",
+    "s1"
+  ]
+}

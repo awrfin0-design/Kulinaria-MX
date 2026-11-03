@@ -14,109 +14,32 @@
   <div class="container">
     <div class="section__head">
       <span class="eyebrow">{{ 'general.account' | t }}</span>
-      <h1 style="font-size:clamp(2.2rem,4vw,3.4rem)">{{ 'account.hello' | t }} {{ customer.first_name | default: customer.email }}</h1>
-      <div class="divider-gold"><i></i></div>
+      <h1>{{ 'account.hello' | t }} {{ customer.first_name | default: customer.email }}</h1>
       <p class="lede">{{ 'account.intro' | t }}</p>
       <p><a class="btn btn--ghost" href="{{ routes.account_logout_url }}">{{ 'account.logout' | t }}</a></p>
     </div>
 
-    <div class="account">
-      <nav class="account-nav" aria-label="{{ 'general.account' | t }}">
-        <a href="#semana">{{ 'account.my_week' | t }}</a><a href="#pausas">{{ 'account.pause_deliveries' | t }}</a><a href="#monedero">{{ 'account.wallet' | t }}</a>
-        <a href="#perfil">{{ 'account.allergies_tastes' | t }}</a><a href="#referidos">{{ 'account.my_referrals' | t }}</a><a href="#pedidos">{{ 'account.orders_invoices' | t }}</a><a href="#entregas">{{ 'account.deliveries_containers' | t }}</a>
-      </nav>
+    <p class="countdown" data-cutoff>{{ 'cutoff.confirm_dishes' | t }} <strong data-cutoff-value>…</strong></p>
 
-      <div>
-        <div class="account-block" id="semana">
-          <h2>{{ 'account.my_week' | t }}</h2>
-          <div class="panel panel--gold">
-            <p class="countdown" data-cutoff>{{ 'cutoff.confirm_dishes' | t }} <strong data-cutoff-value>…</strong></p>
-            <p class="text-muted">{{ 'account.auto_order' | t }}</p>
-            <div class="btn-row"><a class="btn btn--gold" href="/collections/menu-semanal">{{ 'account.choose_dishes' | t }}</a><a class="btn btn--outline" href="{{ portal }}">{{ 'account.manage_subscription' | t }}</a></div>
-          </div>
-        </div>
-
-        <div class="account-block" id="pausas">
-          <h2>{{ 'account.pause_next' | t }}</h2>
-          <p class="text-muted">{{ 'account.pause_intro' | t }}</p>
-          <div class="pause-grid">
-            <div class="card">
-              <h3>{{ 'account.thu_fri' | t }}</h3>
-              <p class="text-muted">{{ 'account.thu_fri_note' | t }}</p>
-              <a class="btn btn--outline" data-pause-lock data-lock-day="2" data-lock-hour="10" href="{{ portal }}">{{ 'account.pause_next' | t }}</a>
-              <p class="alert alert--warn" data-lock-msg hidden>{{ settings.pause_locked_message }}</p>
-              <p class="text-muted" data-lock-left style="font-size:.85rem"></p>
-            </div>
-            <div class="card">
-              <h3>{{ 'account.mon_wed' | t }}</h3>
-              <p class="text-muted">{{ 'account.mon_wed_note' | t }}</p>
-              <a class="btn btn--outline" data-pause-lock data-lock-day="5" data-lock-hour="19" href="{{ portal }}">{{ 'account.pause_next' | t }}</a>
-              <p class="alert alert--warn" data-lock-msg hidden>{{ settings.pause_locked_message }}</p>
-              <p class="text-muted" data-lock-left style="font-size:.85rem"></p>
-            </div>
-          </div>
-          <p class="legal-note" style="margin-top:var(--space-lg)">{{ 'account.pause_limit' | t }}</p>
-        </div>
-
-        <div class="account-block" id="monedero">
-          <h2>{{ 'account.wallet' | t }}</h2>
-          <div class="grid grid--2">
-            <div class="card"><span class="eyebrow">{{ 'account.balance' | t }}</span><p class="tier-card__price gold-text" style="margin:0">{{ wallet | times: 100 | money_without_trailing_zeros }}</p><p class="text-muted">{{ 'account.wallet_text' | t }}</p></div>
-            <div class="card"><span class="eyebrow">{{ 'nav.store' | t }}</span><p class="text-muted">{{ 'account.store_text' | t }}</p><a class="btn btn--outline" style="margin-top:auto;align-self:flex-start" href="/collections/kulinaria-store">{{ 'account.go_store' | t }}</a></div>
-          </div>
-        </div>
-
-        <div class="account-block" id="perfil">
-          <h2>{{ 'account.allergies_tastes' | t }}</h2>
-          <p class="text-muted">{{ 'account.profile_text' | t }}</p>
-          {%- if mf.allergies.value.size > 0 -%}<p>{{ 'account.registered_allergies' | t }} {%- for a in mf.allergies.value %} <span class="tier-badge tier-badge--exclusivo">{{ a }}</span>{%- endfor -%}</p>{%- endif -%}
-          <a class="btn btn--outline" href="/pages/perfil">{{ 'account.edit_profile' | t }}</a>
-        </div>
-
-        <div class="account-block" id="referidos">
-          <h2>{{ 'account.my_referrals' | t }}</h2>
-          <div class="panel panel--gold">
-            <span class="eyebrow">{{ 'account.your_code' | t }}</span>
-            <p class="tier-card__price gold-text" style="margin:0;letter-spacing:.06em">{{ code }}</p>
-            <p class="text-muted">{{ 'account.referral_text' | t }}</p>
-            <div style="height:10px;border-radius:5px;background:var(--ink-600);overflow:hidden;margin:var(--space-md) 0"><div style="height:100%;width:{{ pct }}%;background:var(--gold-foil)"></div></div>
-            <p class="text-muted" style="margin:0">{{ paid }} {{ 'account.referral_progress' | t }}</p>
-          </div>
-        </div>
-
-        <div class="account-block" id="pedidos">
-          <h2>{{ 'account.orders_invoices' | t }}</h2>
-          {%- paginate customer.orders by 10 -%}
-            {%- if customer.orders.size > 0 -%}
-              <div class="table-wrap"><table class="table">
-                <thead><tr><th>{{ 'account.order' | t }}</th><th>{{ 'account.date' | t }}</th><th>{{ 'account.payment' | t }}</th><th>{{ 'account.delivery' | t }}</th><th>{{ 'cart.total' | t }}</th></tr></thead>
-                <tbody>
-                  {%- for order in customer.orders -%}
-                    <tr><td><a href="{{ order.customer_url }}">{{ order.name }}</a></td><td>{{ order.created_at | date: '%d/%m/%Y' }}</td><td>{{ order.financial_status_label }}</td><td>{{ order.fulfillment_status_label }}</td><td>{{ order.total_price | money }}</td></tr>
-                  {%- endfor -%}
-                </tbody>
-              </table></div>
-              {%- if paginate.pages > 1 -%}<div class="btn-row">{%- if paginate.previous -%}<a class="btn btn--outline" href="{{ paginate.previous.url }}">{{ 'general.previous' | t }}</a>{%- endif -%}{%- if paginate.next -%}<a class="btn btn--outline" href="{{ paginate.next.url }}">{{ 'general.next' | t }}</a>{%- endif -%}</div>{%- endif -%}
-            {%- else -%}
-              <p class="alert">{{ 'account.no_orders' | t }}</p>
-            {%- endif -%}
-          {%- endpaginate -%}
-        </div>
-
-        <div class="account-block" id="entregas">
-          <h2>{{ 'account.deliveries_containers' | t }}</h2>
-          <div class="grid grid--2">
-            <div class="card"><h3>{{ 'account.delivery_address' | t }}</h3>
-              {%- if customer.default_address -%}<p class="text-muted">{{ customer.default_address | format_address }}</p>{%- else -%}<p class="text-muted">{{ 'account.no_address' | t }}</p>{%- endif -%}
-              <a class="btn btn--outline" style="margin-top:auto;align-self:flex-start" href="{{ routes.account_addresses_url }}">{{ 'account.manage_addresses' | t }}</a></div>
-            <div class="card"><h3>{{ 'account.policies' | t }}</h3><ul class="plan-list" style="margin:0"><li>{{ 'account.policy_wait' | t }}</li><li>{{ 'account.policy_pickup' | t }}</li><li>{{ 'account.policy_glass_pre' | t }}{{ settings.glass_fee }} {{ 'account.policy_glass_post' | t }}</li></ul></div>
-          </div>
-        </div>
+    <div class="fg--index" style="margin-top:var(--space-2xl)">
+      <div class="fg__list">
+        {%- assign tiles = 'semana:account.my_week:/pages/cuenta-semana,pausas:account.pause_deliveries:/pages/cuenta-pausas,monedero:account.wallet:/pages/cuenta-monedero,perfil:account.allergies_tastes:/pages/cuenta-perfil,referidos:account.my_referrals:/pages/cuenta-referidos,pedidos:account.orders_invoices:/pages/cuenta-pedidos,entregas:account.deliveries_containers:/pages/cuenta-entregas,direcciones:account.manage_addresses:/account/addresses' | split: ',' -%}
+        {%- for tile in tiles -%}
+          {%- assign parts = tile | split: ':' -%}
+          {%- assign tkey = parts[1] -%}
+          {%- assign dkey = 'account.tile_' | append: parts[0] -%}
+          <a class="index-row" href="{{ parts[2] }}">
+            <span class="index-row__n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <span class="index-row__t">{{ tkey | t }}</span>
+            <p class="index-row__d">{{ dkey | t }}</p>
+            <span class="index-row__a" aria-hidden="true">→</span>
+          </a>
+        {%- endfor -%}
       </div>
     </div>
   </div>
 </section>
 
 {% schema %}
-{ "name": "Mi cuenta", "settings": [] }
+{ "name": "Mi cuenta (resumen)", "settings": [] }
 {% endschema %}

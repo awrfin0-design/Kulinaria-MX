@@ -1,0 +1,156 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Planes",
+        "parent_link": "/pages/planes",
+        "eyebrow": "Ciclo y políticas",
+        "heading": "Así corre tu semana",
+        "text": "Cierre los sábados a las 10:00 AM, entregas de lunes a viernes, pausas los martes y los viernes."
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "Resumen",
+            "link": "/pages/planes"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Bloque de 4 semanas",
+            "link": "/pages/plan-bloque"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Semana de prueba",
+            "link": "/pages/plan-prueba"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Niveles y precios",
+            "link": "/pages/niveles-y-precios"
+          }
+        },
+        "n4": {
+          "type": "link",
+          "settings": {
+            "label": "Ciclo y políticas",
+            "link": "/pages/ciclo-y-politicas"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2",
+        "n3",
+        "n4"
+      ]
+    },
+    "s1": {
+      "type": "feature-grid",
+      "settings": {
+        "eyebrow": "Calendario del ciclo",
+        "heading": "Así corre tu semana",
+        "columns": "4",
+        "background": "raised",
+        "numbered": true
+      },
+      "blocks": {
+        "k1": {
+          "type": "item",
+          "settings": {
+            "title": "Sábado 10:00 AM",
+            "text": "<p>Cierre de pedidos. Si no elegiste, a las 10:01 AM se arma tu pedido automático.</p>"
+          }
+        },
+        "k2": {
+          "type": "item",
+          "settings": {
+            "title": "Lunes a miércoles",
+            "text": "<p>Entregas de la primera mitad de la semana. Pausa hasta el viernes 7:00 PM.</p>"
+          }
+        },
+        "k3": {
+          "type": "item",
+          "settings": {
+            "title": "Martes 10:00 AM",
+            "text": "<p>Último momento para pausar las entregas de jueves y viernes.</p>"
+          }
+        },
+        "k4": {
+          "type": "item",
+          "settings": {
+            "title": "Jueves y viernes",
+            "text": "<p>Entregas de la segunda mitad. Viernes 7:00 PM es el corte de renovación.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "k1",
+        "k2",
+        "k3",
+        "k4"
+      ]
+    },
+    "s2": {
+      "type": "faq",
+      "settings": {
+        "eyebrow": "Políticas clave",
+        "heading": "Lo que debes saber antes de suscribirte",
+        "background": "base"
+      },
+      "blocks": {
+        "q1": {
+          "type": "item",
+          "settings": {
+            "question": "Pago digital, cero efectivo",
+            "answer": "<p>Toda suscripción o renovación se cobra en la página web al hacer el pedido. Los repartidores no llevan efectivo ni cambio.</p>"
+          }
+        },
+        "q2": {
+          "type": "item",
+          "settings": {
+            "question": "Sin reembolso tras liquidar",
+            "answer": "<p>Los insumos se compran en volumen, por lo que no hay cancelación del contrato vigente ni devolución de dinero. Si pausas a tiempo, las comidas no preparadas se guardan como saldo a favor.</p>"
+          }
+        },
+        "q3": {
+          "type": "item",
+          "settings": {
+            "question": "Caducidad por inactividad",
+            "answer": "<p>Tras una pausa tienes 30 días naturales para reanudar. Pasado ese plazo el contrato se cancela y se pierde el saldo acumulado.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3"
+      ]
+    },
+    "s3": {
+      "type": "cta-banner",
+      "settings": {
+        "heading": "¿Dudas sobre el contrato?",
+        "text": "Lee el contrato de adhesión completo antes de pagar.",
+        "button_label": "Leer contrato",
+        "button_link": "/pages/terminos",
+        "show_countdown": false
+      }
+    }
+  },
+  "order": [
+    "head",
+    "s1",
+    "s2",
+    "s3"
+  ]
+}

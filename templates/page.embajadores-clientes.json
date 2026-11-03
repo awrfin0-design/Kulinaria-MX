@@ -1,0 +1,132 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Embajadores",
+        "parent_link": "/pages/embajadores",
+        "eyebrow": "Clientes referidos",
+        "heading": "Clientes: crédito interno viral",
+        "text": "Comparte tu código único y gana saldo por cada amigo que compre su primer bloque.",
+        "button_label": "Ver mis referidos",
+        "button_link": "/pages/cuenta-referidos"
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "Programa",
+            "link": "/pages/embajadores"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Entrenadores",
+            "link": "/pages/embajadores-entrenadores"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Clientes referidos",
+            "link": "/pages/embajadores-clientes"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Gimnasios aliados",
+            "link": "/pages/embajadores-gimnasios"
+          }
+        },
+        "n4": {
+          "type": "link",
+          "settings": {
+            "label": "Directorio",
+            "link": "/pages/embajadores-directorio"
+          }
+        },
+        "n5": {
+          "type": "link",
+          "settings": {
+            "label": "Reglas de alianza",
+            "link": "/pages/embajadores-reglas"
+          }
+        },
+        "n6": {
+          "type": "link",
+          "settings": {
+            "label": "Solicitar código",
+            "link": "/pages/embajadores-solicitar"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2",
+        "n3",
+        "n4",
+        "n5",
+        "n6"
+      ]
+    },
+    "s1": {
+      "type": "feature-grid",
+      "settings": {
+        "layout": "rows",
+        "columns": "3",
+        "background": "base",
+        "eyebrow": "Cómo funciona",
+        "heading": "Gana mientras compartes"
+      },
+      "blocks": {
+        "b0": {
+          "type": "item",
+          "settings": {
+            "title": "$150 MXN por amigo",
+            "text": "<p>Recibes saldo a favor cuando un amigo paga su primer bloque de 4 semanas.</p>",
+            "art": "dish-1"
+          }
+        },
+        "b1": {
+          "type": "item",
+          "settings": {
+            "title": "Bono de $500 MXN",
+            "text": "<p>Al llegar a 10 recomendados con bloques pagados recibes un bono en crédito.</p>",
+            "art": "dish-4"
+          }
+        },
+        "b2": {
+          "type": "item",
+          "settings": {
+            "title": "Úsalo donde quieras",
+            "text": "<p>El saldo se usa en tu renovación o en Kulinaria Fit Apparel. Nunca es efectivo.</p>",
+            "art": "containers"
+          }
+        }
+      },
+      "block_order": [
+        "b0",
+        "b1",
+        "b2"
+      ]
+    },
+    "s2": {
+      "type": "cta-banner",
+      "settings": {
+        "heading": "Empieza a compartir",
+        "text": "Tu código se genera automáticamente al registrarte.",
+        "button_label": "Crear cuenta",
+        "button_link": "/account/register",
+        "show_countdown": false
+      }
+    }
+  },
+  "order": [
+    "head",
+    "s1",
+    "s2"
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Planes",
+        "parent_link": "/pages/planes",
+        "eyebrow": "Semana de prueba",
+        "heading": "Semana de prueba",
+        "text": "Una sola semana para conocer el servicio, sin compromiso de renovación.",
+        "button_label": "Probar una semana",
+        "button_link": "/account/register"
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "Resumen",
+            "link": "/pages/planes"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Bloque de 4 semanas",
+            "link": "/pages/plan-bloque"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Semana de prueba",
+            "link": "/pages/plan-prueba"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Niveles y precios",
+            "link": "/pages/niveles-y-precios"
+          }
+        },
+        "n4": {
+          "type": "link",
+          "settings": {
+            "label": "Ciclo y políticas",
+            "link": "/pages/ciclo-y-politicas"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2",
+        "n3",
+        "n4"
+      ]
+    },
+    "s1": {
+      "type": "feature-grid",
+      "settings": {
+        "layout": "rows",
+        "columns": "3",
+        "background": "base",
+        "eyebrow": "Cómo funciona",
+        "heading": "Probar es simple"
+      },
+      "blocks": {
+        "b0": {
+          "type": "item",
+          "settings": {
+            "title": "Una sola semana",
+            "text": "<p>Compra hasta el sábado a las 10:00 AM y recibe esa misma semana.</p>",
+            "art": "dish-0"
+          }
+        },
+        "b1": {
+          "type": "item",
+          "settings": {
+            "title": "15% más cara que el bloque",
+            "text": "<p>Cuesta 15% más que el precio prorrateado del bloque de 4 semanas; la diferencia queda a la vista.</p>",
+            "art": "dish-7"
+          }
+        },
+        "b2": {
+          "type": "item",
+          "settings": {
+            "title": "Pago digital, sin efectivo",
+            "text": "<p>Todo se cobra en la web al hacer el pedido.</p>",
+            "art": "containers"
+          }
+        }
+      },
+      "block_order": [
+        "b0",
+        "b1",
+        "b2"
+      ]
+    },
+    "s2": {
+      "type": "plans-compare",
+      "settings": {}
+    },
+    "s3": {
+      "type": "cta-banner",
+      "settings": {}
+    }
+  },
+  "order": [
+    "head",
+    "s1",
+    "s2",
+    "s3"
+  ]
+}

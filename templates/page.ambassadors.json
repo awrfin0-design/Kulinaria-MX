@@ -1,20 +1,76 @@
 {
   "sections": {
-    "hero": {
-      "type": "hero",
+    "head": {
+      "type": "page-head",
       "settings": {
-        "eyebrow": "Programa de embajadores",
+        "eyebrow": "Embajadores",
         "heading": "Recomienda Kulinaria y gana con cada cliente",
         "text": "Tres ramas para crecer juntos: entrenadores (ropa y efectivo), clientes (crédito interno) y gimnasios aliados (flujo de efectivo de alto volumen).",
         "button_label": "Quiero ser embajador",
-        "button_link": "#alta",
-        "button2_label": "",
-        "show_countdown": false,
-        "size": "compact",
-        "art": "hero"
-      }
+        "button_link": "/pages/embajadores-solicitar"
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "Programa",
+            "link": "/pages/embajadores"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Entrenadores",
+            "link": "/pages/embajadores-entrenadores"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Clientes referidos",
+            "link": "/pages/embajadores-clientes"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Gimnasios aliados",
+            "link": "/pages/embajadores-gimnasios"
+          }
+        },
+        "n4": {
+          "type": "link",
+          "settings": {
+            "label": "Directorio",
+            "link": "/pages/embajadores-directorio"
+          }
+        },
+        "n5": {
+          "type": "link",
+          "settings": {
+            "label": "Reglas de alianza",
+            "link": "/pages/embajadores-reglas"
+          }
+        },
+        "n6": {
+          "type": "link",
+          "settings": {
+            "label": "Solicitar código",
+            "link": "/pages/embajadores-solicitar"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2",
+        "n3",
+        "n4",
+        "n5",
+        "n6"
+      ]
     },
-    "branches": {
+    "s1": {
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Tres ramas",
@@ -54,7 +110,7 @@
         "b3"
       ]
     },
-    "trainers": {
+    "s2": {
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Entrenadores",
@@ -92,7 +148,7 @@
         "t3"
       ]
     },
-    "gyms": {
+    "s3": {
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Gimnasios aliados",
@@ -129,7 +185,7 @@
         "g3"
       ]
     },
-    "rules": {
+    "s4": {
       "type": "faq",
       "settings": {
         "eyebrow": "Reglas claras",
@@ -166,7 +222,7 @@
         "r3"
       ]
     },
-    "directory": {
+    "s5": {
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Directorio",
@@ -212,7 +268,7 @@
         "d4"
       ]
     },
-    "signup": {
+    "s6": {
       "type": "contact-form",
       "settings": {
         "kind": "embajador",
@@ -224,12 +280,12 @@
     }
   },
   "order": [
-    "hero",
-    "branches",
-    "trainers",
-    "gyms",
-    "rules",
-    "directory",
-    "signup"
+    "head",
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5",
+    "s6"
   ]
 }

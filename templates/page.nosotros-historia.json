@@ -1,0 +1,70 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Nosotros",
+        "parent_link": "/pages/nosotros",
+        "eyebrow": "Historia y fundador",
+        "heading": "Historia y fundador",
+        "text": "Relato de la marca y presentación del fundador. Contenido por definir."
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "La marca",
+            "link": "/pages/nosotros"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Historia y fundador",
+            "link": "/pages/nosotros-historia"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Equipo de cocina",
+            "link": "/pages/nosotros-equipo"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Calidad y envases",
+            "link": "/pages/nosotros-calidad"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2",
+        "n3"
+      ]
+    },
+    "s1": {
+      "type": "showcase",
+      "settings": {
+        "eyebrow": "El fundador",
+        "heading": "Cocina de autor, entregada en tu puerta",
+        "text": "<p>Aquí va el relato de la marca y la presentación del fundador. Reemplaza este texto y la foto desde el editor del tema.</p>",
+        "art": "hero",
+        "reverse": false,
+        "badge": "Fundador"
+      }
+    },
+    "s2": {
+      "type": "cta-banner",
+      "settings": {}
+    }
+  },
+  "order": [
+    "head",
+    "s1",
+    "s2"
+  ]
+}

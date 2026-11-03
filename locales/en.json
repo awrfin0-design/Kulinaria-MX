@@ -42,7 +42,17 @@
     "thu_fri_note": "Pause by Tuesday 10:00 AM at the latest.",
     "wallet": "Wallet",
     "wallet_text": "Store credit (never cash). Use it as a discount on your next block or in Kulinaria Fit Apparel. Meals not prepared because of a pause are credited here.",
-    "your_code": "Your referral code"
+    "your_code": "Your referral code",
+    "overview": "Overview",
+    "login_needed": "Sign in to see your account",
+    "tile_semana": "Chosen dishes and the countdown to Saturday's cut-off.",
+    "tile_pausas": "Pause your next block before the window closes.",
+    "tile_monedero": "Store credit and balance.",
+    "tile_perfil": "Allergies and tastes used for the automatic selection.",
+    "tile_referidos": "Your code and your referral progress.",
+    "tile_pedidos": "History and paid invoices.",
+    "tile_entregas": "Address, courtesy wait and containers.",
+    "tile_direcciones": "Update delivery and secondary subscriber."
   },
   "addr": {
     "add": "Add address",
@@ -264,14 +274,16 @@
     "menu": "Menu",
     "more": "More",
     "open": "Open menu",
-    "overlay_title": "Explore Kulinaria",
+    "overlay_title": "Site map",
     "philosophy": "Philosophy",
     "plans": "Plans",
     "primary": "Main",
     "secondary": "You may also like",
     "store": "Kulinaria Store",
     "weekly_menu": "Weekly menu",
-    "write_us": "Write to us"
+    "write_us": "Write to us",
+    "breadcrumb": "Breadcrumb",
+    "home": "Home"
   },
   "order": {
     "discounts": "Discounts",
@@ -288,7 +300,11 @@
     "pct_more": "% more expensive",
     "per_dish": "/ dish",
     "recommended": "Recommended",
-    "than_block": "than the prorated block price."
+    "than_block": "than the prorated block price.",
+    "block_name": "4-week block",
+    "block_short": "Renewable subscription with weekly delivery. The recommended option.",
+    "trial_name": "Trial week",
+    "trial_short": "A single week, 15% more expensive than the prorated block price."
   },
   "product": {
     "calories": "Calories (kcal)",
@@ -319,7 +335,7 @@
   },
   "register": {
     "eyebrow": "Join us",
-    "text": "After creating your account we'll ask for your allergy profile and delivery address.",
+    "text": "Five steps: your account, a backup contact, your allergies, your plan and the contract.",
     "title": "Create account"
   },
   "reset": {
@@ -377,5 +393,24 @@
     "salmon": "Salmon",
     "tahini": "Tahini",
     "zanahoria": "Carrot"
+  },
+  "reg": {
+    "steps": "Sign-up steps",
+    "s1": "Account",
+    "s2": "Backup",
+    "s3": "Allergies",
+    "s4": "Plan",
+    "s5": "Contract",
+    "s1_title": "Account and delivery details",
+    "s2_title": "Secondary subscriber",
+    "s2_text": "A backup contact: they receive the order if the account holder isn't available. Optional.",
+    "s3_title": "Allergies, tastes and diet",
+    "s4_title": "Choose your plan",
+    "gift_note": "With a valid code and your first paid block you get a $0 welcome gift: tee or shaker cup.",
+    "s5_title": "Adhesion contract",
+    "s5_text": "Accept the contract before paying. It covers renewals, penalties and the automatic Saturday selection.",
+    "back": "Back",
+    "next": "Continue",
+    "have_account": "Already have an account?"
   }
 }

@@ -3,13 +3,14 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "eyebrow": "Comida saludable premium a domicilio",
-        "heading": "Tu semana, servida como una pieza de autor",
-        "text": "Platillos preparados por chefs, adaptados a tu estilo de vida y entregados en envases de vidrio. Elige tu bloque de 4 semanas y olvídate de cocinar.",
-        "button_label": "Elegir mi plan",
+        "heading": "Una semana, servida como",
+        "heading_em": "una pieza de autor.",
+        "text": "Platillos preparados por chefs, adaptados a tu estilo de vida.",
+        "button_label": "Haz tu pedido",
         "button2_label": "Ver el menú de la semana",
         "button2_link": "/collections/menu-semanal",
-        "show_countdown": true
+        "show_countdown": false,
+        "art": "air-steak"
       }
     },
     "how": {
@@ -20,7 +21,7 @@
         "columns": "3",
         "background": "base",
         "button_label": "Elegir mi plan",
-        "layout": "stack"
+        "layout": "rows"
       },
       "blocks": {
         "s1": {

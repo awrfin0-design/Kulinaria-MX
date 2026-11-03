@@ -1,0 +1,99 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Nosotros",
+        "parent_link": "/pages/nosotros",
+        "eyebrow": "Calidad y envases",
+        "heading": "Cuidamos cada detalle",
+        "text": "Ingredientes premium y contenedores de vidrio de alta calidad."
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "La marca",
+            "link": "/pages/nosotros"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Historia y fundador",
+            "link": "/pages/nosotros-historia"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Equipo de cocina",
+            "link": "/pages/nosotros-equipo"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Calidad y envases",
+            "link": "/pages/nosotros-calidad"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2",
+        "n3"
+      ]
+    },
+    "s1": {
+      "type": "feature-grid",
+      "settings": {
+        "eyebrow": "Calidad",
+        "heading": "Cuidamos cada detalle",
+        "columns": "2",
+        "background": "raised"
+      },
+      "blocks": {
+        "q1": {
+          "type": "item",
+          "settings": {
+            "title": "Ingredientes premium",
+            "text": "<p>Proteínas de excelente calidad, cortes premium y mariscos selectos acondicionados para recalentar sin perder su punto.</p>"
+          }
+        },
+        "q2": {
+          "type": "item",
+          "settings": {
+            "title": "Envases de vidrio",
+            "text": "<p>Contenedores de alta calidad que conservan el sabor y se pueden reutilizar. Te agradecemos cuidarlos.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2"
+      ]
+    },
+    "s2": {
+      "type": "showcase",
+      "settings": {
+        "eyebrow": "Envases de vidrio",
+        "heading": "Hecho para tu refrigerador, pensado para tu semana",
+        "text": "<p>Cada platillo llega en vidrio de alta calidad que conserva el sabor y se puede reutilizar. Solo calienta y disfruta.</p>",
+        "art": "containers",
+        "reverse": true
+      }
+    },
+    "s3": {
+      "type": "cta-banner",
+      "settings": {}
+    }
+  },
+  "order": [
+    "head",
+    "s1",
+    "s2",
+    "s3"
+  ]
+}

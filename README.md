@@ -8,7 +8,7 @@ assets/      kulinaria.css (tokens + components), kulinaria.js (countdown, pause
 config/      settings_schema.json (brand, cycle, tier prices, subscription & contract settings)
 layout/      theme.liquid
 locales/     es.default.json (default) · en.json — all storefront strings (Shopify i18n)
-sections/    30 sections (header + full-screen menu, hero with video, showcase, scroll-video band, feature-grid, dishes, tiers, plans, faq, forms, product, cart, account…)
+sections/    34 sections (header, sitemap menu, hero, page-head, showcase, scroll-video band, feature-grid, dishes, tiers, plans, faq, forms, product, cart, 5-step sign-up, account overview + panels…)
 snippets/    icon, logo, photo, term, lang-switcher, theme-toggle, dish-card, tier-badge, selling-plan-picker, social-links
 templates/   JSON templates for every page in the approved sitemap
 docs/        subscriptions.md · backend-requirements.md · metafields.md · i18n.md · media.md
@@ -16,23 +16,26 @@ preview/     index.html — standalone preview (ES + EN, light + dark), generate
 scripts/render/  Liquid render harness + end-to-end tests (see below)
 ```
 
-## Pages (sitemap → template)
+## Pages and subpages (Miro sitemap → template)
 
-| Sitemap page | Shopify object | Template |
-|---|---|---|
-| 01 Home | Home | `templates/index.json` |
-| 02 Menú semanal | Collection `menu-semanal` | `templates/collection.json` |
-| 07 Ficha de platillo | Product | `templates/product.json` |
-| 03 Registro y checkout | Cart + customer register + Shopify checkout | `cart.json`, `customers/register.json` |
-| 04 Mi cuenta | Customer account | `templates/customers/*.json` |
-| 05 Embajadores | Page, template **ambassadors** | `templates/page.ambassadors.json` |
-| 06 Planes | Page, template **plans** | `templates/page.plans.json` |
-| 08 Carta Kulinaria | Page, template **carta** | `templates/page.carta.json` |
-| 09 Kulinaria Store | Collection `kulinaria-store`, template **store** | `templates/collection.store.json` |
-| 10 Nosotros | Page, template **about** | `templates/page.about.json` |
-| 11 Filosofía | Page, template **philosophy** | `templates/page.philosophy.json` |
-| 12 Ayuda y legales | Page, template **help** | `templates/page.help.json` |
-| — Perfil de alergias | Page `perfil`, template **profile** | `templates/page.profile.json` |
+Every page and section of the Miro board (12 pages, 114 sections, plus `/checkout` and `/terminos`) exists. Hubs keep all of the board's sections; each family also has focused subpages with a shared sub-navigation (`page-head` section).
+
+| Miro page | Route / Shopify object | Template | Subpages |
+|---|---|---|---|
+| 01 Home | `/` | `index.json` | all 14 board sections |
+| 02 Menú semanal | collection `menu-semanal` | `collection.json` | filters, grid, selection (product pages: `product.json`) |
+| 03 Registro y checkout | `/account/register`, `/pages/checkout`, `/pages/confirmacion` | `customers/register.json` (5-step flow), `page.checkout`, `page.confirmacion` | login, reset password, cart (`cart.json`) |
+| 04 Mi cuenta | `/account` | `customers/account.json` (overview) | `cuenta-semana`, `cuenta-pausas`, `cuenta-monedero`, `cuenta-perfil`, `cuenta-referidos`, `cuenta-pedidos`, `cuenta-entregas` + addresses + order |
+| 05 Embajadores | `/pages/embajadores` | `page.ambassadors` | `embajadores-entrenadores`, `-clientes`, `-gimnasios`, `-directorio`, `-reglas`, `-solicitar` |
+| 06 Planes | `/pages/planes` | `page.plans` | `plan-bloque`, `plan-prueba`, `niveles-y-precios`, `ciclo-y-politicas` |
+| 07 Ficha de platillo | `/products/<handle>` | `product.json` | related dishes |
+| 08 Carta Kulinaria | `/pages/carta-kulinaria` | `page.carta` | `carta-chef-privado`, `carta-cenas-romanticas`, `carta-galeria`, `carta-cotizacion` |
+| 09 Kulinaria Store | collection `kulinaria-store` | `collection.store.json` | product pages |
+| 10 Nosotros | `/pages/nosotros` | `page.about` | `nosotros-historia`, `nosotros-equipo`, `nosotros-calidad` |
+| 11 Filosofía | `/pages/filosofia` | `page.philosophy` | all 6 board sections |
+| 12 Ayuda y legales | `/pages/ayuda`, `/pages/terminos` | `page.help`, `page.terminos` | `privacidad`, profile (`perfil`, `page.profile`) |
+
+Create each page in *Online Store → Pages* with the handle shown and assign its template (templates for subpages are named `page.<handle>`). The burger menu is the whole sitemap: build a **nested** `main-menu` in *Navigation* (top level = the 10 groups, children = subpages) and the header menu section reads it.
 
 ## Setup
 
@@ -61,17 +64,20 @@ The theme is the storefront. Several rules in the business brief are *server-sid
 Tokens live at the top of `assets/kulinaria.css` (`--font-display`, `--font-heading`, `--font-body`, `--font-label`);
 the Google Fonts link is in `layout/theme.liquid`. The "flame" ornament that replaces the usual divider is a CSS-masked inline SVG (`--flame`).
 
-## Design and experience (v3)
+## Design and experience (v4)
 
-- **Light and dark mode.** Light is the default (the brand felt too dark); the toggle in the header and menu remembers the visitor's choice in `localStorage` and is applied before first paint. All colours are semantic tokens at the top of `assets/kulinaria.css`; the hero, header pill, footer, menu overlay, band and loader are "always dark" (`.tone-dark`) so the gold logo stays correct in both modes.
-- **Loading screen.** Logo mark in a gold ring + progress bar, shown once per browser session (`sessionStorage`), with a failsafe so it can never trap the page.
-- **Seamless background.** A fixed walnut-wood layer (`photo-wood.webp`) with a soft vignette sits behind every section (sections are transparent, so there are no hard colour bands) plus a canvas of drifting gold dust that reacts to the pointer. Paused when the tab is hidden; static under `prefers-reduced-motion`.
-- **Menu.** A floating glass pill: logo · 3 primary links · **Más +** · ES/EN · theme · account · cart · CTA. *Más* (and the burger on mobile) opens a full-screen menu with every main link, secondary links, contact and social. How many links stay in the bar is a header setting.
-- **Photography.** Every dish, the hero cards, stacked "how it works" cards, showcase sections and the CTA use photos (`assets/photo-*.webp`, generated, replaceable by uploads: every photo block has an image picker that wins over the theme art).
-- **3D / interaction.** Hero photo cards float in depth and follow the pointer, dish cards and showcase photos tilt with a moving glare, the carousel has a coverflow angle, the category index shows a photo that follows the cursor.
-- **Video** (see [`docs/media.md`](docs/media.md)): two hero videos that alternate (with pause button), a scroll-scrubbed fire band, **fire inside every button on hover**, a gold shimmer over the CTA, a chef video in the Carta showcase. Posters everywhere; nothing autoplays under reduced motion or Save-Data.
-- **Motion system (from v2).** Pill buttons that fill from the cursor, magnetic CTAs, split-word headlines, staggered reveals, sticky stack / sticky split layouts, price ladder, editorial index.
-- Safety: nothing is hidden without JS; `prefers-reduced-motion` shows everything immediately; failsafes (`.no-motion`, loader timeout) never hide content.
+Light, editorial and airy: a flat warm-ivory canvas, hairlines instead of boxes, large type. Fonts are unchanged (Kaushan Script display, Alegreya reading, Alegreya Sans labels).
+
+- **Hero** modelled on the client's reference: full-bleed photo (`photo-air-steak.webp`, a levitating seared cut with herbs, olive oil and spices), small rule, serif headline with the brand-script phrase in Kaushan, tracked-caps subtitle and a **circle-arrow button**. The text column stays on the left; a mobile crop (`-m.webp`) is served on phones.
+- **Header** = logo (ink on light, gold on dark) + cart + a two-line **burger**. The burger opens a full-screen **sitemap** (every page and subpage, from the nested `main-menu`), with language, theme, account and cart.
+- **No fake wood.** The wood texture was removed; the background is flat ivory (a very soft window-light streak) or deep charcoal in dark mode, with sparse gold dust.
+- **Light and dark mode** (light by default, remembered per visitor, applied before first paint). Colours are semantic tokens at the top of `assets/kulinaria.css`; the footer and CTA bands are always dark.
+- **Loading screen** (logo mark in a gold ring), once per session, with a failsafe.
+- **Photography and 3D.** Photo rows, showcases and dish cards; dish cards and showcase photos tilt with a moving glare; the carousel has a coverflow angle; the category index shows a photo that follows the cursor.
+- **Video** (see [`docs/media.md`](docs/media.md)): a scroll-scrubbed fire band, **fire inside buttons and the hero circle on hover**, a gold shimmer on the CTA band, a chef video in Carta / team sections.
+- **Inner pages** use `page-head` (breadcrumbs, title, intro, optional CTA, sub-navigation) and the `rows` / `grid` / `index` layouts of `feature-grid`.
+- **Sign-up** is a 5-step flow (account and delivery, backup contact, allergies and diet, plan and referral code, contract) that stores the allergy profile.
+- Safety: nothing is hidden without JS; `prefers-reduced-motion` shows everything immediately; failsafes never hide content.
 
 ## Languages (i18n)
 

@@ -1,0 +1,164 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Planes",
+        "parent_link": "/pages/planes",
+        "eyebrow": "Bloque de 4 semanas",
+        "heading": "Bloque de 4 semanas",
+        "text": "Suscripción obligatoria y renovable. Es la opción recomendada y la de mejor precio por platillo.",
+        "button_label": "Elegir bloque de 4 semanas",
+        "button_link": "/account/register"
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "Resumen",
+            "link": "/pages/planes"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Bloque de 4 semanas",
+            "link": "/pages/plan-bloque"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Semana de prueba",
+            "link": "/pages/plan-prueba"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Niveles y precios",
+            "link": "/pages/niveles-y-precios"
+          }
+        },
+        "n4": {
+          "type": "link",
+          "settings": {
+            "label": "Ciclo y políticas",
+            "link": "/pages/ciclo-y-politicas"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2",
+        "n3",
+        "n4"
+      ]
+    },
+    "s1": {
+      "type": "feature-grid",
+      "settings": {
+        "layout": "rows",
+        "columns": "3",
+        "background": "base",
+        "eyebrow": "Por qué el bloque",
+        "heading": "La opción lógica para tu semana"
+      },
+      "blocks": {
+        "b0": {
+          "type": "item",
+          "settings": {
+            "title": "Precio prorrateado más bajo",
+            "text": "<p>Compramos los insumos en volumen y esa eficiencia se refleja en cada platillo.</p>",
+            "art": "hero"
+          }
+        },
+        "b1": {
+          "type": "item",
+          "settings": {
+            "title": "Selección automática",
+            "text": "<p>Si no eliges antes del sábado a las 10:00 AM, armamos tu pedido con tu plan, historial y alergias.</p>",
+            "art": "dish-3"
+          }
+        },
+        "b2": {
+          "type": "item",
+          "settings": {
+            "title": "Pausas flexibles",
+            "text": "<p>Pausa por imprevistos o viajes; lo no preparado queda como saldo a favor.</p>",
+            "art": "dish-6"
+          }
+        },
+        "b3": {
+          "type": "item",
+          "settings": {
+            "title": "Código de referencia propio",
+            "text": "<p>Recibes tu código y tu monedero desde el primer bloque.</p>",
+            "art": "dinner"
+          }
+        }
+      },
+      "block_order": [
+        "b0",
+        "b1",
+        "b2",
+        "b3"
+      ]
+    },
+    "s2": {
+      "type": "tiers",
+      "settings": {
+        "eyebrow": "Niveles",
+        "heading": "Cuatro niveles, un mismo estándar",
+        "text": "Cada nivel suma $60 MXN fijos sobre el anterior."
+      },
+      "blocks": {
+        "t1": {
+          "type": "tier",
+          "settings": {
+            "tier": "selecto",
+            "text": "Menú base diario y de alta rotación."
+          }
+        },
+        "t2": {
+          "type": "tier",
+          "settings": {
+            "tier": "exclusivo",
+            "text": "Cocciones lentas y elaboraciones sofisticadas."
+          }
+        },
+        "t3": {
+          "type": "tier",
+          "settings": {
+            "tier": "signature",
+            "text": "Recetas de autor con cortes premium."
+          }
+        },
+        "t4": {
+          "type": "tier",
+          "settings": {
+            "tier": "reserve",
+            "text": "Prime y mariscos selectos."
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ]
+    },
+    "s3": {
+      "type": "cta-banner",
+      "settings": {}
+    }
+  },
+  "order": [
+    "head",
+    "s1",
+    "s2",
+    "s3"
+  ]
+}

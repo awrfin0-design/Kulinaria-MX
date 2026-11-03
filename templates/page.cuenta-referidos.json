@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Mi cuenta",
+        "parent_link": "/account",
+        "eyebrow": "Mis referidos",
+        "heading": "Mis referidos",
+        "text": "Tu código y el progreso de tus referidos."
+      }
+    },
+    "s1": {
+      "type": "account-panel",
+      "settings": {
+        "panel": "referidos"
+      }
+    }
+  },
+  "order": [
+    "head",
+    "s1"
+  ]
+}

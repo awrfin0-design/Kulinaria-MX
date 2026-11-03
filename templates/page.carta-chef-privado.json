@@ -1,0 +1,112 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Carta Kulinaria",
+        "parent_link": "/pages/carta-kulinaria",
+        "eyebrow": "Chef privado",
+        "heading": "Chef privado a domicilio",
+        "text": "Un menú de autor preparado en tu casa para eventos especiales.",
+        "button_label": "Solicitar cotización",
+        "button_link": "/pages/carta-cotizacion"
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "La Carta",
+            "link": "/pages/carta-kulinaria"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Chef privado",
+            "link": "/pages/carta-chef-privado"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Cenas románticas",
+            "link": "/pages/carta-cenas-romanticas"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Galería de eventos",
+            "link": "/pages/carta-galeria"
+          }
+        },
+        "n4": {
+          "type": "link",
+          "settings": {
+            "label": "Cotización privada",
+            "link": "/pages/carta-cotizacion"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2",
+        "n3",
+        "n4"
+      ]
+    },
+    "s1": {
+      "type": "showcase",
+      "settings": {
+        "eyebrow": "Para eventos especiales",
+        "heading": "Cocina de autor en tu propia mesa",
+        "text": "<p>Un chef Kulinaria llega a tu casa con el menú diseñado para ti: ingredientes premium, fuego y emplatado de autor.</p>",
+        "art": "dinner",
+        "reverse": false,
+        "video": "chef",
+        "video_main": true
+      },
+      "blocks": {
+        "p0": {
+          "type": "point",
+          "settings": {
+            "text": "Menú diseñado a tu medida"
+          }
+        },
+        "p1": {
+          "type": "point",
+          "settings": {
+            "text": "Chef y servicio en casa"
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "text": "Alergias y gustos considerados"
+          }
+        }
+      },
+      "block_order": [
+        "p0",
+        "p1",
+        "p2"
+      ]
+    },
+    "s2": {
+      "type": "contact-form",
+      "settings": {
+        "kind": "carta",
+        "eyebrow": "Cotización privada",
+        "heading": "Cuéntanos tu evento",
+        "text": "Esta sección no usa carrito ni precios publicados. Cada experiencia se cotiza de forma privada.",
+        "button_label": "Solicitar cotización"
+      }
+    }
+  },
+  "order": [
+    "head",
+    "s1",
+    "s2"
+  ]
+}

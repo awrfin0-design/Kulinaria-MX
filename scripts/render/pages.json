@@ -1,0 +1,172 @@
+[
+ [
+  "planes",
+  "page.plans",
+  "Planes"
+ ],
+ [
+  "plan-bloque",
+  "page.plan-bloque",
+  "Bloque de 4 semanas"
+ ],
+ [
+  "plan-prueba",
+  "page.plan-prueba",
+  "Semana de prueba"
+ ],
+ [
+  "niveles-y-precios",
+  "page.niveles-y-precios",
+  "Niveles y precios"
+ ],
+ [
+  "ciclo-y-politicas",
+  "page.ciclo-y-politicas",
+  "Ciclo y políticas"
+ ],
+ [
+  "embajadores",
+  "page.ambassadors",
+  "Embajadores"
+ ],
+ [
+  "embajadores-entrenadores",
+  "page.embajadores-entrenadores",
+  "Entrenadores"
+ ],
+ [
+  "embajadores-clientes",
+  "page.embajadores-clientes",
+  "Clientes referidos"
+ ],
+ [
+  "embajadores-gimnasios",
+  "page.embajadores-gimnasios",
+  "Gimnasios aliados"
+ ],
+ [
+  "embajadores-directorio",
+  "page.embajadores-directorio",
+  "Directorio"
+ ],
+ [
+  "embajadores-reglas",
+  "page.embajadores-reglas",
+  "Reglas de alianza"
+ ],
+ [
+  "embajadores-solicitar",
+  "page.embajadores-solicitar",
+  "Solicitar código"
+ ],
+ [
+  "carta-kulinaria",
+  "page.carta",
+  "Carta Kulinaria"
+ ],
+ [
+  "carta-chef-privado",
+  "page.carta-chef-privado",
+  "Chef privado"
+ ],
+ [
+  "carta-cenas-romanticas",
+  "page.carta-cenas-romanticas",
+  "Cenas románticas"
+ ],
+ [
+  "carta-galeria",
+  "page.carta-galeria",
+  "Galería de eventos"
+ ],
+ [
+  "carta-cotizacion",
+  "page.carta-cotizacion",
+  "Cotización privada"
+ ],
+ [
+  "nosotros",
+  "page.about",
+  "Nosotros"
+ ],
+ [
+  "nosotros-historia",
+  "page.nosotros-historia",
+  "Historia y fundador"
+ ],
+ [
+  "nosotros-equipo",
+  "page.nosotros-equipo",
+  "Equipo de cocina"
+ ],
+ [
+  "nosotros-calidad",
+  "page.nosotros-calidad",
+  "Calidad y envases"
+ ],
+ [
+  "filosofia",
+  "page.philosophy",
+  "Filosofía"
+ ],
+ [
+  "ayuda",
+  "page.help",
+  "Ayuda y legales"
+ ],
+ [
+  "terminos",
+  "page.terminos",
+  "Contrato y términos"
+ ],
+ [
+  "privacidad",
+  "page.privacidad",
+  "Aviso de privacidad"
+ ],
+ [
+  "checkout",
+  "page.checkout",
+  "Checkout y contrato"
+ ],
+ [
+  "confirmacion",
+  "page.confirmacion",
+  "Confirmación"
+ ],
+ [
+  "cuenta-semana",
+  "page.cuenta-semana",
+  "Mi semana"
+ ],
+ [
+  "cuenta-pausas",
+  "page.cuenta-pausas",
+  "Pausar entregas"
+ ],
+ [
+  "cuenta-monedero",
+  "page.cuenta-monedero",
+  "Monedero"
+ ],
+ [
+  "cuenta-perfil",
+  "page.cuenta-perfil",
+  "Alergias y gustos"
+ ],
+ [
+  "cuenta-referidos",
+  "page.cuenta-referidos",
+  "Mis referidos"
+ ],
+ [
+  "cuenta-pedidos",
+  "page.cuenta-pedidos",
+  "Pedidos y facturas"
+ ],
+ [
+  "cuenta-entregas",
+  "page.cuenta-entregas",
+  "Entregas y envases"
+ ]
+]

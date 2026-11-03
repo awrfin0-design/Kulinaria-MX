@@ -1,0 +1,113 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Planes",
+        "parent_link": "/pages/planes",
+        "eyebrow": "Niveles y precios",
+        "heading": "Cuatro niveles, un mismo estándar",
+        "text": "Cada nivel suma $60 MXN fijos sobre el anterior. El precio incluye el empaque óptimo y la preparación del chef.",
+        "button_label": "Ver el menú de la semana",
+        "button_link": "/collections/menu-semanal"
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "Resumen",
+            "link": "/pages/planes"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Bloque de 4 semanas",
+            "link": "/pages/plan-bloque"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Semana de prueba",
+            "link": "/pages/plan-prueba"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Niveles y precios",
+            "link": "/pages/niveles-y-precios"
+          }
+        },
+        "n4": {
+          "type": "link",
+          "settings": {
+            "label": "Ciclo y políticas",
+            "link": "/pages/ciclo-y-politicas"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2",
+        "n3",
+        "n4"
+      ]
+    },
+    "s1": {
+      "type": "tiers",
+      "settings": {
+        "eyebrow": "Niveles",
+        "heading": "Cuatro niveles, un mismo estándar",
+        "text": "Cada nivel suma $60 MXN fijos sobre el anterior."
+      },
+      "blocks": {
+        "t1": {
+          "type": "tier",
+          "settings": {
+            "tier": "selecto",
+            "text": "Menú base diario y de alta rotación."
+          }
+        },
+        "t2": {
+          "type": "tier",
+          "settings": {
+            "tier": "exclusivo",
+            "text": "Cocciones lentas y elaboraciones sofisticadas."
+          }
+        },
+        "t3": {
+          "type": "tier",
+          "settings": {
+            "tier": "signature",
+            "text": "Recetas de autor con cortes premium."
+          }
+        },
+        "t4": {
+          "type": "tier",
+          "settings": {
+            "tier": "reserve",
+            "text": "Prime y mariscos selectos."
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ]
+    },
+    "s2": {
+      "type": "cta-banner",
+      "settings": {}
+    }
+  },
+  "order": [
+    "head",
+    "s1",
+    "s2"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Carta Kulinaria",
+        "parent_link": "/pages/carta-kulinaria",
+        "eyebrow": "Cotización privada",
+        "heading": "Cuéntanos tu evento",
+        "text": "Nombre, fecha, tipo de evento, invitados, alergias y contacto. Te respondemos con una propuesta privada."
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "La Carta",
+            "link": "/pages/carta-kulinaria"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Chef privado",
+            "link": "/pages/carta-chef-privado"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Cenas románticas",
+            "link": "/pages/carta-cenas-romanticas"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Galería de eventos",
+            "link": "/pages/carta-galeria"
+          }
+        },
+        "n4": {
+          "type": "link",
+          "settings": {
+            "label": "Cotización privada",
+            "link": "/pages/carta-cotizacion"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2",
+        "n3",
+        "n4"
+      ]
+    },
+    "s1": {
+      "type": "contact-form",
+      "settings": {
+        "kind": "carta",
+        "eyebrow": "Cotización privada",
+        "heading": "Cuéntanos tu evento",
+        "text": "Esta sección no usa carrito ni precios publicados. Cada experiencia se cotiza de forma privada.",
+        "button_label": "Solicitar cotización"
+      }
+    }
+  },
+  "order": [
+    "head",
+    "s1"
+  ]
+}

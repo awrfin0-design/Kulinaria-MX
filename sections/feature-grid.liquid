@@ -3,13 +3,16 @@
   assign cols = section.settings.columns
   assign layout = section.settings.layout | default: 'grid'
 -%}
-<section class="section fg fg--{{ layout }} {% if bg == 'raised' %}section--raised{% elsif bg == 'deep' %}section--deep{% elsif bg == 'walnut' %}surface-walnut{% endif %}" {{ section.shopify_attributes }}>
+<section class="section fg fg--{{ layout }} {% if bg == 'raised' %}section--raised{% elsif bg == 'deep' %}section--deep{% endif %}" {{ section.shopify_attributes }}>
   <div class="container">
     {%- if section.settings.heading != blank -%}
       <div class="section__head{% if section.settings.center and layout == 'grid' %} section__head--center{% endif %}">
         {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
         <h2>{{ section.settings.heading }}</h2>
         {%- if section.settings.text != blank -%}<div class="lede richtext">{{ section.settings.text }}</div>{%- endif -%}
+        {%- if layout == 'sticky' and section.settings.button_label != blank -%}
+          <div class="btn-row"><a class="btn btn--gold" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.button_label }}</a></div>
+        {%- endif -%}
       </div>
     {%- endif -%}
 
@@ -37,7 +40,7 @@
               <span class="card__photo" data-tilt-card>{% render 'photo', image: block.settings.image, art: block.settings.art, alt: photo_alt %}</span>
               <div class="card__body">
             {%- endif -%}
-            {%- if section.settings.numbered or layout == 'stack' -%}<span class="card__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{%- endif -%}
+            {%- if section.settings.numbered or layout == 'rows' or layout == 'stack' -%}<span class="card__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{%- endif -%}
             {%- if block.settings.eyebrow != blank -%}<span class="eyebrow">{{ block.settings.eyebrow }}</span>{%- endif -%}
             <h3>{{ block.settings.title }}</h3>
             <div class="richtext text-muted">{{ block.settings.text }}</div>
@@ -50,7 +53,7 @@
       {%- endfor -%}
     </div>
 
-    {%- if section.settings.button_label != blank -%}
+    {%- if section.settings.button_label != blank and layout != 'sticky' -%}
       <div class="fg__foot btn-row" {% if section.settings.center and layout == 'grid' %}style="justify-content:center"{% endif %}>
         <a class="btn btn--gold" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.button_label }}</a>
       </div>
@@ -64,7 +67,7 @@
   "settings": [
     { "type": "select", "id": "layout", "label": "Diseño", "default": "grid", "options": [
       { "value": "grid", "label": "Cuadrícula de tarjetas" },
-      { "value": "stack", "label": "Tarjetas apiladas (se acumulan al hacer scroll)" },
+      { "value": "rows", "label": "Filas editoriales (número, texto y foto)" },
       { "value": "sticky", "label": "Título fijo + tarjetas que avanzan" },
       { "value": "index", "label": "Índice editorial (lista de enlaces)" } ] },
     { "type": "text", "id": "eyebrow", "label": "Sobretítulo" },
@@ -75,8 +78,8 @@
     { "type": "checkbox", "id": "numbered", "label": "Numerar tarjetas", "default": false },
     { "type": "checkbox", "id": "center", "label": "Centrar encabezado (solo cuadrícula)", "default": false },
     { "type": "select", "id": "background", "label": "Fondo", "default": "base", "options": [
-      { "value": "base", "label": "Negro" }, { "value": "raised", "label": "Negro elevado" },
-      { "value": "deep", "label": "Negro profundo" }, { "value": "walnut", "label": "Nogal" } ] },
+      { "value": "base", "label": "Marfil" }, { "value": "raised", "label": "Marfil elevado" },
+      { "value": "deep", "label": "Marfil profundo" }, { "value": "walnut", "label": "Nogal" } ] },
     { "type": "text", "id": "button_label", "label": "Botón al final" },
     { "type": "url", "id": "button_link", "label": "Enlace del botón" }
   ],

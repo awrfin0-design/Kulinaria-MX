@@ -66,16 +66,27 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
       description: '', products: [playera, shaker], products_count: 2 },
   };
 
-  const pages = Object.fromEntries([
-    ['planes', 'Planes'], ['nosotros', 'Nosotros'], ['filosofia', 'Filosofía'], ['embajadores', 'Embajadores'],
-    ['carta-kulinaria', 'Carta Kulinaria'], ['ayuda', 'Ayuda y legales'], ['perfil', 'Mi perfil de alergias'],
-  ].map(([handle, title]) => [handle, { handle, title: tr(title), url: `/pages/${handle}`, content: '' }]));
+  const PAGE_LIST = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/render/pages.json'), 'utf8'));
+  const pages = Object.fromEntries([...PAGE_LIST.map(([handle, , title]) => [handle, title]), ['perfil', 'Mi perfil de alergias']]
+    .map(([handle, title]) => [handle, { handle, title: tr(title), url: `/pages/${handle}`, content: '' }]));
 
-  const link = (title, url) => ({ title: tr(title), url, current: false });
+  const link = (title, url, links = []) => ({ title: tr(title), url, current: false, links: links.map(([t, u]) => ({ title: tr(t), url: u, current: false, links: [] })) });
+  const pg = (h) => ['/pages/' + h];
+  const sub = (...hs) => hs.map((h) => [pages[h].title, '/pages/' + h]).map(([t, u]) => [Object.keys(pages).find((k) => '/pages/' + k === u) && PAGE_LIST.find(([k]) => '/pages/' + k === u)[2], u]);
   const linklists = {
-    'main-menu': { handle: 'main-menu', links: [link('Menú', '/collections/menu-semanal'), link('Planes', '/pages/planes'), link('Carta Kulinaria', '/pages/carta-kulinaria'), link('Embajadores', '/pages/embajadores'), link('Store', '/collections/kulinaria-store'), link('Nosotros', '/pages/nosotros')] },
+    'main-menu': { handle: 'main-menu', links: [
+      link('Menú semanal', '/collections/menu-semanal'),
+      link('Planes', '/pages/planes', sub('plan-bloque', 'plan-prueba', 'niveles-y-precios', 'ciclo-y-politicas')),
+      link('Registro y checkout', '/account/register', [['Crear cuenta', '/account/register'], ...sub('checkout', 'confirmacion'), ['Iniciar sesión', '/account/login']]),
+      link('Mi cuenta', '/account', [...sub('cuenta-semana', 'cuenta-pausas', 'cuenta-monedero', 'cuenta-perfil', 'cuenta-referidos', 'cuenta-pedidos', 'cuenta-entregas'), ['Direcciones', '/account/addresses']]),
+      link('Embajadores', '/pages/embajadores', sub('embajadores-entrenadores', 'embajadores-clientes', 'embajadores-gimnasios', 'embajadores-directorio', 'embajadores-reglas', 'embajadores-solicitar')),
+      link('Carta Kulinaria', '/pages/carta-kulinaria', sub('carta-chef-privado', 'carta-cenas-romanticas', 'carta-galeria', 'carta-cotizacion')),
+      link('Kulinaria Store', '/collections/kulinaria-store', [['Playera Oficial Kulinaria', '/products/playera-oficial-kulinaria'], ['Vaso mezclador (shaker) premium Kulinaria', '/products/vaso-mezclador-premium']]),
+      link('Nosotros', '/pages/nosotros', sub('nosotros-historia', 'nosotros-equipo', 'nosotros-calidad')),
+      link('Filosofía', '/pages/filosofia'),
+      link('Ayuda y legales', '/pages/ayuda', [...sub('terminos', 'privacidad'), ['Mi perfil de alergias', '/pages/perfil']]),
+    ] },
     footer: { handle: 'footer', links: [link('Menú semanal', '/collections/menu-semanal'), link('Planes', '/pages/planes'), link('Carta Kulinaria', '/pages/carta-kulinaria'), link('Kulinaria Store', '/collections/kulinaria-store'), link('Embajadores', '/pages/embajadores')] },
-    'more-menu': { handle: 'more-menu', links: [link('Kulinaria Store', '/collections/kulinaria-store'), link('Filosofía', '/pages/filosofia'), link('Mi perfil de alergias', '/pages/perfil'), link('Ayuda y legales', '/pages/ayuda')] },
     ayuda: { handle: 'ayuda', links: [link('Nosotros', '/pages/nosotros'), link('Filosofía', '/pages/filosofia'), link('Ayuda y legales', '/pages/ayuda'), link('Mi perfil de alergias', '/pages/perfil')] },
   };
 

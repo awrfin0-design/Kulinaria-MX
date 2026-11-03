@@ -184,8 +184,7 @@ async function renderLang(lang) {
     P('menu', '/collections/menu-semanal', 'collection', 'Menú semanal', { template: { name: 'collection' }, collection: store.collections['menu-semanal'], page_title: T_('Menú semanal') }),
     P('tienda', '/collections/kulinaria-store', 'collection.store', 'Kulinaria Store', { template: { name: 'collection', suffix: 'store' }, collection: store.collections['kulinaria-store'], page_title: 'Kulinaria Store' }),
     ...store.products.map((p) => ({ key: 'p/' + p.handle, url: p.url, tpl: 'product', title: p.title, g: { template: { name: 'product' }, product: p, page_title: p.title } })),
-    ...[['planes', 'page.plans'], ['nosotros', 'page.about'], ['filosofia', 'page.philosophy'], ['embajadores', 'page.ambassadors'],
-      ['carta-kulinaria', 'page.carta'], ['ayuda', 'page.help'], ['perfil', 'page.profile']].map(([h, tpl]) =>
+    ...[...JSON.parse(read('scripts/render/pages.json')).map(([h, tpl]) => [h, tpl]), ['perfil', 'page.profile']].map(([h, tpl]) =>
       ({ key: 'pg/' + h, url: '/pages/' + h, tpl, title: store.pages[h].title, g: { template: { name: 'page' }, page: store.pages[h], page_title: store.pages[h].title } })),
     P('carrito', '/cart', 'cart', 'Mi selección', { template: { name: 'cart' }, page_title: T_('Mi selección') }),
     P('cuenta', '/account', 'customers/account', 'Mi cuenta', { template: { name: 'customers/account' }, page_title: T_('Mi cuenta') }),
@@ -199,6 +198,7 @@ async function renderLang(lang) {
   ];
   for (const r of routes) {
     r.g.canonical_url = r.url;
+    r.g.request = { locale: { iso_code: lang }, path: r.url };
     r.html = await renderTemplate(r.tpl, r.g);
   }
   return { routes, store, groups: state.groups };
@@ -275,6 +275,7 @@ export async function renderSite() {
   for (const n of names) table[n] = fs.readFileSync(path.join(ROOT, 'assets', n)).toString('base64');
   const PIXEL = 'data:image/gif;base64,R0lGODlhAQABAAAAACw=';
   doc = doc.replace(/<img([^>]*?)src="assets\/([^"]+)"/g, (m, pre, f) => `<img${pre}src="${PIXEL}" data-asset="${f}"`);
+  doc = doc.replace(/<source([^>]*?)srcset="assets\/([^"]+)"/g, (m, pre, f) => `<source${pre}data-srcset="assets/${f}"`);
   doc = doc.replace(/\sposter="assets\/([^"]+)"/g, (m, f) => ` data-poster="assets/${f}"`);
   doc = doc.replace(/<link rel="icon" type="image\/png" href="assets\/favicon\.png">/, () => `<link rel="icon" type="image/png" href="data:image/png;base64,${table['favicon.png']}">`);
   const boot = `<script type="application/json" id="kx-assets">${JSON.stringify(table)}</script><script>${PREVIEW_JS.replace('__I18N__', () => JSON.stringify(I18N))}</script>`;
@@ -318,6 +319,7 @@ const PREVIEW_JS = `
   K.i18n = I18N[lang]; K.lang = lang; K.resolve = resolve;
   document.documentElement.style.setProperty('--img-wood', 'url("' + resolve('assets/photo-wood.webp') + '")');
   [].forEach.call(document.querySelectorAll('img[data-asset]'), function (i) { i.src = resolve('assets/' + i.getAttribute('data-asset')); });
+  [].forEach.call(document.querySelectorAll('[data-srcset]'), function (e) { e.srcset = resolve(e.getAttribute('data-srcset')); });
   [].forEach.call(document.querySelectorAll('[data-poster]'), function (v) { v.poster = resolve(v.getAttribute('data-poster')); });
 
   var M = MSG[lang], pages = [].slice.call(document.querySelectorAll('[data-page]'));

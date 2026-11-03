@@ -1,7 +1,7 @@
 {%- comment -%}
   Official Kulinaria logo artwork (transparent PNG, extracted from the brand PDF).
   Params:
-    tone: 'gold' (default, full colour) | 'cream' | 'black'  -> logo.png / logo-cream.png / logo-black.png
+    tone: 'gold' (default, full colour) | 'cream' | 'black' | 'auto' (ink on the light theme, gold on dark)  -> logo.png / logo-cream.png / logo-black.png
     mark: true -> the K + flame monogram only (logo-mark.png)
     height: optional CSS height (e.g. '56px'); width follows the artwork ratio
   Replace the files in /assets (same names) with the high-resolution originals when available.
@@ -25,6 +25,12 @@
     assign h = 399
   endif
 -%}
+{%- if tone_key == 'auto' and mark != true -%}
+  {%- assign alt_text = shop.name | default: 'Kulinaria' | append: ', ' | append: settings.brand_tagline | default: 'Arte del fuego' -%}
+  <img class="logo logo--ink" src="{{ 'logo-black.png' | asset_url }}" width="817" height="399" alt="{{ alt_text | escape }}" decoding="async">
+  <img class="logo logo--gold" src="{{ 'logo.png' | asset_url }}" width="817" height="399" alt="" aria-hidden="true" decoding="async">
+{%- else -%}
 <img class="logo{% if mark %} logo--mark{% endif %}" src="{{ file | asset_url }}" width="{{ w }}" height="{{ h }}"
   alt="{% if mark %}{{ shop.name | default: 'Kulinaria' }}{% else %}{{ shop.name | default: 'Kulinaria' }}, {{ settings.brand_tagline | default: 'Arte del fuego' }}{% endif %}"
   {%- if height %} style="height:{{ height }};width:auto"{% endif %} decoding="async">
+{%- endif -%}

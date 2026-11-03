@@ -49,7 +49,7 @@ for (const r of routes) {
   }, r.key);
   ok(`[${r.key}] only this page visible`, info.visible.length === 1 && info.visible[0] === r.key, info.visible.join(','));
   ok(`[${r.key}] has content`, info.len > 80, String(info.len));
-  ok(`[${r.key}] headline in Kaushan Script`, /Kaushan/.test(info.hFont), info.hFont);
+  ok(`[${r.key}] headline in the brand type system`, /Kaushan/.test(info.hFont) || (r.key === 'home' && /Alegreya/.test(info.hFont)), info.hFont);
 }
 
 // ---- all hash links across the whole document point to a real page
@@ -66,7 +66,7 @@ ok('every in-page anchor has a target', badLinks.anchors.length === 0, badLinks.
 
 // ---- actually click through the real navigation (header, footer, hero CTAs)
 await page.goto(`${URL0}#/home`);
-const groups = ['.site-nav a', '.site-footer a', '[data-page="home"] a.btn'];
+const groups = ['.site-footer a', '[data-page="home"] a.btn', '[data-page="home"] a.arrow-link'];
 for (const base of groups) {
   const hrefs = await page.$$eval(base, (as) => [...new Set(as.map((a) => a.getAttribute('href')).filter((h) => h && h.startsWith('#/')))]);
   for (const h of hrefs) {
@@ -136,9 +136,9 @@ async function lockStateAt(iso) {
   await c2.addInitScript(SKIP_LOADER);
   const p2 = await c2.newPage();
   await p2.clock.install({ time: new Date(iso) });
-  await p2.goto(`${URL0}#/cuenta`); await p2.waitForTimeout(150);
-  const s = await p2.$$eval('[data-page="cuenta"] [data-pause-lock]', (b) => b.map((x) => x.getAttribute('aria-disabled')));
-  const msgs = await p2.$$eval('[data-page="cuenta"] [data-lock-msg]', (m) => m.map((x) => !x.hidden));
+  await p2.goto(`${URL0}#/pg/cuenta-pausas`); await p2.waitForTimeout(150);
+  const s = await p2.$$eval('[data-page="pg/cuenta-pausas"] [data-pause-lock]', (b) => b.map((x) => x.getAttribute('aria-disabled')));
+  const msgs = await p2.$$eval('[data-page="pg/cuenta-pausas"] [data-lock-msg]', (m) => m.map((x) => !x.hidden));
   await c2.close(); return { s, msgs };
 }
 // Mexico City is UTC-6 year-round. Mon 12:00 local = 18:00Z; Tue 11:00 local; Fri 20:00 local; Sat 09:00 / 10:30 local.
@@ -158,10 +158,6 @@ ok('carta page has no cart / price symbols', !(await page.$eval('[data-page="pg/
 await page.goto(`${URL0}#/login`); await page.fill('[data-page="login"] [name="customer[email]"]', 'x@y.co'); await page.fill('[data-page="login"] [name="customer[password]"]', 'pw');
 await page.click('[data-page="login"] form[data-shopify-form="customer_login"] button[type="submit"]'); await page.waitForTimeout(100);
 ok('login submits to account', page.url().endsWith('#/cuenta'));
-await page.goto(`${URL0}#/registro`); await page.fill('[data-page="registro"] #registro--reg-first', 'Ana'); await page.fill('[data-page="registro"] #registro--reg-last', 'P');
-await page.fill('[data-page="registro"] #registro--reg-email', 'a@b.co'); await page.fill('[data-page="registro"] #registro--reg-pass', 'secret1');
-await page.click('[data-page="registro"] form button[type="submit"]'); await page.waitForTimeout(100);
-ok('register submits to account', page.url().endsWith('#/cuenta'));
 await page.goto(`${URL0}#/buscar`); await page.fill('[data-page="buscar"] input[name="q"]', 'pollo'); await page.press('[data-page="buscar"] input[name="q"]', 'Enter'); await page.waitForTimeout(100);
 ok('search form stays on search', page.url().endsWith('#/buscar'));
 
@@ -213,11 +209,9 @@ await page.waitForTimeout(700);
 const m2 = await page.$eval('[data-page="home"] .marquee__track', (e) => new DOMMatrix(getComputedStyle(e).transform).m41);
 ok('marquee is animating', m2 < m1 - 3, `${m1} -> ${m2}`);
 
-// stack cards pile up (sticky) and sticky split keeps its intro in view
-await page.evaluate(() => { const s = document.querySelector('[data-page="home"] .fg--stack'); window.scrollTo(0, s.getBoundingClientRect().top + window.scrollY + 380); });
-await page.waitForTimeout(500);
-const stack = await page.$$eval('[data-page="home"] .fg--stack .card', (c) => c.map((x) => Math.round(x.getBoundingClientRect().top)));
-ok('stack: first card is pinned near the top while later cards are still below', stack[0] < 220 && stack[0] >= 0 && stack[2] > stack[0] + 20, stack.join(','));
+// editorial rows (no pinned cards) + sticky split keeps its intro in view
+const rows = await page.$$eval('[data-page="home"] .fg--rows .card', (c) => c.map((x) => ({ pos: getComputedStyle(x).position, cols: getComputedStyle(x).gridTemplateColumns.split(' ').length })));
+ok('how-it-works uses editorial rows (3 rows, not pinned, 3 columns)', rows.length === 3 && rows.every((r) => r.pos === 'static' && r.cols === 3), JSON.stringify(rows));
 await page.evaluate(() => { const s = document.querySelector('[data-page="home"] .fg--sticky'); window.scrollTo(0, s.getBoundingClientRect().top + window.scrollY + 450); });
 await page.waitForTimeout(500);
 const head = await page.$eval('[data-page="home"] .fg--sticky .section__head', (e) => Math.round(e.getBoundingClientRect().top));
@@ -225,9 +219,9 @@ ok('sticky split: intro stays pinned while cards scroll', head > 0 && head < 260
 
 // button fill + magnetic + spotlight
 await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(400);
-const btnSel = '[data-page="home"] .hero .btn--gold';
+const btnSel = '[data-page="home"] .fg--rows .fg__foot .btn--gold';
 const before = await page.$eval(btnSel, (e) => parseFloat(getComputedStyle(e, '::before').width));
-await page.hover(btnSel); await page.waitForTimeout(1000);
+await page.locator(btnSel).scrollIntoViewIfNeeded(); await page.waitForTimeout(1600); await page.hover(btnSel); await page.waitForTimeout(1000);
 const after = await page.$eval(btnSel, (e) => parseFloat(getComputedStyle(e, '::before').width));
 ok('pill button fills from the cursor on hover', before < 5 && after > 100, `${before} -> ${after}`);
 ok('pill buttons are fully rounded', (await page.$eval(btnSel, (e) => parseFloat(getComputedStyle(e).borderTopLeftRadius))) >= 40);
@@ -297,77 +291,133 @@ for (const w of [1440, 820, 390]) {
 }
 // mobile: burger opens the full-screen menu
 await page.setViewportSize({ width: 390, height: 844 }); await page.goto(`${URL0}#/home`); await page.waitForTimeout(300);
-await page.click('.nav-toggle');
+await page.click('.burger');
 await page.waitForTimeout(900);
-ok('mobile burger opens the full-screen menu', await page.$eval('#menu-overlay', (n) => !n.hidden && n.classList.contains('is-open')) && (await page.$eval('.nav-toggle', (n) => n.getAttribute('aria-expanded'))) === 'true');
-await page.click('#menu-overlay a[href="#/pg/planes"]'); await page.waitForTimeout(1100);
-ok('mobile menu navigates and closes', page.url().endsWith('#/pg/planes') && (await page.$eval('#menu-overlay', (n) => n.hidden)));
+ok('mobile burger opens the full-screen menu', await page.$eval('#menu-overlay', (n) => !n.hidden && n.classList.contains('is-open')) && (await page.$eval('.burger', (n) => n.getAttribute('aria-expanded'))) === 'true');
+await page.click('#menu-overlay a[href="#/pg/plan-bloque"]'); await page.waitForTimeout(1100);
+ok('mobile menu navigates and closes', page.url().endsWith('#/pg/plan-bloque') && (await page.$eval('#menu-overlay', (n) => n.hidden)));
 
-// =====================================================================  v3: no banner, theme, language, loader, media, 3D
+// =====================================================================  v4: burger menu, light/dark, i18n, loader, media, 3D, IA
 await page.setViewportSize({ width: 1440, height: 900 });
-await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(600);
+await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(700);
+const openMenu = async () => { await page.click('.burger'); await page.waitForTimeout(1100); };
+const closeMenu = async () => { await page.keyboard.press('Escape'); await page.waitForTimeout(1000); };
 ok('no "Vista previa" banner anywhere', (await page.$$('.preview-bar')).length === 0 && !/vista previa/i.test(await page.evaluate(() => document.body.innerText)));
-ok('index of pages is still reachable at #/indice', await (async () => { await page.goto(`${URL0}#/indice`); await page.waitForTimeout(150); return (await page.$$eval('[data-page="indice"] a', (a) => a.length)) >= 18; })());
-await page.goto(`${URL0}#/home`); await page.waitForTimeout(300);
+ok('page index is reachable at #/indice', await (async () => { await page.goto(`${URL0}#/indice`); await page.waitForTimeout(200); return (await page.$$eval('[data-page="indice"] a', (a) => a.length)) >= 45; })());
+await page.goto(`${URL0}#/home`); await page.waitForTimeout(400);
 
-// full-screen menu (desktop "Más")
-await page.click('.site-nav__more'); await page.waitForTimeout(1000);
-ok('"Más" opens the full-screen menu with every main link', await page.$eval('#menu-overlay', (n) => !n.hidden) && (await page.$$eval('#menu-overlay .menu-overlay__main a', (a) => a.length)) >= 5);
+// header = logo + cart + burger only
+ok('header holds only the logo, the cart and the burger', (await page.$$('.site-header a, .site-header button')).length === 3);
+ok('no fake-wood background anywhere', await page.evaluate(() => !/wood/i.test(getComputedStyle(document.querySelector('.bg-fx'), '::before').backgroundImage) && !document.querySelector('style').textContent.includes('photo-wood')));
+
+// burger -> full sitemap
+await openMenu();
+const sm = await page.evaluate(() => ({ groups: document.querySelectorAll('#menu-overlay .sitemap__group').length, links: document.querySelectorAll('#menu-overlay .sitemap a').length }));
+ok('burger opens a full-screen sitemap with every top-level page and its subpages', sm.groups >= 10 && sm.links >= 40, JSON.stringify(sm));
 ok('menu dialog is modal and labelled', await page.$eval('#menu-overlay', (n) => n.getAttribute('role') === 'dialog' && n.getAttribute('aria-modal') === 'true' && !!n.getAttribute('aria-label')));
-await page.keyboard.press('Escape'); await page.waitForTimeout(1000);
-ok('Escape closes the menu and returns focus', (await page.$eval('#menu-overlay', (n) => n.hidden)) && (await page.evaluate(() => document.activeElement.className)).includes('site-nav__more'));
-ok('header shows only the primary links + "Más"', (await page.$$eval('.site-header .site-nav a', (a) => a.length)) === 3);
+await closeMenu();
+ok('Escape closes the menu and returns focus to the burger', (await page.$eval('#menu-overlay', (n) => n.hidden)) && (await page.evaluate(() => document.activeElement.className)).includes('burger'));
+const pagesList = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/render/pages.json'), 'utf8'));
+await openMenu();
+const inMenu = await page.$$eval('#menu-overlay .sitemap a', (a) => a.map((x) => x.getAttribute('href')));
+const missing = pagesList.map(([h]) => '#/pg/' + h).filter((h) => !inMenu.includes(h));
+ok('every page and subpage of the Miro sitemap is reachable from the menu', missing.length === 0, missing.join(' '));
+await closeMenu();
+for (const h of ['#/pg/plan-bloque', '#/pg/cuenta-pausas', '#/pg/carta-galeria', '#/pg/terminos', '#/registro', '#/pg/embajadores-directorio']) {
+  await page.goto(`${URL0}#/home`); await page.waitForTimeout(150);
+  await openMenu(); await page.click(`#menu-overlay a[href="${h}"]`); await page.waitForTimeout(1100);
+  ok(`menu link ${h} navigates and closes the menu`, page.url().endsWith(h) && (await page.$eval('#menu-overlay', (n) => n.hidden)));
+}
 
-// light / dark
+// page structure: every sitemap page has a header with breadcrumbs; families have a sub-navigation
+const noHead = [];
+for (const [h] of pagesList) {
+  await page.goto(`${URL0}#/pg/${h}`); await page.waitForTimeout(60);
+  const ok1 = await page.$eval(`[data-page="pg/${h}"]`, (e) => !!e.querySelector('.page-head h1') && !!e.querySelector('.page-head__crumbs'));
+  if (!ok1) noHead.push(h);
+}
+ok('every page and subpage has a page header with breadcrumbs', noHead.length === 0, noHead.join(' '));
+await page.goto(`${URL0}#/pg/embajadores-gimnasios`); await page.waitForTimeout(150);
+ok('subpages show the family sub-navigation with the current page marked', (await page.$$eval('[data-page="pg/embajadores-gimnasios"] .page-head__sub a', (a) => a.length)) >= 6 && (await page.$eval('[data-page="pg/embajadores-gimnasios"] .page-head__sub a[aria-current="page"]', (a) => /Gimnasios/.test(a.textContent))));
+// Miro coverage: sections that must exist
+const must = { 'home': ['.hero', '.marquee', '.fg--rows', '[data-rail]', '.tier-ladder', '.fg--index', '.diet-chips, .chips', '.plan-card', '.accordion', '.cta-banner'],
+  'pg/planes': ['.plan-card', '.tier-ladder', '.accordion'], 'pg/ayuda': ['form'], 'pg/terminos': ['.accordion details'], 'pg/carta-cotizacion': ['form'],
+  'pg/embajadores-solicitar': ['form'], 'pg/checkout': ['.card'], 'pg/cuenta-semana': ['[data-cutoff]'], 'pg/cuenta-pausas': ['[data-pause-lock]'], 'pg/cuenta-monedero': ['.card'] };
+const lacking = [];
+for (const [k, sels] of Object.entries(must)) { await page.goto(`${URL0}#/${k}`); await page.waitForTimeout(80); for (const sel of sels) if (!(await page.$(`[data-page="${k}"] ${sel}`))) lacking.push(`${k} ${sel}`); }
+ok('key sections from the Miro board exist on their pages', lacking.length === 0, lacking.join(' | '));
+ok('terms page carries all 10 contract clauses', await (async () => { await page.goto(`${URL0}#/pg/terminos`); await page.waitForTimeout(100); return (await page.$$eval('[data-page="pg/terminos"] .accordion details', (d) => d.length)) === 10; })());
+
+// account subpages: each shows its own panel inside the account shell
+for (const [k, sel] of [['semana', '#semana'], ['pausas', '#pausas'], ['monedero', '#monedero'], ['perfil', '#perfil'], ['referidos', '#referidos'], ['pedidos', '#pedidos'], ['entregas', '#entregas']]) {
+  await page.goto(`${URL0}#/pg/cuenta-${k}`); await page.waitForTimeout(80);
+  ok(`account sub-page ${k} renders its panel and the account navigation`, !!(await page.$(`[data-page="pg/cuenta-${k}"] .account-block[id$="${k}"]`)) && (await page.$$eval(`[data-page="pg/cuenta-${k}"] .account-nav a`, (a) => a.length)) >= 8);
+}
+ok('account overview links to all 8 account areas', (await (async () => { await page.goto(`${URL0}#/cuenta`); await page.waitForTimeout(100); return page.$$eval('[data-page="cuenta"] .index-row', (r) => r.length); })()) === 8);
+
+// multi-step registration
+await page.goto(`${URL0}#/registro`); await page.reload(); await page.waitForTimeout(500);
+const rg = '[data-page="registro"]';
+ok('registration is a 5-step flow starting at step 1', (await page.$$eval(`${rg} [data-step]`, (s) => s.length)) === 5 && (await page.$$eval(`${rg} [data-step].is-on`, (s) => s.length)) === 1);
+await page.click(`${rg} [data-step-next]`); await page.waitForTimeout(150);
+ok('required fields block moving to the next step', await page.$eval(`${rg} [data-step]:nth-of-type(1)`, (s) => s.classList.contains('is-on')) || (await page.$$eval(`${rg} [data-step].is-on`, (s) => s[0] === document.querySelectorAll('[data-page="registro"] [data-step]')[0])));
+await page.fill(`${rg} #registro--reg-first`, 'Ana'); await page.fill(`${rg} #registro--reg-last`, 'P'); await page.fill(`${rg} #registro--reg-email`, 'a@b.co'); await page.fill(`${rg} #registro--reg-pass`, 'secret1');
+await page.click(`${rg} [data-step-next]`); await page.waitForTimeout(150); await page.click(`${rg} [data-step-next]`); await page.waitForTimeout(150);
+await page.check(`${rg} input[name="allergy"][value="Mariscos"]`); await page.fill(`${rg} [name="dislikes"]`, 'cilantro, pasas');
+await page.click(`${rg} [data-step-next]`); await page.waitForTimeout(150); await page.click(`${rg} [data-step-next]`); await page.waitForTimeout(150);
+ok('step 5 shows the contract and keeps submit disabled until accepted', await page.$eval(`${rg} [data-signup-submit]`, (b) => b.disabled));
+await page.check(`${rg} [data-signup-contract]`);
+ok('accepting the contract enables sign-up', !(await page.$eval(`${rg} [data-signup-submit]`, (b) => b.disabled)));
+await page.click(`${rg} [data-signup-submit]`); await page.waitForTimeout(250);
+ok('sign-up ends in the account and stores the allergy profile', page.url().endsWith('#/cuenta') && JSON.parse(await page.evaluate(() => localStorage.getItem('kulinaria_profile') || '{}')).allergies.includes('Mariscos'));
+await page.evaluate(() => localStorage.clear());
+
+// light / dark (toggle lives in the menu)
 const themeOf = () => page.evaluate(() => document.documentElement.getAttribute('data-theme'));
 const bgOf = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(600);
 ok('light is the default theme', (await themeOf()) === 'light');
 const lightBg = await bgOf();
-await page.click('.site-header [data-theme-toggle]'); await page.waitForTimeout(900);
+await openMenu(); await page.click('#menu-overlay [data-theme-toggle]'); await page.waitForTimeout(500); await closeMenu(); await page.waitForTimeout(500);
 const darkBg = await bgOf();
 ok('toggle switches to dark and changes the page colours', (await themeOf()) === 'dark' && lightBg !== darkBg, `${lightBg} -> ${darkBg}`);
 ok('theme choice is remembered', await page.evaluate(() => localStorage.getItem('kx-theme')) === 'dark');
-ok('toggle label + pressed state follow the theme', (await page.$eval('.site-header [data-theme-toggle]', (b) => b.getAttribute('aria-pressed'))) === 'true');
-await page.reload(); await page.waitForTimeout(500);
+await page.reload(); await page.waitForTimeout(600);
 ok('dark theme persists after reload (before paint)', (await themeOf()) === 'dark');
-const contrast = await page.evaluate(() => {
-  const lum = (c) => { const m = c.match(/\d+(\.\d+)?/g).map(Number).slice(0, 3).map((v) => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }); return .2126 * m[0] + .7152 * m[1] + .0722 * m[2]; };
-  const r = (a, b) => (Math.max(lum(a), lum(b)) + .05) / (Math.min(lum(a), lum(b)) + .05);
-  const s = getComputedStyle(document.body); return r(s.color, s.backgroundColor);
-});
-ok('dark body text contrast >= 7', contrast >= 7, String(contrast));
-await page.click('.site-header [data-theme-toggle]'); await page.waitForTimeout(700);
-const contrastL = await page.evaluate(() => {
-  const lum = (c) => { const m = c.match(/\d+(\.\d+)?/g).map(Number).slice(0, 3).map((v) => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }); return .2126 * m[0] + .7152 * m[1] + .0722 * m[2]; };
-  const r = (a, b) => (Math.max(lum(a), lum(b)) + .05) / (Math.min(lum(a), lum(b)) + .05);
-  const s = getComputedStyle(document.body); const acc = getComputedStyle(document.querySelector('[data-page="home"] .fg .eyebrow')).color; return { body: r(s.color, s.backgroundColor), accent: r(acc, s.backgroundColor) };
-});
-ok('light body text contrast >= 7 and gold labels >= 4.5', contrastL.body >= 7 && contrastL.accent >= 4.5, JSON.stringify(contrastL));
+ok('gold logo shows on dark, ink logo on light', await page.evaluate(() => getComputedStyle(document.querySelector('.site-header .logo--gold')).display !== 'none' && getComputedStyle(document.querySelector('.site-header .logo--ink')).display === 'none'));
+const lumC = `(c) => { const m = c.match(/\\d+(\\.\\d+)?/g).map(Number).slice(0, 3).map((v) => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }); return .2126 * m[0] + .7152 * m[1] + .0722 * m[2]; }`;
+const contrastDark = await page.evaluate(`(() => { const lum = ${lumC}; const r = (a, b) => (Math.max(lum(a), lum(b)) + .05) / (Math.min(lum(a), lum(b)) + .05); const s = getComputedStyle(document.body); return r(s.color, s.backgroundColor); })()`);
+ok('dark body text contrast >= 7', contrastDark >= 7, String(contrastDark));
+await openMenu(); await page.click('#menu-overlay [data-theme-toggle]'); await page.waitForTimeout(500); await closeMenu(); await page.waitForTimeout(500);
+const contrastL = await page.evaluate(`(() => { const lum = ${lumC}; const r = (a, b) => (Math.max(lum(a), lum(b)) + .05) / (Math.min(lum(a), lum(b)) + .05); const s = getComputedStyle(document.body); const acc = getComputedStyle(document.querySelector('[data-page="home"] .fg .eyebrow')).color; return { body: r(s.color, s.backgroundColor), accent: r(acc, s.backgroundColor) }; })()`);
+ok('light body text contrast >= 7 and labels >= 4.5', contrastL.body >= 7 && contrastL.accent >= 4.5, JSON.stringify(contrastL));
 
-// language: ES -> EN reload, every page translated, switch back
+// language: ES -> EN, every page translated, back to ES
 ok('html lang is es by default', (await page.evaluate(() => document.documentElement.lang)) === 'es');
-await page.click('.site-header .lang__btn[value="en"]'); await page.waitForTimeout(900);
-ok('language switch persists en and reloads in English', (await page.evaluate(() => document.documentElement.lang)) === 'en' && /Your week, served like a signature piece/.test(await page.$eval('[data-page="home"] .hero h1', (h) => h.getAttribute('aria-label') || h.innerText)));
-ok('header and CTA are in English', /choose my plan/i.test(await page.$eval('.site-header__cta', (a) => a.textContent)) && (await page.$eval('.site-nav a', (a) => a.textContent.trim())) === 'Menu');
+await openMenu(); await page.click('#menu-overlay .lang__btn[value="en"]'); await page.waitForTimeout(1000);
+ok('language switch persists en and reloads in English', (await page.evaluate(() => document.documentElement.lang)) === 'en' && /A week, served like a signature piece/.test(await page.$eval('[data-page="home"] .hero h1', (h) => h.getAttribute('aria-label') || h.innerText)));
+await openMenu();
+ok('menu and CTA are in English', /choose my plan/i.test(await page.$eval('#menu-overlay .menu-overlay__foot .arrow-link', (a) => a.textContent)) && /Weekly menu/.test(await page.$eval('#menu-overlay .sitemap__top', (a) => a.textContent)));
+await closeMenu();
 const leaks = [];
 for (const k of keys.filter((k) => !k.startsWith('p/') || k === 'p/salmon-costra-almendras')) {
-  await page.goto(`${URL0}#/${k}`); await page.waitForTimeout(80);
+  await page.goto(`${URL0}#/${k}`); await page.waitForTimeout(70);
   const t = await page.$eval(`[data-page="${k}"]`, (e) => e.innerText);
-  const bad = t.match(/\b(Elegir|Menú|Planes|Platillos?|Cierre|Ver el|Guardar|Quitar|Carrito|Pedido|Cuenta|Contrase|Dirección|Entrega|alergias?)\b/g);
+  const bad = t.match(/\b(Elegir|Menú|Planes|Platillos?|Cierre|Ver el|Guardar|Quitar|Carrito|Pedido|Cuenta|Contrase|Dirección|Entrega|alergias?|Bloque|semana)\b/g);
   if (bad) leaks.push(`${k}: ${[...new Set(bad)].join(',')}`);
 }
 ok('no Spanish UI strings leak into the English storefront', leaks.length === 0, leaks.join(' | '));
-await page.goto(`${URL0}#/menu`); await page.waitForTimeout(200);
+await page.goto(`${URL0}#/menu`); await page.waitForTimeout(250);
 ok('menu filters are translated and still work in English', (await page.$eval('[data-page="menu"] [data-filter="category"][data-value="al-fuego-y-mar"]', (b) => b.textContent.trim())) === 'Fire & Sea');
 await page.click('[data-page="menu"] [data-filter="category"][data-value="al-fuego-y-mar"]');
 ok('category filter works in English', (await page.$$eval('[data-page="menu"] [data-dish]:not(.is-hidden)', (e) => e.length)) === 3);
 await page.goto(`${URL0}#/pg/perfil`); await page.waitForTimeout(150);
 await page.check('[data-page="pg/perfil"] input[name="allergy"][value="Frutos secos"]'); await page.click('[data-page="pg/perfil"] button[type="submit"]'); await page.waitForTimeout(100);
 await page.goto(`${URL0}#/p/salmon-costra-almendras`); await page.waitForTimeout(150);
-ok('allergen blocking still works in English (canonical metafield values) with English alert text', await page.evaluate(() => { const d = document.querySelector('[data-page="p/salmon-costra-almendras"]'); return !d.querySelector('[data-allergen-alert]').hidden && /Not suitable for your profile/.test(d.querySelector('[data-allergen-alert]').textContent) && d.querySelector('[data-add]').disabled; }));
+ok('allergen blocking still works in English with English alert text', await page.evaluate(() => { const d = document.querySelector('[data-page="p/salmon-costra-almendras"]'); return !d.querySelector('[data-allergen-alert]').hidden && /Not suitable for your profile/.test(d.querySelector('[data-allergen-alert]').textContent) && d.querySelector('[data-add]').disabled; }));
 await page.evaluate(() => localStorage.removeItem('kulinaria_profile'));
-await page.click('.site-header .lang__btn[value="es"]'); await page.waitForTimeout(900);
-ok('language switches back to Spanish', (await page.evaluate(() => document.documentElement.lang)) === 'es' && /Elegir mi plan/.test(await page.$eval('.site-header__cta', (a) => a.textContent)));
+await openMenu(); await page.click('#menu-overlay .lang__btn[value="es"]'); await page.waitForTimeout(1000);
+ok('language switches back to Spanish', (await page.evaluate(() => document.documentElement.lang)) === 'es' && /Elegir mi plan/.test(await page.evaluate(() => document.querySelector('#menu-overlay .menu-overlay__foot .arrow-link').textContent)));
 
 // every locale key in es has an English twin (and vice versa)
 {
@@ -380,7 +430,7 @@ ok('language switches back to Spanish', (await page.evaluate(() => document.docu
   ok('every static t-key used in Liquid exists in the locale', [...used].every((k) => es.includes(k)), [...used].filter((k) => !es.includes(k)).join(','));
 }
 
-// loading screen: shown on first visit, gone once loaded, skipped later in the session
+// loading screen
 {
   const lctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const lp = await lctx.newPage();
@@ -394,32 +444,34 @@ ok('language switches back to Spanish', (await page.evaluate(() => document.docu
   await lctx.close();
 }
 
-// particle background + wood
+// particles
 {
   const cv = await page.evaluate(() => { const c = document.querySelector('[data-particles]'); const g = c.getContext('2d'); const d = g.getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i] > 20) n++; return { w: c.width, n }; });
   ok('particle canvas is drawing', cv.w > 0 && cv.n > 20, JSON.stringify(cv));
-  ok('background layer is fixed behind the page', await page.$eval('.bg-fx', (e) => getComputedStyle(e).position === 'fixed' && getComputedStyle(e).zIndex === '-1'));
 }
 
-// photos + videos
-await page.goto(`${URL0}#/home`); await page.waitForTimeout(500); await scrollThrough(page);
+// hero: photo like the reference (serif headline + italic brand phrase, circle-arrow button, no inline nav)
+await page.goto(`${URL0}#/home`); await page.waitForTimeout(600);
+const hh = await page.evaluate(async () => {
+  const img = document.querySelector('[data-page="home"] .hero__slide img'); await new Promise((r) => (img.complete && img.naturalWidth > 1 ? r() : (img.onload = r)));
+  const h1 = document.querySelector('[data-page="home"] .hero h1'), em = h1.querySelector('em'), hero = document.querySelector('[data-page="home"] .hero').getBoundingClientRect();
+  const ir = img.getBoundingClientRect();
+  return { imgW: img.naturalWidth, fills: ir.width >= hero.width - 2 && ir.height >= hero.height - 2, h1Font: getComputedStyle(h1).fontFamily, emFont: getComputedStyle(em).fontFamily, arrow: !!document.querySelector('[data-page="home"] .hero .arrow-link .arrow-link__c'), nav: !!document.querySelector('.site-nav') };
+});
+ok('hero: full-bleed photo, serif headline with brand-script phrase, circle-arrow CTA, no inline nav', hh.imgW > 1500 && hh.fills && /Alegreya/.test(hh.h1Font) && /Kaushan/.test(hh.emFont) && hh.arrow && !hh.nav, JSON.stringify(hh));
+ok('hero headline never overlaps the dish (text column stays left of centre)', await page.evaluate(() => document.querySelector('[data-page="home"] .hero__copy').getBoundingClientRect().right < window.innerWidth * 0.5));
+
+// photos
+await scrollThrough(page);
 const media = await page.evaluate(async () => {
   const imgs = [...document.querySelectorAll('[data-page="home"] img')].filter((i) => !i.classList.contains('logo'));
   imgs.forEach((i) => { i.loading = 'eager'; });
   await Promise.race([Promise.all(imgs.map((i) => (i.complete ? 1 : new Promise((r) => { i.onload = i.onerror = r; })))), new Promise((r) => setTimeout(r, 6000))]);
   return { n: imgs.length, broken: imgs.filter((i) => i.naturalWidth === 0).map((i) => i.src.slice(0, 40)), dishPhotos: document.querySelectorAll('[data-page="home"] .dish__media img').length };
 });
-ok('home photos all load (hero cards, stack, dishes, showcase, cta)', media.n >= 14 && media.broken.length === 0, JSON.stringify(media));
+ok('home photos all load (hero, rows, dishes, showcases, CTA)', media.n >= 12 && media.broken.length === 0, JSON.stringify(media));
 ok('dish cards use their own photos, not the logo placeholder', media.dishPhotos >= 6);
-await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(1500);
-const hv = await page.evaluate(() => { const v = document.querySelector('[data-page="home"] [data-slide].is-on video'); return { playing: !v.paused && v.currentTime > 0, src: v.src.slice(0, 5), poster: !!v.poster }; });
-ok('hero video is playing (blob source) with a poster', hv.playing && hv.src === 'blob:' && hv.poster, JSON.stringify(hv));
-const slideOn = () => page.evaluate(() => [...document.querySelectorAll('[data-page="home"] [data-slide]')].findIndex((x) => x.classList.contains('is-on')));
-const s0 = await slideOn(); await page.waitForTimeout(8600); const s1 = await slideOn();
-ok('hero alternates between its two videos', s0 !== -1 && s1 !== -1 && s0 !== s1 && (await page.$$('[data-page="home"] [data-slide]')).length === 2, `${s0} -> ${s1}`);
-await page.click('[data-page="home"] [data-media-toggle]'); await page.waitForTimeout(300);
-ok('hero pause button stops the video', await page.evaluate(() => [...document.querySelectorAll('[data-page="home"] [data-hero] video')].every((v) => v.paused)));
-await page.click('[data-page="home"] [data-media-toggle]');
+
 // scroll-driven video band
 const bandY = await page.evaluate(() => { const b = document.querySelector('[data-page="home"] [data-band]'); return b.getBoundingClientRect().top + scrollY; });
 const bandH = await page.evaluate(() => { const b = document.querySelector('[data-page="home"] [data-band]'); return b.offsetHeight - innerHeight; });
@@ -427,16 +479,21 @@ const times = [];
 for (const f of [0.1, 0.5, 0.9]) { await page.evaluate((y) => window.scrollTo(0, y), bandY + bandH * f); await page.waitForTimeout(1300); times.push(await page.$eval('[data-page="home"] [data-scrub]', (v) => +v.currentTime.toFixed(2))); }
 ok('scroll scrubs the band video forward', times[0] < times[1] && times[1] < times[2], times.join(' -> '));
 ok('band text lines light up with progress', (await page.$$eval('[data-page="home"] .band__line.is-on', (e) => e.length)) === 3);
-// fire inside buttons
+
+// fire inside the circle-arrow button and inside pill buttons
 await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(600);
-await page.hover('[data-page="home"] .hero .btn--gold'); await page.waitForTimeout(1200);
-ok('hovering a button ignites the fire video inside it', await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .hero .btn--gold'); const v = b.querySelector('.btn__fx video'); return b.classList.contains('is-fx') && !!v && !v.paused && parseFloat(getComputedStyle(b.querySelector('.btn__fx')).opacity) > 0.5; }));
+await page.hover('[data-page="home"] .hero .arrow-link'); await page.waitForTimeout(1300);
+ok('hovering the hero button ignites the fire video inside its circle', await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .hero .arrow-link'); const v = b.querySelector('.arrow-link__c .btn__fx video'); return b.classList.contains('is-fx') && !!v && !v.paused && parseFloat(getComputedStyle(b.querySelector('.btn__fx')).opacity) > 0.5; }));
 await page.mouse.move(5, 500); await page.waitForTimeout(1200);
-ok('fire stops when the pointer leaves', await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .hero .btn--gold'); return !b.classList.contains('is-fx') && b.querySelector('.btn__fx video').paused; }));
-// 3D: hero stack follows the pointer, dish cards tilt, index shows a photo peek
-const c0 = await page.$eval('[data-page="home"] .hero__card--2', (e) => getComputedStyle(e).transform);
-await page.mouse.move(1300, 200); await page.waitForTimeout(700);
-ok('hero photo cards move in 3D with the pointer', (await page.$eval('[data-page="home"] .hero__card--2', (e) => getComputedStyle(e).transform)) !== c0);
+ok('fire stops when the pointer leaves', await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .hero .arrow-link'); return !b.classList.contains('is-fx') && b.querySelector('.btn__fx video').paused; }));
+await page.locator('[data-page="home"] .fg--rows .fg__foot .btn--gold').scrollIntoViewIfNeeded(); await page.waitForTimeout(1600); await page.hover('[data-page="home"] .fg--rows .fg__foot .btn--gold'); await page.waitForTimeout(1300);
+ok('pill buttons ignite too', await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .fg--rows .fg__foot .btn--gold'); return b.classList.contains('is-fx') && !!b.querySelector('.btn__fx video'); }));
+await page.mouse.move(5, 500);
+
+// 3D / pointer: hero photo drifts, dish tilt, coverflow, peek
+await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(500);
+await page.mouse.move(300, 300); await page.mouse.move(1300, 700, { steps: 6 }); await page.waitForTimeout(500);
+ok('hero photo drifts with the pointer', Math.abs(parseFloat(await page.$eval('[data-page="home"] .hero', (e) => e.style.getPropertyValue('--tx') || '0'))) > 0.1);
 await page.evaluate(() => { const r = document.querySelector('[data-page="home"] [data-rail]'); window.scrollTo(0, r.getBoundingClientRect().top + window.scrollY - 120); }); await page.waitForTimeout(700);
 const dm = '[data-page="home"] .rail .dish__media';
 const dbox = await page.$eval(dm, (e) => { const r = e.getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; });
@@ -451,7 +508,7 @@ ok('hovering a category row shows its photo next to the cursor', await page.eval
 // ---- screenshots for eyeballing
 if (shotDir) {
   await page.setViewportSize({ width: 1440, height: 900 });
-  for (const k of ['home', 'menu', 'p/salmon-costra-almendras', 'pg/planes', 'pg/embajadores', 'carrito', 'cuenta', 'pg/carta-kulinaria', 'pg/ayuda', 'login']) {
+  for (const k of ['home', 'menu', 'p/salmon-costra-almendras', 'pg/planes', 'pg/embajadores', 'carrito', 'cuenta', 'pg/carta-kulinaria', 'pg/ayuda', 'login', 'registro', 'pg/cuenta-pausas', 'pg/nosotros']) {
     await page.goto(`${URL0}#/${k}`); await page.waitForTimeout(400); await scrollThrough(page);
     await page.screenshot({ path: path.join(shotDir, k.replace(/\W+/g, '_') + '.png'), fullPage: true });
   }

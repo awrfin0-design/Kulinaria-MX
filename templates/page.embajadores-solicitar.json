@@ -1,0 +1,88 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Embajadores",
+        "parent_link": "/pages/embajadores",
+        "eyebrow": "Solicitar código",
+        "heading": "Solicita tu código de embajador",
+        "text": "Cuéntanos quién eres y te contactamos para activar tu código."
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "Programa",
+            "link": "/pages/embajadores"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Entrenadores",
+            "link": "/pages/embajadores-entrenadores"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Clientes referidos",
+            "link": "/pages/embajadores-clientes"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Gimnasios aliados",
+            "link": "/pages/embajadores-gimnasios"
+          }
+        },
+        "n4": {
+          "type": "link",
+          "settings": {
+            "label": "Directorio",
+            "link": "/pages/embajadores-directorio"
+          }
+        },
+        "n5": {
+          "type": "link",
+          "settings": {
+            "label": "Reglas de alianza",
+            "link": "/pages/embajadores-reglas"
+          }
+        },
+        "n6": {
+          "type": "link",
+          "settings": {
+            "label": "Solicitar código",
+            "link": "/pages/embajadores-solicitar"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2",
+        "n3",
+        "n4",
+        "n5",
+        "n6"
+      ]
+    },
+    "s1": {
+      "type": "contact-form",
+      "settings": {
+        "kind": "embajador",
+        "eyebrow": "Alta",
+        "heading": "Solicita tu código de embajador",
+        "text": "Cuéntanos quién eres y te contactamos para activar tu código.",
+        "button_label": "Enviar solicitud"
+      }
+    }
+  },
+  "order": [
+    "head",
+    "s1"
+  ]
+}
