@@ -31,3 +31,7 @@ Status: **Theme** = implemented in this repo · **Config** = Shopify admin setti
 3. **Order paid** (first subscription block) → increment referrer's `referrals_paid`, add $150 credit, notify staff at 10 / 20 / 30…; gym counters at 100.
 4. **Scheduled: Saturday 10:01 America/Mexico_City** → call the auto-selection routine (app/webhook).
 5. **Scheduled: daily** → find paused contracts older than 30 days → cancel + zero balance.
+
+
+## Update: data capture and reporting
+The theme's order funnel and sign-up flow write the client profile and the order choices into cart attributes; `backend/` contains the setup script and the Google Sheets receiver that turn them into client profiles and a weekly kitchen report. Still server-side (not in the theme): the Saturday 10:01 automatic order, pause locks beyond the UI, referral payouts and the $0 gift price (Shopify Function / automatic discount).

@@ -13,46 +13,88 @@
         "art": "air-steak"
       }
     },
-    "how": {
-      "type": "feature-grid",
+    "funnel": {
+      "type": "order-funnel",
       "settings": {
-        "eyebrow": "Cómo funciona",
-        "heading": "Tres pasos y tu *semana está resuelta*",
-        "columns": "3",
-        "background": "base",
-        "button_label": "Elegir mi plan",
-        "layout": "rows"
+        "eyebrow": "Haz tu pedido",
+        "heading": "Arma tu pedido en *5 pasos*",
+        "text": "Del enfoque al contrato: elige, guardamos tus datos y listo. La próxima vez es un clic.",
+        "collection": "menu-semanal",
+        "limit": 12
       },
       "blocks": {
-        "s1": {
-          "type": "item",
+        "d0": {
+          "type": "diet",
           "settings": {
-            "title": "Elige tu plan",
-            "text": "<p>Bloques de 4 semanas con entrega semanal. ¿Quieres probar? Compra una sola semana.</p>",
-            "art": "containers"
+            "label": "Keto",
+            "slug": "keto",
+            "text": "Alto en grasas buenas, bajo en carbohidratos.",
+            "art": "dish-5"
           }
         },
-        "s2": {
-          "type": "item",
+        "d1": {
+          "type": "diet",
           "settings": {
-            "title": "Elige tus platillos",
-            "text": "<p>Cada semana, un menú rotativo de 8 a 10 opciones. Confirma antes del sábado a las 10:00 AM o nosotros armamos tu pedido.</p>",
+            "label": "Libre de gluten",
+            "slug": "sin-gluten",
+            "text": "Sin gluten ni trazas, cocinado por separado.",
+            "art": "dish-1"
+          }
+        },
+        "d2": {
+          "type": "diet",
+          "settings": {
+            "label": "Vegetariano",
+            "slug": "vegetariano",
+            "text": "Sin carne, con huevo y lácteos.",
+            "art": "dish-3"
+          }
+        },
+        "d3": {
+          "type": "diet",
+          "settings": {
+            "label": "Vegano",
+            "slug": "vegano",
+            "text": "100% basado en plantas.",
             "art": "dish-6"
           }
         },
-        "s3": {
-          "type": "item",
+        "d4": {
+          "type": "diet",
           "settings": {
-            "title": "Recíbelo en casa",
-            "text": "<p>Entrega a domicilio en envases de vidrio de alta calidad, listos para calentar. Pago 100% digital.</p>",
-            "art": "hero"
+            "label": "Bajas calorías",
+            "slug": "bajo-calorias",
+            "text": "Ligero y saciante, controlado en calorías.",
+            "art": "dish-8"
+          }
+        },
+        "d5": {
+          "type": "diet",
+          "settings": {
+            "label": "Bajos carbohidratos",
+            "slug": "bajo-carbos",
+            "text": "Pocos carbohidratos, más verdura y proteína.",
+            "art": "dish-2"
+          }
+        },
+        "d6": {
+          "type": "diet",
+          "settings": {
+            "label": "Alta proteína",
+            "slug": "alto-proteina",
+            "text": "Proteína de alto rendimiento para entrenar.",
+            "art": "dish-4"
           }
         }
       },
       "block_order": [
-        "s1",
-        "s2",
-        "s3"
+        "d0",
+        "d1",
+        "d2",
+        "d3",
+        "d4",
+        "d5",
+        "d6"
       ]
     },
     "dishes": {
@@ -449,46 +491,60 @@
       "type": "marquee",
       "settings": {
         "label": "Arte del fuego",
-        "speed": 45
+        "speed": 80
       },
       "blocks": {
+        "m0": {
+          "type": "item",
+          "settings": {
+            "text": "Cocina de autor entregada en tu puerta"
+          }
+        },
         "m1": {
           "type": "item",
           "settings": {
-            "text": "Arte del fuego"
+            "text": "Cortes y pescados sellados al fuego"
           }
         },
         "m2": {
           "type": "item",
           "settings": {
-            "text": "Selecto"
+            "text": "Envases de vidrio reutilizables y listos para calentar"
           }
         },
         "m3": {
           "type": "item",
           "settings": {
-            "text": "Exclusivo"
+            "text": "Un menú rotativo cada semana, con tu perfil de alergias al frente"
           }
         },
         "m4": {
           "type": "item",
           "settings": {
-            "text": "Signature"
+            "text": "Pausas flexibles y saldo a favor, sin efectivo"
           }
         },
         "m5": {
           "type": "item",
           "settings": {
-            "text": "Reserve"
+            "text": "Pedidos hasta el sábado a las 10:00 AM"
+          }
+        },
+        "m6": {
+          "type": "item",
+          "settings": {
+            "text": "Ingredientes y alérgenos declarados en cada platillo"
           }
         }
       },
       "block_order": [
+        "m0",
         "m1",
         "m2",
         "m3",
         "m4",
-        "m5"
+        "m5",
+        "m6"
       ]
     },
     "glass": {
@@ -581,7 +637,7 @@
   "order": [
     "hero",
     "marquee",
-    "how",
+    "funnel",
     "dishes",
     "glass",
     "band",

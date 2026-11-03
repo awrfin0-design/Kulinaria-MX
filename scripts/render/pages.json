@@ -168,5 +168,10 @@
   "cuenta-entregas",
   "page.cuenta-entregas",
   "Entregas y envases"
+ ],
+ [
+  "pedido",
+  "page.pedido",
+  "Armar mi pedido"
  ]
 ]

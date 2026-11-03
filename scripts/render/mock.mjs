@@ -14,6 +14,9 @@ const DISHES = [
   ['arrachera-carbon', 'Arrachera al carbón con maíz y espárragos', 'signature', 'al-fuego-y-mar', ['alto-proteina', 'sin-gluten'], [], ['Arrachera', 'Maíz', 'Espárragos', 'Micro hierbas'], 640, 28, 'Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.'],
   ['filete-prime', 'Filete Prime con verduras asadas', 'reserve', 'al-fuego-y-mar', ['keto', 'alto-proteina', 'sin-gluten'], [], ['Res Prime', 'Brócoli', 'Zanahoria', 'Mantequilla'], 710, 16, 'Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin perder su punto.'],
   ['bowl-vegano-garbanzo', 'Bowl vegano de garbanzo y tahini', 'exclusivo', 'bowls-de-la-semana', ['vegano', 'vegetariano', 'sin-gluten'], ['Ajonjolí'], ['Garbanzo', 'Tahini', 'Pepino', 'Cebolla'], 450, 52, 'Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.'],
+  ['crema-calabaza', 'Crema de calabaza asada', 'selecto', 'sopas-y-entradas', ['vegetariano', 'sin-gluten', 'bajo-calorias'], ['Lácteos'], ['Calabaza', 'Crema', 'Semillas de calabaza', 'Tomillo'], 220, 18, 'Calabaza rostizada al fuego, crema ligera y semillas tostadas.'],
+  ['brownie-proteico', 'Brownie proteico con frambuesa', 'exclusivo', 'postres-y-snacks', ['alto-proteina'], ['Huevo', 'Lácteos'], ['Cacao', 'Huevo', 'Frambuesa', 'Proteína'], 260, 14, 'Brownie de cacao oscuro con proteína y frambuesas frescas.'],
+  ['batido-verde', 'Batido verde de pepino y kiwi', 'selecto', 'batidos-y-bebidas', ['vegano', 'vegetariano', 'sin-gluten', 'bajo-calorias'], [], ['Espinaca', 'Pepino', 'Kiwi', 'Limón'], 150, 20, 'Espinaca, pepino, kiwi y limón, listo para llevar.'],
   ['pasta-pollo-junior', 'Mini pasta de pollo para peques', 'selecto', 'kulinaria-junior', [], ['Gluten', 'Lácteos'], ['Pasta', 'Pollo', 'Queso', 'Jitomate'], 380, 44, 'Pasta corta con pollo desmenuzado y salsa suave de jitomate.'],
 ];
 
@@ -42,8 +45,9 @@ function product(o) {
 
 export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
   const IMG = (n, alt) => ({ src: `assets/photo-dish-${n}.webp`, alt });
+  const IMG_OF = { 'pasta-pollo-junior': 7, 'crema-calabaza': 8, 'brownie-proteico': 9, 'batido-verde': 10 };
   const dishes = DISHES.map((d, i) => product({
-    id: 7100 + i, handle: d[0], title: tr(d[1]), price: TIER_PRICE[d[2]], description: `<p>${tr(d[9])}</p>`, type: d[3], plans: true, tr, image: IMG(i, tr(d[1])),
+    id: 7100 + i, handle: d[0], title: tr(d[1]), price: TIER_PRICE[d[2]], description: `<p>${tr(d[9])}</p>`, type: d[3], plans: true, tr, image: IMG(IMG_OF[d[0]] ?? i, tr(d[1])),
     mf: { tier: d[2], category: d[3], diets: d[4], allergens: d[5], ingredients: d[6], calories: d[7], carbs: d[8] },
   }));
   const bloque = product({ id: 7200, handle: 'bloque-4-semanas', title: tr('Bloque Kulinaria · 4 semanas'), price: 64000, requires_selling_plan: true, plans: true, tr,
@@ -75,7 +79,7 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
   const sub = (...hs) => hs.map((h) => [pages[h].title, '/pages/' + h]).map(([t, u]) => [Object.keys(pages).find((k) => '/pages/' + k === u) && PAGE_LIST.find(([k]) => '/pages/' + k === u)[2], u]);
   const linklists = {
     'main-menu': { handle: 'main-menu', links: [
-      link('Menú semanal', '/collections/menu-semanal'),
+      link('Menú semanal', '/collections/menu-semanal', [['Armar mi pedido', '/pages/pedido'], ['Mi perfil de alergias', '/pages/perfil']]),
       link('Planes', '/pages/planes', sub('plan-bloque', 'plan-prueba', 'niveles-y-precios', 'ciclo-y-politicas')),
       link('Registro y checkout', '/account/register', [['Crear cuenta', '/account/register'], ...sub('checkout', 'confirmacion'), ['Iniciar sesión', '/account/login']]),
       link('Mi cuenta', '/account', [...sub('cuenta-semana', 'cuenta-pausas', 'cuenta-monedero', 'cuenta-perfil', 'cuenta-referidos', 'cuenta-pedidos', 'cuenta-entregas'), ['Direcciones', '/account/addresses']]),

@@ -211,7 +211,7 @@ export async function renderSite() {
 
   // ---- link rewriting (Shopify URLs -> SPA hash routes)
   const urlMap = Object.fromEntries(routes.map((r) => [r.url, '#/' + r.key]));
-  Object.assign(urlMap, { '/account/logout': '#/home', '/collections': '#/menu', '/localization': '#/home' });
+  Object.assign(urlMap, { '/account/logout': '#/home', '/collections': '#/menu', '/localization': '#/home', '/collections/regalos-de-bienvenida': '#/tienda' });
   const dead = [];
   const mapUrl = (v, from) => {
     if (/^(#|https?:|tel:|mailto:|javascript:|data:|assets\/)/.test(v) || v === '') return v;

@@ -1,0 +1,209 @@
+[
+ {
+  "title": "Menú semanal",
+  "url": "/collections/menu-semanal",
+  "links": [
+   {
+    "title": "Armar mi pedido",
+    "url": "/pages/pedido"
+   },
+   {
+    "title": "Mi perfil de alergias",
+    "url": "/pages/perfil"
+   }
+  ]
+ },
+ {
+  "title": "Planes",
+  "url": "/pages/planes",
+  "links": [
+   {
+    "title": "Bloque de 4 semanas",
+    "url": "/pages/plan-bloque"
+   },
+   {
+    "title": "Semana de prueba",
+    "url": "/pages/plan-prueba"
+   },
+   {
+    "title": "Niveles y precios",
+    "url": "/pages/niveles-y-precios"
+   },
+   {
+    "title": "Ciclo y políticas",
+    "url": "/pages/ciclo-y-politicas"
+   }
+  ]
+ },
+ {
+  "title": "Registro y checkout",
+  "url": "/account/register",
+  "links": [
+   {
+    "title": "Crear cuenta",
+    "url": "/account/register"
+   },
+   {
+    "title": "Iniciar sesión",
+    "url": "/account/login"
+   },
+   {
+    "title": "Checkout y contrato",
+    "url": "/pages/checkout"
+   },
+   {
+    "title": "Confirmación",
+    "url": "/pages/confirmacion"
+   },
+   {
+    "title": "Mi selección",
+    "url": "/cart"
+   }
+  ]
+ },
+ {
+  "title": "Mi cuenta",
+  "url": "/account",
+  "links": [
+   {
+    "title": "Mi semana",
+    "url": "/pages/cuenta-semana"
+   },
+   {
+    "title": "Pausar entregas",
+    "url": "/pages/cuenta-pausas"
+   },
+   {
+    "title": "Monedero",
+    "url": "/pages/cuenta-monedero"
+   },
+   {
+    "title": "Alergias y gustos",
+    "url": "/pages/cuenta-perfil"
+   },
+   {
+    "title": "Mis referidos",
+    "url": "/pages/cuenta-referidos"
+   },
+   {
+    "title": "Pedidos y facturas",
+    "url": "/pages/cuenta-pedidos"
+   },
+   {
+    "title": "Entregas y envases",
+    "url": "/pages/cuenta-entregas"
+   },
+   {
+    "title": "Direcciones",
+    "url": "/account/addresses"
+   }
+  ]
+ },
+ {
+  "title": "Embajadores",
+  "url": "/pages/embajadores",
+  "links": [
+   {
+    "title": "Entrenadores",
+    "url": "/pages/embajadores-entrenadores"
+   },
+   {
+    "title": "Clientes referidos",
+    "url": "/pages/embajadores-clientes"
+   },
+   {
+    "title": "Gimnasios aliados",
+    "url": "/pages/embajadores-gimnasios"
+   },
+   {
+    "title": "Directorio",
+    "url": "/pages/embajadores-directorio"
+   },
+   {
+    "title": "Reglas de alianza",
+    "url": "/pages/embajadores-reglas"
+   },
+   {
+    "title": "Solicitar código",
+    "url": "/pages/embajadores-solicitar"
+   }
+  ]
+ },
+ {
+  "title": "Carta Kulinaria",
+  "url": "/pages/carta-kulinaria",
+  "links": [
+   {
+    "title": "Chef privado",
+    "url": "/pages/carta-chef-privado"
+   },
+   {
+    "title": "Cenas románticas",
+    "url": "/pages/carta-cenas-romanticas"
+   },
+   {
+    "title": "Galería de eventos",
+    "url": "/pages/carta-galeria"
+   },
+   {
+    "title": "Cotización privada",
+    "url": "/pages/carta-cotizacion"
+   }
+  ]
+ },
+ {
+  "title": "Kulinaria Store",
+  "url": "/collections/kulinaria-store",
+  "links": [
+   {
+    "title": "Catálogo Fit Apparel",
+    "url": "/collections/kulinaria-store"
+   },
+   {
+    "title": "Regalos de bienvenida",
+    "url": "/collections/regalos-de-bienvenida"
+   }
+  ]
+ },
+ {
+  "title": "Nosotros",
+  "url": "/pages/nosotros",
+  "links": [
+   {
+    "title": "Historia y fundador",
+    "url": "/pages/nosotros-historia"
+   },
+   {
+    "title": "Equipo de cocina",
+    "url": "/pages/nosotros-equipo"
+   },
+   {
+    "title": "Calidad y envases",
+    "url": "/pages/nosotros-calidad"
+   }
+  ]
+ },
+ {
+  "title": "Filosofía",
+  "url": "/pages/filosofia",
+  "links": []
+ },
+ {
+  "title": "Ayuda y legales",
+  "url": "/pages/ayuda",
+  "links": [
+   {
+    "title": "Contrato y términos",
+    "url": "/pages/terminos"
+   },
+   {
+    "title": "Aviso de privacidad",
+    "url": "/pages/privacidad"
+   },
+   {
+    "title": "Mi perfil de alergias",
+    "url": "/pages/perfil"
+   }
+  ]
+ }
+]

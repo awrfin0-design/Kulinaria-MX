@@ -16,7 +16,11 @@
 
     <div class="menu-overlay__body">
       <nav class="sitemap" aria-label="{{ 'nav.overlay_title' | t }}">
+        {%- assign nested = false -%}
         {%- if menu != blank -%}
+          {%- for link in menu.links -%}{%- if link.links.size > 0 -%}{%- assign nested = true -%}{%- endif -%}{%- endfor -%}
+        {%- endif -%}
+        {%- if nested -%}
           {%- for link in menu.links -%}
             <div class="sitemap__group" style="--i:{{ forloop.index0 }}">
               <a class="sitemap__top" href="{{ link.url }}"><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{{ link.title }}</a>
@@ -27,6 +31,8 @@
               {%- endif -%}
             </div>
           {%- endfor -%}
+        {%- else -%}
+          {% render 'sitemap-default' %}
         {%- endif -%}
       </nav>
 
@@ -46,7 +52,7 @@
 {
   "name": "Menú (mapa del sitio)",
   "settings": [
-    { "type": "link_list", "id": "menu", "label": "Menú con submenús", "info": "Los enlaces de primer nivel son los títulos; los submenús aparecen debajo.", "default": "main-menu" }
+    { "type": "link_list", "id": "menu", "label": "Menú con submenús", "info": "Opcional: si el menú tiene submenús se usa tal cual; si no, el tema muestra el mapa del sitio completo.", "default": "main-menu" }
   ]
 }
 {% endschema %}

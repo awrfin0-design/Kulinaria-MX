@@ -12,6 +12,7 @@ sections/    33 sections (header, sitemap menu, hero, page-head, showcase, scrol
 snippets/    icon, logo, photo, term, lang-switcher, theme-toggle, dish-card, tier-badge, selling-plan-picker, social-links
 templates/   JSON templates for every page in the approved sitemap
 docs/        subscriptions.md · backend-requirements.md · metafields.md · i18n.md · media.md
+backend/     Shopify setup script + Google Sheets receiver for client profiles and orders (see backend/README.md)
 preview/     index.html — standalone preview (ES + EN, light + dark), generated from the real Liquid templates (31 pages)
 scripts/render/  Liquid render harness + end-to-end tests (see below)
 ```
@@ -80,6 +81,21 @@ One motif on every page: an airy photo, a serif headline with a brand-script phr
 **Header** is `position: fixed` and never changes size or shifts the page; it only fades in a glass background and shrinks its own logo. The announcement lives inside it and collapses on scroll. The burger opens the full sitemap built from the nested `main-menu`.
 
 Also: loading screen, gold/olive dust on the background, scroll-scrubbed fire band, fire inside buttons, 3D tilt on dish cards and photos, coverflow carousel, category photo preview, 5-step sign-up, editorial `rows` / `grid` / `index` layouts.
+
+## Order funnel (home and `/pages/pedido`)
+
+`sections/order-funnel.liquid` replaces the old "how it works" cards. Five steps, one live summary:
+1. **Focus** (diet): whole menu, Keto, gluten-free, vegetarian, vegan, low-calorie, low-carb, high-protein. Choosing one filters the week's dishes.
+2. **Dishes** of that focus: add, set quantities. Dishes that contain a declared allergen are blocked.
+3. **Plan**: 4-week block (recommended) or trial week (+15%), optional referral code.
+4. **Categories**: browse any other category (breakfasts, fire & sea, bowls, soups, desserts, drinks) and add to the same order.
+5. **Your details**: name, e-mail, phone, address, allergies, dislikes. Saved on the device, so the next visit is one click.
+
+On confirm, the details become **cart attributes** (they appear on the order as *Additional details*) and the dishes go in the cart (with the selling plan for blocks); the client continues to contract and payment. The sitemap menu always shows every page: if Shopify Navigation has no nested `main-menu`, the theme falls back to the complete built-in sitemap (`snippets/sitemap-default.liquid`).
+
+## Client profiles and the order spreadsheet
+
+See [`backend/README.md`](backend/README.md): `backend/shopify/setup.mjs` creates the metafields, collections, pages, nested menu and webhooks; `backend/google-sheets/Code.gs` keeps **Clientes / Pedidos / Platillos / Semana** in a Google Sheet (downloadable as Excel). These need to be run against the live store.
 
 ## Languages (i18n)
 

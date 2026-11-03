@@ -1,0 +1,162 @@
+{%- liquid
+  assign coll = section.settings.collection
+  assign trial_pct = settings.trial_markup | default: 15
+-%}
+<section class="section funnel" id="pedido-{{ section.id }}" data-funnel data-cart-url="{{ routes.cart_url }}" data-trial-pct="{{ trial_pct }}"
+  data-t-dishes="{{ 'funnel.summary_dishes' | t }}" data-t-dish-one="{{ 'funnel.summary_dish_one' | t }}" data-t-empty="{{ 'funnel.summary_empty' | t }}"
+  data-t-trial="{{ 'funnel.trial_note' | t }}" data-t-need-dish="{{ 'funnel.need_dish' | t }}" data-t-need-info="{{ 'funnel.need_info' | t }}"
+  data-t-add="{{ 'funnel.add' | t }}" data-t-in-order="{{ 'funnel.in_order' | t }}" data-t-remembered="{{ 'funnel.remembered' | t }}" data-t-saved="{{ 'funnel.saved' | t }}"
+  data-t-all="{{ 'funnel.all_diets' | t }}" data-t-block="{{ 'plans.block_name' | t }}" data-t-trial-name="{{ 'plans.trial_name' | t }}" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="section__head">
+      <span class="eyebrow">{{ section.settings.eyebrow }}</span>
+      <h2>{% render 'headline', text: section.settings.heading %}</h2>
+      {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+
+    <div class="funnel__layout">
+      <div class="funnel__main">
+        <ol class="steps__nav" aria-label="{{ 'funnel.steps' | t }}">
+          <li data-fn-dot class="is-on"><span>01</span>{{ 'funnel.s1' | t }}</li>
+          <li data-fn-dot><span>02</span>{{ 'funnel.s2' | t }}</li>
+          <li data-fn-dot><span>03</span>{{ 'funnel.s3' | t }}</li>
+          <li data-fn-dot><span>04</span>{{ 'funnel.s4' | t }}</li>
+          <li data-fn-dot><span>05</span>{{ 'funnel.s5' | t }}</li>
+        </ol>
+        <div class="steps__bar" aria-hidden="true"><i data-fn-bar></i></div>
+
+        <fieldset class="step is-on" data-fn-step="1">
+          <legend>{{ 'funnel.s1_title' | t }}</legend>
+          <p class="text-muted">{{ 'funnel.s1_text' | t }}</p>
+          <div class="fn-diets" role="radiogroup" aria-label="{{ 'funnel.s1_title' | t }}">
+            <button class="fn-diet" type="button" role="radio" data-diet="all" aria-checked="true">
+              <span class="fn-diet__img">{% render 'photo', art: 'containers', alt: '' %}</span>
+              <strong>{{ 'funnel.all_diets' | t }}</strong><small>{{ 'funnel.all_diets_text' | t }}</small>
+            </button>
+            {%- for block in section.blocks -%}
+              <button class="fn-diet" type="button" role="radio" data-diet="{{ block.settings.slug }}" aria-checked="false" {{ block.shopify_attributes }}>
+                <span class="fn-diet__img">{% render 'photo', art: block.settings.art, alt: '' %}</span>
+                <strong>{{ block.settings.label }}</strong>{%- if block.settings.text != blank -%}<small>{{ block.settings.text }}</small>{%- endif -%}
+              </button>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+
+        <fieldset class="step" data-fn-step="2">
+          <legend>{{ 'funnel.s2_title' | t }}</legend>
+          <p class="text-muted">{{ 'funnel.s2_text' | t }}</p>
+          <div class="fn-dishes" data-fn-grid="diet">
+            {%- for product in coll.products limit: section.settings.limit -%}{% render 'funnel-dish', product: product %}{%- endfor -%}
+          </div>
+          <p class="alert" data-fn-empty hidden>{{ 'funnel.s2_empty' | t }}</p>
+        </fieldset>
+
+        <fieldset class="step" data-fn-step="3">
+          <legend>{{ 'funnel.s3_title' | t }}</legend>
+          <p class="text-muted">{{ 'funnel.s3_text' | t }}</p>
+          <div class="fn-plans" role="radiogroup" aria-label="{{ 'funnel.s3_title' | t }}">
+            <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
+              <span class="plan-card__flag">{{ 'plans.recommended' | t }}</span>
+              <strong>{{ 'plans.block_name' | t }}</strong><small>{{ 'plans.block_short' | t }}</small>
+            </button>
+            <button class="fn-plan" type="button" role="radio" data-plan-choice="trial" aria-checked="false">
+              <strong>{{ 'plans.trial_name' | t }}</strong><small>{{ 'plans.trial_short' | t }}</small>
+            </button>
+          </div>
+          <div class="field" style="margin-top:var(--space-xl);max-width:360px">
+            <label for="fn-ref-{{ section.id }}">{{ 'form.referral_optional' | t }}</label>
+            <input class="input" id="fn-ref-{{ section.id }}" data-fn-ref data-ref-save placeholder="JUANFIT" autocomplete="off" style="text-transform:uppercase">
+          </div>
+        </fieldset>
+
+        <fieldset class="step" data-fn-step="4">
+          <legend>{{ 'funnel.s4_title' | t }}</legend>
+          <p class="text-muted">{{ 'funnel.s4_text' | t }}</p>
+          <div class="chips fn-cats" role="group" aria-label="{{ 'collection.category' | t }}">
+            <button class="chip" type="button" data-cat="all" aria-pressed="true">{{ 'funnel.all_categories' | t }}</button>
+            {%- assign cats = 'desayunos-premium,al-fuego-y-mar,bowls-de-la-semana,diario-premium,kulinaria-junior,sopas-y-entradas,postres-y-snacks,batidos-y-bebidas' | split: ',' -%}
+            {%- for c in cats -%}{%- assign ck = 'category.' | append: c -%}
+              <button class="chip" type="button" data-cat="{{ c }}" aria-pressed="false">{{ ck | t }}</button>
+            {%- endfor -%}
+          </div>
+          <div class="fn-dishes" data-fn-grid="cat">
+            {%- for product in coll.products limit: section.settings.limit -%}{% render 'funnel-dish', product: product %}{%- endfor -%}
+          </div>
+          <p class="alert" data-fn-empty-cat hidden>{{ 'collection.no_match' | t }}</p>
+        </fieldset>
+
+        <fieldset class="step" data-fn-step="5">
+          <legend>{{ 'funnel.s5_title' | t }}</legend>
+          <p class="text-muted">{{ 'funnel.s5_text' | t }}</p>
+          <div class="form-grid">
+            <div class="field"><label for="fn-name-{{ section.id }}">{{ 'form.full_name' | t }}</label><input class="input" id="fn-name-{{ section.id }}" data-info="name" autocomplete="name"></div>
+            <div class="field"><label for="fn-email-{{ section.id }}">{{ 'form.email' | t }}</label><input class="input" id="fn-email-{{ section.id }}" type="email" data-info="email" autocomplete="email"></div>
+            <div class="field"><label for="fn-phone-{{ section.id }}">{{ 'form.phone_whatsapp' | t }}</label><input class="input" id="fn-phone-{{ section.id }}" type="tel" data-info="phone" autocomplete="tel"></div>
+            <div class="field"><label for="fn-zip-{{ section.id }}">{{ 'addr.zip' | t }}</label><input class="input" id="fn-zip-{{ section.id }}" data-info="zip" autocomplete="postal-code"></div>
+          </div>
+          <div class="field"><label for="fn-street-{{ section.id }}">{{ 'addr.street' | t }}</label><input class="input" id="fn-street-{{ section.id }}" data-info="street" autocomplete="address-line1"></div>
+          <div class="field"><label for="fn-cluster-{{ section.id }}">{{ 'addr.cluster' | t }}</label><input class="input" id="fn-cluster-{{ section.id }}" data-info="cluster"></div>
+          <p class="label" style="margin-top:var(--space-lg)">{{ 'profile.block1' | t }}</p>
+          <div class="check-grid">
+            {%- assign allergy_list = 'Gluten,Lácteos,Frutos secos,Mariscos' | split: ',' -%}
+            {%- for a in allergy_list -%}
+              {%- assign ah = a | handleize -%}{%- assign ak = 'allergen.' | append: ah -%}
+              <label class="check"><input type="checkbox" data-allergy value="{{ a }}"> <span>{{ ak | t }}</span></label>
+            {%- endfor -%}
+          </div>
+          <div class="field"><label for="fn-other-{{ section.id }}">{{ 'profile.other_allergies' | t }}</label><input class="input" id="fn-other-{{ section.id }}" data-info="allergy_other" placeholder="{{ 'profile.other_placeholder' | t }}"></div>
+          <div class="field"><label for="fn-dis-{{ section.id }}">{{ 'profile.block2' | t }}</label><input class="input" id="fn-dis-{{ section.id }}" data-info="dislikes" placeholder="{{ 'profile.tag_placeholder' | t }}"></div>
+          <p class="alert alert--ok" data-fn-remembered hidden role="status"></p>
+        </fieldset>
+
+        <p class="alert alert--warn" data-fn-error hidden role="alert"></p>
+        <div class="steps__actions fn-actions">
+          <button class="text-link" type="button" data-fn-prev hidden>{{ 'funnel.back' | t }}</button>
+          <button class="btn btn--gold" type="button" data-fn-next disabled>{{ 'funnel.next' | t }}</button>
+          <a class="btn btn--gold" data-fn-finish href="{{ routes.cart_url }}" hidden>{{ 'funnel.finish' | t }}</a>
+        </div>
+      </div>
+
+      <aside class="funnel__aside" aria-live="polite">
+        <h3>{{ 'funnel.your_order' | t }}</h3>
+        <dl class="funnel__facts">
+          <div><dt>{{ 'funnel.summary_focus' | t }}</dt><dd data-fn-s-focus>{{ 'funnel.all_diets' | t }}</dd></div>
+          <div><dt>{{ 'funnel.summary_plan' | t }}</dt><dd data-fn-s-plan>{{ 'plans.block_name' | t }}</dd></div>
+        </dl>
+        <ul class="funnel__list" data-fn-s-list></ul>
+        <p class="text-muted" data-fn-s-empty>{{ 'funnel.summary_empty' | t }}</p>
+        <div class="funnel__total"><span>{{ 'funnel.summary_total' | t }}</span><strong data-fn-s-total>$0</strong></div>
+        <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
+        <button class="text-link" type="button" data-fn-reset>{{ 'funnel.reset' | t }}</button>
+      </aside>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Embudo de pedido",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Haz tu pedido" },
+    { "type": "text", "id": "heading", "label": "Título (usa *asteriscos* para la parte en cursiva)", "default": "Arma tu pedido en *5 pasos*" },
+    { "type": "textarea", "id": "text", "label": "Texto" },
+    { "type": "collection", "id": "collection", "label": "Colección del menú de la semana" },
+    { "type": "range", "id": "limit", "label": "Máximo de platillos", "min": 4, "max": 20, "step": 1, "default": 12 }
+  ],
+  "blocks": [
+    {
+      "type": "diet",
+      "name": "Enfoque (dieta)",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Nombre", "default": "Keto" },
+        { "type": "text", "id": "slug", "label": "Código (metacampo diets)", "default": "keto" },
+        { "type": "text", "id": "text", "label": "Descripción corta" },
+        { "type": "select", "id": "art", "label": "Foto del tema", "default": "dish-0", "options": [
+          { "value": "dish-0", "label": "Platillo 1" }, { "value": "dish-1", "label": "Platillo 2" }, { "value": "dish-2", "label": "Platillo 3" }, { "value": "dish-3", "label": "Platillo 4" },
+          { "value": "dish-4", "label": "Platillo 5" }, { "value": "dish-5", "label": "Platillo 6" }, { "value": "dish-6", "label": "Platillo 7" }, { "value": "dish-7", "label": "Platillo 8" } ] }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Embudo de pedido" }]
+}
+{% endschema %}

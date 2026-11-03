@@ -1,0 +1,47 @@
+{%- comment -%}
+  Dish tile used inside the order funnel (steps 2 and 4). Same data attributes as dish-card so allergy blocking applies.
+  Param: product
+{%- endcomment -%}
+{%- liquid
+  assign mf = product.metafields.kulinaria
+  assign tier = mf.tier.value | default: 'selecto'
+  assign category = mf.category.value | default: product.type | handleize
+  assign allergens = mf.allergens.value | join: '|'
+  assign ingredients = mf.ingredients.value | join: '|'
+  assign diets = mf.diets.value | join: '|'
+  assign variant = product.selected_or_first_available_variant
+  assign plan_id = ''
+  if product.selling_plan_groups.size > 0
+    assign group = product.selling_plan_groups | first
+    assign first_plan = group.selling_plans | first
+    assign plan_id = first_plan.id
+  endif
+-%}
+<article class="fn-dish" data-dish data-fn-dish data-pid="{{ product.id }}" data-variant="{{ variant.id }}" data-plan="{{ plan_id }}" data-price="{{ product.price }}"
+  data-title="{{ product.title | escape }}" data-category="{{ category }}" data-tier="{{ tier }}" data-diets="{{ diets }}" data-allergens="{{ allergens | escape }}" data-ingredients="{{ ingredients | escape }}">
+  <div class="fn-dish__media">
+    {%- if product.featured_image -%}
+      {{ product.featured_image | image_url: width: 480 | image_tag: loading: 'lazy', widths: '240, 360, 480', sizes: '(min-width: 1100px) 22vw, 46vw', alt: product.title }}
+    {%- else -%}
+      <span class="dish__ph" aria-hidden="true">{% render 'logo', mark: true %}</span>
+    {%- endif -%}
+    <div class="dish__blocked" role="note"><div><strong>{{ 'dish.blocked_title' | t }}</strong>{{ 'dish.blocked_text' | t }}</div></div>
+  </div>
+  <div class="fn-dish__body">
+    {% render 'tier-badge', tier: tier %}
+    <h3 class="fn-dish__title">{{ product.title }}</h3>
+    {%- if mf.calories.value or mf.carbs.value -%}
+      <p class="dish__facts">{%- if mf.calories.value %}{{ mf.calories.value }} kcal{% endif -%}{%- if mf.calories.value and mf.carbs.value %} · {% endif -%}{%- if mf.carbs.value %}{{ mf.carbs.value }} {{ 'dish.carbs_g' | t }}{% endif -%}</p>
+    {%- endif -%}
+    <span class="compat" data-compat></span>
+    <div class="fn-dish__row">
+      <span class="dish__price">{{ product.price | money_without_trailing_zeros }}</span>
+      <div class="fn-qty" data-fn-qty hidden>
+        <button type="button" data-q-minus aria-label="{{ 'funnel.remove' | t }}">−</button>
+        <output data-q-out>1</output>
+        <button type="button" data-q-plus aria-label="{{ 'funnel.add' | t }}">+</button>
+      </div>
+      <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>{{ 'funnel.add' | t }}</button>
+    </div>
+  </div>
+</article>

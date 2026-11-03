@@ -509,6 +509,155 @@
     });
   }
 
+
+  /* ---------- order funnel: diet -> dishes -> plan -> categories -> your details ----------
+     State lives in localStorage (kulinaria_funnel) so a returning visitor finds the same selection and details.
+     On finish it writes the profile + cart attributes (these become order "additional details" and feed the spreadsheet)
+     and adds the chosen dishes to the cart. */
+  var FUNNEL_KEY = 'kulinaria_funnel';
+  function initFunnel() {
+    $$('[data-funnel]').forEach(function (holder) {
+      var st = { diet: 'all', cat: 'all', plan: 'block', qty: {}, info: {}, allergies: [], step: 0, remembered: false };
+      try { var saved = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (saved) { st = Object.assign(st, saved); st.remembered = !!(saved.info && (saved.info.name || saved.info.email)); } } catch (e) {}
+      var T_ = function (k) { return holder.getAttribute('data-t-' + k) || ''; };
+      var steps = $$('[data-fn-step]', holder), dots = $$('[data-fn-dot]', holder), bar = $('[data-fn-bar]', holder);
+      var next = $('[data-fn-next]', holder), prev = $('[data-fn-prev]', holder), finish = $('[data-fn-finish]', holder), err = $('[data-fn-error]', holder);
+      var dishes = $$('[data-fn-dish]', holder);
+      var money = function (cents) {
+        try { return new Intl.NumberFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(cents / 100); } catch (e) { return '$' + Math.round(cents / 100); }
+      };
+      var info = function (el) { return { id: el.getAttribute('data-pid'), title: el.getAttribute('data-title'), price: +el.getAttribute('data-price'), variant: el.getAttribute('data-variant'), plan: el.getAttribute('data-plan') }; };
+      var total = function () { var t = 0; dishes.forEach(function (d, i) { if (dishes.findIndex(function (x) { return x.getAttribute('data-pid') === d.getAttribute('data-pid'); }) !== i) return; t += (st.qty[d.getAttribute('data-pid')] || 0) * info(d).price; }); return t; };
+      var count = function () { var n = 0; Object.keys(st.qty).forEach(function (k) { n += st.qty[k]; }); return n; };
+      var persist = function () { try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(st)); } catch (e) {} };
+      var say = function (msg) { if (!err) return; err.hidden = !msg; err.textContent = msg || ''; };
+
+      var valid = function (n) {
+        if (n === 1) return count() > 0;
+        if (n === 4) return true;
+        return true;
+      };
+
+      var render = function () {
+        $$('[data-diet]', holder).forEach(function (b) { b.setAttribute('aria-checked', b.getAttribute('data-diet') === st.diet ? 'true' : 'false'); });
+        $$('[data-plan-choice]', holder).forEach(function (b) { b.setAttribute('aria-checked', b.getAttribute('data-plan-choice') === st.plan ? 'true' : 'false'); });
+        $$('[data-cat]', holder).forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-cat') === st.cat ? 'true' : 'false'); });
+        var shownD = 0, shownC = 0;
+        dishes.forEach(function (d) {
+          var grid = d.closest('[data-fn-grid]').getAttribute('data-fn-grid');
+          var show = grid === 'diet'
+            ? (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1)
+            : (st.cat === 'all' || d.getAttribute('data-category') === st.cat);
+          d.classList.toggle('is-hidden', !show);
+          if (show) { if (grid === 'diet') shownD++; else shownC++; }
+          var q = st.qty[d.getAttribute('data-pid')] || 0;
+          d.classList.toggle('is-picked', q > 0);
+          var ctl = $('[data-fn-qty]', d), out = $('[data-q-out]', d), pick = $('[data-pick]', d);
+          if (ctl) ctl.hidden = q === 0; if (out) out.textContent = q;
+          if (pick) { pick.hidden = q > 0; }
+        });
+        var e1 = $('[data-fn-empty]', holder); if (e1) e1.hidden = shownD > 0;
+        var e2 = $('[data-fn-empty-cat]', holder); if (e2) e2.hidden = shownC > 0;
+        // summary
+        var dietBtn = $('[data-diet="' + st.diet + '"] strong', holder);
+        var sf = $('[data-fn-s-focus]', holder); if (sf) sf.textContent = dietBtn ? dietBtn.textContent : T_('all');
+        var sp = $('[data-fn-s-plan]', holder); if (sp) sp.textContent = st.plan === 'trial' ? T_('trial-name') : T_('block');
+        var list = $('[data-fn-s-list]', holder); if (list) {
+          list.innerHTML = '';
+          var seen = {};
+          dishes.forEach(function (d) {
+            var id = d.getAttribute('data-pid'); if (seen[id] || !st.qty[id]) return; seen[id] = 1;
+            var li = document.createElement('li'); var i = info(d);
+            li.innerHTML = '<span></span><b></b>'; li.firstChild.textContent = st.qty[id] + ' × ' + i.title; li.lastChild.textContent = money(i.price * st.qty[id]);
+            list.appendChild(li);
+          });
+        }
+        var n = count(), emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
+        var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? (n === 1 ? T_('dish-one') : T_('dishes').replace('{n}', n)) + (st.plan === 'trial' ? ' · ' + T_('trial') : '') : '';
+        var tot = $('[data-fn-s-total]', holder); if (tot) tot.textContent = money(Math.round(total() * (st.plan === 'trial' ? 1 + (+holder.getAttribute('data-trial-pct') || 15) / 100 : 1)));
+        // stepper
+        steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
+        dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); });
+        if (bar) bar.style.transform = 'scaleX(' + ((st.step + 1) / steps.length) + ')';
+        var last = st.step === steps.length - 1;
+        if (prev) prev.hidden = st.step === 0;
+        if (next) { next.hidden = last; next.disabled = (st.step === 1 && count() === 0); }
+        if (finish) finish.hidden = !last;
+        var rem = $('[data-fn-remembered]', holder); if (rem) { rem.hidden = !(st.remembered && st.step === 4); rem.textContent = T_('remembered'); }
+      };
+
+      var go = function (n) {
+        n = Math.max(0, Math.min(steps.length - 1, n)); st.step = n; say(''); persist(); render();
+        var top = holder.getBoundingClientRect().top + window.scrollY - 120; if (window.scrollY > top) window.scrollTo({ top: top, behavior: REDUCE ? 'auto' : 'smooth' });
+      };
+
+      // choices
+      $$('[data-diet]', holder).forEach(function (b) { b.addEventListener('click', function () { st.diet = b.getAttribute('data-diet'); persist(); render(); setTimeout(function () { go(1); }, REDUCE ? 0 : 280); }); });
+      $$('[data-plan-choice]', holder).forEach(function (b) { b.addEventListener('click', function () { st.plan = b.getAttribute('data-plan-choice'); persist(); render(); }); });
+      $$('[data-cat]', holder).forEach(function (b) { b.addEventListener('click', function () { st.cat = b.getAttribute('data-cat'); persist(); render(); }); });
+      holder.addEventListener('click', function (e) {
+        var d = e.target.closest ? e.target.closest('[data-fn-dish]') : null; if (!d) return;
+        var id = d.getAttribute('data-pid'), cur = st.qty[id] || 0;
+        if (e.target.closest('[data-pick]')) { if (d.classList.contains('is-blocked')) return; st.qty[id] = 1; }
+        else if (e.target.closest('[data-q-plus]')) st.qty[id] = Math.min(20, cur + 1);
+        else if (e.target.closest('[data-q-minus]')) { if (cur <= 1) delete st.qty[id]; else st.qty[id] = cur - 1; }
+        else return;
+        say(''); persist(); render();
+      });
+      var reset = $('[data-fn-reset]', holder);
+      if (reset) reset.addEventListener('click', function () { st.qty = {}; st.diet = 'all'; st.cat = 'all'; st.plan = 'block'; st.step = 0; persist(); render(); });
+
+      // details
+      var fields = $$('[data-info]', holder), checks = $$('[data-allergy]', holder), ref = $('[data-fn-ref]', holder);
+      fields.forEach(function (f) { f.value = (st.info && st.info[f.getAttribute('data-info')]) || ''; f.addEventListener('input', function () { st.info = st.info || {}; st.info[f.getAttribute('data-info')] = f.value; persist(); }); });
+      checks.forEach(function (c) { c.checked = (st.allergies || []).map(norm).indexOf(norm(c.value)) > -1; c.addEventListener('change', function () { st.allergies = checks.filter(function (x) { return x.checked; }).map(function (x) { return x.value; }); persist(); }); });
+      if (ref) { var rs = ''; try { rs = localStorage.getItem('kulinaria_ref') || ''; } catch (e) {} if (rs) ref.value = rs; }
+
+      if (next) next.addEventListener('click', function () {
+        if (st.step === 1 && count() === 0) { say(T_('need-dish')); return; }
+        go(st.step + 1);
+      });
+      if (prev) prev.addEventListener('click', function () { go(st.step - 1); });
+      dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k < st.step || (k > st.step && (k === 0 || count() > 0 || k <= 1))) go(k); }); });
+
+      // finish: save profile + attributes, put the dishes in the cart, continue to the cart (contract + payment)
+      if (finish) finish.addEventListener('click', function (e) {
+        e.preventDefault();
+        var i = st.info || {};
+        if (!i.name || !i.email || !i.phone) { say(T_('need-info')); return; }
+        if (count() === 0) { say(T_('need-dish')); go(1); return; }
+        var p = loadProfile();
+        var other = (i.allergy_other || '').split(',').map(function (v) { return v.trim(); }).filter(Boolean);
+        p.allergies = Array.from(new Set((st.allergies || []).concat(other)));
+        p.dislikes = (i.dislikes || '').split(',').map(function (v) { return v.trim(); }).filter(Boolean);
+        p.diets = st.diet === 'all' ? [] : [st.diet];
+        try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch (x) {}
+        var attrs = {
+          nombre: i.name, correo: i.email, telefono: i.phone, direccion: [i.street, i.cluster, i.zip].filter(Boolean).join(', '),
+          alergias: p.allergies.join(', '), no_me_gustan: p.dislikes.join(', '), dietas: p.diets.join(', '), enfoque: st.diet, plan: st.plan,
+          codigo_referencia: (ref && ref.value) || '', pedido_embudo: dishes.filter(function (d, ix) { return dishes.findIndex(function (z) { return z.getAttribute('data-pid') === d.getAttribute('data-pid'); }) === ix && st.qty[d.getAttribute('data-pid')]; })
+            .map(function (d) { return st.qty[d.getAttribute('data-pid')] + 'x ' + d.getAttribute('data-title'); }).join(' | ')
+        };
+        if (ref && ref.value) { try { localStorage.setItem('kulinaria_ref', ref.value); } catch (x) {} }
+        var items = [];
+        dishes.forEach(function (d, ix) {
+          var id = d.getAttribute('data-pid'); if (!st.qty[id] || dishes.findIndex(function (z) { return z.getAttribute('data-pid') === id; }) !== ix) return;
+          var it = { id: parseInt(d.getAttribute('data-variant'), 10), quantity: st.qty[id] };
+          if (st.plan === 'block' && d.getAttribute('data-plan')) it.selling_plan = parseInt(d.getAttribute('data-plan'), 10);
+          items.push(it);
+        });
+        st.remembered = true; persist();
+        var go2 = function () { window.location.href = finish.getAttribute('href'); };
+        fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ attributes: attrs }) })
+          .then(function () { return fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: items }) }); })
+          .then(go2, go2);
+      });
+
+      applyProfile();
+      render();
+    });
+  }
+
   /* =====================================================================
      Experience layer: theme, loader, particles, menu, video, tilt, peek
      ===================================================================== */
@@ -748,7 +897,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     initLoader(); initTheme(); initParticles(); initMenu();
-    initCountdown(); initSteps(); initPauseLocks(); initFilters(); initProfileForm(); initCart(); initRefSave(); applyProfile();
+    initCountdown(); initSteps(); initFunnel(); initPauseLocks(); initFilters(); initProfileForm(); initCart(); initRefSave(); applyProfile();
     initSplit(); initReveal(); initChrome(); initScrollVars(); initPointer(); initRail();
     initVideos(); initBand(); initFire(); initTilt(); initPeek();
     document.documentElement.classList.add('motion-ready');

@@ -1,0 +1,101 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "eyebrow": "Armar mi pedido",
+        "heading": "Arma tu *pedido*",
+        "text": "Cuatro pasos para elegir, uno para tus datos. Recordamos todo para la próxima vez.",
+        "art": "air-bowl"
+      }
+    },
+    "funnel": {
+      "type": "order-funnel",
+      "settings": {
+        "eyebrow": "Haz tu pedido",
+        "heading": "Arma tu pedido en *5 pasos*",
+        "text": "",
+        "collection": "menu-semanal",
+        "limit": 12
+      },
+      "blocks": {
+        "d0": {
+          "type": "diet",
+          "settings": {
+            "label": "Keto",
+            "slug": "keto",
+            "text": "Alto en grasas buenas, bajo en carbohidratos.",
+            "art": "dish-5"
+          }
+        },
+        "d1": {
+          "type": "diet",
+          "settings": {
+            "label": "Libre de gluten",
+            "slug": "sin-gluten",
+            "text": "Sin gluten ni trazas, cocinado por separado.",
+            "art": "dish-1"
+          }
+        },
+        "d2": {
+          "type": "diet",
+          "settings": {
+            "label": "Vegetariano",
+            "slug": "vegetariano",
+            "text": "Sin carne, con huevo y lácteos.",
+            "art": "dish-3"
+          }
+        },
+        "d3": {
+          "type": "diet",
+          "settings": {
+            "label": "Vegano",
+            "slug": "vegano",
+            "text": "100% basado en plantas.",
+            "art": "dish-6"
+          }
+        },
+        "d4": {
+          "type": "diet",
+          "settings": {
+            "label": "Bajas calorías",
+            "slug": "bajo-calorias",
+            "text": "Ligero y saciante, controlado en calorías.",
+            "art": "dish-8"
+          }
+        },
+        "d5": {
+          "type": "diet",
+          "settings": {
+            "label": "Bajos carbohidratos",
+            "slug": "bajo-carbos",
+            "text": "Pocos carbohidratos, más verdura y proteína.",
+            "art": "dish-2"
+          }
+        },
+        "d6": {
+          "type": "diet",
+          "settings": {
+            "label": "Alta proteína",
+            "slug": "alto-proteina",
+            "text": "Proteína de alto rendimiento para entrenar.",
+            "art": "dish-4"
+          }
+        }
+      },
+      "block_order": [
+        "d0",
+        "d1",
+        "d2",
+        "d3",
+        "d4",
+        "d5",
+        "d6"
+      ]
+    }
+  },
+  "order": [
+    "head",
+    "funnel"
+  ]
+}
