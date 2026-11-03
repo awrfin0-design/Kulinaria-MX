@@ -13,103 +13,103 @@
 <section class="section" {{ section.shopify_attributes }}>
   <div class="container">
     <div class="section__head">
-      <span class="eyebrow">Mi cuenta</span>
-      <h1 style="font-size:clamp(2.2rem,4vw,3.4rem)">Hola, {{ customer.first_name | default: customer.email }}</h1>
+      <span class="eyebrow">{{ 'general.account' | t }}</span>
+      <h1 style="font-size:clamp(2.2rem,4vw,3.4rem)">{{ 'account.hello' | t }} {{ customer.first_name | default: customer.email }}</h1>
       <div class="divider-gold"><i></i></div>
-      <p class="lede">Tienes el control total de tu semana: elige tus platillos, pausa tu bloque, revisa tu saldo y comparte tu código.</p>
-      <p><a class="btn btn--ghost" href="{{ routes.account_logout_url }}">Cerrar sesión</a></p>
+      <p class="lede">{{ 'account.intro' | t }}</p>
+      <p><a class="btn btn--ghost" href="{{ routes.account_logout_url }}">{{ 'account.logout' | t }}</a></p>
     </div>
 
     <div class="account">
-      <nav class="account-nav" aria-label="Mi cuenta">
-        <a href="#semana">Mi semana</a><a href="#pausas">Pausar entregas</a><a href="#monedero">Monedero</a>
-        <a href="#perfil">Alergias y gustos</a><a href="#referidos">Mis referidos</a><a href="#pedidos">Pedidos y facturas</a><a href="#entregas">Entregas y envases</a>
+      <nav class="account-nav" aria-label="{{ 'general.account' | t }}">
+        <a href="#semana">{{ 'account.my_week' | t }}</a><a href="#pausas">{{ 'account.pause_deliveries' | t }}</a><a href="#monedero">{{ 'account.wallet' | t }}</a>
+        <a href="#perfil">{{ 'account.allergies_tastes' | t }}</a><a href="#referidos">{{ 'account.my_referrals' | t }}</a><a href="#pedidos">{{ 'account.orders_invoices' | t }}</a><a href="#entregas">{{ 'account.deliveries_containers' | t }}</a>
       </nav>
 
       <div>
         <div class="account-block" id="semana">
-          <h2>Mi semana</h2>
+          <h2>{{ 'account.my_week' | t }}</h2>
           <div class="panel panel--gold">
-            <p class="countdown" data-cutoff>Confirma tus platillos antes del sábado 10:00 AM · quedan <strong data-cutoff-value>…</strong></p>
-            <p class="text-muted">Si no registras tus opciones a tiempo, el sábado a las 10:01 AM se genera un pedido automático con tu plan contratado, tu historial y, de forma obligatoria, tus alergias registradas.</p>
-            <div class="btn-row"><a class="btn btn--gold" href="/collections/menu-semanal">Elegir platillos</a><a class="btn btn--outline" href="{{ portal }}">Administrar suscripción</a></div>
+            <p class="countdown" data-cutoff>{{ 'cutoff.confirm_dishes' | t }} <strong data-cutoff-value>…</strong></p>
+            <p class="text-muted">{{ 'account.auto_order' | t }}</p>
+            <div class="btn-row"><a class="btn btn--gold" href="/collections/menu-semanal">{{ 'account.choose_dishes' | t }}</a><a class="btn btn--outline" href="{{ portal }}">{{ 'account.manage_subscription' | t }}</a></div>
           </div>
         </div>
 
         <div class="account-block" id="pausas">
-          <h2>Pausar próximo bloque de entregas</h2>
-          <p class="text-muted">Pausa manualmente por imprevistos o viajes. Las ventanas se bloquean automáticamente.</p>
+          <h2>{{ 'account.pause_next' | t }}</h2>
+          <p class="text-muted">{{ 'account.pause_intro' | t }}</p>
           <div class="pause-grid">
             <div class="card">
-              <h3>Entregas de jueves y viernes</h3>
-              <p class="text-muted">Pausa a más tardar el martes a las 10:00 AM.</p>
-              <a class="btn btn--outline" data-pause-lock data-lock-day="2" data-lock-hour="10" href="{{ portal }}">Pausar próximo bloque de entregas</a>
+              <h3>{{ 'account.thu_fri' | t }}</h3>
+              <p class="text-muted">{{ 'account.thu_fri_note' | t }}</p>
+              <a class="btn btn--outline" data-pause-lock data-lock-day="2" data-lock-hour="10" href="{{ portal }}">{{ 'account.pause_next' | t }}</a>
               <p class="alert alert--warn" data-lock-msg hidden>{{ settings.pause_locked_message }}</p>
               <p class="text-muted" data-lock-left style="font-size:.85rem"></p>
             </div>
             <div class="card">
-              <h3>Entregas de lunes a miércoles</h3>
-              <p class="text-muted">Pausa a más tardar el viernes a las 7:00 PM. Es el corte más importante: si no pausas, tu nuevo pedido se asigna el sábado a las 10:00 AM con cargo al plan vigente.</p>
-              <a class="btn btn--outline" data-pause-lock data-lock-day="5" data-lock-hour="19" href="{{ portal }}">Pausar próximo bloque de entregas</a>
+              <h3>{{ 'account.mon_wed' | t }}</h3>
+              <p class="text-muted">{{ 'account.mon_wed_note' | t }}</p>
+              <a class="btn btn--outline" data-pause-lock data-lock-day="5" data-lock-hour="19" href="{{ portal }}">{{ 'account.pause_next' | t }}</a>
               <p class="alert alert--warn" data-lock-msg hidden>{{ settings.pause_locked_message }}</p>
               <p class="text-muted" data-lock-left style="font-size:.85rem"></p>
             </div>
           </div>
-          <p class="legal-note" style="margin-top:var(--space-lg)">Al pausar, tienes un máximo de 30 días naturales para reanudar. Pasado ese plazo el contrato se cancela y se pierde el saldo acumulado.</p>
+          <p class="legal-note" style="margin-top:var(--space-lg)">{{ 'account.pause_limit' | t }}</p>
         </div>
 
         <div class="account-block" id="monedero">
-          <h2>Monedero</h2>
+          <h2>{{ 'account.wallet' | t }}</h2>
           <div class="grid grid--2">
-            <div class="card"><span class="eyebrow">Saldo a favor</span><p class="tier-card__price gold-text" style="margin:0">{{ wallet | times: 100 | money_without_trailing_zeros }}</p><p class="text-muted">Crédito interno (nunca efectivo). Úsalo como descuento en tu siguiente bloque o en Kulinaria Fit Apparel. Las comidas no preparadas por una pausa quedan aquí.</p></div>
-            <div class="card"><span class="eyebrow">Kulinaria Store</span><p class="text-muted">Playera oficial, vaso mezclador y la futura línea Fit Apparel.</p><a class="btn btn--outline" style="margin-top:auto;align-self:flex-start" href="/collections/kulinaria-store">Ir a la tienda</a></div>
+            <div class="card"><span class="eyebrow">{{ 'account.balance' | t }}</span><p class="tier-card__price gold-text" style="margin:0">{{ wallet | times: 100 | money_without_trailing_zeros }}</p><p class="text-muted">{{ 'account.wallet_text' | t }}</p></div>
+            <div class="card"><span class="eyebrow">{{ 'nav.store' | t }}</span><p class="text-muted">{{ 'account.store_text' | t }}</p><a class="btn btn--outline" style="margin-top:auto;align-self:flex-start" href="/collections/kulinaria-store">{{ 'account.go_store' | t }}</a></div>
           </div>
         </div>
 
         <div class="account-block" id="perfil">
-          <h2>Alergias y gustos</h2>
-          <p class="text-muted">Tu perfil define qué platillos se bloquean y qué elegimos por ti en la selección automática.</p>
-          {%- if mf.allergies.value.size > 0 -%}<p>Alergias registradas: {%- for a in mf.allergies.value %} <span class="tier-badge tier-badge--exclusivo">{{ a }}</span>{%- endfor -%}</p>{%- endif -%}
-          <a class="btn btn--outline" href="/pages/perfil">Editar mi perfil</a>
+          <h2>{{ 'account.allergies_tastes' | t }}</h2>
+          <p class="text-muted">{{ 'account.profile_text' | t }}</p>
+          {%- if mf.allergies.value.size > 0 -%}<p>{{ 'account.registered_allergies' | t }} {%- for a in mf.allergies.value %} <span class="tier-badge tier-badge--exclusivo">{{ a }}</span>{%- endfor -%}</p>{%- endif -%}
+          <a class="btn btn--outline" href="/pages/perfil">{{ 'account.edit_profile' | t }}</a>
         </div>
 
         <div class="account-block" id="referidos">
-          <h2>Mis referidos</h2>
+          <h2>{{ 'account.my_referrals' | t }}</h2>
           <div class="panel panel--gold">
-            <span class="eyebrow">Tu código de referencia</span>
+            <span class="eyebrow">{{ 'account.your_code' | t }}</span>
             <p class="tier-card__price gold-text" style="margin:0;letter-spacing:.06em">{{ code }}</p>
-            <p class="text-muted">Cuando un amigo compre su primer bloque de 4 semanas (con factura pagada) recibes $150 MXN de saldo a favor. Al llegar a 10 suscriptores recomendados, un bono de $500 MXN en crédito.</p>
+            <p class="text-muted">{{ 'account.referral_text' | t }}</p>
             <div style="height:10px;border-radius:5px;background:var(--ink-600);overflow:hidden;margin:var(--space-md) 0"><div style="height:100%;width:{{ pct }}%;background:var(--gold-foil)"></div></div>
-            <p class="text-muted" style="margin:0">{{ paid }} de 10 recomendados con bloques pagados.</p>
+            <p class="text-muted" style="margin:0">{{ paid }} {{ 'account.referral_progress' | t }}</p>
           </div>
         </div>
 
         <div class="account-block" id="pedidos">
-          <h2>Pedidos y facturas</h2>
+          <h2>{{ 'account.orders_invoices' | t }}</h2>
           {%- paginate customer.orders by 10 -%}
             {%- if customer.orders.size > 0 -%}
               <div class="table-wrap"><table class="table">
-                <thead><tr><th>Pedido</th><th>Fecha</th><th>Pago</th><th>Entrega</th><th>Total</th></tr></thead>
+                <thead><tr><th>{{ 'account.order' | t }}</th><th>{{ 'account.date' | t }}</th><th>{{ 'account.payment' | t }}</th><th>{{ 'account.delivery' | t }}</th><th>{{ 'cart.total' | t }}</th></tr></thead>
                 <tbody>
                   {%- for order in customer.orders -%}
                     <tr><td><a href="{{ order.customer_url }}">{{ order.name }}</a></td><td>{{ order.created_at | date: '%d/%m/%Y' }}</td><td>{{ order.financial_status_label }}</td><td>{{ order.fulfillment_status_label }}</td><td>{{ order.total_price | money }}</td></tr>
                   {%- endfor -%}
                 </tbody>
               </table></div>
-              {%- if paginate.pages > 1 -%}<div class="btn-row">{%- if paginate.previous -%}<a class="btn btn--outline" href="{{ paginate.previous.url }}">Anterior</a>{%- endif -%}{%- if paginate.next -%}<a class="btn btn--outline" href="{{ paginate.next.url }}">Siguiente</a>{%- endif -%}</div>{%- endif -%}
+              {%- if paginate.pages > 1 -%}<div class="btn-row">{%- if paginate.previous -%}<a class="btn btn--outline" href="{{ paginate.previous.url }}">{{ 'general.previous' | t }}</a>{%- endif -%}{%- if paginate.next -%}<a class="btn btn--outline" href="{{ paginate.next.url }}">{{ 'general.next' | t }}</a>{%- endif -%}</div>{%- endif -%}
             {%- else -%}
-              <p class="alert">Aún no tienes pedidos.</p>
+              <p class="alert">{{ 'account.no_orders' | t }}</p>
             {%- endif -%}
           {%- endpaginate -%}
         </div>
 
         <div class="account-block" id="entregas">
-          <h2>Entregas y envases</h2>
+          <h2>{{ 'account.deliveries_containers' | t }}</h2>
           <div class="grid grid--2">
-            <div class="card"><h3>Dirección de entrega</h3>
-              {%- if customer.default_address -%}<p class="text-muted">{{ customer.default_address | format_address }}</p>{%- else -%}<p class="text-muted">Aún no tienes una dirección.</p>{%- endif -%}
-              <a class="btn btn--outline" style="margin-top:auto;align-self:flex-start" href="{{ routes.account_addresses_url }}">Administrar direcciones</a></div>
-            <div class="card"><h3>Políticas</h3><ul class="plan-list" style="margin:0"><li>Espera de cortesía: 5 minutos.</li><li>Si no estás, puedes recoger sin costo con horario acordado.</li><li>Envase de vidrio dañado o extraviado: ${{ settings.glass_fee }} MXN mínimo.</li></ul></div>
+            <div class="card"><h3>{{ 'account.delivery_address' | t }}</h3>
+              {%- if customer.default_address -%}<p class="text-muted">{{ customer.default_address | format_address }}</p>{%- else -%}<p class="text-muted">{{ 'account.no_address' | t }}</p>{%- endif -%}
+              <a class="btn btn--outline" style="margin-top:auto;align-self:flex-start" href="{{ routes.account_addresses_url }}">{{ 'account.manage_addresses' | t }}</a></div>
+            <div class="card"><h3>{{ 'account.policies' | t }}</h3><ul class="plan-list" style="margin:0"><li>{{ 'account.policy_wait' | t }}</li><li>{{ 'account.policy_pickup' | t }}</li><li>{{ 'account.policy_glass_pre' | t }}{{ settings.glass_fee }} {{ 'account.policy_glass_post' | t }}</li></ul></div>
           </div>
         </div>
       </div>

@@ -27,21 +27,24 @@
           "type": "item",
           "settings": {
             "title": "Elige tu plan",
-            "text": "<p>Bloques de 4 semanas con entrega semanal. ¿Quieres probar? Compra una sola semana.</p>"
+            "text": "<p>Bloques de 4 semanas con entrega semanal. ¿Quieres probar? Compra una sola semana.</p>",
+            "art": "containers"
           }
         },
         "s2": {
           "type": "item",
           "settings": {
             "title": "Elige tus platillos",
-            "text": "<p>Cada semana, un menú rotativo de 8 a 10 opciones. Confirma antes del sábado a las 10:00 AM o nosotros armamos tu pedido.</p>"
+            "text": "<p>Cada semana, un menú rotativo de 8 a 10 opciones. Confirma antes del sábado a las 10:00 AM o nosotros armamos tu pedido.</p>",
+            "art": "dish-6"
           }
         },
         "s3": {
           "type": "item",
           "settings": {
             "title": "Recíbelo en casa",
-            "text": "<p>Entrega a domicilio en envases de vidrio de alta calidad, listos para calentar. Pago 100% digital.</p>"
+            "text": "<p>Entrega a domicilio en envases de vidrio de alta calidad, listos para calentar. Pago 100% digital.</p>",
+            "art": "hero"
           }
         }
       },
@@ -122,7 +125,8 @@
           "settings": {
             "title": "Desayunos Premium",
             "text": "<p>Para empezar el día con intención.</p>",
-            "link": "/collections/menu-semanal?categoria=desayunos-premium"
+            "link": "/collections/menu-semanal?categoria=desayunos-premium",
+            "art": "dish-3"
           }
         },
         "c2": {
@@ -130,7 +134,8 @@
           "settings": {
             "title": "Al Fuego y Mar",
             "text": "<p>Cortes, aves y pesca premium.</p>",
-            "link": "/collections/menu-semanal?categoria=al-fuego-y-mar"
+            "link": "/collections/menu-semanal?categoria=al-fuego-y-mar",
+            "art": "dish-1"
           }
         },
         "c3": {
@@ -138,7 +143,8 @@
           "settings": {
             "title": "Bowls de la Semana",
             "text": "<p>Frescos, completos y de temporada.</p>",
-            "link": "/collections/menu-semanal?categoria=bowls-de-la-semana"
+            "link": "/collections/menu-semanal?categoria=bowls-de-la-semana",
+            "art": "dish-6"
           }
         },
         "c4": {
@@ -146,7 +152,8 @@
           "settings": {
             "title": "Balanceado / Diario Premium",
             "text": "<p>La base de tu semana.</p>",
-            "link": "/collections/menu-semanal?categoria=diario-premium"
+            "link": "/collections/menu-semanal?categoria=diario-premium",
+            "art": "dish-0"
           }
         },
         "c5": {
@@ -154,7 +161,8 @@
           "settings": {
             "title": "Kulinaria Junior",
             "text": "<p>Platillos pensados para los más pequeños.</p>",
-            "link": "/collections/menu-semanal?categoria=kulinaria-junior"
+            "link": "/collections/menu-semanal?categoria=kulinaria-junior",
+            "art": "dish-7"
           }
         },
         "c6": {
@@ -162,7 +170,8 @@
           "settings": {
             "title": "Entradas y complementos",
             "text": "<p>Sopas, cremas, postres y snacks saludables, batidos y bebidas.</p>",
-            "link": "/collections/menu-semanal?categoria=sopas-y-entradas"
+            "link": "/collections/menu-semanal?categoria=sopas-y-entradas",
+            "art": "dish-2"
           }
         }
       },
@@ -305,7 +314,8 @@
             "title": "Carta Kulinaria",
             "text": "<p>Chef privado a domicilio y cenas románticas de los sábados. Cotización privada, sin precios publicados.</p>",
             "link_label": "Conocer la carta",
-            "link": "/pages/carta-kulinaria"
+            "link": "/pages/carta-kulinaria",
+            "art": "dinner"
           }
         },
         "m2": {
@@ -315,7 +325,8 @@
             "title": "Programa de Embajadores",
             "text": "<p>Recomienda Kulinaria y gana bonos, ropa deportiva y estatus como Entrenador Personal de Alta Clase.</p>",
             "link_label": "Ver el programa",
-            "link": "/pages/embajadores"
+            "link": "/pages/embajadores",
+            "art": "hero"
           }
         },
         "m3": {
@@ -325,7 +336,8 @@
             "title": "Kulinaria Store",
             "text": "<p>Playera oficial y vaso mezclador premium. Gratis con tu primer bloque si llegas con código de referencia.</p>",
             "link_label": "Ir a la tienda",
-            "link": "/collections/kulinaria-store"
+            "link": "/collections/kulinaria-store",
+            "art": "containers"
           }
         }
       },
@@ -475,6 +487,92 @@
         "m4",
         "m5"
       ]
+    },
+    "glass": {
+      "type": "showcase",
+      "settings": {
+        "eyebrow": "Envases de vidrio",
+        "heading": "Hecho para tu refrigerador, pensado para tu semana",
+        "text": "<p>Cada platillo llega en vidrio de alta calidad que conserva el sabor y se puede reutilizar. Solo calienta y disfruta.</p>",
+        "badge": "Envases de vidrio",
+        "button_label": "Ver el menú de la semana",
+        "button_link": "/collections/menu-semanal",
+        "art": "containers",
+        "reverse": false
+      },
+      "blocks": {
+        "p1": {
+          "type": "point",
+          "settings": {
+            "text": "Vidrio de alta calidad, reutilizable"
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "text": "Listos para calentar en minutos"
+          }
+        },
+        "p3": {
+          "type": "point",
+          "settings": {
+            "text": "Ingredientes y alérgenos declarados en cada platillo"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3"
+      ]
+    },
+    "band": {
+      "type": "media-band",
+      "settings": {
+        "eyebrow": "Arte del fuego",
+        "heading": "El fuego hace la diferencia",
+        "button_label": "Ver el menú"
+      },
+      "blocks": {
+        "l1": {
+          "type": "line",
+          "settings": {
+            "text": "Cortes y pescados sellados al fuego"
+          }
+        },
+        "l2": {
+          "type": "line",
+          "settings": {
+            "text": "Cocciones lentas y reducciones artesanales"
+          }
+        },
+        "l3": {
+          "type": "line",
+          "settings": {
+            "text": "Acondicionados para recalentar sin perder su punto"
+          }
+        }
+      },
+      "block_order": [
+        "l1",
+        "l2",
+        "l3"
+      ]
+    },
+    "chef": {
+      "type": "showcase",
+      "settings": {
+        "eyebrow": "Carta Kulinaria",
+        "heading": "Una cena de autor en tu mesa",
+        "text": "<p>Chef privado a domicilio, cenas románticas de sábado y eventos especiales. Cada experiencia se cotiza de forma privada.</p>",
+        "badge": "Chef privado",
+        "button_label": "Conocer la Carta",
+        "button_link": "/pages/carta-kulinaria",
+        "art": "dinner",
+        "reverse": true,
+        "video": "chef",
+        "video_main": true
+      }
     }
   },
   "order": [
@@ -482,8 +580,11 @@
     "marquee",
     "how",
     "dishes",
+    "glass",
+    "band",
     "tiers",
     "categories",
+    "chef",
     "diets",
     "plans",
     "safety",

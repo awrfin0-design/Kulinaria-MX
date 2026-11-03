@@ -7,12 +7,12 @@ Design tokens mirror the Figma design system (gold · ink · dark walnut) with a
 assets/      kulinaria.css (tokens + components), kulinaria.js (countdown, pause locks, filters, allergen profile, cart)
 config/      settings_schema.json (brand, cycle, tier prices, subscription & contract settings)
 layout/      theme.liquid
-locales/     es.default.json
-sections/    26 sections (header/footer groups, hero, feature-grid, dishes, tiers, plans, faq, forms, product, cart, account…)
-snippets/    icon, logo, dish-card, tier-badge, selling-plan-picker, social-links
+locales/     es.default.json (default) · en.json — all storefront strings (Shopify i18n)
+sections/    30 sections (header + full-screen menu, hero with video, showcase, scroll-video band, feature-grid, dishes, tiers, plans, faq, forms, product, cart, account…)
+snippets/    icon, logo, photo, term, lang-switcher, theme-toggle, dish-card, tier-badge, selling-plan-picker, social-links
 templates/   JSON templates for every page in the approved sitemap
-docs/        subscriptions.md · backend-requirements.md · metafields.md
-preview/     index.html — standalone preview, generated from the real Liquid templates (31 pages)
+docs/        subscriptions.md · backend-requirements.md · metafields.md · i18n.md · media.md
+preview/     index.html — standalone preview (ES + EN, light + dark), generated from the real Liquid templates (31 pages)
 scripts/render/  Liquid render harness + end-to-end tests (see below)
 ```
 
@@ -61,16 +61,21 @@ The theme is the storefront. Several rules in the business brief are *server-sid
 Tokens live at the top of `assets/kulinaria.css` (`--font-display`, `--font-heading`, `--font-body`, `--font-label`);
 the Google Fonts link is in `layout/theme.liquid`. The "flame" ornament that replaces the usual divider is a CSS-masked inline SVG (`--flame`).
 
-## Design and motion (v2)
+## Design and experience (v3)
 
-Minimal, editorial and kinetic. Everything is CSS + a small vanilla JS layer (`assets/kulinaria.js`), progressive and reduced-motion safe:
+- **Light and dark mode.** Light is the default (the brand felt too dark); the toggle in the header and menu remembers the visitor's choice in `localStorage` and is applied before first paint. All colours are semantic tokens at the top of `assets/kulinaria.css`; the hero, header pill, footer, menu overlay, band and loader are "always dark" (`.tone-dark`) so the gold logo stays correct in both modes.
+- **Loading screen.** Logo mark in a gold ring + progress bar, shown once per browser session (`sessionStorage`), with a failsafe so it can never trap the page.
+- **Seamless background.** A fixed walnut-wood layer (`photo-wood.webp`) with a soft vignette sits behind every section (sections are transparent, so there are no hard colour bands) plus a canvas of drifting gold dust that reacts to the pointer. Paused when the tab is hidden; static under `prefers-reduced-motion`.
+- **Menu.** A floating glass pill: logo · 3 primary links · **Más +** · ES/EN · theme · account · cart · CTA. *Más* (and the burger on mobile) opens a full-screen menu with every main link, secondary links, contact and social. How many links stay in the bar is a header setting.
+- **Photography.** Every dish, the hero cards, stacked "how it works" cards, showcase sections and the CTA use photos (`assets/photo-*.webp`, generated, replaceable by uploads: every photo block has an image picker that wins over the theme art).
+- **3D / interaction.** Hero photo cards float in depth and follow the pointer, dish cards and showcase photos tilt with a moving glare, the carousel has a coverflow angle, the category index shows a photo that follows the cursor.
+- **Video** (see [`docs/media.md`](docs/media.md)): two hero videos that alternate (with pause button), a scroll-scrubbed fire band, **fire inside every button on hover**, a gold shimmer over the CTA, a chef video in the Carta showcase. Posters everywhere; nothing autoplays under reduced motion or Save-Data.
+- **Motion system (from v2).** Pill buttons that fill from the cursor, magnetic CTAs, split-word headlines, staggered reveals, sticky stack / sticky split layouts, price ladder, editorial index.
+- Safety: nothing is hidden without JS; `prefers-reduced-motion` shows everything immediately; failsafes (`.no-motion`, loader timeout) never hide content.
 
-- **Pill buttons** that fill from the cursor entry point, with an arrow that slides in; **magnetic** primary CTAs.
-- **Scroll choreography**: reading-progress bar, header that glass-blurs and hides on scroll-down / returns on scroll-up, headline words that rise in, staggered reveals, hero parallax with a light ring that orbits the plate as you scroll, footer wordmark drift.
-- **Sticky sections**: filter pill on the menu, product photo, order summary, account nav, and two content layouts (`stack` = cards pile up while scrolling, `sticky` = intro stays pinned).
-- **Distinct layouts** per content type: marquee ribbon, editorial **index** list for categories, **price ladder** for tiers, draggable **carousel** for dishes, spotlight cards.
-- `feature-grid` has a **Diseño** setting (grid / stack / sticky / index); `featured-dishes` has carrusel / cuadrícula.
-- Safety: nothing is hidden without JS; `prefers-reduced-motion` shows everything immediately; a 3.5 s failsafe (`.no-motion`) reveals content if the script never starts.
+## Languages (i18n)
+
+Spanish (default) and English ship in `locales/`. Every string in sections, snippets and JS comes from there (`{{ 'cart.title' | t }}`; JS strings are injected into `window.KULINARIA.i18n`). The header/menu language switcher is Shopify's native `{% form 'localization' %}`: enable English in *Settings → Languages* and it appears automatically. Merchant-edited content (headings in the theme editor, product text) is translated with Translate & Adapt; [`docs/i18n.md`](docs/i18n.md) explains this and how to add a language. The preview includes the English storefront (`scripts/render/content.en.json` holds the English text of the sample content).
 
 ## Logo
 
@@ -83,19 +88,19 @@ Usage: `{% render 'logo' %}`, `{% render 'logo', tone: 'cream' %}`, `{% render '
 
 ## Preview and tests
 
-`preview/index.html` is **not hand-written**: `scripts/render` loads the real layout, JSON templates, sections and snippets with
+`preview/index.html` (about 9 MB because it embeds the photos and videos) is **not hand-written**: `scripts/render` loads the real layout, JSON templates, sections and snippets with
 [liquidjs](https://liquidjs.com) plus mock store data (`scripts/render/mock.mjs`), then stitches every page into one navigable file.
 If a section breaks, the preview breaks, so it doubles as a smoke test of the Liquid.
 
 ```bash
 cd scripts/render && npm install
-node render.mjs                       # rebuilds ../../preview/index.html and fails on dead links
-NODE_PATH=$(npm root -g) node test.mjs [screenshotDir]   # 150+ browser checks (needs Playwright)
+node render.mjs                       # rebuilds ../../preview/index.html (ES + EN) and fails on dead links; SHOW_UNTRANSLATED=1 lists content missing from content.en.json
+NODE_PATH=$(npm root -g) node test.mjs [screenshotDir]   # 200+ browser checks (needs Playwright)
 ```
 
-The suite visits all 31 pages, clicks the real header/footer/CTA links, checks the headline font, filters, allergy blocking, product alerts,
+The suite also covers light/dark, ES/EN (no Spanish leaking into English, locale keys in sync), loader, particles, menu overlay, videos, scroll scrubbing, fire buttons and 3D tilt. It visits all 31 pages, clicks the real header/footer/CTA links, checks the headline font, filters, allergy blocking, product alerts,
 cart/contract gating, referral + gift flow, pause locks at fixed Mexico City times, forms, and overflow at 1440 / 820 / 390 px.
-The mock engine is not Shopify itself: still run `shopify theme check` and preview on a dev store before launch.
+Open `preview/index.html#/indice` for a list of every page (there is no banner). The mock engine is not Shopify itself: still run `shopify theme check` and preview on a dev store before launch.
 
 ## Quality checks
 

@@ -1,63 +1,63 @@
 {%- liquid
   assign layout = section.settings.layout
-  assign cats = 'desayunos-premium:Desayunos Premium,al-fuego-y-mar:Al Fuego y Mar,bowls-de-la-semana:Bowls de la Semana,diario-premium:Diario Premium,kulinaria-junior:Kulinaria Junior,sopas-y-entradas:Sopas y Entradas,postres-y-snacks:Postres y Snacks,batidos-y-bebidas:Batidos y Bebidas' | split: ','
-  assign diets = 'keto:Keto,sin-gluten:Libre de gluten,vegetariano:Vegetariano,vegano:Vegano,bajo-calorias:Bajas calorías,bajo-carbos:Bajos carbohidratos,alto-proteina:Alta proteína' | split: ','
-  assign tiers = 'selecto:Selecto,exclusivo:Exclusivo $,signature:Signature $$,reserve:Reserve $$$' | split: ','
+  assign cats = 'desayunos-premium,al-fuego-y-mar,bowls-de-la-semana,diario-premium,kulinaria-junior,sopas-y-entradas,postres-y-snacks,batidos-y-bebidas' | split: ','
+  assign diets = 'keto,sin-gluten,vegetariano,vegano,bajo-calorias,bajo-carbos,alto-proteina' | split: ','
+  assign tiers = 'selecto,exclusivo,signature,reserve' | split: ','
 -%}
 {%- paginate collection.products by 48 -%}
 <section class="section" {{ section.shopify_attributes }}>
   <div class="container">
     <div class="section__head">
-      <span class="eyebrow">{% if layout == 'menu' %}Menú de la semana{% else %}Kulinaria Store{% endif %}</span>
+      <span class="eyebrow">{% if layout == 'menu' %}{{ 'collection.weekly_menu' | t }}{% else %}{{ 'nav.store' | t }}{% endif %}</span>
       <h1 style="font-size:clamp(2.6rem,6vw,5rem)">{{ collection.title }}</h1>
       {%- if collection.description != blank -%}<div class="lede richtext">{{ collection.description }}</div>{%- endif -%}
       {%- if layout == 'menu' -%}
-        <p style="margin-top:var(--space-lg)"><span class="countdown" data-cutoff>Confirma tus platillos antes del sábado 10:00 AM · quedan <strong data-cutoff-value>…</strong></span></p>
-        <p class="legal-note">Si no registras tus opciones a tiempo, se genera un pedido automático con tu plan, historial y perfil de alergias.</p>
+        <p style="margin-top:var(--space-lg)"><span class="countdown" data-cutoff>{{ 'cutoff.confirm_dishes' | t }} <strong data-cutoff-value>…</strong></span></p>
+        <p class="legal-note">{{ 'cutoff.auto_order' | t }}</p>
       {%- endif -%}
     </div>
 
     {%- if collection.products.size == 0 -%}
-      <p class="alert">Aún no hay productos en esta colección.</p>
+      <p class="alert">{{ 'collection.empty' | t }}</p>
     {%- elsif layout == 'menu' -%}
       <div class="menu-shell" data-filters>
         <div class="filter-sticky">
-          <div class="chips" role="group" aria-label="Categoría">
-            <button class="chip" type="button" data-filter="category" data-value="all" aria-pressed="true">Todo</button>
-            {%- for c in cats -%}{%- assign p = c | split: ':' -%}
-              <button class="chip" type="button" data-filter="category" data-value="{{ p[0] }}" aria-pressed="false">{{ p[1] }}</button>
+          <div class="chips" role="group" aria-label="{{ 'collection.category' | t }}">
+            <button class="chip" type="button" data-filter="category" data-value="all" aria-pressed="true">{{ 'collection.all' | t }}</button>
+            {%- for c in cats -%}{%- assign ck = 'category.' | append: c -%}
+              <button class="chip" type="button" data-filter="category" data-value="{{ c }}" aria-pressed="false">{{ ck | t }}</button>
             {%- endfor -%}
           </div>
-          <span class="filter-count"><strong data-count>{{ collection.products_count }}</strong> platillos</span>
+          <span class="filter-count"><strong data-count>{{ collection.products_count }}</strong> {{ 'collection.dishes' | t }}</span>
         </div>
 
         <div class="filter-secondary">
           <div class="filter-bar__row">
-            <span class="filter-bar__label">Enfoque</span>
+            <span class="filter-bar__label">{{ 'collection.focus' | t }}</span>
             <div class="chips">
-              {%- for d in diets -%}{%- assign p = d | split: ':' -%}
-                <button class="chip" type="button" data-filter="diet" data-value="{{ p[0] }}" aria-pressed="false">{{ p[1] }}</button>
+              {%- for d in diets -%}{%- assign dk = 'diet.' | append: d -%}
+                <button class="chip" type="button" data-filter="diet" data-value="{{ d }}" aria-pressed="false">{{ dk | t }}</button>
               {%- endfor -%}
             </div>
           </div>
           <div class="filter-bar__row">
-            <span class="filter-bar__label">Nivel</span>
+            <span class="filter-bar__label">{{ 'collection.level' | t }}</span>
             <div class="chips">
-              <button class="chip" type="button" data-filter="tier" data-value="all" aria-pressed="true">Todos</button>
-              {%- for t in tiers -%}{%- assign p = t | split: ':' -%}
-                <button class="chip" type="button" data-filter="tier" data-value="{{ p[0] }}" aria-pressed="false">{{ p[1] }}</button>
+              <button class="chip" type="button" data-filter="tier" data-value="all" aria-pressed="true">{{ 'collection.all_plural' | t }}</button>
+              {%- for tr in tiers -%}{%- assign tk = 'tier.' | append: tr -%}
+                <button class="chip" type="button" data-filter="tier" data-value="{{ tr }}" aria-pressed="false">{{ tk | t }}</button>
               {%- endfor -%}
             </div>
           </div>
           {%- unless customer -%}
-            <div><a class="btn btn--ghost" href="/pages/perfil">Declara tus alergias para filtrar el menú</a></div>
+            <div><a class="btn btn--ghost" href="/pages/perfil">{{ 'collection.declare_allergies' | t }}</a></div>
           {%- endunless -%}
         </div>
 
         <div class="dish-grid">
           {%- for product in collection.products -%}{% render 'dish-card', product: product %}{%- endfor -%}
         </div>
-        <p class="alert" data-empty hidden>Ningún platillo coincide con los filtros elegidos.</p>
+        <p class="alert" data-empty hidden>{{ 'collection.no_match' | t }}</p>
       </div>
     {%- else -%}
       <div class="dish-grid">
@@ -65,11 +65,11 @@
           <article class="dish">
             <a class="dish__media surface-slate" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
               {%- if product.featured_image -%}{{ product.featured_image | image_url: width: 640 | image_tag: loading: 'lazy', alt: product.title }}{%- else -%}<span class="dish__ph surface-walnut" aria-hidden="true">{% render 'logo', mark: true %}</span>{%- endif -%}
-              <span class="dish__pill" aria-hidden="true">Ver producto</span>
+              <span class="dish__pill" aria-hidden="true">{{ 'collection.view_product' | t }}</span>
             </a>
             <div class="dish__body">
               <h3 class="dish__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
-              <div class="dish__meta"><span class="dish__price">{{ product.price | money_without_trailing_zeros }}</span><a class="dish__go" href="{{ product.url }}" aria-label="Ver {{ product.title | escape }}">→</a></div>
+              <div class="dish__meta"><span class="dish__price">{{ product.price | money_without_trailing_zeros }}</span><a class="dish__go" href="{{ product.url }}" aria-label="{{ 'collection.view' | t }} {{ product.title | escape }}">→</a></div>
             </div>
           </article>
         {%- endfor -%}
@@ -78,8 +78,8 @@
 
     {%- if paginate.pages > 1 -%}
       <div class="btn-row" style="justify-content:center">
-        {%- if paginate.previous -%}<a class="btn btn--outline" href="{{ paginate.previous.url }}">Anterior</a>{%- endif -%}
-        {%- if paginate.next -%}<a class="btn btn--outline" href="{{ paginate.next.url }}">Siguiente</a>{%- endif -%}
+        {%- if paginate.previous -%}<a class="btn btn--outline" href="{{ paginate.previous.url }}">{{ 'general.previous' | t }}</a>{%- endif -%}
+        {%- if paginate.next -%}<a class="btn btn--outline" href="{{ paginate.next.url }}">{{ 'general.next' | t }}</a>{%- endif -%}
       </div>
     {%- endif -%}
   </div>

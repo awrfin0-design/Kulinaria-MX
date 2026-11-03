@@ -5,11 +5,11 @@
 {%- endcomment -%}
 {%- if product.selling_plan_groups.size > 0 -%}
   <fieldset class="plan-picker">
-    <legend>Cómo quieres recibirlo</legend>
+    <legend>{{ 'plan.how' | t }}</legend>
     {%- unless product.requires_selling_plan -%}
       <label>
         <input type="radio" name="selling_plan" value="" checked>
-        <span><strong>Compra única</strong><br><small class="text-muted">Un solo pago, sin renovación.</small></span>
+        <span><strong>{{ 'plan.one_time' | t }}</strong><br><small class="text-muted">{{ 'plan.one_time_text' | t }}</small></span>
       </label>
     {%- endunless -%}
     {%- assign plan_n = 0 -%}
@@ -24,7 +24,7 @@
             {%- if plan.description != blank -%}<br><small class="text-muted">{{ plan.description }}</small>{%- endif -%}
             {%- for adj in plan.price_adjustments -%}
               {%- if adj.value_type == 'percentage' and adj.value != 0 -%}
-                <br><small class="text-accent" style="color:var(--gold-300)">{% if adj.value > 0 %}+{% endif %}{{ adj.value }}%</small>
+                <br><small class="text-accent" style="color:var(--accent)">{% if adj.value > 0 %}+{% endif %}{{ adj.value }}%</small>
               {%- endif -%}
             {%- endfor -%}
           </span>

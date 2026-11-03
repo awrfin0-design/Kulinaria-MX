@@ -1,0 +1,4 @@
+{%- comment -%} Light / dark switch. State lives on <html data-theme> and in localStorage (kx-theme). {%- endcomment -%}
+<button class="icon-link theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="{{ 'theme.to_dark' | t }}">
+  {% render 'icon', name: 'sun' %}{% render 'icon', name: 'moon' %}
+</button>

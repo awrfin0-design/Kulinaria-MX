@@ -19,13 +19,13 @@
 <article class="dish" data-dish
   data-category="{{ category }}" data-tier="{{ tier }}"
   data-diets="{{ diets }}" data-allergens="{{ allergens | escape }}" data-ingredients="{{ ingredients | escape }}">
-  <a class="dish__media surface-walnut" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+  <a class="dish__media surface-walnut" data-tilt-card href="{{ product.url }}" aria-label="{{ product.title | escape }}">
     {%- if product.featured_image -%}
       {{ product.featured_image | image_url: width: 640 | image_tag: loading: 'lazy', widths: '320, 480, 640', sizes: '(min-width: 1100px) 25vw, 50vw', alt: product.featured_image.alt | default: product.title }}
     {%- else -%}
       <span class="dish__ph surface-slate" aria-hidden="true">{% render 'logo', mark: true %}</span>
     {%- endif -%}
-    <span class="dish__pill" aria-hidden="true">Ver ficha</span>
+    <span class="dish__pill" aria-hidden="true">{{ 'dish.view' | t }}</span>
   </a>
   <div class="dish__body">
     <div>{% render 'tier-badge', tier: tier %}</div>
@@ -34,14 +34,14 @@
       <p class="dish__facts">
         {%- if mf.calories.value %}{{ mf.calories.value }} kcal{% endif -%}
         {%- if mf.calories.value and mf.carbs.value %} · {% endif -%}
-        {%- if mf.carbs.value %}{{ mf.carbs.value }} g carbohidratos{% endif -%}
+        {%- if mf.carbs.value %}{{ mf.carbs.value }} {{ 'dish.carbs_g' | t }}{% endif -%}
       </p>
     {%- endif -%}
     <span class="compat" data-compat></span>
     <div class="dish__meta">
       <span class="dish__price">{{ product.price | money_without_trailing_zeros }}</span>
-      <a class="dish__go" href="{{ product.url }}" aria-label="Ver ficha de {{ product.title | escape }}">→</a>
+      <a class="dish__go" href="{{ product.url }}" aria-label="{{ 'dish.view_of' | t }} {{ product.title | escape }}">→</a>
     </div>
   </div>
-  <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+  <div class="dish__blocked" role="note"><div><strong>{{ 'dish.blocked_title' | t }}</strong>{{ 'dish.blocked_text' | t }}</div></div>
 </article>

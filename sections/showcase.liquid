@@ -1,0 +1,65 @@
+{%- assign alt_text = section.settings.heading | escape -%}
+<section class="section showcase{% if section.settings.reverse %} showcase--reverse{% endif %}" data-scroll="in" {{ section.shopify_attributes }}>
+  <div class="container showcase__grid">
+    <div class="showcase__media" data-tilt-card>
+      <div class="showcase__frame">
+        {% render 'photo', image: section.settings.image, art: section.settings.art, alt: alt_text %}
+        {%- liquid
+          assign vsrc = section.settings.video_url
+          if vsrc == blank and section.settings.video != 'none'
+            assign vfile = 'video-' | append: section.settings.video | append: '.mp4'
+            assign vsrc = vfile | asset_url
+            assign vposter = 'video-' | append: section.settings.video | append: '-poster.webp' | asset_url
+          endif
+        -%}
+        {%- if vsrc != blank -%}
+          <video class="showcase__video{% if section.settings.video_main %} showcase__video--main{% endif %}" muted loop playsinline preload="none"{% if vposter != blank %} poster="{{ vposter }}"{% endif %} data-video-src="{{ vsrc }}" data-ambient></video>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.badge != blank -%}<span class="showcase__badge">{{ section.settings.badge }}</span>{%- endif -%}
+    </div>
+    <div class="showcase__copy">
+      <div class="section__head">
+        {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+        <h2>{{ section.settings.heading }}</h2>
+        {%- if section.settings.text != blank -%}<div class="lede richtext">{{ section.settings.text }}</div>{%- endif -%}
+      </div>
+      {%- if section.blocks.size > 0 -%}
+        <ul class="showcase__points">
+          {%- for block in section.blocks -%}<li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>{%- endfor -%}
+        </ul>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <div class="btn-row"><a class="btn btn--gold" href="{{ section.settings.button_link | default: '/collections/menu-semanal' }}">{{ section.settings.button_label }}</a></div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Foto destacada",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Título de la sección" },
+    { "type": "richtext", "id": "text", "label": "Texto" },
+    { "type": "text", "id": "badge", "label": "Insignia sobre la foto" },
+    { "type": "text", "id": "button_label", "label": "Botón" },
+    { "type": "url", "id": "button_link", "label": "Enlace del botón" },
+    { "type": "checkbox", "id": "reverse", "label": "Foto a la derecha", "default": false },
+    { "type": "image_picker", "id": "image", "label": "Foto" },
+    { "type": "select", "id": "art", "label": "Foto del tema (si no subes una)", "default": "containers", "options": [
+      { "value": "containers", "label": "Envases de vidrio" }, { "value": "dinner", "label": "Cena a la luz de las velas" },
+      { "value": "flames", "label": "Llamas" }, { "value": "hero", "label": "Corte sobre pizarra" }, { "value": "wood", "label": "Madera de nogal" },
+      { "value": "dish-0", "label": "Platillo 1" }, { "value": "dish-1", "label": "Platillo 2" }, { "value": "dish-2", "label": "Platillo 3" } ] },
+    { "type": "select", "id": "video", "label": "Video del tema", "default": "none", "options": [
+      { "value": "none", "label": "Sin video" }, { "value": "chef", "label": "Chef cortando jitomate" }, { "value": "gold", "label": "Destellos dorados" } ] },
+    { "type": "checkbox", "id": "video_main", "label": "El video reemplaza la foto (si no, se mezcla encima)", "default": false },
+    { "type": "text", "id": "video_url", "label": "Video propio (URL .mp4, opcional)" }
+  ],
+  "blocks": [
+    { "type": "point", "name": "Punto", "settings": [ { "type": "text", "id": "text", "label": "Texto", "default": "Punto destacado" } ] }
+  ],
+  "presets": [{ "name": "Foto destacada", "blocks": [{ "type": "point" }, { "type": "point" }] }]
+}
+{% endschema %}

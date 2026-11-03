@@ -12,14 +12,14 @@
       <h2>{{ section.settings.heading }}</h2>
       <div class="divider-gold"><i></i></div>
       <p class="lede" style="margin-inline:auto">{{ section.settings.text }}</p>
-      <p><span class="countdown" data-cutoff>La semana de prueba se puede comprar hasta el sábado 10:00 AM · quedan <strong data-cutoff-value>…</strong></span></p>
+      <p><span class="countdown" data-cutoff>{{ 'cutoff.trial_until' | t }} <strong data-cutoff-value>…</strong></span></p>
     </div>
 
     <div class="grid grid--2" style="max-width:980px;margin-inline:auto">
       <article class="card plan-card plan-card--featured">
-        <span class="plan-card__flag">Recomendado</span>
+        <span class="plan-card__flag">{{ 'plans.recommended' | t }}</span>
         <span class="eyebrow">{{ section.settings.block_name }}</span>
-        <p class="plan-card__price gold-text">Desde ${{ base }}<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / platillo</small></p>
+        <p class="plan-card__price gold-text">{{ 'plans.from' | t }}{{ base }}<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> {{ 'plans.per_dish' | t }}</small></p>
         <p class="text-muted">{{ section.settings.block_desc }}</p>
         <ul class="plan-list">{%- for f in block_features -%}{%- if f != blank -%}<li>{{ f }}</li>{%- endif -%}{%- endfor -%}</ul>
         <a class="btn btn--gold btn--block" style="margin-top:auto" href="{{ section.settings.block_product.url | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.block_cta }}</a>
@@ -27,8 +27,8 @@
 
       <article class="card plan-card">
         <span class="eyebrow">{{ section.settings.trial_name }}</span>
-        <p class="plan-card__price">${{ trial_price }}<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / platillo</small></p>
-        <p class="text-muted">{{ section.settings.trial_desc }} <strong style="color:var(--gold-300)">{{ settings.trial_markup }}% más cara</strong> que el precio prorrateado del bloque.</p>
+        <p class="plan-card__price">${{ trial_price }}<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> {{ 'plans.per_dish' | t }}</small></p>
+        <p class="text-muted">{{ section.settings.trial_desc }} <strong style="color:var(--accent)">{{ settings.trial_markup }}{{ 'plans.pct_more' | t }}</strong> {{ 'plans.than_block' | t }}</p>
         <ul class="plan-list">{%- for f in trial_features -%}{%- if f != blank -%}<li>{{ f }}</li>{%- endif -%}{%- endfor -%}</ul>
         <a class="btn btn--outline btn--block" style="margin-top:auto" href="{{ section.settings.trial_product.url | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.trial_cta }}</a>
       </article>

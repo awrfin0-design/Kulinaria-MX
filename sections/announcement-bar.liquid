@@ -1,7 +1,7 @@
 <div class="announcement" {{ section.shopify_attributes }}>
   {{ section.settings.text }}
   {%- if section.settings.show_countdown -%}
-    <span data-cutoff> · cierra en <strong data-cutoff-value>…</strong></span>
+    <span data-cutoff> {{ 'cutoff.closes_in' | t }} <strong data-cutoff-value>…</strong></span>
   {%- endif -%}
   {%- if section.settings.link != blank and section.settings.link_label != blank -%}
     · <a href="{{ section.settings.link }}">{{ section.settings.link_label }}</a>

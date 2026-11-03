@@ -29,34 +29,34 @@
 
       <div class="alert" data-allergen-alert hidden role="alert"></div>
 
-      {%- if product.description != blank -%}<div class="richtext lede" style="color:var(--cream-200)">{{ product.description }}</div>{%- endif -%}
+      {%- if product.description != blank -%}<div class="richtext lede" >{{ product.description }}</div>{%- endif -%}
 
       {%- if mf.calories.value or mf.carbs.value -%}
         <div class="spec-list">
-          {%- if mf.calories.value -%}<div class="spec"><b>{{ mf.calories.value }}</b><span>Calorías (kcal)</span></div>{%- endif -%}
-          {%- if mf.carbs.value -%}<div class="spec"><b>{{ mf.carbs.value }} g</b><span>Carbohidratos</span></div>{%- endif -%}
+          {%- if mf.calories.value -%}<div class="spec"><b>{{ mf.calories.value }}</b><span>{{ 'product.calories' | t }}</span></div>{%- endif -%}
+          {%- if mf.carbs.value -%}<div class="spec"><b>{{ mf.carbs.value }} g</b><span>{{ 'product.carbs' | t }}</span></div>{%- endif -%}
         </div>
         <p class="legal-note">{{ settings.protein_note }}</p>
       {%- endif -%}
 
       {%- if mf.ingredients.value.size > 0 -%}
         <div>
-          <h3>Ingredientes</h3>
-          <p class="text-muted">Declaración explícita de cada ingrediente para la prevención de alergias.</p>
-          <div class="chips">{%- for i in mf.ingredients.value -%}<span class="chip" style="cursor:default">{{ i }}</span>{%- endfor -%}</div>
+          <h3>{{ 'product.ingredients' | t }}</h3>
+          <p class="text-muted">{{ 'product.ingredients_note' | t }}</p>
+          <div class="chips">{%- for i in mf.ingredients.value -%}<span class="chip" style="cursor:default">{% render 'term', prefix: 'ingredient', value: i %}</span>{%- endfor -%}</div>
         </div>
       {%- endif -%}
 
       {%- if mf.allergens.value.size > 0 -%}
         <div>
-          <h3>Contiene</h3>
-          <div class="chips">{%- for a in mf.allergens.value -%}<span class="tier-badge tier-badge--exclusivo">{{ a }}</span>{%- endfor -%}</div>
+          <h3>{{ 'product.contains' | t }}</h3>
+          <div class="chips">{%- for a in mf.allergens.value -%}<span class="tier-badge tier-badge--exclusivo">{% render 'term', prefix: 'allergen', value: a %}</span>{%- endfor -%}</div>
         </div>
       {%- endif -%}
 
       {%- form 'product', product, id: 'product-form', class: 'product-form' -%}
         {%- if product.variants.size > 1 -%}
-          <div class="field"><label for="variant">Opción</label>
+          <div class="field"><label for="variant">{{ 'product.option' | t }}</label>
             <select class="select" id="variant" name="id">
               {%- for v in product.variants -%}<option value="{{ v.id }}" {% if v == current_variant %}selected{% endif %} {% unless v.available %}disabled{% endunless %}>{{ v.title }} · {{ v.price | money_without_trailing_zeros }}</option>{%- endfor -%}
             </select></div>
@@ -67,14 +67,14 @@
         {% render 'selling-plan-picker', product: product %}
 
         <div class="btn-row" style="align-items:center">
-          <input class="input qty" type="number" name="quantity" value="1" min="1" aria-label="Cantidad">
+          <input class="input qty" type="number" name="quantity" value="1" min="1" aria-label="{{ 'order.quantity' | t }}">
           <button class="btn btn--gold" type="submit" data-add {% unless current_variant.available %}disabled{% endunless %}>
             {%- if current_variant.available -%}{{ 'products.add_to_selection' | t }}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
           </button>
         </div>
       {%- endform -%}
 
-      <p class="text-muted" style="font-size:.85rem">Confirma tu selección antes del sábado 10:00 AM · quedan <strong data-cutoff style="color:var(--gold-300)"><span data-cutoff-value>…</span></strong></p>
+      <p class="text-muted" style="font-size:.85rem">{{ 'cutoff.confirm_selection' | t }} <strong data-cutoff style="color:var(--accent)"><span data-cutoff-value>…</span></strong></p>
     </div>
   </div>
 </section>

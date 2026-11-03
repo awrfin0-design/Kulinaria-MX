@@ -1,0 +1,10 @@
+{%- comment -%}
+  Shows a catalogue term (ingredient, allergen) in the visitor's language when the locale files have it,
+  and falls back to the value stored in the metafield. Matching logic (profile / allergen blocking) always uses
+  the stored value, never this label.
+  Params: prefix ('ingredient' | 'allergen') · value
+{%- endcomment -%}
+{%- assign term_slug = value | handleize -%}
+{%- assign term_key = prefix | append: '.' | append: term_slug -%}
+{%- assign term_out = term_key | t -%}
+{%- if term_out contains 'translation missing' -%}{{ value }}{%- else -%}{{ term_out }}{%- endif -%}

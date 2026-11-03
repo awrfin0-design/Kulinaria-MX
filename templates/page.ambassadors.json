@@ -9,7 +9,9 @@
         "button_label": "Quiero ser embajador",
         "button_link": "#alta",
         "button2_label": "",
-        "show_countdown": false
+        "show_countdown": false,
+        "size": "compact",
+        "art": "hero"
       }
     },
     "branches": {

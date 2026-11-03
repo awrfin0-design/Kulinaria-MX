@@ -14,9 +14,21 @@
     "header": {
       "type": "header",
       "settings": {
-        "menu": "main-menu"
+        "menu": "main-menu",
+        "inline_count": 3
+      }
+    },
+    "overlay": {
+      "type": "menu-overlay",
+      "settings": {
+        "menu": "main-menu",
+        "menu_more": "more-menu"
       }
     }
   },
-  "order": ["announcement", "header"]
+  "order": [
+    "announcement",
+    "header",
+    "overlay"
+  ]
 }

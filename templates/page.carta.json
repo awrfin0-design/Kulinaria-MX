@@ -9,23 +9,62 @@
         "button_label": "Solicitar cotización privada",
         "button_link": "#cotizacion",
         "button2_label": "",
-        "show_countdown": false
+        "show_countdown": false,
+        "size": "compact",
+        "art": "dinner"
       }
     },
     "services": {
       "type": "feature-grid",
-      "settings": { "eyebrow": "Experiencias", "heading": "Diseñadas a tu medida", "columns": "3", "background": "base" },
-      "blocks": {
-        "s1": { "type": "item", "settings": { "title": "Chef privado a domicilio", "text": "<p>Un menú de autor preparado en tu casa para eventos especiales.</p>" } },
-        "s2": { "type": "item", "settings": { "title": "Cenas románticas de los sábados", "text": "<p>Una noche pensada al detalle: ambientación, menú y servicio.</p>" } },
-        "s3": { "type": "item", "settings": { "title": "Eventos especiales", "text": "<p>Cumpleaños, aniversarios y reuniones íntimas con sello Kulinaria.</p>" } }
+      "settings": {
+        "eyebrow": "Experiencias",
+        "heading": "Diseñadas a tu medida",
+        "columns": "3",
+        "background": "base"
       },
-      "block_order": ["s1", "s2", "s3"]
+      "blocks": {
+        "s1": {
+          "type": "item",
+          "settings": {
+            "title": "Chef privado a domicilio",
+            "text": "<p>Un menú de autor preparado en tu casa para eventos especiales.</p>"
+          }
+        },
+        "s2": {
+          "type": "item",
+          "settings": {
+            "title": "Cenas románticas de los sábados",
+            "text": "<p>Una noche pensada al detalle: ambientación, menú y servicio.</p>"
+          }
+        },
+        "s3": {
+          "type": "item",
+          "settings": {
+            "title": "Eventos especiales",
+            "text": "<p>Cumpleaños, aniversarios y reuniones íntimas con sello Kulinaria.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ]
     },
     "quote": {
       "type": "contact-form",
-      "settings": { "kind": "carta", "eyebrow": "Cotización privada", "heading": "Cuéntanos tu evento", "text": "Esta sección no usa carrito ni precios publicados. Cada experiencia se cotiza de forma privada.", "button_label": "Solicitar cotización" }
+      "settings": {
+        "kind": "carta",
+        "eyebrow": "Cotización privada",
+        "heading": "Cuéntanos tu evento",
+        "text": "Esta sección no usa carrito ni precios publicados. Cada experiencia se cotiza de forma privada.",
+        "button_label": "Solicitar cotización"
+      }
     }
   },
-  "order": ["hero", "services", "quote"]
+  "order": [
+    "hero",
+    "services",
+    "quote"
+  ]
 }

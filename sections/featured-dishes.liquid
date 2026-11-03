@@ -11,8 +11,8 @@
         </div>
         {%- if rail -%}
           <div class="rail__nav">
-            <button class="rail-btn" type="button" data-rail-prev aria-label="Anterior">←</button>
-            <button class="rail-btn" type="button" data-rail-next aria-label="Siguiente">→</button>
+            <button class="rail-btn" type="button" data-rail-prev aria-label="{{ 'general.previous' | t }}">←</button>
+            <button class="rail-btn" type="button" data-rail-next aria-label="{{ 'general.next' | t }}">→</button>
           </div>
         {%- endif -%}
       </div>
@@ -28,7 +28,7 @@
               <div class="dish__media surface-walnut"><span class="dish__ph surface-slate" aria-hidden="true">{% render 'logo', mark: true %}</span></div>
               <div class="dish__body">
                 <div>{% render 'tier-badge', tier: 'selecto' %}</div>
-                <h3 class="dish__title">Platillo de ejemplo {{ i }}</h3>
+                <h3 class="dish__title">{{ 'dish.sample' | t }} {{ i }}</h3>
                 <div class="dish__meta"><span class="dish__price">${{ settings.price_selecto }}</span></div>
               </div>
             </article>

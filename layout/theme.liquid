@@ -1,14 +1,20 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code | default: 'es' }}">
+<html lang="{{ request.locale.iso_code | default: 'es' }}" data-theme="light">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#0B0B0C">
+    <meta name="theme-color" content="#F7F0E2">
     <script>
-      document.documentElement.className += ' js';
-      /* if the motion script never starts, show everything */
-      setTimeout(function () { if (!document.documentElement.classList.contains('motion-ready')) document.documentElement.classList.add('no-motion'); }, 3500);
+      /* Runs before first paint: theme (light by default, remembers the visitor's choice), loader (once per session) and the motion failsafe. */
+      (function () {
+        var d = document.documentElement, theme = 'light', seen = false;
+        try { theme = localStorage.getItem('kx-theme') || 'light'; seen = !!sessionStorage.getItem('kx-seen'); } catch (e) {}
+        d.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+        d.className += ' js' + (seen ? ' is-loaded' : ' has-loader');
+        setTimeout(function () { d.classList.add('is-loaded'); }, 4500);
+        setTimeout(function () { if (!d.classList.contains('motion-ready')) d.classList.add('no-motion'); }, 6000);
+      })();
     </script>
     <link rel="canonical" href="{{ canonical_url }}">
     <link rel="icon" type="image/png" href="{{ 'favicon.png' | asset_url }}">
@@ -28,11 +34,21 @@
     {%- if page_image -%}<meta property="og:image" content="{{ page_image | image_url: width: 1200 }}">{%- endif -%}
 
     {{ 'kulinaria.css' | asset_url | stylesheet_tag }}
+    <style>:root{--img-wood:url("{{ 'photo-wood.webp' | asset_url }}")}</style>
     <script>
       window.KULINARIA = {
         timezone: {{ settings.timezone | default: 'America/Mexico_City' | json }},
         cutoffHour: {{ settings.cutoff_hour | default: 10 | json }},
-        routes: { cart: {{ routes.cart_url | json }}, cartAdd: {{ routes.cart_add_url | json }}, account: {{ routes.account_url | json }} }
+        lang: {{ request.locale.iso_code | default: 'es' | json }},
+        routes: { cart: {{ routes.cart_url | json }}, cartAdd: {{ routes.cart_add_url | json }}, account: {{ routes.account_url | json }} },
+        media: { fire: {{ 'video-fire.mp4' | asset_url | json }}, band: {{ 'video-band.mp4' | asset_url | json }} },
+        i18n: {
+          pauseLeft: {{ 'js.pause_left' | t | json }}, compat: {{ 'js.compat' | t | json }},
+          notSuitable: {{ 'js.not_suitable' | t | json }}, dislikeHit: {{ 'js.dislike_hit' | t | json }},
+          remove: {{ 'js.remove' | t | json }}, d: {{ 'js.days' | t | json }}, h: {{ 'js.hours' | t | json }}, min: {{ 'js.minutes' | t | json }},
+          toDark: {{ 'theme.to_dark' | t | json }}, toLight: {{ 'theme.to_light' | t | json }},
+          pause: {{ 'media.pause' | t | json }}, play: {{ 'media.play' | t | json }}
+        }
       };
     </script>
     {{ content_for_header }}
@@ -40,6 +56,16 @@
 
   <body class="template-{{ template.name | handleize }}">
     <a class="skip-link" href="#main">{{ 'general.skip_to_content' | t }}</a>
+
+    <div class="loader tone-dark" id="loader" role="status" aria-label="{{ 'loader.label' | t }}">
+      <div class="loader__inner">
+        <span class="loader__ring"><i></i>{% render 'logo', mark: true %}</span>
+        <p class="loader__tag">{{ 'loader.tagline' | t }}</p>
+        <span class="loader__bar" aria-hidden="true"><i></i></span>
+      </div>
+    </div>
+
+    <div class="bg-fx" aria-hidden="true"><canvas data-particles></canvas></div>
 
     {% sections 'header-group' %}
 

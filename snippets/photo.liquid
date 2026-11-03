@@ -1,0 +1,13 @@
+{%- comment -%}
+  Photo with a theme-art fallback.
+  Params: image (image_picker value, optional) · art (theme photo key, e.g. 'dish-1', 'dinner', 'flames') · alt · class · width · eager
+  Theme art lives in /assets as photo-<key>.webp. Merchant uploads always win over the theme art.
+{%- endcomment -%}
+{%- assign loading = 'lazy' -%}
+{%- if eager -%}{%- assign loading = 'eager' -%}{%- endif -%}
+{%- if image != blank -%}
+  {{ image | image_url: width: width | default: 1200 | image_tag: loading: loading, class: class, alt: alt }}
+{%- elsif art != blank and art != 'none' -%}
+  {%- assign art_file = 'photo-' | append: art | append: '.webp' -%}
+  <img src="{{ art_file | asset_url }}" width="1200" height="800" alt="{{ alt | escape }}" class="{{ class }}" loading="{{ loading }}" decoding="async">
+{%- endif -%}

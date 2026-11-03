@@ -2,30 +2,30 @@
   <div class="container" style="max-width:980px">
     <div class="grid grid--2">
       <div class="panel panel--gold">
-        <span class="eyebrow">Mi cuenta</span>
-        <h1 style="font-size:2.4rem">Iniciar sesión</h1>
+        <span class="eyebrow">{{ 'general.account' | t }}</span>
+        <h1 style="font-size:2.4rem">{{ 'login.title' | t }}</h1>
         {%- form 'customer_login', novalidate: 'novalidate' -%}
           {%- if form.errors -%}<div class="alert alert--warn" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
-          <div class="field"><label for="login-email">Correo</label><input class="input" id="login-email" type="email" name="customer[email]" autocomplete="email" required></div>
-          <div class="field"><label for="login-pass">Contraseña</label><input class="input" id="login-pass" type="password" name="customer[password]" autocomplete="current-password" required></div>
-          <button class="btn btn--gold btn--block" type="submit">Entrar</button>
-          <p style="margin-top:var(--space-md)"><a href="#recover" class="btn btn--ghost">¿Olvidaste tu contraseña?</a></p>
+          <div class="field"><label for="login-email">{{ 'form.email' | t }}</label><input class="input" id="login-email" type="email" name="customer[email]" autocomplete="email" required></div>
+          <div class="field"><label for="login-pass">{{ 'form.password' | t }}</label><input class="input" id="login-pass" type="password" name="customer[password]" autocomplete="current-password" required></div>
+          <button class="btn btn--gold btn--block" type="submit">{{ 'login.submit' | t }}</button>
+          <p style="margin-top:var(--space-md)"><a href="#recover" class="btn btn--ghost">{{ 'login.forgot' | t }}</a></p>
         {%- endform -%}
       </div>
       <div class="panel">
-        <span class="eyebrow">Nuevo en Kulinaria</span>
-        <h2 style="font-size:2rem">Crea tu cuenta</h2>
-        <p class="text-muted">Al inscribirte llenas tu perfil de alergias y aceptas el contrato de adhesión antes de pagar.</p>
-        <a class="btn btn--outline" href="{{ routes.account_register_url }}">Crear cuenta</a>
+        <span class="eyebrow">{{ 'login.new' | t }}</span>
+        <h2 style="font-size:2rem">{{ 'login.create' | t }}</h2>
+        <p class="text-muted">{{ 'login.create_text' | t }}</p>
+        <a class="btn btn--outline" href="{{ routes.account_register_url }}">{{ 'register.title' | t }}</a>
       </div>
     </div>
 
     <div id="recover" class="panel" style="margin-top:var(--space-xl)">
-      <h2 style="font-size:1.6rem">Recuperar contraseña</h2>
+      <h2 style="font-size:1.6rem">{{ 'login.recover' | t }}</h2>
       {%- form 'recover_customer_password' -%}
-        {%- if form.posted_successfully? -%}<p class="alert alert--ok" role="status">Te enviamos un correo para restablecer tu contraseña.</p>{%- endif -%}
-        <div class="field"><label for="rec-email">Correo</label><input class="input" id="rec-email" type="email" name="email" required></div>
-        <button class="btn btn--outline" type="submit">Enviar enlace</button>
+        {%- if form.posted_successfully? -%}<p class="alert alert--ok" role="status">{{ 'login.recover_text' | t }}</p>{%- endif -%}
+        <div class="field"><label for="rec-email">{{ 'form.email' | t }}</label><input class="input" id="rec-email" type="email" name="email" required></div>
+        <button class="btn btn--outline" type="submit">{{ 'login.send_link' | t }}</button>
       {%- endform -%}
     </div>
   </div>

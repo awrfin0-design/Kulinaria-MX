@@ -4,9 +4,9 @@
 {%- endcomment -%}
 {%- assign tier_key = tier | downcase | strip -%}
 {%- case tier_key -%}
-  {%- when 'exclusivo' -%}{%- assign label = 'Exclusivo $' -%}
-  {%- when 'signature' -%}{%- assign label = 'Signature $$' -%}
-  {%- when 'reserve' -%}{%- assign label = 'Reserve $$$' -%}
-  {%- else -%}{%- assign tier_key = 'selecto' -%}{%- assign label = 'Selecto' -%}
+  {%- when 'exclusivo' -%}{%- assign label = 'tier.exclusivo' | t -%}
+  {%- when 'signature' -%}{%- assign label = 'tier.signature' | t -%}
+  {%- when 'reserve' -%}{%- assign label = 'tier.reserve' | t -%}
+  {%- else -%}{%- assign tier_key = 'selecto' -%}{%- assign label = 'tier.selecto' | t -%}
 {%- endcase -%}
 <span class="tier-badge tier-badge--{{ tier_key }}">{{ label }}</span>

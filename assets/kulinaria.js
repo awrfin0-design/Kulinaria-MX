@@ -1,6 +1,7 @@
 /* Kulinaria MX — storefront behaviour (vanilla JS, no dependencies)
-   Modules: nav, weekly cutoff countdown, pause locks, menu filters,
-   allergen/dislike profile (hard + soft filters), cart (contract, referral, gift). */
+   Commerce: weekly cutoff countdown, pause locks, menu filters, allergen/dislike profile, cart (contract, referral, gift).
+   Experience: light/dark theme, loading screen, particle background, full-screen menu, video (hero, scroll scrub, fire buttons),
+   3D tilt, cursor photo preview, coverflow carousel. Strings come from window.KULINARIA.i18n (locales/*.json). */
 (function () {
   'use strict';
 
@@ -9,6 +10,21 @@
   var PROFILE_KEY = 'kulinaria_profile';
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var root = document.documentElement;
+
+  /* ---------- i18n: strings are injected by layout/theme.liquid from the locale files ---------- */
+  var FALLBACK = {
+    pauseLeft: 'Quedan {time} para pausar.', compat: 'Compatibilidad {n}%',
+    notSuitable: 'No apto para tu perfil: contiene {list}.', dislikeHit: 'Contiene ingredientes que marcaste como "no me gustan": {list}.',
+    remove: 'Quitar {name}', d: 'd', h: 'h', min: 'min', toDark: 'Activar modo oscuro', toLight: 'Activar modo claro', pause: 'Pausar video', play: 'Reproducir video'
+  };
+  function T(key, vars) {
+    var src = (window.KULINARIA && window.KULINARIA.i18n) || {};
+    var str = src[key] != null ? src[key] : FALLBACK[key] || key;
+    return String(str).replace(/\{(\w+)\}/g, function (m, n) { return vars && vars[n] != null ? vars[n] : m; });
+  }
+  // preview hook: the single-file preview serves media from memory
+  var resolve = function (u) { return (window.KULINARIA && window.KULINARIA.resolve) ? window.KULINARIA.resolve(u) : u; };
 
   /* ---------- helpers ---------- */
   var norm = function (s) {
@@ -43,9 +59,9 @@
   function fmtCountdown(mins) {
     var d = Math.floor(mins / 1440), h = Math.floor((mins % 1440) / 60), m = mins % 60;
     var out = [];
-    if (d) out.push(d + ' d');
-    out.push(h + ' h');
-    out.push(m + ' min');
+    if (d) out.push(d + ' ' + T('d'));
+    out.push(h + ' ' + T('h'));
+    out.push(m + ' ' + T('min'));
     return out.join(' ');
   }
 
@@ -84,7 +100,7 @@
           msg.hidden = !locked;
         }
         var left = b.parentNode.querySelector('[data-lock-left]');
-        if (left) left.textContent = locked ? '' : 'Quedan ' + fmtCountdown(deadline - into) + ' para pausar.';
+        if (left) left.textContent = locked ? '' : T('pauseLeft', { time: fmtCountdown(deadline - into) });
       });
     };
     apply();
@@ -131,7 +147,7 @@
       card.classList.toggle('is-blocked', hard);
       var badge = $('[data-compat]', card);
       if (badge) {
-        badge.textContent = (al.length || dl.length) ? 'Compatibilidad ' + compat + '%' : '';
+        badge.textContent = (al.length || dl.length) ? T('compat', { n: compat }) : '';
         badge.setAttribute('data-low', compat < 100 ? 'true' : 'false');
       }
       $$('button[type="submit"],[data-add]', card).forEach(function (b) { b.disabled = hard; });
@@ -148,10 +164,10 @@
       $$('[data-add]', detail).forEach(function (b) { b.disabled = hit.length > 0; });
       if (hit.length) {
         alert.className = 'alert alert--warn';
-        alert.textContent = 'No apto para tu perfil: contiene ' + hit.join(', ') + '.';
+        alert.textContent = T('notSuitable', { list: hit.join(', ') });
       } else if (soft.length) {
         alert.className = 'alert alert--ok';
-        alert.textContent = 'Contiene ingredientes que marcaste como "no me gustan": ' + soft.join(', ') + '.';
+        alert.textContent = T('dislikeHit', { list: soft.join(', ') });
       }
     });
   }
@@ -165,7 +181,7 @@
       $$('.tag', tagsBox).forEach(function (t) { t.remove(); });
       p.dislikes.forEach(function (d, i) {
         var t = document.createElement('span'); t.className = 'tag'; t.textContent = d + ' ';
-        var x = document.createElement('button'); x.type = 'button'; x.setAttribute('aria-label', 'Quitar ' + d); x.textContent = '×';
+        var x = document.createElement('button'); x.type = 'button'; x.setAttribute('aria-label', T('remove', { name: d })); x.textContent = '×';
         x.addEventListener('click', function () { p.dislikes.splice(i, 1); renderTags(); });
         t.appendChild(x); tagsBox.insertBefore(t, tagInput);
       });
@@ -300,16 +316,6 @@
     });
   }
 
-  /* ---------- nav ---------- */
-  function initNav() {
-    var t = $('[data-nav-toggle]'), n = $('[data-nav]');
-    if (!t || !n) return;
-    t.addEventListener('click', function () {
-      var open = n.classList.toggle('is-open');
-      t.setAttribute('aria-expanded', open);
-    });
-  }
-
   /* =====================================================================
      Motion layer. Progressive: the page is fully usable without it, and it
      is skipped for prefers-reduced-motion. Failsafe lives in layout/theme.liquid.
@@ -331,9 +337,8 @@
       bar.style.setProperty('--sp', max > 0 ? Math.min(1, y / max).toFixed(4) : '0');
       if (!hdr) return;
       hdr.classList.toggle('is-stuck', y > 24);
-      var nav = $('[data-nav]'), navOpen = !!(nav && nav.classList.contains('is-open'));
       var hide = hdr.classList.contains('is-hidden');
-      if (REDUCE || navOpen) hide = false;
+      if (REDUCE || document.body.classList.contains('menu-open')) hide = false;
       else if (y > 280 && y > last + 6) hide = true;
       else if (y < last - 6 || y <= 280) hide = false;
       hdr.classList.toggle('is-hidden', hide);
@@ -377,7 +382,7 @@
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
     }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
-    targets.forEach(function (t) { io.observe(t); });
+    whenLoaded(function () { targets.forEach(function (t) { io.observe(t); }); });
   }
 
   // scroll-linked custom property --p (0..1) for parallax / ring / footer wordmark
@@ -408,8 +413,8 @@
       if (s) { var r = s.getBoundingClientRect(); s.style.setProperty('--mx', (e.clientX - r.left) + 'px'); s.style.setProperty('--my', (e.clientY - r.top) + 'px'); }
       var hero = tgt.closest('[data-tilt]');
       if (hero) {
-        var pl = $('.plate', hero), hr = hero.getBoundingClientRect();
-        if (pl) { pl.style.setProperty('--tx', ((e.clientX - hr.left) / hr.width - 0.5).toFixed(3)); pl.style.setProperty('--ty', ((e.clientY - hr.top) / hr.height - 0.5).toFixed(3)); }
+        var hr = hero.getBoundingClientRect();
+        hero.style.setProperty('--tx', ((e.clientX - hr.left) / hr.width - 0.5).toFixed(3)); hero.style.setProperty('--ty', ((e.clientY - hr.top) / hr.height - 0.5).toFixed(3));
       }
     }, { passive: true });
     var origin = function (e) {
@@ -440,7 +445,16 @@
       };
       if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -step() * 2, behavior: REDUCE ? 'auto' : 'smooth' }); });
       if (next) next.addEventListener('click', function () { track.scrollBy({ left: step() * 2, behavior: REDUCE ? 'auto' : 'smooth' }); });
-      track.addEventListener('scroll', raf(sync), { passive: true });
+      var cover = function () {
+        if (REDUCE) return;
+        var tr = track.getBoundingClientRect(), mid = tr.left + tr.width / 2;
+        $$('.dish', track).forEach(function (c) {
+          var r = c.getBoundingClientRect(), o = Math.max(-1.3, Math.min(1.3, (r.left + r.width / 2 - mid) / (tr.width / 2)));
+          c.style.setProperty('--ry', (o * -9).toFixed(2) + 'deg'); c.style.setProperty('--sc', (1 - Math.abs(o) * 0.055).toFixed(3));
+        });
+      };
+      track.addEventListener('scroll', raf(function () { sync(); cover(); }), { passive: true });
+      window.addEventListener('resize', raf(cover)); cover();
       if ('ResizeObserver' in window) new ResizeObserver(sync).observe(track); else window.addEventListener('resize', sync);
       var down = false, moved = false, sx = 0, sl = 0;
       track.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse' || e.button !== 0) return; down = true; moved = false; sx = e.clientX; sl = track.scrollLeft; });
@@ -456,9 +470,259 @@
     });
   }
 
+
+  /* =====================================================================
+     Experience layer: theme, loader, particles, menu, video, tilt, peek
+     ===================================================================== */
+  function whenLoaded(fn) {
+    if (root.classList.contains('is-loaded')) { fn(); return; }
+    var mo = new MutationObserver(function () { if (root.classList.contains('is-loaded')) { mo.disconnect(); fn(); } });
+    mo.observe(root, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  function initLoader() {
+    if (!root.classList.contains('has-loader')) return;
+    var t0 = performance.now();
+    var done = function () {
+      setTimeout(function () {
+        root.classList.add('is-loaded');
+        try { sessionStorage.setItem('kx-seen', '1'); } catch (e) {}
+      }, Math.max(0, 1400 - (performance.now() - t0)));
+    };
+    if (document.readyState === 'complete') done(); else window.addEventListener('load', done);
+  }
+
+  function setTheme(t, persist) {
+    root.setAttribute('data-theme', t);
+    if (persist) { try { localStorage.setItem('kx-theme', t); } catch (e) {} }
+    $$('[data-theme-toggle]').forEach(function (b) {
+      b.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+      b.setAttribute('aria-label', t === 'dark' ? T('toLight') : T('toDark'));
+    });
+    var meta = $('meta[name="theme-color"]'); if (meta) meta.setAttribute('content', t === 'dark' ? '#1F160F' : '#F6EFE0');
+    document.dispatchEvent(new CustomEvent('kx:theme', { detail: t }));
+  }
+  function initTheme() {
+    setTheme(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light', false);
+    $$('[data-theme-toggle]').forEach(function (b) {
+      b.addEventListener('click', function () { setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true); });
+    });
+  }
+
+  // gold dust drifting over the wood background
+  function initParticles() {
+    var c = $('[data-particles]'); if (!c || !c.getContext) return;
+    var ctx = c.getContext('2d'), W = 0, H = 0, dpr = Math.min(2, window.devicePixelRatio || 1), ps = [], mx = -999, my = -999, running = false;
+    var dark = function () { return root.getAttribute('data-theme') === 'dark'; };
+    var size = function () { W = c.clientWidth; H = c.clientHeight; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); };
+    var make = function (fresh) { return { x: Math.random() * W, y: fresh ? Math.random() * H : H + 20, r: 0.7 + Math.random() * 2.1, vy: 0.12 + Math.random() * 0.4, ph: Math.random() * 6.28, a: 0.25 + Math.random() * 0.6 }; };
+    var N = function () { return Math.max(18, Math.min(72, Math.round(window.innerWidth / 24))); };
+    var frame = function (t) {
+      ctx.clearRect(0, 0, W, H);
+      var d = dark();
+      ctx.globalCompositeOperation = d ? 'lighter' : 'source-over';
+      for (var i = 0; i < ps.length; i++) {
+        var p = ps[i];
+        p.y -= p.vy; p.x += Math.sin(t / 1800 + p.ph) * 0.25;
+        var dx = p.x - mx, dy = p.y - my, dd = dx * dx + dy * dy;
+        if (dd < 14400) { var f = (1 - dd / 14400) * 1.6; p.x += (dx / 120) * f; p.y += (dy / 120) * f; }
+        if (p.y < -20) ps[i] = make(false);
+        var tw = 0.55 + 0.45 * Math.sin(t / 700 + p.ph), a = p.a * tw;
+        if (d) {
+          var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
+          g.addColorStop(0, 'rgba(255,224,150,' + a + ')'); g.addColorStop(1, 'rgba(255,200,90,0)');
+          ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 5, 0, 6.283); ctx.fill();
+        } else {
+          ctx.fillStyle = 'rgba(176,126,38,' + (a * 0.55) + ')'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.283); ctx.fill();
+        }
+      }
+      if (running) requestAnimationFrame(frame);
+    };
+    var start = function () { if (running || REDUCE) return; running = true; requestAnimationFrame(frame); };
+    size(); for (var i = 0; i < N(); i++) ps.push(make(true));
+    window.addEventListener('resize', function () { size(); while (ps.length < N()) ps.push(make(true)); ps.length = Math.min(ps.length, N()); });
+    window.addEventListener('pointermove', function (e) { mx = e.clientX; my = e.clientY; }, { passive: true });
+    document.addEventListener('visibilitychange', function () { running = false; if (!document.hidden) start(); });
+    if (REDUCE) frame(0); else start();
+  }
+
+  // full-screen menu (the "Más" button and the mobile burger)
+  function initMenu() {
+    var ov = $('#menu-overlay'); if (!ov) return;
+    var openers = $$('[data-menu-open]'), last = null;
+    var focusables = function () { return $$('a[href],button:not([disabled]),input,select', ov).filter(function (e) { return e.offsetParent !== null; }); };
+    var open = function () {
+      last = document.activeElement; ov.hidden = false; document.body.classList.add('menu-open');
+      requestAnimationFrame(function () { requestAnimationFrame(function () { ov.classList.add('is-open'); }); });
+      openers.forEach(function (b) { b.setAttribute('aria-expanded', 'true'); });
+      var cl = $('[data-menu-close]', ov); if (cl) cl.focus();
+    };
+    var close = function () {
+      if (ov.hidden) return;
+      ov.classList.remove('is-open'); document.body.classList.remove('menu-open');
+      openers.forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
+      setTimeout(function () { if (!ov.classList.contains('is-open')) ov.hidden = true; }, 760);
+      if (last && last.focus) last.focus();
+    };
+    openers.forEach(function (b) { b.addEventListener('click', function () { if (ov.hidden) open(); else close(); }); });
+    $$('[data-menu-close]', ov).forEach(function (b) { b.addEventListener('click', close); });
+    ov.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('a[href]')) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (ov.hidden) return;
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key === 'Tab') {
+        var f = focusables(); if (!f.length) return;
+        var first = f[0], lastEl = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); lastEl.focus(); }
+        else if (!e.shiftKey && document.activeElement === lastEl) { e.preventDefault(); first.focus(); }
+      }
+    });
+    window.addEventListener('hashchange', close);
+  }
+
+  /* ---------- video ---------- */
+  var SAVE = !!(navigator.connection && navigator.connection.saveData);
+  function loadVideo(v) {
+    if (v.getAttribute('data-ready')) return;
+    v.setAttribute('data-ready', '1'); v.src = resolve(v.getAttribute('data-video-src')); v.load();
+  }
+  function playVideo(v) { loadVideo(v); var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+
+  function initVideos() {
+    var vids = $$('video[data-video-src]').filter(function (v) { return !v.hasAttribute('data-scrub'); });
+    if (REDUCE || SAVE) return;   // poster frames only
+    var hero = $('[data-hero]'), slides = hero ? $$('[data-slide]', hero) : [], paused = false, timer = null, cur = 0;
+    var vis = new Map();
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var v = e.target; vis.set(v, e.isIntersecting);
+        var inHero = hero && hero.contains(v);
+        if (e.isIntersecting) {
+          if (inHero && (paused || !v.closest('[data-slide]').classList.contains('is-on'))) { if (!v.getAttribute('data-ready')) loadVideo(v); return; }
+          playVideo(v); if (v.hasAttribute('data-ambient')) v.classList.add('is-on');
+        } else if (!v.paused) v.pause();
+      });
+    }, { threshold: 0.15 });
+    vids.forEach(function (v) { io.observe(v); });
+
+    if (slides.length > 1) {
+      var show = function (i) {
+        slides.forEach(function (sl, k) {
+          var on = k === i; sl.classList.toggle('is-on', on);
+          var v = $('video', sl); if (!v) return;
+          if (on && !paused) playVideo(v); else if (!on) setTimeout(function () { if (!sl.classList.contains('is-on')) v.pause(); }, 1900);
+        });
+        cur = i;
+      };
+      var next = function () { show((cur + 1) % slides.length); };
+      timer = setInterval(next, 7500);
+      var tg = $('[data-media-toggle]', hero);
+      if (tg) tg.addEventListener('click', function () {
+        paused = !paused; tg.setAttribute('aria-pressed', paused ? 'true' : 'false'); tg.setAttribute('aria-label', paused ? T('play') : T('pause'));
+        $$('video', hero).forEach(function (v) { if (paused) v.pause(); else if (v.closest('[data-slide]').classList.contains('is-on')) playVideo(v); });
+        if (paused) clearInterval(timer); else timer = setInterval(next, 7500);
+      });
+    } else {
+      var tg1 = hero && $('[data-media-toggle]', hero);
+      if (tg1) tg1.addEventListener('click', function () {
+        paused = !paused; tg1.setAttribute('aria-pressed', paused ? 'true' : 'false'); tg1.setAttribute('aria-label', paused ? T('play') : T('pause'));
+        $$('video', hero).forEach(function (v) { if (paused) v.pause(); else playVideo(v); });
+      });
+    }
+  }
+
+  // video that scrubs with the scroll position
+  function initBand() {
+    var b = $('[data-band]'); if (!b) return;
+    var v = $('[data-scrub]', b), lines = $$('.band__line', b);
+    if (REDUCE || root.classList.contains('no-motion') || !v) return;
+    b.classList.add('is-scrubbing');
+    var near = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { loadVideo(v); near.disconnect(); } }, { rootMargin: '900px 0px' });
+    near.observe(b);
+    var update = raf(function () {
+      var r = b.getBoundingClientRect(), vh = window.innerHeight, span = r.height - vh;
+      if (span <= 0) return;
+      var p = Math.max(0, Math.min(1, -r.top / span));
+      b.style.setProperty('--p', p.toFixed(4));
+      if (v.readyState >= 1 && v.duration) {
+        var t = p * (v.duration - 0.05);
+        if (Math.abs(v.currentTime - t) > 0.04) { if (v.fastSeek) v.fastSeek(t); else v.currentTime = t; }
+      }
+      lines.forEach(function (l, i) { l.classList.toggle('is-on', p >= 0.1 + i * (0.7 / Math.max(1, lines.length))); });
+    });
+    window.addEventListener('scroll', update, { passive: true }); window.addEventListener('resize', update);
+    v.addEventListener('loadedmetadata', update); update();
+  }
+
+  // any pill button ignites with a fire loop on hover / focus
+  function initFire() {
+    var url = (cfg.media || {}).fire;
+    if (!url || REDUCE || SAVE || !FINE) return;
+    var start = function (b) {
+      if (!b._fx) {
+        var fx = document.createElement('span'); fx.className = 'btn__fx'; fx.setAttribute('aria-hidden', 'true');
+        var v = document.createElement('video'); v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto'; v.src = resolve(url);
+        fx.appendChild(v); b.appendChild(fx); b._fx = v;
+      }
+      b.classList.add('is-fx'); var p = b._fx.play(); if (p && p.catch) p.catch(function () {});
+    };
+    var stop = function (b) {
+      b.classList.remove('is-fx');
+      setTimeout(function () { if (b._fx && !b.classList.contains('is-fx')) b._fx.pause(); }, 700);
+    };
+    var pick = function (e) { var b = e.target.closest ? e.target.closest('.btn') : null; return b && !b.classList.contains('btn--ghost') && !b.disabled ? b : null; };
+    document.addEventListener('pointerover', function (e) { var b = pick(e); if (b && !(e.relatedTarget && b.contains(e.relatedTarget))) start(b); });
+    document.addEventListener('pointerout', function (e) { var b = pick(e); if (b && !(e.relatedTarget && b.contains(e.relatedTarget))) stop(b); });
+    document.addEventListener('focusin', function (e) { var b = pick(e); if (b) start(b); });
+    document.addEventListener('focusout', function (e) { var b = pick(e); if (b) stop(b); });
+  }
+
+  // 3D tilt with moving glare
+  function initTilt() {
+    if (!FINE || REDUCE) return;
+    var active = null;
+    var reset = function (el) { el.classList.remove('is-tilting'); el.style.setProperty('--rx', '0deg'); el.style.setProperty('--ry', '0deg'); };
+    document.addEventListener('pointermove', function (e) {
+      var el = e.target.closest ? e.target.closest('[data-tilt-card]') : null;
+      if (active && active !== el) reset(active);
+      active = el; if (!el) return;
+      var r = el.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+      var m = el.classList.contains('dish__media') ? 6 : 5;
+      el.style.setProperty('--ry', ((px - 0.5) * m * 2).toFixed(2) + 'deg'); el.style.setProperty('--rx', ((0.5 - py) * m * 2).toFixed(2) + 'deg');
+      el.style.setProperty('--gx', (px * 100).toFixed(1) + '%'); el.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
+      el.classList.add('is-tilting');
+    }, { passive: true });
+    document.addEventListener('pointerleave', function () { if (active) reset(active); active = null; });
+  }
+
+  // editorial index: a photo follows the cursor
+  function initPeek() {
+    if (!FINE || REDUCE) return;
+    var rows = $$('.index-row[data-peek]'); if (!rows.length) return;
+    var el = document.createElement('div'); el.className = 'peek'; el.setAttribute('aria-hidden', 'true');
+    var img = new Image(); img.alt = ''; el.appendChild(img); document.body.appendChild(el);
+    var tx = 0, ty = 0, cx = 0, cy = 0, on = false;
+    var loop = function () {
+      cx += (tx - cx) * 0.16; cy += (ty - cy) * 0.16;
+      var tilt = Math.max(-8, Math.min(8, (tx - cx) * 0.06));
+      el.style.transform = 'translate3d(' + (cx + 36).toFixed(1) + 'px,' + (cy - 130).toFixed(1) + 'px,0) rotate(' + tilt.toFixed(2) + 'deg)';
+      if (on || Math.abs(tx - cx) > 0.5) requestAnimationFrame(loop);
+    };
+    rows.forEach(function (r) {
+      r.addEventListener('pointerenter', function (e) {
+        img.src = resolve(r.getAttribute('data-peek')); tx = cx = e.clientX; ty = cy = e.clientY;
+        if (!on) { on = true; requestAnimationFrame(loop); } el.classList.add('is-on');
+      });
+      r.addEventListener('pointermove', function (e) { tx = e.clientX; ty = e.clientY; });
+      r.addEventListener('pointerleave', function () { on = false; el.classList.remove('is-on'); });
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
-    initNav(); initCountdown(); initPauseLocks(); initFilters(); initProfileForm(); initCart(); initRefSave(); applyProfile();
+    initLoader(); initTheme(); initParticles(); initMenu();
+    initCountdown(); initPauseLocks(); initFilters(); initProfileForm(); initCart(); initRefSave(); applyProfile();
     initSplit(); initReveal(); initChrome(); initScrollVars(); initPointer(); initRail();
+    initVideos(); initBand(); initFire(); initTilt(); initPeek();
     document.documentElement.classList.add('motion-ready');
   });
 })();

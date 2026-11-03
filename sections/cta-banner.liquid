@@ -1,12 +1,16 @@
-<section class="cta-banner surface-walnut" data-scroll {{ section.shopify_attributes }}>
+<section class="cta-banner tone-dark" data-scroll {{ section.shopify_attributes }}>
+  <div class="cta-banner__bg" aria-hidden="true">{% render 'photo', image: section.settings.image, art: 'dinner', alt: '' %}</div>
+  {%- if section.settings.shimmer -%}
+    <video class="cta-banner__fx" aria-hidden="true" muted loop playsinline preload="none" poster="{{ 'video-gold-poster.webp' | asset_url }}" data-video-src="{{ 'video-gold.mp4' | asset_url }}" data-ambient></video>
+  {%- endif -%}
   <div class="container">
-    <div class="panel panel--slate surface-slate">
+    <div class="panel panel--glass">
       <span class="eyebrow">{{ section.settings.eyebrow }}</span>
       <h2>{{ section.settings.heading }}</h2>
       <div class="divider-gold" style="margin-inline:auto"><i></i></div>
       <p class="lede" style="margin-inline:auto">{{ section.settings.text }}</p>
       {%- if section.settings.show_countdown -%}
-        <p><span class="countdown" data-cutoff>Cierre de pedidos en <strong data-cutoff-value>…</strong></span></p>
+        <p><span class="countdown" data-cutoff>{{ 'cutoff.orders_close_in' | t }} <strong data-cutoff-value>…</strong></span></p>
       {%- endif -%}
       <div class="btn-row" style="justify-content:center">
         <a class="btn btn--gold" data-magnetic href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.button_label }}</a>
@@ -29,7 +33,9 @@
     { "type": "text", "id": "button_label", "label": "Botón", "default": "Elegir mi plan" },
     { "type": "url", "id": "button_link", "label": "Enlace" },
     { "type": "text", "id": "button2_label", "label": "Botón secundario" },
-    { "type": "url", "id": "button2_link", "label": "Enlace secundario" }
+    { "type": "url", "id": "button2_link", "label": "Enlace secundario" },
+    { "type": "image_picker", "id": "image", "label": "Foto de fondo", "info": "Vacío = cena a la luz de las velas del tema." },
+    { "type": "checkbox", "id": "shimmer", "label": "Destellos dorados animados (video)", "default": true }
   ],
   "presets": [{ "name": "Llamado a la acción" }]
 }

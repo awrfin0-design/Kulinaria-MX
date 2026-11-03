@@ -18,7 +18,7 @@
           <span class="tier-row__n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
           <div>{% render 'tier-badge', tier: block.settings.tier %}</div>
           <p class="tier-row__text">{{ block.settings.text }}</p>
-          <p class="tier-row__price gold-text">${{ price }}<small>MXN / platillo</small></p>
+          <p class="tier-row__price gold-text">${{ price }}<small>{{ 'tiers.unit' | t }}</small></p>
         </article>
       {%- endfor -%}
     </div>

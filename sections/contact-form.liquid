@@ -20,31 +20,31 @@
 
       <input type="hidden" name="contact[Solicitud]" value="{{ kind }}">
       <div class="form-grid">
-        <div class="field"><label for="cf-name">Nombre completo</label><input class="input" id="cf-name" name="contact[name]" required autocomplete="name"></div>
-        <div class="field"><label for="cf-email">Correo</label><input class="input" id="cf-email" type="email" name="contact[email]" required autocomplete="email"></div>
-        <div class="field"><label for="cf-phone">Teléfono / WhatsApp</label><input class="input" id="cf-phone" type="tel" name="contact[phone]" required autocomplete="tel"></div>
+        <div class="field"><label for="cf-name">{{ 'form.full_name' | t }}</label><input class="input" id="cf-name" name="contact[name]" required autocomplete="name"></div>
+        <div class="field"><label for="cf-email">{{ 'form.email' | t }}</label><input class="input" id="cf-email" type="email" name="contact[email]" required autocomplete="email"></div>
+        <div class="field"><label for="cf-phone">{{ 'form.phone_whatsapp' | t }}</label><input class="input" id="cf-phone" type="tel" name="contact[phone]" required autocomplete="tel"></div>
 
         {%- if kind == 'carta' -%}
-          <div class="field"><label for="cf-type">Tipo de experiencia</label>
-            <select class="select" id="cf-type" name="contact[Tipo de experiencia]">
-              <option>Chef privado a domicilio</option><option>Cena romántica de sábado</option><option>Evento especial</option>
+          <div class="field"><label for="cf-type">{{ 'form.experience_type' | t }}</label>
+            <select class="select" id="cf-type" name="contact[{{ 'form.experience_type' | t }}]">
+              <option>{{ 'form.opt_private_chef' | t }}</option><option>{{ 'form.opt_romantic' | t }}</option><option>{{ 'form.opt_event' | t }}</option>
             </select></div>
-          <div class="field"><label for="cf-date">Fecha deseada</label><input class="input" id="cf-date" type="date" name="contact[Fecha]"></div>
-          <div class="field"><label for="cf-guests">Número de invitados</label><input class="input" id="cf-guests" type="number" min="1" name="contact[Invitados]"></div>
+          <div class="field"><label for="cf-date">{{ 'form.desired_date' | t }}</label><input class="input" id="cf-date" type="date" name="contact[{{ 'account.date' | t }}]"></div>
+          <div class="field"><label for="cf-guests">{{ 'form.guests' | t }}</label><input class="input" id="cf-guests" type="number" min="1" name="contact[Invitados]"></div>
         {%- elsif kind == 'embajador' -%}
-          <div class="field"><label for="cf-role">Soy</label>
+          <div class="field"><label for="cf-role">{{ 'form.i_am' | t }}</label>
             <select class="select" id="cf-role" name="contact[Perfil]">
-              <option>Entrenador personal</option><option>Dueño de gimnasio</option><option>Cliente que quiere recomendar</option>
+              <option>{{ 'form.opt_trainer' | t }}</option><option>{{ 'form.opt_gym_owner' | t }}</option><option>{{ 'form.opt_client' | t }}</option>
             </select></div>
-          <div class="field"><label for="cf-org">Gimnasio / marca personal</label><input class="input" id="cf-org" name="contact[Organización]"></div>
+          <div class="field"><label for="cf-org">{{ 'form.gym_brand' | t }}</label><input class="input" id="cf-org" name="contact[Organización]"></div>
           <div class="field"><label for="cf-ig">Instagram</label><input class="input" id="cf-ig" name="contact[Instagram]" placeholder="@usuario"></div>
-          <div class="field"><label for="cf-code">Código de referencia deseado</label><input class="input" id="cf-code" name="contact[Código deseado]" placeholder="JUANFIT" style="text-transform:uppercase"></div>
+          <div class="field"><label for="cf-code">{{ 'form.desired_code' | t }}</label><input class="input" id="cf-code" name="contact[{{ 'cart.code' | t }} deseado]" placeholder="JUANFIT" style="text-transform:uppercase"></div>
         {%- endif -%}
       </div>
 
-      <div class="field"><label for="cf-body">Cuéntanos más</label><textarea class="textarea" id="cf-body" name="contact[body]" required></textarea></div>
+      <div class="field"><label for="cf-body">{{ 'form.tell_us_more' | t }}</label><textarea class="textarea" id="cf-body" name="contact[body]" required></textarea></div>
       {%- if kind == 'carta' -%}
-        <p class="legal-note">Esta sección no tiene precios publicados ni carrito: cada experiencia se cotiza de forma privada.</p>
+        <p class="legal-note">{{ 'form.carta_note' | t }}</p>
       {%- endif -%}
       <button class="btn btn--gold" type="submit">{{ section.settings.button_label }}</button>
     {%- endform -%}

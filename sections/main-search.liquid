@@ -2,17 +2,17 @@
 <section class="section" {{ section.shopify_attributes }}>
   <div class="container">
     <div class="section__head">
-      <span class="eyebrow">Buscar</span>
-      <h1 style="font-size:clamp(2.2rem,4vw,3.4rem)">{% if search.performed %}Resultados para "{{ search.terms | escape }}"{% else %}Buscar{% endif %}</h1>
+      <span class="eyebrow">{{ 'general.search' | t }}</span>
+      <h1 style="font-size:clamp(2.2rem,4vw,3.4rem)">{% if search.performed %}{{ 'search.results_for' | t }}{{ search.terms | escape }}"{% else %}{{ 'general.search' | t }}{% endif %}</h1>
     </div>
     <form action="{{ routes.search_url }}" method="get" role="search" class="btn-row" style="margin-bottom:var(--space-xl)">
-      <input class="input" style="max-width:420px" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Busca un platillo" aria-label="Buscar">
+      <input class="input" style="max-width:420px" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t }}" aria-label="{{ 'general.search' | t }}">
       <input type="hidden" name="type" value="product">
-      <button class="btn btn--gold" type="submit">Buscar</button>
+      <button class="btn btn--gold" type="submit">{{ 'general.search' | t }}</button>
     </form>
     {%- if search.performed -%}
       {%- if search.results.size == 0 -%}
-        <p class="alert">No encontramos resultados.</p>
+        <p class="alert">{{ 'search.none' | t }}</p>
       {%- else -%}
         <div class="dish-grid">
           {%- for item in search.results -%}

@@ -1,0 +1,38 @@
+<section class="band tone-dark" data-band {{ section.shopify_attributes }}>
+  <div class="band__pin">
+    <div class="band__media" aria-hidden="true">
+      <video class="band__video" muted playsinline preload="metadata" poster="{{ 'video-band-poster.webp' | asset_url }}" data-scrub data-video-src="{{ section.settings.video_url | default: 'video-band.mp4' | asset_url }}"></video>
+      <div class="band__shade"></div>
+    </div>
+    <div class="container band__content">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{{ section.settings.heading }}</h2>
+      <ol class="band__lines">
+        {%- for block in section.blocks -%}
+          <li class="band__line" style="--i:{{ forloop.index0 }}" {{ block.shopify_attributes }}><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{{ block.settings.text }}</li>
+        {%- endfor -%}
+      </ol>
+      {%- if section.settings.button_label != blank -%}
+        <div class="btn-row"><a class="btn btn--gold" href="{{ section.settings.button_link | default: '/collections/menu-semanal' }}">{{ section.settings.button_label }}</a></div>
+      {%- endif -%}
+    </div>
+    <div class="band__meter" aria-hidden="true"><i></i></div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Video con scroll",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Arte del fuego" },
+    { "type": "text", "id": "button_label", "label": "Botón" },
+    { "type": "url", "id": "button_link", "label": "Enlace del botón" },
+    { "type": "text", "id": "video_url", "label": "Video (URL .mp4)", "info": "El video avanza con el scroll. Exporta con un fotograma clave cada 4 cuadros para que se vea fluido. Vacío = video del tema." }
+  ],
+  "blocks": [
+    { "type": "line", "name": "Línea", "settings": [ { "type": "text", "id": "text", "label": "Texto", "default": "Línea" } ] }
+  ],
+  "presets": [{ "name": "Video con scroll", "blocks": [{ "type": "line" }, { "type": "line" }, { "type": "line" }] }]
+}
+{% endschema %}

@@ -1,0 +1,53 @@
+{%- liquid
+  assign menu = section.settings.menu
+  assign more = section.settings.menu_more
+-%}
+<div class="menu-overlay tone-dark" id="menu-overlay" role="dialog" aria-modal="true" aria-label="{{ 'nav.overlay_title' | t }}" hidden {{ section.shopify_attributes }}>
+  <div class="menu-overlay__bg" aria-hidden="true">{% render 'photo', art: 'flames', alt: '', eager: false %}</div>
+  <div class="container menu-overlay__inner">
+    <div class="menu-overlay__top">
+      <a href="{{ routes.root_url }}" aria-label="{{ shop.name }}">{% render 'logo' %}</a>
+      <div class="menu-overlay__tools">
+        {% render 'lang-switcher' %}
+        {% render 'theme-toggle' %}
+        <button class="icon-link" type="button" data-menu-close aria-label="{{ 'nav.close' | t }}">{% render 'icon', name: 'close' %}</button>
+      </div>
+    </div>
+
+    <div class="menu-overlay__body">
+      <nav class="menu-overlay__main" aria-label="{{ 'nav.overlay_title' | t }}">
+        {%- if menu != blank and menu.links.size > 0 -%}
+          {%- for link in menu.links -%}
+            <a href="{{ link.url }}" style="--i:{{ forloop.index0 }}"><span class="menu-overlay__n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span><span class="menu-overlay__t">{{ link.title }}</span></a>
+          {%- endfor -%}
+        {%- endif -%}
+      </nav>
+
+      <div class="menu-overlay__side">
+        {%- if more != blank and more.links.size > 0 -%}
+          <p class="eyebrow">{{ 'nav.secondary' | t }}</p>
+          <ul class="menu-overlay__more">
+            {%- for link in more.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
+          </ul>
+        {%- endif -%}
+        <p class="eyebrow">{{ 'nav.write_us' | t }}</p>
+        <ul class="menu-overlay__more">
+          {%- if settings.contact_email != blank -%}<li><a href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }}</a></li>{%- endif -%}
+          {%- if settings.contact_phone != blank -%}<li><a href="tel:{{ settings.contact_phone | remove: ' ' }}">{{ settings.contact_phone }}</a></li>{%- endif -%}
+        </ul>
+        {% render 'social-links' %}
+        <div class="btn-row"><a class="btn btn--gold" href="{{ settings.plans_url | default: '/pages/planes' }}">{{ 'nav.cta' | t }}</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Menú desplegable",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Enlaces principales (grandes)", "default": "main-menu" },
+    { "type": "link_list", "id": "menu_more", "label": "Enlaces secundarios", "default": "more-menu" }
+  ]
+}
+{% endschema %}

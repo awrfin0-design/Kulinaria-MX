@@ -1,25 +1,25 @@
 <section class="section" {{ section.shopify_attributes }}>
   <div class="container" style="max-width:720px">
     <div class="section__head">
-      <span class="eyebrow">Únete</span>
-      <h1 style="font-size:clamp(2.2rem,4vw,3.2rem)">Crear cuenta</h1>
+      <span class="eyebrow">{{ 'register.eyebrow' | t }}</span>
+      <h1 style="font-size:clamp(2.2rem,4vw,3.2rem)">{{ 'register.title' | t }}</h1>
       <div class="divider-gold"><i></i></div>
-      <p class="lede">Después de crear tu cuenta te pediremos tu perfil de alergias y tu dirección de entrega.</p>
+      <p class="lede">{{ 'register.text' | t }}</p>
     </div>
     {%- form 'create_customer', novalidate: 'novalidate' -%}
       {%- if form.errors -%}<div class="alert alert--warn" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
       <div class="form-grid">
-        <div class="field"><label for="reg-first">Nombre</label><input class="input" id="reg-first" name="customer[first_name]" autocomplete="given-name" required></div>
-        <div class="field"><label for="reg-last">Apellido</label><input class="input" id="reg-last" name="customer[last_name]" autocomplete="family-name" required></div>
-        <div class="field"><label for="reg-email">Correo</label><input class="input" id="reg-email" type="email" name="customer[email]" autocomplete="email" required></div>
-        <div class="field"><label for="reg-pass">Contraseña</label><input class="input" id="reg-pass" type="password" name="customer[password]" autocomplete="new-password" required></div>
+        <div class="field"><label for="reg-first">{{ 'form.first_name' | t }}</label><input class="input" id="reg-first" name="customer[first_name]" autocomplete="given-name" required></div>
+        <div class="field"><label for="reg-last">{{ 'form.last_name' | t }}</label><input class="input" id="reg-last" name="customer[last_name]" autocomplete="family-name" required></div>
+        <div class="field"><label for="reg-email">{{ 'form.email' | t }}</label><input class="input" id="reg-email" type="email" name="customer[email]" autocomplete="email" required></div>
+        <div class="field"><label for="reg-pass">{{ 'form.password' | t }}</label><input class="input" id="reg-pass" type="password" name="customer[password]" autocomplete="new-password" required></div>
       </div>
       <div class="field">
-        <label for="reg-ref">Código de referencia (opcional)</label>
+        <label for="reg-ref">{{ 'form.referral_optional' | t }}</label>
         <input class="input" id="reg-ref" data-ref-save placeholder="JUANFIT" autocomplete="off" style="text-transform:uppercase">
       </div>
       <input type="hidden" name="customer[tags]" value="suscriptor">
-      <button class="btn btn--gold btn--block" type="submit">Crear cuenta</button>
+      <button class="btn btn--gold btn--block" type="submit">{{ 'register.title' | t }}</button>
     {%- endform -%}
   </div>
 </section>

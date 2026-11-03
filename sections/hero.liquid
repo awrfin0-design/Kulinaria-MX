@@ -1,4 +1,25 @@
-<section class="hero surface-walnut" data-scroll data-tilt {{ section.shopify_attributes }}>
+{%- liquid
+  assign alt_1 = 'hero.card_alt_1' | t
+  assign alt_2 = 'hero.card_alt_2' | t
+  assign alt_3 = 'hero.card_alt_3' | t
+  assign size = section.settings.size | default: 'full'
+  assign v1 = section.settings.video_url | default: ''
+-%}
+<section class="hero hero--{{ size }} tone-dark" data-scroll data-tilt data-hero {{ section.shopify_attributes }}>
+  <div class="hero__bg" aria-hidden="true">
+    {%- if size == 'full' -%}
+      <div class="hero__slide is-on" data-slide>
+        <video class="hero__video" muted loop playsinline preload="none" poster="{{ 'video-second-poster.webp' | asset_url }}" data-video-src="{{ v1 | default: 'video-second.mp4' | asset_url }}" data-hero-video></video>
+      </div>
+      <div class="hero__slide" data-slide>
+        <video class="hero__video" muted loop playsinline preload="none" poster="{{ 'video-hero-2-poster.webp' | asset_url }}" data-video-src="{{ section.settings.video2_url | default: 'video-hero-2.mp4' | asset_url }}" data-hero-video></video>
+      </div>
+    {%- else -%}
+      <div class="hero__slide is-on" data-slide>{% render 'photo', art: section.settings.art, alt: '', eager: true %}</div>
+    {%- endif -%}
+    <div class="hero__shade"></div>
+  </div>
+
   <div class="container hero__grid">
     <div class="hero__copy">
       {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
@@ -6,7 +27,7 @@
       <p class="lede">{{ section.settings.text }}</p>
 
       {%- if section.settings.show_countdown -%}
-        <p><span class="countdown" data-cutoff>Cierre de pedidos en <strong data-cutoff-value>…</strong></span></p>
+        <p><span class="countdown" data-cutoff>{{ 'cutoff.orders_close_in' | t }} <strong data-cutoff-value>…</strong></span></p>
       {%- endif -%}
 
       <div class="btn-row">
@@ -19,21 +40,27 @@
       </div>
     </div>
 
-    <div class="plate surface-slate" role="img" aria-label="{{ section.settings.heading | escape }}">
-      {%- if section.settings.plate_image != blank -%}
-        {{ section.settings.plate_image | image_url: width: 900 | image_tag: loading: 'eager', alt: section.settings.heading }}
-      {%- else -%}
-        <div class="plate--logo">{% render 'logo' %}</div>
-      {%- endif -%}
-    </div>
+    {%- if size == 'full' -%}
+      <div class="hero__stack" role="group" aria-label="{{ section.settings.heading | escape }}">
+        <figure class="hero__card hero__card--1" style="--z:1;--r:-5deg">{% render 'photo', image: section.settings.image_1, art: 'dish-1', alt: alt_1, eager: true %}<figcaption>{{ 'hero.chip_1' | t }}</figcaption></figure>
+        <figure class="hero__card hero__card--2" style="--z:2;--r:4deg">{% render 'photo', image: section.settings.image_2, art: 'dish-6', alt: alt_2, eager: true %}<figcaption>{{ 'hero.chip_2' | t }}</figcaption></figure>
+        <figure class="hero__card hero__card--3" style="--z:3;--r:-2deg">{% render 'photo', image: section.settings.image_3, art: 'dish-3', alt: alt_3, eager: true %}<figcaption>{{ 'hero.chip_3' | t }}</figcaption></figure>
+      </div>
+    {%- endif -%}
   </div>
-  <span class="hero__scroll" aria-hidden="true"><i></i>Desliza</span>
+
+  {%- if size == 'full' -%}
+    <button class="hero__toggle" type="button" data-media-toggle aria-pressed="false" aria-label="{{ 'media.pause' | t }}">{% render 'icon', name: 'pause' %}</button>
+  {%- endif -%}
+  <span class="hero__scroll" aria-hidden="true"><i></i>{{ 'hero.scroll' | t }}</span>
 </section>
 
 {% schema %}
 {
   "name": "Hero",
   "settings": [
+    { "type": "select", "id": "size", "label": "Tamaño", "default": "full", "options": [
+      { "value": "full", "label": "Completo (video + tarjetas 3D)" }, { "value": "compact", "label": "Compacto (foto, para páginas internas)" } ] },
     { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Comida saludable premium a domicilio" },
     { "type": "text", "id": "heading", "label": "Título", "default": "Tu semana, servida como una pieza de autor" },
     { "type": "textarea", "id": "text", "label": "Texto", "default": "Platillos preparados por chefs, adaptados a tu estilo de vida y entregados en envases de vidrio. Elige tu bloque de 4 semanas y olvídate de cocinar." },
@@ -42,7 +69,16 @@
     { "type": "text", "id": "button2_label", "label": "Botón secundario", "default": "Ver el menú de la semana" },
     { "type": "url", "id": "button2_link", "label": "Enlace del botón secundario" },
     { "type": "checkbox", "id": "show_countdown", "label": "Mostrar cuenta regresiva de cierre", "default": true },
-    { "type": "image_picker", "id": "plate_image", "label": "Foto del platillo (vista cenital, sobre pizarra)", "info": "Si está vacío se muestra el logotipo sobre la placa de pizarra." }
+    { "type": "header", "content": "Video de fondo (se alternan 2 videos)" },
+    { "type": "text", "id": "video_url", "label": "Video 1 (URL .mp4)", "info": "Vacío = video del tema (assets/video-second.mp4)." },
+    { "type": "text", "id": "video2_url", "label": "Video 2 (URL .mp4)", "info": "Vacío = video del tema (assets/video-hero-2.mp4)." },
+    { "type": "header", "content": "Tarjetas flotantes 3D" },
+    { "type": "image_picker", "id": "image_1", "label": "Foto 1" },
+    { "type": "image_picker", "id": "image_2", "label": "Foto 2" },
+    { "type": "image_picker", "id": "image_3", "label": "Foto 3" },
+    { "type": "select", "id": "art", "label": "Foto de fondo (tamaño compacto)", "default": "wood", "options": [
+      { "value": "wood", "label": "Madera de nogal" }, { "value": "flames", "label": "Llamas" }, { "value": "dinner", "label": "Cena a la luz de las velas" },
+      { "value": "containers", "label": "Envases de vidrio" }, { "value": "hero", "label": "Corte sobre pizarra" } ] }
   ],
   "presets": [{ "name": "Hero" }]
 }

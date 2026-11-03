@@ -1,15 +1,15 @@
 <section class="section" {{ section.shopify_attributes }}>
   <div class="container" style="max-width:960px">
     <div class="section__head">
-      <span class="eyebrow">Entregas</span>
-      <h1 style="font-size:clamp(2rem,4vw,3rem)">Mis direcciones</h1>
-      <a class="btn btn--ghost" href="{{ routes.account_url }}">← Volver a mi cuenta</a>
+      <span class="eyebrow">{{ 'addr.eyebrow' | t }}</span>
+      <h1 style="font-size:clamp(2rem,4vw,3rem)">{{ 'addr.title' | t }}</h1>
+      <a class="btn btn--ghost" href="{{ routes.account_url }}">{{ 'general.back_account' | t }}</a>
     </div>
     {%- paginate customer.addresses by 10 -%}
       <div class="grid grid--2">
         {%- for address in customer.addresses -%}
           <div class="card">
-            {%- if address == customer.default_address -%}<span class="tier-badge tier-badge--exclusivo">Principal</span>{%- endif -%}
+            {%- if address == customer.default_address -%}<span class="tier-badge tier-badge--exclusivo">{{ 'addr.primary' | t }}</span>{%- endif -%}
             <p class="text-muted">{{ address | format_address }}</p>
           </div>
         {%- endfor -%}
@@ -17,21 +17,21 @@
     {%- endpaginate -%}
 
     <div class="panel panel--gold" style="margin-top:var(--space-xl)">
-      <h2 style="font-size:1.6rem">Agregar dirección</h2>
-      <p class="text-muted">Incluye clúster, calle, número de lote o casa y referencias de acceso.</p>
+      <h2 style="font-size:1.6rem">{{ 'addr.add' | t }}</h2>
+      <p class="text-muted">{{ 'addr.hint' | t }}</p>
       {%- form 'customer_address', customer.new_address -%}
         <div class="form-grid">
-          <div class="field"><label for="a-first">Nombre</label><input class="input" id="a-first" name="address[first_name]" required></div>
-          <div class="field"><label for="a-last">Apellido</label><input class="input" id="a-last" name="address[last_name]" required></div>
-          <div class="field"><label for="a-a1">Calle y número de lote / casa</label><input class="input" id="a-a1" name="address[address1]" required></div>
-          <div class="field"><label for="a-a2">Clúster y referencias de acceso</label><input class="input" id="a-a2" name="address[address2]"></div>
-          <div class="field"><label for="a-city">Ciudad</label><input class="input" id="a-city" name="address[city]" required></div>
-          <div class="field"><label for="a-zip">Código postal</label><input class="input" id="a-zip" name="address[zip]" required></div>
-          <div class="field"><label for="a-phone">Teléfono</label><input class="input" id="a-phone" type="tel" name="address[phone]" required></div>
+          <div class="field"><label for="a-first">{{ 'form.first_name' | t }}</label><input class="input" id="a-first" name="address[first_name]" required></div>
+          <div class="field"><label for="a-last">{{ 'form.last_name' | t }}</label><input class="input" id="a-last" name="address[last_name]" required></div>
+          <div class="field"><label for="a-a1">{{ 'addr.street' | t }}</label><input class="input" id="a-a1" name="address[address1]" required></div>
+          <div class="field"><label for="a-a2">{{ 'addr.cluster' | t }}</label><input class="input" id="a-a2" name="address[address2]"></div>
+          <div class="field"><label for="a-city">{{ 'addr.city' | t }}</label><input class="input" id="a-city" name="address[city]" required></div>
+          <div class="field"><label for="a-zip">{{ 'addr.zip' | t }}</label><input class="input" id="a-zip" name="address[zip]" required></div>
+          <div class="field"><label for="a-phone">{{ 'form.phone' | t }}</label><input class="input" id="a-phone" type="tel" name="address[phone]" required></div>
           <input type="hidden" name="address[country]" value="Mexico">
         </div>
-        <label class="check" style="margin-bottom:var(--space-md)"><input type="checkbox" name="address[default]" value="1"> <span>Usar como dirección principal</span></label>
-        <button class="btn btn--gold" type="submit">Guardar dirección</button>
+        <label class="check" style="margin-bottom:var(--space-md)"><input type="checkbox" name="address[default]" value="1"> <span>{{ 'addr.make_primary' | t }}</span></label>
+        <button class="btn btn--gold" type="submit">{{ 'addr.save' | t }}</button>
       {%- endform -%}
     </div>
   </div>

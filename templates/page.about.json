@@ -9,29 +9,86 @@
         "button_label": "Elegir mi plan",
         "button2_label": "Ver el menú",
         "button2_link": "/collections/menu-semanal",
-        "show_countdown": false
+        "show_countdown": false,
+        "size": "compact",
+        "art": "wood"
       }
     },
     "story": {
       "type": "feature-grid",
-      "settings": { "eyebrow": "La marca", "heading": "Cocina de autor, entregada en tu puerta", "columns": "3", "background": "base" },
-      "blocks": {
-        "s1": { "type": "item", "settings": { "title": "Propósito", "text": "<p>Que comer saludable no signifique renunciar al placer: platillos de autor, listos para tu semana.</p>" } },
-        "s2": { "type": "item", "settings": { "title": "Historia y fundador", "text": "<p>Contenido por definir: relato de la marca y presentación del fundador.</p>" } },
-        "s3": { "type": "item", "settings": { "title": "Equipo de cocina", "text": "<p>Chefs que dominan el fuego, las cocciones lentas y las reducciones artesanales.</p>" } }
+      "settings": {
+        "eyebrow": "La marca",
+        "heading": "Cocina de autor, entregada en tu puerta",
+        "columns": "3",
+        "background": "base"
       },
-      "block_order": ["s1", "s2", "s3"]
+      "blocks": {
+        "s1": {
+          "type": "item",
+          "settings": {
+            "title": "Propósito",
+            "text": "<p>Que comer saludable no signifique renunciar al placer: platillos de autor, listos para tu semana.</p>"
+          }
+        },
+        "s2": {
+          "type": "item",
+          "settings": {
+            "title": "Historia y fundador",
+            "text": "<p>Contenido por definir: relato de la marca y presentación del fundador.</p>"
+          }
+        },
+        "s3": {
+          "type": "item",
+          "settings": {
+            "title": "Equipo de cocina",
+            "text": "<p>Chefs que dominan el fuego, las cocciones lentas y las reducciones artesanales.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ]
     },
     "quality": {
       "type": "feature-grid",
-      "settings": { "eyebrow": "Calidad", "heading": "Cuidamos cada detalle", "columns": "2", "background": "raised" },
-      "blocks": {
-        "q1": { "type": "item", "settings": { "title": "Ingredientes premium", "text": "<p>Proteínas de excelente calidad, cortes premium y mariscos selectos acondicionados para recalentar sin perder su punto.</p>" } },
-        "q2": { "type": "item", "settings": { "title": "Envases de vidrio", "text": "<p>Contenedores de alta calidad que conservan el sabor y se pueden reutilizar. Te agradecemos cuidarlos.</p>" } }
+      "settings": {
+        "eyebrow": "Calidad",
+        "heading": "Cuidamos cada detalle",
+        "columns": "2",
+        "background": "raised"
       },
-      "block_order": ["q1", "q2"]
+      "blocks": {
+        "q1": {
+          "type": "item",
+          "settings": {
+            "title": "Ingredientes premium",
+            "text": "<p>Proteínas de excelente calidad, cortes premium y mariscos selectos acondicionados para recalentar sin perder su punto.</p>"
+          }
+        },
+        "q2": {
+          "type": "item",
+          "settings": {
+            "title": "Envases de vidrio",
+            "text": "<p>Contenedores de alta calidad que conservan el sabor y se pueden reutilizar. Te agradecemos cuidarlos.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2"
+      ]
     },
-    "cta": { "type": "cta-banner", "settings": {} }
+    "cta": {
+      "type": "cta-banner",
+      "settings": {}
+    }
   },
-  "order": ["hero", "story", "quality", "cta"]
+  "order": [
+    "hero",
+    "story",
+    "quality",
+    "cta"
+  ]
 }

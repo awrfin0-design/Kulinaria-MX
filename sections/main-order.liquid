@@ -1,30 +1,30 @@
 <section class="section" {{ section.shopify_attributes }}>
   <div class="container" style="max-width:960px">
     <div class="section__head">
-      <span class="eyebrow">Pedido</span>
+      <span class="eyebrow">{{ 'account.order' | t }}</span>
       <h1 style="font-size:clamp(2rem,4vw,3rem)">{{ order.name }}</h1>
       <p class="text-muted">{{ order.created_at | date: '%d/%m/%Y' }} · {{ order.financial_status_label }} · {{ order.fulfillment_status_label }}</p>
-      <a class="btn btn--ghost" href="{{ routes.account_url }}">← Volver a mi cuenta</a>
+      <a class="btn btn--ghost" href="{{ routes.account_url }}">{{ 'general.back_account' | t }}</a>
     </div>
     <div class="table-wrap"><table class="table">
-      <thead><tr><th>Platillo</th><th>Cantidad</th><th style="text-align:right">Total</th></tr></thead>
+      <thead><tr><th>{{ 'order.dish' | t }}</th><th>{{ 'order.quantity' | t }}</th><th style="text-align:right">{{ 'cart.total' | t }}</th></tr></thead>
       <tbody>
         {%- for line in order.line_items -%}
           <tr>
-            <td>{{ line.title }}{% if line.selling_plan_allocation %}<br><small style="color:var(--gold-300)">{{ line.selling_plan_allocation.selling_plan.name }}</small>{% endif %}</td>
+            <td>{{ line.title }}{% if line.selling_plan_allocation %}<br><small style="color:var(--accent)">{{ line.selling_plan_allocation.selling_plan.name }}</small>{% endif %}</td>
             <td>{{ line.quantity }}</td>
             <td style="text-align:right">{{ line.final_line_price | money }}</td>
           </tr>
         {%- endfor -%}
       </tbody>
       <tfoot>
-        <tr><td colspan="2" style="text-align:right">Subtotal</td><td style="text-align:right">{{ order.line_items_subtotal_price | money }}</td></tr>
-        {%- if order.total_discounts > 0 -%}<tr><td colspan="2" style="text-align:right">Descuentos</td><td style="text-align:right">-{{ order.total_discounts | money }}</td></tr>{%- endif -%}
-        <tr><td colspan="2" style="text-align:right"><strong>Total</strong></td><td style="text-align:right"><strong>{{ order.total_price | money }}</strong></td></tr>
+        <tr><td colspan="2" style="text-align:right">{{ 'cart.subtotal' | t }}</td><td style="text-align:right">{{ order.line_items_subtotal_price | money }}</td></tr>
+        {%- if order.total_discounts > 0 -%}<tr><td colspan="2" style="text-align:right">{{ 'order.discounts' | t }}</td><td style="text-align:right">-{{ order.total_discounts | money }}</td></tr>{%- endif -%}
+        <tr><td colspan="2" style="text-align:right"><strong>{{ 'cart.total' | t }}</strong></td><td style="text-align:right"><strong>{{ order.total_price | money }}</strong></td></tr>
       </tfoot>
     </table></div>
     {%- if order.shipping_address -%}
-      <div class="card" style="margin-top:var(--space-xl)"><h3>Dirección de entrega</h3><p class="text-muted">{{ order.shipping_address | format_address }}</p></div>
+      <div class="card" style="margin-top:var(--space-xl)"><h3>{{ 'account.delivery_address' | t }}</h3><p class="text-muted">{{ order.shipping_address | format_address }}</p></div>
     {%- endif -%}
   </div>
 </section>

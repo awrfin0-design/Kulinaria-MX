@@ -14,42 +14,45 @@
     </div>
 
     <form data-profile-form class="panel panel--gold" novalidate>
-      <h3>Bloque 1 · Alergias y restricciones médicas <span class="tier-badge tier-badge--exclusivo" style="vertical-align:middle;margin-left:8px">Crítico</span></h3>
-      <p class="text-muted">Los platillos que contengan estos ingredientes (o trazas) se bloquean por completo en tu menú.</p>
+      <h3>{{ 'profile.block1' | t }} <span class="tier-badge tier-badge--exclusivo" style="vertical-align:middle;margin-left:8px">{{ 'profile.critical' | t }}</span></h3>
+      <p class="text-muted">{{ 'profile.block1_text' | t }}</p>
       <div class="check-grid">
         {%- for a in allergy_list -%}
-          <label class="check"><input type="checkbox" name="allergy" value="{{ a }}"> <span>{{ a }}</span></label>
+          {%- assign ah = a | handleize -%}{%- assign ak = 'allergen.' | append: ah -%}
+          <label class="check"><input type="checkbox" name="allergy" value="{{ a }}"> <span>{{ ak | t }}</span></label>
         {%- endfor -%}
       </div>
-      <div class="field"><label for="allergy-other">Otras alergias</label>
-        <input class="input" id="allergy-other" name="allergy_other" list="allergy-list" placeholder="Separa con comas: soya, huevo, ajonjolí">
+      <div class="field"><label for="allergy-other">{{ 'profile.other_allergies' | t }}</label>
+        <input class="input" id="allergy-other" name="allergy_other" list="allergy-list" placeholder="{{ 'profile.other_placeholder' | t }}">
         <datalist id="allergy-list">
           {%- for a in allergy_more -%}<option value="{{ a }}"></option>{%- endfor -%}
         </datalist></div>
 
       <hr style="border:0;border-top:1px solid var(--border);margin:var(--space-xl) 0">
 
-      <h3>Bloque 2 · Ingredientes que no me gustan</h3>
-      <p class="text-muted">Escribe un ingrediente y presiona Enter. Filtramos el menú o sustituimos el ingrediente cuando la cocina lo permite.</p>
-      <div class="tag-input" data-tags><input type="text" data-tag-input placeholder="Ej. jitomate" aria-label="Agregar ingrediente"></div>
+      <h3>{{ 'profile.block2' | t }}</h3>
+      <p class="text-muted">{{ 'profile.block2_text' | t }}</p>
+      <div class="tag-input" data-tags><input type="text" data-tag-input placeholder="{{ 'profile.tag_placeholder' | t }}" aria-label="{{ 'profile.add_ingredient' | t }}"></div>
       <div class="chips" style="margin-top:12px">
         {%- for s in suggest_list -%}
-          <button class="chip" type="button" data-suggest="{{ s }}">+ {{ s }}</button>
+          {%- assign sh = s | handleize -%}{%- assign sk = 'allergen.' | append: sh -%}
+          <button class="chip" type="button" data-suggest="{{ s }}">+ {{ sk | t }}</button>
         {%- endfor -%}
       </div>
 
       <hr style="border:0;border-top:1px solid var(--border);margin:var(--space-xl) 0">
 
-      <h3>Preferencias dietéticas</h3>
+      <h3>{{ 'profile.diets' | t }}</h3>
       <div class="check-grid">
         {%- for d in diet_list -%}
-          <label class="check"><input type="checkbox" name="diet" value="{{ d }}"> <span>{{ d }}</span></label>
+          {%- assign dh = d | handleize -%}{%- assign dk = 'diet.' | append: dh -%}
+          <label class="check"><input type="checkbox" name="diet" value="{{ d }}"> <span>{{ dk | t }}</span></label>
         {%- endfor -%}
       </div>
 
       <p class="legal-note">{{ settings.allergy_disclaimer }}</p>
-      <button class="btn btn--gold" type="submit">Guardar mi perfil</button>
-      <p class="alert alert--ok form-msg" data-profile-msg hidden role="status">Perfil guardado. El menú ya se filtra con tus datos y tus siguientes pedidos lo incluirán.</p>
+      <button class="btn btn--gold" type="submit">{{ 'profile.save' | t }}</button>
+      <p class="alert alert--ok form-msg" data-profile-msg hidden role="status">{{ 'profile.saved' | t }}</p>
     </form>
   </div>
 </section>

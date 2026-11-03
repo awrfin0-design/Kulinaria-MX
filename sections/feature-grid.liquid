@@ -18,7 +18,9 @@
         {%- if layout == 'index' -%}
           {%- assign tag = 'div' -%}
           {%- if block.settings.link != blank -%}{%- assign tag = 'a' -%}{%- endif -%}
-          <{{ tag }} class="index-row" {% if tag == 'a' %}href="{{ block.settings.link }}"{% endif %} {{ block.shopify_attributes }}>
+          {%- assign peek = '' -%}
+          {%- if block.settings.art != blank and block.settings.art != 'none' -%}{%- assign peek_file = 'photo-' | append: block.settings.art | append: '.webp' -%}{%- assign peek = peek_file | asset_url -%}{%- endif -%}
+          <{{ tag }} class="index-row" {% if tag == 'a' %}href="{{ block.settings.link }}"{% endif %} {% if peek != blank %}data-peek="{{ peek }}"{% endif %} {{ block.shopify_attributes }}>
             <span class="index-row__n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
             <span class="index-row__t">{{ block.settings.title }}</span>
             <p class="index-row__d">{{ block.settings.text | strip_html | truncate: 120 }}</p>
@@ -27,9 +29,12 @@
         {%- else -%}
           {%- assign tag = 'div' -%}
           {%- if block.settings.link != blank and block.settings.link_label == blank -%}{%- assign tag = 'a' -%}{%- endif -%}
-          <{{ tag }} class="card{% if block.settings.image != blank %} card--img{% endif %}" style="--i:{{ forloop.index0 }}" {% if tag == 'a' %}href="{{ block.settings.link }}"{% endif %} {{ block.shopify_attributes }}>
-            {%- if block.settings.image != blank -%}
-              {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', alt: block.settings.title }}
+          {%- assign has_photo = false -%}
+          {%- assign photo_alt = block.settings.title | escape -%}
+          {%- if block.settings.image != blank or block.settings.art != blank and block.settings.art != 'none' -%}{%- assign has_photo = true -%}{%- endif -%}
+          <{{ tag }} class="card{% if has_photo %} card--img{% endif %}" style="--i:{{ forloop.index0 }}" {% if tag == 'a' %}href="{{ block.settings.link }}"{% endif %} {{ block.shopify_attributes }}>
+            {%- if has_photo -%}
+              <span class="card__photo" data-tilt-card>{% render 'photo', image: block.settings.image, art: block.settings.art, alt: photo_alt %}</span>
               <div class="card__body">
             {%- endif -%}
             {%- if section.settings.numbered or layout == 'stack' -%}<span class="card__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{%- endif -%}
@@ -39,7 +44,7 @@
             {%- if block.settings.link != blank and block.settings.link_label != blank -%}
               <a class="btn btn--ghost" style="margin-top:auto;align-self:flex-start" href="{{ block.settings.link }}">{{ block.settings.link_label }}</a>
             {%- endif -%}
-            {%- if block.settings.image != blank -%}</div>{%- endif -%}
+            {%- if has_photo -%}</div>{%- endif -%}
           </{{ tag }}>
         {%- endif -%}
       {%- endfor -%}
@@ -81,6 +86,11 @@
       "name": "Tarjeta",
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Imagen (opcional)" },
+        { "type": "select", "id": "art", "label": "Foto del tema (si no subes una)", "default": "none", "options": [
+          { "value": "none", "label": "Sin foto del tema" }, { "value": "hero", "label": "Corte sobre pizarra" }, { "value": "flames", "label": "Llamas" },
+          { "value": "dinner", "label": "Cena a la luz de las velas" }, { "value": "containers", "label": "Envases de vidrio" }, { "value": "wood", "label": "Madera de nogal" },
+          { "value": "dish-0", "label": "Platillo 1" }, { "value": "dish-1", "label": "Platillo 2" }, { "value": "dish-2", "label": "Platillo 3" }, { "value": "dish-3", "label": "Platillo 4" },
+          { "value": "dish-4", "label": "Platillo 5" }, { "value": "dish-5", "label": "Platillo 6" }, { "value": "dish-6", "label": "Platillo 7" }, { "value": "dish-7", "label": "Platillo 8" } ] },
         { "type": "text", "id": "eyebrow", "label": "Sobretítulo" },
         { "type": "text", "id": "title", "label": "Título", "default": "Título" },
         { "type": "richtext", "id": "text", "label": "Texto", "default": "<p>Descripción breve.</p>" },

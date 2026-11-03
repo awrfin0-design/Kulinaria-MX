@@ -9,7 +9,9 @@
         "button_label": "Ver el menú de la semana",
         "button_link": "/collections/menu-semanal",
         "button2_label": "",
-        "show_countdown": false
+        "show_countdown": false,
+        "size": "compact",
+        "art": "flames"
       }
     },
     "principles": {
