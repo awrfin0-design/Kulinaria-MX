@@ -517,7 +517,7 @@
   var FUNNEL_KEY = 'kulinaria_funnel';
   function initFunnel() {
     $$('[data-funnel]').forEach(function (holder) {
-      var st = { diet: 'all', cat: 'all', plan: 'block', qty: {}, info: {}, allergies: [], step: 0, remembered: false };
+      var st = { diet: 'all', cat: 'all', tier: 'all', plan: 'block', qty: {}, info: {}, allergies: [], step: 0, remembered: false };
       try { var saved = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (saved) { st = Object.assign(st, saved); st.remembered = !!(saved.info && (saved.info.name || saved.info.email)); } } catch (e) {}
       var T_ = function (k) { return holder.getAttribute('data-t-' + k) || ''; };
       var steps = $$('[data-fn-step]', holder), dots = $$('[data-fn-dot]', holder), bar = $('[data-fn-bar]', holder);
@@ -532,24 +532,19 @@
       var persist = function () { try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(st)); } catch (e) {} };
       var say = function (msg) { if (!err) return; err.hidden = !msg; err.textContent = msg || ''; };
 
-      var valid = function (n) {
-        if (n === 1) return count() > 0;
-        if (n === 4) return true;
-        return true;
-      };
 
       var render = function () {
-        $$('[data-diet]', holder).forEach(function (b) { b.setAttribute('aria-checked', b.getAttribute('data-diet') === st.diet ? 'true' : 'false'); });
+        $$('[data-diet]', holder).forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-diet') === st.diet ? 'true' : 'false'); });
         $$('[data-plan-choice]', holder).forEach(function (b) { b.setAttribute('aria-checked', b.getAttribute('data-plan-choice') === st.plan ? 'true' : 'false'); });
-        $$('[data-cat]', holder).forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-cat') === st.cat ? 'true' : 'false'); });
-        var shownD = 0, shownC = 0;
+        $$('[data-cat]', holder).forEach(function (b) { b.setAttribute('aria-checked', b.getAttribute('data-cat') === st.cat ? 'true' : 'false'); });
+        $$('[data-tier-choice]', holder).forEach(function (b) { b.setAttribute('aria-checked', b.getAttribute('data-tier-choice') === st.tier ? 'true' : 'false'); });
+        var shownD = 0;
         dishes.forEach(function (d) {
-          var grid = d.closest('[data-fn-grid]').getAttribute('data-fn-grid');
-          var show = grid === 'diet'
-            ? (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1)
-            : (st.cat === 'all' || d.getAttribute('data-category') === st.cat);
+          var show = (st.cat === 'all' || d.getAttribute('data-category') === st.cat)
+            && (st.tier === 'all' || d.getAttribute('data-tier') === st.tier)
+            && (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1);
           d.classList.toggle('is-hidden', !show);
-          if (show) { if (grid === 'diet') shownD++; else shownC++; }
+          if (show) shownD++;
           var q = st.qty[d.getAttribute('data-pid')] || 0;
           d.classList.toggle('is-picked', q > 0);
           var ctl = $('[data-fn-qty]', d), out = $('[data-q-out]', d), pick = $('[data-pick]', d);
@@ -557,10 +552,11 @@
           if (pick) { pick.hidden = q > 0; }
         });
         var e1 = $('[data-fn-empty]', holder); if (e1) e1.hidden = shownD > 0;
-        var e2 = $('[data-fn-empty-cat]', holder); if (e2) e2.hidden = shownC > 0;
         // summary
-        var dietBtn = $('[data-diet="' + st.diet + '"] strong', holder);
-        var sf = $('[data-fn-s-focus]', holder); if (sf) sf.textContent = dietBtn ? dietBtn.textContent : T_('all');
+        var menuBtn = $('[data-cat="' + st.cat + '"] strong', holder);
+        var sf = $('[data-fn-s-focus]', holder); if (sf) sf.textContent = menuBtn ? menuBtn.textContent : T_('all');
+        var tierBtn = $('[data-tier-choice="' + st.tier + '"] strong', holder);
+        var stier = $('[data-fn-s-tier]', holder); if (stier) stier.textContent = tierBtn ? tierBtn.textContent : T_('any-tier');
         var sp = $('[data-fn-s-plan]', holder); if (sp) sp.textContent = st.plan === 'trial' ? T_('trial-name') : T_('block');
         var list = $('[data-fn-s-list]', holder); if (list) {
           list.innerHTML = '';
@@ -581,42 +577,26 @@
         if (bar) bar.style.transform = 'scaleX(' + ((st.step + 1) / steps.length) + ')';
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
-        if (next) { next.hidden = last; next.disabled = (st.step === 1 && count() === 0); }
+        if (next) { next.hidden = last; next.disabled = (st.step === 2 && count() === 0); }
         if (finish) finish.hidden = !last;
         var rem = $('[data-fn-remembered]', holder); if (rem) { rem.hidden = !(st.remembered && st.step === 4); rem.textContent = T_('remembered'); }
       };
 
-      // the funnel is pinned: its track is taller than the screen, and scrolling through the track walks through the steps.
-      // Steps still advance with clicks (the scroll position follows), and "skip" jumps past the whole thing.
-      var track = $('[data-fn-track]', holder), stage = $('[data-fn-stage]', holder), lock = false, lockTimer = null;
-      var geom = function () {
-        var top = track.getBoundingClientRect().top + window.scrollY, stick = parseFloat(getComputedStyle(stage).top) || 0;
-        return { top: top - stick, range: Math.max(1, track.offsetHeight - stage.offsetHeight) };
-      };
-      var posFor = function (n) { var g = geom(); return g.top + g.range * ((n + 0.5) / steps.length); };
+      // a plain stepper: the page keeps scrolling normally; changing step brings the top of the funnel back into view if needed
+      var top = $('.funnel__top', holder);
       var go = function (n) {
-        n = Math.max(0, Math.min(steps.length - 1, n)); st.step = n; say(''); persist(); render();
-        if (!track) return;
-        lock = true; clearTimeout(lockTimer); lockTimer = setTimeout(function () { lock = false; }, REDUCE ? 150 : 950);
-        window.scrollTo({ top: posFor(n), behavior: REDUCE ? 'auto' : 'smooth' });
+        n = Math.max(0, Math.min(steps.length - 1, n)); var moved = n !== st.step; st.step = n; say(''); persist(); render();
+        if (moved && top) {
+          var r = top.getBoundingClientRect(), hdr = (parseFloat(getComputedStyle(root).getPropertyValue('--hdr')) || 72) + 8;
+          if (r.top < hdr || r.top > window.innerHeight * 0.5) window.scrollTo({ top: r.top + window.scrollY - hdr, behavior: REDUCE ? 'auto' : 'smooth' });
+        }
       };
-      if (track) {
-        window.addEventListener('scroll', raf(function () {
-          if (lock) return;
-          var g = geom(), p = (window.scrollY - g.top) / g.range;
-          if (p < -0.02 || p > 1.02) return;
-          var target = Math.max(0, Math.min(steps.length - 1, Math.floor(p * steps.length)));
-          target = Math.min(target, count() > 0 ? steps.length - 1 : 1);       // can't scroll past the dishes until one is chosen
-          if (target !== st.step) { st.step = target; say(''); persist(); render(); }
-        }), { passive: true });
-        var skip = $('[data-fn-skip]', holder);
-        if (skip) skip.addEventListener('click', function () { window.scrollTo({ top: track.getBoundingClientRect().bottom + window.scrollY - 12, behavior: REDUCE ? 'auto' : 'smooth' }); });
-      }
 
       // choices
-      $$('[data-diet]', holder).forEach(function (b) { b.addEventListener('click', function () { st.diet = b.getAttribute('data-diet'); persist(); render(); setTimeout(function () { go(1); }, REDUCE ? 0 : 280); }); });
+      $$('[data-diet]', holder).forEach(function (b) { b.addEventListener('click', function () { st.diet = b.getAttribute('data-diet'); persist(); render(); }); });
+      $$('[data-tier-choice]', holder).forEach(function (b) { b.addEventListener('click', function () { st.tier = b.getAttribute('data-tier-choice'); persist(); render(); setTimeout(function () { go(2); }, REDUCE ? 0 : 280); }); });
       $$('[data-plan-choice]', holder).forEach(function (b) { b.addEventListener('click', function () { st.plan = b.getAttribute('data-plan-choice'); persist(); render(); }); });
-      $$('[data-cat]', holder).forEach(function (b) { b.addEventListener('click', function () { st.cat = b.getAttribute('data-cat'); persist(); render(); }); });
+      $$('[data-cat]', holder).forEach(function (b) { b.addEventListener('click', function () { st.cat = b.getAttribute('data-cat'); persist(); render(); setTimeout(function () { go(1); }, REDUCE ? 0 : 280); }); });
       holder.addEventListener('click', function (e) {
         var d = e.target.closest ? e.target.closest('[data-fn-dish]') : null; if (!d) return;
         var id = d.getAttribute('data-pid'), cur = st.qty[id] || 0;
@@ -627,27 +607,29 @@
         say(''); persist(); render();
       });
       var reset = $('[data-fn-reset]', holder);
-      if (reset) reset.addEventListener('click', function () { st.qty = {}; st.diet = 'all'; st.cat = 'all'; st.plan = 'block'; st.step = 0; persist(); render(); });
+      if (reset) reset.addEventListener('click', function () { st.qty = {}; st.diet = 'all'; st.cat = 'all'; st.tier = 'all'; st.plan = 'block'; st.step = 0; persist(); render(); });
 
       // details
       var fields = $$('[data-info]', holder), checks = $$('[data-allergy]', holder), ref = $('[data-fn-ref]', holder);
       fields.forEach(function (f) { f.value = (st.info && st.info[f.getAttribute('data-info')]) || ''; f.addEventListener('input', function () { st.info = st.info || {}; st.info[f.getAttribute('data-info')] = f.value; persist(); }); });
       checks.forEach(function (c) { c.checked = (st.allergies || []).map(norm).indexOf(norm(c.value)) > -1; c.addEventListener('change', function () { st.allergies = checks.filter(function (x) { return x.checked; }).map(function (x) { return x.value; }); persist(); }); });
+      var cn = holder.getAttribute('data-customer-name'), ce = holder.getAttribute('data-customer-email');
+      if (ce) { st.info = st.info || {}; if (!st.info.email) st.info.email = ce; if (!st.info.name && cn) st.info.name = cn; fields.forEach(function (f) { var v = st.info[f.getAttribute('data-info')]; if (v && !f.value) f.value = v; }); }
       if (ref) { var rs = ''; try { rs = localStorage.getItem('kulinaria_ref') || ''; } catch (e) {} if (rs) ref.value = rs; }
 
       if (next) next.addEventListener('click', function () {
-        if (st.step === 1 && count() === 0) { say(T_('need-dish')); return; }
+        if (st.step === 2 && count() === 0) { say(T_('need-dish')); return; }
         go(st.step + 1);
       });
       if (prev) prev.addEventListener('click', function () { go(st.step - 1); });
-      dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k < st.step || (k > st.step && (k === 0 || count() > 0 || k <= 1))) go(k); }); });
+      dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k < st.step || (k > st.step && (k <= 2 || count() > 0))) go(k); }); });
 
       // finish: save profile + attributes, put the dishes in the cart, continue to the cart (contract + payment)
       if (finish) finish.addEventListener('click', function (e) {
         e.preventDefault();
         var i = st.info || {};
         if (!i.name || !i.email || !i.phone) { say(T_('need-info')); return; }
-        if (count() === 0) { say(T_('need-dish')); go(1); return; }
+        if (count() === 0) { say(T_('need-dish')); go(2); return; }
         var p = loadProfile();
         var other = (i.allergy_other || '').split(',').map(function (v) { return v.trim(); }).filter(Boolean);
         p.allergies = Array.from(new Set((st.allergies || []).concat(other)));
@@ -656,7 +638,7 @@
         try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch (x) {}
         var attrs = {
           nombre: i.name, correo: i.email, telefono: i.phone, direccion: [i.street, i.cluster, i.zip].filter(Boolean).join(', '),
-          alergias: p.allergies.join(', '), no_me_gustan: p.dislikes.join(', '), dietas: p.diets.join(', '), enfoque: st.diet, plan: st.plan,
+          alergias: p.allergies.join(', '), no_me_gustan: p.dislikes.join(', '), dietas: p.diets.join(', '), menu: st.cat, nivel: st.tier, enfoque: st.diet, plan: st.plan,
           codigo_referencia: (ref && ref.value) || '', pedido_embudo: dishes.filter(function (d, ix) { return dishes.findIndex(function (z) { return z.getAttribute('data-pid') === d.getAttribute('data-pid'); }) === ix && st.qty[d.getAttribute('data-pid')]; })
             .map(function (d) { return st.qty[d.getAttribute('data-pid')] + 'x ' + d.getAttribute('data-title'); }).join(' | ')
         };

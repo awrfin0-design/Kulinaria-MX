@@ -100,7 +100,7 @@ See [`backend/README.md`](backend/README.md): `backend/shopify/setup.mjs` create
 ## v7: fits the screen, one-page ordering
 
 - **Everything fits the screen.** Heroes, the funnel, showcases, dish rails, page heads, the CTA and the fire band are capped to the viewport height (`svh`) on phone and desktop. Photos are rounded rectangular product cards (no arch shapes).
-- **Order funnel pinned on the homepage.** It starts directly under the marquee; scrolling through it walks the five steps (it will not pass the dishes step until a dish is chosen), steps also advance by click, and a small **Skip** button jumps past it.
+- **Order funnel on the homepage (v8: plain stepper, not sticky).** Starts directly under the marquee. Steps: 1 menu (Desayunos Premium, Al Fuego y Mar, Bowls de la Semana, Diario Premium, Kulinaria Junior), 2 price tier (Selecto $160, Exclusivo $220, Signature $280, Reserve $340), 3 dishes of that menu and tier (optional nutritional-focus chips), 4 plan, 5 details + sign-in / create account. The ES/EN switch is now in the header.
 - **Logo instead of the word.** Every "Kulinaria" in the copy is replaced by the logo (`initWordmark`; ink/cream/gold per theme; screen readers still read the word).
 - **Fire band** is a plain looping background video (no scroll scrubbing). **Loader** is animated (orbiting ingredients, flame, live percentage) and waits only for the first-screen image (2.6 s max). Preview images are embedded as data URIs.
 - **Client login** link in the header (needs Customer accounts set to *Classic*).

@@ -2,11 +2,11 @@
   assign coll = section.settings.collection
   assign trial_pct = settings.trial_markup | default: 15
 -%}
-<section class="section funnel" id="pedido-{{ section.id }}" data-funnel data-cart-url="{{ routes.cart_url }}" data-trial-pct="{{ trial_pct }}"
+<section class="section funnel" id="pedido-{{ section.id }}" data-funnel{% if customer %} data-customer-name="{{ customer.name | escape }}" data-customer-email="{{ customer.email | escape }}"{% endif %} data-cart-url="{{ routes.cart_url }}" data-trial-pct="{{ trial_pct }}"
   data-t-dishes="{{ 'funnel.summary_dishes' | t }}" data-t-dish-one="{{ 'funnel.summary_dish_one' | t }}" data-t-empty="{{ 'funnel.summary_empty' | t }}"
   data-t-trial="{{ 'funnel.trial_note' | t }}" data-t-need-dish="{{ 'funnel.need_dish' | t }}" data-t-need-info="{{ 'funnel.need_info' | t }}"
   data-t-add="{{ 'funnel.add' | t }}" data-t-in-order="{{ 'funnel.in_order' | t }}" data-t-remembered="{{ 'funnel.remembered' | t }}" data-t-saved="{{ 'funnel.saved' | t }}"
-  data-t-all="{{ 'funnel.all_diets' | t }}" data-t-block="{{ 'plans.block_name' | t }}" data-t-trial-name="{{ 'plans.trial_name' | t }}" {{ section.shopify_attributes }}>
+  data-t-all="{{ 'funnel.all_diets' | t }}" data-t-any-tier="{{ 'funnel.any_tier' | t }}" data-t-block="{{ 'plans.block_name' | t }}" data-t-trial-name="{{ 'plans.trial_name' | t }}" {{ section.shopify_attributes }}>
   <div class="funnel__track" data-fn-track>
    <div class="funnel__stage" data-fn-stage>
     <div class="funnel__top container">
@@ -21,7 +21,6 @@
         <li data-fn-dot><span>04</span>{{ 'funnel.s4' | t }}</li>
         <li data-fn-dot><span>05</span>{{ 'funnel.s5' | t }}</li>
       </ol>
-      <button class="text-link funnel__skip" type="button" data-fn-skip>{{ 'funnel.skip' | t }}</button>
     </div>
     <div class="steps__bar funnel__bar" aria-hidden="true"><i data-fn-bar></i></div>
 
@@ -30,33 +29,63 @@
         <fieldset class="step is-on" data-fn-step="1">
           <legend>{{ 'funnel.s1_title' | t }}</legend>
           <p class="text-muted">{{ 'funnel.s1_text' | t }}</p>
-          <div class="fn-diets" role="radiogroup" aria-label="{{ 'funnel.s1_title' | t }}">
-            <button class="fn-diet" type="button" role="radio" data-diet="all" aria-checked="true">
-              <span class="fn-diet__img">{% render 'photo', art: 'containers', alt: '' %}</span>
-              <strong>{{ 'funnel.all_diets' | t }}</strong><small>{{ 'funnel.all_diets_text' | t }}</small>
-            </button>
-            {%- for block in section.blocks -%}
-              <button class="fn-diet" type="button" role="radio" data-diet="{{ block.settings.slug }}" aria-checked="false" {{ block.shopify_attributes }}>
-                <span class="fn-diet__img">{% render 'photo', art: block.settings.art, alt: '' %}</span>
-                <strong>{{ block.settings.label }}</strong>{%- if block.settings.text != blank -%}<small>{{ block.settings.text }}</small>{%- endif -%}
+          <div class="fn-menus" role="radiogroup" aria-label="{{ 'funnel.s1_title' | t }}">
+            {%- assign menu_list = 'desayunos-premium:desayunos,al-fuego-y-mar:fuego,bowls-de-la-semana:bowl,diario-premium:diario,kulinaria-junior:junior' | split: ',' -%}
+            {%- assign menu_art = 'air-breakfast,air-steak,air-bowl,containers,dish-10' | split: ',' -%}
+            {%- for m in menu_list -%}
+              {%- assign handle = m | split: ':' | first -%}
+              {%- assign name_key = 'category.' | append: handle -%}{%- assign text_key = 'funnel.menu_' | append: handle -%}
+              <button class="fn-menu" type="button" role="radio" data-cat="{{ handle }}" aria-checked="false">
+                <span class="fn-menu__img">{% render 'photo', art: menu_art[forloop.index0], alt: '' %}</span>
+                <strong>{{ name_key | t }}</strong><small>{{ text_key | t }}</small>
               </button>
             {%- endfor -%}
+            <button class="fn-menu fn-menu--all" type="button" role="radio" data-cat="all" aria-checked="true">
+              <span class="fn-menu__img">{% render 'photo', art: 'dinner', alt: '' %}</span>
+              <strong>{{ 'funnel.all_diets' | t }}</strong><small>{{ 'funnel.all_menus_text' | t }}</small>
+            </button>
           </div>
         </fieldset>
 
         <fieldset class="step" data-fn-step="2">
           <legend>{{ 'funnel.s2_title' | t }}</legend>
           <p class="text-muted">{{ 'funnel.s2_text' | t }}</p>
-          <div class="fn-dishes" data-fn-grid="diet">
-            {%- for product in coll.products limit: section.settings.limit -%}{% render 'funnel-dish', product: product %}{%- endfor -%}
+          <div class="fn-tiers" role="radiogroup" aria-label="{{ 'funnel.s2_title' | t }}">
+            {%- assign tier_list = 'selecto:160,exclusivo:220,signature:280,reserve:340' | split: ',' -%}
+            {%- for t in tier_list -%}
+              {%- assign tk = t | split: ':' | first -%}{%- assign tp = t | split: ':' | last -%}
+              {%- assign tname = 'tier.' | append: tk -%}{%- assign ttext = 'funnel.tier_' | append: tk -%}
+              <button class="fn-tier fn-tier--{{ tk }}" type="button" role="radio" data-tier-choice="{{ tk }}" aria-checked="false">
+                <span class="fn-tier__price">${{ tp }}<small>{{ 'funnel.per_dish' | t }}</small></span>
+                <strong>{{ tname | t }}</strong><small>{{ ttext | t }}</small>
+              </button>
+            {%- endfor -%}
+            <button class="fn-tier fn-tier--any" type="button" role="radio" data-tier-choice="all" aria-checked="true">
+              <span class="fn-tier__price">$160–340<small>{{ 'funnel.per_dish' | t }}</small></span>
+              <strong>{{ 'funnel.any_tier' | t }}</strong><small>{{ 'funnel.any_tier_text' | t }}</small>
+            </button>
           </div>
-          <p class="alert" data-fn-empty hidden>{{ 'funnel.s2_empty' | t }}</p>
         </fieldset>
 
         <fieldset class="step" data-fn-step="3">
           <legend>{{ 'funnel.s3_title' | t }}</legend>
           <p class="text-muted">{{ 'funnel.s3_text' | t }}</p>
-          <div class="fn-plans" role="radiogroup" aria-label="{{ 'funnel.s3_title' | t }}">
+          <div class="chips fn-diets-chips" role="group" aria-label="{{ 'funnel.diet_filter' | t }}">
+            <button class="chip" type="button" data-diet="all" aria-pressed="true">{{ 'funnel.all_categories' | t }}</button>
+            {%- for block in section.blocks -%}
+              <button class="chip" type="button" data-diet="{{ block.settings.slug }}" aria-pressed="false" {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
+            {%- endfor -%}
+          </div>
+          <div class="fn-dishes" data-fn-grid>
+            {%- for product in coll.products limit: section.settings.limit -%}{% render 'funnel-dish', product: product %}{%- endfor -%}
+          </div>
+          <p class="alert" data-fn-empty hidden>{{ 'funnel.s3_empty' | t }}</p>
+        </fieldset>
+
+        <fieldset class="step" data-fn-step="4">
+          <legend>{{ 'funnel.s4_title' | t }}</legend>
+          <p class="text-muted">{{ 'funnel.s4_text' | t }}</p>
+          <div class="fn-plans" role="radiogroup" aria-label="{{ 'funnel.s4_title' | t }}">
             <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
               <span class="plan-card__flag">{{ 'plans.recommended' | t }}</span>
               <strong>{{ 'plans.block_name' | t }}</strong><small>{{ 'plans.block_short' | t }}</small>
@@ -71,25 +100,17 @@
           </div>
         </fieldset>
 
-        <fieldset class="step" data-fn-step="4">
-          <legend>{{ 'funnel.s4_title' | t }}</legend>
-          <p class="text-muted">{{ 'funnel.s4_text' | t }}</p>
-          <div class="chips fn-cats" role="group" aria-label="{{ 'collection.category' | t }}">
-            <button class="chip" type="button" data-cat="all" aria-pressed="true">{{ 'funnel.all_categories' | t }}</button>
-            {%- assign cats = 'desayunos-premium,al-fuego-y-mar,bowls-de-la-semana,diario-premium,kulinaria-junior,sopas-y-entradas,postres-y-snacks,batidos-y-bebidas' | split: ',' -%}
-            {%- for c in cats -%}{%- assign ck = 'category.' | append: c -%}
-              <button class="chip" type="button" data-cat="{{ c }}" aria-pressed="false">{{ ck | t }}</button>
-            {%- endfor -%}
-          </div>
-          <div class="fn-dishes" data-fn-grid="cat">
-            {%- for product in coll.products limit: section.settings.limit -%}{% render 'funnel-dish', product: product %}{%- endfor -%}
-          </div>
-          <p class="alert" data-fn-empty-cat hidden>{{ 'collection.no_match' | t }}</p>
-        </fieldset>
-
         <fieldset class="step" data-fn-step="5">
           <legend>{{ 'funnel.s5_title' | t }}</legend>
           <p class="text-muted">{{ 'funnel.s5_text' | t }}</p>
+          <div class="fn-account">
+            {%- if customer -%}
+              <p><strong>{{ 'funnel.logged_as' | t }} {{ customer.email }}</strong> · <a class="text-link" href="{{ routes.account_url }}">{{ 'general.account' | t }}</a></p>
+            {%- else -%}
+              <p><strong>{{ 'funnel.account_title' | t }}</strong> {{ 'funnel.account_text' | t }}</p>
+              <p class="fn-account__links"><a class="btn btn--outline btn--sm" href="{{ routes.account_login_url }}">{{ 'login.title' | t }}</a> <a class="text-link" href="{{ routes.account_register_url }}">{{ 'funnel.create_account' | t }}</a></p>
+            {%- endif -%}
+          </div>
           <div class="form-grid">
             <div class="field"><label for="fn-name-{{ section.id }}">{{ 'form.full_name' | t }}</label><input class="input" id="fn-name-{{ section.id }}" data-info="name" autocomplete="name"></div>
             <div class="field"><label for="fn-email-{{ section.id }}">{{ 'form.email' | t }}</label><input class="input" id="fn-email-{{ section.id }}" type="email" data-info="email" autocomplete="email"></div>
@@ -117,7 +138,8 @@
       <aside class="funnel__aside" aria-live="polite">
         <h3>{{ 'funnel.your_order' | t }}</h3>
         <dl class="funnel__facts">
-          <div><dt>{{ 'funnel.summary_focus' | t }}</dt><dd data-fn-s-focus>{{ 'funnel.all_diets' | t }}</dd></div>
+          <div><dt>{{ 'funnel.summary_menu' | t }}</dt><dd data-fn-s-focus>{{ 'funnel.all_diets' | t }}</dd></div>
+          <div><dt>{{ 'funnel.summary_tier' | t }}</dt><dd data-fn-s-tier>{{ 'funnel.any_tier' | t }}</dd></div>
           <div><dt>{{ 'funnel.summary_plan' | t }}</dt><dd data-fn-s-plan>{{ 'plans.block_name' | t }}</dd></div>
         </dl>
         <ul class="funnel__list" data-fn-s-list></ul>

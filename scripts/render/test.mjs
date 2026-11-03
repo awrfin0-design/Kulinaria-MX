@@ -316,7 +316,7 @@ ok('page index is reachable at #/indice', await (async () => { await page.goto(`
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(400);
 
 // header = logo + cart + burger only
-ok('header holds only the logo, the announcement link, the login, the cart and the burger', (await page.$$('.site-header a, .site-header button')).length === 5);
+ok('header holds only the logo, the announcement link, the login, the cart and the burger', (await page.$$('.site-header a, .site-header button')).length === 7);
 ok('no fake-wood background anywhere', await page.evaluate(() => !/wood/i.test(getComputedStyle(document.querySelector('.bg-fx'), '::before').backgroundImage) && !document.querySelector('style').textContent.includes('photo-wood')));
 
 // burger -> full sitemap
@@ -557,26 +557,31 @@ await page.setViewportSize({ width: 1440, height: 900 });
 await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); }); await page.reload(); await page.waitForTimeout(900);
 const fnS = '[data-page="home"] [data-funnel]';
 ok('the section after the marquee is the order funnel (5 steps)', await page.evaluate(() => { const m = document.querySelector('[data-page="home"] .marquee'); const f = m.closest('.shopify-section').nextElementSibling; return !!f.querySelector('[data-funnel]') && f.querySelectorAll('[data-fn-dot]').length === 5; }));
-ok('step 1 offers the 7 diets of the brief plus "whole menu"', (await page.$$eval(`${fnS} [data-diet]`, (b) => b.map((x) => x.getAttribute('data-diet')))).join() === 'all,keto,sin-gluten,vegetariano,vegano,bajo-calorias,bajo-carbos,alto-proteina');
-await page.locator(`${fnS} [data-diet="vegetariano"]`).scrollIntoViewIfNeeded(); await page.waitForTimeout(900);
-await page.click(`${fnS} [data-diet="vegetariano"]`); await page.waitForTimeout(900);
-ok('choosing a diet moves to step 2 and shows only dishes of that diet', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); const vis = [...f.querySelectorAll('[data-fn-grid="diet"] .fn-dish:not(.is-hidden)')]; return f.querySelector('[data-fn-step="2"]').classList.contains('is-on') && vis.length >= 3 && vis.every((d) => d.getAttribute('data-diets').split('|').includes('vegetariano')); }));
+ok('step 1 offers the 5 menus of the brief plus "whole menu"', (await page.$$eval(`${fnS} [data-cat]`, (b) => b.map((x) => x.getAttribute('data-cat')))).join() === 'desayunos-premium,al-fuego-y-mar,bowls-de-la-semana,diario-premium,kulinaria-junior,all');
+ok('the funnel is a plain stepper: not sticky, no scroll hijack', await page.evaluate(() => { const st = document.querySelector('[data-page="home"] .funnel__stage'); const track = document.querySelector('[data-page="home"] .funnel__track'); return getComputedStyle(st).position === 'static' && track.offsetHeight < innerHeight * 3 && !document.querySelector('[data-fn-skip]'); }));
+await page.locator(`${fnS} [data-cat="al-fuego-y-mar"]`).scrollIntoViewIfNeeded(); await page.waitForTimeout(500);
+await page.click(`${fnS} [data-cat="al-fuego-y-mar"]`); await page.waitForTimeout(900);
+ok('choosing a menu moves to step 2 (price tier) with the 4 tiers at $160/$220/$280/$340', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); const t = [...f.querySelectorAll('[data-tier-choice]')].map((x) => x.getAttribute('data-tier-choice')).join(); return f.querySelector('[data-fn-step="2"]').classList.contains('is-on') && t === 'selecto,exclusivo,signature,reserve,all' && /160/.test(f.querySelector('[data-tier-choice="selecto"]').textContent) && /340/.test(f.querySelector('[data-tier-choice="reserve"]').textContent); }));
+await page.click(`${fnS} [data-tier-choice="reserve"]`); await page.waitForTimeout(900);
+ok('step 3 shows only dishes of that menu AND tier', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); const vis = [...f.querySelectorAll('[data-fn-dish]:not(.is-hidden)')]; return f.querySelector('[data-fn-step="3"]').classList.contains('is-on') && vis.length >= 1 && vis.every((d) => d.getAttribute('data-category') === 'al-fuego-y-mar' && d.getAttribute('data-tier') === 'reserve'); }));
+await page.click(`${fnS} [data-fn-prev]`); await page.waitForTimeout(400);
+await page.click(`${fnS} [data-tier-choice="all"]`); await page.waitForTimeout(900);
+await page.click(`${fnS} [data-diet="vegetariano"]`); await page.waitForTimeout(300);
+await page.click(`${fnS} [data-fn-prev]`); await page.waitForTimeout(300); await page.click(`${fnS} [data-fn-prev]`); await page.waitForTimeout(300);
+await page.click(`${fnS} [data-cat="all"]`); await page.waitForTimeout(900); await page.click(`${fnS} [data-tier-choice="all"]`); await page.waitForTimeout(900);
+ok('the nutritional focus narrows the dishes inside step 3', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); const vis = [...f.querySelectorAll('[data-fn-dish]:not(.is-hidden)')]; return vis.length >= 3 && vis.every((d) => d.getAttribute('data-diets').split('|').includes('vegetariano')); }));
 ok('"continue" is disabled until at least one dish is chosen', await page.$eval(`${fnS} [data-fn-next]`, (b) => b.disabled));
-await page.click(`${fnS} [data-fn-grid="diet"] .fn-dish:not(.is-hidden) [data-pick]`); await page.waitForTimeout(300);
-await page.click(`${fnS} [data-fn-grid="diet"] .fn-dish.is-picked [data-q-plus]`); await page.waitForTimeout(300);
+await page.click(`${fnS} [data-fn-grid] .fn-dish:not(.is-hidden) [data-pick]`); await page.waitForTimeout(300);
+await page.click(`${fnS} [data-fn-grid] .fn-dish.is-picked [data-q-plus]`); await page.waitForTimeout(300);
 const sum1 = await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); return { n: f.querySelector('[data-fn-s-count]').textContent, total: f.querySelector('[data-fn-s-total]').textContent, list: f.querySelectorAll('[data-fn-s-list] li').length }; });
 ok('quantities update the live summary (2 dishes, $320)', /2/.test(sum1.n) && /320/.test(sum1.total) && sum1.list === 1, JSON.stringify(sum1));
 await page.click(`${fnS} [data-fn-next]`); await page.waitForTimeout(500);
+ok('step 4 is the plan', await page.$eval(`${fnS} [data-fn-step="4"]`, (e) => e.classList.contains('is-on')));
 await page.click(`${fnS} [data-plan-choice="trial"]`); await page.waitForTimeout(300);
-ok('step 3: trial week adds 15% to the total', /368/.test(await page.$eval(`${fnS} [data-fn-s-total]`, (e) => e.textContent)));
+ok('trial week adds 15% to the total', /368/.test(await page.$eval(`${fnS} [data-fn-s-total]`, (e) => e.textContent)));
 await page.click(`${fnS} [data-plan-choice="block"]`);
 await page.click(`${fnS} [data-fn-next]`); await page.waitForTimeout(500);
-ok('step 4 is the category step', await page.$eval(`${fnS} [data-fn-step="4"]`, (e) => e.classList.contains('is-on')));
-await page.click(`${fnS} [data-cat="postres-y-snacks"]`); await page.waitForTimeout(300);
-ok('category filter shows only that category', await page.evaluate(() => { const v = [...document.querySelectorAll('[data-page="home"] [data-fn-grid="cat"] .fn-dish:not(.is-hidden)')]; return v.length >= 1 && v.every((d) => d.getAttribute('data-category') === 'postres-y-snacks'); }));
-await page.click(`${fnS} [data-fn-grid="cat"] .fn-dish:not(.is-hidden) [data-pick]`); await page.waitForTimeout(300);
-ok('a dish from another category joins the same order', await page.$$eval(`${fnS} [data-fn-s-list] li`, (l) => l.length) === 2);
-await page.click(`${fnS} [data-fn-next]`); await page.waitForTimeout(500);
+ok('step 5 offers sign-in and account creation next to the details', await page.evaluate(() => { const a = document.querySelector('[data-page="home"] [data-fn-step="5"] .fn-account'); return !!a && a.querySelectorAll('a').length >= 1; }));
 await page.click(`${fnS} [data-fn-finish]`); await page.waitForTimeout(300);
 ok('step 5 will not finish without name, e-mail and phone', !(await page.$eval(`${fnS} [data-fn-error]`, (e) => e.hidden)) && page.url().endsWith('#/home'));
 await page.fill(`${fnS} [data-info="name"]`, 'Ana Pérez'); await page.fill(`${fnS} [data-info="email"]`, 'ana@ejemplo.com'); await page.fill(`${fnS} [data-info="phone"]`, '+52 999 000 0000');
@@ -589,12 +594,12 @@ const savedProfile = await page.evaluate(() => JSON.parse(localStorage.getItem('
 ok('the allergy profile is stored for the menu filters', (savedProfile.allergies || []).includes('Mariscos') && (savedProfile.diets || []).includes('vegetariano'));
 await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
 await page.locator(`${fnS} [data-fn-s-total]`).scrollIntoViewIfNeeded();
-ok('coming back, the funnel remembers the selection and the details', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); return f.querySelector('[data-info="email"]').value === 'ana@ejemplo.com' && f.querySelectorAll('[data-fn-s-list] li').length === 2; }));
+ok('coming back, the funnel remembers the selection and the details', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); return f.querySelector('[data-info="email"]').value === 'ana@ejemplo.com' && f.querySelectorAll('[data-fn-s-list] li').length === 1; }));
 // allergy blocking inside the funnel
 await page.evaluate(() => { localStorage.setItem('kulinaria_profile', JSON.stringify({ allergies: ['Frutos secos'], dislikes: [] })); localStorage.removeItem('kulinaria_funnel'); });
 await page.reload(); await page.waitForTimeout(900);
-await page.click(`${fnS} [data-diet="keto"]`); await page.waitForTimeout(900);
-ok('dishes with a declared allergen are blocked inside the funnel', await page.evaluate(() => { const d = [...document.querySelectorAll('[data-page="home"] [data-fn-grid="diet"] .fn-dish')].find((x) => /Salmón/.test(x.getAttribute('data-title'))); return !!d && d.classList.contains('is-blocked') && d.querySelector('[data-pick]').disabled; }));
+await page.click(`${fnS} [data-cat="all"]`); await page.waitForTimeout(900); await page.click(`${fnS} [data-tier-choice="all"]`); await page.waitForTimeout(900); await page.click(`${fnS} [data-diet="keto"]`); await page.waitForTimeout(400);
+ok('dishes with a declared allergen are blocked inside the funnel', await page.evaluate(() => { const d = [...document.querySelectorAll('[data-page="home"] [data-fn-grid] .fn-dish')].find((x) => /Salmón/.test(x.getAttribute('data-title'))); return !!d && d.classList.contains('is-blocked') && d.querySelector('[data-pick]').disabled; }));
 await page.evaluate(() => { localStorage.clear(); });
 // the dedicated page and the complete menu
 await page.goto(`${URL0}#/pg/pedido`); await page.waitForTimeout(500);
@@ -616,7 +621,7 @@ for (const [w, h] of [[1440, 900], [390, 844], [820, 1180]]) {
     const vh = innerHeight, q = (sel) => [...document.querySelectorAll(`[data-page="home"] ${sel}`)];
     const tall = [];
     const chk = (name, els, max) => els.forEach((e) => { const r = e.getBoundingClientRect(); if (r.height > max + 1) tall.push(`${name}:${Math.round(r.height)}>${Math.round(max)}`); });
-    chk('hero', q('.hero'), vh); chk('funnel-stage', q('.funnel__stage'), vh); chk('showcase-photo', q('.showcase__frame'), vh * 0.7);
+    chk('hero', q('.hero'), vh); chk('showcase-photo', q('.showcase__frame'), vh * 0.7);
     chk('rail-card', q('.rail .dish'), vh * 0.8); chk('row-photo', q('.card__photo'), vh * 0.5); chk('cta', q('.cta-banner'), vh); chk('band', q('.band'), vh);
     return tall;
   });
@@ -633,17 +638,8 @@ const wm = await page.evaluate(() => { const h = [...document.querySelectorAll('
 ok('"Esta semana en Kulinaria" shows the logo instead of the word', wm.has && wm.loaded, JSON.stringify(wm));
 const leftover = await page.evaluate(() => { const bad = []; const w = document.createTreeWalker(document.querySelector('[data-page="home"]'), NodeFilter.SHOW_TEXT); while (w.nextNode()) { const n = w.currentNode; if (/Kulinaria/.test(n.nodeValue) && !/Kulinaria Junior/.test(n.nodeValue) && !n.parentNode.closest('.wordmark,.visually-hidden,script,style,[data-no-wordmark]')) bad.push(n.nodeValue.trim().slice(0, 40)); } return bad; });
 ok('no bare "Kulinaria" word is left in the home copy', leftover.length === 0, leftover.join(' | '));
-// pinned funnel: scrolling through the track walks through the steps, skip jumps past it
-await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.reload(); await page.waitForTimeout(900);
-const trk = await page.evaluate(() => { const t = document.querySelector('[data-page="home"] [data-fn-track]'), st = document.querySelector('[data-page="home"] [data-fn-stage]'); return { top: t.getBoundingClientRect().top + scrollY, h: t.offsetHeight, sh: st.offsetHeight }; });
-await page.evaluate((y) => window.scrollTo(0, y), trk.top - 90); await page.waitForTimeout(500);
-await page.evaluate((y) => window.scrollTo(0, y), trk.top - 90 + Math.round((trk.h - trk.sh) * 0.3)); await page.waitForTimeout(700);
-ok('the funnel stays pinned while scrolling and the step follows the scroll (never past dishes without a dish)', await page.evaluate(() => { const st = document.querySelector('[data-page="home"] [data-fn-stage]').getBoundingClientRect(); const on = [...document.querySelectorAll('[data-page="home"] [data-fn-step]')].findIndex((x) => x.classList.contains('is-on')); return Math.abs(st.top - 92) < 30 && on === 1; }));
-await page.evaluate((y) => window.scrollTo(0, y), trk.top - 90 + (trk.h - trk.sh) * 0.95); await page.waitForTimeout(700);
-ok('without a dish the funnel does not run past the dishes step', await page.evaluate(() => [...document.querySelectorAll('[data-page="home"] [data-fn-step]')].findIndex((x) => x.classList.contains('is-on')) === 1));
-await page.evaluate((y) => window.scrollTo(0, y), trk.top - 90 + 200); await page.waitForTimeout(500);
-await page.click('[data-page="home"] [data-fn-skip]'); await page.waitForTimeout(1500);
-ok('"skip" jumps past the funnel to the next section', await page.evaluate(() => { const t = document.querySelector('[data-page="home"] [data-fn-track]').getBoundingClientRect(); return t.bottom < innerHeight * 0.4; }));
+// header: language switch is visible
+ok('the ES/EN language switch sits in the header', await page.evaluate(() => { const b = [...document.querySelectorAll('.site-header .lang__btn')]; return b.length === 2 && b.every((x) => x.getBoundingClientRect().width > 0); }));
 // client login is visible
 ok('header offers the client login', await page.$eval('.site-header .header-login', (a) => /login|sesi|cuenta|account/i.test(a.textContent) && /login|cuenta/.test(a.getAttribute('href'))));
 // dish cards carry their own short description
