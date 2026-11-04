@@ -173,5 +173,10 @@
   "pedido",
   "page.pedido",
   "Armar mi pedido"
+ ],
+ [
+  "calendario",
+  "page.calendario",
+  "Calendario del menú"
  ]
 ]

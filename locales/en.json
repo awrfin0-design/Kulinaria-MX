@@ -522,7 +522,8 @@
     "n_equipo": "Kitchen team",
     "n_calidad": "Quality and containers",
     "a_terminos": "Contract and terms",
-    "a_privacidad": "Privacy notice"
+    "a_privacidad": "Privacy notice",
+    "calendario": "Menu calendar"
   },
   "calendar": {
     "eyebrow": "Calendar",

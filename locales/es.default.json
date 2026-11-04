@@ -522,7 +522,8 @@
     "n_equipo": "Equipo de cocina",
     "n_calidad": "Calidad y envases",
     "a_terminos": "Contrato y términos",
-    "a_privacidad": "Aviso de privacidad"
+    "a_privacidad": "Aviso de privacidad",
+    "calendario": "Calendario del menú"
   },
   "calendar": {
     "eyebrow": "Calendario",

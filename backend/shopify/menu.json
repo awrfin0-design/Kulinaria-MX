@@ -4,6 +4,10 @@
   "url": "/collections/menu-semanal",
   "links": [
    {
+    "title": "Calendario del menú",
+    "url": "/pages/calendario"
+   },
+   {
     "title": "Armar mi pedido",
     "url": "/pages/pedido"
    },

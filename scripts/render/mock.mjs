@@ -82,7 +82,7 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
   const sub = (...hs) => hs.map((h) => [pages[h].title, '/pages/' + h]).map(([t, u]) => [Object.keys(pages).find((k) => '/pages/' + k === u) && PAGE_LIST.find(([k]) => '/pages/' + k === u)[2], u]);
   const linklists = {
     'main-menu': { handle: 'main-menu', links: [
-      link('Menú semanal', '/collections/menu-semanal', [['Armar mi pedido', '/pages/pedido'], ['Mi perfil de alergias', '/pages/perfil']]),
+      link('Menú semanal', '/collections/menu-semanal', [['Calendario del menú', '/pages/calendario'], ['Armar mi pedido', '/pages/pedido'], ['Mi perfil de alergias', '/pages/perfil']]),
       link('Planes', '/pages/planes', sub('plan-bloque', 'plan-prueba', 'niveles-y-precios', 'ciclo-y-politicas')),
       link('Registro y checkout', '/account/register', [['Crear cuenta', '/account/register'], ...sub('checkout', 'confirmacion'), ['Iniciar sesión', '/account/login']]),
       link('Mi cuenta', '/account', [...sub('cuenta-semana', 'cuenta-pausas', 'cuenta-monedero', 'cuenta-perfil', 'cuenta-referidos', 'cuenta-pedidos', 'cuenta-entregas'), ['Direcciones', '/account/addresses']]),
