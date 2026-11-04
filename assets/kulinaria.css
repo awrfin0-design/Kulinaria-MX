@@ -1316,3 +1316,9 @@ h1 .wordmark img,h2 .wordmark img{height:1.2em}
 h3 .wordmark img,.dish__title .wordmark img,.card h3 .wordmark img{height:1.05em}
 .eyebrow .wordmark img,.label .wordmark img,.page-head__crumbs .wordmark img{height:2.6em}
 .eyebrow .wordmark{margin-block:-1em}
+
+/* v9: invisible navbar — no bar, no blur, no line; only the logo and icons float over the page (also while scrolling) */
+.site-header,.site-header.is-stuck{background:none;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;border:0}
+.site-header.is-stuck .site-header__bar{background:none;box-shadow:none;border:0}
+.site-header .logo,.site-header .header-actions>*{filter:drop-shadow(0 0 10px var(--bg-base))}
+.site-header .lang__group{background:none;border-color:transparent}
