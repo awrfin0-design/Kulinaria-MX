@@ -14,4 +14,13 @@
       {%- endfor -%}
     </div>
   {%- endform -%}
+{%- else -%}
+  {%- comment -%} Only one language is published yet: still show the switch. "EN" points to /en, which works as soon as English is published in Settings → Languages. {%- endcomment -%}
+  {%- assign ls_cur = localization.language.iso_code | default: request.locale.iso_code | default: 'es' -%}
+  <div class="lang">
+    <div class="lang__group" role="group" aria-label="{{ 'lang.label' | t }}">
+      <a class="lang__btn" href="{{ routes.root_url }}" lang="es"{% if ls_cur == 'es' %} aria-current="true"{% endif %}>ES</a>
+      <a class="lang__btn" href="/en{{ request.path }}" lang="en"{% if ls_cur == 'en' %} aria-current="true"{% endif %}>EN</a>
+    </div>
+  </div>
 {%- endif -%}
