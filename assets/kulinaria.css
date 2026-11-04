@@ -1419,12 +1419,7 @@ a.lang__btn{display:inline-block;text-decoration:none}
 
   /* ---------- HOME: a short dashboard ---------- */
   body.template-index .shopify-section:has(> .marquee),
-  body.template-index .shopify-section:has(> .showcase),
-  body.template-index .shopify-section:has(> .band),
-  body.template-index .shopify-section:has(> .fg),
-  body.template-index .shopify-section:has(> .cta-banner),
-  body.template-index .shopify-section:has(> .section--tight),
-  body.template-index .shopify-section:has(.tier-ladder){display:none}
+  body.template-index .shopify-section:has(> .fg--grid.section--raised){display:none}
   body .hero{min-height:0;display:block;padding:0;background:none}
   body .hero__bg{position:relative;inset:auto;height:min(34svh,300px);margin:12px var(--pad) 0;border-radius:26px;overflow:hidden}
   body .hero__copy{padding:18px 0 4px}
@@ -1739,4 +1734,103 @@ a.lang__btn{display:inline-block;text-decoration:none}
   body .tier-row__text{flex-basis:100%;order:3}
   body .tier-row .tier-badge{flex:none}
   body .tier-row__price{margin-left:auto;white-space:nowrap}
+}
+@media (max-width:760px){
+  /* plans: two clean cards, one under the other (no half-cut peeking card) */
+  body .shopify-section:has(.plan-card) .grid--2{display:grid;grid-template-columns:1fr;gap:14px;overflow:visible;margin:0;padding:0;scroll-snap-type:none}
+  body .shopify-section:has(.plan-card) .grid--2>*{flex:none;max-width:none;width:100%}
+  body .plan-card{padding:22px 20px}
+  body .plan-card--featured{background:var(--bg-raised);box-shadow:0 0 0 1.5px var(--accent)}
+  body .plan-card__price{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;font-size:2.4rem;margin:6px 0 8px}
+  body .plan-card__price small{white-space:nowrap}
+  body .plan-card__flag{margin-bottom:10px}
+  body .plan-list li{font-size:.95rem;line-height:1.4}
+  body .plan-card .btn{margin-top:8px}
+}
+@media (max-width:760px){
+  body .plan-card__flag{align-self:flex-start;width:auto}
+  body .section .countdown{border-radius:18px;text-align:left}
+  body .fg .card h3,body .fg .card p,body .fg .card__num{text-align:left}
+}
+
+/* =====================================================================
+   PHONE v15 — rules that keep it easy to use
+   · text cards stack (nothing is ever cut in half); only photo cards swipe, with a soft fade + dots
+   · every home section is back, each one short
+   ===================================================================== */
+.swipe-dots{display:none}
+@media (max-width:760px){
+  /* text-only cards: a clean vertical list */
+  body .fg__list:not(:has(.card--img)),body .grid--2,body .grid--3,body .menu-calendar__grid{display:grid;grid-template-columns:1fr;gap:12px;overflow:visible;margin:0;padding:0;scroll-snap-type:none}
+  body .fg__list:not(:has(.card--img))>*,body .grid--2>*,body .grid--3>*,body .menu-calendar__week{flex:none;width:auto;max-width:none}
+  body .fg .card{padding:20px}
+  body .fg .card p{-webkit-line-clamp:5}
+  body .fg .card h3{font-size:1.15rem}
+  body .menu-calendar__week{padding:18px}
+
+  /* photo cards swipe, with a fade on the right edge instead of a hard cut, and dots below */
+  body .fg__list:has(.card--img){-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);padding-right:40px}
+  body .fg__list:has(.card--img)>*{flex:0 0 78%;max-width:300px}
+  .swipe-dots{display:flex;gap:6px;justify-content:center;margin:6px 0 4px}
+  .swipe-dots i{width:6px;height:6px;border-radius:50%;background:var(--line);transition:width .25s,background .25s}
+  .swipe-dots i.on{width:20px;border-radius:6px;background:var(--accent)}
+  body.template-index .rail .swipe-dots,body .rail>.swipe-dots{position:absolute;left:0;right:0;bottom:104px;z-index:8;margin:0}
+  body .rail>.swipe-dots i{background:rgba(255,255,255,.35)}
+  body .rail>.swipe-dots i.on{background:#e2c36b}
+
+  /* ---------- showcases: photo on top, short text under ---------- */
+  body .showcase{padding-block:24px}
+  body .showcase__grid{display:grid;grid-template-columns:1fr;gap:16px}
+  body .showcase__media{order:-1;max-width:none;width:100%}
+  body .showcase__frame{height:240px;border-radius:26px}
+  body .showcase__badge{display:none}
+  body .showcase__copy .section__head{margin-bottom:10px}
+  body .showcase__points{display:grid;gap:8px;margin:6px 0 14px}
+  body .showcase__points li{font-size:.92rem;padding-left:24px}
+  body .showcase .btn-row{display:block}
+  body .showcase .arrow-link{display:flex;flex-direction:row-reverse;align-items:center;justify-content:space-between;height:54px;padding:0 6px 0 22px;border-radius:999px;border:1.5px solid var(--accent);color:var(--accent);font-size:.74rem;letter-spacing:.12em}
+  body .showcase .arrow-link__c{width:40px;height:40px;border:0;background:var(--accent-wash);color:inherit}
+
+  /* ---------- fire band: a short photo/video chapter ---------- */
+  body .band{height:auto;min-height:0}
+  body .band__pin,body .js:not(.no-motion) .band__pin{position:relative;top:auto;height:auto;min-height:62svh;display:flex;align-items:flex-end;padding:0}
+  body .band__content{position:relative;z-index:3;padding-bottom:34px;width:100%}
+  body .band__content h2{color:#f3ebd9;font-size:1.9rem;text-shadow:0 2px 20px rgba(0,0,0,.5)}
+  body .band__shade{background:linear-gradient(180deg,rgba(13,12,10,.5),rgba(13,12,10,.1) 35%,rgba(13,12,10,.88))}
+  body .band .arrow-link{display:inline-flex;color:#e2c36b}
+
+  /* ---------- tiers, categories, chips ---------- */
+  body .tier-ladder{display:grid;gap:0}
+  body .fg--index{padding-block:20px}
+  body .index-row{padding:16px 0}
+  body .index-row__t{font-size:1.2rem}
+
+  /* ---------- final call to action: photo with text over it ---------- */
+  body .cta-banner{position:relative;display:flex;align-items:flex-end;min-height:52svh;overflow:hidden;background:#0d0c0a}
+  body .cta-banner__bg{display:block;position:absolute;inset:0;height:auto}
+  body .cta-banner__bg img{width:100%;height:100%;object-fit:cover}
+  body .cta-banner__bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,12,10,.35),rgba(13,12,10,.1) 30%,rgba(13,12,10,.92))}
+  body .cta-banner .container{position:relative;z-index:2;width:100%}
+  body .cta-banner__copy{padding:0 0 34px;color:#f3ebd9}
+  body .cta-banner h2{color:#f3ebd9}
+  body .cta-banner .hero__sub{color:rgba(243,235,217,.82)}
+  body .cta-banner .hero__cta{display:block}
+  body .cta-banner .hero__cta .arrow-link{display:flex;flex-direction:row-reverse;align-items:center;justify-content:space-between;height:56px;padding:0 6px 0 24px;border-radius:999px;background:linear-gradient(135deg,#f0d684,#b8913a);color:#1a1405;font-size:.76rem;letter-spacing:.12em}
+  body .cta-banner .hero__cta .arrow-link__c{width:44px;height:44px;border:0;background:rgba(26,20,5,.14);color:inherit}
+  body .cta-banner .hero__cta .text-link{display:none}
+  body .cta-banner .countdown{display:none}
+
+  /* plan flag and countdown */
+  body .plan-card__flag{align-self:flex-start;width:auto}
+  body .section .countdown{border-radius:18px;text-align:left}
+}
+@media (max-width:760px){
+  body .fg .card{min-height:0;height:auto}
+  body .tier-row__text{display:none}
+  body .tier-row{padding:12px 0}
+}
+@media (max-width:760px){
+  body .showcase__points{display:none}
+  body .band__pin,body .js:not(.no-motion) .band__pin{min-height:52svh}
+  body .cta-banner{min-height:46svh}
 }

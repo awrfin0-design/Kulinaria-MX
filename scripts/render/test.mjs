@@ -681,10 +681,10 @@ for (const name of pageNames) {
   const r = await page.evaluate(() => ({ ow: document.documentElement.scrollWidth - innerWidth, h: document.documentElement.scrollHeight, bw: document.body.scrollWidth - innerWidth }));
   totalScreens += r.h / mobile.height;
   if (r.ow > 1 || r.bw > 1) wide.push(name + ' +' + Math.max(r.ow, r.bw));
-  if (r.h / mobile.height > 11) long.push(name + ' ' + (r.h / mobile.height).toFixed(1));
+  if (r.h / mobile.height > 13) long.push(name + ' ' + (r.h / mobile.height).toFixed(1));
 }
 ok('phone: no page scrolls sideways (all ' + pageNames.length + ' pages)', wide.length === 0, wide.join(', '));
-ok('phone: no page is longer than 11 screens and the average is under 3.5 screens', long.length === 0 && totalScreens / pageNames.length < 3.5, long.join(', ') + ' avg ' + (totalScreens / pageNames.length).toFixed(2));
+ok('phone: no page is longer than 13 screens and the average is under 3.5 screens', long.length === 0 && totalScreens / pageNames.length < 3.5, long.join(', ') + ' avg ' + (totalScreens / pageNames.length).toFixed(2));
 // order wizard on the phone
 await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.evaluate(() => { location.hash = '#/pg/pedido'; }); await page.reload(); await page.waitForTimeout(900);
 const fnPhone = await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); const m = f.querySelector('.fn-menus'); const act = f.querySelector('.funnel__actions'); return { swipe: getComputedStyle(m).overflowX === 'auto' && m.scrollWidth > m.clientWidth, docked: getComputedStyle(act).position === 'sticky', summary: getComputedStyle(f.querySelector('.funnel__facts')).display === 'none' }; });
@@ -695,7 +695,11 @@ ok('phone: the dish list stays inside the screen (own scroll, never taller than 
 await page.setViewportSize({ width: 390, height: 844 });
 await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
 const homePhone = await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'); const vis = (s) => [...pg.querySelectorAll(s)].some((e) => e.getBoundingClientRect().height > 0 && getComputedStyle(e).display !== 'none'); return { ann: getComputedStyle(document.querySelector('.site-header__ann')).display, teaser: vis('.funnel__teaser'), wizard: vis('.funnel__track'), showcase: vis('.showcase'), band: vis('.band'), rail: vis('.rail'), plans: vis('.plan-card'), screens: document.documentElement.scrollHeight / innerHeight }; });
-ok('phone home: only hero, order card, this week, plans and FAQ (no showcases, video band or index lists)', homePhone.teaser && !homePhone.wizard && !homePhone.showcase && !homePhone.band && homePhone.rail && homePhone.plans && homePhone.screens < 8, JSON.stringify(homePhone));
+ok('phone home: hero, order card, this week, showcases, tiers, categories, plans, FAQ and the final call are all there (placeholder testimonials and the marquee are not)', homePhone.teaser && !homePhone.wizard && homePhone.showcase && homePhone.band && homePhone.rail && homePhone.plans && homePhone.screens < 13, JSON.stringify(homePhone));
+const homeMore = await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'); const vis = (s) => [...pg.querySelectorAll(s)].some((e) => e.getBoundingClientRect().height > 0); return { tiers: vis('.tier-ladder'), index: vis('.fg--index'), faq: vis('.accordion'), cta: vis('.cta-banner'), marquee: vis('.marquee'), testimonials: vis('.fg--grid.section--raised') }; });
+ok('phone home keeps tiers, categories, FAQ and the final call, and drops the marquee and the placeholder testimonials', homeMore.tiers && homeMore.index && homeMore.faq && homeMore.cta && !homeMore.marquee && !homeMore.testimonials, JSON.stringify(homeMore));
+const swipeRule = await page.evaluate(() => { const bad = []; for (const l of document.querySelectorAll('.fg__list')) { const ph = !!l.querySelector('.card--img'); const sw = getComputedStyle(l).overflowX === 'auto' && l.getBoundingClientRect().width > 0; if (!ph && !l.closest('.fg--index') && sw) bad.push(l.parentElement.className); } return bad; });
+ok('phone: only photo cards swipe; text cards stack so nothing is cut in half', swipeRule.length === 0, swipeRule.join(' | '));
 ok('phone: no announcement strip above the app bar', homePhone.ann === 'none');
 await page.click('[data-page="home"] .funnel__teaser .info-dot'); await page.waitForTimeout(600);
 const sheet = await page.evaluate(() => { const s = document.getElementById('sheet-pricing'); const r = s.querySelector('.sheet__panel').getBoundingClientRect(); return { open: s.classList.contains('is-open'), steps: s.querySelectorAll('.sheet__steps>li').length, tiers: [...s.querySelectorAll('.sheet__tiers dd')].map((x) => x.textContent).join(), fits: r.bottom <= innerHeight + 1 && r.height <= innerHeight * 0.9 && /4/.test(s.textContent) }; });

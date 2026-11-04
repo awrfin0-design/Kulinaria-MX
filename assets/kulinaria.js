@@ -975,10 +975,31 @@
     });
   }
 
+
+  // swipe rows (phone): little dots show how many cards there are and which one you are on
+  function initSwipeDots() {
+    $$('.fg__list, .rail__track, .fn-menus').forEach(function (row) {
+      if (row.getAttribute('data-dots')) return;
+      var kids = function () { return [].slice.call(row.children).filter(function (c) { return c.getBoundingClientRect().width > 0; }); };
+      if (kids().length < 2) return;
+      row.setAttribute('data-dots', '1');
+      var d = document.createElement('div'); d.className = 'swipe-dots'; d.setAttribute('aria-hidden', 'true');
+      var n = kids().length; for (var i = 0; i < n; i++) d.appendChild(document.createElement('i'));
+      row.parentNode.insertBefore(d, row.nextSibling);
+      var paint = function () {
+        var k = kids(); if (!k.length) return;
+        var step = k.length > 1 ? (k[1].offsetLeft - k[0].offsetLeft) || k[0].getBoundingClientRect().width : 1;
+        var idx = Math.max(0, Math.min(k.length - 1, Math.round(row.scrollLeft / Math.max(1, step))));
+        [].forEach.call(d.children, function (dot, j) { dot.className = j === idx ? 'on' : ''; });
+      };
+      row.addEventListener('scroll', raf(paint), { passive: true }); paint();
+    });
+  }
+
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
