@@ -976,21 +976,24 @@
   }
 
 
-  // swipe rows (phone): little dots show how many cards there are and which one you are on
+  // carousels (phone): like an Instagram post, one item at a time with dots and a "1 / 5" counter
   function initSwipeDots() {
-    $$('.fg__list, .rail__track, .fn-menus').forEach(function (row) {
+    if (!initSwipeDots.bound) { initSwipeDots.bound = true; var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(initSwipeDots, 150); }); window.addEventListener('load', initSwipeDots); window.addEventListener('hashchange', function () { setTimeout(initSwipeDots, 200); }); }
+    $$('.fg__list, .rail__track').forEach(function (row) {
       if (row.getAttribute('data-dots')) return;
       var kids = function () { return [].slice.call(row.children).filter(function (c) { return c.getBoundingClientRect().width > 0; }); };
-      if (kids().length < 2) return;
+      if (kids().length < 2 || row.scrollWidth <= row.clientWidth + 2) return;
       row.setAttribute('data-dots', '1');
       var d = document.createElement('div'); d.className = 'swipe-dots'; d.setAttribute('aria-hidden', 'true');
       var n = kids().length; for (var i = 0; i < n; i++) d.appendChild(document.createElement('i'));
+      var cnt = document.createElement('span'); cnt.className = 'swipe-n'; d.appendChild(cnt);
       row.parentNode.insertBefore(d, row.nextSibling);
       var paint = function () {
         var k = kids(); if (!k.length) return;
         var step = k.length > 1 ? (k[1].offsetLeft - k[0].offsetLeft) || k[0].getBoundingClientRect().width : 1;
         var idx = Math.max(0, Math.min(k.length - 1, Math.round(row.scrollLeft / Math.max(1, step))));
-        [].forEach.call(d.children, function (dot, j) { dot.className = j === idx ? 'on' : ''; });
+        [].forEach.call(d.querySelectorAll('i'), function (dot, j) { dot.className = j === idx ? 'on' : ''; });
+        cnt.textContent = (idx + 1) + ' / ' + k.length;
       };
       row.addEventListener('scroll', raf(paint), { passive: true }); paint();
     });

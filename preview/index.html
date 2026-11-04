@@ -1865,6 +1865,40 @@ a.lang__btn{display:inline-block;text-decoration:none}
   body .cta-banner{min-height:46svh}
 }
 
+/* =====================================================================
+   PHONE v16 — vertical scrolling first. Anything with several photos behaves like an Instagram post:
+   one item at a time, as wide as the screen, swipe for the next, dots + "1 / 5" counter.
+   No more rows of chips or cards that scroll sideways.
+   ===================================================================== */
+.swipe-n{display:none}
+@media (max-width:760px){
+  /* photo cards: one per screen-width, swipe (carousel) */
+  body .fg__list:has(.card--img){display:flex;flex-wrap:nowrap;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0;padding:0 0 4px;-webkit-mask-image:none;mask-image:none;scrollbar-width:none;border-radius:26px}
+  body .fg__list:has(.card--img)>*{flex:0 0 100%;max-width:none;scroll-snap-align:center;scroll-snap-stop:always}
+  body .fg .card--img>.card__photo,body .fg--rows .card--img>.card__photo,body .fg--stack .card--img>.card__photo{height:220px}
+  .swipe-dots{align-items:center;gap:6px;margin:10px 0 2px}
+  .swipe-n{display:inline-block;margin-left:10px;font:700 .72rem var(--font-label);letter-spacing:.1em;color:var(--text-muted)}
+  body .rail>.swipe-dots{gap:6px}
+  body .rail>.swipe-dots .swipe-n{color:rgba(243,235,217,.8)}
+
+  /* wizard: menu choices as a vertical list with a photo each (no sideways scrolling) */
+  body .fn-menus{display:grid;grid-template-columns:1fr;gap:10px;overflow:visible;margin:6px 0 0;padding:0;-webkit-mask-image:none;mask-image:none}
+  body .fn-menu{flex:none;display:grid;grid-template-columns:84px minmax(0,1fr);align-items:center;gap:14px;padding:10px;text-align:left}
+  body .fn-menu__img{aspect-ratio:1/1;border-radius:16px;overflow:hidden}
+  body .fn-menu strong{padding:0;font-size:1.05rem}
+  body .fn-menu small{display:block;padding:0;font-size:.85rem;color:var(--text-muted);grid-column:2}
+  body .fn-menu strong{grid-column:2}
+  body .fn-menu__img{grid-row:1/span 2}
+
+  /* chips and pills wrap instead of scrolling sideways */
+  body .chips,body .menu-shell .filter-bar__row,body .account-nav{display:flex;flex-wrap:wrap;overflow:visible;margin:0;padding:0 0 8px;gap:8px}
+  body .menu-shell .filter-bar__row{margin:0 0 4px;padding:0}
+  body .chip{flex:none}
+  body .account-nav a{flex:none}
+}
+@media (max-width:760px){ body .tier-row{flex-wrap:nowrap} body .tier-row__price{font-size:1.9rem} body .tier-row__price small{font-size:.7rem} }
+@media (max-width:760px){ :root[data-theme="dark"] body .funnel:not(.funnel--teaser){isolation:auto} }
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -15131,21 +15165,24 @@ Digital payment, no cash</li></ul>
   }
 
 
-  // swipe rows (phone): little dots show how many cards there are and which one you are on
+  // carousels (phone): like an Instagram post, one item at a time with dots and a "1 / 5" counter
   function initSwipeDots() {
-    $$('.fg__list, .rail__track, .fn-menus').forEach(function (row) {
+    if (!initSwipeDots.bound) { initSwipeDots.bound = true; var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(initSwipeDots, 150); }); window.addEventListener('load', initSwipeDots); window.addEventListener('hashchange', function () { setTimeout(initSwipeDots, 200); }); }
+    $$('.fg__list, .rail__track').forEach(function (row) {
       if (row.getAttribute('data-dots')) return;
       var kids = function () { return [].slice.call(row.children).filter(function (c) { return c.getBoundingClientRect().width > 0; }); };
-      if (kids().length < 2) return;
+      if (kids().length < 2 || row.scrollWidth <= row.clientWidth + 2) return;
       row.setAttribute('data-dots', '1');
       var d = document.createElement('div'); d.className = 'swipe-dots'; d.setAttribute('aria-hidden', 'true');
       var n = kids().length; for (var i = 0; i < n; i++) d.appendChild(document.createElement('i'));
+      var cnt = document.createElement('span'); cnt.className = 'swipe-n'; d.appendChild(cnt);
       row.parentNode.insertBefore(d, row.nextSibling);
       var paint = function () {
         var k = kids(); if (!k.length) return;
         var step = k.length > 1 ? (k[1].offsetLeft - k[0].offsetLeft) || k[0].getBoundingClientRect().width : 1;
         var idx = Math.max(0, Math.min(k.length - 1, Math.round(row.scrollLeft / Math.max(1, step))));
-        [].forEach.call(d.children, function (dot, j) { dot.className = j === idx ? 'on' : ''; });
+        [].forEach.call(d.querySelectorAll('i'), function (dot, j) { dot.className = j === idx ? 'on' : ''; });
+        cnt.textContent = (idx + 1) + ' / ' + k.length;
       };
       row.addEventListener('scroll', raf(paint), { passive: true }); paint();
     });

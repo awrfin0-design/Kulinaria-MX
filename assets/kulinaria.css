@@ -1834,3 +1834,37 @@ a.lang__btn{display:inline-block;text-decoration:none}
   body .band__pin,body .js:not(.no-motion) .band__pin{min-height:52svh}
   body .cta-banner{min-height:46svh}
 }
+
+/* =====================================================================
+   PHONE v16 — vertical scrolling first. Anything with several photos behaves like an Instagram post:
+   one item at a time, as wide as the screen, swipe for the next, dots + "1 / 5" counter.
+   No more rows of chips or cards that scroll sideways.
+   ===================================================================== */
+.swipe-n{display:none}
+@media (max-width:760px){
+  /* photo cards: one per screen-width, swipe (carousel) */
+  body .fg__list:has(.card--img){display:flex;flex-wrap:nowrap;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0;padding:0 0 4px;-webkit-mask-image:none;mask-image:none;scrollbar-width:none;border-radius:26px}
+  body .fg__list:has(.card--img)>*{flex:0 0 100%;max-width:none;scroll-snap-align:center;scroll-snap-stop:always}
+  body .fg .card--img>.card__photo,body .fg--rows .card--img>.card__photo,body .fg--stack .card--img>.card__photo{height:220px}
+  .swipe-dots{align-items:center;gap:6px;margin:10px 0 2px}
+  .swipe-n{display:inline-block;margin-left:10px;font:700 .72rem var(--font-label);letter-spacing:.1em;color:var(--text-muted)}
+  body .rail>.swipe-dots{gap:6px}
+  body .rail>.swipe-dots .swipe-n{color:rgba(243,235,217,.8)}
+
+  /* wizard: menu choices as a vertical list with a photo each (no sideways scrolling) */
+  body .fn-menus{display:grid;grid-template-columns:1fr;gap:10px;overflow:visible;margin:6px 0 0;padding:0;-webkit-mask-image:none;mask-image:none}
+  body .fn-menu{flex:none;display:grid;grid-template-columns:84px minmax(0,1fr);align-items:center;gap:14px;padding:10px;text-align:left}
+  body .fn-menu__img{aspect-ratio:1/1;border-radius:16px;overflow:hidden}
+  body .fn-menu strong{padding:0;font-size:1.05rem}
+  body .fn-menu small{display:block;padding:0;font-size:.85rem;color:var(--text-muted);grid-column:2}
+  body .fn-menu strong{grid-column:2}
+  body .fn-menu__img{grid-row:1/span 2}
+
+  /* chips and pills wrap instead of scrolling sideways */
+  body .chips,body .menu-shell .filter-bar__row,body .account-nav{display:flex;flex-wrap:wrap;overflow:visible;margin:0;padding:0 0 8px;gap:8px}
+  body .menu-shell .filter-bar__row{margin:0 0 4px;padding:0}
+  body .chip{flex:none}
+  body .account-nav a{flex:none}
+}
+@media (max-width:760px){ body .tier-row{flex-wrap:nowrap} body .tier-row__price{font-size:1.9rem} body .tier-row__price small{font-size:.7rem} }
+@media (max-width:760px){ :root[data-theme="dark"] body .funnel:not(.funnel--teaser){isolation:auto} }
