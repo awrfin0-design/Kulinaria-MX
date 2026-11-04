@@ -66,7 +66,7 @@ ok('every in-page anchor has a target', badLinks.anchors.length === 0, badLinks.
 
 // ---- actually click through the real navigation (header, footer, hero CTAs)
 await page.goto(`${URL0}#/home`);
-const groups = ['.site-footer a', '[data-page="home"] a.btn:not([data-fn-finish])', '[data-page="home"] a.arrow-link'];
+const groups = ['.site-footer a', '[data-page="home"] a.btn:not([data-fn-finish]):not(.funnel__teaser *)', '[data-page="home"] a.arrow-link'];
 for (const base of groups) {
   const hrefs = await page.$$eval(base, (as) => [...new Set(as.map((a) => a.getAttribute('href')).filter((h) => h && h.startsWith('#/')))]);
   for (const h of hrefs) {
@@ -698,6 +698,24 @@ const fnPhone = await page.evaluate(() => { const f = document.querySelector('[d
 ok('phone: the menu choices swipe sideways, the wizard buttons dock above the tab bar and the summary is one slim row', fnPhone.swipe && fnPhone.docked && fnPhone.summary, JSON.stringify(fnPhone));
 await page.click('[data-page="pg/pedido"] [data-cat="al-fuego-y-mar"]'); await page.waitForTimeout(900); await page.click('[data-page="pg/pedido"] [data-tier-choice="all"]'); await page.waitForTimeout(900);
 ok('phone: the dish list stays inside the screen (own scroll, never taller than the frame)', await page.evaluate(() => { const l = document.querySelector('[data-page="pg/pedido"] .fn-dishes'); const r = l.getBoundingClientRect(); return r.height <= innerHeight - 200 && getComputedStyle(l).overflowY === 'auto'; }));
+// v13: minimal phone UI: slim home, glowing "i" with the pricing sheet, no announcement bar
+await page.setViewportSize({ width: 390, height: 844 });
+await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
+const homePhone = await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'); const vis = (s) => [...pg.querySelectorAll(s)].some((e) => e.getBoundingClientRect().height > 0 && getComputedStyle(e).display !== 'none'); return { ann: getComputedStyle(document.querySelector('.site-header__ann')).display, teaser: vis('.funnel__teaser'), wizard: vis('.funnel__track'), showcase: vis('.showcase'), band: vis('.band'), rail: vis('.rail'), plans: vis('.plan-card'), screens: document.documentElement.scrollHeight / innerHeight }; });
+ok('phone home: only hero, order card, this week, plans and FAQ (no showcases, video band or index lists)', homePhone.teaser && !homePhone.wizard && !homePhone.showcase && !homePhone.band && homePhone.rail && homePhone.plans && homePhone.screens < 5, JSON.stringify(homePhone));
+ok('phone: no announcement strip above the app bar', homePhone.ann === 'none');
+await page.click('[data-page="home"] .funnel__teaser .info-dot'); await page.waitForTimeout(600);
+const sheet = await page.evaluate(() => { const s = document.getElementById('sheet-pricing'); const r = s.querySelector('.sheet__panel').getBoundingClientRect(); return { open: s.classList.contains('is-open'), steps: s.querySelectorAll('.sheet__steps>li').length, tiers: [...s.querySelectorAll('.sheet__tiers dd')].map((x) => x.textContent).join(), fits: r.bottom <= innerHeight + 1 && r.height <= innerHeight * 0.9 && /4/.test(s.textContent) }; });
+ok('phone: the glowing "i" opens a bottom sheet that explains the 4-week block and the tier prices ($160/$220/$280/$340)', sheet.open && sheet.steps === 4 && sheet.tiers === '$160,$220,$280,$340' && sheet.fits, JSON.stringify(sheet));
+await page.keyboard.press('Escape'); await page.waitForTimeout(500);
+ok('phone: the sheet closes with Escape or the button', await page.evaluate(() => !document.getElementById('sheet-pricing').classList.contains('is-open')));
+await page.evaluate(() => { location.hash = '#/pg/pedido'; }); await page.waitForTimeout(500);
+await page.click('[data-page="pg/pedido"] [data-cat="all"]'); await page.waitForTimeout(900); await page.click('[data-page="pg/pedido"] [data-tier-choice="all"]'); await page.waitForTimeout(900);
+await page.click('[data-page="pg/pedido"] [data-fn-dish]:not(.is-hidden) [data-pick]'); await page.waitForTimeout(400);
+const blk = await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); const b = f.querySelector('[data-fn-s-block]'); const t = f.querySelector('[data-fn-s-total]').textContent; return { hidden: b.hidden, text: b.textContent, week: t, count: f.querySelector('[data-fn-stepcount]').textContent }; });
+ok('phone: the summary shows the block price (weekly total x 4) and the step counter reads "Paso 3 de 5"', !blk.hidden && /640/.test(blk.text) && /160/.test(blk.week) && /3 de 5/.test(blk.count), JSON.stringify(blk));
+await page.setViewportSize({ width: 1440, height: 900 });
+ok('desktop never shows the info dot, the sheet or the block line', await page.evaluate(() => [...document.querySelectorAll('.info-dot,.sheet,.funnel__block,.funnel__teaser,.funnel__stepcount')].every((e) => getComputedStyle(e).display === 'none')));
 await page.setViewportSize({ width: 1440, height: 900 });
 // ---- screenshots for eyeballing
 if (shotDir) {

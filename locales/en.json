@@ -484,7 +484,17 @@
     "account_title": "Already a client?",
     "account_text": "Sign in and we recover your details and allergies. If you're new, your account is created when you confirm the order.",
     "create_account": "Create my account",
-    "logged_as": "Signed in as"
+    "logged_as": "Signed in as",
+    "teaser_t": "Your 4-week block",
+    "teaser_p": "Pick your menu, your tier and your dishes. You pay once and we deliver every week.",
+    "teaser_a": "4 weeks · 1 payment",
+    "teaser_b": "From $160 per dish",
+    "teaser_c": "Cutoff: Saturday 10:00 AM",
+    "teaser_cta": "Build my order",
+    "step_of": "Step {n} of {t}",
+    "block_total": "4-week block",
+    "trial_total": "Trial week",
+    "per_week": "Each week"
   },
   "sitemap": {
     "pedido": "Build my order",
@@ -541,5 +551,19 @@
     "order": "Order",
     "calendar": "Calendar",
     "account": "Account"
+  },
+  "sheet": {
+    "info": "How pricing works",
+    "title": "How your order works",
+    "p1_t": "You buy a 4-week block",
+    "p1": "You pay once and we deliver your dishes every week, for 4 weeks.",
+    "p2_t": "Price is per dish",
+    "p2": "Every dish has a tier. Your block adds up the dishes you choose each week.",
+    "p3_t": "Your total",
+    "p3": "One week of dishes × 4 weeks = your block total.",
+    "p4_t": "Rather try first?",
+    "p4": "The trial week costs {{ pct }}% more. You can buy it until Saturday at 10:00 AM.",
+    "per_dish": "per dish",
+    "close": "Got it"
   }
 }

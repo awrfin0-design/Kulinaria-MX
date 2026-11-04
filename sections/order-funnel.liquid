@@ -2,11 +2,18 @@
   assign coll = section.settings.collection
   assign trial_pct = settings.trial_markup | default: 15
 -%}
-<section class="section funnel" id="pedido-{{ section.id }}" data-funnel{% if customer %} data-customer-name="{{ customer.name | escape }}" data-customer-email="{{ customer.email | escape }}"{% endif %} data-cart-url="{{ routes.cart_url }}" data-trial-pct="{{ trial_pct }}"
+<section class="section funnel{% if section.settings.phone_teaser %} funnel--teaser{% endif %}" id="pedido-{{ section.id }}" data-funnel{% if customer %} data-customer-name="{{ customer.name | escape }}" data-customer-email="{{ customer.email | escape }}"{% endif %} data-cart-url="{{ routes.cart_url }}" data-trial-pct="{{ trial_pct }}"
   data-t-dishes="{{ 'funnel.summary_dishes' | t }}" data-t-dish-one="{{ 'funnel.summary_dish_one' | t }}" data-t-empty="{{ 'funnel.summary_empty' | t }}"
   data-t-trial="{{ 'funnel.trial_note' | t }}" data-t-need-dish="{{ 'funnel.need_dish' | t }}" data-t-need-info="{{ 'funnel.need_info' | t }}"
   data-t-add="{{ 'funnel.add' | t }}" data-t-in-order="{{ 'funnel.in_order' | t }}" data-t-remembered="{{ 'funnel.remembered' | t }}" data-t-saved="{{ 'funnel.saved' | t }}"
-  data-t-all="{{ 'funnel.all_diets' | t }}" data-t-any-tier="{{ 'funnel.any_tier' | t }}" data-t-block="{{ 'plans.block_name' | t }}" data-t-trial-name="{{ 'plans.trial_name' | t }}" {{ section.shopify_attributes }}>
+  data-t-step-of="{{ 'funnel.step_of' | t }}" data-t-block-total="{{ 'funnel.block_total' | t }}" data-t-trial-total="{{ 'funnel.trial_total' | t }}" data-t-all="{{ 'funnel.all_diets' | t }}" data-t-any-tier="{{ 'funnel.any_tier' | t }}" data-t-block="{{ 'plans.block_name' | t }}" data-t-trial-name="{{ 'plans.trial_name' | t }}" {{ section.shopify_attributes }}>
+  <div class="funnel__teaser container">
+    <p class="funnel__teaser-kicker">{{ 'funnel.eyebrow' | t }}</p>
+    <h2>{{ 'funnel.teaser_t' | t }} <button class="info-dot" type="button" data-sheet="pricing" aria-label="{{ 'sheet.info' | t }}"><i aria-hidden="true">i</i></button></h2>
+    <p class="funnel__teaser-text">{{ 'funnel.teaser_p' | t }}</p>
+    <ul class="funnel__teaser-facts"><li>{{ 'funnel.teaser_a' | t }}</li><li>{{ 'funnel.teaser_b' | t }}</li><li>{{ 'funnel.teaser_c' | t }}</li></ul>
+    <a class="btn btn--gold btn--block" href="/pages/pedido">{{ 'funnel.teaser_cta' | t }}</a>
+  </div>
   <div class="funnel__track" data-fn-track>
    <div class="funnel__stage" data-fn-stage>
     <div class="funnel__top container">
@@ -22,6 +29,7 @@
         <li data-fn-dot><span>05</span>{{ 'funnel.s5' | t }}</li>
       </ol>
     </div>
+    <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
     <div class="steps__bar funnel__bar" aria-hidden="true"><i data-fn-bar></i></div>
 
     <div class="funnel__panel container" data-fn-panel>
@@ -48,7 +56,7 @@
         </fieldset>
 
         <fieldset class="step" data-fn-step="2">
-          <legend>{{ 'funnel.s2_title' | t }}</legend>
+          <legend>{{ 'funnel.s2_title' | t }} <button class="info-dot" type="button" data-sheet="pricing" aria-label="{{ 'sheet.info' | t }}"><i aria-hidden="true">i</i></button></legend>
           <p class="text-muted">{{ 'funnel.s2_text' | t }}</p>
           <div class="fn-tiers" role="radiogroup" aria-label="{{ 'funnel.s2_title' | t }}">
             {%- assign tier_list = 'selecto:160,exclusivo:220,signature:280,reserve:340' | split: ',' -%}
@@ -145,6 +153,7 @@
         <ul class="funnel__list" data-fn-s-list></ul>
         <p class="text-muted" data-fn-s-empty>{{ 'funnel.summary_empty' | t }}</p>
         <div class="funnel__total"><span>{{ 'funnel.summary_total' | t }}</span><strong data-fn-s-total>$0</strong></div>
+        <p class="funnel__block" data-fn-s-block hidden></p>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
         <button class="text-link" type="button" data-fn-reset>{{ 'funnel.reset' | t }}</button>
       </aside>
@@ -165,6 +174,7 @@
 {
   "name": "Embudo de pedido",
   "settings": [
+    { "type": "checkbox", "id": "phone_teaser", "label": "En el teléfono, mostrar solo una tarjeta que lleva al pedido completo", "default": false },
     { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Haz tu pedido" },
     { "type": "text", "id": "heading", "label": "Título (usa *asteriscos* para la parte en cursiva)", "default": "Arma tu pedido en *5 pasos*" },
     { "type": "textarea", "id": "text", "label": "Texto" },

@@ -575,6 +575,8 @@
         steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
         dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); });
         if (bar) bar.style.transform = 'scaleX(' + ((st.step + 1) / steps.length) + ')';
+        var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step + 1).replace('{t}', steps.length) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
+        var sb = $('[data-fn-s-block]', holder); if (sb) { var wk = total(); sb.hidden = wk === 0; sb.textContent = st.plan === 'trial' ? T_('trial-total') + ' · ' + money(Math.round(wk * (1 + (+holder.getAttribute('data-trial-pct') || 15) / 100))) : T_('block-total') + ' · ' + money(wk * 4); }
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
         if (next) { next.hidden = last; next.disabled = (st.step === 2 && count() === 0); }
@@ -964,10 +966,23 @@
     window.addEventListener('hashchange', paint); window.addEventListener('popstate', paint); paint();
   }
 
+
+  // bottom sheet (phone): the glowing "i" buttons open the pricing explanation
+  function initSheets() {
+    var open = null;
+    var close = function () { if (!open) return; open.classList.remove('is-open'); open.setAttribute('aria-hidden', 'true'); root.classList.remove('sheet-open'); var b = open._from; open = null; if (b && b.focus) b.focus(); };
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest ? e.target.closest('[data-sheet]') : null;
+      if (t) { var el = document.getElementById('sheet-' + t.getAttribute('data-sheet')); if (!el) return; e.preventDefault(); el._from = t; open = el; el.classList.add('is-open'); el.setAttribute('aria-hidden', 'false'); root.classList.add('sheet-open'); var p = $('.sheet__panel', el); if (p) p.focus(); return; }
+      if (open && e.target.closest('[data-sheet-close]')) close();
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  }
+
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initTabs, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initTabs, initSheets, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

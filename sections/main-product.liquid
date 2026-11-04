@@ -24,7 +24,7 @@
           {%- if mf.category.value != blank -%}<span class="eyebrow" style="margin:0">{{ mf.category.value | replace: '-', ' ' }}</span>{%- endif -%}
         </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">{{ product.title }}</h1>
-        <p class="tagline" style="font-size:2rem;margin:0" data-price>{{ current_variant.price | money_without_trailing_zeros }}</p>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>{{ current_variant.price | money_without_trailing_zeros }}</p>{%- if mf.tier.value != blank -%}<button class="info-dot" type="button" data-sheet="pricing" aria-label="{{ 'sheet.info' | t }}"><i aria-hidden="true">i</i></button>{%- endif -%}</div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div>

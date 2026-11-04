@@ -484,7 +484,17 @@
     "account_title": "¿Ya eres cliente?",
     "account_text": "Inicia sesión y recuperamos tus datos y alergias. Si eres nuevo, tu cuenta se crea al confirmar el pedido.",
     "create_account": "Crear mi cuenta",
-    "logged_as": "Sesión iniciada como"
+    "logged_as": "Sesión iniciada como",
+    "teaser_t": "Tu bloque de 4 semanas",
+    "teaser_p": "Elige tu menú, tu nivel y tus platillos. Pagas una vez y recibes cada semana.",
+    "teaser_a": "4 semanas · 1 pago",
+    "teaser_b": "Desde $160 por platillo",
+    "teaser_c": "Cierre: sábado 10:00 AM",
+    "teaser_cta": "Armar mi pedido",
+    "step_of": "Paso {n} de {t}",
+    "block_total": "Bloque de 4 semanas",
+    "trial_total": "Semana de prueba",
+    "per_week": "Cada semana"
   },
   "sitemap": {
     "pedido": "Armar mi pedido",
@@ -541,5 +551,19 @@
     "order": "Pedido",
     "calendar": "Calendario",
     "account": "Cuenta"
+  },
+  "sheet": {
+    "info": "Cómo se cobra",
+    "title": "Así funciona tu pedido",
+    "p1_t": "Compras un bloque de 4 semanas",
+    "p1": "Pagas una sola vez y recibes tus platillos cada semana, durante 4 semanas.",
+    "p2_t": "El precio es por platillo",
+    "p2": "Cada platillo tiene un nivel. Tu bloque suma los platillos que elijas cada semana.",
+    "p3_t": "Tu total",
+    "p3": "Platillos de una semana × 4 semanas = el total de tu bloque.",
+    "p4_t": "¿Prefieres probar?",
+    "p4": "La semana de prueba cuesta {{ pct }}% más. Se compra hasta el sábado a las 10:00 AM.",
+    "per_dish": "por platillo",
+    "close": "Entendido"
   }
 }

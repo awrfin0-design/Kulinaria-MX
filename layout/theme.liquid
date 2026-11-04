@@ -90,6 +90,31 @@
       <a class="app-tab" data-tab="account" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c.5-4 3.5-6 7.5-6s7 2 7.5 6"/></svg><span>{{ 'tabs.account' | t }}</span></a>
     </nav>
 
+    {%- comment -%} Phone-only bottom sheet explaining the 4-week block pricing; opened by the glowing "i" buttons ([data-sheet="pricing"]). {%- endcomment -%}
+    <div class="sheet" id="sheet-pricing" role="dialog" aria-modal="true" aria-labelledby="sheet-pricing-t" aria-hidden="true" data-sheet-root>
+      <div class="sheet__backdrop" data-sheet-close></div>
+      <div class="sheet__panel" tabindex="-1">
+        <span class="sheet__grip" aria-hidden="true"></span>
+        <p class="sheet__kicker">{{ 'sheet.info' | t }}</p>
+        <h2 id="sheet-pricing-t">{{ 'sheet.title' | t }}</h2>
+        <ol class="sheet__steps">
+          <li><b>{{ 'sheet.p1_t' | t }}</b><span>{{ 'sheet.p1' | t }}</span></li>
+          <li><b>{{ 'sheet.p2_t' | t }}</b><span>{{ 'sheet.p2' | t }}</span>
+            <dl class="sheet__tiers">
+              <div><dt>{{ 'tier.selecto' | t }}</dt><dd>${{ settings.price_selecto | default: 160 }}</dd></div>
+              <div><dt>{{ 'tier.exclusivo' | t }}</dt><dd>${{ settings.price_exclusivo | default: 220 }}</dd></div>
+              <div><dt>{{ 'tier.signature' | t }}</dt><dd>${{ settings.price_signature | default: 280 }}</dd></div>
+              <div><dt>{{ 'tier.reserve' | t }}</dt><dd>${{ settings.price_reserve | default: 340 }}</dd></div>
+            </dl>
+            <small>{{ 'sheet.per_dish' | t }}</small>
+          </li>
+          <li><b>{{ 'sheet.p3_t' | t }}</b><span>{{ 'sheet.p3' | t }}</span></li>
+          <li><b>{{ 'sheet.p4_t' | t }}</b><span>{{ 'sheet.p4' | t: pct: settings.trial_markup | default: 15 }}</span></li>
+        </ol>
+        <button class="btn btn--gold btn--block" type="button" data-sheet-close>{{ 'sheet.close' | t }}</button>
+      </div>
+    </div>
+
     {%- if customer -%}
       <script type="application/json" id="kulinaria-customer">
         {
