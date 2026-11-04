@@ -950,23 +950,6 @@
   }
 
 
-  // phone app tab bar: highlight the tab of the current page (real URLs on Shopify, hash routes in the preview)
-  function initTabs() {
-    var bar = $('[data-app-tabs]'); if (!bar) return;
-    var key = function () {
-      var r = (location.hash ? location.hash.replace(/^#/, '') : location.pathname).toLowerCase();
-      if (r === '' || r === '/' || r === '/home') return 'home';
-      if (/pedido/.test(r)) return 'order';
-      if (/calendario/.test(r)) return 'calendar';
-      if (/cuenta|account|login|registro|direcciones|reset/.test(r)) return 'account';
-      if (/menu|collections|products|^\/p\//.test(r)) return 'menu';
-      return '';
-    };
-    var paint = function () { var k = key(); $$('[data-tab]', bar).forEach(function (a) { if (a.getAttribute('data-tab') === k) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }); };
-    window.addEventListener('hashchange', paint); window.addEventListener('popstate', paint); paint();
-  }
-
-
   // bottom sheet (phone): the glowing "i" buttons open the pricing explanation
   function initSheets() {
     var open = null;
@@ -979,10 +962,23 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
   }
 
+
+  // burger menu (phone): every group can open its sub-pages as cards
+  function initSitemapToggles() {
+    $$('.sitemap__group').forEach(function (g) {
+      var sub = $('.sitemap__sub', g); if (!sub || $('.sitemap__tog', g)) return;
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'sitemap__tog'; b.setAttribute('aria-expanded', 'false');
+      b.setAttribute('aria-label', (cfg.lang === 'en' ? 'Show pages: ' : 'Ver páginas: ') + ($('.sitemap__top', g) ? $('.sitemap__top', g).textContent.replace(/^\d+/, '').trim() : ''));
+      b.innerHTML = '<i></i><i></i>';
+      b.addEventListener('click', function () { var o = g.classList.toggle('is-open'); b.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+      g.appendChild(b);
+    });
+  }
+
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initTabs, initSheets, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

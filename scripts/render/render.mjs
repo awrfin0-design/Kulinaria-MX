@@ -246,7 +246,7 @@ export async function renderSite() {
 
   const pagesFor = (lang) => per[lang].routes.map((r) => {
     const inner = r.html.match(MAIN_RE)[1];
-    return `<div data-page="${r.key}" data-title="${r.title.replace(/"/g, '&quot;')}" hidden>${prefixIds(rewrite(inner, r.key + ' ' + lang), r.key)}</div>`;
+    return `<div data-page="${r.key}" data-template="${String(r.tpl || 'page').split('.')[0].replace(/[^a-z0-9]+/gi, '-').toLowerCase()}" data-title="${r.title.replace(/"/g, '&quot;')}" hidden>${prefixIds(rewrite(inner, r.key + ' ' + lang), r.key)}</div>`;
   }).join('\n') + `\n<div data-page="indice" data-title="${lang === 'en' ? 'Page index' : 'Índice de páginas'}" hidden>${rewrite(indexHtml(lang), 'index')}</div>`;
 
   let doc = per.es.routes.find((r) => r.key === 'home').html;
@@ -332,7 +332,7 @@ const PREVIEW_JS = `
     if (h && h.indexOf('#/') !== 0) return;              // in-page anchors
     var key = (h ? h.slice(2) : 'home').split('?')[0] || 'home';
     var found = false;
-    pages.forEach(function (p) { var on = p.getAttribute('data-page') === key; p.hidden = !on; if (on) { found = true; document.title = p.getAttribute('data-title') + ' | ' + M.suffix; } });
+    pages.forEach(function (p) { var on = p.getAttribute('data-page') === key; p.hidden = !on; if (on) { found = true; document.body.className = document.body.className.replace(/template-\\S+/, 'template-' + (p.getAttribute('data-template') || 'page')); document.title = p.getAttribute('data-title') + ' | ' + M.suffix; } });
     if (!found) { pages.forEach(function (p) { p.hidden = p.getAttribute('data-page') !== '404'; }); }
     [].forEach.call(document.querySelectorAll('.site-nav a'), function (a) {
       if (a.getAttribute('href').split('?')[0] === '#/' + key) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');

@@ -8,12 +8,14 @@
   data-t-add="{{ 'funnel.add' | t }}" data-t-in-order="{{ 'funnel.in_order' | t }}" data-t-remembered="{{ 'funnel.remembered' | t }}" data-t-saved="{{ 'funnel.saved' | t }}"
   data-t-step-of="{{ 'funnel.step_of' | t }}" data-t-block-total="{{ 'funnel.block_total' | t }}" data-t-trial-total="{{ 'funnel.trial_total' | t }}" data-t-all="{{ 'funnel.all_diets' | t }}" data-t-any-tier="{{ 'funnel.any_tier' | t }}" data-t-block="{{ 'plans.block_name' | t }}" data-t-trial-name="{{ 'plans.trial_name' | t }}" {{ section.shopify_attributes }}>
   <div class="funnel__teaser container">
+    <div class="funnel__teaser-bg" aria-hidden="true">{% render 'photo', art: 'containers', alt: '' %}</div>
     <p class="funnel__teaser-kicker">{{ 'funnel.eyebrow' | t }}</p>
     <h2>{{ 'funnel.teaser_t' | t }} <button class="info-dot" type="button" data-sheet="pricing" aria-label="{{ 'sheet.info' | t }}"><i aria-hidden="true">i</i></button></h2>
     <p class="funnel__teaser-text">{{ 'funnel.teaser_p' | t }}</p>
     <ul class="funnel__teaser-facts"><li>{{ 'funnel.teaser_a' | t }}</li><li>{{ 'funnel.teaser_b' | t }}</li><li>{{ 'funnel.teaser_c' | t }}</li></ul>
     <a class="btn btn--gold btn--block" href="/pages/pedido">{{ 'funnel.teaser_cta' | t }}</a>
   </div>
+  {%- unless section.settings.phone_teaser -%}<div class="funnel__bgphoto" aria-hidden="true">{% render 'photo', art: 'air-steak-dark', alt: '' %}</div>{%- endunless -%}
   <div class="funnel__track" data-fn-track>
    <div class="funnel__stage" data-fn-stage>
     <div class="funnel__top container">

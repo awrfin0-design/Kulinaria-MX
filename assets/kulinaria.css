@@ -1621,3 +1621,122 @@ a.lang__btn{display:inline-block;text-decoration:none}
   body.template-product .shopify-section:has(.rail){display:none}
   body .product__info .alert{border-radius:16px}
 }
+
+/* =====================================================================
+   PHONE v14 — "Capítulos": photo chapters with text laid over the photography, a burger-only top bar
+   and sub-page cards in the menu. Phones only (max-width:760px); desktop untouched.
+   ===================================================================== */
+.funnel__bgphoto,.funnel__teaser-bg{display:none}
+@media (max-width:760px){
+  :root{--tabbar:0px;--ink-on-photo:#f3ebd9;--ink-on-photo-2:rgba(243,235,217,.82)}
+  .app-tabs{display:none}
+  body{padding-bottom:28px}
+
+  /* ---------- top bar: transparent over photo chapters, solid elsewhere ---------- */
+  body:has(.hero),body:has(.page-head){padding-top:0}
+  body:has(.hero) .site-header:not(.is-stuck),body:has(.page-head) .site-header:not(.is-stuck){background:transparent;box-shadow:none}
+  body:has(.hero) .site-header:not(.is-stuck) .logo,body:has(.page-head) .site-header:not(.is-stuck) .logo{filter:brightness(0) invert(1)}
+  body:has(.hero) .site-header:not(.is-stuck) .icon-link,body:has(.page-head) .site-header:not(.is-stuck) .icon-link,
+  body:has(.hero) .site-header:not(.is-stuck) .burger,body:has(.page-head) .site-header:not(.is-stuck) .burger{color:#fff}
+  body .site-header.is-stuck .logo{filter:none}
+
+  /* ---------- chapter 1: hero, full screen ---------- */
+  body .hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;padding:0;background:#0d0c0a;overflow:hidden}
+  body .hero__bg{position:absolute;inset:0;height:auto;margin:0;border-radius:0}
+  body .hero__dim{display:block;position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(13,12,10,.62) 0,rgba(13,12,10,0) 24%,rgba(13,12,10,0) 38%,rgba(13,12,10,.9) 80%)}
+  body .hero__grid{position:relative;z-index:3;width:100%}
+  body .hero__copy{padding:0 0 44px}
+  body .hero__copy h1{color:var(--ink-on-photo);font-size:2.35rem;line-height:1.06;text-shadow:0 2px 24px rgba(0,0,0,.5)}
+  body .hero__sub{color:var(--ink-on-photo-2);font-size:1.02rem}
+  body .hero .countdown{background:rgba(255,255,255,.14);color:var(--ink-on-photo);backdrop-filter:blur(8px)}
+  body .hero__cta .arrow-link{background:linear-gradient(135deg,#f0d684,#b8913a);color:#1a1405}
+  body .hero__cta .arrow-link__c{background:rgba(26,20,5,.14)}
+  body .hero:after{content:"Desliza ↓";position:absolute;left:0;right:0;bottom:14px;z-index:4;text-align:center;font:700 .62rem var(--font-label);letter-spacing:.24em;text-transform:uppercase;color:var(--ink-on-photo-2)}
+  html[lang="en"] body .hero:after{content:"Swipe ↓"}
+
+  /* ---------- chapter 2: this week, one dish per screen ---------- */
+  body.template-index .shopify-section:has(.rail){position:relative}
+  body.template-index .shopify-section:has(.rail) section{padding:0;background:#0d0c0a}
+  body.template-index .rail{position:relative}
+  body.template-index .rail__head{position:absolute;left:0;right:0;top:78px;z-index:6;padding:0 24px;pointer-events:none}
+  body.template-index .rail__head h2{font-size:1.1rem;color:var(--ink-on-photo);margin:0;text-shadow:0 1px 14px rgba(0,0,0,.6)}
+  body.template-index .rail__head .lede,body.template-index .rail__head .eyebrow{display:none}
+  body.template-index .rail__head::after{content:"← →";position:absolute;right:24px;top:2px;font:700 .75rem var(--font-label);letter-spacing:.2em;color:var(--ink-on-photo-2)}
+  body.template-index .rail__track{display:flex;gap:0;margin:0;padding:0;overflow-x:auto;scroll-snap-type:x mandatory}
+  body.template-index .rail .dish{flex:0 0 100%;max-width:none;height:100svh;position:relative;border:0;border-radius:0;background:#0d0c0a;scroll-snap-align:start}
+  body.template-index .rail .dish__media{position:absolute;inset:0;aspect-ratio:auto;height:100%;border-radius:0}
+  body.template-index .rail .dish__media img{height:100%;object-fit:cover}
+  body.template-index .rail .dish:after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(13,12,10,.55) 0,rgba(13,12,10,0) 22%,rgba(13,12,10,0) 44%,rgba(13,12,10,.92) 82%);pointer-events:none}
+  body.template-index .rail .dish__body{position:absolute;left:0;right:0;bottom:118px;z-index:2;padding:0 24px;gap:8px;display:grid;color:var(--ink-on-photo)}
+  body.template-index .rail .tier-badge{display:inline-flex;justify-self:start;background:none;border:0;padding:0;color:#e2c36b;font-size:.7rem;letter-spacing:.18em}
+  body.template-index .rail .dish__title{font-size:2rem;line-height:1.08;color:var(--ink-on-photo)}
+  body.template-index .rail .dish__desc{display:-webkit-box;color:var(--ink-on-photo-2);font-size:1rem;-webkit-line-clamp:2}
+  body.template-index .rail .dish__price{font-size:1.9rem;color:#e2c36b}
+  body.template-index .rail .dish__meta{margin:0}
+  body.template-index .rail .dish__go{display:none}
+  body.template-index .shopify-section:has(.rail) .btn-row{position:absolute;left:24px;right:24px;bottom:34px;z-index:7;margin:0}
+  body.template-index .shopify-section:has(.rail) .arrow-link{display:flex;flex-direction:row-reverse;align-items:center;justify-content:space-between;height:56px;padding:0 6px 0 24px;border-radius:999px;border:1.5px solid #e2c36b;color:#e2c36b;font-size:.76rem;letter-spacing:.12em;background:rgba(13,12,10,.35);backdrop-filter:blur(8px)}
+  body.template-index .shopify-section:has(.rail) .arrow-link__c{width:42px;height:42px;border:0;background:rgba(226,195,107,.16);color:inherit}
+
+  /* ---------- chapter 3: "Tu bloque" over a photo ---------- */
+  body .funnel--teaser{position:relative;min-height:100svh;padding:0;display:flex;align-items:flex-end;overflow:hidden;background:#0d0c0a}
+  body .funnel--teaser .funnel__teaser{position:relative;z-index:2;background:none;border-radius:0;padding:0 var(--pad) 44px;margin:0;width:100%;color:var(--ink-on-photo)}
+  body .funnel__teaser-bg{display:block;position:absolute;inset:0;z-index:0}
+  body .funnel__teaser-bg img{width:100%;height:100%;object-fit:cover}
+  body .funnel--teaser:after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(13,12,10,.4) 0,rgba(13,12,10,.1) 30%,rgba(13,12,10,.94) 78%);pointer-events:none}
+  body .funnel__teaser-kicker{color:#e2c36b}
+  body .funnel__teaser h2{font-size:2.1rem;color:var(--ink-on-photo)}
+  body .funnel__teaser-text{color:var(--ink-on-photo-2)}
+  body .funnel__teaser-facts li{color:var(--ink-on-photo)}
+  body .funnel__teaser-facts li::before{background:#e2c36b}
+  body .funnel--teaser .btn--gold{background:linear-gradient(135deg,#f0d684,#b8913a);color:#1a1405}
+
+  /* ---------- inner pages: photo with the title over it ---------- */
+  body .page-head__photo{position:relative;display:flex;align-items:flex-end;min-height:min(46svh,400px);padding:0;background:#0d0c0a;overflow:hidden}
+  body .page-head__bg{display:block;position:absolute;inset:0;height:auto}
+  body .page-head__bg img{height:100%;object-fit:cover}
+  body .page-head__bg::after{display:block;content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(13,12,10,.6) 0,rgba(13,12,10,0) 28%,rgba(13,12,10,.15) 45%,rgba(13,12,10,.92) 100%)}
+  body .page-head .container{position:relative;z-index:2;width:100%}
+  body .page-head__copy{padding:96px 0 26px}
+  body .page-head h1{color:var(--ink-on-photo);font-size:2.1rem;text-shadow:0 2px 20px rgba(0,0,0,.5)}
+  body .page-head .hero__sub{color:var(--ink-on-photo-2);font-size:1rem}
+  body .page-head .hero__cta .arrow-link{background:linear-gradient(135deg,#f0d684,#b8913a);color:#1a1405}
+  body .page-head .hero__cta .arrow-link__c{background:rgba(26,20,5,.14)}
+
+  /* ---------- order wizard: glass over a blurred photo (dark theme) ---------- */
+  :root[data-theme="dark"] body .funnel:not(.funnel--teaser){position:relative;isolation:isolate}
+  :root[data-theme="dark"] body .funnel__bgphoto{display:block;position:fixed;inset:0;z-index:-1;pointer-events:none}
+  :root[data-theme="dark"] body .funnel__bgphoto img{width:100%;height:100%;object-fit:cover;filter:blur(18px) brightness(.34);transform:scale(1.15)}
+  :root[data-theme="dark"] body .fn-menu,:root[data-theme="dark"] body .fn-tier,:root[data-theme="dark"] body .fn-plan,:root[data-theme="dark"] body .funnel__aside,:root[data-theme="dark"] body .fn-account{background:rgba(22,19,14,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.1)}
+  :root[data-theme="dark"] body .fn-menu[aria-checked="true"],:root[data-theme="dark"] body .fn-tier[aria-checked="true"],:root[data-theme="dark"] body .fn-plan[aria-checked="true"]{border-color:#e2c36b;box-shadow:0 0 0 1px #e2c36b,0 0 28px rgba(226,195,107,.22)}
+  :root[data-theme="dark"] body .funnel__actions{background:rgba(13,12,10,.82);backdrop-filter:blur(12px)}
+
+  /* ---------- burger menu: big links, sub-pages as cards ---------- */
+  .menu-overlay__inner{padding-block:18px 32px}
+  .menu-overlay__foot{display:none}
+  body .sitemap{display:block}
+  body .sitemap__group{position:relative;border-top:1px solid var(--line);padding:4px 0 6px;opacity:1;translate:none}
+  body .sitemap__top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;font-size:2rem;line-height:1.2;margin:0;padding:10px 52px 10px 0}
+  body .sitemap__top span{order:2;font-size:.66rem;color:var(--accent)}
+  body .sitemap__tog{position:absolute;right:0;top:10px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:none;display:grid;place-items:center;cursor:pointer;color:var(--text)}
+  body .sitemap__tog i{grid-area:1/1;width:14px;height:1.6px;background:currentColor;border-radius:2px;transition:rotate .3s}
+  body .sitemap__tog i+i{rotate:90deg}
+  body .sitemap__group.is-open .sitemap__tog i+i{rotate:0deg}
+  body .sitemap__sub{display:none;grid-template-columns:1fr 1fr;gap:10px;padding:4px 0 14px;margin:0}
+  body .sitemap__group.is-open .sitemap__sub{display:grid}
+  body .sitemap__sub a{display:flex;align-items:flex-end;min-height:68px;padding:12px 14px;border-radius:18px;background:var(--bg-raised);border:1px solid var(--line);color:var(--text);font-size:.98rem;line-height:1.2;background-image:none}
+  body .sitemap__sub li:only-child{grid-column:1/-1}
+  body .sitemap__sub a:active{border-color:var(--accent)}
+}
+@media (max-width:760px){
+  body .funnel--teaser{isolation:isolate}
+  body .funnel--teaser .funnel__teaser{position:static;z-index:auto}
+  body .funnel__teaser-bg{z-index:-2}
+  body .funnel--teaser:after{z-index:-1}
+}
+@media (max-width:760px){
+  body .tier-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px}
+  body .tier-row__text{flex-basis:100%;order:3}
+  body .tier-row .tier-badge{flex:none}
+  body .tier-row__price{margin-left:auto;white-space:nowrap}
+}

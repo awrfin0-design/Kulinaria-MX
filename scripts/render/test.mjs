@@ -303,6 +303,7 @@ await page.setViewportSize({ width: 390, height: 844 }); await page.goto(`${URL0
 await page.click('.burger');
 await page.waitForTimeout(900);
 ok('mobile burger opens the full-screen menu', await page.$eval('#menu-overlay', (n) => !n.hidden && n.classList.contains('is-open')) && (await page.$eval('.burger', (n) => n.getAttribute('aria-expanded'))) === 'true');
+await page.evaluate(() => { const g = document.querySelector('#menu-overlay a[href="#/pg/plan-bloque"]').closest('.sitemap__group'); const t = g && g.querySelector('.sitemap__tog'); if (t && !g.classList.contains('is-open')) t.click(); }); await page.waitForTimeout(300);
 await page.click('#menu-overlay a[href="#/pg/plan-bloque"]'); await page.waitForTimeout(1100);
 ok('mobile menu navigates and closes', page.url().endsWith('#/pg/plan-bloque') && (await page.$eval('#menu-overlay', (n) => n.hidden)));
 
@@ -622,7 +623,7 @@ for (const [w, h] of [[1440, 900], [390, 844], [820, 1180]]) {
     const tall = [];
     const chk = (name, els, max) => els.forEach((e) => { const r = e.getBoundingClientRect(); if (r.height > max + 1) tall.push(`${name}:${Math.round(r.height)}>${Math.round(max)}`); });
     chk('hero', q('.hero'), vh); chk('showcase-photo', q('.showcase__frame'), vh * 0.7);
-    chk('rail-card', q('.rail .dish'), vh * 0.8); chk('row-photo', q('.card__photo'), vh * 0.5); chk('cta', q('.cta-banner'), vh); chk('band', q('.band'), vh);
+    chk('rail-card', q('.rail .dish'), innerWidth <= 760 ? vh : vh * 0.8); chk('row-photo', q('.card__photo'), vh * 0.5); chk('cta', q('.cta-banner'), vh); chk('band', q('.band'), vh);
     return tall;
   });
   ok(`home sections fit the screen @${w}x${h}`, fit.length === 0, fit.join(' '));
@@ -663,22 +664,14 @@ ok('the calendar lists this week and the next 3, with the scheduled dishes in th
 // =====================================================================  v12: phone app mode (desktop untouched)
 await page.setViewportSize({ width: 1440, height: 900 });
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(500);
-ok('desktop has no app tab bar', await page.evaluate(() => getComputedStyle(document.querySelector('[data-app-tabs]')).display === 'none'));
+ok('there is no app tab bar anywhere (navigation is the burger menu)', await page.evaluate(() => !document.querySelector('[data-app-tabs],.app-tabs')));
 ok('desktop header keeps language, login, cart and burger', await page.evaluate(() => { const v = (s) => { const e = document.querySelector(s); return !!e && getComputedStyle(e).display !== 'none'; }; return v('.site-header .lang') && v('.site-header .header-login') && v('.site-header .burger'); }));
 const mobile = { width: 390, height: 844 };
 await page.setViewportSize(mobile); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
-ok('phone: the bottom tab bar has 5 tabs (home, menu, order, calendar, account) fixed at the bottom', await page.evaluate(() => { const b = document.querySelector('[data-app-tabs]'); const r = b.getBoundingClientRect(); return getComputedStyle(b).display !== 'none' && b.querySelectorAll('[data-tab]').length === 5 && Math.abs(r.bottom - innerHeight) < 2; }));
 ok('phone: the header keeps only logo, cart and burger (language, theme and login live in the burger menu)', await page.evaluate(() => { const v = (s) => { const e = document.querySelector(s); return !e || getComputedStyle(e).display === 'none'; }; const bar = document.querySelector('.site-header__bar').getBoundingClientRect(); return v('.site-header .lang') && v('.site-header .header-login') && bar.height <= 56; }));
 await page.click('[data-menu-open]'); await page.waitForTimeout(900);
 ok('phone: the burger menu holds the language switch, theme toggle, account and cart', await page.evaluate(() => { const o = document.querySelector('.menu-overlay'); const vis = (s) => { const e = o.querySelector(s); return !!e && e.getBoundingClientRect().width > 0; }; return vis('.lang') && vis('.theme-toggle,[data-theme-toggle]') && o.querySelectorAll('.menu-overlay__tools .icon-link').length >= 2; }));
 await page.click('[data-menu-close]'); await page.waitForTimeout(600);
-const tabFor = {};
-for (const [route, tab] of [['home', 'home'], ['menu', 'menu'], ['pg/pedido', 'order'], ['pg/calendario', 'calendar'], ['cuenta', 'account'], ['p/pollo-a-las-hierbas', 'menu']]) {
-  await page.evaluate((h) => { location.hash = '#/' + h; }, route); await page.waitForTimeout(350);
-  tabFor[route] = await page.evaluate(() => { const a = document.querySelector('[data-app-tabs] [aria-current="page"]'); return a ? a.getAttribute('data-tab') : null; });
-  if (tabFor[route] !== tab) tabFor.bad = (tabFor.bad || []).concat(route + '->' + tabFor[route]);
-}
-ok('phone: the current page lights up its tab', !tabFor.bad, JSON.stringify(tabFor.bad));
 // every page: nothing wider than the screen, compact length, nothing hides under the fixed bars
 const pageNames = await page.evaluate(() => [...document.querySelectorAll('[data-page]')].map((e) => e.getAttribute('data-page')));
 const wide = [], long = [], hidden = [];
@@ -702,7 +695,7 @@ ok('phone: the dish list stays inside the screen (own scroll, never taller than 
 await page.setViewportSize({ width: 390, height: 844 });
 await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
 const homePhone = await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'); const vis = (s) => [...pg.querySelectorAll(s)].some((e) => e.getBoundingClientRect().height > 0 && getComputedStyle(e).display !== 'none'); return { ann: getComputedStyle(document.querySelector('.site-header__ann')).display, teaser: vis('.funnel__teaser'), wizard: vis('.funnel__track'), showcase: vis('.showcase'), band: vis('.band'), rail: vis('.rail'), plans: vis('.plan-card'), screens: document.documentElement.scrollHeight / innerHeight }; });
-ok('phone home: only hero, order card, this week, plans and FAQ (no showcases, video band or index lists)', homePhone.teaser && !homePhone.wizard && !homePhone.showcase && !homePhone.band && homePhone.rail && homePhone.plans && homePhone.screens < 5, JSON.stringify(homePhone));
+ok('phone home: only hero, order card, this week, plans and FAQ (no showcases, video band or index lists)', homePhone.teaser && !homePhone.wizard && !homePhone.showcase && !homePhone.band && homePhone.rail && homePhone.plans && homePhone.screens < 8, JSON.stringify(homePhone));
 ok('phone: no announcement strip above the app bar', homePhone.ann === 'none');
 await page.click('[data-page="home"] .funnel__teaser .info-dot'); await page.waitForTimeout(600);
 const sheet = await page.evaluate(() => { const s = document.getElementById('sheet-pricing'); const r = s.querySelector('.sheet__panel').getBoundingClientRect(); return { open: s.classList.contains('is-open'), steps: s.querySelectorAll('.sheet__steps>li').length, tiers: [...s.querySelectorAll('.sheet__tiers dd')].map((x) => x.textContent).join(), fits: r.bottom <= innerHeight + 1 && r.height <= innerHeight * 0.9 && /4/.test(s.textContent) }; });
@@ -714,6 +707,41 @@ await page.click('[data-page="pg/pedido"] [data-cat="all"]'); await page.waitFor
 await page.click('[data-page="pg/pedido"] [data-fn-dish]:not(.is-hidden) [data-pick]'); await page.waitForTimeout(400);
 const blk = await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); const b = f.querySelector('[data-fn-s-block]'); const t = f.querySelector('[data-fn-s-total]').textContent; return { hidden: b.hidden, text: b.textContent, week: t, count: f.querySelector('[data-fn-stepcount]').textContent }; });
 ok('phone: the summary shows the block price (weekly total x 4) and the step counter reads "Paso 3 de 5"', !blk.hidden && /640/.test(blk.text) && /160/.test(blk.week) && /3 de 5/.test(blk.count), JSON.stringify(blk));
+await page.setViewportSize({ width: 1440, height: 900 });
+// v14: "Capítulos" phone design
+await page.setViewportSize({ width: 390, height: 844 });
+await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1000);
+const chap = await page.evaluate(() => {
+  const pg = document.querySelector('[data-page="home"]'); const hero = pg.querySelector('.hero'); const h1 = hero.querySelector('h1');
+  const rgb = (c) => c.match(/\d+/g).map(Number); const lum = ([r, g, b]) => (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+  const dishes = [...pg.querySelectorAll('.rail .dish')]; const track = pg.querySelector('.rail__track');
+  const teaser = pg.querySelector('.funnel--teaser');
+  return { tabs: !!document.querySelector('.app-tabs') && getComputedStyle(document.querySelector('.app-tabs')).display !== 'none', dark: document.documentElement.getAttribute('data-theme'),
+    heroH: Math.round(hero.getBoundingClientRect().height), vh: innerHeight, h1lum: lum(rgb(getComputedStyle(h1).color)), bodyClass: document.body.className,
+    slideW: dishes[0] ? Math.round(dishes[0].getBoundingClientRect().width) : 0, swipe: track ? getComputedStyle(track).scrollSnapType : '', slides: dishes.length,
+    teaserH: Math.round(teaser.getBoundingClientRect().height), teaserBg: !!teaser.querySelector('.funnel__teaser-bg img') };
+});
+ok('phone: there is no bottom tab bar (burger-only navigation)', !chap.tabs, JSON.stringify(chap));
+ok('phone: chapter 1 is a full-screen photo hero with light text laid over it', chap.heroH >= chap.vh - 2 && chap.h1lum > 0.8, JSON.stringify(chap));
+ok('phone: chapter 2 shows one dish per screen and you swipe sideways between dishes', chap.slideW === 390 && /x/.test(chap.swipe) && chap.slides >= 5, JSON.stringify(chap));
+ok('phone: chapter 3 ("Tu bloque") is a full-screen photo with the order button over it', chap.teaserH >= chap.vh - 2 && chap.teaserBg, JSON.stringify(chap));
+ok('the preview switches the body template class page by page (like Shopify)', await page.evaluate(() => { location.hash = '#/p/pollo-a-las-hierbas'; return new Promise((r) => setTimeout(() => r(document.body.classList.contains('template-product') && !document.body.classList.contains('template-index')), 300)); }));
+await page.evaluate(() => { location.hash = '#/home'; }); await page.waitForTimeout(300);
+await page.click('[data-menu-open]'); await page.waitForTimeout(900);
+const map = await page.evaluate(() => { const o = document.querySelector('.menu-overlay'); const groups = [...o.querySelectorAll('.sitemap__group')]; const withSub = groups.filter((g) => g.querySelector('.sitemap__sub')); return { groups: groups.length, toggles: o.querySelectorAll('.sitemap__tog').length, withSub: withSub.length, closedSubs: withSub.every((g) => getComputedStyle(g.querySelector('.sitemap__sub')).display === 'none') }; });
+ok('phone burger menu: 10 groups, each one with sub-pages has a "+" that opens them (closed at first)', map.groups === 10 && map.toggles === map.withSub && map.withSub >= 8 && map.closedSubs, JSON.stringify(map));
+await page.click('.sitemap__group:nth-child(1) .sitemap__tog'); await page.waitForTimeout(400);
+ok('phone burger menu: opening "Menú semanal" shows its sub-pages as 2-column cards (calendar, order, allergy profile)', await page.evaluate(() => { const g = document.querySelector('.sitemap__group:nth-child(1)'); const sub = g.querySelector('.sitemap__sub'); const links = [...sub.querySelectorAll('a')]; const cols = getComputedStyle(sub).gridTemplateColumns.split(' ').length; return getComputedStyle(sub).display === 'grid' && cols === 2 && links.length >= 3 && links.every((a) => a.getBoundingClientRect().height >= 60); }));
+await page.click('[data-menu-close]'); await page.waitForTimeout(500);
+await page.evaluate(() => { location.hash = '#/pg/planes'; }); await page.waitForTimeout(500);
+ok('phone inner pages: the title sits over a photo (not a separate block)', await page.evaluate(() => { const ph = document.querySelector('[data-page="pg/planes"] .page-head__photo'); const h1 = ph.querySelector('h1').getBoundingClientRect(), bg = ph.querySelector('.page-head__bg').getBoundingClientRect(); return h1.top >= bg.top && h1.bottom <= bg.bottom + 2 && bg.height > 250; }));
+// a fresh visitor on a phone gets the dark design
+{
+  const fresh = await browser.newContext({ viewport: { width: 390, height: 844 } }); const fp = await fresh.newPage();
+  await fp.goto(`${URL0}#/home`); await fp.waitForTimeout(500);
+  ok('phone: first visit opens in the dark theme (black + gold)', await fp.evaluate(() => document.documentElement.getAttribute('data-theme') === 'dark'));
+  await fresh.close();
+}
 await page.setViewportSize({ width: 1440, height: 900 });
 ok('desktop never shows the info dot, the sheet or the block line', await page.evaluate(() => [...document.querySelectorAll('.info-dot,.sheet,.funnel__block,.funnel__teaser,.funnel__stepcount')].every((e) => getComputedStyle(e).display === 'none')));
 await page.setViewportSize({ width: 1440, height: 900 });
