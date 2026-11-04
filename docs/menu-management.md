@@ -29,3 +29,6 @@ Each dish has the field **"Semanas en el menú"** (`kulinaria.weeks`): a list of
 - Field empty: the dish follows the tag `menu-semana` only (always on this week's menu).
 - Field filled: the dish appears in the menu, the home order section and the funnel only in those weeks, and it is listed in the calendar on the menu page ("This week" + the next 3). Outside those weeks it can't be added to the order.
 Tag every rotating dish with `menu-semana` once and plan it with the dates; no weekly tag editing is needed.
+
+## Importing the 10 base products (CSV)
+`backend/shopify/productos-base.csv` is in Shopify's product-import format (Products → Import). It carries title, description, type, price, tag `menu-semana` and every `kulinaria.*` field. Photos are left empty (add them in each product). The same handles already exist in the dev store, so importing there with "Overwrite products with matching handles" updates them instead of duplicating.

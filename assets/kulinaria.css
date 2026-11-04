@@ -1334,3 +1334,25 @@ a.lang__btn{display:inline-block;text-decoration:none}
 .menu-calendar__week ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .menu-calendar__week li{display:flex;justify-content:space-between;gap:10px;font-size:.95rem}
 .menu-calendar__week li span{color:var(--accent);white-space:nowrap}
+
+/* ---- v11: phones keep only logo, cart and burger in the header; language, theme and login live in the burger menu ---- */
+@media (max-width:760px){
+  .site-header .header-actions .lang,.site-header .header-actions .header-login{display:none}
+  .site-header__ann .announcement{font-size:.66rem;letter-spacing:.1em;padding:8px 12px;line-height:1.35}
+  .menu-overlay__top{flex-wrap:wrap;gap:12px 10px;align-items:center}
+  .menu-overlay__tools{width:100%;order:3;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 0 4px;border-top:1px solid var(--line)}
+  .menu-overlay__tools .lang{order:1}.menu-overlay__tools .theme-toggle{order:2}
+  .menu-overlay__tools [data-menu-close]{position:absolute;top:14px;right:16px;margin:0}
+  .menu-overlay__tools .icon-link{order:3}
+  .menu-overlay__top>a{margin-right:auto}
+}
+
+/* ---- v11 mobile polish ---- */
+@media (max-width:760px){
+  .account-nav{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;margin-inline:calc(var(--gutter,20px)*-1);padding:2px var(--gutter,20px) 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .account-nav::-webkit-scrollbar{display:none}
+  .account-nav a{flex:none;padding:9px 16px;font-size:.74rem;border:1px solid var(--line);white-space:nowrap}
+  .account-nav a:hover{padding-left:16px}
+  .spec-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .spec-list .spec{min-width:0;padding:var(--space-md)}
+}
