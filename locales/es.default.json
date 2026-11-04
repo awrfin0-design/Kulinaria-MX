@@ -523,5 +523,14 @@
     "n_calidad": "Calidad y envases",
     "a_terminos": "Contrato y términos",
     "a_privacidad": "Aviso de privacidad"
+  },
+  "calendar": {
+    "eyebrow": "Calendario",
+    "heading": "Lo que viene en el *menú*",
+    "text": "Los platillos programados para las próximas semanas.",
+    "this_week": "Esta semana",
+    "week_of": "Semana del {{ date }}",
+    "empty": "Aún sin platillos programados.",
+    "off_menu": "Este platillo no está en el menú de esta semana."
   }
 }

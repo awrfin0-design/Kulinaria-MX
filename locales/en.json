@@ -523,5 +523,14 @@
     "n_calidad": "Quality and containers",
     "a_terminos": "Contract and terms",
     "a_privacidad": "Privacy notice"
+  },
+  "calendar": {
+    "eyebrow": "Calendar",
+    "heading": "Coming up on the *menu*",
+    "text": "The dishes planned for the next weeks.",
+    "this_week": "This week",
+    "week_of": "Week of {{ date }}",
+    "empty": "No dishes scheduled yet.",
+    "off_menu": "This dish is not on this week's menu."
   }
 }

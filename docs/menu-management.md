@@ -23,3 +23,9 @@ Alternatives: add and remove products by hand in a manual collection, or schedul
 
 ## Seeding the 11 sample dishes
 `node backend/shopify/seed-dishes.mjs --apply` creates them with all fields (see `backend/README.md`). Photos: set `IMAGE_BASE_URL` to a public folder holding `photo-dish-N.webp`, or upload them in the product page.
+
+## Planning weeks ahead (calendar)
+Each dish has the field **"Semanas en el menú"** (`kulinaria.weeks`): a list of dates, one per week the dish runs. Any date inside the week works, written `YYYY-MM-DD` (weeks start on Monday), e.g. `2026-11-09`.
+- Field empty: the dish follows the tag `menu-semana` only (always on this week's menu).
+- Field filled: the dish appears in the menu, the home order section and the funnel only in those weeks, and it is listed in the calendar on the menu page ("This week" + the next 3). Outside those weeks it can't be added to the order.
+Tag every rotating dish with `menu-semana` once and plan it with the dates; no weekly tag editing is needed.

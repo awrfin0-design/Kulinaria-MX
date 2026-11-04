@@ -1,0 +1,38 @@
+{%- comment -%}
+  Is this dish on the menu in a given week?  Prints "on" or "off" (capture it:  {%- capture mw -%}{% render 'menu-week', product: product %}{%- endcapture -%}).
+  Params: product · offset (weeks from this one, default 0)
+  Metafield kulinaria.weeks (list of text) = the weeks the dish runs. Each entry is ANY date inside that week, written YYYY-MM-DD (e.g. 2026-11-09).
+  - weeks empty  -> the dish follows the tag only: always on this week, never in the future calendar
+  - weeks filled -> the dish shows only in those weeks (weeks start on Monday)
+{%- endcomment -%}
+{%- liquid
+  assign off_n = offset | default: 0 | plus: 0
+  assign day = 86400
+  assign now_ts = 'now' | date: '%s' | plus: 0
+  assign now_dow = 'now' | date: '%u' | plus: 0 | minus: 1
+  assign want_ts = now_ts | minus: now_dow | times: 0
+  assign want_ts = now_dow | times: day
+  assign want_ts = now_ts | minus: want_ts
+  assign shift = off_n | times: 7 | times: day
+  assign want_ts = want_ts | plus: shift
+  assign want_key = want_ts | date: '%Y-%m-%d'
+  assign weeks = product.metafields.kulinaria.weeks.value
+  assign result = 'off'
+  if weeks == blank
+    if off_n == 0
+      assign result = 'on'
+    endif
+  else
+    for w in weeks
+      assign w_ts = w | strip | date: '%s' | plus: 0
+      assign w_dow = w | strip | date: '%u' | plus: 0 | minus: 1
+      assign w_off = w_dow | times: day
+      assign w_start = w_ts | minus: w_off | date: '%Y-%m-%d'
+      if w_start == want_key
+        assign result = 'on'
+        break
+      endif
+    endfor
+  endif
+  echo result
+-%}

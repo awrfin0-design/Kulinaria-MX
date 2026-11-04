@@ -82,7 +82,7 @@ for (const base of groups) {
 // ---- menu: filters, tier, deep link
 await page.goto(`${URL0}#/menu`); await page.waitForTimeout(150);
 const scope = '[data-page="menu"]';
-ok('menu shows the 11 dishes of the week', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 11);
+ok('menu shows the 9 dishes scheduled for this week (2 are planned for later weeks)', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 9);
 await page.click(`${scope} [data-filter="category"][data-value="al-fuego-y-mar"]`);
 ok('category filter -> 3 dishes', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 3);
 await page.click(`${scope} [data-filter="diet"][data-value="keto"]`);
@@ -90,12 +90,12 @@ ok('category + keto -> 2 dishes', (await page.$$eval(`${scope} [data-dish]:not(.
 ok('counter matches', (await page.$eval(`${scope} [data-count]`, (e) => e.textContent.trim())) === '2');
 await page.goto(`${URL0}#/home`); await page.reload();
 await page.goto(`${URL0}#/menu?dieta=vegano`); await page.reload(); await page.waitForTimeout(150);
-ok('deep link ?dieta=vegano filters menu', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 2);
+ok('deep link ?dieta=vegano filters menu', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 1);
 
 // ---- home diet chip deep-links into the filtered menu without reload
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(100);
 await page.click('[data-page="home"] a.chip[href*="dieta=sin-gluten"]'); await page.waitForTimeout(150);
-{ const n = await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.map((x) => x.dataset.diets)); ok('chip from home -> menu filtered by sin-gluten (6 gluten-free dishes, previous filters cleared)', n.length === 6 && n.every((d) => d.split('|').includes('sin-gluten')), n.length + ' shown'); }
+{ const n = await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.map((x) => x.dataset.diets)); ok('chip from home -> menu filtered by sin-gluten (5 gluten-free dishes this week, previous filters cleared)', n.length === 5 && n.every((d) => d.split('|').includes('sin-gluten')), n.length + ' shown'); }
 
 // ---- allergy profile blocks dishes + product page alert
 await page.goto(`${URL0}#/pg/perfil`); await page.waitForTimeout(100);
@@ -656,6 +656,10 @@ ok('dish cards show a short description', (await page.$$eval('[data-page="home"]
   await lctx.close();
 }
 
+// =====================================================================  v10: weekly calendar and off-menu dishes
+await page.goto(`${URL0}#/menu`); await page.reload(); await page.waitForTimeout(900);
+ok('a dish scheduled for a later week is not on this week\'s menu', await page.evaluate(() => ![...document.querySelectorAll('[data-page="menu"] [data-dish]')].some((d) => /Brownie/.test(d.getAttribute('data-title')))));
+ok('the calendar lists this week and the next 3, with the scheduled dishes in their week', await page.evaluate(() => { const w = [...document.querySelectorAll('[data-page="menu"] .menu-calendar__week')]; const t = (i) => w[i].textContent; return w.length === 4 && w[0].classList.contains('is-now') && !/Brownie/.test(t(0)) && /Brownie/.test(t(1)) && /Batido verde/.test(t(1)) && /Batido verde/.test(t(2)) && !/\{/.test(t(1)); }));
 // ---- screenshots for eyeballing
 if (shotDir) {
   await page.setViewportSize({ width: 1440, height: 900 });

@@ -8,6 +8,8 @@
     calories (integer), carbs (integer, grams)
   One top-down plated photo only — never multiple preparation methods.
 {%- endcomment -%}
+{%- capture mw_state -%}{% render 'menu-week', product: product %}{%- endcapture -%}
+{%- if show_all or mw_state == 'on' -%}
 {%- liquid
   assign mf = product.metafields.kulinaria
   assign card_text = mf.card_description.value | default: product.description | strip_html | truncate: 90
@@ -24,7 +26,7 @@
     {%- if product.featured_image -%}
       {{ product.featured_image | image_url: width: 640 | image_tag: loading: 'lazy', widths: '320, 480, 640', sizes: '(min-width: 1100px) 25vw, 50vw', alt: product.featured_image.alt | default: product.title }}
     {%- else -%}
-      <span class="dish__ph surface-slate" aria-hidden="true">{% render 'logo', mark: true %}</span>
+      <span class="dish__ph surface-slate" aria-hidden="true">{% render 'dish-placeholder', category: category %}</span>
     {%- endif -%}
     <span class="dish__pill" aria-hidden="true">{{ 'dish.view' | t }}</span>
   </a>
@@ -47,3 +49,4 @@
   </div>
   <div class="dish__blocked" role="note"><div><strong>{{ 'dish.blocked_title' | t }}</strong>{{ 'dish.blocked_text' | t }}</div></div>
 </article>
+{%- endif -%}

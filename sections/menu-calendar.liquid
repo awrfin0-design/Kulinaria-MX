@@ -1,0 +1,53 @@
+{%- liquid
+  assign coll = section.settings.collection
+  assign day = 86400
+  assign now_ts = 'now' | date: '%s' | plus: 0
+  assign now_dow = 'now' | date: '%u' | plus: 0 | minus: 1
+  assign mon_off = now_dow | times: day
+  assign mon_ts = now_ts | minus: mon_off
+-%}
+<section class="section section--raised menu-calendar" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="section__head">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2>{% render 'headline', text: section.settings.heading %}</h2>
+      {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
+    </div>
+    <div class="menu-calendar__grid">
+      {%- for i in (0..3) -%}
+        {%- assign shift = i | times: 7 | times: day -%}
+        {%- assign wk_ts = mon_ts | plus: shift -%}
+        {%- assign wk_label = wk_ts | date: '%d/%m' -%}
+        {%- assign n = 0 -%}
+        <article class="menu-calendar__week{% if i == 0 %} is-now{% endif %}">
+          <h3>{% if i == 0 %}{{ 'calendar.this_week' | t }}{% else %}{{ 'calendar.week_of' | t: date: wk_label }}{% endif %}</h3>
+          <ul>
+            {%- if coll != blank -%}
+              {%- for product in coll.products -%}
+                {%- capture mw_state -%}{% render 'menu-week', product: product, offset: i %}{%- endcapture -%}
+                {%- if mw_state == 'on' -%}
+                  {%- assign n = n | plus: 1 -%}
+                  <li><a href="{{ product.url }}">{{ product.title }}</a> <span>{{ product.price | money_without_trailing_zeros }}</span></li>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+            {%- if n == 0 -%}<li class="text-muted">{{ 'calendar.empty' | t }}</li>{%- endif -%}
+          </ul>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Calendario del menú",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Etiqueta", "default": "Calendario" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Lo que viene en el *menú*" },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Los platillos programados para las próximas semanas." },
+    { "type": "collection", "id": "collection", "label": "Colección con los platillos" }
+  ],
+  "presets": [{ "name": "Calendario del menú" }]
+}
+{% endschema %}

@@ -25,7 +25,7 @@
         {%- else -%}
           {%- for i in (1..4) -%}
             <article class="dish">
-              <div class="dish__media surface-walnut"><span class="dish__ph surface-slate" aria-hidden="true">{% render 'logo', mark: true %}</span></div>
+              <div class="dish__media surface-walnut"><span class="dish__ph surface-slate" aria-hidden="true">{% render 'dish-placeholder', category: product.metafields.kulinaria.category.value %}</span></div>
               <div class="dish__body">
                 <div>{% render 'tier-badge', tier: 'selecto' %}</div>
                 <h3 class="dish__title">{{ 'dish.sample' | t }} {{ i }}</h3>

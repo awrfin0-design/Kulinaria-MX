@@ -43,12 +43,15 @@ function product(o) {
   };
 }
 
+const ymd = (add) => new Date(Date.now() + add * 86400000).toISOString().slice(0, 10);
+const WEEKS = { 'brownie-proteico': [ymd(7)], 'batido-verde': [ymd(7), ymd(14)], 'crema-calabaza': [ymd(0), ymd(7)] };   // scheduled dishes (the rest follow the tag only)
+
 export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
   const IMG = (n, alt) => ({ src: `assets/photo-dish-${n}.webp`, alt });
   const IMG_OF = { 'pasta-pollo-junior': 7, 'crema-calabaza': 8, 'brownie-proteico': 9, 'batido-verde': 10 };
   const dishes = DISHES.map((d, i) => product({
     id: 7100 + i, handle: d[0], title: tr(d[1]), price: TIER_PRICE[d[2]], description: `<p>${tr(d[9])}</p>`, type: d[3], plans: true, tr, image: IMG(IMG_OF[d[0]] ?? i, tr(d[1])),
-    mf: { tier: d[2], category: d[3], diets: d[4], allergens: d[5], ingredients: d[6], calories: d[7], carbs: d[8] },
+    mf: { tier: d[2], category: d[3], diets: d[4], allergens: d[5], ingredients: d[6], calories: d[7], carbs: d[8], ...(WEEKS[d[0]] ? { weeks: WEEKS[d[0]] } : {}) },
   }));
   const bloque = product({ id: 7200, handle: 'bloque-4-semanas', title: tr('Bloque Kulinaria · 4 semanas'), price: 64000, requires_selling_plan: true, plans: true, tr,
     description: tr('<p>Suscripción renovable de 4 semanas con entrega semanal. Un solo pago por bloque.</p>'), image: { src: 'assets/photo-containers.webp', alt: '' } });

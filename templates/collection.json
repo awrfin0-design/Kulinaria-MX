@@ -21,11 +21,18 @@
         "heading": "¿Aún no *tienes plan?*",
         "text": "Elige tu bloque de 4 semanas para ordenar tus platillos cada semana."
       }
+    },
+    "calendar": {
+      "type": "menu-calendar",
+      "settings": {
+        "collection": "menu-semanal"
+      }
     }
   },
   "order": [
     "head",
     "main",
+    "calendar",
     "cta"
   ]
 }

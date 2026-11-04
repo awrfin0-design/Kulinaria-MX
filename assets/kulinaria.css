@@ -1323,3 +1323,14 @@ h3 .wordmark img,.dish__title .wordmark img,.card h3 .wordmark img{height:1.05em
 .site-header .logo,.site-header .header-actions>*{filter:drop-shadow(0 0 10px var(--bg-base))}
 .site-header .lang__group{background:none;border-color:transparent}
 a.lang__btn{display:inline-block;text-decoration:none}
+
+/* ---- v10: menu calendar + dish placeholder ---- */
+.dish-ph{width:min(62%,180px);height:auto;color:var(--accent);opacity:.8}
+.dish__ph{display:grid;place-items:center;width:100%;height:100%}
+.menu-calendar__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.menu-calendar__week{background:var(--bg-raised);border:1px solid var(--line);border-radius:var(--radius-md);padding:18px}
+.menu-calendar__week.is-now{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.menu-calendar__week h3{font-size:1.15rem;margin:0 0 10px}
+.menu-calendar__week ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.menu-calendar__week li{display:flex;justify-content:space-between;gap:10px;font-size:.95rem}
+.menu-calendar__week li span{color:var(--accent);white-space:nowrap}

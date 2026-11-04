@@ -1,0 +1,20 @@
+{%- comment -%}
+  Brand-style stand-in for a dish without a photo: a plate with a line drawing per menu line. Colours follow the theme (currentColor).
+  Param: category (menu slug)
+{%- endcomment -%}
+<svg class="dish-ph" viewBox="0 0 200 150" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Kulinaria">
+  <ellipse cx="100" cy="92" rx="78" ry="30" opacity=".35"/>
+  <ellipse cx="100" cy="88" rx="62" ry="22" opacity=".6"/>
+  {%- case category -%}
+    {%- when 'desayunos-premium' -%}
+      <circle cx="100" cy="56" r="14"/><path d="M100 28v8M76 38l6 6M124 38l-6 6M68 56h8M124 56h8"/>
+    {%- when 'bowls-de-la-semana' -%}
+      <path d="M62 80c4 22 18 30 38 30s34-8 38-30z"/><path d="M82 70c0-12 10-18 18-18s18 6 18 18M100 52c-6-8 0-16 8-18"/>
+    {%- when 'diario-premium' -%}
+      <path d="M72 40v28M66 40v14c0 5 6 8 6 8s6-3 6-8V40M72 62v26"/><path d="M128 40c-8 6-8 22 0 28v20"/>
+    {%- when 'kulinaria-junior' -%}
+      <path d="M100 30l7 15 16 2-12 11 3 16-14-8-14 8 3-16-12-11 16-2z"/>
+    {%- else -%}
+      <path d="M100 26c10 12 20 20 20 36a20 20 0 0 1-40 0c0-10 6-14 10-22 4 4 6 8 8 12 4-8 2-16 2-26z"/>
+  {%- endcase -%}
+</svg>

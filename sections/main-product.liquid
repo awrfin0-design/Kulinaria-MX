@@ -13,7 +13,7 @@
       {%- if product.featured_image -%}
         {{ product.featured_image | image_url: width: 1100 | image_tag: loading: 'eager', alt: product.featured_image.alt | default: product.title }}
       {%- else -%}
-        <span class="dish__ph surface-slate" aria-hidden="true">{% render 'logo', mark: true %}</span>
+        <span class="dish__ph surface-slate" aria-hidden="true">{% render 'dish-placeholder', category: product.metafields.kulinaria.category.value %}</span>
       {%- endif -%}
     </div>
 
@@ -54,6 +54,8 @@
         </div>
       {%- endif -%}
 
+      {%- capture mw_state -%}{% render 'menu-week', product: product %}{%- endcapture -%}
+      {%- if mw_state == 'off' -%}<p class="alert alert--warn" role="note">{{ 'calendar.off_menu' | t }}</p>{%- endif -%}
       {%- form 'product', product, id: 'product-form', class: 'product-form' -%}
         {%- if product.variants.size > 1 -%}
           <div class="field"><label for="variant">{{ 'product.option' | t }}</label>
@@ -68,7 +70,7 @@
 
         <div class="btn-row" style="align-items:center">
           <input class="input qty" type="number" name="quantity" value="1" min="1" aria-label="{{ 'order.quantity' | t }}">
-          <button class="btn btn--gold" type="submit" data-add {% unless current_variant.available %}disabled{% endunless %}>
+          <button class="btn btn--gold" type="submit" data-add {% unless current_variant.available and mw_state == 'on' %}disabled{% endunless %}>
             {%- if current_variant.available -%}{{ 'products.add_to_selection' | t }}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
           </button>
         </div>
