@@ -17,7 +17,7 @@
       <div class="section__head">
         <span class="eyebrow">{{ 'general.account' | t }}</span>
         <h2>{{ 'account.login_needed' | t }}</h2>
-        <div class="btn-row"><a class="btn btn--gold" href="{{ routes.account_login_url }}">{{ 'login.title' | t }}</a><a class="btn btn--outline" href="{{ routes.account_register_url }}">{{ 'register.title' | t }}</a></div>
+        <div class="btn-row"><a class="btn btn--gold" href="{{ routes.account_login_url }}">{{ 'login.title' | t }}</a><a class="btn btn--outline" href="{{ routes.account_register_url | default: routes.account_login_url }}">{{ 'register.title' | t }}</a></div>
       </div>
     {%- else -%}
     <div class="account">
