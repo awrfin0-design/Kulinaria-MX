@@ -660,6 +660,45 @@ ok('dish cards show a short description', (await page.$$eval('[data-page="home"]
 await page.goto(`${URL0}#/menu`); await page.reload(); await page.waitForTimeout(900);
 ok('a dish scheduled for a later week is not on this week\'s menu', await page.evaluate(() => ![...document.querySelectorAll('[data-page="menu"] [data-dish]')].some((d) => /Brownie/.test(d.getAttribute('data-title')))));
 ok('the calendar lists this week and the next 3, with the scheduled dishes in their week', await page.evaluate(() => { const w = [...document.querySelectorAll('[data-page="menu"] .menu-calendar__week')]; const t = (i) => w[i].textContent; return w.length === 4 && w[0].classList.contains('is-now') && !/Brownie/.test(t(0)) && /Brownie/.test(t(1)) && /Batido verde/.test(t(1)) && /Batido verde/.test(t(2)) && !/\{/.test(t(1)); }));
+// =====================================================================  v12: phone app mode (desktop untouched)
+await page.setViewportSize({ width: 1440, height: 900 });
+await page.goto(`${URL0}#/home`); await page.waitForTimeout(500);
+ok('desktop has no app tab bar', await page.evaluate(() => getComputedStyle(document.querySelector('[data-app-tabs]')).display === 'none'));
+ok('desktop header keeps language, login, cart and burger', await page.evaluate(() => { const v = (s) => { const e = document.querySelector(s); return !!e && getComputedStyle(e).display !== 'none'; }; return v('.site-header .lang') && v('.site-header .header-login') && v('.site-header .burger'); }));
+const mobile = { width: 390, height: 844 };
+await page.setViewportSize(mobile); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
+ok('phone: the bottom tab bar has 5 tabs (home, menu, order, calendar, account) fixed at the bottom', await page.evaluate(() => { const b = document.querySelector('[data-app-tabs]'); const r = b.getBoundingClientRect(); return getComputedStyle(b).display !== 'none' && b.querySelectorAll('[data-tab]').length === 5 && Math.abs(r.bottom - innerHeight) < 2; }));
+ok('phone: the header keeps only logo, cart and burger (language, theme and login live in the burger menu)', await page.evaluate(() => { const v = (s) => { const e = document.querySelector(s); return !e || getComputedStyle(e).display === 'none'; }; const bar = document.querySelector('.site-header__bar').getBoundingClientRect(); return v('.site-header .lang') && v('.site-header .header-login') && bar.height <= 56; }));
+await page.click('[data-menu-open]'); await page.waitForTimeout(900);
+ok('phone: the burger menu holds the language switch, theme toggle, account and cart', await page.evaluate(() => { const o = document.querySelector('.menu-overlay'); const vis = (s) => { const e = o.querySelector(s); return !!e && e.getBoundingClientRect().width > 0; }; return vis('.lang') && vis('.theme-toggle,[data-theme-toggle]') && o.querySelectorAll('.menu-overlay__tools .icon-link').length >= 2; }));
+await page.click('[data-menu-close]'); await page.waitForTimeout(600);
+const tabFor = {};
+for (const [route, tab] of [['home', 'home'], ['menu', 'menu'], ['pg/pedido', 'order'], ['pg/calendario', 'calendar'], ['cuenta', 'account'], ['p/pollo-a-las-hierbas', 'menu']]) {
+  await page.evaluate((h) => { location.hash = '#/' + h; }, route); await page.waitForTimeout(350);
+  tabFor[route] = await page.evaluate(() => { const a = document.querySelector('[data-app-tabs] [aria-current="page"]'); return a ? a.getAttribute('data-tab') : null; });
+  if (tabFor[route] !== tab) tabFor.bad = (tabFor.bad || []).concat(route + '->' + tabFor[route]);
+}
+ok('phone: the current page lights up its tab', !tabFor.bad, JSON.stringify(tabFor.bad));
+// every page: nothing wider than the screen, compact length, nothing hides under the fixed bars
+const pageNames = await page.evaluate(() => [...document.querySelectorAll('[data-page]')].map((e) => e.getAttribute('data-page')));
+const wide = [], long = [], hidden = [];
+let totalScreens = 0;
+for (const name of pageNames) {
+  await page.evaluate((h) => { location.hash = '#/' + h; }, name); await page.waitForTimeout(250);
+  const r = await page.evaluate(() => ({ ow: document.documentElement.scrollWidth - innerWidth, h: document.documentElement.scrollHeight, bw: document.body.scrollWidth - innerWidth }));
+  totalScreens += r.h / mobile.height;
+  if (r.ow > 1 || r.bw > 1) wide.push(name + ' +' + Math.max(r.ow, r.bw));
+  if (r.h / mobile.height > 11) long.push(name + ' ' + (r.h / mobile.height).toFixed(1));
+}
+ok('phone: no page scrolls sideways (all ' + pageNames.length + ' pages)', wide.length === 0, wide.join(', '));
+ok('phone: no page is longer than 11 screens and the average is under 3.5 screens', long.length === 0 && totalScreens / pageNames.length < 3.5, long.join(', ') + ' avg ' + (totalScreens / pageNames.length).toFixed(2));
+// order wizard on the phone
+await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.evaluate(() => { location.hash = '#/pg/pedido'; }); await page.reload(); await page.waitForTimeout(900);
+const fnPhone = await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); const m = f.querySelector('.fn-menus'); const act = f.querySelector('.funnel__actions'); return { swipe: getComputedStyle(m).overflowX === 'auto' && m.scrollWidth > m.clientWidth, docked: getComputedStyle(act).position === 'sticky', summary: getComputedStyle(f.querySelector('.funnel__facts')).display === 'none' }; });
+ok('phone: the menu choices swipe sideways, the wizard buttons dock above the tab bar and the summary is one slim row', fnPhone.swipe && fnPhone.docked && fnPhone.summary, JSON.stringify(fnPhone));
+await page.click('[data-page="pg/pedido"] [data-cat="al-fuego-y-mar"]'); await page.waitForTimeout(900); await page.click('[data-page="pg/pedido"] [data-tier-choice="all"]'); await page.waitForTimeout(900);
+ok('phone: the dish list stays inside the screen (own scroll, never taller than the frame)', await page.evaluate(() => { const l = document.querySelector('[data-page="pg/pedido"] .fn-dishes'); const r = l.getBoundingClientRect(); return r.height <= innerHeight - 200 && getComputedStyle(l).overflowY === 'auto'; }));
+await page.setViewportSize({ width: 1440, height: 900 });
 // ---- screenshots for eyeballing
 if (shotDir) {
   await page.setViewportSize({ width: 1440, height: 900 });

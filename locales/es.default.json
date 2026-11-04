@@ -533,5 +533,13 @@
     "week_of": "Semana del {{ date }}",
     "empty": "Aún sin platillos programados.",
     "off_menu": "Este platillo no está en el menú de esta semana."
+  },
+  "tabs": {
+    "label": "Navegación de la app",
+    "home": "Inicio",
+    "menu": "Menú",
+    "order": "Pedido",
+    "calendar": "Calendario",
+    "account": "Cuenta"
   }
 }

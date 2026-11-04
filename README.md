@@ -142,3 +142,6 @@ npm i -g @shopify/cli     # then:
 shopify theme check
 ```
 The theme passes `theme-check` with no errors (only informational warnings for Google Fonts and hard-coded `/collections` paths).
+
+## Phone app mode (v12)
+On screens up to 760px the store is laid out like an app (CSS in the last block of `assets/kulinaria.css`, plus the `.app-tabs` bar in `layout/theme.liquid`; desktop is untouched): slim top bar (logo, cart, burger), bottom tab bar (Inicio, Menú, Pedido, Calendario, Cuenta), swipe rows instead of long stacks, a docked order wizard, language/theme/login inside the burger menu. Desktop screenshots of 10 key pages are pixel-identical before and after.

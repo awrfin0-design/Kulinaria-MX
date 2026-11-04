@@ -533,5 +533,13 @@
     "week_of": "Week of {{ date }}",
     "empty": "No dishes scheduled yet.",
     "off_menu": "This dish is not on this week's menu."
+  },
+  "tabs": {
+    "label": "App navigation",
+    "home": "Home",
+    "menu": "Menu",
+    "order": "Order",
+    "calendar": "Calendar",
+    "account": "Account"
   }
 }
