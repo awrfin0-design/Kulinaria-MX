@@ -141,7 +141,7 @@
     "no_match": "Ningún platillo coincide con los filtros elegidos.",
     "view": "Ver",
     "view_product": "Ver producto",
-    "weekly_menu": "Menú de la semana"
+    "weekly_menu": "Especiales de la semana"
   },
   "cutoff": {
     "auto_order": "Si no registras tus opciones a tiempo, se genera un pedido automático con tu plan, historial y perfil de alergias.",
@@ -171,7 +171,7 @@
   },
   "e404": {
     "code": "Error 404",
-    "text": "No encontramos lo que buscas. Vuelve al menú de la semana o elige tu plan.",
+    "text": "No encontramos lo que buscas. Vuelve a los especiales de la semana o elige tu plan.",
     "title": "Esta página se quemó en la parrilla"
   },
   "footer": {
@@ -218,7 +218,7 @@
     "search": "Buscar",
     "skip_to_content": "Saltar al contenido",
     "view_menu": "Ver el menú",
-    "view_week_menu": "Ver el menú de la semana"
+    "view_week_menu": "Ver los especiales de la semana"
   },
   "hero": {
     "card_alt_1": "Filete con mantequilla de hierbas, brócoli y zanahorias glaseadas sobre pizarra",
@@ -280,7 +280,7 @@
     "primary": "Principal",
     "secondary": "También te puede interesar",
     "store": "Kulinaria Store",
-    "weekly_menu": "Menú semanal",
+    "weekly_menu": "Especiales de la semana",
     "write_us": "Escríbenos",
     "breadcrumb": "Ruta de navegación",
     "home": "Inicio"

@@ -851,6 +851,7 @@
   function initVideos() {
     var vids = $$('video[data-video-src]').filter(function (v) { return !v.hasAttribute('data-scrub'); });
     vids.forEach(function (v) { v.addEventListener('playing', function () { v.classList.add('is-on'); }); });
+    vids.forEach(function (v) { if (v.hasAttribute('data-once')) v.addEventListener('ended', function () { v.classList.add('is-done'); }); });
     var hero = $('[data-hero]'), paused = false;
     var tg = hero && $('[data-media-toggle]', hero);
     if (REDUCE || SAVE) { if (tg) tg.hidden = true; return; }   // poster frames only

@@ -3,7 +3,7 @@
     "head": {
       "type": "page-head",
       "settings": {
-        "parent_label": "Menú semanal",
+        "parent_label": "Especiales de la semana",
         "parent_link": "/collections/menu-semanal",
         "eyebrow": "Calendario",
         "heading": "Calendario del *menú*",
@@ -16,7 +16,7 @@
         "n0": {
           "type": "link",
           "settings": {
-            "label": "Menú semanal",
+            "label": "Especiales de la semana",
             "link": "/collections/menu-semanal"
           }
         },

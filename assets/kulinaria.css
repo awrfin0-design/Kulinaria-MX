@@ -1926,3 +1926,41 @@ a.lang__btn{display:inline-block;text-decoration:none}
 :root[data-theme="fuego"] .page-head__bg::before,:root[data-theme="fuego"] .cta-banner__bg::before{background:#FF6200;opacity:0}
 .sitemap__tog{display:none}
 @media (max-width:760px){ body .sitemap__tog{display:grid} }
+
+/* =====================================================================
+   v19 — hero = the brand intro video (square, black background), the old hero film moves behind the tiers
+   ===================================================================== */
+.hero--intro{position:relative;min-height:100svh;display:grid;align-items:center;padding:calc(var(--hdr) + 28px) 0 96px;background:#000;color:#F5F5F5;overflow:hidden;isolation:isolate}
+.hero--intro .hero__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,72px);align-items:center;width:100%}
+.hero--intro .hero__copy{order:1;max-width:560px;position:relative;z-index:2}
+.hero--intro .hero__stage{order:2;position:relative;justify-self:center;width:min(100%,min(82svh,720px));aspect-ratio:1/1;-webkit-mask-image:radial-gradient(closest-side,#000 90%,transparent 100%);mask-image:radial-gradient(closest-side,#000 90%,transparent 100%)}
+.hero--intro .hero__poster,.hero--intro .hero__video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.hero--intro .hero__video{opacity:0;transition:opacity .6s}
+.hero--intro .hero__video.is-on{opacity:1}
+.hero--intro .hero__copy h1{color:#F5F5F5;text-shadow:none}
+.hero--intro .hero__sub{color:rgba(245,245,245,.78)}
+.hero--intro .hero__toggle{bottom:28px}
+.hero--intro .arrow-link,.hero--intro .text-link{color:#F5F5F5}
+/* the header floats over the black hero: keep it light until it turns solid */
+:root[data-theme="light"] body:has(.hero--intro) .site-header:not(.is-stuck){--text:#F5F5F5;--text-muted:#D6D6D6;--line:rgba(255,255,255,.3)}
+:root[data-theme="light"] body:has(.hero--intro) .site-header:not(.is-stuck) .logo--ink{filter:brightness(0) invert(1)}
+/* tiers with the old hero film behind */
+.tiers--video{position:relative;overflow:hidden;isolation:isolate;background:#0a0a0a}
+.tiers__bg{position:absolute;inset:0;z-index:-1}
+.tiers__video{width:100%;height:100%;object-fit:cover;opacity:.0;transition:opacity 1s;filter:saturate(.9)}
+.tiers__video.is-on{opacity:.38}
+.tiers--video::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.7),rgba(0,0,0,.35) 40%,rgba(0,0,0,.8))}
+:root[data-theme="fuego"] .tiers__video{filter:hue-rotate(-24deg) saturate(1.1)}
+@media (max-width:760px){
+  body .hero.hero--intro{min-height:0;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:var(--app-top,56px) 0 0}
+  body .hero--intro .hero__grid{display:flex;flex-direction:column;gap:0;width:100%;position:relative;z-index:3}
+  body .hero--intro .hero__stage{order:1;width:100%;max-width:none;justify-self:stretch;margin:0;-webkit-mask-image:radial-gradient(closest-side,#000 92%,transparent 100%);mask-image:radial-gradient(closest-side,#000 92%,transparent 100%)}
+  body .hero--intro .hero__copy{order:2;max-width:none;padding:0 0 56px;margin-top:-6%}
+  body .hero--intro .hero__copy h1{font-size:2rem}
+  body .hero--intro .hero__toggle{display:none}
+  body .hero--intro .hero__cta .arrow-link{background:var(--brand-grad);color:var(--on-brand)}
+  body .hero.hero--intro:after{bottom:14px}
+  body:has(.hero) .site-header:not(.is-stuck){background:#000}
+}
+:root[data-theme="fuego"] body:has(.hero) .site-header:not(.is-stuck) .logo,:root[data-theme="fuego"] body:has(.page-head) .site-header:not(.is-stuck) .logo{filter:none}
+@media (max-width:760px){ body .hero--intro .hero__stage{width:calc(100% + 2*var(--pad));margin-inline:calc(var(--pad)*-1)} }

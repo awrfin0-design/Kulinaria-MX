@@ -4,9 +4,9 @@
       "type": "page-head",
       "settings": {
         "art": "air-bowl",
-        "heading": "Menú de la *semana*",
+        "heading": "Especiales de la *semana*",
         "text": "Un menú rotativo de 8 a 10 platillos. Confirma antes del sábado a las 10:00 AM.",
-        "eyebrow": "Menú semanal"
+        "eyebrow": "Especiales de la semana"
       }
     },
     "main": {

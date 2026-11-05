@@ -52,7 +52,7 @@ for (const [owner, key, name, type] of DEFS) {
 }
 
 // ---------------------------------------------------------------- collections
-for (const [title, handle, templateSuffix] of [['Menú semanal', 'menu-semanal', null], ['Kulinaria Store', 'kulinaria-store', 'store'], ['Regalos de bienvenida', 'regalos-de-bienvenida', null]]) {
+for (const [title, handle, templateSuffix] of [['Especiales de la semana', 'menu-semanal', null], ['Kulinaria Store', 'kulinaria-store', 'store'], ['Regalos de bienvenida', 'regalos-de-bienvenida', null]]) {
   await run(`collection ${handle}`, `mutation($i: CollectionInput!){ collectionCreate(input:$i){ userErrors{ message } } }`, { i: { title, handle, ...(templateSuffix ? { templateSuffix } : {}) } }, 'collectionCreate');
 }
 

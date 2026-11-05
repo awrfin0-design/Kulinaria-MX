@@ -3,31 +3,14 @@
   assign art = section.settings.art | default: 'air-steak'
   assign art_m = 'photo-' | append: art | append: '-m.webp'
 -%}
-<section class="hero hero--{{ size }}" data-scroll data-tilt data-hero {{ section.shopify_attributes }}>
-  <div class="hero__bg" aria-hidden="true">
-    {%- assign themes = 'light,dark' | split: ',' -%}
-    {%- for theme in themes -%}
-      {%- assign art_key = art -%}
-      {%- if theme == 'dark' -%}{%- assign art_key = art | append: '-dark' -%}{%- endif -%}
-      {%- assign art_m = 'photo-' | append: art_key | append: '-m.webp' -%}
-      {%- assign vfile = 'video-hero-' | append: theme | append: '.mp4' -%}
-      {%- assign vposter = 'video-hero-' | append: theme | append: '-poster.webp' -%}
-      <div class="hero__media hero__media--{{ theme }}">
-        {%- if theme == 'light' and section.settings.image != blank -%}
-          {{ section.settings.image | image_url: width: 2200 | image_tag: loading: 'eager', alt: '' }}
-        {%- else -%}
-          <picture>
-            <source media="(max-width: 860px)" srcset="{{ art_m | asset_url }}">
-            {% render 'photo', art: art_key, alt: '', eager: true %}
-          </picture>
-        {%- endif -%}
-        <video class="hero__video" muted loop playsinline preload="none" poster="{{ vposter | asset_url }}" data-video-src="{{ vfile | asset_url }}" data-ambient data-hero-video></video>
-      </div>
-    {%- endfor -%}
-    <div class="hero__dim"></div>
-  </div>
-
+<section class="hero hero--{{ size }} hero--intro tone-dark" data-scroll data-hero {{ section.shopify_attributes }}>
   <div class="container hero__grid">
+    <div class="hero__stage" aria-hidden="true">
+      {%- assign hv_src = section.settings.video_url | default: 'video-hero-intro.mp4' -%}
+      {%- if section.settings.video_url == blank -%}{%- assign hv_src = 'video-hero-intro.mp4' | asset_url -%}{%- endif -%}
+      <img class="hero__poster" src="{{ 'video-hero-intro-poster.webp' | asset_url }}" width="640" height="640" alt="" fetchpriority="high" decoding="async">
+      <video class="hero__video hero__video--intro" muted playsinline preload="none" poster="{{ 'video-hero-intro-poster.webp' | asset_url }}" data-video-src="{{ hv_src }}" data-ambient data-hero-video data-once></video>
+    </div>
     <div class="hero__copy">
       <span class="hero__rule" aria-hidden="true"></span>
       <h1>{{ section.settings.heading | escape }}{%- if section.settings.heading_em != blank %} <em>{{ section.settings.heading_em | escape }}</em>{% endif -%}</h1>
@@ -60,12 +43,10 @@
     { "type": "text", "id": "text", "label": "Subtítulo", "default": "Platillos preparados por chefs, adaptados a tu estilo de vida." },
     { "type": "text", "id": "button_label", "label": "Botón principal", "default": "Haz tu pedido" },
     { "type": "url", "id": "button_link", "label": "Enlace del botón principal" },
-    { "type": "text", "id": "button2_label", "label": "Enlace secundario", "default": "Ver el menú de la semana" },
+    { "type": "text", "id": "button2_label", "label": "Enlace secundario", "default": "Ver los especiales de la semana" },
     { "type": "url", "id": "button2_link", "label": "Enlace secundario (URL)" },
     { "type": "checkbox", "id": "show_countdown", "label": "Mostrar cuenta regresiva de cierre", "default": false },
-    { "type": "image_picker", "id": "image", "label": "Foto de fondo", "info": "Vacío = foto del tema. Deja el lado izquierdo despejado para el texto." },
-    { "type": "select", "id": "art", "label": "Foto del tema", "default": "air-steak", "options": [
-      { "value": "air-steak", "label": "Corte en el aire (recomendada)" }, { "value": "air-fish", "label": "Pescado en el aire" } ] }
+    { "type": "text", "id": "video_url", "label": "Video propio (URL .mp4 cuadrado, opcional)", "info": "Vacío = el video de intro de la marca (video-hero-intro.mp4 en Assets)." }
   ],
   "presets": [{ "name": "Hero" }]
 }

@@ -181,7 +181,7 @@ async function renderLang(lang) {
   const T_ = (k) => tr(k);
   const routes = [
     P('home', '/', 'index', 'Home', { template: { name: 'index' }, page_title: 'Kulinaria MX' }),
-    P('menu', '/collections/menu-semanal', 'collection', 'Menú semanal', { template: { name: 'collection' }, collection: store.collections['menu-semanal'], page_title: T_('Menú semanal') }),
+    P('menu', '/collections/menu-semanal', 'collection', 'Especiales de la semana', { template: { name: 'collection' }, collection: store.collections['menu-semanal'], page_title: T_('Especiales de la semana') }),
     P('tienda', '/collections/kulinaria-store', 'collection.store', 'Kulinaria Store', { template: { name: 'collection', suffix: 'store' }, collection: store.collections['kulinaria-store'], page_title: 'Kulinaria Store' }),
     ...store.products.map((p) => ({ key: 'p/' + p.handle, url: p.url, tpl: 'product', title: p.title, g: { template: { name: 'product' }, product: p, page_title: p.title } })),
     ...[...JSON.parse(read('scripts/render/pages.json')).map(([h, tpl]) => [h, tpl]), ['perfil', 'page.profile']].map(([h, tpl]) =>

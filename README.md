@@ -24,7 +24,7 @@ Every page and section of the Miro board (12 pages, 114 sections, plus `/checkou
 | Miro page | Route / Shopify object | Template | Subpages |
 |---|---|---|---|
 | 01 Home | `/` | `index.json` | all 14 board sections |
-| 02 Menú semanal | collection `menu-semanal` | `collection.json` | filters, grid, selection (product pages: `product.json`) |
+| 02 Especiales de la semana | collection `menu-semanal` | `collection.json` | filters, grid, selection (product pages: `product.json`) |
 | 03 Registro y checkout | `/account/register`, `/pages/checkout`, `/pages/confirmacion` | `customers/register.json` (5-step flow), `page.checkout`, `page.confirmacion` | login, reset password, cart (`cart.json`) |
 | 04 Mi cuenta | `/account` | `customers/account.json` (overview) | `cuenta-semana`, `cuenta-pausas`, `cuenta-monedero`, `cuenta-perfil`, `cuenta-referidos`, `cuenta-pedidos`, `cuenta-entregas` + addresses + order |
 | 05 Embajadores | `/pages/embajadores` | `page.ambassadors` | `embajadores-entrenadores`, `-clientes`, `-gimnasios`, `-directorio`, `-reglas`, `-solicitar` |

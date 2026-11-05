@@ -65,7 +65,7 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
   const products = [...dishes, bloque, prueba, playera, shaker];
 
   const collections = {
-    'menu-semanal': { title: tr('Menú semanal'), handle: 'menu-semanal', url: '/collections/menu-semanal',
+    'menu-semanal': { title: tr('Especiales de la semana'), handle: 'menu-semanal', url: '/collections/menu-semanal',
       description: tr('<p>Un menú rotativo de 8 a 10 platillos. Confirma antes del sábado a las 10:00 AM.</p>'), products: dishes, products_count: dishes.length },
     'kulinaria-store': { title: 'Kulinaria Store', handle: 'kulinaria-store', url: '/collections/kulinaria-store',
       description: tr('<p>Línea Fit Apparel: playera oficial y vaso mezclador premium.</p>'), products: [playera, shaker], products_count: 2 },
@@ -82,7 +82,7 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
   const sub = (...hs) => hs.map((h) => [pages[h].title, '/pages/' + h]).map(([t, u]) => [Object.keys(pages).find((k) => '/pages/' + k === u) && PAGE_LIST.find(([k]) => '/pages/' + k === u)[2], u]);
   const linklists = {
     'main-menu': { handle: 'main-menu', links: [
-      link('Menú semanal', '/collections/menu-semanal', [['Calendario del menú', '/pages/calendario'], ['Armar mi pedido', '/pages/pedido'], ['Mi perfil de alergias', '/pages/perfil']]),
+      link('Especiales de la semana', '/collections/menu-semanal', [['Calendario del menú', '/pages/calendario'], ['Armar mi pedido', '/pages/pedido'], ['Mi perfil de alergias', '/pages/perfil']]),
       link('Planes', '/pages/planes', sub('plan-bloque', 'plan-prueba', 'niveles-y-precios', 'ciclo-y-politicas')),
       link('Registro y checkout', '/account/register', [['Crear cuenta', '/account/register'], ...sub('checkout', 'confirmacion'), ['Iniciar sesión', '/account/login']]),
       link('Mi cuenta', '/account', [...sub('cuenta-semana', 'cuenta-pausas', 'cuenta-monedero', 'cuenta-perfil', 'cuenta-referidos', 'cuenta-pedidos', 'cuenta-entregas'), ['Direcciones', '/account/addresses']]),
@@ -93,7 +93,7 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
       link('Filosofía', '/pages/filosofia'),
       link('Ayuda y legales', '/pages/ayuda', [...sub('terminos', 'privacidad'), ['Mi perfil de alergias', '/pages/perfil']]),
     ] },
-    footer: { handle: 'footer', links: [link('Menú semanal', '/collections/menu-semanal'), link('Planes', '/pages/planes'), link('Carta Kulinaria', '/pages/carta-kulinaria'), link('Kulinaria Store', '/collections/kulinaria-store'), link('Embajadores', '/pages/embajadores')] },
+    footer: { handle: 'footer', links: [link('Especiales de la semana', '/collections/menu-semanal'), link('Planes', '/pages/planes'), link('Carta Kulinaria', '/pages/carta-kulinaria'), link('Kulinaria Store', '/collections/kulinaria-store'), link('Embajadores', '/pages/embajadores')] },
     ayuda: { handle: 'ayuda', links: [link('Nosotros', '/pages/nosotros'), link('Filosofía', '/pages/filosofia'), link('Ayuda y legales', '/pages/ayuda'), link('Mi perfil de alergias', '/pages/perfil')] },
   };
 

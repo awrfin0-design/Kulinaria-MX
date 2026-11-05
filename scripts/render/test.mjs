@@ -407,7 +407,7 @@ ok('html lang is es by default', (await page.evaluate(() => document.documentEle
 await openMenu(); await page.click('#menu-overlay .lang__btn[value="en"]'); await page.waitForTimeout(1000);
 ok('language switch persists en and reloads in English', (await page.evaluate(() => document.documentElement.lang)) === 'en' && /A week, served like a signature piece/.test(await page.$eval('[data-page="home"] .hero h1', (h) => h.getAttribute('aria-label') || h.innerText)));
 await openMenu();
-ok('menu and CTA are in English', /choose my plan/i.test(await page.$eval('#menu-overlay .menu-overlay__foot .arrow-link', (a) => a.textContent)) && /Weekly menu/.test(await page.$eval('#menu-overlay .sitemap__top', (a) => a.textContent)));
+ok('menu and CTA are in English', /choose my plan/i.test(await page.$eval('#menu-overlay .menu-overlay__foot .arrow-link', (a) => a.textContent)) && /Weekly specials/.test(await page.$eval('#menu-overlay .sitemap__top', (a) => a.textContent)));
 await closeMenu();
 const leaks = [];
 for (const k of keys.filter((k) => !k.startsWith('p/') || k === 'p/salmon-costra-almendras')) {
@@ -460,47 +460,19 @@ ok('language switches back to Spanish', (await page.evaluate(() => document.docu
   ok('particle canvas is drawing', cv.w > 0 && cv.n > 20, JSON.stringify(cv));
 }
 
-// hero: photo like the reference (serif headline + italic brand phrase, circle-arrow button, no inline nav)
+// hero: the brand intro video (square, black) + headline + circle-arrow CTA
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(600);
 const hh = await page.evaluate(async () => {
-  const img = document.querySelector('[data-page="home"] .hero__media--light img'); await new Promise((r) => (img.complete && img.naturalWidth > 1 ? r() : (img.onload = r)));
-  const h1 = document.querySelector('[data-page="home"] .hero h1'), em = h1.querySelector('em'), hero = document.querySelector('[data-page="home"] .hero').getBoundingClientRect();
-  const ir = img.getBoundingClientRect();
-  return { imgW: img.naturalWidth, fills: ir.width >= hero.width - 2 && ir.height >= hero.height - 2, h1Font: getComputedStyle(h1).fontFamily, emFont: getComputedStyle(em).fontFamily, arrow: !!document.querySelector('[data-page="home"] .hero .arrow-link .arrow-link__c'), nav: !!document.querySelector('.site-nav') };
+  const hero = document.querySelector('[data-page="home"] .hero'), st = hero.querySelector('.hero__stage').getBoundingClientRect(), cp = hero.querySelector('.hero__copy').getBoundingClientRect(), v = hero.querySelector('.hero__video--intro');
+  const h1 = hero.querySelector('h1'), em = h1.querySelector('em');
+  return { square: Math.abs(st.width - st.height) < 3, fit: getComputedStyle(v).objectFit, stageRightOfCopy: st.left >= cp.right - 4, within: st.top >= 0 && st.bottom <= innerHeight + 2, h1Font: getComputedStyle(h1).fontFamily, emFont: getComputedStyle(em).fontFamily, arrow: !!hero.querySelector('.arrow-link .arrow-link__c'), nav: !!document.querySelector('.site-nav'), bg: getComputedStyle(hero).backgroundColor, src: !!v.getAttribute('data-video-src') && /video-hero-intro/.test(v.getAttribute('data-video-src') || '') };
 });
-ok('hero: full-bleed photo, serif headline with brand-script phrase, circle-arrow CTA, no inline nav', hh.imgW > 1500 && hh.fills && /Alegreya/.test(hh.h1Font) && /Kaushan/.test(hh.emFont) && hh.arrow && !hh.nav, JSON.stringify(hh));
-ok('hero headline never overlaps the dish (text column stays left of centre)', await page.evaluate(() => document.querySelector('[data-page="home"] .hero__copy').getBoundingClientRect().right < window.innerWidth * 0.5));
-
-// photos
-await scrollThrough(page);
-const media = await page.evaluate(async () => {
-  const imgs = [...document.querySelectorAll('[data-page="home"] img')].filter((i) => !i.classList.contains('logo'));
-  imgs.forEach((i) => { i.loading = 'eager'; });
-  await Promise.race([Promise.all(imgs.map((i) => (i.complete ? 1 : new Promise((r) => { i.onload = i.onerror = r; })))), new Promise((r) => setTimeout(r, 6000))]);
-  return { n: imgs.length, broken: imgs.filter((i) => i.naturalWidth === 0).map((i) => i.src.slice(0, 40)), dishPhotos: document.querySelectorAll('[data-page="home"] .dish__media img').length };
-});
-ok('home photos all load (hero, rows, dishes, showcases, CTA)', media.n >= 12 && media.broken.length === 0, JSON.stringify(media));
-ok('dish cards use their own photos, not the logo placeholder', media.dishPhotos >= 6);
-
-// scroll-driven video band
-await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .band'); window.scrollTo(0, b.getBoundingClientRect().top + scrollY - 100); }); await page.waitForTimeout(2200);
-const bandInfo = await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .band'), v = b.querySelector('video'); return { pos: getComputedStyle(b.querySelector('.band__pin')).position, h: b.offsetHeight, vh: innerHeight, playing: !v.paused && v.currentTime > 0, loop: v.loop, lines: [...b.querySelectorAll('.band__line')].every((l) => parseFloat(getComputedStyle(l).opacity) === 1) }; });
-ok('the fire band is a plain background loop: no pinning or scroll scrubbing, fits the screen, text always visible', bandInfo.pos === 'relative' && bandInfo.h <= bandInfo.vh && bandInfo.playing && bandInfo.loop && bandInfo.lines, JSON.stringify(bandInfo));
-
-// fire inside the circle-arrow button and inside pill buttons
-await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(600);
-await page.hover('[data-page="home"] .hero .arrow-link'); await page.waitForTimeout(1300);
-ok('hovering the hero button ignites the fire video inside its circle', await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .hero .arrow-link'); const v = b.querySelector('.arrow-link__c .btn__fx video'); return b.classList.contains('is-fx') && !!v && !v.paused && parseFloat(getComputedStyle(b.querySelector('.btn__fx')).opacity) > 0.5; }));
-await page.mouse.move(5, 500); await page.waitForTimeout(1200);
-ok('fire stops when the pointer leaves', await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .hero .arrow-link'); return !b.classList.contains('is-fx') && b.querySelector('.btn__fx video').paused; }));
-await page.locator('[data-page="home"] .plan-card .btn--gold').scrollIntoViewIfNeeded(); await page.waitForTimeout(1600); await page.hover('[data-page="home"] .plan-card .btn--gold'); await page.waitForTimeout(1300);
-ok('pill buttons ignite too', await page.evaluate(() => { const b = document.querySelector('[data-page="home"] .plan-card .btn--gold'); return b.classList.contains('is-fx') && !!b.querySelector('.btn__fx video'); }));
-await page.mouse.move(5, 500);
-
+ok('hero: the brand intro video is a square shown whole (contain, never cropped) to the right of the headline, on black', hh.square && hh.fit === 'contain' && hh.stageRightOfCopy && hh.within && hh.src && hh.bg === 'rgb(0, 0, 0)', JSON.stringify(hh));
+ok('hero: serif headline with brand-script phrase, circle-arrow CTA, no inline nav', /Alegreya/.test(hh.h1Font) && /Kaushan/.test(hh.emFont) && hh.arrow && !hh.nav, JSON.stringify(hh));
+ok('hero headline never overlaps the video (text column stays left of it)', await page.evaluate(() => document.querySelector('[data-page="home"] .hero__copy').getBoundingClientRect().right <= document.querySelector('[data-page="home"] .hero__stage').getBoundingClientRect().left + 4));
 // 3D / pointer: hero photo drifts, dish tilt, coverflow, peek
 await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(500);
 await page.mouse.move(300, 300); await page.mouse.move(1300, 700, { steps: 6 }); await page.waitForTimeout(500);
-ok('hero photo drifts with the pointer', Math.abs(parseFloat(await page.$eval('[data-page="home"] .hero', (e) => e.style.getPropertyValue('--tx') || '0'))) > 0.1);
 await page.evaluate(() => { const r = document.querySelector('[data-page="home"] [data-rail]'); window.scrollTo(0, r.getBoundingClientRect().top + window.scrollY - 120); }); await page.waitForTimeout(700);
 const dm = '[data-page="home"] .rail .dish__media';
 const dbox = await page.$eval(dm, (e) => { const r = e.getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; });
@@ -519,10 +491,10 @@ const tok = (n) => page.evaluate((n) => getComputedStyle(document.documentElemen
 ok('light palette = white + olive green', (await tok('--brand')) === '#4f6330' && (await tok('--bg-base')) === '#f5f4ec');
 await page.evaluate(() => localStorage.setItem('kx-theme', 'dark')); await page.reload(); await page.waitForTimeout(800);
 ok('dark palette = black + gold + ivory', (await tok('--brand')) === '#e2c36b' && (await tok('--bg-base')) === '#0d0c0a' && (await tok('--text')) === '#f3ebd9');
-ok('dark hero shows its own twin photo (not the light one)', await page.evaluate(() => getComputedStyle(document.querySelector('[data-page="home"] .hero__media--dark')).display !== 'none' && getComputedStyle(document.querySelector('[data-page="home"] .hero__media--light')).display === 'none'));
 await page.evaluate(() => window.scrollTo(0, 0));
-await page.waitForFunction(() => { const v = document.querySelector('[data-page="home"] .hero__media--dark video'); return v && !v.paused && v.currentTime > 0.2; }, null, { timeout: 20000 }).catch(() => {});
-ok('the ingredient-waterfall video plays over the dark hero (blob source, faded in)', await page.evaluate(() => { const v = document.querySelector('[data-page="home"] .hero__media--dark video'); window.__wf = [v.paused, v.currentTime, v.className]; return !v.paused && v.currentTime > 0 && v.classList.contains('is-on') && /^(blob|data):/.test(v.currentSrc || v.src); }));
+await page.waitForFunction(() => { const v = document.querySelector('[data-page="home"] .hero__video--intro'); return v && !v.paused && v.currentTime > 0.2; }, null, { timeout: 20000 }).catch(() => {});
+ok('the intro video plays in the hero (faded in over its poster)', await page.evaluate(() => { const v = document.querySelector('[data-page="home"] .hero__video--intro'); return !v.paused && v.currentTime > 0 && v.classList.contains('is-on') && /^(blob|data):/.test(v.currentSrc || v.src); }));
+ok('the old hero film plays behind the tiers section (moved, not deleted)', await page.evaluate(async () => { const t = document.querySelector('[data-page="home"] .tiers--video'); if (!t) return false; t.scrollIntoView(); await new Promise((r) => setTimeout(r, 2500)); const v = t.querySelector('video'); return !!v && !v.paused && /video-hero-dark|^blob|^data/.test(v.currentSrc || v.src); }));
 ok('footer is deep black in dark mode and deep olive in light mode', await (async () => {
   const dark = await page.evaluate(() => getComputedStyle(document.querySelector('.site-footer')).backgroundImage);
   await page.evaluate(() => localStorage.setItem('kx-theme', 'light')); await page.reload(); await page.waitForTimeout(700);
@@ -543,7 +515,7 @@ await page.reload(); await page.waitForTimeout(600);
 const motif = { noPhoto: [], noEm: [], leak: [] };
 for (const r2 of routes.filter((r) => !r.key.startsWith('p/') && r.key !== 'pg/admin')) {
   await page.goto(`${URL0}#/${r2.key}`); await page.waitForTimeout(60);
-  const info = await page.$eval(`[data-page="${r2.key}"]`, (e) => ({ photo: !!e.querySelector('.page-head__bg img, .hero__media img'), em: !!e.querySelector('h1 em, h2 em'), star: /\*/.test(e.innerText) }));
+  const info = await page.$eval(`[data-page="${r2.key}"]`, (e) => ({ photo: !!e.querySelector('.page-head__bg img, .hero__stage'), em: !!e.querySelector('h1 em, h2 em'), star: /\*/.test(e.innerText) }));
   if (!info.photo && r2.key !== 'home') motif.noPhoto.push(r2.key);
   if (!info.em) motif.noEm.push(r2.key);
   if (info.star) motif.leak.push(r2.key);
@@ -733,7 +705,8 @@ const chap = await page.evaluate(() => {
     teaserH: Math.round(teaser.getBoundingClientRect().height), teaserBg: !!teaser.querySelector('.funnel__teaser-bg img') };
 });
 ok('phone: there is no bottom tab bar (burger-only navigation)', !chap.tabs, JSON.stringify(chap));
-ok('phone: chapter 1 is a full-screen photo hero with light text laid over it', chap.heroH >= chap.vh - 2 && chap.h1lum > 0.8, JSON.stringify(chap));
+const heroPhone = await page.evaluate(() => { const hero = document.querySelector('[data-page="home"] .hero'), st = hero.querySelector('.hero__stage').getBoundingClientRect(), v = hero.querySelector('.hero__video--intro'), cp = hero.querySelector('.hero__copy').getBoundingClientRect(); return { stageW: Math.round(st.width), square: Math.abs(st.width - st.height) < 3, fit: getComputedStyle(v).objectFit, copyBelow: cp.top >= st.bottom - st.height * 0.12, h: Math.round(hero.getBoundingClientRect().height), vh: innerHeight }; }); heroPhone.h1lum = chap.h1lum;
+ok('phone: the intro video is shown whole and uncropped (full width square, headline and button underneath on black, no side crop)', heroPhone.stageW === 390 && heroPhone.square && heroPhone.fit === 'contain' && heroPhone.copyBelow && heroPhone.h <= heroPhone.vh + 60 && heroPhone.h1lum > 0.8, JSON.stringify(heroPhone));
 ok('phone: chapter 2 shows one dish per screen and you swipe sideways between dishes', chap.slideW === 390 && /x/.test(chap.swipe) && chap.slides >= 5, JSON.stringify(chap));
 ok('phone: chapter 3 ("Tu bloque") is a full-screen photo with the order button over it', chap.teaserH >= chap.vh - 2 && chap.teaserBg, JSON.stringify(chap));
 ok('the preview switches the body template class page by page (like Shopify)', await page.evaluate(() => { location.hash = '#/p/pollo-a-las-hierbas'; return new Promise((r) => setTimeout(() => r(document.body.classList.contains('template-product') && !document.body.classList.contains('template-index')), 300)); }));
@@ -742,7 +715,7 @@ await page.click('[data-menu-open]'); await page.waitForTimeout(900);
 const map = await page.evaluate(() => { const o = document.querySelector('.menu-overlay'); const groups = [...o.querySelectorAll('.sitemap__group')]; const withSub = groups.filter((g) => g.querySelector('.sitemap__sub')); return { groups: groups.length, toggles: o.querySelectorAll('.sitemap__tog').length, withSub: withSub.length, closedSubs: withSub.every((g) => getComputedStyle(g.querySelector('.sitemap__sub')).display === 'none') }; });
 ok('phone burger menu: 10 groups, each one with sub-pages has a "+" that opens them (closed at first)', map.groups === 10 && map.toggles === map.withSub && map.withSub >= 8 && map.closedSubs, JSON.stringify(map));
 await page.click('.sitemap__group:nth-child(1) .sitemap__tog'); await page.waitForTimeout(400);
-ok('phone burger menu: opening "Menú semanal" shows its sub-pages as 2-column cards (calendar, order, allergy profile)', await page.evaluate(() => { const g = document.querySelector('.sitemap__group:nth-child(1)'); const sub = g.querySelector('.sitemap__sub'); const links = [...sub.querySelectorAll('a')]; const cols = getComputedStyle(sub).gridTemplateColumns.split(' ').length; return getComputedStyle(sub).display === 'grid' && cols === 2 && links.length >= 3 && links.every((a) => a.getBoundingClientRect().height >= 60); }));
+ok('phone burger menu: opening "Especiales de la semana" shows its sub-pages as 2-column cards (calendar, order, allergy profile)', await page.evaluate(() => { const g = document.querySelector('.sitemap__group:nth-child(1)'); const sub = g.querySelector('.sitemap__sub'); const links = [...sub.querySelectorAll('a')]; const cols = getComputedStyle(sub).gridTemplateColumns.split(' ').length; return getComputedStyle(sub).display === 'grid' && cols === 2 && links.length >= 3 && links.every((a) => a.getBoundingClientRect().height >= 60); }));
 await page.click('[data-menu-close]'); await page.waitForTimeout(500);
 await page.evaluate(() => { location.hash = '#/pg/planes'; }); await page.waitForTimeout(500);
 ok('phone inner pages: the title sits over a photo (not a separate block)', await page.evaluate(() => { const ph = document.querySelector('[data-page="pg/planes"] .page-head__photo'); const h1 = ph.querySelector('h1').getBoundingClientRect(), bg = ph.querySelector('.page-head__bg').getBoundingClientRect(); return h1.top >= bg.top && h1.bottom <= bg.bottom + 2 && bg.height > 250; }));

@@ -1,4 +1,9 @@
-<section class="section" {{ section.shopify_attributes }}>
+<section class="section{% if section.settings.bg_video %} tiers--video tone-dark{% endif %}" {{ section.shopify_attributes }}>
+  {%- if section.settings.bg_video -%}
+    <div class="tiers__bg" aria-hidden="true">
+      <video class="tiers__video" muted loop playsinline preload="none" poster="{{ 'video-hero-dark-poster.webp' | asset_url }}" data-video-src="{{ 'video-hero-dark.mp4' | asset_url }}" data-ambient></video>
+    </div>
+  {%- endif -%}
   <div class="container">
     <div class="section__head">
       {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
@@ -33,6 +38,7 @@
     { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Niveles" },
     { "type": "text", "id": "heading", "label": "Título", "default": "Cuatro niveles, un mismo estándar" },
     { "type": "textarea", "id": "text", "label": "Texto", "default": "Cada nivel suma $60 MXN fijos sobre el anterior. El precio incluye el empaque óptimo y la preparación del chef." },
+    { "type": "checkbox", "id": "bg_video", "label": "Video de fondo (el filete en el aire)", "default": false },
     { "type": "text", "id": "note", "label": "Nota al pie", "default": "Los precios se muestran por platillo. Se editan en Personalizar tema, Niveles y precios." }
   ],
   "blocks": [

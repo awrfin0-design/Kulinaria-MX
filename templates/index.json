@@ -7,10 +7,9 @@
         "heading_em": "una pieza de autor.",
         "text": "Platillos preparados por chefs, adaptados a tu estilo de vida.",
         "button_label": "Haz tu pedido",
-        "button2_label": "Ver el menú de la semana",
+        "button2_label": "Ver los especiales de la semana",
         "button2_link": "/collections/menu-semanal",
-        "show_countdown": false,
-        "art": "air-steak"
+        "show_countdown": false
       }
     },
     "funnel": {
@@ -101,7 +100,7 @@
     "dishes": {
       "type": "featured-dishes",
       "settings": {
-        "eyebrow": "Menú de la semana",
+        "eyebrow": "Especiales de la semana",
         "heading": "Esta semana *en Kulinaria*",
         "text": "Un menú rotativo de 8 a 10 platillos. Cada uno con una sola foto del emplatado final, vista desde arriba.",
         "collection": "menu-semanal",
@@ -115,7 +114,8 @@
       "settings": {
         "eyebrow": "Niveles",
         "heading": "Cuatro niveles, un *mismo estándar*",
-        "text": "Cada nivel suma $60 MXN fijos sobre el anterior. El precio incluye el empaque óptimo y la preparación del chef."
+        "text": "Cada nivel suma $60 MXN fijos sobre el anterior. El precio incluye el empaque óptimo y la preparación del chef.",
+        "bg_video": true
       },
       "blocks": {
         "t1": {
@@ -555,7 +555,7 @@
         "heading": "Hecho para tu refrigerador, pensado *para tu semana*",
         "text": "<p>Cada platillo llega en vidrio de alta calidad que conserva el sabor y se puede reutilizar. Solo calienta y disfruta.</p>",
         "badge": "Envases de vidrio",
-        "button_label": "Ver el menú de la semana",
+        "button_label": "Ver los especiales de la semana",
         "button_link": "/collections/menu-semanal",
         "art": "containers",
         "reverse": false
