@@ -118,8 +118,9 @@ await page.evaluate(() => localStorage.clear());
 
 // ---- add to selection -> cart; cart gating; referral + gift
 await page.goto(`${URL0}#/p/bowl-res-quinoa`); await page.reload(); await page.waitForTimeout(100);
-await page.click('[data-page="p/bowl-res-quinoa"] [data-add]'); await page.waitForTimeout(100);
-ok('add to selection goes to cart', page.url().endsWith('#/carrito'));
+await page.click('[data-page="p/bowl-res-quinoa"] [data-add]'); await page.waitForTimeout(150);
+ok('dish page CTA opens the plan builder with the dish preselected', /#\/pg\/pedido\?dish=bowl-res-quinoa|#\/pedido\?dish=bowl-res-quinoa/.test(page.url()), page.url());
+await page.goto(`${URL0}#/carrito`); await page.waitForTimeout(150);
 const cartScope = '[data-page="carrito"]';
 ok('checkout disabled until contract accepted', await page.$eval(`${cartScope} [data-checkout]`, (e) => e.disabled));
 await page.check(`${cartScope} [data-contract]`);

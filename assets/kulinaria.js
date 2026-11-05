@@ -161,7 +161,7 @@
       var hit = al.filter(function (a) { return tags.indexOf(a) > -1 || ings.indexOf(a) > -1; });
       var soft = dl.filter(function (d) { return ings.some(function (i) { return i.indexOf(d) > -1; }); });
       alert.hidden = !(hit.length || soft.length);
-      $$('[data-add]', detail).forEach(function (b) { b.disabled = hit.length > 0; });
+      $$('[data-add]', detail).forEach(function (b) { b.disabled = hit.length > 0; if (b.tagName === 'A') { b.setAttribute('aria-disabled', hit.length > 0 ? 'true' : 'false'); b.style.pointerEvents = hit.length > 0 ? 'none' : ''; b.style.opacity = hit.length > 0 ? '.45' : ''; } });
       if (hit.length) {
         alert.className = 'alert alert--warn';
         alert.textContent = T('notSuitable', { list: hit.join(', ') });

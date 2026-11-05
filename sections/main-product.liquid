@@ -60,7 +60,7 @@
         <div class="meal-card">
           <p class="meal-card__price">{% render 'plan-price', tier: mf.tier.value, kind: 'meal', money: true %}<small> {{ 'funnel.per_meal' | t }}</small></p>
           <p class="text-muted">{{ 'product.in_plan_text' | t }}</p>
-          <a class="btn btn--gold btn--block" href="/pages/pedido?dish={{ product.handle }}">{{ 'product.build_plan' | t }}</a>
+          <a class="btn btn--gold btn--block" data-add href="/pages/pedido?dish={{ product.handle }}">{{ 'product.build_plan' | t }}</a>
           <p class="meal-card__weeks"><a class="text-link" href="/pages/planes">{{ 'product.see_plans' | t }}</a></p>
         </div>
       {%- else -%}
