@@ -674,7 +674,7 @@
     var make = function () {
       var w = document.createElement('span'); w.className = 'wordmark';
       var vh = document.createElement('span'); vh.className = 'visually-hidden'; vh.textContent = 'Kulinaria'; w.appendChild(vh);
-      [['wm-ink', L.ink], ['wm-cream', L.cream], ['wm-gold', L.gold]].forEach(function (x) {
+      [['wm-ink', L.ink], ['wm-cream', L.cream], ['wm-gold', L.gold], ['wm-fuego', L.fuego || L.gold]].forEach(function (x) {
         var i = document.createElement('img'); i.className = x[0]; i.alt = ''; i.setAttribute('aria-hidden', 'true'); i.decoding = 'async'; i.src = resolve(x[1]); w.appendChild(i);
       });
       return w;
@@ -733,13 +733,11 @@
     setTimeout(finish, MAX);
   }
 
+  var THEMES = ['light', 'dark', 'fuego'], THEME_COLOR = { light: '#F5F4EC', dark: '#0D0C0A', fuego: '#0E0E0E' };
   function paintTheme(t) {
     root.setAttribute('data-theme', t);
-    $$('[data-theme-toggle]').forEach(function (b) {
-      b.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
-      b.setAttribute('aria-label', t === 'dark' ? T('toLight') : T('toDark'));
-    });
-    var meta = $('meta[name="theme-color"]'); if (meta) meta.setAttribute('content', t === 'dark' ? '#0D0C0A' : '#F5F4EC');
+    $$('[data-theme-pick]').forEach(function (d) { d.classList.toggle('on', d.getAttribute('data-theme-pick') === t); });
+    var meta = $('meta[name="theme-color"]'); if (meta) meta.setAttribute('content', THEME_COLOR[t] || THEME_COLOR.light);
     document.dispatchEvent(new CustomEvent('kx:theme', { detail: t }));
   }
   function setTheme(t, persist) {
@@ -756,9 +754,18 @@
     vt.finished.then(done, done);
   }
   function initTheme() {
-    setTheme(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light', false);
-    $$('[data-theme-toggle]').forEach(function (b) {
-      b.addEventListener('click', function () { setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true); });
+    var cur = function () { var i = THEMES.indexOf(root.getAttribute('data-theme')); return i < 0 ? 0 : i; };
+    setTheme(THEMES[cur()], false);
+    var step = function (d) { setTheme(THEMES[(cur() + d + THEMES.length) % THEMES.length], true); };
+    $$('[data-theme-next]').forEach(function (b) { b.addEventListener('click', function () { step(1); }); });
+    $$('[data-theme-prev]').forEach(function (b) { b.addEventListener('click', function () { step(-1); }); });
+    $$('[data-theme-pick]').forEach(function (d) { d.addEventListener('click', function () { setTheme(d.getAttribute('data-theme-pick'), true); }); });
+    $$('[data-theme-toggle]').forEach(function (b) { b.addEventListener('click', function () { step(1); }); });
+    // swipe the label like a carousel
+    $$('.tc__stage').forEach(function (st) {
+      var x0 = null;
+      st.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
+      st.addEventListener('pointerup', function (e) { if (x0 === null) return; var dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 24) step(dx < 0 ? 1 : -1); });
     });
   }
 
@@ -766,7 +773,7 @@
   function initParticles() {
     var c = $('[data-particles]'); if (!c || !c.getContext) return;
     var ctx = c.getContext('2d'), W = 0, H = 0, dpr = Math.min(2, window.devicePixelRatio || 1), ps = [], mx = -999, my = -999, running = false;
-    var dark = function () { return root.getAttribute('data-theme') === 'dark'; };
+    var dark = function () { var t = root.getAttribute('data-theme'); return t === 'dark' || t === 'fuego'; };
     var size = function () { W = c.clientWidth; H = c.clientHeight; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); };
     var make = function (fresh) { return { x: Math.random() * W, y: fresh ? Math.random() * H : H + 20, r: 0.7 + Math.random() * 2.1, vy: 0.12 + Math.random() * 0.4, ph: Math.random() * 6.28, a: 0.25 + Math.random() * 0.6 }; };
     var N = function () { return Math.max(18, Math.min(72, Math.round(window.innerWidth / 24))); };

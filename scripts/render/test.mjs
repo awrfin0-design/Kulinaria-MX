@@ -388,7 +388,7 @@ const bgOf = () => page.evaluate(() => getComputedStyle(document.body).backgroun
 await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(600);
 ok('light is the default theme', (await themeOf()) === 'light');
 const lightBg = await bgOf();
-await openMenu(); await page.click('#menu-overlay [data-theme-toggle]'); await page.waitForTimeout(500); await closeMenu(); await page.waitForTimeout(500);
+await openMenu(); await page.click('#menu-overlay [data-theme-next]'); await page.waitForTimeout(500); await closeMenu(); await page.waitForTimeout(500);
 const darkBg = await bgOf();
 ok('toggle switches to dark and changes the page colours', (await themeOf()) === 'dark' && lightBg !== darkBg, `${lightBg} -> ${darkBg}`);
 ok('theme choice is remembered', await page.evaluate(() => localStorage.getItem('kx-theme')) === 'dark');
@@ -398,7 +398,7 @@ ok('gold logo shows on dark, ink logo on light', await page.evaluate(() => getCo
 const lumC = `(c) => { const m = c.match(/\\d+(\\.\\d+)?/g).map(Number).slice(0, 3).map((v) => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }); return .2126 * m[0] + .7152 * m[1] + .0722 * m[2]; }`;
 const contrastDark = await page.evaluate(`(() => { const lum = ${lumC}; const r = (a, b) => (Math.max(lum(a), lum(b)) + .05) / (Math.min(lum(a), lum(b)) + .05); const s = getComputedStyle(document.body); return r(s.color, s.backgroundColor); })()`);
 ok('dark body text contrast >= 7', contrastDark >= 7, String(contrastDark));
-await openMenu(); await page.click('#menu-overlay [data-theme-toggle]'); await page.waitForTimeout(500); await closeMenu(); await page.waitForTimeout(500);
+await openMenu(); await page.click('#menu-overlay [data-theme-prev]'); await page.waitForTimeout(500); await closeMenu(); await page.waitForTimeout(500);
 const contrastL = await page.evaluate(`(() => { const lum = ${lumC}; const r = (a, b) => (Math.max(lum(a), lum(b)) + .05) / (Math.min(lum(a), lum(b)) + .05); const s = getComputedStyle(document.body); const acc = getComputedStyle(document.querySelector('[data-page="home"] .fg .eyebrow')).color; return { body: r(s.color, s.backgroundColor), accent: r(acc, s.backgroundColor) }; })()`);
 ok('light body text contrast >= 7 and labels >= 4.5', contrastL.body >= 7 && contrastL.accent >= 4.5, JSON.stringify(contrastL));
 
@@ -532,7 +532,7 @@ ok('footer is deep black in dark mode and deep olive in light mode', await (asyn
 // theme switching is instant: no transition storm, one snapshot cross-fade
 await page.reload(); await page.waitForTimeout(800);
 await page.click('.burger'); await page.waitForTimeout(1000);
-const sw = await page.evaluate(async () => { const t0 = performance.now(); document.querySelector('#menu-overlay [data-theme-toggle]').click(); await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))); const t1 = performance.now(); return { dt: t1 - t0, theme: document.documentElement.getAttribute('data-theme') }; });
+const sw = await page.evaluate(async () => { const t0 = performance.now(); document.querySelector('#menu-overlay [data-theme-next]').click(); await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))); const t1 = performance.now(); return { dt: t1 - t0, theme: document.documentElement.getAttribute('data-theme') }; });
 ok('theme switch lands within two frames', sw.theme === 'dark' && sw.dt < 250, JSON.stringify(sw));
 await page.waitForTimeout(800);
 ok('no stuck "is-theming" state after the switch', await page.evaluate(() => !document.documentElement.classList.contains('is-theming')));
@@ -670,7 +670,7 @@ const mobile = { width: 390, height: 844 };
 await page.setViewportSize(mobile); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
 ok('phone: the header keeps only logo, cart and burger (language, theme and login live in the burger menu)', await page.evaluate(() => { const v = (s) => { const e = document.querySelector(s); return !e || getComputedStyle(e).display === 'none'; }; const bar = document.querySelector('.site-header__bar').getBoundingClientRect(); return v('.site-header .lang') && v('.site-header .header-login') && bar.height <= 56; }));
 await page.click('[data-menu-open]'); await page.waitForTimeout(900);
-ok('phone: the burger menu holds the language switch, theme toggle, account and cart', await page.evaluate(() => { const o = document.querySelector('.menu-overlay'); const vis = (s) => { const e = o.querySelector(s); return !!e && e.getBoundingClientRect().width > 0; }; return vis('.lang') && vis('.theme-toggle,[data-theme-toggle]') && o.querySelectorAll('.menu-overlay__tools .icon-link').length >= 2; }));
+ok('phone: the burger menu holds the language switch, theme toggle, account and cart', await page.evaluate(() => { const o = document.querySelector('.menu-overlay'); const vis = (s) => { const e = o.querySelector(s); return !!e && e.getBoundingClientRect().width > 0; }; return vis('.lang') && vis('.theme-carousel') && o.querySelectorAll('.menu-overlay__tools .icon-link').length >= 2; }));
 await page.click('[data-menu-close]'); await page.waitForTimeout(600);
 // every page: nothing wider than the screen, compact length, nothing hides under the fixed bars
 const pageNames = await page.evaluate(() => [...document.querySelectorAll('[data-page]')].map((e) => e.getAttribute('data-page')));
@@ -756,6 +756,29 @@ ok('phone inner pages: the title sits over a photo (not a separate block)', awai
 await page.setViewportSize({ width: 1440, height: 900 });
 ok('desktop never shows the info dot, the sheet or the block line', await page.evaluate(() => [...document.querySelectorAll('.info-dot,.sheet,.funnel__block,.funnel__teaser,.funnel__stepcount')].every((e) => getComputedStyle(e).display === 'none')));
 await page.setViewportSize({ width: 1440, height: 900 });
+// =====================================================================  v17: Day / Night / Fuego carousel
+await page.setViewportSize({ width: 1440, height: 900 });
+await page.evaluate(() => localStorage.removeItem('kx-theme')); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
+const modes = [];
+for (let i = 0; i < 3; i++) {
+  await openMenu();
+  const st = await page.evaluate(() => { const g = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim().toLowerCase(); const lg = (s) => { const e = document.querySelector('.site-header ' + s); return e ? getComputedStyle(e).display : null; };
+    return { theme: document.documentElement.getAttribute('data-theme'), accent: g('--accent'), bg: g('--bg-base'), font: getComputedStyle(document.querySelector('h1')).fontFamily.split(',')[0].replace(/"/g, ''), ink: lg('.logo--ink'), gold: lg('.logo--gold'), fuego: lg('.logo--fuego'), label: [...document.querySelectorAll('.tc__name')].find((n) => getComputedStyle(n).opacity === '1')?.textContent.trim() }; });
+  modes.push(st);
+  await page.click('#menu-overlay [data-theme-next]'); await page.waitForTimeout(700); await closeMenu(); await page.waitForTimeout(500);
+}
+ok('the carousel goes Day -> Night -> Fuego -> Day', modes.map((m) => m.theme).join() === 'light,dark,fuego', JSON.stringify(modes.map((m) => m.theme)));
+ok('Day is white + olive, Night is black + gold, Fuego is black + orange-red #FF6200', modes[0].accent === '#cad89b' || modes[0].accent !== '#ff6200', JSON.stringify(modes[0])) ;
+ok('Night keeps its gold accent', modes[1].accent === '#e2c36b' && modes[1].bg === '#0d0c0a', JSON.stringify(modes[1]));
+ok('Fuego uses the brand colours (accent #FF6200, background #0E0E0E)', modes[2].accent === '#ff6200' && modes[2].bg === '#0e0e0e', JSON.stringify(modes[2]));
+ok('Fuego uses the brand fonts (Playfair Display titles) and the other modes keep theirs', modes[2].font === 'Playfair Display' && modes[1].font !== 'Playfair Display', JSON.stringify(modes.map((m) => m.font)));
+ok('each mode shows its own logo (ink / gold / orange-and-white Fuego logo)', modes[0].ink !== 'none' && modes[0].fuego === 'none' && modes[1].gold !== 'none' && modes[1].fuego === 'none' && modes[2].fuego !== 'none' && modes[2].gold === 'none', JSON.stringify(modes.map((m) => [m.ink, m.gold, m.fuego])));
+ok('the carousel label names the mode (Día / Noche / Fuego)', modes.map((m) => m.label).join() === 'Día,Noche,Fuego', JSON.stringify(modes.map((m) => m.label)));
+await page.evaluate(() => localStorage.setItem('kx-theme', 'fuego')); await page.reload(); await page.waitForTimeout(800);
+ok('the chosen mode is remembered (Fuego survives a reload, before first paint)', await page.evaluate(() => document.documentElement.getAttribute('data-theme')) === 'fuego');
+await openMenu(); await page.click('#menu-overlay [data-theme-pick="light"]'); await page.waitForTimeout(600);
+ok('the dots jump straight to a mode', await page.evaluate(() => document.documentElement.getAttribute('data-theme')) === 'light');
+await closeMenu(); await page.waitForTimeout(500); await page.evaluate(() => localStorage.removeItem('kx-theme'));
 // ---- screenshots for eyeballing
 if (shotDir) {
   await page.setViewportSize({ width: 1440, height: 900 });

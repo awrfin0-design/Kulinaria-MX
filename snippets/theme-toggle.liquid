@@ -1,4 +1,14 @@
-{%- comment -%} Light / dark switch. State lives on <html data-theme> and in localStorage (kx-theme). {%- endcomment -%}
-<button class="icon-link theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="{{ 'theme.to_dark' | t }}">
-  {% render 'icon', name: 'sun' %}{% render 'icon', name: 'moon' %}
-</button>
+{%- comment -%}
+  Colour-mode carousel: Day (white + olive) · Night (black + gold) · Fuego (black + orange-red, the brand manual).
+  State lives on <html data-theme="light|dark|fuego"> and in localStorage (kx-theme). Tap the arrows, tap a dot or swipe the label.
+{%- endcomment -%}
+<div class="theme-carousel" role="group" aria-label="{{ 'theme.label' | t }}" data-theme-carousel>
+  <button class="tc__btn" type="button" data-theme-prev aria-label="{{ 'theme.prev' | t }}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <div class="tc__stage" aria-live="polite">
+    <span class="tc__name tc__name--light">{% render 'icon', name: 'sun' %}{{ 'theme.day' | t }}</span>
+    <span class="tc__name tc__name--dark">{% render 'icon', name: 'moon' %}{{ 'theme.night' | t }}</span>
+    <span class="tc__name tc__name--fuego">{% render 'icon', name: 'flame' %}{{ 'theme.fuego' | t }}</span>
+  </div>
+  <button class="tc__btn" type="button" data-theme-next aria-label="{{ 'theme.next' | t }}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+  <span class="tc__dots" aria-hidden="true"><i data-theme-pick="light"></i><i data-theme-pick="dark"></i><i data-theme-pick="fuego"></i></span>
+</div>

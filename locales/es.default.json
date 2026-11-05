@@ -351,7 +351,13 @@
   },
   "theme": {
     "to_dark": "Activar modo oscuro",
-    "to_light": "Activar modo claro"
+    "to_light": "Activar modo claro",
+    "label": "Modo de color",
+    "prev": "Modo anterior",
+    "next": "Modo siguiente",
+    "day": "Día",
+    "night": "Noche",
+    "fuego": "Fuego"
   },
   "tier": {
     "exclusivo": "Exclusivo $",

@@ -29,10 +29,12 @@
   {%- assign alt_text2 = shop.name | default: 'Kulinaria' | append: ', ' | append: settings.brand_tagline | default: 'Arte del fuego' -%}
   <img class="logo logo--cream" src="{{ 'logo-cream.webp' | asset_url }}" width="700" height="342" alt="{{ alt_text2 | escape }}" decoding="async">
   <img class="logo logo--gold" src="{{ 'logo.webp' | asset_url }}" width="700" height="342" alt="" aria-hidden="true" decoding="async">
+  <img class="logo logo--fuego" src="{{ 'logo-fuego.webp' | asset_url }}" width="700" height="342" alt="" aria-hidden="true" decoding="async">
 {%- elsif tone_key == 'auto' and mark != true -%}
   {%- assign alt_text = shop.name | default: 'Kulinaria' | append: ', ' | append: settings.brand_tagline | default: 'Arte del fuego' -%}
   <img class="logo logo--ink" src="{{ 'logo-black.webp' | asset_url }}" width="700" height="342" alt="{{ alt_text | escape }}" decoding="async">
   <img class="logo logo--gold" src="{{ 'logo.webp' | asset_url }}" width="700" height="342" alt="" aria-hidden="true" decoding="async">
+  <img class="logo logo--fuego" src="{{ 'logo-fuego.webp' | asset_url }}" width="700" height="342" alt="" aria-hidden="true" decoding="async">
 {%- else -%}
 <img class="logo{% if mark %} logo--mark{% endif %}" src="{{ file | asset_url }}" width="{{ w }}" height="{{ h }}"
   alt="{% if mark %}{{ shop.name | default: 'Kulinaria' }}{% else %}{{ shop.name | default: 'Kulinaria' }}, {{ settings.brand_tagline | default: 'Arte del fuego' }}{% endif %}"

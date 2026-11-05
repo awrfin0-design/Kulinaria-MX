@@ -351,7 +351,13 @@
   },
   "theme": {
     "to_dark": "Switch to dark mode",
-    "to_light": "Switch to light mode"
+    "to_light": "Switch to light mode",
+    "label": "Colour mode",
+    "prev": "Previous mode",
+    "next": "Next mode",
+    "day": "Day",
+    "night": "Night",
+    "fuego": "Fuego"
   },
   "tier": {
     "exclusivo": "Exclusivo $",
