@@ -1,7 +1,23 @@
 {
   "sections": {
-    "head": { "type": "page-head", "settings": { "art": "air-bowl", "eyebrow": "Bienvenida", "heading": "Cuéntanos de *ti*", "text": "Una sola vez. Con esto personalizamos tu menú y no tendrás que volver a llenarlo." } },
-    "ob": { "type": "onboarding", "settings": { "next_url": "/pages/pedido" } }
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "art": "air-bowl",
+        "eyebrow": "Bienvenida",
+        "heading": "Cuéntanos de *ti*",
+        "text": "Una sola vez. Con esto personalizamos tu menú y no tendrás que volver a llenarlo."
+      }
+    },
+    "ob": {
+      "type": "onboarding",
+      "settings": {
+        "next_url": "/pages/pedido"
+      }
+    }
   },
-  "order": ["head", "ob"]
+  "order": [
+    "head",
+    "ob"
+  ]
 }
