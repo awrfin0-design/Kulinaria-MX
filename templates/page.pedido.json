@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "head": {
@@ -5,7 +14,7 @@
       "settings": {
         "eyebrow": "Armar mi pedido",
         "heading": "Arma tu *pedido*",
-        "text": "Tres pasos: tu plan, tus 5 comidas por día y tus datos. Recordamos todo para la próxima vez.",
+        "text": "Cuatro pasos para elegir, uno para tus datos. Recordamos todo para la próxima vez.",
         "art": "air-bowl"
       }
     },
