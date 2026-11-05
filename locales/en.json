@@ -571,5 +571,12 @@
     "p4": "The trial week costs {{ pct }}% more. You can buy it until Saturday at 10:00 AM.",
     "per_dish": "per dish",
     "close": "Got it"
+  },
+  "admin": {
+    "loading": "Loading…",
+    "denied_title": "No access",
+    "denied_text": "This account is not allowed to see the admin panel.",
+    "login_title": "Admin access",
+    "login_text": "Sign in with the authorised account to continue."
   }
 }

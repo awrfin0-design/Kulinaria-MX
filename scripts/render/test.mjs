@@ -327,7 +327,7 @@ ok('burger opens a full-screen sitemap with every top-level page and its subpage
 ok('menu dialog is modal and labelled', await page.$eval('#menu-overlay', (n) => n.getAttribute('role') === 'dialog' && n.getAttribute('aria-modal') === 'true' && !!n.getAttribute('aria-label')));
 await closeMenu();
 ok('Escape closes the menu and returns focus to the burger', (await page.$eval('#menu-overlay', (n) => n.hidden)) && (await page.evaluate(() => document.activeElement.className)).includes('burger'));
-const pagesList = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/render/pages.json'), 'utf8'));
+const pagesList = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/render/pages.json'), 'utf8')).filter(([h]) => h !== 'admin');   // the admin page is deliberately hidden from every menu
 await openMenu();
 const inMenu = await page.$$eval('#menu-overlay .sitemap a', (a) => a.map((x) => x.getAttribute('href')));
 const missing = pagesList.map(([h]) => '#/pg/' + h).filter((h) => !inMenu.includes(h));
@@ -541,7 +541,7 @@ await page.evaluate(() => localStorage.setItem('kx-theme', 'light'));
 // the motif on every page: photo header, serif headline + script phrase, no raw markup
 await page.reload(); await page.waitForTimeout(600);
 const motif = { noPhoto: [], noEm: [], leak: [] };
-for (const r2 of routes.filter((r) => !r.key.startsWith('p/'))) {
+for (const r2 of routes.filter((r) => !r.key.startsWith('p/') && r.key !== 'pg/admin')) {
   await page.goto(`${URL0}#/${r2.key}`); await page.waitForTimeout(60);
   const info = await page.$eval(`[data-page="${r2.key}"]`, (e) => ({ photo: !!e.querySelector('.page-head__bg img, .hero__media img'), em: !!e.querySelector('h1 em, h2 em'), star: /\*/.test(e.innerText) }));
   if (!info.photo && r2.key !== 'home') motif.noPhoto.push(r2.key);
@@ -779,6 +779,59 @@ ok('the chosen mode is remembered (Fuego survives a reload, before first paint)'
 await openMenu(); await page.click('#menu-overlay [data-theme-pick="light"]'); await page.waitForTimeout(600);
 ok('the dots jump straight to a mode', await page.evaluate(() => document.documentElement.getAttribute('data-theme')) === 'light');
 await closeMenu(); await page.waitForTimeout(500); await page.evaluate(() => localStorage.removeItem('kx-theme'));
+// =====================================================================  v18: admin hub (orders tally + shopping list)
+{
+  const K = require(path.join(ROOT, 'assets/kulinaria-admin.js'));
+  const recipes = K.normalizeRecipes({ dishes: { 'filete-prime': { title: 'Filete Prime con verduras asadas', ing: [['Filete Prime', 200, 'g', 'prot', 5], ['Sal', 2.5, 'g', 'pantry', 0], ['Huevo', 1, 'u', 'dairy', 0]] } } });
+  const at = (y, m, d, h = 12, mi = 0) => new Date(y, m, d, h, mi).toISOString();
+  ok('admin: orders close Saturday 10:00; a Wednesday order first delivers on the Monday after that Saturday', K.ymd(K.firstDeliveryMonday(at(2026, 10, 4, 15), 10)) === '2026-11-09');
+  ok('admin: an order placed Saturday 09:59 still makes the cycle, 10:01 goes to the next one', K.ymd(K.firstDeliveryMonday(at(2026, 10, 7, 9, 59), 10)) === '2026-11-09' && K.ymd(K.firstDeliveryMonday(at(2026, 10, 7, 10, 1), 10)) === '2026-11-16');
+  ok('admin: a Sunday order goes to the following cycle', K.ymd(K.firstDeliveryMonday(at(2026, 10, 8, 20), 10)) === '2026-11-16');
+  ok('admin: a 4-week block delivers on 4 consecutive Mondays, a trial on one', K.deliveryWeeks({ date: at(2026, 10, 4), plan: 'block' }, 10).join() === '2026-11-09,2026-11-16,2026-11-23,2026-11-30' && K.deliveryWeeks({ date: at(2026, 10, 4), plan: 'trial' }, 10).join() === '2026-11-09');
+  ok('admin: November 2026 has 5 delivery Mondays', K.weeksInMonth(2026, 10).join() === '2026-11-02,2026-11-09,2026-11-16,2026-11-23,2026-11-30');
+  const o1 = { date: at(2026, 10, 4), plan: 'block', items: [{ title: 'Filete Prime con verduras asadas', qty: 2 }] };
+  const o2 = { date: at(2026, 10, 5), plan: 'trial', items: [{ title: 'filete prime con verduras asadas', qty: 1 }] };
+  const L = K.shopping([o1, o2], recipes, { from: '2026-11-09', to: '2026-11-09', cutoff: 10, buffer: 0 });
+  const row = (l, n) => l.rows.find((r) => r.name === n);
+  ok('admin: 3 steaks of 200 g with 5% waste = 631.6 g to buy, rounded up to 640 g (block and trial orders add up)', row(L, 'Filete Prime').buy === 640 && L.plates === 3 && L.orders === 2, JSON.stringify(row(L, 'Filete Prime')));
+  ok('admin: salt 3 x 2.5 g = 7.5 g, rounded up to 10 g; eggs are counted in pieces', row(L, 'Sal').buy === 10 && row(L, 'Huevo').buy === 3 && row(L, 'Huevo').unit === 'u');
+  ok('admin: the 10% buying buffer is applied on top of the waste (700 g)', row(K.shopping([o1, o2], recipes, { from: '2026-11-09', to: '2026-11-09', cutoff: 10, buffer: 10 }), 'Filete Prime').buy === 700);
+  ok('admin: the trial week only counts in its own week, the block keeps counting (week 3: 2 steaks = 421 g, rounded up to 430 g)', row(K.shopping([o1, o2], recipes, { from: '2026-11-23', to: '2026-11-23', cutoff: 10, buffer: 0 }), 'Filete Prime').buy === 430 && K.shopping([o1, o2], recipes, { from: '2026-12-07', to: '2026-12-07', cutoff: 10 }).rows.length === 0);
+  ok('admin: a month adds every delivery week inside it (block 4 weeks x 2 + trial 1 = 9 steaks)', K.shopping([o1, o2], recipes, { from: '2026-11-02', to: '2026-11-30', cutoff: 10, buffer: 0 }).plates === 9);
+  ok('admin: dishes without a recipe are reported, not silently ignored', K.shopping([{ date: at(2026, 10, 4), plan: 'trial', items: [{ title: 'Plato nuevo', qty: 2 }] }], recipes, { from: '2026-11-09', to: '2026-11-09', cutoff: 10 }).missing['Plato nuevo'] === 2);
+  ok('admin: quantities read like a shopping list (13.2 kg, 950 g, 1.5 L, 3 pz)', ['13.2 kg', '950 g', '1.5 L', '3 pz'].join() === [K.fmtQty(13200, 'g'), K.fmtQty(950, 'g'), K.fmtQty(1500, 'ml'), K.fmtQty(3, 'u')].map((x) => x.n + ' ' + x.u).join());
+  const tally = K.monthTally([{ date: at(2026, 10, 4), plan: 'block', total: 2560, email: 'a@x.com', items: [{ title: 'A', qty: 2 }] }, { date: at(2026, 10, 9), plan: 'trial', total: 736, email: 'b@x.com', items: [{ title: 'A', qty: 1 }, { title: 'B', qty: 1 }] }, { date: at(2026, 9, 28), plan: 'block', total: 999, email: 'c@x.com', items: [] }], [{ email: 'a@x.com', created: at(2026, 10, 4) }, { email: 'b@x.com', created: at(2026, 10, 9) }, { email: 'c@x.com', created: at(2026, 9, 28) }], 2026, 10, 10);
+  ok('admin: month tally = orders, blocks vs loose trials, sales, new clients and plates to cook', tally.orders === 2 && tally.blocks === 1 && tally.trials === 1 && tally.revenue === 3296 && tally.newClients === 2 && tally.plates === 10 && tally.top[0].title === 'A', JSON.stringify(tally));
+  ok('admin: the Google Sheet recipe rows (Recetas tab) load like the bundled recipes', !!K.findRecipe(K.normalizeRecipes([{ dish: 'Sopa X', name: 'Sal', qty: 1, unit: 'g', cat: 'pantry', waste: 0 }]), 'sopa x'));
+  const bundled = K.normalizeRecipes(JSON.parse(fs.readFileSync(path.join(ROOT, 'backend/recipes.json'), 'utf8')));
+  ok('admin: every sample dish of the store has a recipe with the pantry basics (oil, salt, garlic where used)', K.recipeList(bundled).length === 11 && K.recipeList(bundled).every((r) => r.ing.length >= 6), String(K.recipeList(bundled).length));
+  ok('admin: the page is hidden (not in the sitemap, the burger or any menu) and asks search engines not to index it', !/pages\/admin/.test(fs.readFileSync(path.join(ROOT, 'snippets/sitemap-default.liquid'), 'utf8')) && !/pages\/admin/.test(fs.readFileSync(path.join(ROOT, 'backend/shopify/menu.json'), 'utf8')) && /template\.suffix == 'admin'[\s\S]{0,120}noindex/.test(fs.readFileSync(path.join(ROOT, 'layout/theme.liquid'), 'utf8')));
+  ok('admin: the preview never links to /pages/admin from the public pages', await (async () => { await page.setViewportSize({ width: 1440, height: 900 }); await page.goto(`${URL0}#/home`); await page.waitForTimeout(300); return page.evaluate(() => ![...document.querySelectorAll('[data-page]:not([data-page="pg/admin"]) a')].some((a) => /admin/.test(a.getAttribute('href') || ''))); })());
+  await page.goto(`${URL0}#/pg/admin`); await page.reload(); await page.waitForTimeout(1200);
+  const A = '[data-page="pg/admin"]';
+  ok('admin hub: title, 4 tabs, demo-data notice, 6 KPI cards', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-tabs button').length === 4 && !!document.querySelector(a + ' .adm-demo') && document.querySelectorAll(a + ' .adm-kpi').length === 6, A));
+  ok('admin hub: the KPIs show orders, 4-week blocks, loose trial weeks, new clients, sales and average ticket', await page.evaluate((a) => { const t = (id) => document.querySelector(a + ' [data-kpi="' + id + '"] b').textContent; return +t('orders') === +t('blocks') + +t('trials') && /^\$/.test(t('sales')) && /^\$/.test(t('avg')) && +t('clients') >= 0; }, A));
+  await page.click(`${A} [data-tab="1"]`); await page.waitForTimeout(400);
+  const shop = await page.evaluate((a) => ({ cats: document.querySelectorAll(a + ' .adm-cat').length, rows: document.querySelectorAll(a + ' .adm-list li').length, kg: /kg|L|g|ml|pz/.test(document.querySelector(a + ' .adm-qty').textContent), week: document.querySelector(a + ' .adm-nav b').textContent, actions: document.querySelectorAll(a + ' .adm-actions button').length }), A);
+  ok('admin shopping list: grouped by category with kg / g / L / pieces per ingredient, next week by default, copy / CSV / print', shop.cats >= 3 && shop.rows >= 10 && shop.kg && shop.actions === 3, JSON.stringify(shop));
+  const before = await page.evaluate((a) => document.querySelector(a + ' [data-qty]').textContent, A);
+  await page.fill(`${A} [data-buffer]`, '20'); await page.dispatchEvent(`${A} [data-buffer]`, 'change'); await page.waitForTimeout(300);
+  const after = await page.evaluate((a) => document.querySelector(a + ' [data-qty]').textContent, A);
+  ok('admin shopping list: a bigger buying buffer raises the quantities', before !== after, before + ' -> ' + after);
+  await page.fill(`${A} [data-buffer]`, '5'); await page.dispatchEvent(`${A} [data-buffer]`, 'change'); await page.waitForTimeout(300);
+  await page.click(`${A} .adm-list li:first-child input`); await page.waitForTimeout(200);
+  await page.reload(); await page.waitForTimeout(1200); await page.click(`${A} [data-tab="1"]`); await page.waitForTimeout(400);
+  ok('admin shopping list: ticked items stay ticked after a reload (you can shop through the list)', await page.evaluate((a) => document.querySelector(a + ' .adm-list li:first-child').classList.contains('done'), A));
+  await page.click(`${A} [data-mode="month"]`); await page.waitForTimeout(300);
+  ok('admin shopping list: the month view adds up every delivery week of the month', await page.evaluate((a) => /\d/.test(document.querySelector(a + ' .adm-sum b').textContent) && document.querySelector(a + ' [data-m]') !== null, A));
+  await page.click(`${A} [data-tab="2"]`); await page.waitForTimeout(300);
+  ok('admin recipes: 11 dishes, each with grams per portion and waste', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-recipes .adm-card').length === 11 && /g\/ml/.test(document.querySelector(a + ' .adm-recipes h3').textContent), A));
+  await page.click(`${A} [data-tab="3"]`); await page.waitForTimeout(300);
+  ok('admin orders: a table with date, client, plan (block / trial), dishes, total and first delivery', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-table tbody tr').length > 20 && document.querySelectorAll(a + ' .adm-table th').length === 7, A));
+  await page.click(`${A} [data-tab="0"]`); await page.waitForTimeout(300); await page.click(`${A} [data-go]`); await page.waitForTimeout(300);
+  ok('admin summary: "to cook next week" jumps to that week\'s shopping list', await page.evaluate((a) => document.querySelector(a + ' .adm-tabs [aria-selected="true"]').getAttribute('data-tab') === '1', A));
+  await page.evaluate(() => { localStorage.clear(); });
+}
 // ---- screenshots for eyeballing
 if (shotDir) {
   await page.setViewportSize({ width: 1440, height: 900 });

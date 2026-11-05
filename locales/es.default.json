@@ -571,5 +571,12 @@
     "p4": "La semana de prueba cuesta {{ pct }}% más. Se compra hasta el sábado a las 10:00 AM.",
     "per_dish": "por platillo",
     "close": "Entendido"
+  },
+  "admin": {
+    "loading": "Cargando…",
+    "denied_title": "Sin acceso",
+    "denied_text": "Esta cuenta no tiene permiso para ver el panel de administración.",
+    "login_title": "Acceso de administración",
+    "login_text": "Inicia sesión con la cuenta autorizada para continuar."
   }
 }

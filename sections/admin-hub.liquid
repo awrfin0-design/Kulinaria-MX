@@ -1,0 +1,36 @@
+{%- comment -%}
+  Admin hub (hidden page /pages/admin, not in any menu, noindex). Cosmetic gate: only a signed-in customer whose e-mail is in
+  Theme settings -> Administración -> "Correos con acceso" sees the panel. The REAL protection is the admin password that the
+  Google Apps Script endpoint checks (backend/google-sheets/Code.gs, property ADMIN_KEY): the theme code itself is public.
+{%- endcomment -%}
+{%- liquid
+  assign admin_list = settings.admin_emails | downcase | remove: ' ' | split: ','
+  assign me = customer.email | downcase
+  assign allowed = false
+  if customer and admin_list contains me
+    assign allowed = true
+  endif
+-%}
+<section class="admin-hub" {{ section.shopify_attributes }}>
+  <div class="admin-hub__wrap">
+    {%- if allowed -%}
+      <div data-admin-hub data-endpoint="{{ settings.admin_endpoint | escape }}" data-cutoff-hour="{{ settings.cutoff_hour | default: 10 }}" data-lang="{{ request.locale.iso_code | default: 'es' }}" data-email="{{ customer.email | escape }}">
+        <p class="adm-empty">{{ 'admin.loading' | t }}</p>
+      </div>
+    {%- elsif customer -%}
+      <div class="admin-denied"><h1>{{ 'admin.denied_title' | t }}</h1><p class="text-muted">{{ 'admin.denied_text' | t }}</p><a class="btn btn--outline" href="{{ routes.account_url }}">{{ 'general.account' | t }}</a></div>
+    {%- else -%}
+      <div class="admin-denied"><h1>{{ 'admin.login_title' | t }}</h1><p class="text-muted">{{ 'admin.login_text' | t }}</p><a class="btn btn--gold" href="{{ routes.account_login_url }}">{{ 'login.title' | t }}</a></div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Panel de administración",
+  "settings": [
+    { "type": "paragraph", "content": "Quién puede entrar y de dónde salen los datos se configura en Configuración del tema → Administración." }
+  ],
+  "presets": [{ "name": "Panel de administración" }]
+}
+{% endschema %}

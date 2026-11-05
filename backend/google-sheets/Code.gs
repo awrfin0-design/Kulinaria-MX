@@ -38,7 +38,40 @@ function setupSheets() {
   wk.getRange('G3').setFormula('=IFERROR(QUERY(Clientes!A2:Q,"select K, count(F) where K is not null and K <> \'\' group by K order by count(F) desc label K \'Alergias\', count(F) \'Clientes\'",1),"")');
 }
 
-function doGet() { return out_({ ok: true, service: 'kulinaria-sheets' }); }
+/**
+ * GET ?action=admin&key=<ADMIN_KEY>  -> the data of the admin hub (orders, clients, recipes). Without that action it only says it is alive.
+ * ADMIN_KEY is a script property (Project Settings > Script properties) and is the password the admin types in /pages/admin.
+ * Use a long, unique one: this URL is public, the password is what protects the data.
+ */
+function doGet(e) {
+  var params = (e && e.parameter) || {};
+  if (params.action !== 'admin') return out_({ ok: true, service: 'kulinaria-sheets' });
+  var key = PropertiesService.getScriptProperties().getProperty('ADMIN_KEY');
+  if (!key || params.key !== key) return out_({ ok: false, error: 'forbidden' });
+  return out_(adminData_());
+}
+
+function adminData_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var rows = function (name) { var sh = ss.getSheetByName(name); if (!sh || sh.getLastRow() < 2) return []; return sh.getRange(2, 1, sh.getLastRow() - 1, sh.getLastColumn()).getValues(); };
+  // dishes per order id (a selling plan name on the line = part of a 4-week block)
+  var byOrder = {};
+  rows('Platillos').forEach(function (r) {
+    var id = String(r[0]); byOrder[id] = byOrder[id] || { items: [], block: false };
+    byOrder[id].items.push({ title: String(r[4]), qty: Number(r[6]) || 0 });
+    if (r[8]) byOrder[id].block = true;
+  });
+  var orders = rows('Pedidos').map(function (r) {
+    var id = String(r[0]), d = byOrder[id] || { items: [], block: false }, planText = String(r[10] || '').toLowerCase();
+    var block = d.block || planText.indexOf('bloque') > -1 || planText === 'block';
+    return { id: id, name: String(r[1]), date: new Date(r[2]).toISOString(), customer: String(r[3]), email: String(r[4]), total: Number(r[6]) || 0, currency: String(r[7]),
+      paid: String(r[8]).toLowerCase() === 'paid', plan: block ? 'block' : 'trial', items: d.items };
+  });
+  orders.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+  var clients = rows('Clientes').map(function (r) { return { email: String(r[5]), created: r[1] ? new Date(r[1]).toISOString() : '' }; }).filter(function (c) { return c.email && c.created; });
+  var recipes = rows('Recetas').map(function (r) { return { dish: String(r[0]), name: String(r[1]), qty: Number(r[2]) || 0, unit: String(r[3] || 'g'), cat: String(r[4] || 'pantry'), waste: Number(r[5]) || 0 }; }).filter(function (r) { return r.dish && r.name; });
+  return { ok: true, generated: new Date().toISOString(), orders: orders, clients: clients, recipes: recipes.length ? recipes : null };
+}
 
 function doPost(e) {
   var props = PropertiesService.getScriptProperties();

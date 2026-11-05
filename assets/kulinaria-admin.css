@@ -1,0 +1,61 @@
+/* Kulinaria MX — admin hub (only loaded on /pages/admin). Uses the theme tokens, so it follows Day / Night / Fuego. */
+.admin-hub{padding:clamp(120px,13vw,170px) 0 80px}
+.admin-hub__wrap{max-width:1180px;margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}
+.adm-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.adm-head h1{font-family:var(--font-heading);font-weight:600;font-size:clamp(1.7rem,3.4vw,2.6rem);margin:0}
+.adm-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.adm-tabs button,.adm-seg button{padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--text);font-family:var(--font-label);font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .25s,color .25s,border-color .25s}
+.adm-tabs button[aria-selected="true"],.adm-seg button[aria-pressed="true"]{background:var(--brand-grad);color:var(--on-brand);border-color:transparent}
+.adm-demo{margin:0 0 18px;padding:10px 16px;border-radius:14px;background:var(--accent-wash);border:1px solid var(--border-accent);font-size:.92rem}
+.adm-nav{display:inline-flex;align-items:center;gap:12px;margin-bottom:14px}
+.adm-nav b{min-width:150px;text-align:center;font-family:var(--font-heading);font-size:1.25rem;font-weight:600;text-transform:capitalize}
+.adm-nav button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--text);font-size:1.3rem;cursor:pointer}
+.adm-nav button:hover{border-color:var(--accent);color:var(--accent)}
+.adm-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+.adm-kpi{padding:18px 20px;border-radius:20px;background:var(--bg-raised);border:1px solid var(--line)}
+.adm-kpi span{display:block;font-family:var(--font-label);font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px}
+.adm-kpi b{font-family:var(--font-heading);font-size:2rem;font-weight:600;color:var(--accent);line-height:1.1;font-variant-numeric:tabular-nums}
+.adm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.adm-card{padding:22px;border-radius:22px;background:var(--bg-raised);border:1px solid var(--line)}
+.adm-card h3{font-size:1.1rem;margin:0 0 12px}
+.adm-card h3 small{font-weight:400;color:var(--text-muted);font-size:.8rem;margin-left:6px}
+.adm-muted{color:var(--text-muted);font-size:.92rem;margin:6px 0 16px}
+.adm-bar{height:10px;border-radius:10px;background:var(--line);overflow:hidden}.adm-bar i{display:block;height:100%;background:var(--brand-grad);border-radius:10px}
+.adm-bar.sm{height:6px;margin-top:4px;grid-column:1/-1}
+.adm-row{display:grid;grid-template-columns:1fr auto;gap:0 12px;padding:7px 0;font-size:.95rem}.adm-row b{color:var(--accent)}
+.adm-spark{display:flex;align-items:flex-end;gap:10px;height:96px;padding-top:6px}
+.adm-spark span{flex:1;max-width:56px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:4px}
+.adm-spark i{display:block;width:100%;min-height:4px;border-radius:8px 8px 3px 3px;background:var(--brand-grad)}.adm-spark em{font-style:normal;font-size:.78rem;color:var(--text-muted)}
+.adm-cta .adm-big{font-family:var(--font-heading);font-weight:600;font-size:3rem;margin:0;color:var(--accent);line-height:1}.adm-cta .adm-big small{font-size:1rem;color:var(--text-muted);font-family:var(--font-body)}
+.adm-btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 22px;border-radius:999px;border:0;background:var(--brand-grad);color:var(--on-brand);font-family:var(--font-label);font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+.adm-btn.ghost{background:none;border:1px solid var(--line);color:var(--text)}
+.adm-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px;margin-bottom:12px}
+.adm-seg{display:inline-flex;gap:6px}.adm-toolbar .adm-nav{margin:0}
+.adm-buffer{display:inline-flex;align-items:center;gap:10px;font-size:.88rem;color:var(--text-muted)}.adm-buffer input{width:72px;min-height:42px;border-radius:12px;border:1px solid var(--line);background:var(--bg-raised);color:var(--text);padding:0 10px;font:inherit}
+.adm-sum{margin:0 0 6px;color:var(--text-muted)}.adm-sum b{color:var(--text)}
+.adm-cat{font-family:var(--font-label);font-size:.78rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:26px 0 8px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.adm-list{list-style:none;margin:0;padding:0}
+.adm-list li{border-bottom:1px solid var(--line)}
+.adm-list label{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:14px;padding:14px 4px;cursor:pointer}
+.adm-list input{width:24px;height:24px;accent-color:var(--accent)}
+.adm-name{font-size:1.05rem}.adm-name small{display:block;color:var(--text-muted);font-size:.78rem;margin-top:2px;line-height:1.35}
+.adm-qty{font-family:var(--font-label);font-size:.95rem;color:var(--text-muted);white-space:nowrap}.adm-qty b{font-family:var(--font-heading);font-size:1.6rem;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums}
+.adm-list li.done .adm-name,.adm-list li.done .adm-qty b{text-decoration:line-through;opacity:.45}
+.adm-warn{margin:18px 0 0;padding:12px 16px;border-radius:14px;border:1px solid var(--border-accent);background:var(--accent-wash);font-size:.9rem}
+.adm-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.adm-empty{padding:40px 0;color:var(--text-muted);text-align:center}
+.adm-recipes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.adm-recipes table,.adm-table{width:100%;border-collapse:collapse;font-size:.92rem}.adm-recipes td{padding:6px 0;border-bottom:1px solid var(--line)}.adm-recipes td:nth-child(2){text-align:right;font-weight:700}
+.adm-tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:18px}.adm-table th,.adm-table td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}.adm-table th{font-family:var(--font-label);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.adm-gate{max-width:440px;margin:6vh auto;padding:30px;border-radius:24px;background:var(--bg-raised);border:1px solid var(--line)}.adm-gate label{display:block;margin:16px 0}.adm-gate input{display:block;width:100%;min-height:50px;margin-top:8px;border-radius:14px;border:1px solid var(--line);background:var(--bg-base);color:var(--text);padding:0 14px;font:inherit}
+.adm-toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:300;padding:12px 20px;border-radius:999px;background:var(--text);color:var(--bg-base);font-size:.9rem}
+.admin-denied{max-width:520px;margin:12vh auto;text-align:center;padding:0 20px}
+@media (max-width:760px){
+  .adm-tabs{width:100%}.adm-tabs button{flex:1;padding:10px 6px;font-size:.66rem;letter-spacing:.04em}
+  .adm-list label{grid-template-columns:26px 1fr auto;gap:10px}.adm-qty b{font-size:1.4rem}
+  .adm-nav b{min-width:120px}
+}
+@media print{
+  .site-header,.site-footer,.adm-tabs,.adm-toolbar,.adm-actions,.adm-demo,.menu-overlay,.adm-head h1~*:not(.adm-body){display:none!important}
+  body{background:#fff!important;color:#000!important}.adm-list li{border-color:#999}.adm-qty b,.adm-name,.adm-cat{color:#000!important}
+}

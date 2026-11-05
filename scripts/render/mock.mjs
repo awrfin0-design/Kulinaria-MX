@@ -107,6 +107,7 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
     welcome_gift_collection: collections['regalos-de-bienvenida'],
     instagram_url: 'https://www.instagram.com/kulinariamx', whatsapp_number: '525650399656', tiktok_url: 'https://www.tiktok.com/', facebook_url: 'https://www.facebook.com/',
     subscription_portal_url: '/account',
+    admin_emails: 'ramon@ejemplo.com', admin_endpoint: '',
   });
 
   const addr = { first_name: 'Ramón', last_name: 'Chavez', address1: 'Calle Lago 24, Lote 12', address2: 'Clúster Las Lomas, caseta norte', city: 'Mérida', zip: '97000', phone: '+52 000 000 0000', country: 'Mexico' };

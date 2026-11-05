@@ -239,7 +239,7 @@ export async function renderSite() {
 
   // ---- page index (reachable at #/indice, no banner needed)
   const indexHtml = (lang) => {
-    const items = per[lang].routes.filter((r) => !r.key.startsWith('p/') || r.key === 'p/salmon-costra-almendras')
+    const items = per[lang].routes.filter((r) => r.key !== 'pg/admin' && (!r.key.startsWith('p/') || r.key === 'p/salmon-costra-almendras'))
       .map((r) => `<li><a href="${r.url}">${r.key.startsWith('p/') ? (lang === 'en' ? 'Dish page' : 'Ficha de platillo') : r.title}</a></li>`).join('');
     return `<section class="section"><div class="container"><div class="section__head"><span class="eyebrow">${lang === 'en' ? 'All pages' : 'Todas las páginas'}</span><h1>${lang === 'en' ? 'Page index' : 'Índice de páginas'}</h1></div><ul class="menu-overlay__more" style="list-style:none">${items}</ul></div></section>`;
   };
@@ -279,7 +279,9 @@ export async function renderSite() {
   doc = doc.replace(/\sposter="assets\/([^"]+)"/g, (m, f) => ` data-poster="assets/${f}"`);
   doc = doc.replace(/<link rel="icon" type="image\/png" href="assets\/favicon\.png">/, () => `<link rel="icon" type="image/png" href="data:image/png;base64,${table['favicon.png']}">`);
   const boot = `<script type="application/json" id="kx-assets">${JSON.stringify(table)}</script><script>${PREVIEW_JS.replace('__I18N__', () => JSON.stringify(I18N))}</script>`;
-  doc = doc.replace(/<script src="assets\/kulinaria\.js"[^>]*><\/script>/, () => `${boot}<script>${js}</script>`);
+  const adminCss = read('assets/kulinaria-admin.css'), adminJs = read('assets/kulinaria-admin.js'), recipesJs = read('assets/kx-recipes.js');
+  doc = doc.replace('</head>', () => `<style>${adminCss}</style></head>`);
+  doc = doc.replace(/<script src="assets\/kulinaria\.js"[^>]*><\/script>/, () => `${boot}<script>${recipesJs}</script><script>${adminJs}</script><script>${js}</script>`);
   return { doc, routes, dead, store: per.es.store, untranslated: [...untranslated], per };
 }
 
