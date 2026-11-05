@@ -32,3 +32,16 @@ Tag every rotating dish with `menu-semana` once and plan it with the dates; no w
 
 ## Importing the 10 base products (CSV)
 `backend/shopify/productos-base.csv` is in Shopify's product-import format (Products → Import). It carries title, description, type, price, tag `menu-semana` and every `kulinaria.*` field. Photos are left empty (add them in each product). The same handles already exist in the dev store, so importing there with "Overwrite products with matching handles" updates them instead of duplicating.
+
+## Precios (planes)
+
+Se venden **planes**, no platillos sueltos. Los precios viven en los 4 productos de la colección `planes-semanales` (Plan semanal Selecto / Exclusivo / Signature / Reserve), cada uno con dos variantes: "1 semana" y "4 semanas".
+
+| Nivel | Por comida | 1 semana (5 comidas) | 4 semanas (20 comidas) |
+|---|---|---|---|
+| Selecto | $180 | $1,000 | $3,600 |
+| Exclusivo | $250 | $1,390 | $5,000 |
+| Signature | $320 | $1,780 | $6,400 |
+| Reserve | $390 | $2,170 | $7,800 |
+
+Para cambiar un precio, edita la variante del producto plan; el sitio lo lee solo (snippet `plan-price`). El precio del platillo individual es solo informativo (precio por comida).
