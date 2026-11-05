@@ -527,7 +527,19 @@
     "prop_length": "Duración",
     "length_block": "4 semanas",
     "length_week": "1 semana",
-    "renew": "Renovar automáticamente cada 4 semanas"
+    "renew": "Renovar automáticamente cada 4 semanas",
+    "days_title": "Asigna cada comida a un día",
+    "days_text": "Elige qué platillo comerás cada día hábil. Se repite igual cada semana de tu plan.",
+    "days": "Lunes,Martes,Miércoles,Jueves,Viernes",
+    "day_empty": "Elegir platillo",
+    "up_badge": "+{p} por comida",
+    "up_total": "Incluye mejoras de platillo: +{p}",
+    "up_note": "¿Quieres un platillo de nivel superior? Puedes elegirlo: pagas solo la diferencia por comida (cada semana de tu plan).",
+    "prop_upgrade": "Mejora",
+    "up_line": "Mejora de platillo",
+    "need_contract": "Acepta el contrato para continuar.",
+    "contract": "Acepto el contrato de adhesión y los términos de servicio de Kulinaria MX.",
+    "days_missing": "Asigna un platillo a cada día."
   },
   "sitemap": {
     "pedido": "Armar mi pedido",

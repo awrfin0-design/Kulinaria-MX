@@ -64,7 +64,10 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
     variants: ['S', 'M', 'L', 'XL'].map((s, i) => ({ id: 73000 + i, title: s, price: 39900, available: true })) });
   const shaker = product({ id: 7301, handle: 'vaso-mezclador-premium', title: tr('Vaso mezclador (shaker) premium Kulinaria'), price: 29900,
     description: tr('<p>Shaker oficial para tus batidos.</p>') });
+  const mejora = product({ id: 7400, handle: 'mejora-de-platillo', title: tr('Mejora de platillo'), type: 'mejora', price: 7000,
+    variants: [1, 2, 3].map((n) => ({ id: 74000 + n, title: `+${n}`, price: 7000 * n, available: true })) });
   const products = [...dishes, ...planProducts, playera, shaker];
+  const all_products = Object.fromEntries([...products, mejora].map((p) => [p.handle, p]));
 
   const collections = {
     'menu-semanal': { title: tr('Especiales de la semana'), handle: 'menu-semanal', url: '/collections/menu-semanal',
@@ -148,7 +151,7 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
   return {
     products, dishes, collections, pages, linklists, order, customer, cart, search,
     globals: {
-      shop: { name: 'Kulinaria MX' }, settings, routes, linklists, collections, pages, cart, customer, search,
+      shop: { name: 'Kulinaria MX' }, all_products, settings, routes, linklists, collections, pages, cart, customer, search,
       request: { locale: { iso_code: lang } }, content_for_header: '',
       localization: { available_languages: [{ iso_code: 'es', endonym_name: 'Español' }, { iso_code: 'en', endonym_name: 'English' }], language: { iso_code: lang }, country: { iso_code: 'MX' } },
     },

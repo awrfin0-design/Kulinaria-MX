@@ -2025,6 +2025,20 @@ a.lang__btn{display:inline-block;text-decoration:none}
 .dish__price small,.fn-dish .dish__price small{display:inline;white-space:nowrap}
 .fn-dish__row{flex-wrap:wrap}
 
+/* ---- v21: day assignment, tier upgrades, contract in the details step ---- */
+.fn-daysbox{margin:0 0 var(--space-lg);padding:18px 20px;border:1px solid var(--line);border-radius:20px;background:var(--bg-raised)}
+.fn-days{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.fn-days li{display:grid;gap:4px}
+.fn-days label{font-family:var(--font-label);font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+.fn-days li.is-set label{color:var(--accent)}
+.fn-days select{width:100%;min-height:46px}
+.fn-upnote{margin:6px 0 0;font-size:.88rem;color:var(--text-muted)}
+.fn-up{display:inline-block;margin:6px 0 0;padding:3px 10px;border-radius:999px;border:1px solid var(--border-accent);background:var(--accent-wash);color:var(--accent);font-family:var(--font-label);font-size:.72rem;font-weight:700;letter-spacing:.06em}
+.fn-up[hidden]{display:none}
+.funnel__upgrades{margin:6px 0 0;font-size:.85rem;color:var(--accent)}
+.fn-contract{margin:var(--space-lg) 0 0}
+.cart-line input.qty[readonly]{opacity:.55;pointer-events:none}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -2348,7 +2362,10 @@ Fuego</span>
   data-t-per-week="{p} por semana" data-t-weeks-x="{p} por semana × {w} semanas" data-t-per-meal="por comida"
   data-t-all-lines="Todas" data-t-prop-dishes="Platillos" data-t-prop-meals="Comidas por semana"
   data-t-prop-tier="Nivel" data-t-prop-length="Duración" data-t-length-block="4 semanas" data-t-length-week="1 semana"
-  data-t-renew="Renovar automáticamente cada 4 semanas" >
+  data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
+  data-t-prop-upgrade="Mejora" data-t-need-contract="Acepta el contrato para continuar." data-t-days-missing="Asigna un platillo a cada día."
+  data-upg-1="70" data-upg-2="140" data-upg-3="210"
+  data-upv-1="74001" data-upv-2="74002" data-upv-3="74003" >
   <div class="funnel__teaser container">
     <div class="funnel__teaser-bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-containers.webp" width="1200" height="800" alt="" class="" loading="lazy" decoding="async"></div>
     <p class="funnel__teaser-kicker">Haz tu pedido</p>
@@ -2429,6 +2446,12 @@ Fuego</span>
           <legend>Elige tus 5 comidas de la semana</legend>
           <p class="text-muted">Tu selección se repite cada semana de tu plan. Toca para agregar; puedes repetir platillos.</p>
           <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>comidas</span><i data-fn-meter-bar></i></p>
+          <div class="fn-daysbox">
+            <p class="label">Asigna cada comida a un día</p>
+            <p class="text-muted" style="margin:0 0 var(--space-sm)">Elige qué platillo comerás cada día hábil. Se repite igual cada semana de tu plan.</p>
+            <ol class="fn-days" data-fn-days></ol>
+            <p class="fn-upnote">¿Quieres un platillo de nivel superior? Puedes elegirlo: pagas solo la diferencia por comida (cada semana de tu plan).</p>
+          </div>
           <div class="chips fn-cats" role="group" aria-label="Categoría">
             <button class="chip" type="button" data-cat="all" aria-pressed="true">Todas</button><button class="chip" type="button" data-cat="desayunos-premium" aria-pressed="false">Desayunos Premium</button><button class="chip" type="button" data-cat="al-fuego-y-mar" aria-pressed="false">Al Fuego y Mar</button><button class="chip" type="button" data-cat="bowls-de-la-semana" aria-pressed="false">Bowls de la Semana</button><button class="chip" type="button" data-cat="diario-premium" aria-pressed="false">Diario Premium</button><button class="chip" type="button" data-cat="kulinaria-junior" aria-pressed="false">Kulinaria Junior</button><button class="chip" type="button" data-cat="sopas-y-entradas" aria-pressed="false">Sopas y Entradas</button><button class="chip" type="button" data-cat="postres-y-snacks" aria-pressed="false">Postres y Snacks</button><button class="chip" type="button" data-cat="batidos-y-bebidas" aria-pressed="false">Batidos y Bebidas</button></div>
           <div class="chips fn-diets-chips" role="group" aria-label="Enfoque nutricional (opcional)">
@@ -2441,6 +2464,7 @@ Fuego</span>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Pollo a las hierbas con puré rústico</h3><p class="dish__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de ...</p><p class="dish__facts">480 kcal · 22 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -2459,6 +2483,7 @@ Fuego</span>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Bowl de res magra y quinoa</h3><p class="dish__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="dish__facts">560 kcal · 34 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -2477,6 +2502,7 @@ Fuego</span>
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Salmón gourmet en costra de almendras</h3><p class="dish__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry ro...</p><p class="dish__facts">520 kcal · 14 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -2495,6 +2521,7 @@ Fuego</span>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Omelette de claras con espinaca</h3><p class="dish__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="dish__facts">310 kcal · 8 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -2513,6 +2540,7 @@ Fuego</span>
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3 class="fn-dish__title">Arrachera al carbón con maíz y espárragos</h3><p class="dish__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="dish__facts">640 kcal · 28 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$320<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -2531,6 +2559,7 @@ Fuego</span>
     <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 
     <h3 class="fn-dish__title">Filete Prime con verduras asadas</h3><p class="dish__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin per...</p><p class="dish__facts">710 kcal · 16 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$390<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -2549,6 +2578,7 @@ Fuego</span>
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Bowl vegano de garbanzo y tahini</h3><p class="dish__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="dish__facts">450 kcal · 52 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -2567,6 +2597,7 @@ Fuego</span>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Crema de calabaza asada</h3><p class="dish__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="dish__facts">220 kcal · 18 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -2585,6 +2616,7 @@ Fuego</span>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Mini pasta de pollo para peques</h3><p class="dish__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="dish__facts">380 kcal · 44 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -2615,6 +2647,7 @@ Fuego</span>
           <div class="check-grid"><label class="check"><input type="checkbox" data-allergy value="Gluten"> <span>Gluten</span></label><label class="check"><input type="checkbox" data-allergy value="Lácteos"> <span>Lácteos</span></label><label class="check"><input type="checkbox" data-allergy value="Frutos secos"> <span>Frutos secos</span></label><label class="check"><input type="checkbox" data-allergy value="Mariscos"> <span>Mariscos</span></label></div>
           <div class="field"><label for="home--fn-other-funnel">Otras alergias</label><input class="input" id="home--fn-other-funnel" data-info="allergy_other" placeholder="Separa con comas: soya, huevo, ajonjolí"></div>
           <div class="field"><label for="home--fn-dis-funnel">Bloque 2 · Ingredientes que no me gustan</label><input class="input" id="home--fn-dis-funnel" data-info="dislikes" placeholder="Ej. jitomate"></div>
+          <label class="check fn-contract"><input type="checkbox" data-fn-contract> <span>Acepto el contrato de adhesión y los términos de servicio de Kulinaria MX. <a href="#/pg/ayuda" target="_blank" rel="noopener" class="text-link">Leer contrato</a></span></label>
           <p class="alert alert--ok" data-fn-remembered hidden role="status"></p>
         </fieldset>
 
@@ -2630,6 +2663,7 @@ Fuego</span>
         </dl>
         <ul class="funnel__list" data-fn-s-list></ul>
         <p class="text-muted" data-fn-s-empty>Aún no eliges comidas.</p>
+        <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Total del plan</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
@@ -2642,7 +2676,7 @@ Fuego</span>
         <button class="btn btn--gold" type="button" data-fn-next disabled>Continuar</button>
         <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirmar y continuar</a>
       </div>
-      <p class="funnel__login text-muted">¿Ya tienes cuenta? <a href="#/login">Iniciar sesión</a></p>
+      <p class="funnel__login text-muted">¿Ya tienes cuenta? <a href="#/login?return_url=%2F">Iniciar sesión</a></p>
     </div>
    </div>
   </div>
@@ -7585,7 +7619,10 @@ Pago digital, sin efectivo</li></ul>
   data-t-per-week="{p} por semana" data-t-weeks-x="{p} por semana × {w} semanas" data-t-per-meal="por comida"
   data-t-all-lines="Todas" data-t-prop-dishes="Platillos" data-t-prop-meals="Comidas por semana"
   data-t-prop-tier="Nivel" data-t-prop-length="Duración" data-t-length-block="4 semanas" data-t-length-week="1 semana"
-  data-t-renew="Renovar automáticamente cada 4 semanas" >
+  data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
+  data-t-prop-upgrade="Mejora" data-t-need-contract="Acepta el contrato para continuar." data-t-days-missing="Asigna un platillo a cada día."
+  data-upg-1="70" data-upg-2="140" data-upg-3="210"
+  data-upv-1="74001" data-upv-2="74002" data-upv-3="74003" >
   <div class="funnel__teaser container">
     <div class="funnel__teaser-bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-containers.webp" width="1200" height="800" alt="" class="" loading="lazy" decoding="async"></div>
     <p class="funnel__teaser-kicker">Haz tu pedido</p>
@@ -7666,6 +7703,12 @@ Pago digital, sin efectivo</li></ul>
           <legend>Elige tus 5 comidas de la semana</legend>
           <p class="text-muted">Tu selección se repite cada semana de tu plan. Toca para agregar; puedes repetir platillos.</p>
           <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>comidas</span><i data-fn-meter-bar></i></p>
+          <div class="fn-daysbox">
+            <p class="label">Asigna cada comida a un día</p>
+            <p class="text-muted" style="margin:0 0 var(--space-sm)">Elige qué platillo comerás cada día hábil. Se repite igual cada semana de tu plan.</p>
+            <ol class="fn-days" data-fn-days></ol>
+            <p class="fn-upnote">¿Quieres un platillo de nivel superior? Puedes elegirlo: pagas solo la diferencia por comida (cada semana de tu plan).</p>
+          </div>
           <div class="chips fn-cats" role="group" aria-label="Categoría">
             <button class="chip" type="button" data-cat="all" aria-pressed="true">Todas</button><button class="chip" type="button" data-cat="desayunos-premium" aria-pressed="false">Desayunos Premium</button><button class="chip" type="button" data-cat="al-fuego-y-mar" aria-pressed="false">Al Fuego y Mar</button><button class="chip" type="button" data-cat="bowls-de-la-semana" aria-pressed="false">Bowls de la Semana</button><button class="chip" type="button" data-cat="diario-premium" aria-pressed="false">Diario Premium</button><button class="chip" type="button" data-cat="kulinaria-junior" aria-pressed="false">Kulinaria Junior</button><button class="chip" type="button" data-cat="sopas-y-entradas" aria-pressed="false">Sopas y Entradas</button><button class="chip" type="button" data-cat="postres-y-snacks" aria-pressed="false">Postres y Snacks</button><button class="chip" type="button" data-cat="batidos-y-bebidas" aria-pressed="false">Batidos y Bebidas</button></div>
           <div class="chips fn-diets-chips" role="group" aria-label="Enfoque nutricional (opcional)">
@@ -7678,6 +7721,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Pollo a las hierbas con puré rústico</h3><p class="dish__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de ...</p><p class="dish__facts">480 kcal · 22 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -7696,6 +7740,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Bowl de res magra y quinoa</h3><p class="dish__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="dish__facts">560 kcal · 34 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -7714,6 +7759,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Salmón gourmet en costra de almendras</h3><p class="dish__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry ro...</p><p class="dish__facts">520 kcal · 14 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -7732,6 +7778,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Omelette de claras con espinaca</h3><p class="dish__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="dish__facts">310 kcal · 8 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -7750,6 +7797,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3 class="fn-dish__title">Arrachera al carbón con maíz y espárragos</h3><p class="dish__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="dish__facts">640 kcal · 28 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$320<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -7768,6 +7816,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 
     <h3 class="fn-dish__title">Filete Prime con verduras asadas</h3><p class="dish__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin per...</p><p class="dish__facts">710 kcal · 16 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$390<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -7786,6 +7835,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Bowl vegano de garbanzo y tahini</h3><p class="dish__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="dish__facts">450 kcal · 52 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -7804,6 +7854,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Crema de calabaza asada</h3><p class="dish__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="dish__facts">220 kcal · 18 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -7822,6 +7873,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Mini pasta de pollo para peques</h3><p class="dish__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="dish__facts">380 kcal · 44 g carbohidratos</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -7852,6 +7904,7 @@ Pago digital, sin efectivo</li></ul>
           <div class="check-grid"><label class="check"><input type="checkbox" data-allergy value="Gluten"> <span>Gluten</span></label><label class="check"><input type="checkbox" data-allergy value="Lácteos"> <span>Lácteos</span></label><label class="check"><input type="checkbox" data-allergy value="Frutos secos"> <span>Frutos secos</span></label><label class="check"><input type="checkbox" data-allergy value="Mariscos"> <span>Mariscos</span></label></div>
           <div class="field"><label for="pg-pedido--fn-other-funnel">Otras alergias</label><input class="input" id="pg-pedido--fn-other-funnel" data-info="allergy_other" placeholder="Separa con comas: soya, huevo, ajonjolí"></div>
           <div class="field"><label for="pg-pedido--fn-dis-funnel">Bloque 2 · Ingredientes que no me gustan</label><input class="input" id="pg-pedido--fn-dis-funnel" data-info="dislikes" placeholder="Ej. jitomate"></div>
+          <label class="check fn-contract"><input type="checkbox" data-fn-contract> <span>Acepto el contrato de adhesión y los términos de servicio de Kulinaria MX. <a href="#/pg/ayuda" target="_blank" rel="noopener" class="text-link">Leer contrato</a></span></label>
           <p class="alert alert--ok" data-fn-remembered hidden role="status"></p>
         </fieldset>
 
@@ -7867,6 +7920,7 @@ Pago digital, sin efectivo</li></ul>
         </dl>
         <ul class="funnel__list" data-fn-s-list></ul>
         <p class="text-muted" data-fn-s-empty>Aún no eliges comidas.</p>
+        <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Total del plan</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
@@ -7879,7 +7933,7 @@ Pago digital, sin efectivo</li></ul>
         <button class="btn btn--gold" type="button" data-fn-next disabled>Continuar</button>
         <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirmar y continuar</a>
       </div>
-      <p class="funnel__login text-muted">¿Ya tienes cuenta? <a href="#/login">Iniciar sesión</a></p>
+      <p class="funnel__login text-muted">¿Ya tienes cuenta? <a href="#/login?return_url=%2Fpages%2Fpedido">Iniciar sesión</a></p>
     </div>
    </div>
   </div>
@@ -8006,8 +8060,7 @@ Pago digital, sin efectivo</li></ul>
 
 
 </div><div id="carrito--shopify-section-main" class="shopify-section"><section class="section" >
-  <div class="container"><form action="/cart" method="post" class="cart" data-cart-form>
-        <div><div class="cart-line">
+  <div class="container"><form action="/cart" method="post" class="cart" data-cart-form><div><div class="cart-line">
               <a href="#/p/plan-semanal-exclusivo"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-containers.webp" alt="Plan semanal Exclusivo" loading="lazy"></a>
               <div>
                 <h3 style="margin:0 0 4px"><a href="#/p/plan-semanal-exclusivo">Plan semanal Exclusivo</a></h3><p class="text-muted" style="margin:0">4 semanas</p><p class="cart-line__plan" style="margin:0">Bloque de 4 semanas (pago anticipado, entrega semanal)</p><p class="cart-line__prop text-muted" style="margin:2px 0 0;font-size:.9rem"><strong>Platillos:</strong> 2× Bowl de res magra y quinoa | 3× Salmón gourmet en costra de almendras</p><p class="cart-line__prop text-muted" style="margin:2px 0 0;font-size:.9rem"><strong>Comidas por semana:</strong> 5</p><p class="cart-line__prop text-muted" style="margin:2px 0 0;font-size:.9rem"><strong>Nivel:</strong> Exclusivo</p><p class="cart-line__prop text-muted" style="margin:2px 0 0;font-size:.9rem"><strong>Duración:</strong> 4 semanas</p><a class="btn btn--ghost" style="padding-left:0" href="#/carrito">Quitar</a>
@@ -8468,7 +8521,10 @@ Pago digital, sin efectivo</li></ul>
   data-t-per-week="{p} per week" data-t-weeks-x="{p} per week × {w} weeks" data-t-per-meal="per meal"
   data-t-all-lines="All" data-t-prop-dishes="Dishes" data-t-prop-meals="Meals per week"
   data-t-prop-tier="Tier" data-t-prop-length="Length" data-t-length-block="4 weeks" data-t-length-week="1 week"
-  data-t-renew="Renew automatically every 4 weeks" >
+  data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
+  data-t-prop-upgrade="Upgrade" data-t-need-contract="Accept the contract to continue." data-t-days-missing="Assign a dish to every day."
+  data-upg-1="70" data-upg-2="140" data-upg-3="210"
+  data-upv-1="74001" data-upv-2="74002" data-upv-3="74003" >
   <div class="funnel__teaser container">
     <div class="funnel__teaser-bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-containers.webp" width="1200" height="800" alt="" class="" loading="lazy" decoding="async"></div>
     <p class="funnel__teaser-kicker">Place your order</p>
@@ -8549,6 +8605,12 @@ Pago digital, sin efectivo</li></ul>
           <legend>Choose your 5 meals for the week</legend>
           <p class="text-muted">Your selection repeats every week of your plan. Tap to add; you can repeat dishes.</p>
           <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>meals</span><i data-fn-meter-bar></i></p>
+          <div class="fn-daysbox">
+            <p class="label">Assign each meal to a day</p>
+            <p class="text-muted" style="margin:0 0 var(--space-sm)">Choose which dish you'll eat each business day. It repeats the same way every week of your plan.</p>
+            <ol class="fn-days" data-fn-days></ol>
+            <p class="fn-upnote">Want a higher-tier dish? Go ahead: you only pay the per-meal difference (every week of your plan).</p>
+          </div>
           <div class="chips fn-cats" role="group" aria-label="Category">
             <button class="chip" type="button" data-cat="all" aria-pressed="true">All</button><button class="chip" type="button" data-cat="desayunos-premium" aria-pressed="false">Premium Breakfasts</button><button class="chip" type="button" data-cat="al-fuego-y-mar" aria-pressed="false">Fire & Sea</button><button class="chip" type="button" data-cat="bowls-de-la-semana" aria-pressed="false">Bowls of the Week</button><button class="chip" type="button" data-cat="diario-premium" aria-pressed="false">Premium Daily</button><button class="chip" type="button" data-cat="kulinaria-junior" aria-pressed="false">Kulinaria Junior</button><button class="chip" type="button" data-cat="sopas-y-entradas" aria-pressed="false">Soups & Starters</button><button class="chip" type="button" data-cat="postres-y-snacks" aria-pressed="false">Desserts & Snacks</button><button class="chip" type="button" data-cat="batidos-y-bebidas" aria-pressed="false">Smoothies & Drinks</button></div>
           <div class="chips fn-diets-chips" role="group" aria-label="Nutritional focus (optional)">
@@ -8561,6 +8623,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Herb chicken with rustic mash</h3><p class="dish__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="dish__facts">480 kcal · 22 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -8579,6 +8642,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Lean beef and quinoa bowl</h3><p class="dish__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="dish__facts">560 kcal · 34 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -8597,6 +8661,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Gourmet salmon in an almond crust</h3><p class="dish__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="dish__facts">520 kcal · 14 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -8615,6 +8680,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Egg-white omelette with spinach</h3><p class="dish__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="dish__facts">310 kcal · 8 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -8633,6 +8699,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3 class="fn-dish__title">Charcoal-grilled skirt steak with corn and asparagus</h3><p class="dish__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="dish__facts">640 kcal · 28 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$320<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -8651,6 +8718,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 
     <h3 class="fn-dish__title">Prime filet with roasted vegetables</h3><p class="dish__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losin...</p><p class="dish__facts">710 kcal · 16 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$390<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -8669,6 +8737,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Vegan chickpea and tahini bowl</h3><p class="dish__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="dish__facts">450 kcal · 52 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -8687,6 +8756,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Roasted pumpkin cream soup</h3><p class="dish__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="dish__facts">220 kcal · 18 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -8705,6 +8775,7 @@ Pago digital, sin efectivo</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Mini chicken pasta for little ones</h3><p class="dish__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="dish__facts">380 kcal · 44 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -8735,6 +8806,7 @@ Pago digital, sin efectivo</li></ul>
           <div class="check-grid"><label class="check"><input type="checkbox" data-allergy value="Gluten"> <span>Gluten</span></label><label class="check"><input type="checkbox" data-allergy value="Lácteos"> <span>Dairy</span></label><label class="check"><input type="checkbox" data-allergy value="Frutos secos"> <span>Tree nuts</span></label><label class="check"><input type="checkbox" data-allergy value="Mariscos"> <span>Shellfish</span></label></div>
           <div class="field"><label for="home--fn-other-funnel">Other allergies</label><input class="input" id="home--fn-other-funnel" data-info="allergy_other" placeholder="Separate with commas: soy, egg, sesame"></div>
           <div class="field"><label for="home--fn-dis-funnel">Block 2 · Ingredients I don't like</label><input class="input" id="home--fn-dis-funnel" data-info="dislikes" placeholder="E.g. tomato"></div>
+          <label class="check fn-contract"><input type="checkbox" data-fn-contract> <span>I accept the Kulinaria MX subscription contract and terms of service. <a href="#/pg/ayuda" target="_blank" rel="noopener" class="text-link">Read contract</a></span></label>
           <p class="alert alert--ok" data-fn-remembered hidden role="status"></p>
         </fieldset>
 
@@ -8750,6 +8822,7 @@ Pago digital, sin efectivo</li></ul>
         </dl>
         <ul class="funnel__list" data-fn-s-list></ul>
         <p class="text-muted" data-fn-s-empty>You haven't chosen any meals yet.</p>
+        <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Plan total</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
@@ -8762,7 +8835,7 @@ Pago digital, sin efectivo</li></ul>
         <button class="btn btn--gold" type="button" data-fn-next disabled>Continue</button>
         <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirm and continue</a>
       </div>
-      <p class="funnel__login text-muted">Already have an account? <a href="#/login">Sign in</a></p>
+      <p class="funnel__login text-muted">Already have an account? <a href="#/login?return_url=%2F">Sign in</a></p>
     </div>
    </div>
   </div>
@@ -13705,7 +13778,10 @@ Digital payment, no cash</li></ul>
   data-t-per-week="{p} per week" data-t-weeks-x="{p} per week × {w} weeks" data-t-per-meal="per meal"
   data-t-all-lines="All" data-t-prop-dishes="Dishes" data-t-prop-meals="Meals per week"
   data-t-prop-tier="Tier" data-t-prop-length="Length" data-t-length-block="4 weeks" data-t-length-week="1 week"
-  data-t-renew="Renew automatically every 4 weeks" >
+  data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
+  data-t-prop-upgrade="Upgrade" data-t-need-contract="Accept the contract to continue." data-t-days-missing="Assign a dish to every day."
+  data-upg-1="70" data-upg-2="140" data-upg-3="210"
+  data-upv-1="74001" data-upv-2="74002" data-upv-3="74003" >
   <div class="funnel__teaser container">
     <div class="funnel__teaser-bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-containers.webp" width="1200" height="800" alt="" class="" loading="lazy" decoding="async"></div>
     <p class="funnel__teaser-kicker">Place your order</p>
@@ -13786,6 +13862,12 @@ Digital payment, no cash</li></ul>
           <legend>Choose your 5 meals for the week</legend>
           <p class="text-muted">Your selection repeats every week of your plan. Tap to add; you can repeat dishes.</p>
           <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>meals</span><i data-fn-meter-bar></i></p>
+          <div class="fn-daysbox">
+            <p class="label">Assign each meal to a day</p>
+            <p class="text-muted" style="margin:0 0 var(--space-sm)">Choose which dish you'll eat each business day. It repeats the same way every week of your plan.</p>
+            <ol class="fn-days" data-fn-days></ol>
+            <p class="fn-upnote">Want a higher-tier dish? Go ahead: you only pay the per-meal difference (every week of your plan).</p>
+          </div>
           <div class="chips fn-cats" role="group" aria-label="Category">
             <button class="chip" type="button" data-cat="all" aria-pressed="true">All</button><button class="chip" type="button" data-cat="desayunos-premium" aria-pressed="false">Premium Breakfasts</button><button class="chip" type="button" data-cat="al-fuego-y-mar" aria-pressed="false">Fire & Sea</button><button class="chip" type="button" data-cat="bowls-de-la-semana" aria-pressed="false">Bowls of the Week</button><button class="chip" type="button" data-cat="diario-premium" aria-pressed="false">Premium Daily</button><button class="chip" type="button" data-cat="kulinaria-junior" aria-pressed="false">Kulinaria Junior</button><button class="chip" type="button" data-cat="sopas-y-entradas" aria-pressed="false">Soups & Starters</button><button class="chip" type="button" data-cat="postres-y-snacks" aria-pressed="false">Desserts & Snacks</button><button class="chip" type="button" data-cat="batidos-y-bebidas" aria-pressed="false">Smoothies & Drinks</button></div>
           <div class="chips fn-diets-chips" role="group" aria-label="Nutritional focus (optional)">
@@ -13798,6 +13880,7 @@ Digital payment, no cash</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Herb chicken with rustic mash</h3><p class="dish__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="dish__facts">480 kcal · 22 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -13816,6 +13899,7 @@ Digital payment, no cash</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Lean beef and quinoa bowl</h3><p class="dish__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="dish__facts">560 kcal · 34 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -13834,6 +13918,7 @@ Digital payment, no cash</li></ul>
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Gourmet salmon in an almond crust</h3><p class="dish__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="dish__facts">520 kcal · 14 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -13852,6 +13937,7 @@ Digital payment, no cash</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Egg-white omelette with spinach</h3><p class="dish__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="dish__facts">310 kcal · 8 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -13870,6 +13956,7 @@ Digital payment, no cash</li></ul>
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3 class="fn-dish__title">Charcoal-grilled skirt steak with corn and asparagus</h3><p class="dish__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="dish__facts">640 kcal · 28 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$320<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -13888,6 +13975,7 @@ Digital payment, no cash</li></ul>
     <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 
     <h3 class="fn-dish__title">Prime filet with roasted vegetables</h3><p class="dish__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losin...</p><p class="dish__facts">710 kcal · 16 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$390<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -13906,6 +13994,7 @@ Digital payment, no cash</li></ul>
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Vegan chickpea and tahini bowl</h3><p class="dish__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="dish__facts">450 kcal · 52 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -13924,6 +14013,7 @@ Digital payment, no cash</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Roasted pumpkin cream soup</h3><p class="dish__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="dish__facts">220 kcal · 18 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -13942,6 +14032,7 @@ Digital payment, no cash</li></ul>
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Mini chicken pasta for little ones</h3><p class="dish__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="dish__facts">380 kcal · 44 g carbs</p><span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <div class="fn-qty" data-fn-qty hidden>
@@ -13972,6 +14063,7 @@ Digital payment, no cash</li></ul>
           <div class="check-grid"><label class="check"><input type="checkbox" data-allergy value="Gluten"> <span>Gluten</span></label><label class="check"><input type="checkbox" data-allergy value="Lácteos"> <span>Dairy</span></label><label class="check"><input type="checkbox" data-allergy value="Frutos secos"> <span>Tree nuts</span></label><label class="check"><input type="checkbox" data-allergy value="Mariscos"> <span>Shellfish</span></label></div>
           <div class="field"><label for="pg-pedido--fn-other-funnel">Other allergies</label><input class="input" id="pg-pedido--fn-other-funnel" data-info="allergy_other" placeholder="Separate with commas: soy, egg, sesame"></div>
           <div class="field"><label for="pg-pedido--fn-dis-funnel">Block 2 · Ingredients I don't like</label><input class="input" id="pg-pedido--fn-dis-funnel" data-info="dislikes" placeholder="E.g. tomato"></div>
+          <label class="check fn-contract"><input type="checkbox" data-fn-contract> <span>I accept the Kulinaria MX subscription contract and terms of service. <a href="#/pg/ayuda" target="_blank" rel="noopener" class="text-link">Read contract</a></span></label>
           <p class="alert alert--ok" data-fn-remembered hidden role="status"></p>
         </fieldset>
 
@@ -13987,6 +14079,7 @@ Digital payment, no cash</li></ul>
         </dl>
         <ul class="funnel__list" data-fn-s-list></ul>
         <p class="text-muted" data-fn-s-empty>You haven't chosen any meals yet.</p>
+        <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Plan total</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
@@ -13999,7 +14092,7 @@ Digital payment, no cash</li></ul>
         <button class="btn btn--gold" type="button" data-fn-next disabled>Continue</button>
         <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirm and continue</a>
       </div>
-      <p class="funnel__login text-muted">Already have an account? <a href="#/login">Sign in</a></p>
+      <p class="funnel__login text-muted">Already have an account? <a href="#/login?return_url=%2Fpages%2Fpedido">Sign in</a></p>
     </div>
    </div>
   </div>
@@ -14126,8 +14219,7 @@ Digital payment, no cash</li></ul>
 
 
 </div><div id="carrito--shopify-section-main" class="shopify-section"><section class="section" >
-  <div class="container"><form action="/cart" method="post" class="cart" data-cart-form>
-        <div><div class="cart-line">
+  <div class="container"><form action="/cart" method="post" class="cart" data-cart-form><div><div class="cart-line">
               <a href="#/p/plan-semanal-exclusivo"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-containers.webp" alt="Exclusivo weekly plan" loading="lazy"></a>
               <div>
                 <h3 style="margin:0 0 4px"><a href="#/p/plan-semanal-exclusivo">Exclusivo weekly plan</a></h3><p class="text-muted" style="margin:0">4 weeks</p><p class="cart-line__plan" style="margin:0">4-week block (prepaid, weekly delivery)</p><p class="cart-line__prop text-muted" style="margin:2px 0 0;font-size:.9rem"><strong>Dishes:</strong> 2× Bowl de res magra y quinoa | 3× Salmón gourmet en costra de almendras</p><p class="cart-line__prop text-muted" style="margin:2px 0 0;font-size:.9rem"><strong>Meals per week:</strong> 5</p><p class="cart-line__prop text-muted" style="margin:2px 0 0;font-size:.9rem"><strong>Tier:</strong> Exclusivo</p><p class="cart-line__prop text-muted" style="margin:2px 0 0;font-size:.9rem"><strong>Length:</strong> 4 weeks</p><a class="btn btn--ghost" style="padding-left:0" href="#/carrito">Remove</a>
@@ -14926,7 +15018,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
 
   var STR = {
     es: { title: 'Panel de administración', demo: 'Datos de demostración. Conecta el Google Sheet (docs/admin.md) para ver los pedidos reales.', tabs: ['Resumen', 'Lista de compras', 'Recetas', 'Pedidos'],
-      orders: 'Pedidos del mes', blocks: 'Bloques de 4 semanas', trials: 'Semanas de prueba (sueltas)', clients: 'Clientes nuevos', sales: 'Ventas', avg: 'Ticket promedio', plates: 'Platillos a cocinar', top: 'Platillos más pedidos', mix: 'Bloque vs. suelto',
+      orders: 'Pedidos del mes', blocks: 'Planes de 4 semanas', trials: 'Planes de 1 semana', clients: 'Clientes nuevos', sales: 'Ventas', avg: 'Ticket promedio', plates: 'Platillos a cocinar', top: 'Platillos más pedidos', mix: 'Bloque vs. suelto',
       perWeek: 'Pedidos por semana', week: 'Semana', month: 'Mes', buffer: 'Colchón de compra (%)', copy: 'Copiar lista', csv: 'Descargar CSV', print: 'Imprimir', copied: 'Lista copiada',
       forWhat: 'Para', dishesWord: 'platillos', activeOrders: 'pedidos activos', missing: 'Sin receta (no entran en la lista):', ingredient: 'Ingrediente', qty: 'Comprar', none: 'No hay pedidos activos en este periodo.',
       history: 'Historial por semana', hWeek: 'Semana', hOrders: 'Pedidos activos', hPlates: 'Platillos', hNew: 'Bloques nuevos', activeNow: 'Bloques activos ahora', calc: 'Cálculo', withWaste: 'con merma', recipesNote: 'Cantidades por porción. Son estimaciones de arranque: el chef las ajusta en la hoja "Recetas" del Google Sheet.', per: 'por porción', waste: 'merma',
@@ -15587,24 +15679,55 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   function initFunnel() {
     $$('[data-funnel]').forEach(function (holder) {
       var MEALS = +holder.getAttribute('data-meals') || 5, WEEKS = +holder.getAttribute('data-weeks') || 4;
-      var st = { plan: 'block', tier: 'selecto', cat: 'all', diet: 'all', qty: {}, info: {}, allergies: [], step: 0, remembered: false, renew: true };
+      var st = { plan: 'block', tier: 'selecto', cat: 'all', diet: 'all', qty: {}, days: [], info: {}, allergies: [], step: 0, remembered: false, renew: true };
       try { var saved = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (saved && saved.v === 2) { st = Object.assign(st, saved); st.remembered = !!(saved.info && (saved.info.name || saved.info.email)); } } catch (e) {}
       var T_ = function (k) { return holder.getAttribute('data-t-' + k) || ''; };
       var steps = $$('[data-fn-step]', holder), dots = $$('[data-fn-dot]', holder), bar = $('[data-fn-bar]', holder);
       var next = $('[data-fn-next]', holder), prev = $('[data-fn-prev]', holder), finish = $('[data-fn-finish]', holder), err = $('[data-fn-error]', holder);
       var dishes = $$('[data-fn-dish]', holder), tierBtns = $$('[data-tier-choice]', holder);
+      var TIERS = ['selecto', 'exclusivo', 'signature', 'reserve'], rank = function (t) { var r = TIERS.indexOf(t); return r < 0 ? 0 : r; };
+      var dayNames = (T_('days') || 'Lun,Mar,Mié,Jue,Vie').split(','), daysBox = $('[data-fn-days]', holder);
+      var blankDays = function () { var a = []; for (var j = 0; j < MEALS; j++) a.push(''); return a; };
+      var byPid = function (id) { return dishes.filter(function (d) { return d.getAttribute('data-pid') === id; })[0]; };
+      var upg = function (n) { return +holder.getAttribute('data-upg-' + n) || 70 * n; };
+      var levelOf = function (d) { return d ? Math.max(0, Math.min(3, rank(d.getAttribute('data-tier')) - rank(st.tier))) : 0; };
+      // first visit with an old selection (quantities) -> turn it into day slots
+      if (!Array.isArray(st.days) || st.days.length !== MEALS) { var seq = []; Object.keys(st.qty || {}).forEach(function (k) { for (var j = 0; j < st.qty[k]; j++) seq.push(k); }); st.days = blankDays().map(function (x, j) { return seq[j] || ''; }); }
+      var eligible = function (d) { return !!d && rank(d.getAttribute('data-tier')) >= rank(st.tier) && !d.classList.contains('is-blocked'); };
+      var upgradeExtra = function () { var sum = 0; st.days.forEach(function (p) { var l = levelOf(byPid(p)); if (l) sum += upg(l); }); return sum * (st.plan === 'block' ? WEEKS : 1); };
       var money = function (n) {
         try { return new Intl.NumberFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(n); } catch (e) { return '$' + Math.round(n); }
       };
       var tierEl = function () { return $('[data-tier-choice="' + st.tier + '"]', holder) || tierBtns[0]; };
       var priceOf = function (btn, plan) { return +btn.getAttribute(plan === 'block' ? 'data-block' : 'data-week') || 0; };
-      var count = function () { var n = 0; Object.keys(st.qty).forEach(function (k) { n += st.qty[k]; }); return n; };
+      var count = function () { return st.days.filter(Boolean).length; };
       var persist = function () { try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(Object.assign({ v: 2 }, st))); } catch (e) {} };
       var say = function (msg) { if (!err) return; err.hidden = !msg; err.textContent = msg || ''; };
       var fill = function (tpl, o) { return String(tpl).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; }); };
-      var planTotal = function () { return priceOf(tierEl(), st.plan); };
+      var planTotal = function () { return priceOf(tierEl(), st.plan) + upgradeExtra(); };
+
+      var buildDays = function () {
+        if (!daysBox) return;
+        var key = st.tier + '|' + dishes.length; if (daysBox.getAttribute('data-built') === key) return;
+        daysBox.setAttribute('data-built', key); daysBox.innerHTML = '';
+        var opts = dishes.filter(eligible);
+        for (var i = 0; i < MEALS; i++) {
+          (function (i) {
+            var li = document.createElement('li'), lab = document.createElement('label'), sel = document.createElement('select'), id = 'fn-day-' + i + '-' + Math.random().toString(36).slice(2, 6);
+            sel.className = 'select'; sel.id = id; sel.setAttribute('data-fn-day', i); lab.setAttribute('for', id); lab.textContent = dayNames[i] || ('#' + (i + 1));
+            var o0 = document.createElement('option'); o0.value = ''; o0.textContent = T_('day-empty'); sel.appendChild(o0);
+            opts.forEach(function (d) { var o = document.createElement('option'), l = levelOf(d); o.value = d.getAttribute('data-pid'); o.textContent = d.getAttribute('data-title') + (l ? ' · ' + fill(T_('up-badge'), { p: money(upg(l)) }) : ''); sel.appendChild(o); });
+            sel.addEventListener('change', function () { st.days[i] = sel.value; say(''); persist(); render(); });
+            li.appendChild(lab); li.appendChild(sel); daysBox.appendChild(li);
+          })(i);
+        }
+      };
 
       var render = function () {
+        // dishes of a lower tier or blocked by the profile cannot stay in the plan; slots are the source of truth
+        st.days = st.days.map(function (p) { return p && eligible(byPid(p)) ? p : ''; });
+        st.qty = {}; st.days.forEach(function (p) { if (p) st.qty[p] = (st.qty[p] || 0) + 1; });
+        buildDays(); if (daysBox) $$('select[data-fn-day]', daysBox).forEach(function (sel) { sel.value = st.days[+sel.getAttribute('data-fn-day')] || ''; sel.closest('li').classList.toggle('is-set', !!sel.value); });
         $$('[data-plan-choice]', holder).forEach(function (b) { b.setAttribute('aria-checked', b.getAttribute('data-plan-choice') === st.plan ? 'true' : 'false'); });
         tierBtns.forEach(function (b) {
           b.setAttribute('aria-checked', b === tierEl() ? 'true' : 'false');
@@ -15616,9 +15739,10 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         $$('[data-diet]', holder).forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-diet') === st.diet ? 'true' : 'false'); });
         var n = count(), full = n >= MEALS, shown = 0;
         dishes.forEach(function (d) {
-          var show = d.getAttribute('data-tier') === st.tier && (st.cat === 'all' || d.getAttribute('data-category') === st.cat) && (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1);
+          var show = rank(d.getAttribute('data-tier')) >= rank(st.tier) && (st.cat === 'all' || d.getAttribute('data-category') === st.cat) && (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1);
           d.classList.toggle('is-hidden', !show); if (show) shown++;
           var q = st.qty[d.getAttribute('data-pid')] || 0;
+          var upEl = $('[data-fn-up]', d), lv = levelOf(d); if (upEl) { upEl.hidden = !lv; upEl.textContent = lv ? fill(T_('up-badge'), { p: money(upg(lv)) }) : ''; }
           d.classList.toggle('is-picked', q > 0);
           var ctl = $('[data-fn-qty]', d), out = $('[data-q-out]', d), pick = $('[data-pick]', d), plus = $('[data-q-plus]', d);
           if (ctl) ctl.hidden = q === 0; if (out) out.textContent = q;
@@ -15636,12 +15760,13 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var list = $('[data-fn-s-list]', holder);
         if (list) {
           list.innerHTML = '';
-          dishes.forEach(function (d) {
-            var id = d.getAttribute('data-pid'); if (!st.qty[id]) return;
-            var li = document.createElement('li'); li.innerHTML = '<span></span><b></b>'; li.firstChild.textContent = st.qty[id] + ' × ' + d.getAttribute('data-title'); li.lastChild.textContent = '';
+          st.days.forEach(function (pid, i) {
+            var d = pid && byPid(pid); if (!d) return; var l = levelOf(d);
+            var li = document.createElement('li'); li.innerHTML = '<span></span><b></b>'; li.firstChild.textContent = (dayNames[i] || '') + ' · ' + d.getAttribute('data-title'); li.lastChild.textContent = l ? '+' + money(upg(l)) : '';
             list.appendChild(li);
           });
         }
+        var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : ''; }
         var emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
         var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? fill(T_('meals'), { n: n, t: MEALS }) : '';
         var tot = $('[data-fn-s-total]', holder); if (tot) tot.textContent = money(planTotal());
@@ -15674,7 +15799,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       tierBtns.forEach(function (b) {
         b.addEventListener('click', function () {
           var t = b.getAttribute('data-tier-choice');
-          if (t !== st.tier) { st.tier = t; st.qty = {}; }            // meals of another tier don't carry over
+          if (t !== st.tier) { st.tier = t; if (daysBox) daysBox.removeAttribute('data-built'); }            // render() drops slots that no longer fit the tier
           persist(); render(); setTimeout(function () { go(2); }, REDUCE ? 0 : 280);
         });
       });
@@ -15683,15 +15808,15 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       var renewBox = $('[data-fn-renew-box]', holder); if (renewBox) renewBox.addEventListener('change', function () { st.renew = renewBox.checked; persist(); });
       holder.addEventListener('click', function (e) {
         var d = e.target.closest ? e.target.closest('[data-fn-dish]') : null; if (!d) return;
-        var id = d.getAttribute('data-pid'), cur = st.qty[id] || 0, n = count();
-        if (e.target.closest('[data-pick]')) { if (d.classList.contains('is-blocked')) return; if (n >= MEALS) { say(T_('full')); return; } st.qty[id] = 1; }
-        else if (e.target.closest('[data-q-plus]')) { if (n >= MEALS) { say(T_('full')); return; } st.qty[id] = cur + 1; }
-        else if (e.target.closest('[data-q-minus]')) { if (cur <= 1) delete st.qty[id]; else st.qty[id] = cur - 1; }
-        else return;
+        var id = d.getAttribute('data-pid');
+        var isPick = e.target.closest('[data-pick]'), isPlus = e.target.closest('[data-q-plus]'), isMinus = e.target.closest('[data-q-minus]');
+        if (!isPick && !isPlus && !isMinus) return;
+        if (isMinus) { var at = st.days.lastIndexOf(id); if (at > -1) st.days[at] = ''; }
+        else { if (isPick && d.classList.contains('is-blocked')) return; var free = st.days.indexOf(''); if (free < 0) { say(T_('full')); return; } st.days[free] = id; }
         say(''); persist(); render();
       });
       var reset = $('[data-fn-reset]', holder);
-      if (reset) reset.addEventListener('click', function () { st.qty = {}; st.cat = 'all'; st.diet = 'all'; st.tier = 'selecto'; st.plan = 'block'; st.step = 0; persist(); render(); });
+      if (reset) reset.addEventListener('click', function () { st.qty = {}; st.days = blankDays(); if (daysBox) daysBox.removeAttribute('data-built'); st.cat = 'all'; st.diet = 'all'; st.tier = 'selecto'; st.plan = 'block'; st.step = 0; persist(); render(); });
 
       // details
       var fields = $$('[data-info]', holder), checks = $$('[data-allergy]', holder), ref = $('[data-fn-ref]', holder);
@@ -15713,7 +15838,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var q = (location.search + '&' + (location.hash.split('?')[1] || '')).match(/[?&]dish=([\w-]+)/);
         if (q) {
           var pre = dishes.filter(function (d) { return d.getAttribute('data-handle') === q[1]; })[0];
-          if (pre) { st.tier = pre.getAttribute('data-tier'); st.qty = {}; st.qty[pre.getAttribute('data-pid')] = 1; st.step = 1; persist(); }
+          if (pre) { st.tier = pre.getAttribute('data-tier'); st.days = blankDays(); st.days[0] = pre.getAttribute('data-pid'); if (daysBox) daysBox.removeAttribute('data-built'); st.step = 1; persist(); }
         }
       } catch (e) {}
 
@@ -15723,6 +15848,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var i = st.info || {}, tb = tierEl();
         if (!i.name || !i.email || !i.phone) { say(T_('need-info')); return; }
         if (count() !== MEALS) { say(T_('need-meals')); go(2); return; }
+        var cbox = $('[data-fn-contract]', holder); if (cbox && !cbox.checked) { say(T_('need-contract')); return; }
         var p = loadProfile();
         var other = (i.allergy_other || '').split(',').map(function (v) { return v.trim(); }).filter(Boolean);
         p.allergies = Array.from(new Set((st.allergies || []).concat(other)));
@@ -15730,19 +15856,30 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         p.diets = st.diet === 'all' ? [] : [st.diet];
         try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch (x) {}
         var list = dishes.filter(function (d) { return st.qty[d.getAttribute('data-pid')]; }).map(function (d) { return st.qty[d.getAttribute('data-pid')] + '× ' + d.getAttribute('data-title'); }).join(' | ');
+        var cl = function (k) { return (i[k] || '').trim(); };
         var attrs = {
-          nombre: i.name, correo: i.email, telefono: i.phone, direccion: [i.street, i.cluster, i.zip].filter(Boolean).join(', '),
+          nombre: i.name, correo: i.email, telefono: i.phone, direccion: [i.street, i.cluster, i.zip].filter(Boolean).join(', '), calle: cl('street'), cluster: cl('cluster'), cp: cl('zip'), contrato_aceptado: 'sí',
+          dias: st.days.map(function (p, k) { var d = byPid(p); return (dayNames[k] || k + 1) + ': ' + (d ? d.getAttribute('data-title') : ''); }).join(' | '),
           alergias: p.allergies.join(', '), no_me_gustan: p.dislikes.join(', '), dietas: p.diets.join(', '), plan: st.plan, nivel: st.tier,
           codigo_referencia: (ref && ref.value) || '', pedido_embudo: list
         };
         if (ref && ref.value) { try { localStorage.setItem('kulinaria_ref', ref.value); } catch (x) {} }
-        var props = {}; props[T_('prop-dishes')] = list; props[T_('prop-meals')] = String(MEALS); props[T_('prop-tier')] = tb.getAttribute('data-name'); props[T_('prop-length')] = st.plan === 'block' ? T_('length-block') : T_('length-week');
+        var props = {}; props[T_('prop-meals')] = String(MEALS); props[T_('prop-tier')] = tb.getAttribute('data-name'); props[T_('prop-length')] = st.plan === 'block' ? T_('length-block') : T_('length-week');
+        st.days.forEach(function (p, k) { var dd = byPid(p); if (dd) props[dayNames[k] || String(k + 1)] = dd.getAttribute('data-title'); });
+        props['_platillos'] = list;
         var line = { id: parseInt(tb.getAttribute(st.plan === 'block' ? 'data-variant-block' : 'data-variant-week'), 10), quantity: 1, properties: props };
         var sp = tb.getAttribute('data-selling-plan'); if (st.plan === 'block' && st.renew && sp) line.selling_plan = parseInt(sp, 10);
+        var lines = [line];
+        for (var lvl = 1; lvl <= 3; lvl++) {
+          var names = []; st.days.forEach(function (p) { var dd = byPid(p); if (dd && levelOf(dd) === lvl) names.push(dd.getAttribute('data-title')); });
+          var vid = parseInt(holder.getAttribute('data-upv-' + lvl), 10);
+          if (names.length && vid) { var up = {}; up[T_('prop-upgrade')] = names.join(', '); lines.push({ id: vid, quantity: names.length * (st.plan === 'block' ? WEEKS : 1), properties: up }); }
+        }
         st.remembered = true; persist();
         var go2 = function () { window.location.href = finish.getAttribute('href'); };
-        fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ attributes: attrs }) })
-          .then(function () { return fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: [line] }) }); })
+        fetch('/cart/clear.js', { method: 'POST' })
+          .then(function () { return fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ attributes: attrs }) }); })
+          .then(function () { return fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: lines }) }); })
           .then(go2, go2);
       });
 

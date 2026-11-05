@@ -3,6 +3,7 @@
   assign meals_per_week = 5
   assign plan_coll = collections['planes-semanales']
 -%}
+{%- assign upg = all_products['mejora-de-platillo'] -%}
 <section class="section funnel{% if section.settings.phone_teaser %} funnel--teaser{% endif %}" id="pedido-{{ section.id }}" data-funnel data-cart-url="{{ routes.cart_url }}" data-meals="{{ meals_per_week }}" data-weeks="4"
   {%- if customer %} data-customer-name="{{ customer.name | escape }}" data-customer-email="{{ customer.email | escape }}"{% endif %}
   data-t-meals="{{ 'funnel.meals_of' | t }}" data-t-meal-one="{{ 'funnel.meal_one' | t }}" data-t-empty="{{ 'funnel.summary_empty' | t }}"
@@ -12,7 +13,10 @@
   data-t-per-week="{{ 'funnel.per_week_each' | t }}" data-t-weeks-x="{{ 'funnel.weeks_x' | t }}" data-t-per-meal="{{ 'funnel.per_meal' | t }}"
   data-t-all-lines="{{ 'funnel.all_categories' | t }}" data-t-prop-dishes="{{ 'funnel.prop_dishes' | t }}" data-t-prop-meals="{{ 'funnel.prop_meals' | t }}"
   data-t-prop-tier="{{ 'funnel.prop_tier' | t }}" data-t-prop-length="{{ 'funnel.prop_length' | t }}" data-t-length-block="{{ 'funnel.length_block' | t }}" data-t-length-week="{{ 'funnel.length_week' | t }}"
-  data-t-renew="{{ 'funnel.renew' | t }}" {{ section.shopify_attributes }}>
+  data-t-renew="{{ 'funnel.renew' | t }}" data-t-days="{{ 'funnel.days' | t }}" data-t-day-empty="{{ 'funnel.day_empty' | t }}" data-t-up-badge="{{ 'funnel.up_badge' | t }}" data-t-up-total="{{ 'funnel.up_total' | t }}"
+  data-t-prop-upgrade="{{ 'funnel.prop_upgrade' | t }}" data-t-need-contract="{{ 'funnel.need_contract' | t }}" data-t-days-missing="{{ 'funnel.days_missing' | t }}"
+  data-upg-1="{{ upg.variants[0].price | divided_by: 100 | default: 70 }}" data-upg-2="{{ upg.variants[1].price | divided_by: 100 | default: 140 }}" data-upg-3="{{ upg.variants[2].price | divided_by: 100 | default: 210 }}"
+  data-upv-1="{{ upg.variants[0].id }}" data-upv-2="{{ upg.variants[1].id }}" data-upv-3="{{ upg.variants[2].id }}" {{ section.shopify_attributes }}>
   <div class="funnel__teaser container">
     <div class="funnel__teaser-bg" aria-hidden="true">{% render 'photo', art: 'containers', alt: '' %}</div>
     <p class="funnel__teaser-kicker">{{ 'funnel.eyebrow' | t }}</p>
@@ -131,6 +135,12 @@
           <legend>{{ 'funnel.s3_title' | t }}</legend>
           <p class="text-muted">{{ 'funnel.s3_text' | t }}</p>
           <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / {{ meals_per_week }} <span>{{ 'funnel.meals_word' | t }}</span><i data-fn-meter-bar></i></p>
+          <div class="fn-daysbox">
+            <p class="label">{{ 'funnel.days_title' | t }}</p>
+            <p class="text-muted" style="margin:0 0 var(--space-sm)">{{ 'funnel.days_text' | t }}</p>
+            <ol class="fn-days" data-fn-days></ol>
+            <p class="fn-upnote">{{ 'funnel.up_note' | t }}</p>
+          </div>
           <div class="chips fn-cats" role="group" aria-label="{{ 'collection.category' | t }}">
             <button class="chip" type="button" data-cat="all" aria-pressed="true">{{ 'funnel.all_categories' | t }}</button>
             {%- assign cats = 'desayunos-premium,al-fuego-y-mar,bowls-de-la-semana,diario-premium,kulinaria-junior,sopas-y-entradas,postres-y-snacks,batidos-y-bebidas' | split: ',' -%}
@@ -158,7 +168,7 @@
               <p><strong>{{ 'funnel.logged_as' | t }} {{ customer.email }}</strong> · <a class="text-link" href="{{ routes.account_url }}">{{ 'general.account' | t }}</a></p>
             {%- else -%}
               <p><strong>{{ 'funnel.account_title' | t }}</strong> {{ 'funnel.account_text' | t }}</p>
-              <p class="fn-account__links"><a class="btn btn--outline btn--sm" href="{{ routes.account_login_url }}">{{ 'login.title' | t }}</a> <a class="text-link" href="{{ routes.account_register_url | default: routes.account_login_url }}">{{ 'funnel.create_account' | t }}</a></p>
+              <p class="fn-account__links"><a class="btn btn--outline btn--sm" href="{{ routes.account_login_url }}?return_url={{ request.path | default: '/pages/pedido' | url_encode }}">{{ 'login.title' | t }}</a> <a class="text-link" href="{{ routes.account_register_url | default: routes.account_login_url }}?return_url={{ request.path | default: '/pages/pedido' | url_encode }}">{{ 'funnel.create_account' | t }}</a></p>
             {%- endif -%}
           </div>
           <div class="form-grid">
@@ -179,6 +189,7 @@
           </div>
           <div class="field"><label for="fn-other-{{ section.id }}">{{ 'profile.other_allergies' | t }}</label><input class="input" id="fn-other-{{ section.id }}" data-info="allergy_other" placeholder="{{ 'profile.other_placeholder' | t }}"></div>
           <div class="field"><label for="fn-dis-{{ section.id }}">{{ 'profile.block2' | t }}</label><input class="input" id="fn-dis-{{ section.id }}" data-info="dislikes" placeholder="{{ 'profile.tag_placeholder' | t }}"></div>
+          <label class="check fn-contract"><input type="checkbox" data-fn-contract> <span>{{ 'funnel.contract' | t }}{% if settings.contract_page != blank %} <a href="{{ settings.contract_page.url }}" target="_blank" rel="noopener" class="text-link">{{ 'cart.read_contract' | t }}</a>{% endif %}</span></label>
           <p class="alert alert--ok" data-fn-remembered hidden role="status"></p>
         </fieldset>
 
@@ -194,6 +205,7 @@
         </dl>
         <ul class="funnel__list" data-fn-s-list></ul>
         <p class="text-muted" data-fn-s-empty>{{ 'funnel.summary_empty' | t }}</p>
+        <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>{{ 'funnel.summary_total' | t }}</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
@@ -206,7 +218,7 @@
         <button class="btn btn--gold" type="button" data-fn-next disabled>{{ 'funnel.next' | t }}</button>
         <a class="btn btn--gold" data-fn-finish href="{{ routes.cart_url }}" hidden>{{ 'funnel.finish' | t }}</a>
       </div>
-      <p class="funnel__login text-muted">{{ 'reg.have_account' | t }} <a href="{{ routes.account_login_url }}">{{ 'login.title' | t }}</a></p>
+      <p class="funnel__login text-muted">{{ 'reg.have_account' | t }} <a href="{{ routes.account_login_url }}?return_url={{ request.path | default: '/pages/pedido' | url_encode }}">{{ 'login.title' | t }}</a></p>
     </div>
    </div>
   </div>

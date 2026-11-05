@@ -178,7 +178,7 @@ function handleOrder_(o) {
 function dishRowsOf_(line) {
   var props = line.properties || [], out = [];
   props.forEach(function (p) {
-    if (!/^(platillos|dishes)$/i.test(String(p.name || ''))) return;
+    if (!/^_?(platillos|dishes)$/i.test(String(p.name || ''))) return;
     String(p.value || '').split('|').forEach(function (part) {
       var m = part.trim().match(/^(\d+)\s*[×x]\s*(.+)$/);
       if (m) out.push({ title: m[2].trim(), qty: Number(m[1]) });
@@ -211,7 +211,7 @@ function alertNewOrder_(o, name, email, addr, a, summary) {
     if (!to) return;
     var plan = (a.plan === 'block' || /4 semanas/.test(summary)) ? 'Plan de 4 semanas (20 comidas)' : 'Plan de 1 semana (5 comidas)';
     var body = ['Nuevo pedido ' + o.name, '', 'Cliente: ' + name, 'Correo: ' + email, 'Teléfono: ' + ((o.customer && o.customer.phone) || a.telefono || ''), 'Dirección: ' + addr, '',
-      'Plan: ' + plan, 'Total: $' + o.total_price + ' ' + o.currency, 'Platillos: ' + summary, '',
+      'Plan: ' + plan, 'Total: $' + o.total_price + ' ' + o.currency, 'Platillos: ' + summary, 'Días: ' + (a.dias || '-'), '',
       'ALERGIAS: ' + (a.alergias || 'ninguna declarada'), 'No le gustan: ' + (a.no_me_gustan || '-'), 'Dietas: ' + (a.dietas || '-'), '', 'Panel: abre /pages/admin en tu sitio.'].join('\n');
     MailApp.sendEmail(to, 'Nuevo pedido ' + o.name + ' · ' + name, body);
   } catch (err) { /* never block the order */ }

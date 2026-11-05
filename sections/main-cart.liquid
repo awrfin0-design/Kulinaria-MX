@@ -10,6 +10,16 @@
       </div>
     {%- else -%}
       <form action="{{ routes.cart_url }}" method="post" class="cart" data-cart-form>
+        {%- comment -%} The details were captured once (order builder); pre-fill Shopify's checkout so nobody types them again. {%- endcomment -%}
+        {%- assign a = cart.attributes -%}
+        {%- if a.correo != blank and customer == nil -%}<input type="hidden" name="checkout[email]" value="{{ a.correo | escape }}">{%- endif -%}
+        {%- if a.nombre != blank -%}{%- assign nm_first = a.nombre | split: ' ' | first -%}
+          <input type="hidden" name="checkout[shipping_address][first_name]" value="{{ nm_first | escape }}">
+          <input type="hidden" name="checkout[shipping_address][last_name]" value="{{ a.nombre | remove_first: nm_first | strip | escape }}">{%- endif -%}
+        {%- if a.calle != blank -%}<input type="hidden" name="checkout[shipping_address][address1]" value="{{ a.calle | escape }}">{%- endif -%}
+        {%- if a.cluster != blank -%}<input type="hidden" name="checkout[shipping_address][address2]" value="{{ a.cluster | escape }}">{%- endif -%}
+        {%- if a.cp != blank -%}<input type="hidden" name="checkout[shipping_address][zip]" value="{{ a.cp | escape }}">{%- endif -%}
+        {%- if a.telefono != blank -%}<input type="hidden" name="checkout[shipping_address][phone]" value="{{ a.telefono | escape }}">{%- endif -%}
         <div>
           {%- for item in cart.items -%}
             <div class="cart-line">
@@ -27,7 +37,7 @@
                 <a class="btn btn--ghost" style="padding-left:0" href="{{ item.url_to_remove }}">{{ 'cart.remove' | t }}</a>
               </div>
               <div style="text-align:right">
-                <input class="input qty" type="number" name="updates[]" value="{{ item.quantity }}" min="0" max="{% if item.product.type == 'plan' %}1{% else %}99{% endif %}" aria-label="{{ 'cart.quantity_of' | t }} {{ item.product.title | escape }}">
+                <input class="input qty" type="number" name="updates[]" value="{{ item.quantity }}" min="0" max="{% if item.product.type == 'plan' %}1{% else %}99{% endif %}"{% if item.product.type == 'mejora' %} readonly tabindex="-1"{% endif %} aria-label="{{ 'cart.quantity_of' | t }} {{ item.product.title | escape }}">
                 <p class="dish__price" style="margin:8px 0 0">
                   {%- if item.original_line_price != item.final_line_price -%}<s class="text-muted" style="font-size:.9rem">{{ item.original_line_price | money }}</s> {%- endif -%}
                   {{ item.final_line_price | money }}

@@ -38,6 +38,7 @@
       <p class="dish__facts">{%- if mf.calories.value %}{{ mf.calories.value }} kcal{% endif -%}{%- if mf.calories.value and mf.carbs.value %} · {% endif -%}{%- if mf.carbs.value %}{{ mf.carbs.value }} {{ 'dish.carbs_g' | t }}{% endif -%}</p>
     {%- endif -%}
     <span class="compat" data-compat></span>
+    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">{% render 'plan-price', tier: tier, kind: 'meal', money: true %}<small> {{ 'funnel.per_meal' | t }}</small></span>
       <div class="fn-qty" data-fn-qty hidden>

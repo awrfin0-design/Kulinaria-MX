@@ -527,7 +527,19 @@
     "prop_length": "Length",
     "length_block": "4 weeks",
     "length_week": "1 week",
-    "renew": "Renew automatically every 4 weeks"
+    "renew": "Renew automatically every 4 weeks",
+    "days_title": "Assign each meal to a day",
+    "days_text": "Choose which dish you'll eat each business day. It repeats the same way every week of your plan.",
+    "days": "Monday,Tuesday,Wednesday,Thursday,Friday",
+    "day_empty": "Choose a dish",
+    "up_badge": "+{p} per meal",
+    "up_total": "Includes dish upgrades: +{p}",
+    "up_note": "Want a higher-tier dish? Go ahead: you only pay the per-meal difference (every week of your plan).",
+    "prop_upgrade": "Upgrade",
+    "up_line": "Dish upgrade",
+    "need_contract": "Accept the contract to continue.",
+    "contract": "I accept the Kulinaria MX subscription contract and terms of service.",
+    "days_missing": "Assign a dish to every day."
   },
   "sitemap": {
     "pedido": "Build my order",

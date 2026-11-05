@@ -518,24 +518,55 @@
   function initFunnel() {
     $$('[data-funnel]').forEach(function (holder) {
       var MEALS = +holder.getAttribute('data-meals') || 5, WEEKS = +holder.getAttribute('data-weeks') || 4;
-      var st = { plan: 'block', tier: 'selecto', cat: 'all', diet: 'all', qty: {}, info: {}, allergies: [], step: 0, remembered: false, renew: true };
+      var st = { plan: 'block', tier: 'selecto', cat: 'all', diet: 'all', qty: {}, days: [], info: {}, allergies: [], step: 0, remembered: false, renew: true };
       try { var saved = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (saved && saved.v === 2) { st = Object.assign(st, saved); st.remembered = !!(saved.info && (saved.info.name || saved.info.email)); } } catch (e) {}
       var T_ = function (k) { return holder.getAttribute('data-t-' + k) || ''; };
       var steps = $$('[data-fn-step]', holder), dots = $$('[data-fn-dot]', holder), bar = $('[data-fn-bar]', holder);
       var next = $('[data-fn-next]', holder), prev = $('[data-fn-prev]', holder), finish = $('[data-fn-finish]', holder), err = $('[data-fn-error]', holder);
       var dishes = $$('[data-fn-dish]', holder), tierBtns = $$('[data-tier-choice]', holder);
+      var TIERS = ['selecto', 'exclusivo', 'signature', 'reserve'], rank = function (t) { var r = TIERS.indexOf(t); return r < 0 ? 0 : r; };
+      var dayNames = (T_('days') || 'Lun,Mar,Mié,Jue,Vie').split(','), daysBox = $('[data-fn-days]', holder);
+      var blankDays = function () { var a = []; for (var j = 0; j < MEALS; j++) a.push(''); return a; };
+      var byPid = function (id) { return dishes.filter(function (d) { return d.getAttribute('data-pid') === id; })[0]; };
+      var upg = function (n) { return +holder.getAttribute('data-upg-' + n) || 70 * n; };
+      var levelOf = function (d) { return d ? Math.max(0, Math.min(3, rank(d.getAttribute('data-tier')) - rank(st.tier))) : 0; };
+      // first visit with an old selection (quantities) -> turn it into day slots
+      if (!Array.isArray(st.days) || st.days.length !== MEALS) { var seq = []; Object.keys(st.qty || {}).forEach(function (k) { for (var j = 0; j < st.qty[k]; j++) seq.push(k); }); st.days = blankDays().map(function (x, j) { return seq[j] || ''; }); }
+      var eligible = function (d) { return !!d && rank(d.getAttribute('data-tier')) >= rank(st.tier) && !d.classList.contains('is-blocked'); };
+      var upgradeExtra = function () { var sum = 0; st.days.forEach(function (p) { var l = levelOf(byPid(p)); if (l) sum += upg(l); }); return sum * (st.plan === 'block' ? WEEKS : 1); };
       var money = function (n) {
         try { return new Intl.NumberFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(n); } catch (e) { return '$' + Math.round(n); }
       };
       var tierEl = function () { return $('[data-tier-choice="' + st.tier + '"]', holder) || tierBtns[0]; };
       var priceOf = function (btn, plan) { return +btn.getAttribute(plan === 'block' ? 'data-block' : 'data-week') || 0; };
-      var count = function () { var n = 0; Object.keys(st.qty).forEach(function (k) { n += st.qty[k]; }); return n; };
+      var count = function () { return st.days.filter(Boolean).length; };
       var persist = function () { try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(Object.assign({ v: 2 }, st))); } catch (e) {} };
       var say = function (msg) { if (!err) return; err.hidden = !msg; err.textContent = msg || ''; };
       var fill = function (tpl, o) { return String(tpl).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; }); };
-      var planTotal = function () { return priceOf(tierEl(), st.plan); };
+      var planTotal = function () { return priceOf(tierEl(), st.plan) + upgradeExtra(); };
+
+      var buildDays = function () {
+        if (!daysBox) return;
+        var key = st.tier + '|' + dishes.length; if (daysBox.getAttribute('data-built') === key) return;
+        daysBox.setAttribute('data-built', key); daysBox.innerHTML = '';
+        var opts = dishes.filter(eligible);
+        for (var i = 0; i < MEALS; i++) {
+          (function (i) {
+            var li = document.createElement('li'), lab = document.createElement('label'), sel = document.createElement('select'), id = 'fn-day-' + i + '-' + Math.random().toString(36).slice(2, 6);
+            sel.className = 'select'; sel.id = id; sel.setAttribute('data-fn-day', i); lab.setAttribute('for', id); lab.textContent = dayNames[i] || ('#' + (i + 1));
+            var o0 = document.createElement('option'); o0.value = ''; o0.textContent = T_('day-empty'); sel.appendChild(o0);
+            opts.forEach(function (d) { var o = document.createElement('option'), l = levelOf(d); o.value = d.getAttribute('data-pid'); o.textContent = d.getAttribute('data-title') + (l ? ' · ' + fill(T_('up-badge'), { p: money(upg(l)) }) : ''); sel.appendChild(o); });
+            sel.addEventListener('change', function () { st.days[i] = sel.value; say(''); persist(); render(); });
+            li.appendChild(lab); li.appendChild(sel); daysBox.appendChild(li);
+          })(i);
+        }
+      };
 
       var render = function () {
+        // dishes of a lower tier or blocked by the profile cannot stay in the plan; slots are the source of truth
+        st.days = st.days.map(function (p) { return p && eligible(byPid(p)) ? p : ''; });
+        st.qty = {}; st.days.forEach(function (p) { if (p) st.qty[p] = (st.qty[p] || 0) + 1; });
+        buildDays(); if (daysBox) $$('select[data-fn-day]', daysBox).forEach(function (sel) { sel.value = st.days[+sel.getAttribute('data-fn-day')] || ''; sel.closest('li').classList.toggle('is-set', !!sel.value); });
         $$('[data-plan-choice]', holder).forEach(function (b) { b.setAttribute('aria-checked', b.getAttribute('data-plan-choice') === st.plan ? 'true' : 'false'); });
         tierBtns.forEach(function (b) {
           b.setAttribute('aria-checked', b === tierEl() ? 'true' : 'false');
@@ -547,9 +578,10 @@
         $$('[data-diet]', holder).forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-diet') === st.diet ? 'true' : 'false'); });
         var n = count(), full = n >= MEALS, shown = 0;
         dishes.forEach(function (d) {
-          var show = d.getAttribute('data-tier') === st.tier && (st.cat === 'all' || d.getAttribute('data-category') === st.cat) && (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1);
+          var show = rank(d.getAttribute('data-tier')) >= rank(st.tier) && (st.cat === 'all' || d.getAttribute('data-category') === st.cat) && (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1);
           d.classList.toggle('is-hidden', !show); if (show) shown++;
           var q = st.qty[d.getAttribute('data-pid')] || 0;
+          var upEl = $('[data-fn-up]', d), lv = levelOf(d); if (upEl) { upEl.hidden = !lv; upEl.textContent = lv ? fill(T_('up-badge'), { p: money(upg(lv)) }) : ''; }
           d.classList.toggle('is-picked', q > 0);
           var ctl = $('[data-fn-qty]', d), out = $('[data-q-out]', d), pick = $('[data-pick]', d), plus = $('[data-q-plus]', d);
           if (ctl) ctl.hidden = q === 0; if (out) out.textContent = q;
@@ -567,12 +599,13 @@
         var list = $('[data-fn-s-list]', holder);
         if (list) {
           list.innerHTML = '';
-          dishes.forEach(function (d) {
-            var id = d.getAttribute('data-pid'); if (!st.qty[id]) return;
-            var li = document.createElement('li'); li.innerHTML = '<span></span><b></b>'; li.firstChild.textContent = st.qty[id] + ' × ' + d.getAttribute('data-title'); li.lastChild.textContent = '';
+          st.days.forEach(function (pid, i) {
+            var d = pid && byPid(pid); if (!d) return; var l = levelOf(d);
+            var li = document.createElement('li'); li.innerHTML = '<span></span><b></b>'; li.firstChild.textContent = (dayNames[i] || '') + ' · ' + d.getAttribute('data-title'); li.lastChild.textContent = l ? '+' + money(upg(l)) : '';
             list.appendChild(li);
           });
         }
+        var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : ''; }
         var emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
         var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? fill(T_('meals'), { n: n, t: MEALS }) : '';
         var tot = $('[data-fn-s-total]', holder); if (tot) tot.textContent = money(planTotal());
@@ -605,7 +638,7 @@
       tierBtns.forEach(function (b) {
         b.addEventListener('click', function () {
           var t = b.getAttribute('data-tier-choice');
-          if (t !== st.tier) { st.tier = t; st.qty = {}; }            // meals of another tier don't carry over
+          if (t !== st.tier) { st.tier = t; if (daysBox) daysBox.removeAttribute('data-built'); }            // render() drops slots that no longer fit the tier
           persist(); render(); setTimeout(function () { go(2); }, REDUCE ? 0 : 280);
         });
       });
@@ -614,15 +647,15 @@
       var renewBox = $('[data-fn-renew-box]', holder); if (renewBox) renewBox.addEventListener('change', function () { st.renew = renewBox.checked; persist(); });
       holder.addEventListener('click', function (e) {
         var d = e.target.closest ? e.target.closest('[data-fn-dish]') : null; if (!d) return;
-        var id = d.getAttribute('data-pid'), cur = st.qty[id] || 0, n = count();
-        if (e.target.closest('[data-pick]')) { if (d.classList.contains('is-blocked')) return; if (n >= MEALS) { say(T_('full')); return; } st.qty[id] = 1; }
-        else if (e.target.closest('[data-q-plus]')) { if (n >= MEALS) { say(T_('full')); return; } st.qty[id] = cur + 1; }
-        else if (e.target.closest('[data-q-minus]')) { if (cur <= 1) delete st.qty[id]; else st.qty[id] = cur - 1; }
-        else return;
+        var id = d.getAttribute('data-pid');
+        var isPick = e.target.closest('[data-pick]'), isPlus = e.target.closest('[data-q-plus]'), isMinus = e.target.closest('[data-q-minus]');
+        if (!isPick && !isPlus && !isMinus) return;
+        if (isMinus) { var at = st.days.lastIndexOf(id); if (at > -1) st.days[at] = ''; }
+        else { if (isPick && d.classList.contains('is-blocked')) return; var free = st.days.indexOf(''); if (free < 0) { say(T_('full')); return; } st.days[free] = id; }
         say(''); persist(); render();
       });
       var reset = $('[data-fn-reset]', holder);
-      if (reset) reset.addEventListener('click', function () { st.qty = {}; st.cat = 'all'; st.diet = 'all'; st.tier = 'selecto'; st.plan = 'block'; st.step = 0; persist(); render(); });
+      if (reset) reset.addEventListener('click', function () { st.qty = {}; st.days = blankDays(); if (daysBox) daysBox.removeAttribute('data-built'); st.cat = 'all'; st.diet = 'all'; st.tier = 'selecto'; st.plan = 'block'; st.step = 0; persist(); render(); });
 
       // details
       var fields = $$('[data-info]', holder), checks = $$('[data-allergy]', holder), ref = $('[data-fn-ref]', holder);
@@ -644,7 +677,7 @@
         var q = (location.search + '&' + (location.hash.split('?')[1] || '')).match(/[?&]dish=([\w-]+)/);
         if (q) {
           var pre = dishes.filter(function (d) { return d.getAttribute('data-handle') === q[1]; })[0];
-          if (pre) { st.tier = pre.getAttribute('data-tier'); st.qty = {}; st.qty[pre.getAttribute('data-pid')] = 1; st.step = 1; persist(); }
+          if (pre) { st.tier = pre.getAttribute('data-tier'); st.days = blankDays(); st.days[0] = pre.getAttribute('data-pid'); if (daysBox) daysBox.removeAttribute('data-built'); st.step = 1; persist(); }
         }
       } catch (e) {}
 
@@ -654,6 +687,7 @@
         var i = st.info || {}, tb = tierEl();
         if (!i.name || !i.email || !i.phone) { say(T_('need-info')); return; }
         if (count() !== MEALS) { say(T_('need-meals')); go(2); return; }
+        var cbox = $('[data-fn-contract]', holder); if (cbox && !cbox.checked) { say(T_('need-contract')); return; }
         var p = loadProfile();
         var other = (i.allergy_other || '').split(',').map(function (v) { return v.trim(); }).filter(Boolean);
         p.allergies = Array.from(new Set((st.allergies || []).concat(other)));
@@ -661,19 +695,30 @@
         p.diets = st.diet === 'all' ? [] : [st.diet];
         try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch (x) {}
         var list = dishes.filter(function (d) { return st.qty[d.getAttribute('data-pid')]; }).map(function (d) { return st.qty[d.getAttribute('data-pid')] + '× ' + d.getAttribute('data-title'); }).join(' | ');
+        var cl = function (k) { return (i[k] || '').trim(); };
         var attrs = {
-          nombre: i.name, correo: i.email, telefono: i.phone, direccion: [i.street, i.cluster, i.zip].filter(Boolean).join(', '),
+          nombre: i.name, correo: i.email, telefono: i.phone, direccion: [i.street, i.cluster, i.zip].filter(Boolean).join(', '), calle: cl('street'), cluster: cl('cluster'), cp: cl('zip'), contrato_aceptado: 'sí',
+          dias: st.days.map(function (p, k) { var d = byPid(p); return (dayNames[k] || k + 1) + ': ' + (d ? d.getAttribute('data-title') : ''); }).join(' | '),
           alergias: p.allergies.join(', '), no_me_gustan: p.dislikes.join(', '), dietas: p.diets.join(', '), plan: st.plan, nivel: st.tier,
           codigo_referencia: (ref && ref.value) || '', pedido_embudo: list
         };
         if (ref && ref.value) { try { localStorage.setItem('kulinaria_ref', ref.value); } catch (x) {} }
-        var props = {}; props[T_('prop-dishes')] = list; props[T_('prop-meals')] = String(MEALS); props[T_('prop-tier')] = tb.getAttribute('data-name'); props[T_('prop-length')] = st.plan === 'block' ? T_('length-block') : T_('length-week');
+        var props = {}; props[T_('prop-meals')] = String(MEALS); props[T_('prop-tier')] = tb.getAttribute('data-name'); props[T_('prop-length')] = st.plan === 'block' ? T_('length-block') : T_('length-week');
+        st.days.forEach(function (p, k) { var dd = byPid(p); if (dd) props[dayNames[k] || String(k + 1)] = dd.getAttribute('data-title'); });
+        props['_platillos'] = list;
         var line = { id: parseInt(tb.getAttribute(st.plan === 'block' ? 'data-variant-block' : 'data-variant-week'), 10), quantity: 1, properties: props };
         var sp = tb.getAttribute('data-selling-plan'); if (st.plan === 'block' && st.renew && sp) line.selling_plan = parseInt(sp, 10);
+        var lines = [line];
+        for (var lvl = 1; lvl <= 3; lvl++) {
+          var names = []; st.days.forEach(function (p) { var dd = byPid(p); if (dd && levelOf(dd) === lvl) names.push(dd.getAttribute('data-title')); });
+          var vid = parseInt(holder.getAttribute('data-upv-' + lvl), 10);
+          if (names.length && vid) { var up = {}; up[T_('prop-upgrade')] = names.join(', '); lines.push({ id: vid, quantity: names.length * (st.plan === 'block' ? WEEKS : 1), properties: up }); }
+        }
         st.remembered = true; persist();
         var go2 = function () { window.location.href = finish.getAttribute('href'); };
-        fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ attributes: attrs }) })
-          .then(function () { return fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: [line] }) }); })
+        fetch('/cart/clear.js', { method: 'POST' })
+          .then(function () { return fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ attributes: attrs }) }); })
+          .then(function () { return fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: lines }) }); })
           .then(go2, go2);
       });
 

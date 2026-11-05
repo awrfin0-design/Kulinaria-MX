@@ -1994,3 +1994,17 @@ a.lang__btn{display:inline-block;text-decoration:none}
 }
 .dish__price small,.fn-dish .dish__price small{display:inline;white-space:nowrap}
 .fn-dish__row{flex-wrap:wrap}
+
+/* ---- v21: day assignment, tier upgrades, contract in the details step ---- */
+.fn-daysbox{margin:0 0 var(--space-lg);padding:18px 20px;border:1px solid var(--line);border-radius:20px;background:var(--bg-raised)}
+.fn-days{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.fn-days li{display:grid;gap:4px}
+.fn-days label{font-family:var(--font-label);font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+.fn-days li.is-set label{color:var(--accent)}
+.fn-days select{width:100%;min-height:46px}
+.fn-upnote{margin:6px 0 0;font-size:.88rem;color:var(--text-muted)}
+.fn-up{display:inline-block;margin:6px 0 0;padding:3px 10px;border-radius:999px;border:1px solid var(--border-accent);background:var(--accent-wash);color:var(--accent);font-family:var(--font-label);font-size:.72rem;font-weight:700;letter-spacing:.06em}
+.fn-up[hidden]{display:none}
+.funnel__upgrades{margin:6px 0 0;font-size:.85rem;color:var(--accent)}
+.fn-contract{margin:var(--space-lg) 0 0}
+.cart-line input.qty[readonly]{opacity:.55;pointer-events:none}
