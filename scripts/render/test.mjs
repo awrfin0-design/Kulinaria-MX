@@ -839,6 +839,35 @@ const fnO = '[data-page="pg/pedido"] [data-funnel]';
 ok('the order builder does not ask again: details step shows a saved summary instead of the form', await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); return f.querySelector('[data-fn-fields]').hidden && !f.querySelector('[data-fn-saved]').hidden && /ana@ejemplo.com/.test(f.querySelector('[data-fn-saved-text]').textContent); }));
 ok('the first delivery date is shown (Monday) with a real date on each weekday slot', await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); return /\d/.test(f.querySelector('[data-fn-first]').textContent) && [...f.querySelectorAll('.fn-days label')].every((l) => /\d/.test(l.textContent)); }));
 
+// =====================================================================  v23: "Mi semana" (weekly choice) + admin math with weekly selections
+await page.setViewportSize({ width: 1440, height: 900 });
+await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); }); await page.goto(`${URL0}#/pg/cuenta-semana`); await page.waitForTimeout(600);
+const mwS = '[data-page="pg/cuenta-semana"] [data-myweek]';
+ok('Mi semana: 4 selectable delivery weeks and one slot per weekday, each with a date', (await page.$$eval(`${mwS} [data-mw-week] option`, (o) => o.length)) === 4 && (await page.$$eval(`${mwS} select[data-mw-day]`, (s) => s.length)) === 5 && (await page.$$eval(`${mwS} .fn-days label`, (l) => l.every((x) => /\d/.test(x.textContent)))));
+await page.click(`${mwS} [data-mw-save]`); await page.waitForTimeout(150);
+ok('Mi semana will not save with empty days', /d[ií]a|day/i.test(await page.$eval(`${mwS} [data-mw-msg]`, (e) => e.textContent)));
+const mwVals = await page.$$eval(`${mwS} select[data-mw-day]:first-of-type option`, (o) => o.map((x) => [x.value, x.textContent]));
+const base = mwVals.filter(([v, t]) => v && !/\+\$/.test(t)).map(([v]) => v), dear = mwVals.filter(([v, t]) => v && /\+\$210/.test(t)).map(([v]) => v);
+for (let i = 0; i < 5; i++) await page.selectOption(`${mwS} li:nth-child(${i + 1}) select[data-mw-day]`, base[i % base.length]);
+await page.click(`${mwS} [data-mw-save]`); await page.waitForTimeout(250);
+ok('Mi semana saves a week of base dishes with nothing to pay', /guard|saved/i.test(await page.$eval(`${mwS} [data-mw-msg]`, (e) => e.textContent)) && (await page.evaluate(() => Object.keys(localStorage).some((k) => k.startsWith('kulinaria_week_')))) && (await page.$eval(`${mwS} [data-mw-up]`, (e) => e.hidden)));
+await page.selectOption(`${mwS} li:nth-child(5) select[data-mw-day]`, dear[0]); await page.waitForTimeout(200);
+ok('a higher-tier dish shows the upgrade difference for that week (+$210)', /210/.test(await page.$eval(`${mwS} [data-mw-up]`, (e) => e.textContent)));
+await page.evaluate(() => { const f = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push(String(u).split('/').pop() + ' ' + ((o && o.body) || '').slice(0, 1500)); return f.apply(this, arguments); }; });
+await page.click(`${mwS} [data-mw-save]`); await page.waitForTimeout(500);
+const mwCalls = await page.evaluate(() => window.__calls);
+ok('saving an upgraded week adds the upgrade line tagged with the week (hidden _semana) and goes to the cart', mwCalls.some((r) => /add\.js/.test(r) && /_semana/.test(r)) && page.url().endsWith('#/carrito'), JSON.stringify(mwCalls).slice(0, 300));
+{
+  const K2 = require(path.join(ROOT, 'assets/kulinaria-admin.js'));
+  const order = { date: '2026-11-04T12:00:00', plan: 'block', email: 'a@b.mx', items: [{ title: 'Salmón gourmet en costra de almendras', qty: 5 }] };   // Wed -> first delivery Mon 2026-11-09
+  const sel = [{ email: 'a@b.mx', week: '2026-11-16', items: [{ title: 'Bowl vegano de garbanzo y tahini', qty: 5 }] }];
+  K2.attachWeeklies([order], sel, 10);
+  ok('admin: week 1 uses the order dishes, week 2 the client\'s own choice, weeks 3-4 repeat that choice (automatic selection)', K2.itemsOf(order, '2026-11-09')[0].title.startsWith('Salm') && K2.itemsOf(order, '2026-11-16')[0].title.startsWith('Bowl vegano') && K2.itemsOf(order, '2026-11-23')[0].title.startsWith('Bowl vegano') && K2.itemsOf(order, '2026-11-30')[0].title.startsWith('Bowl vegano'));
+  const rec = K2.normalizeRecipes ? null : null;
+  const hist = K2.weeklyHistory([order], 10, '2026-11-09', 4);
+  ok('admin: every delivery week counts 5 dishes (not 20 in week one)', hist.map((h) => h.plates).join() === '5,5,5,5', hist.map((h) => h.plates).join());
+}
+
 await browser.close();
 ok('no JS errors on any page', errors.length === 0, errors.slice(0, 5).join(' | '));
 const pass = results.filter((r) => r.ok).length;

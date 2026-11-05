@@ -46,6 +46,7 @@ function setupSheets() {
 function doGet(e) {
   var params = (e && e.parameter) || {};
   if (params.action === 'profile') return out_(profileGet_(params.cid, params.token));
+  if (params.action === 'week') return out_(weekGet_(params.cid, params.token, params.week));
   if (params.action !== 'admin') return out_({ ok: true, service: 'kulinaria-sheets' });
   var key = PropertiesService.getScriptProperties().getProperty('ADMIN_KEY');
   if (!key || params.key !== key) return out_({ ok: false, error: 'forbidden' });
@@ -71,12 +72,17 @@ function adminData_() {
   orders.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
   var clients = rows('Clientes').map(function (r) { return { email: String(r[5]), created: r[1] ? new Date(r[1]).toISOString() : '' }; }).filter(function (c) { return c.email && c.created; });
   var recipes = rows('Recetas').map(function (r) { return { dish: String(r[0]), name: String(r[1]), qty: Number(r[2]) || 0, unit: String(r[3] || 'g'), cat: String(r[4] || 'pantry'), waste: Number(r[5]) || 0 }; }).filter(function (r) { return r.dish && r.name; });
-  return { ok: true, generated: new Date().toISOString(), orders: orders, clients: clients, recipes: recipes.length ? recipes : null };
+  var selections = rows('Selecciones').filter(function (r) { return /confirmada|pagada/i.test(String(r[6])); }).map(function (r) {
+    var items = []; try { items = JSON.parse(r[3]); } catch (e) {}
+    return { email: String(r[1]), week: weekStr_(r[2]), items: items };
+  });
+  return { ok: true, generated: new Date().toISOString(), selections: selections, orders: orders, clients: clients, recipes: recipes.length ? recipes : null };
 }
 
 function doPost(e) {
   var props = PropertiesService.getScriptProperties();
   var params = (e && e.parameter) || {};
+  if (e && e.postData && /"action"\s*:\s*"week"/.test(e.postData.contents || '')) { try { var wb = JSON.parse(e.postData.contents); return out_(weekSet_(wb.cid, wb.token, wb)); } catch (err2) { return out_({ ok: false, error: String(err2) }); } }
   if (e && e.postData && /"action"\s*:\s*"profile"/.test(e.postData.contents || '')) { try { var pb = JSON.parse(e.postData.contents); return out_(profileSet_(pb.cid, pb.token, pb.profile)); } catch (err) { return out_({ ok: false, error: String(err) }); } }
   if (!props.getProperty('WEBHOOK_KEY') || params.key !== props.getProperty('WEBHOOK_KEY')) return out_({ ok: false, error: 'forbidden' });
   var lock = LockService.getScriptLock();
@@ -171,6 +177,7 @@ function handleOrder_(o) {
         (i.selling_plan_allocation && i.selling_plan_allocation.selling_plan && i.selling_plan_allocation.selling_plan.name) || '']);
     });
   }
+  (o.line_items || []).forEach(function (li) { (li.properties || []).forEach(function (pr) { if (pr.name === '_semana') weekMarkPaid_(o.customer && o.customer.id, String(pr.value)); }); });
   if (isNew) alertNewOrder_(o, name, email, addr, a, summary);
 }
 
@@ -250,4 +257,95 @@ function profileSet_(cid, token, profile) {
     sh.getRange(row, 1, 1, 4).setValues([[String(cid), new Date(), email, JSON.stringify(profile || {})]]);
     return { ok: true };
   } finally { lock.releaseLock(); }
+}
+
+
+/* ---------- weekly selections ("Mi semana") ----------
+ * Plan = paid once; every week the client chooses their 5 meals (Monday..Friday). Row per client and delivery Monday.
+ * Estado: Confirmada (no extra to pay) · Pendiente de pago (a higher-tier upgrade is in the cart) · Pagada (the order webhook saw the upgrade line).
+ * A week without a row repeats the previous one (the contract's automatic Saturday selection) — the admin page does that. */
+function weekStr_(v) { return v instanceof Date ? Utilities.formatDate(v, Session.getScriptTimeZone(), 'yyyy-MM-dd') : String(v || ''); }
+function weekSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet(), sh = ss.getSheetByName('Selecciones');
+  if (!sh) { sh = ss.insertSheet('Selecciones'); sh.getRange(1, 1, 1, 8).setValues([['ID Cliente', 'Correo', 'Semana (lunes)', 'Platillos (JSON)', 'Resumen', 'Mejora ($)', 'Estado', 'Actualizado']]).setFontWeight('bold'); sh.getRange('C:C').setNumberFormat('@'); }
+  return sh;
+}
+function weekRow_(sh, cid, week) {
+  var last = sh.getLastRow(); if (last < 2) return 0;
+  var v = sh.getRange(2, 1, last - 1, 3).getValues();
+  for (var i = 0; i < v.length; i++) if (String(v[i][0]) === String(cid) && weekStr_(v[i][2]) === String(week)) return i + 2;
+  return 0;
+}
+function weekGet_(cid, token, week) {
+  if (!profileTokenOk_(cid, token)) return { ok: false, error: 'forbidden' };
+  var sh = weekSheet_(), row = weekRow_(sh, cid, week), last = sh.getLastRow();
+  if (row) { var r = sh.getRange(row, 1, 1, 8).getValues()[0]; var d = []; try { d = JSON.parse(r[3] || '[]'); } catch (e) {} return { ok: true, selection: { week: week, status: String(r[6]), upgrade: Number(r[5]) || 0, items: d } }; }
+  var prev = null, prevWeek = '';
+  if (last > 1) sh.getRange(2, 1, last - 1, 4).getValues().forEach(function (x) { var w = weekStr_(x[2]); if (String(x[0]) === String(cid) && w < week && w > prevWeek) { prevWeek = w; prev = x[3]; } });
+  var items = []; try { items = prev ? JSON.parse(prev) : []; } catch (e2) {}
+  return { ok: true, selection: null, previous: items.length ? { week: prevWeek, items: items } : null };
+}
+function weekSet_(cid, token, p) {
+  if (!profileTokenOk_(cid, token)) return { ok: false, error: 'forbidden' };
+  var week = String(p.week || ''); if (!/^\d{4}-\d{2}-\d{2}$/.test(week)) return { ok: false, error: 'bad week' };
+  var days = (p.days || []).slice(0, 5).map(function (t) { return String(t || '').slice(0, 120); }).filter(Boolean);
+  var counts = {}; days.forEach(function (t) { counts[t] = (counts[t] || 0) + 1; });
+  var items = Object.keys(counts).map(function (t) { return { title: t, qty: counts[t] }; });
+  var summary = items.map(function (i) { return i.qty + '× ' + i.title; }).join(' | ');
+  var up = Math.max(0, Number(p.upgrade) || 0), status = up > 0 ? 'Pendiente de pago' : 'Confirmada';
+  var lock = LockService.getScriptLock(); lock.waitLock(20000);
+  try {
+    var sh = weekSheet_(), row = weekRow_(sh, cid, week) || sh.getLastRow() + 1;
+    sh.getRange(row, 3).setNumberFormat('@');
+    sh.getRange(row, 1, 1, 8).setValues([[String(cid), String(p.email || ''), week, JSON.stringify(items), summary, up, status, new Date()]]);
+    return { ok: true, status: status };
+  } finally { lock.releaseLock(); }
+}
+/** called from the order webhook for lines that carry the hidden property _semana (an upgrade paid for that week) */
+function weekMarkPaid_(cid, week) {
+  if (!cid || !week) return;
+  var sh = weekSheet_(), row = weekRow_(sh, cid, week);
+  if (row) sh.getRange(row, 7).setValue('Pagada');
+}
+
+
+/* ---------- weekly reminder: "choose your next 5 meals" ----------
+ * Run installWeeklyReminders() once. Every Thursday and Friday (09:00) it e-mails each client with an active 4-week plan whose NEXT delivery week
+ * (weeks 2-4) has no row in "Selecciones". Script property SITE_URL (default https://kulinariamx.com). Free Google accounts send ~100 e-mails/day.
+ * Without a choice the previous week repeats (automatic Saturday selection), so the reminder is a nudge, not a requirement. */
+function installWeeklyReminders() {
+  ScriptApp.getProjectTriggers().forEach(function (t) { if (t.getHandlerFunction() === 'sendWeeklyReminders') ScriptApp.deleteTrigger(t); });
+  ScriptApp.newTrigger('sendWeeklyReminders').timeBased().everyDays(1).atHour(9).create();
+  return 'Listo: recordatorios jueves y viernes a las 9:00.';
+}
+function pad2_(n) { return (n < 10 ? '0' : '') + n; }
+function ymd_(d) { return d.getFullYear() + '-' + pad2_(d.getMonth() + 1) + '-' + pad2_(d.getDate()); }
+/** the Monday a given order starts: Saturday 10:00 is the cut-off, the first delivery is the Monday after that Saturday */
+function firstMonday_(orderDate, cutoffHour) {
+  var d = new Date(orderDate), h = cutoffHour == null ? 10 : cutoffHour;
+  var s = new Date(d.getFullYear(), d.getMonth(), d.getDate(), h, 0, 0, 0);
+  while (s.getDay() !== 6 || s.getTime() < d.getTime()) s = new Date(s.getFullYear(), s.getMonth(), s.getDate() + 1, h, 0, 0, 0);
+  return new Date(s.getFullYear(), s.getMonth(), s.getDate() + 2);
+}
+function sendWeeklyReminders(now) {
+  now = now || new Date();
+  var dow = now.getDay(); if (dow !== 4 && dow !== 5) return 'Hoy no toca recordatorio.';
+  var daysToMon = ((1 - dow + 7) % 7) || 7, next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysToMon), nextStr = ymd_(next);
+  var ss = SpreadsheetApp.getActiveSpreadsheet(), pe = ss.getSheetByName('Pedidos'); if (!pe || pe.getLastRow() < 2) return 'Sin pedidos.';
+  var orders = pe.getRange(2, 1, pe.getLastRow() - 1, 11).getValues();
+  var sel = {}, sh = ss.getSheetByName('Selecciones');
+  if (sh && sh.getLastRow() > 1) sh.getRange(2, 1, sh.getLastRow() - 1, 3).getValues().forEach(function (r) { sel[String(r[1]).toLowerCase() + '|' + weekStr_(r[2])] = 1; });
+  var site = PropertiesService.getScriptProperties().getProperty('SITE_URL') || 'https://kulinariamx.com', sent = {}, n = 0;
+  orders.forEach(function (r) {
+    var email = String(r[4] || '').toLowerCase(), plan = String(r[10] || '').toLowerCase();
+    if (!email || sent[email] || !(plan === 'block' || /4/.test(plan))) return;
+    var first = firstMonday_(r[2]), idx = Math.round((next.getTime() - first.getTime()) / (7 * 86400000));
+    if (idx < 1 || idx > 3) return;                               // only weeks 2-4 of a 4-week plan need a new choice
+    if (sel[email + '|' + nextStr]) return;
+    var name = String(r[3] || '').split(' ')[0] || '';
+    var body = ['Hola ' + name + ',', '', 'Tu plan de Kulinaria sigue activo. Elige tus 5 comidas de la semana del ' + nextStr + ' antes del sábado a las 10:00:', site + '/pages/cuenta-semana', '',
+      'Si no eliges, repetimos tu selección anterior. Si subes un platillo de nivel, solo pagas la diferencia.', '', 'Kulinaria MX · Arte del fuego'].join('\n');
+    try { MailApp.sendEmail(email, 'Elige tus comidas de la próxima semana · Kulinaria', body); sent[email] = 1; n++; } catch (err) { /* keep going */ }
+  });
+  return 'Recordatorios enviados: ' + n;
 }

@@ -2024,3 +2024,6 @@ a.lang__btn{display:inline-block;text-decoration:none}
 .fn-saved{padding:16px 18px;border:1px solid var(--border-accent);border-radius:16px;background:var(--accent-wash);margin-bottom:var(--space-md)}
 .fn-saved p{margin:0 0 4px}
 [data-fn-fields][hidden],.fn-saved[hidden]{display:none}
+
+/* ---- v23: Mi semana ---- */
+.myweek .field{max-width:360px}.myweek .fn-days{margin:var(--space-md) 0}.myweek .btn-row{margin-top:var(--space-md)}

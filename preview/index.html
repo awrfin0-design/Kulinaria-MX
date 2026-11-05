@@ -2055,6 +2055,9 @@ a.lang__btn{display:inline-block;text-decoration:none}
 .fn-saved p{margin:0 0 4px}
 [data-fn-fields][hidden],.fn-saved[hidden]{display:none}
 
+/* ---- v23: Mi semana ---- */
+.myweek .field{max-width:360px}.myweek .fn-days{margin:var(--space-md) 0}.myweek .btn-row{margin-top:var(--space-md)}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -2415,12 +2418,12 @@ Fuego</span>
               <span class="plan-card__flag">Recomendado</span>
               <strong>4 semanas · 20 comidas</strong>
               <small>Pagas una vez y recibes tus 5 comidas cada semana durante 4 semanas. Es el plan con mejor precio por comida.</small>
-              <em class="fn-plan__from">Desde $3,600 <span>· incluye 20 comidas (5 por semana)</span></em>
+              <em class="fn-plan__from">Desde $3,600 <span>· al mes · incluye 20 comidas (5 por semana)</span></em>
             </button>
             <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
               <strong>1 semana · 5 comidas</strong>
               <small>Una sola semana para conocer el servicio. Se compra hasta el sábado a las 10:00 AM.</small>
-              <em class="fn-plan__from">Desde $1,000 <span>· incluye 5 comidas</span></em>
+              <em class="fn-plan__from">Desde $1,000 <span>· por semana · incluye 5 comidas</span></em>
             </button>
           </div>
           <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renovar automáticamente cada 4 semanas</span></label>
@@ -7347,11 +7350,19 @@ Pago digital, sin efectivo</li></ul>
       </nav>
 
       <div class="account-content">
-        <div class="account-block" id="pg-cuenta-semana--semana"><h2>Mi semana</h2>
-        <div class="panel panel--gold">
+        <div class="account-block" id="pg-cuenta-semana--semana"><h2>Mi semana</h2><div class="panel panel--gold myweek" data-myweek
+          data-upg-1="70" data-upg-2="140" data-upg-3="210"
+          data-upv-1="74001" data-upv-2="74002" data-upv-3="74003"
+          data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
+          data-t-prop-upgrade="Mejora" data-t-need="Asigna un platillo a cada día." data-t-saved="Listo: tu semana del {d} quedó guardada." data-t-saved-pay="Guardamos tu selección. Paga la mejora de platillos ({p}) para confirmarla." data-t-prev="Cargamos tu selección anterior; cámbiala si quieres." data-t-week-opt="Lunes {a} – viernes {b}" data-t-error="No pudimos agregar la mejora al carrito. Intenta de nuevo.">
           <p class="countdown" data-cutoff>Confirma tus platillos antes del sábado 10:00 AM · quedan <strong data-cutoff-value>…</strong></p>
-          <p class="text-muted">Si no registras tus opciones a tiempo, el sábado a las 10:01 AM se genera un pedido automático con tu plan contratado, tu historial y, de forma obligatoria, tus alergias registradas.</p>
-          <div class="btn-row"><a class="btn btn--gold" href="#/menu">Elegir platillos</a><a class="btn btn--outline" href="#/cuenta">Administrar suscripción</a></div>
+          <p class="text-muted">Tu plan ya está pagado. Elige qué comerás cada día de la semana; si no eliges antes del sábado a las 10:00, repetimos tu selección anterior.</p><div class="field"><label for="pg-cuenta-semana--mw-week">Semana de entrega</label><select class="select" id="pg-cuenta-semana--mw-week" data-mw-week></select></div>
+          <ol class="fn-days" data-mw-days></ol>
+          <p class="funnel__upgrades" data-mw-up hidden></p>
+          <p class="alert alert--ok" data-mw-msg hidden role="status"></p>
+          <a hidden data-mw-cart href="#/carrito" tabindex="-1" aria-hidden="true"></a>
+          <div class="btn-row"><button class="btn btn--gold" type="button" data-mw-save>Guardar mi semana</button><a class="btn btn--outline" href="#/cuenta">Administrar suscripción</a></div>
+          <ul hidden data-mw-dishes><li data-pid="7100" data-title="Pollo a las hierbas con puré rústico" data-tier="selecto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas"></li><li data-pid="7101" data-title="Bowl de res magra y quinoa" data-tier="selecto" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro"></li><li data-pid="7102" data-title="Salmón gourmet en costra de almendras" data-tier="exclusivo" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón"></li><li data-pid="7103" data-title="Omelette de claras con espinaca" data-tier="selecto" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones"></li><li data-pid="7104" data-title="Arrachera al carbón con maíz y espárragos" data-tier="signature" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas"></li><li data-pid="7105" data-title="Filete Prime con verduras asadas" data-tier="reserve" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla"></li><li data-pid="7106" data-title="Bowl vegano de garbanzo y tahini" data-tier="exclusivo" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla"></li><li data-pid="7107" data-title="Crema de calabaza asada" data-tier="selecto" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo"></li><li data-pid="7110" data-title="Mini pasta de pollo para peques" data-tier="selecto" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate"></li></ul>
         </div></div>
       </div>
     </div></div>
@@ -7671,12 +7682,12 @@ Pago digital, sin efectivo</li></ul>
               <span class="plan-card__flag">Recomendado</span>
               <strong>4 semanas · 20 comidas</strong>
               <small>Pagas una vez y recibes tus 5 comidas cada semana durante 4 semanas. Es el plan con mejor precio por comida.</small>
-              <em class="fn-plan__from">Desde $3,600 <span>· incluye 20 comidas (5 por semana)</span></em>
+              <em class="fn-plan__from">Desde $3,600 <span>· al mes · incluye 20 comidas (5 por semana)</span></em>
             </button>
             <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
               <strong>1 semana · 5 comidas</strong>
               <small>Una sola semana para conocer el servicio. Se compra hasta el sábado a las 10:00 AM.</small>
-              <em class="fn-plan__from">Desde $1,000 <span>· incluye 5 comidas</span></em>
+              <em class="fn-plan__from">Desde $1,000 <span>· por semana · incluye 5 comidas</span></em>
             </button>
           </div>
           <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renovar automáticamente cada 4 semanas</span></label>
@@ -8647,12 +8658,12 @@ Pago digital, sin efectivo</li></ul>
               <span class="plan-card__flag">Recommended</span>
               <strong>4 weeks · 20 meals</strong>
               <small>You pay once and get your 5 meals every week for 4 weeks. It's the best price per meal.</small>
-              <em class="fn-plan__from">From $3,600 <span>· includes 20 meals (5 per week)</span></em>
+              <em class="fn-plan__from">From $3,600 <span>· per month · includes 20 meals (5 per week)</span></em>
             </button>
             <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
               <strong>1 week · 5 meals</strong>
               <small>A single week to try the service. You can buy it until Saturday at 10:00 AM.</small>
-              <em class="fn-plan__from">From $1,000 <span>· includes 5 meals</span></em>
+              <em class="fn-plan__from">From $1,000 <span>· per week · includes 5 meals</span></em>
             </button>
           </div>
           <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renew automatically every 4 weeks</span></label>
@@ -13579,11 +13590,19 @@ Digital payment, no cash</li></ul>
       </nav>
 
       <div class="account-content">
-        <div class="account-block" id="pg-cuenta-semana--semana"><h2>My week</h2>
-        <div class="panel panel--gold">
+        <div class="account-block" id="pg-cuenta-semana--semana"><h2>My week</h2><div class="panel panel--gold myweek" data-myweek
+          data-upg-1="70" data-upg-2="140" data-upg-3="210"
+          data-upv-1="74001" data-upv-2="74002" data-upv-3="74003"
+          data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
+          data-t-prop-upgrade="Upgrade" data-t-need="Assign a dish to every day." data-t-saved="Done: your week of {d} is saved." data-t-saved-pay="We saved your selection. Pay the dish upgrade ({p}) to confirm it." data-t-prev="We loaded your previous selection; change it if you like." data-t-week-opt="Monday {a} – Friday {b}" data-t-error="We couldn't add the upgrade to your cart. Please try again.">
           <p class="countdown" data-cutoff>Confirm your dishes before Saturday 10:00 AM · time left: <strong data-cutoff-value>…</strong></p>
-          <p class="text-muted">If you don't register your choices in time, at 10:01 AM on Saturday we create an automatic order from your plan, your history and, always, your registered allergies.</p>
-          <div class="btn-row"><a class="btn btn--gold" href="#/menu">Choose dishes</a><a class="btn btn--outline" href="#/cuenta">Manage subscription</a></div>
+          <p class="text-muted">Your plan is already paid. Choose what you'll eat each day of the week; if you don't choose before Saturday at 10:00, we repeat your previous selection.</p><div class="field"><label for="pg-cuenta-semana--mw-week">Delivery week</label><select class="select" id="pg-cuenta-semana--mw-week" data-mw-week></select></div>
+          <ol class="fn-days" data-mw-days></ol>
+          <p class="funnel__upgrades" data-mw-up hidden></p>
+          <p class="alert alert--ok" data-mw-msg hidden role="status"></p>
+          <a hidden data-mw-cart href="#/carrito" tabindex="-1" aria-hidden="true"></a>
+          <div class="btn-row"><button class="btn btn--gold" type="button" data-mw-save>Save my week</button><a class="btn btn--outline" href="#/cuenta">Manage subscription</a></div>
+          <ul hidden data-mw-dishes><li data-pid="7100" data-title="Herb chicken with rustic mash" data-tier="selecto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas"></li><li data-pid="7101" data-title="Lean beef and quinoa bowl" data-tier="selecto" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro"></li><li data-pid="7102" data-title="Gourmet salmon in an almond crust" data-tier="exclusivo" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón"></li><li data-pid="7103" data-title="Egg-white omelette with spinach" data-tier="selecto" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones"></li><li data-pid="7104" data-title="Charcoal-grilled skirt steak with corn and asparagus" data-tier="signature" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas"></li><li data-pid="7105" data-title="Prime filet with roasted vegetables" data-tier="reserve" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla"></li><li data-pid="7106" data-title="Vegan chickpea and tahini bowl" data-tier="exclusivo" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla"></li><li data-pid="7107" data-title="Roasted pumpkin cream soup" data-tier="selecto" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo"></li><li data-pid="7110" data-title="Mini chicken pasta for little ones" data-tier="selecto" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate"></li></ul>
         </div></div>
       </div>
     </div></div>
@@ -13903,12 +13922,12 @@ Digital payment, no cash</li></ul>
               <span class="plan-card__flag">Recommended</span>
               <strong>4 weeks · 20 meals</strong>
               <small>You pay once and get your 5 meals every week for 4 weeks. It's the best price per meal.</small>
-              <em class="fn-plan__from">From $3,600 <span>· includes 20 meals (5 per week)</span></em>
+              <em class="fn-plan__from">From $3,600 <span>· per month · includes 20 meals (5 per week)</span></em>
             </button>
             <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
               <strong>1 week · 5 meals</strong>
               <small>A single week to try the service. You can buy it until Saturday at 10:00 AM.</small>
-              <em class="fn-plan__from">From $1,000 <span>· includes 5 meals</span></em>
+              <em class="fn-plan__from">From $1,000 <span>· per week · includes 5 meals</span></em>
             </button>
           </div>
           <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renew automatically every 4 weeks</span></label>
@@ -15037,6 +15056,19 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     for (var i = 0; i < weeksOf(order); i++) out.push(ymd(addDays(first, 7 * i)));
     return out;
   }
+  /** items cooked for one delivery week of an order: the client's own choice for that week, else the last choice repeated
+   *  (the contract's automatic Saturday selection); week 1 = the items that came with the order */
+  function itemsOf(o, w) { return (o.byWeek && o.byWeek[w]) || o.items || []; }
+  function attachWeeklies(orders, selections, cutoff) {
+    var by = {};
+    (selections || []).forEach(function (s) { by[String(s.email || '').toLowerCase() + '|' + s.week] = s.items || []; });
+    orders.forEach(function (o) {
+      var cur = o.items || [], map = {}, e = String(o.email || '').toLowerCase();
+      deliveryWeeks(o, cutoff).forEach(function (w, i) { if (i > 0 && by[e + '|' + w]) cur = by[e + '|' + w]; map[w] = cur; });
+      o.byWeek = map;
+    });
+    return orders;
+  }
   function weeksInMonth(year, month) {              // Mondays that fall inside the month
     var out = [], d = mondayOf(new Date(year, month, 1));
     if (d.getMonth() !== month) d = addDays(d, 7);
@@ -15086,8 +15118,8 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       var weeks = deliveryWeeks(o, opts.cutoff).filter(function (w) { return w >= from && w <= to; });
       if (!weeks.length) return;
       active++;
-      (o.items || []).forEach(function (it) {
-        var n = (+it.qty || 0) * weeks.length; if (!n) return;
+      weeks.forEach(function (w) { itemsOf(o, w).forEach(function (it) {
+        var n = +it.qty || 0; if (!n) return;
         plates += n;
         var rec = findRecipe(recipes, it.title);
         if (!rec) { missing[it.title] = (missing[it.title] || 0) + n; return; }
@@ -15097,7 +15129,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           var net = g.qty * n, gross = g.waste > 0 && g.waste < 95 ? net / (1 - g.waste / 100) : net;
           r.net += net; r.gross += gross; r.dishes[rec.title] = (r.dishes[rec.title] || 0) + n;
         });
-      });
+      }); });
     });
     var list = Object.keys(rows).map(function (k) { var r = rows[k]; r.buy = roundUp(r.gross * (1 + buffer / 100), r.unit); return r; });
     list.sort(function (a, b) { return CAT_ORDER.indexOf(a.cat) - CAT_ORDER.indexOf(b.cat) || a.name.localeCompare(b.name, 'es'); });
@@ -15119,7 +15151,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var weeks = deliveryWeeks(o, cutoff);
         if (weeks.indexOf(w) < 0) return;
         active++; if (weeks[0] === w && o.plan === 'block') started++;
-        (o.items || []).forEach(function (it) { plates += +it.qty || 0; });
+        itemsOf(o, w).forEach(function (it) { plates += +it.qty || 0; });
       });
       out.push({ week: w, orders: active, plates: plates, newBlocks: started });
     }
@@ -15138,7 +15170,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       if (o.plan === 'block') t.blocks++; else t.trials++;
       t.revenue += +o.total || 0;
       var wk = ymd(mondayOf(new Date(o.date))); t.perWeek[wk] = (t.perWeek[wk] || 0) + 1;
-      (o.items || []).forEach(function (it) { var n = (+it.qty || 0) * weeksOf(o); t.plates += n; dishes[it.title] = (dishes[it.title] || 0) + n; });
+      deliveryWeeks(o, cutoff).forEach(function (w) { itemsOf(o, w).forEach(function (it) { var n = +it.qty || 0; t.plates += n; dishes[it.title] = (dishes[it.title] || 0) + n; }); });
     });
     t.avg = t.orders ? t.revenue / t.orders : 0;
     t.top = Object.keys(dishes).map(function (k) { return { title: k, n: dishes[k] }; }).sort(function (a, b) { return b.n - a.n; });
@@ -15174,7 +15206,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
 
   var api = { CAT_ORDER: CAT_ORDER, CAT_NAME: CAT_NAME, ymd: ymd, parseYmd: parseYmd, addDays: addDays, mondayOf: mondayOf, firstDeliveryMonday: firstDeliveryMonday,
     weeksOf: weeksOf, deliveryWeeks: deliveryWeeks, weeksInMonth: weeksInMonth, norm: norm, normalizeRecipes: normalizeRecipes, findRecipe: findRecipe, recipeList: recipeList,
-    shopping: shopping, weeklyHistory: weeklyHistory, activeBlocks: activeBlocks, fmtQty: fmtQty, monthTally: monthTally, demoData: demoData };
+    shopping: shopping, itemsOf: itemsOf, attachWeeklies: attachWeeklies, weeklyHistory: weeklyHistory, activeBlocks: activeBlocks, fmtQty: fmtQty, monthTally: monthTally, demoData: demoData };
 
   /* ================================================================== the screen (browser only) */
   if (typeof document === 'undefined') return api;
@@ -15311,7 +15343,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       fetch(url).then(function (r) { return r.json(); }).then(function (j) {
         if (!j.ok) { try { sessionStorage.removeItem('kx-admin-key'); } catch (x) {} gate(j.error === 'forbidden' ? T.badKey : T.error); return; }
         if (j.recipes && j.recipes.length) recipes = normalizeRecipes(j.recipes);
-        S.data = { orders: j.orders || [], clients: j.clients || [], demo: false }; render();
+        S.data = { orders: attachWeeklies(j.orders || [], j.selections || [], cutoff), clients: j.clients || [], demo: false }; render();
       }).catch(function () { gate(T.error); });
     }
     var saved = ''; try { saved = sessionStorage.getItem('kx-admin-key') || ''; } catch (e) {}
@@ -15860,6 +15892,83 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         location.reload();
       }).catch(function () {});
   }
+  /* ---------- "Mi semana": every week the client picks the next 5 meals (the plan is already paid) ---------- */
+  function initMyWeek() {
+    var root = $('[data-myweek]'); if (!root) return;
+    var T_ = function (k) { return root.getAttribute('data-t-' + k) || ''; };
+    var fill = function (tpl, o) { return String(tpl).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; }); };
+    var lang = cfg.lang === 'en' ? 'en-US' : 'es-MX';
+    var money = function (n) { try { return new Intl.NumberFormat(lang, { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(n); } catch (e) { return '$' + Math.round(n); } };
+    var fmt = function (d) { try { return new Intl.DateTimeFormat(lang, { timeZone: TZ, day: 'numeric', month: 'short' }).format(d); } catch (e) { return ''; } };
+    var TIERS = ['selecto', 'exclusivo', 'signature', 'reserve'], rank = function (t) { var r = TIERS.indexOf(t); return r < 0 ? 0 : r; };
+    var dayNames = (T_('days') || 'Lun,Mar,Mié,Jue,Vie').split(',');
+    var upg = function (n) { return +root.getAttribute('data-upg-' + n) || 70 * n; };
+    var dishes = $$('[data-mw-dishes] li', root).map(function (li) { return { pid: li.getAttribute('data-pid'), title: li.getAttribute('data-title'), tier: li.getAttribute('data-tier'), al: (li.getAttribute('data-allergens') || '').split('|').filter(Boolean), ing: (li.getAttribute('data-ingredients') || '').split('|').filter(Boolean) }; });
+    var prof = loadProfile(), banned = (prof.allergies || []).map(norm);
+    var ok = function (d) { return !d.al.concat(d.ing).some(function (x) { return banned.indexOf(norm(x)) > -1; }); };
+    var level = function (d) { return d ? Math.max(0, Math.min(3, rank(d.tier))) : 0; };   // every plan starts at the Selecto base
+    var byTitle = function (t) { return dishes.filter(function (d) { return d.title === t; })[0]; };
+    // the first delivery is the coming Monday; after Saturday 10:00 (cut-off) the Monday after
+    var mondayOffset = function () { var n = mxNow(), d = ((1 - n.dow + 7) % 7) || 7; if (n.dow === 0 || (n.dow === 6 && n.minutes >= cutoffMin)) d += 7; return d; };
+    var weekDate = function (k, i) { return new Date(Date.now() + (mondayOffset() + 7 * k + (i || 0)) * 86400000); };
+    var iso = function (d) { try { var p = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d); return p; } catch (e) { return ''; } };
+    var weekSel = $('[data-mw-week]', root), box = $('[data-mw-days]', root), up = $('[data-mw-up]', root), msg = $('[data-mw-msg]', root), save = $('[data-mw-save]', root);
+    var a = acct(), days = ['', '', '', '', ''];
+    for (var k = 0; k < 4; k++) { var o = document.createElement('option'); o.value = iso(weekDate(k)); o.textContent = fill(T_('week-opt'), { a: fmt(weekDate(k)), b: fmt(weekDate(k, 4)) }); weekSel.appendChild(o); }
+    var say = function (m, bad) { msg.hidden = !m; msg.textContent = m || ''; msg.classList.toggle('alert--warn', !!bad); msg.classList.toggle('alert--ok', !bad); };
+    var extra = function () { var s = 0; days.forEach(function (t) { var l = level(byTitle(t)); if (l) s += upg(l); }); return s; };
+    var paint = function () {
+      var kk = weekSel.selectedIndex < 0 ? 0 : weekSel.selectedIndex;
+      $$('select[data-mw-day]', box).forEach(function (s) { s.value = days[+s.getAttribute('data-mw-day')] || ''; });
+      $$('label', box).forEach(function (l, i) { l.textContent = (dayNames[i] || '') + ' ' + fmt(weekDate(kk, i)); });
+      var ex = extra(); up.hidden = !ex; up.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : '';
+    };
+    for (var i = 0; i < 5; i++) (function (i) {
+      var li = document.createElement('li'), lab = document.createElement('label'), sel = document.createElement('select'), id = 'mw-day-' + i;
+      sel.className = 'select'; sel.id = id; sel.setAttribute('data-mw-day', i); lab.setAttribute('for', id);
+      var o0 = document.createElement('option'); o0.value = ''; o0.textContent = T_('day-empty'); sel.appendChild(o0);
+      dishes.filter(ok).forEach(function (d) { var op = document.createElement('option'), l = level(d); op.value = d.title; op.textContent = d.title + (l ? ' · ' + fill(T_('up-badge'), { p: money(upg(l)) }) : ''); sel.appendChild(op); });
+      sel.addEventListener('change', function () { days[i] = sel.value; say(''); paint(); });
+      li.appendChild(lab); li.appendChild(sel); box.appendChild(li);
+    })(i);
+    var fromItems = function (items) { var out = []; (items || []).forEach(function (it) { for (var j = 0; j < (+it.qty || 1); j++) out.push(it.title); }); while (out.length < 5) out.push(''); return out.slice(0, 5); };
+    var local = function (w) { try { return JSON.parse(localStorage.getItem('kulinaria_week_' + w) || 'null'); } catch (e) { return null; } };
+    var loadWeek = function () {
+      var w = weekSel.value; days = ['', '', '', '', '']; say(''); paint();
+      var done = function (sel, prev) {
+        if (sel && sel.items && sel.items.length) days = fromItems(sel.items);
+        else if (prev && prev.items && prev.items.length) { days = fromItems(prev.items); say(T_('prev'), false); }
+        days = days.map(function (t) { var d = byTitle(t); return d && ok(d) ? t : ''; }); paint();
+      };
+      if (a) {
+        fetch(a.url + (a.url.indexOf('?') > -1 ? '&' : '?') + 'action=week&cid=' + encodeURIComponent(a.cid) + '&token=' + encodeURIComponent(a.token) + '&week=' + encodeURIComponent(w))
+          .then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) done(j.selection, j.previous); }).catch(function () {});
+      } else { var l = local(w); if (l) done({ items: l.items }, null); }
+    };
+    weekSel.addEventListener('change', loadWeek);
+    save.addEventListener('click', function () {
+      if (days.filter(Boolean).length !== 5) { say(T_('need'), true); return; }
+      var w = weekSel.value, kk = weekSel.selectedIndex, ex = extra(), counts = {};
+      days.forEach(function (t) { counts[t] = (counts[t] || 0) + 1; });
+      var items = Object.keys(counts).map(function (t) { return { title: t, qty: counts[t] }; });
+      var label = fmt(weekDate(kk)) + ' – ' + fmt(weekDate(kk, 4)), email = ((readFunnel().info || {}).email) || '';
+      try { localStorage.setItem('kulinaria_week_' + w, JSON.stringify({ items: items, upgrade: ex })); } catch (e) {}
+      if (a) { try { fetch(a.url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'week', cid: a.cid, token: a.token, week: w, email: email, days: days, upgrade: ex }) }); } catch (e) {} }
+      if (!ex) { say(fill(T_('saved'), { d: label }), false); return; }
+      // the difference of the higher-tier dishes is paid for that week: one line per upgrade level
+      var lines = [];
+      for (var lv = 1; lv <= 3; lv++) {
+        var names = days.filter(function (t) { return level(byTitle(t)) === lv; }), vid = parseInt(root.getAttribute('data-upv-' + lv), 10);
+        if (names.length && vid) { var p = {}; p[T_('prop-upgrade')] = names.join(', '); p._semana = w; lines.push({ id: vid, quantity: names.length, properties: p }); }
+      }
+      say(fill(T_('saved-pay'), { p: money(ex) }), false);
+      if (!lines.length) return;
+      fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: lines }) })
+        .then(function () { var c = $('[data-mw-cart]', root); window.location.href = (c && c.getAttribute('href')) || '/cart'; }, function () { say(T_('error'), true); });
+    });
+    loadWeek();
+  }
+
   function initOnboarding() {
     var root = $('[data-onboarding]'); if (!root) return;
     var form = $('[data-ob-form]', root), welcome = $('[data-ob-welcome]', root), err = $('[data-ob-error]', form);
@@ -16472,7 +16581,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

@@ -543,8 +543,8 @@
     "first_delivery": "Primera entrega: lunes {d}.",
     "week_note": "Estas 5 comidas son solo para esa primera semana. Tu plan ya está pagado: regresa cada semana a elegir las siguientes 5 (antes del sábado a las 10:00).",
     "saved_title": "Tus datos están guardados",
-    "includes_block": "incluye 20 comidas (5 por semana)",
-    "includes_week": "incluye 5 comidas"
+    "includes_block": "al mes · incluye 20 comidas (5 por semana)",
+    "includes_week": "por semana · incluye 5 comidas"
   },
   "sitemap": {
     "pedido": "Armar mi pedido",
@@ -643,5 +643,17 @@
     "next3": "Cada semana regresas a elegir tus siguientes 5 comidas (tu plan ya está pagado).",
     "choose_plan": "Elegir mi plan",
     "edit": "Editar mis datos"
+  },
+  "myweek": {
+    "intro": "Tu plan ya está pagado. Elige qué comerás cada día de la semana; si no eliges antes del sábado a las 10:00, repetimos tu selección anterior.",
+    "guest": "Inicia sesión para elegir tu semana.",
+    "week_label": "Semana de entrega",
+    "week_opt": "Lunes {a} – viernes {b}",
+    "save": "Guardar mi semana",
+    "need": "Asigna un platillo a cada día.",
+    "saved": "Listo: tu semana del {d} quedó guardada.",
+    "saved_pay": "Guardamos tu selección. Paga la mejora de platillos ({p}) para confirmarla.",
+    "prev": "Cargamos tu selección anterior; cámbiala si quieres.",
+    "error": "No pudimos agregar la mejora al carrito. Intenta de nuevo."
   }
 }

@@ -543,8 +543,8 @@
     "first_delivery": "First delivery: Monday {d}.",
     "week_note": "These 5 meals are for that first week only. Your plan is already paid: come back every week to choose the next 5 (before Saturday at 10:00).",
     "saved_title": "Your details are saved",
-    "includes_block": "includes 20 meals (5 per week)",
-    "includes_week": "includes 5 meals"
+    "includes_block": "per month · includes 20 meals (5 per week)",
+    "includes_week": "per week · includes 5 meals"
   },
   "sitemap": {
     "pedido": "Build my order",
@@ -643,5 +643,17 @@
     "next3": "Every week you come back to choose your next 5 meals (your plan is already paid).",
     "choose_plan": "Choose my plan",
     "edit": "Edit my details"
+  },
+  "myweek": {
+    "intro": "Your plan is already paid. Choose what you'll eat each day of the week; if you don't choose before Saturday at 10:00, we repeat your previous selection.",
+    "guest": "Sign in to choose your week.",
+    "week_label": "Delivery week",
+    "week_opt": "Monday {a} – Friday {b}",
+    "save": "Save my week",
+    "need": "Assign a dish to every day.",
+    "saved": "Done: your week of {d} is saved.",
+    "saved_pay": "We saved your selection. Pay the dish upgrade ({p}) to confirm it.",
+    "prev": "We loaded your previous selection; change it if you like.",
+    "error": "We couldn't add the upgrade to your cart. Please try again."
   }
 }

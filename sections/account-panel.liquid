@@ -38,10 +38,31 @@
           {%- case panel -%}
           {%- when 'semana' -%}
         <h2>{{ 'account.my_week' | t }}</h2>
-        <div class="panel panel--gold">
+        {%- assign upg = all_products['mejora-de-platillo'] -%}
+        <div class="panel panel--gold myweek" data-myweek
+          data-upg-1="{{ upg.variants[0].price | divided_by: 100 | default: 70 }}" data-upg-2="{{ upg.variants[1].price | divided_by: 100 | default: 140 }}" data-upg-3="{{ upg.variants[2].price | divided_by: 100 | default: 210 }}"
+          data-upv-1="{{ upg.variants[0].id }}" data-upv-2="{{ upg.variants[1].id }}" data-upv-3="{{ upg.variants[2].id }}"
+          data-t-days="{{ 'funnel.days' | t }}" data-t-day-empty="{{ 'funnel.day_empty' | t }}" data-t-up-badge="{{ 'funnel.up_badge' | t }}" data-t-up-total="{{ 'funnel.up_total' | t }}"
+          data-t-prop-upgrade="{{ 'funnel.prop_upgrade' | t }}" data-t-need="{{ 'myweek.need' | t }}" data-t-saved="{{ 'myweek.saved' | t }}" data-t-saved-pay="{{ 'myweek.saved_pay' | t }}" data-t-prev="{{ 'myweek.prev' | t }}" data-t-week-opt="{{ 'myweek.week_opt' | t }}" data-t-error="{{ 'myweek.error' | t }}">
           <p class="countdown" data-cutoff>{{ 'cutoff.confirm_dishes' | t }} <strong data-cutoff-value>…</strong></p>
-          <p class="text-muted">{{ 'account.auto_order' | t }}</p>
-          <div class="btn-row"><a class="btn btn--gold" href="/collections/menu-semanal">{{ 'account.choose_dishes' | t }}</a><a class="btn btn--outline" href="{{ portal }}">{{ 'account.manage_subscription' | t }}</a></div>
+          <p class="text-muted">{{ 'myweek.intro' | t }}</p>
+          {%- unless customer -%}
+            <p class="alert alert--warn">{{ 'myweek.guest' | t }} <a class="text-link" href="{{ routes.account_login_url }}?return_url=%2Fpages%2Fcuenta-semana">{{ 'login.title' | t }}</a></p>
+          {%- endunless -%}
+          <div class="field"><label for="mw-week">{{ 'myweek.week_label' | t }}</label><select class="select" id="mw-week" data-mw-week></select></div>
+          <ol class="fn-days" data-mw-days></ol>
+          <p class="funnel__upgrades" data-mw-up hidden></p>
+          <p class="alert alert--ok" data-mw-msg hidden role="status"></p>
+          <a hidden data-mw-cart href="{{ routes.cart_url }}" tabindex="-1" aria-hidden="true"></a>
+          <div class="btn-row"><button class="btn btn--gold" type="button" data-mw-save>{{ 'myweek.save' | t }}</button><a class="btn btn--outline" href="{{ portal }}">{{ 'account.manage_subscription' | t }}</a></div>
+          <ul hidden data-mw-dishes>
+            {%- for product in collections['menu-semanal'].products limit: 40 -%}
+              {%- capture mw_state -%}{% render 'menu-week', product: product %}{%- endcapture -%}
+              {%- if mw_state == 'on' -%}
+                <li data-pid="{{ product.id }}" data-title="{{ product.title | escape }}" data-tier="{{ product.metafields.kulinaria.tier.value | default: 'selecto' }}" data-allergens="{{ product.metafields.kulinaria.allergens.value | join: '|' | escape }}" data-ingredients="{{ product.metafields.kulinaria.ingredients.value | join: '|' | escape }}"></li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
         </div>
           {%- when 'pausas' -%}
         <h2>{{ 'account.pause_next' | t }}</h2>

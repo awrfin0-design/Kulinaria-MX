@@ -536,6 +536,83 @@
         location.reload();
       }).catch(function () {});
   }
+  /* ---------- "Mi semana": every week the client picks the next 5 meals (the plan is already paid) ---------- */
+  function initMyWeek() {
+    var root = $('[data-myweek]'); if (!root) return;
+    var T_ = function (k) { return root.getAttribute('data-t-' + k) || ''; };
+    var fill = function (tpl, o) { return String(tpl).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; }); };
+    var lang = cfg.lang === 'en' ? 'en-US' : 'es-MX';
+    var money = function (n) { try { return new Intl.NumberFormat(lang, { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(n); } catch (e) { return '$' + Math.round(n); } };
+    var fmt = function (d) { try { return new Intl.DateTimeFormat(lang, { timeZone: TZ, day: 'numeric', month: 'short' }).format(d); } catch (e) { return ''; } };
+    var TIERS = ['selecto', 'exclusivo', 'signature', 'reserve'], rank = function (t) { var r = TIERS.indexOf(t); return r < 0 ? 0 : r; };
+    var dayNames = (T_('days') || 'Lun,Mar,Mié,Jue,Vie').split(',');
+    var upg = function (n) { return +root.getAttribute('data-upg-' + n) || 70 * n; };
+    var dishes = $$('[data-mw-dishes] li', root).map(function (li) { return { pid: li.getAttribute('data-pid'), title: li.getAttribute('data-title'), tier: li.getAttribute('data-tier'), al: (li.getAttribute('data-allergens') || '').split('|').filter(Boolean), ing: (li.getAttribute('data-ingredients') || '').split('|').filter(Boolean) }; });
+    var prof = loadProfile(), banned = (prof.allergies || []).map(norm);
+    var ok = function (d) { return !d.al.concat(d.ing).some(function (x) { return banned.indexOf(norm(x)) > -1; }); };
+    var level = function (d) { return d ? Math.max(0, Math.min(3, rank(d.tier))) : 0; };   // every plan starts at the Selecto base
+    var byTitle = function (t) { return dishes.filter(function (d) { return d.title === t; })[0]; };
+    // the first delivery is the coming Monday; after Saturday 10:00 (cut-off) the Monday after
+    var mondayOffset = function () { var n = mxNow(), d = ((1 - n.dow + 7) % 7) || 7; if (n.dow === 0 || (n.dow === 6 && n.minutes >= cutoffMin)) d += 7; return d; };
+    var weekDate = function (k, i) { return new Date(Date.now() + (mondayOffset() + 7 * k + (i || 0)) * 86400000); };
+    var iso = function (d) { try { var p = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d); return p; } catch (e) { return ''; } };
+    var weekSel = $('[data-mw-week]', root), box = $('[data-mw-days]', root), up = $('[data-mw-up]', root), msg = $('[data-mw-msg]', root), save = $('[data-mw-save]', root);
+    var a = acct(), days = ['', '', '', '', ''];
+    for (var k = 0; k < 4; k++) { var o = document.createElement('option'); o.value = iso(weekDate(k)); o.textContent = fill(T_('week-opt'), { a: fmt(weekDate(k)), b: fmt(weekDate(k, 4)) }); weekSel.appendChild(o); }
+    var say = function (m, bad) { msg.hidden = !m; msg.textContent = m || ''; msg.classList.toggle('alert--warn', !!bad); msg.classList.toggle('alert--ok', !bad); };
+    var extra = function () { var s = 0; days.forEach(function (t) { var l = level(byTitle(t)); if (l) s += upg(l); }); return s; };
+    var paint = function () {
+      var kk = weekSel.selectedIndex < 0 ? 0 : weekSel.selectedIndex;
+      $$('select[data-mw-day]', box).forEach(function (s) { s.value = days[+s.getAttribute('data-mw-day')] || ''; });
+      $$('label', box).forEach(function (l, i) { l.textContent = (dayNames[i] || '') + ' ' + fmt(weekDate(kk, i)); });
+      var ex = extra(); up.hidden = !ex; up.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : '';
+    };
+    for (var i = 0; i < 5; i++) (function (i) {
+      var li = document.createElement('li'), lab = document.createElement('label'), sel = document.createElement('select'), id = 'mw-day-' + i;
+      sel.className = 'select'; sel.id = id; sel.setAttribute('data-mw-day', i); lab.setAttribute('for', id);
+      var o0 = document.createElement('option'); o0.value = ''; o0.textContent = T_('day-empty'); sel.appendChild(o0);
+      dishes.filter(ok).forEach(function (d) { var op = document.createElement('option'), l = level(d); op.value = d.title; op.textContent = d.title + (l ? ' · ' + fill(T_('up-badge'), { p: money(upg(l)) }) : ''); sel.appendChild(op); });
+      sel.addEventListener('change', function () { days[i] = sel.value; say(''); paint(); });
+      li.appendChild(lab); li.appendChild(sel); box.appendChild(li);
+    })(i);
+    var fromItems = function (items) { var out = []; (items || []).forEach(function (it) { for (var j = 0; j < (+it.qty || 1); j++) out.push(it.title); }); while (out.length < 5) out.push(''); return out.slice(0, 5); };
+    var local = function (w) { try { return JSON.parse(localStorage.getItem('kulinaria_week_' + w) || 'null'); } catch (e) { return null; } };
+    var loadWeek = function () {
+      var w = weekSel.value; days = ['', '', '', '', '']; say(''); paint();
+      var done = function (sel, prev) {
+        if (sel && sel.items && sel.items.length) days = fromItems(sel.items);
+        else if (prev && prev.items && prev.items.length) { days = fromItems(prev.items); say(T_('prev'), false); }
+        days = days.map(function (t) { var d = byTitle(t); return d && ok(d) ? t : ''; }); paint();
+      };
+      if (a) {
+        fetch(a.url + (a.url.indexOf('?') > -1 ? '&' : '?') + 'action=week&cid=' + encodeURIComponent(a.cid) + '&token=' + encodeURIComponent(a.token) + '&week=' + encodeURIComponent(w))
+          .then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) done(j.selection, j.previous); }).catch(function () {});
+      } else { var l = local(w); if (l) done({ items: l.items }, null); }
+    };
+    weekSel.addEventListener('change', loadWeek);
+    save.addEventListener('click', function () {
+      if (days.filter(Boolean).length !== 5) { say(T_('need'), true); return; }
+      var w = weekSel.value, kk = weekSel.selectedIndex, ex = extra(), counts = {};
+      days.forEach(function (t) { counts[t] = (counts[t] || 0) + 1; });
+      var items = Object.keys(counts).map(function (t) { return { title: t, qty: counts[t] }; });
+      var label = fmt(weekDate(kk)) + ' – ' + fmt(weekDate(kk, 4)), email = ((readFunnel().info || {}).email) || '';
+      try { localStorage.setItem('kulinaria_week_' + w, JSON.stringify({ items: items, upgrade: ex })); } catch (e) {}
+      if (a) { try { fetch(a.url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'week', cid: a.cid, token: a.token, week: w, email: email, days: days, upgrade: ex }) }); } catch (e) {} }
+      if (!ex) { say(fill(T_('saved'), { d: label }), false); return; }
+      // the difference of the higher-tier dishes is paid for that week: one line per upgrade level
+      var lines = [];
+      for (var lv = 1; lv <= 3; lv++) {
+        var names = days.filter(function (t) { return level(byTitle(t)) === lv; }), vid = parseInt(root.getAttribute('data-upv-' + lv), 10);
+        if (names.length && vid) { var p = {}; p[T_('prop-upgrade')] = names.join(', '); p._semana = w; lines.push({ id: vid, quantity: names.length, properties: p }); }
+      }
+      say(fill(T_('saved-pay'), { p: money(ex) }), false);
+      if (!lines.length) return;
+      fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: lines }) })
+        .then(function () { var c = $('[data-mw-cart]', root); window.location.href = (c && c.getAttribute('href')) || '/cart'; }, function () { say(T_('error'), true); });
+    });
+    loadWeek();
+  }
+
   function initOnboarding() {
     var root = $('[data-onboarding]'); if (!root) return;
     var form = $('[data-ob-form]', root), welcome = $('[data-ob-welcome]', root), err = $('[data-ob-error]', form);
@@ -1148,7 +1225,7 @@
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

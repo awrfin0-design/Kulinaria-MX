@@ -33,6 +33,19 @@
     for (var i = 0; i < weeksOf(order); i++) out.push(ymd(addDays(first, 7 * i)));
     return out;
   }
+  /** items cooked for one delivery week of an order: the client's own choice for that week, else the last choice repeated
+   *  (the contract's automatic Saturday selection); week 1 = the items that came with the order */
+  function itemsOf(o, w) { return (o.byWeek && o.byWeek[w]) || o.items || []; }
+  function attachWeeklies(orders, selections, cutoff) {
+    var by = {};
+    (selections || []).forEach(function (s) { by[String(s.email || '').toLowerCase() + '|' + s.week] = s.items || []; });
+    orders.forEach(function (o) {
+      var cur = o.items || [], map = {}, e = String(o.email || '').toLowerCase();
+      deliveryWeeks(o, cutoff).forEach(function (w, i) { if (i > 0 && by[e + '|' + w]) cur = by[e + '|' + w]; map[w] = cur; });
+      o.byWeek = map;
+    });
+    return orders;
+  }
   function weeksInMonth(year, month) {              // Mondays that fall inside the month
     var out = [], d = mondayOf(new Date(year, month, 1));
     if (d.getMonth() !== month) d = addDays(d, 7);
@@ -82,8 +95,8 @@
       var weeks = deliveryWeeks(o, opts.cutoff).filter(function (w) { return w >= from && w <= to; });
       if (!weeks.length) return;
       active++;
-      (o.items || []).forEach(function (it) {
-        var n = (+it.qty || 0) * weeks.length; if (!n) return;
+      weeks.forEach(function (w) { itemsOf(o, w).forEach(function (it) {
+        var n = +it.qty || 0; if (!n) return;
         plates += n;
         var rec = findRecipe(recipes, it.title);
         if (!rec) { missing[it.title] = (missing[it.title] || 0) + n; return; }
@@ -93,7 +106,7 @@
           var net = g.qty * n, gross = g.waste > 0 && g.waste < 95 ? net / (1 - g.waste / 100) : net;
           r.net += net; r.gross += gross; r.dishes[rec.title] = (r.dishes[rec.title] || 0) + n;
         });
-      });
+      }); });
     });
     var list = Object.keys(rows).map(function (k) { var r = rows[k]; r.buy = roundUp(r.gross * (1 + buffer / 100), r.unit); return r; });
     list.sort(function (a, b) { return CAT_ORDER.indexOf(a.cat) - CAT_ORDER.indexOf(b.cat) || a.name.localeCompare(b.name, 'es'); });
@@ -115,7 +128,7 @@
         var weeks = deliveryWeeks(o, cutoff);
         if (weeks.indexOf(w) < 0) return;
         active++; if (weeks[0] === w && o.plan === 'block') started++;
-        (o.items || []).forEach(function (it) { plates += +it.qty || 0; });
+        itemsOf(o, w).forEach(function (it) { plates += +it.qty || 0; });
       });
       out.push({ week: w, orders: active, plates: plates, newBlocks: started });
     }
@@ -134,7 +147,7 @@
       if (o.plan === 'block') t.blocks++; else t.trials++;
       t.revenue += +o.total || 0;
       var wk = ymd(mondayOf(new Date(o.date))); t.perWeek[wk] = (t.perWeek[wk] || 0) + 1;
-      (o.items || []).forEach(function (it) { var n = (+it.qty || 0) * weeksOf(o); t.plates += n; dishes[it.title] = (dishes[it.title] || 0) + n; });
+      deliveryWeeks(o, cutoff).forEach(function (w) { itemsOf(o, w).forEach(function (it) { var n = +it.qty || 0; t.plates += n; dishes[it.title] = (dishes[it.title] || 0) + n; }); });
     });
     t.avg = t.orders ? t.revenue / t.orders : 0;
     t.top = Object.keys(dishes).map(function (k) { return { title: k, n: dishes[k] }; }).sort(function (a, b) { return b.n - a.n; });
@@ -170,7 +183,7 @@
 
   var api = { CAT_ORDER: CAT_ORDER, CAT_NAME: CAT_NAME, ymd: ymd, parseYmd: parseYmd, addDays: addDays, mondayOf: mondayOf, firstDeliveryMonday: firstDeliveryMonday,
     weeksOf: weeksOf, deliveryWeeks: deliveryWeeks, weeksInMonth: weeksInMonth, norm: norm, normalizeRecipes: normalizeRecipes, findRecipe: findRecipe, recipeList: recipeList,
-    shopping: shopping, weeklyHistory: weeklyHistory, activeBlocks: activeBlocks, fmtQty: fmtQty, monthTally: monthTally, demoData: demoData };
+    shopping: shopping, itemsOf: itemsOf, attachWeeklies: attachWeeklies, weeklyHistory: weeklyHistory, activeBlocks: activeBlocks, fmtQty: fmtQty, monthTally: monthTally, demoData: demoData };
 
   /* ================================================================== the screen (browser only) */
   if (typeof document === 'undefined') return api;
@@ -307,7 +320,7 @@
       fetch(url).then(function (r) { return r.json(); }).then(function (j) {
         if (!j.ok) { try { sessionStorage.removeItem('kx-admin-key'); } catch (x) {} gate(j.error === 'forbidden' ? T.badKey : T.error); return; }
         if (j.recipes && j.recipes.length) recipes = normalizeRecipes(j.recipes);
-        S.data = { orders: j.orders || [], clients: j.clients || [], demo: false }; render();
+        S.data = { orders: attachWeeklies(j.orders || [], j.selections || [], cutoff), clients: j.clients || [], demo: false }; render();
       }).catch(function () { gate(T.error); });
     }
     var saved = ''; try { saved = sessionStorage.getItem('kx-admin-key') || ''; } catch (e) {}
