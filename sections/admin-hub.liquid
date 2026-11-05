@@ -4,7 +4,9 @@
   Google Apps Script endpoint checks (backend/google-sheets/Code.gs, property ADMIN_KEY): the theme code itself is public.
 {%- endcomment -%}
 {%- liquid
-  assign admin_list = settings.admin_emails | downcase | remove: ' ' | split: ','
+  assign emails_raw = section.settings.admin_emails | default: settings.admin_emails
+  assign endpoint = section.settings.admin_endpoint | default: settings.admin_endpoint
+  assign admin_list = emails_raw | downcase | remove: ' ' | split: ','
   assign me = customer.email | downcase
   assign allowed = false
   if customer and admin_list contains me
@@ -14,7 +16,7 @@
 <section class="admin-hub" {{ section.shopify_attributes }}>
   <div class="admin-hub__wrap">
     {%- if allowed -%}
-      <div data-admin-hub data-endpoint="{{ settings.admin_endpoint | escape }}" data-cutoff-hour="{{ settings.cutoff_hour | default: 10 }}" data-lang="{{ request.locale.iso_code | default: 'es' }}" data-email="{{ customer.email | escape }}">
+      <div data-admin-hub data-endpoint="{{ endpoint | escape }}" data-cutoff-hour="{{ settings.cutoff_hour | default: 10 }}" data-lang="{{ request.locale.iso_code | default: 'es' }}" data-email="{{ customer.email | escape }}">
         <p class="adm-empty">{{ 'admin.loading' | t }}</p>
       </div>
     {%- elsif customer -%}
@@ -29,7 +31,9 @@
 {
   "name": "Panel de administración",
   "settings": [
-    { "type": "paragraph", "content": "Quién puede entrar y de dónde salen los datos se configura en Configuración del tema → Administración." }
+    { "type": "paragraph", "content": "Solo entra quien inicie sesión con uno de estos correos Y conozca la contraseña ADMIN_KEY del Apps Script. La contraseña NO se escribe aquí." },
+    { "type": "text", "id": "admin_emails", "label": "Correos con acceso (separados por comas)", "info": "Ej.: dueno@correo.com, gerente@correo.com" },
+    { "type": "text", "id": "admin_endpoint", "label": "URL del Apps Script (web app)", "info": "La URL que termina en /exec. Vacío = datos de demostración." }
   ],
   "presets": [{ "name": "Panel de administración" }]
 }
