@@ -868,6 +868,65 @@ ok('saving an upgraded week adds the upgrade line tagged with the week (hidden _
   ok('admin: every delivery week counts 5 dishes (not 20 in week one)', hist.map((h) => h.plates).join() === '5,5,5,5', hist.map((h) => h.plates).join());
 }
 
+// =====================================================================  v24: customer journeys, end to end (payment aside)
+const runJourney = async (label, { w, h, lang, plan, upgrade, onboarded, allergy, keep }) => {
+  await page.setViewportSize({ width: w, height: h });
+  await page.goto(`${URL0}#/home`);
+  await page.evaluate((o) => { if (o.keep) { localStorage.setItem('kx-lang', o.lang); return; } localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', o.lang); if (o.allergy) localStorage.setItem('kulinaria_profile', JSON.stringify({ allergies: [o.allergy], dislikes: [] })); }, { lang, allergy, keep });
+  await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(900);
+  const sc = '[data-page="pg/pedido"]', f = `${sc} [data-funnel]`;
+  const txt = await page.$eval(f, (e) => e.innerText);
+  if (lang === 'en') ok(`${label}: the whole order builder is in English`, !/\b(Elige|Lunes|Martes|Plan semanal|comidas|Tus datos|Siguiente|Desde)\b/.test(txt) && /per month/.test(txt) && /includes 20 meals/.test(txt), txt.slice(0, 200));
+  else ok(`${label}: plan cards read "Desde $3,600 al mes · incluye 20 comidas" and "Desde $1,000 por semana · incluye 5 comidas"`, /3,600/.test(txt) && /al mes/.test(txt) && /1,000/.test(txt) && /por semana/.test(txt), txt.slice(0, 300));
+  ok(`${label}: 3 steps and the counter starts at 1 of 3`, (await page.$$eval(`${f} [data-fn-dot]`, (d) => d.length)) === 3 && /1\D+3/.test(await page.$eval(`${f} [data-fn-stepcount]`, (e) => e.textContent)));
+  await page.click(`${f} [data-plan-choice="${plan}"]`); await page.waitForTimeout(700);   // choosing a plan moves on by itself
+  ok(`${label}: choosing a plan goes straight to the meals`, await page.$eval(`${f} [data-fn-step="2"]`, (e) => e.classList.contains('is-on')));
+  ok(`${label}: next is disabled until all 5 days have a dish`, await page.$eval(`${f} [data-fn-next]`, (b) => b.disabled));
+  const opts = await page.$$eval(`${f} select[data-fn-day]:first-of-type option`, (o) => o.map((x) => [x.value, x.textContent]));
+  const base = opts.filter(([v, t]) => v && !/\+(MX)?\$/.test(t)), dear = opts.filter(([v, t]) => v && /\+(MX)?\$210/.test(t));
+  if (allergy) ok(`${label}: a dish with the declared allergen is not offered in any day`, !opts.some(([, t]) => /Salm/.test(t)), opts.map((o) => o[1]).join('|'));
+  for (let i = 0; i < 5; i++) await page.selectOption(`${f} li:nth-child(${i + 1}) select[data-fn-day]`, (upgrade && i === 2 ? dear[0] : base[i % base.length])[0]);
+  const planTotal = await page.$eval(`${f} [data-fn-s-total]`, (e) => e.textContent);
+  const expected = (plan === 'block' ? 3600 : 1000) + (upgrade ? 210 : 0);
+  ok(`${label}: total = plan + upgrade ($${expected.toLocaleString('en-US')})`, new RegExp(expected.toLocaleString('en-US')).test(planTotal), planTotal);
+  const labels = await page.$$eval(`${f} .fn-days label`, (l) => l.map((x) => x.textContent.trim()));
+  ok(`${label}: days are Mon-Fri with dates (${labels[0]} … ${labels[4]})`, labels.length === 5 && labels.every((x) => /\d/.test(x)) && (lang === 'en' ? /^Monday/.test(labels[0]) && /^Friday/.test(labels[4]) : /^Lunes/.test(labels[0]) && /^Viernes/.test(labels[4])));
+  await page.click(`${f} [data-fn-next]`); await page.waitForTimeout(500);
+  if (onboarded) {
+    ok(`${label}: returning customer is not asked again (saved summary, no form)`, await page.$eval(`${f} [data-fn-fields]`, (e) => e.hidden) && !(await page.$eval(`${f} [data-fn-saved]`, (e) => e.hidden)));
+  } else {
+    await page.click(`${f} [data-fn-finish]`); await page.waitForTimeout(250);
+    ok(`${label}: cannot finish with the form empty`, !(await page.$eval(`${f} [data-fn-error]`, (e) => e.hidden)));
+    await page.fill(`${f} [data-info="name"]`, 'Ana Pérez Soto'); await page.fill(`${f} [data-info="email"]`, 'ana@ejemplo.com'); await page.fill(`${f} [data-info="phone"]`, '+52 999 000 0000');
+    await page.fill(`${f} [data-info="street"]`, 'Calle Lago 24'); await page.fill(`${f} [data-info="cluster"]`, 'Clúster Las Lomas'); await page.fill(`${f} [data-info="zip"]`, '97000');
+  }
+  await page.click(`${f} [data-fn-finish]`); await page.waitForTimeout(250);
+  ok(`${label}: cannot finish without accepting the contract`, !(await page.$eval(`${f} [data-fn-error]`, (e) => e.hidden)) && page.url().endsWith('#/pg/pedido'));
+  await page.check(`${f} [data-fn-contract]`);
+  await page.evaluate(() => { const fe = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push({ u: String(u).split('/').pop(), b: (o && o.body) || '' }); return fe.apply(this, arguments); }; });
+  await page.click(`${f} [data-fn-finish]`); await page.waitForTimeout(1100);
+  const calls = await page.evaluate(() => window.__calls);
+  const order = calls.map((c) => c.u).join(',');
+  ok(`${label}: cart is cleared first, then attributes, then the plan lines are added (no duplicates when you go back)`, /^clear\.js,update\.js,add\.js/.test(order), order);
+  const attrs = JSON.parse((calls.find((c) => c.u === 'update.js') || { b: '{}' }).b).attributes || {};
+  ok(`${label}: attributes carry the customer data once (name, e-mail, phone, street, plan, contract, days)`, attrs.correo === 'ana@ejemplo.com' || onboarded ? (attrs.plan === plan && attrs.contrato_aceptado === 'sí' && !!attrs.nombre && !!attrs.telefono && /:/.test(attrs.dias) && attrs.calle !== undefined) : false, JSON.stringify(attrs).slice(0, 300));
+  const items = JSON.parse((calls.find((c) => c.u === 'add.js') || { b: '{"items":[]}' }).b).items;
+  const planLine = items[0], props = planLine.properties || {};
+  ok(`${label}: ONE plan line, quantity 1, right variant (${plan === 'block' ? '4 weeks' : '1 week'}), day properties and hidden dish list`, planLine.quantity === 1 && (plan === 'block' ? /1$/.test(String(planLine.id)) : /0$/.test(String(planLine.id))) && Object.keys(props).filter((k) => /\d/.test(k)).length === 5 && /_platillos/.test(JSON.stringify(props)), JSON.stringify(planLine).slice(0, 400));
+  ok(`${label}: ${upgrade ? 'the upgrade is its own line (+3 levels, qty 1, one week only)' : 'no upgrade line when every dish is the base tier'}`, upgrade ? items.length === 2 && items[1].quantity === 1 && /^74003$/.test(String(items[1].id)) : items.length === 1, JSON.stringify(items.slice(1)));
+  ok(`${label}: lands on the cart`, page.url().endsWith('#/carrito'));
+  const cartTxt = await page.$eval('[data-page="carrito"]', (e) => e.innerText);
+  ok(`${label}: the cart shows the plan, never the hidden properties`, !/_platillos|_semana/.test(cartTxt) && /(Lunes|Monday) 9 nov/i.test(cartTxt) && /3,600|5,000|1,000|plan/i.test(cartTxt), cartTxt.slice(0, 200));
+};
+await runJourney('journey desktop ES, 4-week plan with one upgrade', { w: 1440, h: 900, lang: 'es', plan: 'block', upgrade: true });
+await runJourney('journey phone ES, 1-week plan', { w: 390, h: 844, lang: 'es', plan: 'week', upgrade: false });
+await runJourney('journey desktop EN, 4-week plan', { w: 1440, h: 900, lang: 'en', plan: 'block', upgrade: false });
+await runJourney('journey with a nut allergy', { w: 1440, h: 900, lang: 'es', plan: 'block', upgrade: false, allergy: 'Frutos secos' });
+await page.evaluate(() => { localStorage.setItem('kx-lang', 'es'); });
+// returning customer: onboarded earlier -> the order builder asks nothing again
+await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); localStorage.setItem('kx-lang', 'es'); localStorage.setItem('kulinaria_onboarded', '1'); localStorage.setItem('kulinaria_funnel', JSON.stringify({ v: 2, info: { name: 'Ana Pérez', email: 'a@x.com', phone: '999', street: 'Calle Lago 24' }, allergies: [], days: [] })); });
+await runJourney('journey returning customer', { w: 1440, h: 900, lang: 'es', plan: 'block', upgrade: false, onboarded: true, keep: true });
+
 await browser.close();
 ok('no JS errors on any page', errors.length === 0, errors.slice(0, 5).join(' | '));
 const pass = results.filter((r) => r.ok).length;

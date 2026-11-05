@@ -12,13 +12,6 @@
   assign allergens = mf.allergens.value | join: '|'
   assign ingredients = mf.ingredients.value | join: '|'
   assign diets = mf.diets.value | join: '|'
-  assign variant = product.selected_or_first_available_variant
-  assign plan_id = ''
-  if product.selling_plan_groups.size > 0
-    assign group = product.selling_plan_groups | first
-    assign first_plan = group.selling_plans | first
-    assign plan_id = first_plan.id
-  endif
 -%}
 <article class="fn-dish" data-dish data-fn-dish data-pid="{{ product.id }}" data-handle="{{ product.handle }}"
   data-title="{{ product.title | escape }}" data-category="{{ category }}" data-tier="{{ tier }}" data-diets="{{ diets }}" data-allergens="{{ allergens | escape }}" data-ingredients="{{ ingredients | escape }}">

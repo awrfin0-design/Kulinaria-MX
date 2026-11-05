@@ -137,7 +137,7 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
   });
   const plan4 = planProducts[1], v4 = plan4.variants[1];
   const planLine = { ...item(plan4, 1, 0), variant: v4, original_line_price: v4.price, final_line_price: v4.price,
-    properties: { [tr('Platillos')]: '2× Bowl de res magra y quinoa | 3× Salmón gourmet en costra de almendras', [tr('Comidas por semana')]: '5', [tr('Nivel')]: 'Exclusivo', [tr('Duración')]: tr('4 semanas') } };
+    properties: { [tr('Comidas por semana')]: '5', [tr('Nivel')]: 'Selecto', [tr('Duración')]: tr('4 semanas'), 'Lunes 9 nov': 'Bowl de res magra y quinoa', 'Martes 10 nov': 'Bowl de res magra y quinoa', 'Miércoles 11 nov': 'Salmón gourmet en costra de almendras', 'Jueves 12 nov': 'Salmón gourmet en costra de almendras', 'Viernes 13 nov': 'Salmón gourmet en costra de almendras', _platillos: '2× Bowl de res magra y quinoa | 3× Salmón gourmet en costra de almendras' } };
   const items = [planLine];
   const total = items.reduce((a, i) => a + i.final_line_price, 0);
   const cart = { items, item_count: 1, total_discount: 0, items_subtotal_price: total, total_price: total, attributes: {}, currency: { iso_code: 'MXN' } };
