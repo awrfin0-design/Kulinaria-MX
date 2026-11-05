@@ -146,7 +146,8 @@ function handleOrder_(o) {
   // 2. dishes
   var items = (o.line_items || []);
   var summary = items.map(function (i) { return i.quantity + '× ' + i.title + (i.variant_title ? ' (' + i.variant_title + ')' : ''); }).join(' | ');
-  // 3. order row
+  // 3. order row (remember if it is a brand-new order, to alert the kitchen only once)
+  var isNew = !orderExists_(o.id);
   upsertRow_('Pedidos', 1, o.id, [o.id, o.name, o.created_at, name, email, c.phone || a.telefono || '', o.total_price, o.currency, o.financial_status, o.fulfillment_status || 'pendiente',
     a.plan || '', a.enfoque || '', a.dietas || '', a.alergias || '', a.no_me_gustan || '', addr, a.codigo_referencia || '', a.contrato_aceptado || '', summary, o.note || '']);
   // 4. dish rows (replace the order's previous rows so re-sent webhooks never duplicate)
@@ -159,4 +160,30 @@ function handleOrder_(o) {
     sh.appendRow([o.id, o.name, o.created_at, name, i.title, i.variant_title || '', i.quantity, i.price,
       (i.selling_plan_allocation && i.selling_plan_allocation.selling_plan && i.selling_plan_allocation.selling_plan.name) || '']);
   });
+  if (isNew) alertNewOrder_(o, name, email, addr, a, summary);
+}
+
+function orderExists_(id) {
+  var sh = sheet_('Pedidos'), last = sh.getLastRow();
+  if (last < 2) return false;
+  var ids = sh.getRange(2, 1, last - 1, 1).getValues();
+  for (var i = 0; i < ids.length; i++) if (String(ids[i][0]) === String(id)) return true;
+  return false;
+}
+
+/**
+ * E-mail alert for every NEW order. Script property ALERT_EMAILS = one or more addresses separated by commas
+ * (e.g. equipo@kulinariamx.com). Without the property nothing is sent. Free Google accounts can send about 100 e-mails a day.
+ * A failure to send never blocks saving the order.
+ */
+function alertNewOrder_(o, name, email, addr, a, summary) {
+  try {
+    var to = PropertiesService.getScriptProperties().getProperty('ALERT_EMAILS');
+    if (!to) return;
+    var plan = (a.plan === 'block' || summary.indexOf('Bloque') > -1) ? 'Bloque de 4 semanas' : 'Semana de prueba';
+    var body = ['Nuevo pedido ' + o.name, '', 'Cliente: ' + name, 'Correo: ' + email, 'Teléfono: ' + ((o.customer && o.customer.phone) || a.telefono || ''), 'Dirección: ' + addr, '',
+      'Plan: ' + plan, 'Total: $' + o.total_price + ' ' + o.currency, 'Platillos: ' + summary, '',
+      'ALERGIAS: ' + (a.alergias || 'ninguna declarada'), 'No le gustan: ' + (a.no_me_gustan || '-'), 'Dietas: ' + (a.dietas || '-'), '', 'Panel: abre /pages/admin en tu sitio.'].join('\n');
+    MailApp.sendEmail(to, 'Nuevo pedido ' + o.name + ' · ' + name, body);
+  } catch (err) { /* never block the order */ }
 }
