@@ -82,16 +82,20 @@ One motif on every page: an airy photo, a serif headline with a brand-script phr
 
 Also: loading screen, gold/olive dust on the background, scroll-scrubbed fire band, fire inside buttons, 3D tilt on dish cards and photos, coverflow carousel, category photo preview, 5-step sign-up, editorial `rows` / `grid` / `index` layouts.
 
-## Order funnel (home and `/pages/pedido`)
+## Order funnel (home and `/pages/pedido`) — plans, not single dishes
 
-`sections/order-funnel.liquid` replaces the old "how it works" cards. Five steps, one live summary:
-1. **Focus** (diet): whole menu, Keto, gluten-free, vegetarian, vegan, low-calorie, low-carb, high-protein. Choosing one filters the week's dishes.
-2. **Dishes** of that focus: add, set quantities. Dishes that contain a declared allergen are blocked.
-3. **Plan**: 4-week block (recommended) or trial week (+15%), optional referral code.
-4. **Categories**: browse any other category (breakfasts, fire & sea, bowls, soups, desserts, drinks) and add to the same order.
-5. **Your details**: name, e-mail, phone, address, allergies, dislikes. Saved on the device, so the next visit is one click.
+`sections/order-funnel.liquid`, three steps and one live summary:
+1. **Plan**: 4 weeks (from $3,600 a month, 20 meals) or 1 week (from $1,000, 5 meals). Choosing a plan moves on by itself.
+2. **Meals**: assign a dish to each weekday (Monday to Friday, with the real dates). The first delivery is the coming Monday; after Saturday 10:00 it is the Monday after. Dishes of a higher tier add only the per-meal difference (+$70 / +$140 / +$210) **for that week**; dishes with a declared allergen are blocked.
+3. **Your details**: asked once (onboarding). Returning customers see a saved summary and only accept the contract.
 
-On confirm, the details become **cart attributes** (they appear on the order as *Additional details*) and the dishes go in the cart (with the selling plan for blocks); the client continues to contract and payment. The sitemap menu always shows every page: if Shopify Navigation has no nested `main-menu`, the theme falls back to the complete built-in sitemap (`snippets/sitemap-default.liquid`).
+On confirm the cart is cleared, the details become cart attributes, and ONE plan line is added (variant "1 semana" / "4 semanas" of the "Plan semanal <nivel>" product, day properties, hidden `_platillos`), plus one "Mejora de platillo" line per upgrade level. Prices live in Shopify (collection `planes-semanales` and product `mejora-de-platillo`); the theme reads them with `snippets/plan-price.liquid`.
+
+**Onboarding** (`/pages/bienvenida`, `sections/onboarding.liquid`): a one-time questionnaire after sign-in (contact, delivery address, allergies, dislikes, diet). Stored in the browser and in the Sheet tab `Perfiles`, signed per customer (`customer.id | hmac_sha256: shop.metafields.kulinaria.profile_secret`).
+
+**Mi semana** (`/pages/cuenta-semana`): every week the client chooses the next 5 meals for any of the next 4 delivery Mondays. A week left unchosen repeats the previous one (automatic Saturday selection). Choices live in the Sheet tab `Selecciones`; the admin shopping list counts each week's own dishes. Thursday and Friday reminders: `installWeeklyReminders()` in `Code.gs`.
+
+Owner steps: `docs/setup-checklist.md`. Tests: `node scripts/backend-test.js`, `node scripts/recetas-test.js`, `scripts/render/test.mjs`.
 
 ## Client profiles and the order spreadsheet
 
