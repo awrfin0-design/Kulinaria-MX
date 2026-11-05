@@ -9,7 +9,8 @@ import { makeStore } from './mock.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
-const LOCALES = { es: JSON.parse(read('locales/es.default.json')), en: JSON.parse(read('locales/en.json')) };
+const jparse = (t) => JSON.parse(t.replace(/^\s*\/\*[\s\S]*?\*\/\s*/, ''));   // Shopify's editor adds a comment header to JSON files it saves
+const LOCALES = { es: jparse(read('locales/es.default.json')), en: jparse(read('locales/en.json')) };
 const CONTENT_EN = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/render/content.en.json'), 'utf8'));
 export const LANGS = ['es', 'en'];
 
@@ -155,7 +156,7 @@ async function renderLang(lang) {
   };
 
   state.renderGroup = async (name) => {
-    const g = JSON.parse(read(`sections/${name}.json`));
+    const g = jparse(read(`sections/${name}.json`));
     let out = '';
     for (const id of g.order) out += await state.renderSection(g.sections[id].type, id, g.sections[id].settings, g.sections[id].blocks || {}, g.sections[id].block_order || null, name);
     return out;
@@ -163,7 +164,9 @@ async function renderLang(lang) {
 
   let layoutTpl;
   const renderTemplate = async (tplName, pageGlobals) => {
-    const t = JSON.parse(read(`templates/${tplName}.json`));
+    const t = jparse(read(`templates/${tplName}.json`));
+    // the preview has a demo customer and no Apps Script: the admin page shows demo data for them (the real store's values stay in the template)
+    if (tplName === 'page.admin') for (const k of Object.keys(t.sections)) Object.assign(t.sections[k].settings || {}, { admin_emails: 'ramon@ejemplo.com', admin_endpoint: '' });
     current = { ...store.globals, ...pageGlobals };
     for (const k of Object.keys(state.globals)) delete state.globals[k];
     Object.assign(state.globals, current);   // Shopify exposes these inside snippets too

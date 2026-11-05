@@ -432,7 +432,7 @@ ok('language switches back to Spanish', (await page.evaluate(() => document.docu
 // every locale key in es has an English twin (and vice versa)
 {
   const flat = (o, p = '') => Object.entries(o).flatMap(([k, v]) => (typeof v === 'object' ? flat(v, p + k + '.') : [p + k]));
-  const es = flat(JSON.parse(fs.readFileSync(path.join(ROOT, 'locales/es.default.json'), 'utf8'))), en = flat(JSON.parse(fs.readFileSync(path.join(ROOT, 'locales/en.json'), 'utf8')));
+  const es = flat(JSON.parse(fs.readFileSync(path.join(ROOT, 'locales/es.default.json'), 'utf8').replace(/^\s*\/\*[\s\S]*?\*\/\s*/, ''))), en = flat(JSON.parse(fs.readFileSync(path.join(ROOT, 'locales/en.json'), 'utf8').replace(/^\s*\/\*[\s\S]*?\*\/\s*/, '')));
   ok('locales/en.json has exactly the keys of es.default.json', es.length === en.length && es.every((k) => en.includes(k)), es.filter((k) => !en.includes(k)).join(','));
   const used = new Set(); for (const f of fs.readdirSync(path.join(ROOT, 'sections')).filter((f) => f.endsWith('.liquid')).map((f) => 'sections/' + f).concat(fs.readdirSync(path.join(ROOT, 'snippets')).map((f) => 'snippets/' + f), ['layout/theme.liquid'])) {
     for (const m of fs.readFileSync(path.join(ROOT, f), 'utf8').matchAll(/'([a-z_0-9-]+(?:\.[a-z_0-9-]+)+)'\s*\|\s*t\b/g)) used.add(m[1]);
@@ -775,6 +775,9 @@ await closeMenu(); await page.waitForTimeout(500); await page.evaluate(() => loc
   ok('admin: quantities read like a shopping list (13.2 kg, 950 g, 1.5 L, 3 pz)', ['13.2 kg', '950 g', '1.5 L', '3 pz'].join() === [K.fmtQty(13200, 'g'), K.fmtQty(950, 'g'), K.fmtQty(1500, 'ml'), K.fmtQty(3, 'u')].map((x) => x.n + ' ' + x.u).join());
   const tally = K.monthTally([{ date: at(2026, 10, 4), plan: 'block', total: 2560, email: 'a@x.com', items: [{ title: 'A', qty: 2 }] }, { date: at(2026, 10, 9), plan: 'trial', total: 736, email: 'b@x.com', items: [{ title: 'A', qty: 1 }, { title: 'B', qty: 1 }] }, { date: at(2026, 9, 28), plan: 'block', total: 999, email: 'c@x.com', items: [] }], [{ email: 'a@x.com', created: at(2026, 10, 4) }, { email: 'b@x.com', created: at(2026, 10, 9) }, { email: 'c@x.com', created: at(2026, 9, 28) }], 2026, 10, 10);
   ok('admin: month tally = orders, blocks vs loose trials, sales, new clients and plates to cook', tally.orders === 2 && tally.blocks === 1 && tally.trials === 1 && tally.revenue === 3296 && tally.newClients === 2 && tally.plates === 10 && tally.top[0].title === 'A', JSON.stringify(tally));
+  const hist = K.weeklyHistory([o1, o2], 10, '2026-11-02', 6);
+  ok('admin: the weekly history remembers past weeks (active orders, dishes, new blocks per delivery week)', hist[1].orders === 2 && hist[1].plates === 3 && hist[1].newBlocks === 1 && hist[2].orders === 1 && hist[5].orders === 0, JSON.stringify(hist));
+  ok('admin: "active blocks now" counts blocks that still have deliveries ahead', K.activeBlocks([o1, o2], 10, '2026-11-23') === 1 && K.activeBlocks([o1, o2], 10, '2026-12-14') === 0);
   ok('admin: the Google Sheet recipe rows (Recetas tab) load like the bundled recipes', !!K.findRecipe(K.normalizeRecipes([{ dish: 'Sopa X', name: 'Sal', qty: 1, unit: 'g', cat: 'pantry', waste: 0 }]), 'sopa x'));
   const bundled = K.normalizeRecipes(JSON.parse(fs.readFileSync(path.join(ROOT, 'backend/recipes.json'), 'utf8')));
   ok('admin: every sample dish of the store has a recipe with the pantry basics (oil, salt, garlic where used)', K.recipeList(bundled).length === 11 && K.recipeList(bundled).every((r) => r.ing.length >= 6), String(K.recipeList(bundled).length));
@@ -782,8 +785,9 @@ await closeMenu(); await page.waitForTimeout(500); await page.evaluate(() => loc
   ok('admin: the preview never links to /pages/admin from the public pages', await (async () => { await page.setViewportSize({ width: 1440, height: 900 }); await page.goto(`${URL0}#/home`); await page.waitForTimeout(300); return page.evaluate(() => ![...document.querySelectorAll('[data-page]:not([data-page="pg/admin"]) a')].some((a) => /admin/.test(a.getAttribute('href') || ''))); })());
   await page.goto(`${URL0}#/pg/admin`); await page.reload(); await page.waitForTimeout(1200);
   const A = '[data-page="pg/admin"]';
-  ok('admin hub: title, 4 tabs, demo-data notice, 6 KPI cards', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-tabs button').length === 4 && !!document.querySelector(a + ' .adm-demo') && document.querySelectorAll(a + ' .adm-kpi').length === 6, A));
+  ok('admin hub: title, 4 tabs, demo-data notice, 7 KPI cards', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-tabs button').length === 4 && !!document.querySelector(a + ' .adm-demo') && document.querySelectorAll(a + ' .adm-kpi').length === 7, A));
   ok('admin hub: the KPIs show orders, 4-week blocks, loose trial weeks, new clients, sales and average ticket', await page.evaluate((a) => { const t = (id) => document.querySelector(a + ' [data-kpi="' + id + '"] b').textContent; return +t('orders') === +t('blocks') + +t('trials') && /^\$/.test(t('sales')) && /^\$/.test(t('avg')) && +t('clients') >= 0; }, A));
+  ok('admin summary: a weekly history table of past and coming weeks', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-hist tbody tr').length === 12 && !!document.querySelector(a + ' .adm-hist tr.now'), A));
   await page.click(`${A} [data-tab="1"]`); await page.waitForTimeout(400);
   const shop = await page.evaluate((a) => ({ cats: document.querySelectorAll(a + ' .adm-cat').length, rows: document.querySelectorAll(a + ' .adm-list li').length, kg: /kg|L|g|ml|pz/.test(document.querySelector(a + ' .adm-qty').textContent), week: document.querySelector(a + ' .adm-nav b').textContent, actions: document.querySelectorAll(a + ' .adm-actions button').length }), A);
   ok('admin shopping list: grouped by category with kg / g / L / pieces per ingredient, next week by default, copy / CSV / print', shop.cats >= 3 && shop.rows >= 10 && shop.kg && shop.actions === 3, JSON.stringify(shop));

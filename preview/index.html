@@ -2079,6 +2079,8 @@ a.lang__btn{display:inline-block;text-decoration:none}
   .site-header,.site-footer,.adm-tabs,.adm-toolbar,.adm-actions,.adm-demo,.menu-overlay,.adm-head h1~*:not(.adm-body){display:none!important}
   body{background:#fff!important;color:#000!important}.adm-list li{border-color:#999}.adm-qty b,.adm-name,.adm-cat{color:#000!important}
 }
+
+.adm-hist{grid-column:1/-1}.adm-hist table{width:100%;border-collapse:collapse;font-size:.92rem}.adm-hist th{font-family:var(--font-label);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}.adm-hist td{padding:8px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}.adm-hist tr.now td{color:var(--accent);font-weight:700}
 </style></head>
 
   <body class="template-index">
@@ -14477,6 +14479,25 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     return { n: f(v, 0), u: 'pz' };
   }
 
+  /** per delivery week: how many orders were active, dishes to cook, and how many 4-week blocks started that week */
+  function weeklyHistory(orders, cutoff, fromMonday, count) {
+    var out = [];
+    for (var i = 0; i < count; i++) {
+      var w = ymd(addDays(parseYmd(fromMonday), 7 * i)), active = 0, plates = 0, started = 0;
+      orders.forEach(function (o) {
+        var weeks = deliveryWeeks(o, cutoff);
+        if (weeks.indexOf(w) < 0) return;
+        active++; if (weeks[0] === w && o.plan === 'block') started++;
+        (o.items || []).forEach(function (it) { plates += +it.qty || 0; });
+      });
+      out.push({ week: w, orders: active, plates: plates, newBlocks: started });
+    }
+    return out;
+  }
+  function activeBlocks(orders, cutoff, todayMonday) {
+    return orders.filter(function (o) { return o.plan === 'block' && deliveryWeeks(o, cutoff).slice(-1)[0] >= todayMonday; }).length;
+  }
+
   /* ------------------------------------------------------------------ tally */
   function monthTally(orders, clients, year, month, cutoff) {
     var inMonth = orders.filter(function (o) { var d = new Date(o.date); return d.getFullYear() === year && d.getMonth() === month; });
@@ -14522,7 +14543,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
 
   var api = { CAT_ORDER: CAT_ORDER, CAT_NAME: CAT_NAME, ymd: ymd, parseYmd: parseYmd, addDays: addDays, mondayOf: mondayOf, firstDeliveryMonday: firstDeliveryMonday,
     weeksOf: weeksOf, deliveryWeeks: deliveryWeeks, weeksInMonth: weeksInMonth, norm: norm, normalizeRecipes: normalizeRecipes, findRecipe: findRecipe, recipeList: recipeList,
-    shopping: shopping, fmtQty: fmtQty, monthTally: monthTally, demoData: demoData };
+    shopping: shopping, weeklyHistory: weeklyHistory, activeBlocks: activeBlocks, fmtQty: fmtQty, monthTally: monthTally, demoData: demoData };
 
   /* ================================================================== the screen (browser only) */
   if (typeof document === 'undefined') return api;
@@ -14532,7 +14553,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       orders: 'Pedidos del mes', blocks: 'Bloques de 4 semanas', trials: 'Semanas de prueba (sueltas)', clients: 'Clientes nuevos', sales: 'Ventas', avg: 'Ticket promedio', plates: 'Platillos a cocinar', top: 'Platillos más pedidos', mix: 'Bloque vs. suelto',
       perWeek: 'Pedidos por semana', week: 'Semana', month: 'Mes', buffer: 'Colchón de compra (%)', copy: 'Copiar lista', csv: 'Descargar CSV', print: 'Imprimir', copied: 'Lista copiada',
       forWhat: 'Para', dishesWord: 'platillos', activeOrders: 'pedidos activos', missing: 'Sin receta (no entran en la lista):', ingredient: 'Ingrediente', qty: 'Comprar', none: 'No hay pedidos activos en este periodo.',
-      calc: 'Cálculo', withWaste: 'con merma', recipesNote: 'Cantidades por porción. Son estimaciones de arranque: el chef las ajusta en la hoja "Recetas" del Google Sheet.', per: 'por porción', waste: 'merma',
+      history: 'Historial por semana', hWeek: 'Semana', hOrders: 'Pedidos activos', hPlates: 'Platillos', hNew: 'Bloques nuevos', activeNow: 'Bloques activos ahora', calc: 'Cálculo', withWaste: 'con merma', recipesNote: 'Cantidades por porción. Son estimaciones de arranque: el chef las ajusta en la hoja "Recetas" del Google Sheet.', per: 'por porción', waste: 'merma',
       date: 'Fecha', order: 'Pedido', client: 'Cliente', plan: 'Plan', items: 'Platillos', total: 'Total', firstDelivery: '1ª entrega', block: 'Bloque 4 sem.', trial: 'Semana de prueba',
       key: 'Contraseña de administración', keyHelp: 'Es la clave ADMIN_KEY que configuraste en el Apps Script.', enter: 'Entrar', badKey: 'Contraseña incorrecta.', loading: 'Cargando…', error: 'No se pudieron cargar los datos', lock: 'Cerrar sesión',
       noRecipes: 'Aún no hay recetas.', cooking: 'Para cocinar', buyList: 'Ver lista de compras', thisWeek: 'Esta semana', nextWeek: 'Próxima semana' },
@@ -14540,7 +14561,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       orders: 'Orders this month', blocks: '4-week blocks', trials: 'Trial weeks (loose)', clients: 'New clients', sales: 'Sales', avg: 'Average ticket', plates: 'Dishes to cook', top: 'Most ordered dishes', mix: 'Block vs loose',
       perWeek: 'Orders per week', week: 'Week', month: 'Month', buffer: 'Buying buffer (%)', copy: 'Copy list', csv: 'Download CSV', print: 'Print', copied: 'List copied',
       forWhat: 'For', dishesWord: 'dishes', activeOrders: 'active orders', missing: 'No recipe (not in the list):', ingredient: 'Ingredient', qty: 'Buy', none: 'No active orders in this period.',
-      calc: 'Math', withWaste: 'with waste', recipesNote: 'Quantities per portion. Starting estimates: the chef adjusts them in the "Recetas" Google Sheet tab.', per: 'per portion', waste: 'waste',
+      history: 'Weekly history', hWeek: 'Week', hOrders: 'Active orders', hPlates: 'Dishes', hNew: 'New blocks', activeNow: 'Active blocks now', calc: 'Math', withWaste: 'with waste', recipesNote: 'Quantities per portion. Starting estimates: the chef adjusts them in the "Recetas" Google Sheet tab.', per: 'per portion', waste: 'waste',
       date: 'Date', order: 'Order', client: 'Client', plan: 'Plan', items: 'Dishes', total: 'Total', firstDelivery: '1st delivery', block: '4-week block', trial: 'Trial week',
       key: 'Admin password', keyHelp: 'It is the ADMIN_KEY you set in the Apps Script.', enter: 'Enter', badKey: 'Wrong password.', loading: 'Loading…', error: 'Could not load the data', lock: 'Sign out',
       noRecipes: 'No recipes yet.', cooking: 'To cook', buyList: 'See shopping list', thisWeek: 'This week', nextWeek: 'Next week' }
@@ -14572,10 +14593,11 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       return '<div class="adm-nav"><button data-m="-1" aria-label="‹">‹</button><b>' + esc(MONTHS[lang][S.month] + ' ' + S.year) + '</b><button data-m="1" aria-label="›">›</button></div>' +
         '<div class="adm-kpis">' +
         kpi(T.orders, t.orders, 'orders') + kpi(T.blocks, t.blocks, 'blocks') + kpi(T.trials, t.trials, 'trials') + kpi(T.clients, t.newClients, 'clients') +
-        kpi(T.sales, money(t.revenue, lang), 'sales') + kpi(T.avg, money(t.avg, lang), 'avg') + '</div>' +
+        kpi(T.activeNow, activeBlocks(S.data.orders, cutoff, ymd(mondayOf(now))), 'active') + kpi(T.sales, money(t.revenue, lang), 'sales') + kpi(T.avg, money(t.avg, lang), 'avg') + '</div>' +
         '<div class="adm-grid"><section class="adm-card"><h3>' + T.mix + '</h3><div class="adm-bar"><i style="width:' + pb + '%"></i></div><p class="adm-muted">' + t.blocks + ' ' + esc(T.blocks.toLowerCase()) + ' · ' + t.trials + ' ' + esc(T.trials.toLowerCase()) + '</p>' +
         '<h3>' + T.perWeek + '</h3><div class="adm-spark">' + wk.map(function (k) { return '<span title="' + esc(weekLabel(k)) + '"><i style="height:' + Math.round((t.perWeek[k] / wkMax) * 100) + '%"></i><em>' + t.perWeek[k] + '</em></span>'; }).join('') + '</div></section>' +
         '<section class="adm-card"><h3>' + T.top + '</h3>' + (t.top.length ? t.top.slice(0, 8).map(function (d) { return '<div class="adm-row"><span>' + esc(d.title) + '</span><b>' + d.n + '</b><div class="adm-bar sm"><i style="width:' + Math.round((d.n / topMax) * 100) + '%"></i></div></div>'; }).join('') : '<p class="adm-muted">' + T.none + '</p>') + '</section>' +
+        '<section class="adm-card adm-hist"><h3>' + T.history + '</h3><table><thead><tr><th>' + T.hWeek + '</th><th>' + T.hOrders + '</th><th>' + T.hPlates + '</th><th>' + T.hNew + '</th></tr></thead><tbody>' + weeklyHistory(S.data.orders, cutoff, ymd(addDays(mondayOf(now), -49)), 12).reverse().map(function (h) { return '<tr' + (h.week === ymd(mondayOf(now)) ? ' class="now"' : '') + '><td>' + esc(weekLabel(h.week)) + '</td><td>' + h.orders + '</td><td>' + h.plates + '</td><td>' + h.newBlocks + '</td></tr>'; }).join('') + '</tbody></table></section>' +
         '<section class="adm-card adm-cta"><h3>' + T.cooking + ' · ' + T.nextWeek + '</h3><p class="adm-big">' + cook.plates + ' <small>' + T.dishesWord + '</small></p><p class="adm-muted">' + cook.orders + ' ' + T.activeOrders + '</p><button class="adm-btn" data-go="1" data-week="' + nextW + '">' + T.buyList + '</button></section></div>';
     }
     function kpi(label, val, id) { return '<div class="adm-kpi" data-kpi="' + id + '"><span>' + esc(label) + '</span><b>' + esc(val) + '</b></div>'; }

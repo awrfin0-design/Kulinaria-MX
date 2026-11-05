@@ -60,3 +60,5 @@
   .site-header,.site-footer,.adm-tabs,.adm-toolbar,.adm-actions,.adm-demo,.menu-overlay,.adm-head h1~*:not(.adm-body){display:none!important}
   body{background:#fff!important;color:#000!important}.adm-list li{border-color:#999}.adm-qty b,.adm-name,.adm-cat{color:#000!important}
 }
+
+.adm-hist{grid-column:1/-1}.adm-hist table{width:100%;border-collapse:collapse;font-size:.92rem}.adm-hist th{font-family:var(--font-label);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}.adm-hist td{padding:8px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}.adm-hist tr.now td{color:var(--accent);font-weight:700}
