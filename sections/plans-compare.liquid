@@ -1,7 +1,4 @@
 {%- liquid
-  assign base = settings.price_selecto
-  assign trial_extra = base | times: settings.trial_markup | divided_by: 100.0
-  assign trial_price = base | plus: trial_extra | round
   assign block_features = section.settings.block_features | newline_to_br | split: '<br />'
   assign trial_features = section.settings.trial_features | newline_to_br | split: '<br />'
 -%}
@@ -19,7 +16,7 @@
       <article class="card plan-card plan-card--featured">
         <span class="plan-card__flag">{{ 'plans.recommended' | t }}</span>
         <span class="eyebrow">{{ section.settings.block_name }}</span>
-        <p class="plan-card__price gold-text">{{ 'plans.from' | t }}{{ base }}<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> {{ 'plans.per_dish' | t }}</small></p>
+        <p class="plan-card__price gold-text">{{ 'plans.from' | t }}{% render 'plan-price', tier: 'selecto', kind: 'block', money: true %}<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> {{ 'plans.per_block' | t }}</small></p>
         <p class="text-muted">{{ section.settings.block_desc }}</p>
         <ul class="plan-list">{%- for f in block_features -%}{%- if f != blank -%}<li>{{ f }}</li>{%- endif -%}{%- endfor -%}</ul>
         <a class="btn btn--gold btn--block" style="margin-top:auto" href="{{ section.settings.block_product.url | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.block_cta }}</a>
@@ -27,8 +24,8 @@
 
       <article class="card plan-card">
         <span class="eyebrow">{{ section.settings.trial_name }}</span>
-        <p class="plan-card__price">${{ trial_price }}<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> {{ 'plans.per_dish' | t }}</small></p>
-        <p class="text-muted">{{ section.settings.trial_desc }} <strong style="color:var(--accent)">{{ settings.trial_markup }}{{ 'plans.pct_more' | t }}</strong> {{ 'plans.than_block' | t }}</p>
+        <p class="plan-card__price">{{ 'plans.from' | t }}{% render 'plan-price', tier: 'selecto', kind: 'week', money: true %}<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> {{ 'plans.per_week' | t }}</small></p>
+        <p class="text-muted">{{ section.settings.trial_desc }} <strong style="color:var(--accent)">{{ 'plans.week_note' | t }}</strong></p>
         <ul class="plan-list">{%- for f in trial_features -%}{%- if f != blank -%}<li>{{ f }}</li>{%- endif -%}{%- endfor -%}</ul>
         <a class="btn btn--outline btn--block" style="margin-top:auto" href="{{ section.settings.trial_product.url | default: settings.plans_url | default: '/pages/planes' }}">{{ section.settings.trial_cta }}</a>
       </article>

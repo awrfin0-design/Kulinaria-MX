@@ -20,11 +20,14 @@
                 <h3 style="margin:0 0 4px"><a href="{{ item.url }}">{{ item.product.title }}</a></h3>
                 {%- unless item.product.has_only_default_variant -%}<p class="text-muted" style="margin:0">{{ item.variant.title }}</p>{%- endunless -%}
                 {%- if item.selling_plan_allocation -%}<p class="cart-line__plan" style="margin:0">{{ item.selling_plan_allocation.selling_plan.name }}</p>{%- endif -%}
+                {%- for prop in item.properties -%}{%- assign pk = prop | first -%}
+                  {%- unless pk contains '_' -%}<p class="cart-line__prop text-muted" style="margin:2px 0 0;font-size:.9rem"><strong>{{ pk }}:</strong> {{ prop | last }}</p>{%- endunless -%}
+                {%- endfor -%}
                 {%- if item.properties._regalo_bienvenida -%}<p class="cart-line__plan" style="margin:0">{{ 'cart.welcome_gift_line' | t }}</p>{%- endif -%}
                 <a class="btn btn--ghost" style="padding-left:0" href="{{ item.url_to_remove }}">{{ 'cart.remove' | t }}</a>
               </div>
               <div style="text-align:right">
-                <input class="input qty" type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="{{ 'cart.quantity_of' | t }} {{ item.product.title | escape }}">
+                <input class="input qty" type="number" name="updates[]" value="{{ item.quantity }}" min="0" max="{% if item.product.type == 'plan' %}1{% else %}99{% endif %}" aria-label="{{ 'cart.quantity_of' | t }} {{ item.product.title | escape }}">
                 <p class="dish__price" style="margin:8px 0 0">
                   {%- if item.original_line_price != item.final_line_price -%}<s class="text-muted" style="font-size:.9rem">{{ item.original_line_price | money }}</s> {%- endif -%}
                   {{ item.final_line_price | money }}

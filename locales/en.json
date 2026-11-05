@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin language editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "account": {
     "allergies_tastes": "Allergies & tastes",
@@ -305,7 +296,7 @@
     "one_time_text": "A single payment, no renewal."
   },
   "plans": {
-    "from": "From $",
+    "from": "From ",
     "pct_more": "% more expensive",
     "per_dish": "/ dish",
     "recommended": "Recommended",
@@ -313,7 +304,10 @@
     "block_name": "4-week block",
     "block_short": "Renewable subscription with weekly delivery. The recommended option.",
     "trial_name": "Trial week",
-    "trial_short": "A single week, 15% more expensive than the prorated block price."
+    "trial_short": "A single week, 15% more expensive than the prorated block price.",
+    "per_block": "/ 4 weeks",
+    "per_week": "/ week",
+    "week_note": "5 meals, Monday to Friday."
   },
   "product": {
     "calories": "Calories (kcal)",
@@ -321,7 +315,10 @@
     "contains": "Contains",
     "ingredients": "Ingredients",
     "ingredients_note": "Every ingredient is declared explicitly to prevent allergies.",
-    "option": "Option"
+    "option": "Option",
+    "in_plan_text": "You enjoy this dish as part of your plan: you pick 5 meals a week and pay once.",
+    "build_plan": "Build my plan with this dish",
+    "see_plans": "See the plans"
   },
   "products": {
     "add_to_selection": "Add to my selection",
@@ -439,18 +436,18 @@
   "funnel": {
     "eyebrow": "Place your order",
     "steps": "Order steps",
-    "s1": "Menu",
+    "s1": "Plan",
     "s2": "Tier",
-    "s3": "Dishes",
-    "s4": "Plan",
+    "s3": "Meals",
+    "s4": "Your details",
     "s5": "Your details",
-    "s1_title": "Which menu do you want?",
-    "s1_text": "Pick the line of cooking for your week.",
-    "s2_title": "Which price tier?",
-    "s2_text": "Each tier has its own price per dish. Pick the one that suits you.",
+    "s1_title": "How long do you want to eat well?",
+    "s1_text": "You pick your plan once. You get 5 meals a week, Monday to Friday.",
+    "s2_title": "Choose your tier",
+    "s2_text": "All the meals in your plan are from this tier. Each tier adds $70 per meal.",
     "s2_empty": "There are no dishes with that focus this week. Pick another or see the whole menu.",
-    "s3_title": "Choose your dishes",
-    "s3_text": "You only see the menu and tier you picked. Tap to add and adjust quantities.",
+    "s3_title": "Choose your 5 meals for the week",
+    "s3_text": "Your selection repeats every week of your plan. Tap to add; you can repeat dishes.",
     "s4_title": "Choose your plan",
     "s4_text": "The 4-week block is the best-value option. The trial week costs 15% more and can be bought until Saturday at 10:00 AM.",
     "s5_title": "Your details and account",
@@ -468,8 +465,8 @@
     "summary_plan": "Plan",
     "summary_dishes": "{n} dishes per week",
     "summary_dish_one": "1 dish per week",
-    "summary_total": "Estimated weekly total",
-    "summary_empty": "You haven't chosen any dishes yet.",
+    "summary_total": "Plan total",
+    "summary_empty": "You haven't chosen any meals yet.",
     "trial_note": "Trial week: +15%",
     "need_dish": "Choose at least one dish to continue.",
     "need_info": "Please fill in your name, email and phone.",
@@ -500,16 +497,37 @@
     "account_text": "Sign in and we recover your details and allergies. If you're new, your account is created when you confirm the order.",
     "create_account": "Create my account",
     "logged_as": "Signed in as",
-    "teaser_t": "Your 4-week block",
-    "teaser_p": "Pick your menu, your tier and your dishes. You pay once and we deliver every week.",
-    "teaser_a": "4 weeks · 1 payment",
-    "teaser_b": "From $160 per dish",
+    "teaser_t": "Your 4-week plan",
+    "teaser_p": "Pick your tier and 5 meals a week. You pay once and we deliver every week.",
+    "teaser_a": "20 meals · 1 payment",
+    "teaser_b": "From $180 per meal",
     "teaser_c": "Cutoff: Saturday 10:00 AM",
     "teaser_cta": "Build my order",
     "step_of": "Step {n} of {t}",
     "block_total": "4-week block",
     "trial_total": "Trial week",
-    "per_week": "Each week"
+    "per_week": "Each week",
+    "plan_block": "4 weeks · 20 meals",
+    "plan_block_text": "You pay once and get your 5 meals every week for 4 weeks. It's the best price per meal.",
+    "plan_week": "1 week · 5 meals",
+    "plan_week_text": "A single week to try the service. You can buy it until Saturday at 10:00 AM.",
+    "meals_word": "meals",
+    "meals_of": "{n} of {t} meals",
+    "meal_one": "1 meal",
+    "need_meals": "Choose your 5 meals to continue.",
+    "meals_full": "You already have your 5 meals. Remove one to change.",
+    "all_diets_short": "All diets",
+    "summary_meals": "Meals",
+    "per_meal": "per meal",
+    "per_week_each": "{p} per week",
+    "weeks_x": "{p} per week × {w} weeks",
+    "prop_dishes": "Dishes",
+    "prop_meals": "Meals per week",
+    "prop_tier": "Tier",
+    "prop_length": "Length",
+    "length_block": "4 weeks",
+    "length_week": "1 week",
+    "renew": "Renew automatically every 4 weeks"
   },
   "sitemap": {
     "pedido": "Build my order",
@@ -571,13 +589,13 @@
     "info": "How pricing works",
     "title": "How your order works",
     "p1_t": "You buy a 4-week block",
-    "p1": "You pay once and we deliver your dishes every week, for 4 weeks.",
-    "p2_t": "Price is per dish",
-    "p2": "Every dish has a tier. Your block adds up the dishes you choose each week.",
+    "p1": "You pick a plan: 4 weeks (20 meals) or 1 week (5 meals). You pay once.",
+    "p2_t": "The tier sets the price per meal",
+    "p2": "All meals in your plan come from the same tier. Each tier adds $70 per meal.",
     "p3_t": "Your total",
-    "p3": "One week of dishes × 4 weeks = your block total.",
-    "p4_t": "Rather try first?",
-    "p4": "The trial week costs {{ pct }}% more. You can buy it until Saturday at 10:00 AM.",
+    "p3": "5 meals a week, Monday to Friday. A 4-week plan = 20 meals.",
+    "p4_t": "1-week plan",
+    "p4": "It costs a bit more per meal than the 4-week plan. You can buy it until Saturday at 10:00 AM.",
     "per_dish": "per dish",
     "close": "Got it"
   },

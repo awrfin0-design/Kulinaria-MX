@@ -24,7 +24,7 @@
           {%- if mf.category.value != blank -%}<span class="eyebrow" style="margin:0">{{ mf.category.value | replace: '-', ' ' }}</span>{%- endif -%}
         </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">{{ product.title }}</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>{{ current_variant.price | money_without_trailing_zeros }}</p>{%- if mf.tier.value != blank -%}<button class="info-dot" type="button" data-sheet="pricing" aria-label="{{ 'sheet.info' | t }}"><i aria-hidden="true">i</i></button>{%- endif -%}</div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>{%- if mf.category.value != blank -%}{% render 'plan-price', tier: mf.tier.value, kind: 'meal', money: true %}<small style="font-size:1rem"> {{ 'funnel.per_meal' | t }}</small>{%- else -%}{{ current_variant.price | money_without_trailing_zeros }}{%- endif -%}</p>{%- if mf.tier.value != blank -%}<button class="info-dot" type="button" data-sheet="pricing" aria-label="{{ 'sheet.info' | t }}"><i aria-hidden="true">i</i></button>{%- endif -%}</div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div>
@@ -54,6 +54,16 @@
         </div>
       {%- endif -%}
 
+      {%- if mf.tier.value != blank -%}
+        {%- capture mw_state -%}{% render 'menu-week', product: product %}{%- endcapture -%}
+        {%- if mw_state == 'off' and mf.category.value != blank -%}<p class="alert alert--warn" role="note">{{ 'calendar.off_menu' | t }}</p>{%- endif -%}
+        <div class="meal-card">
+          <p class="meal-card__price">{% render 'plan-price', tier: mf.tier.value, kind: 'meal', money: true %}<small> {{ 'funnel.per_meal' | t }}</small></p>
+          <p class="text-muted">{{ 'product.in_plan_text' | t }}</p>
+          <a class="btn btn--gold btn--block" href="/pages/pedido?dish={{ product.handle }}">{{ 'product.build_plan' | t }}</a>
+          <p class="meal-card__weeks"><a class="text-link" href="/pages/planes">{{ 'product.see_plans' | t }}</a></p>
+        </div>
+      {%- else -%}
       {%- capture mw_state -%}{% render 'menu-week', product: product %}{%- endcapture -%}
       {%- if mw_state == 'off' -%}<p class="alert alert--warn" role="note">{{ 'calendar.off_menu' | t }}</p>{%- endif -%}
       {%- form 'product', product, id: 'product-form', class: 'product-form' -%}
@@ -75,6 +85,7 @@
           </button>
         </div>
       {%- endform -%}
+      {%- endif -%}
 
       <p class="text-muted" style="font-size:.85rem">{{ 'cutoff.confirm_selection' | t }} <strong data-cutoff style="color:var(--accent)"><span data-cutoff-value>…</span></strong></p>
     </div>

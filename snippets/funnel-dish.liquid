@@ -20,7 +20,7 @@
     assign plan_id = first_plan.id
   endif
 -%}
-<article class="fn-dish" data-dish data-fn-dish data-pid="{{ product.id }}" data-variant="{{ variant.id }}" data-plan="{{ plan_id }}" data-price="{{ product.price }}"
+<article class="fn-dish" data-dish data-fn-dish data-pid="{{ product.id }}" data-handle="{{ product.handle }}"
   data-title="{{ product.title | escape }}" data-category="{{ category }}" data-tier="{{ tier }}" data-diets="{{ diets }}" data-allergens="{{ allergens | escape }}" data-ingredients="{{ ingredients | escape }}">
   <div class="fn-dish__media">
     {%- if product.featured_image -%}
@@ -39,7 +39,7 @@
     {%- endif -%}
     <span class="compat" data-compat></span>
     <div class="fn-dish__row">
-      <span class="dish__price">{{ product.price | money_without_trailing_zeros }}</span>
+      <span class="dish__price">{% render 'plan-price', tier: tier, kind: 'meal', money: true %}<small> {{ 'funnel.per_meal' | t }}</small></span>
       <div class="fn-qty" data-fn-qty hidden>
         <button type="button" data-q-minus aria-label="{{ 'funnel.remove' | t }}">−</button>
         <output data-q-out>1</output>

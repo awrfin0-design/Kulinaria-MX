@@ -25,7 +25,7 @@
       "type": "order-funnel",
       "settings": {
         "eyebrow": "Haz tu pedido",
-        "heading": "Arma tu pedido en *5 pasos*",
+        "heading": "Arma tu pedido en *4 pasos*",
         "text": "Del enfoque al contrato: elige, guardamos tus datos y listo. La próxima vez es un clic.",
         "collection": "menu-semanal",
         "limit": 12,
@@ -123,7 +123,7 @@
       "settings": {
         "eyebrow": "Niveles",
         "heading": "Cuatro niveles, un *mismo estándar*",
-        "text": "Cada nivel suma $60 MXN fijos sobre el anterior. El precio incluye el empaque óptimo y la preparación del chef.",
+        "text": "Cada nivel suma $70 MXN por comida sobre el anterior. El precio incluye el empaque óptimo y la preparación del chef.",
         "bg_video": true
       },
       "blocks": {

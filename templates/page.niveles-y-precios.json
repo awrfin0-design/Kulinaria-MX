@@ -16,7 +16,7 @@
         "parent_link": "/pages/planes",
         "eyebrow": "Niveles y precios",
         "heading": "Cuatro niveles, un *mismo estándar*",
-        "text": "Cada nivel suma $60 MXN fijos sobre el anterior. El precio incluye el empaque óptimo y la preparación del chef.",
+        "text": "Cada nivel suma $70 MXN por comida sobre el anterior. El precio incluye el empaque óptimo y la preparación del chef.",
         "button_label": "Ver los especiales de la semana",
         "button_link": "/collections/menu-semanal",
         "art": "air-steak"
@@ -71,7 +71,7 @@
       "settings": {
         "eyebrow": "Niveles",
         "heading": "Cuatro niveles, un *mismo estándar*",
-        "text": "Cada nivel suma $60 MXN fijos sobre el anterior."
+        "text": "Cada nivel suma $70 MXN por comida sobre el anterior."
       },
       "blocks": {
         "t1": {

@@ -96,15 +96,15 @@
           <li><b>{{ 'sheet.p1_t' | t }}</b><span>{{ 'sheet.p1' | t }}</span></li>
           <li><b>{{ 'sheet.p2_t' | t }}</b><span>{{ 'sheet.p2' | t }}</span>
             <dl class="sheet__tiers">
-              <div><dt>{{ 'tier.selecto' | t }}</dt><dd>${{ settings.price_selecto | default: 160 }}</dd></div>
-              <div><dt>{{ 'tier.exclusivo' | t }}</dt><dd>${{ settings.price_exclusivo | default: 220 }}</dd></div>
-              <div><dt>{{ 'tier.signature' | t }}</dt><dd>${{ settings.price_signature | default: 280 }}</dd></div>
-              <div><dt>{{ 'tier.reserve' | t }}</dt><dd>${{ settings.price_reserve | default: 340 }}</dd></div>
+              <div><dt>{{ 'tier.selecto' | t }}</dt><dd>{% render 'plan-price', tier: 'selecto', kind: 'meal', money: true %}</dd></div>
+              <div><dt>{{ 'tier.exclusivo' | t }}</dt><dd>{% render 'plan-price', tier: 'exclusivo', kind: 'meal', money: true %}</dd></div>
+              <div><dt>{{ 'tier.signature' | t }}</dt><dd>{% render 'plan-price', tier: 'signature', kind: 'meal', money: true %}</dd></div>
+              <div><dt>{{ 'tier.reserve' | t }}</dt><dd>{% render 'plan-price', tier: 'reserve', kind: 'meal', money: true %}</dd></div>
             </dl>
             <small>{{ 'sheet.per_dish' | t }}</small>
           </li>
           <li><b>{{ 'sheet.p3_t' | t }}</b><span>{{ 'sheet.p3' | t }}</span></li>
-          <li><b>{{ 'sheet.p4_t' | t }}</b><span>{{ 'sheet.p4' | t: pct: settings.trial_markup | default: 15 }}</span></li>
+          <li><b>{{ 'sheet.p4_t' | t }}</b><span>{{ 'sheet.p4' | t }}</span></li>
         </ol>
         <button class="btn btn--gold btn--block" type="button" data-sheet-close>{{ 'sheet.close' | t }}</button>
       </div>

@@ -517,74 +517,80 @@
   var FUNNEL_KEY = 'kulinaria_funnel';
   function initFunnel() {
     $$('[data-funnel]').forEach(function (holder) {
-      var st = { diet: 'all', cat: 'all', tier: 'all', plan: 'block', qty: {}, info: {}, allergies: [], step: 0, remembered: false };
-      try { var saved = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (saved) { st = Object.assign(st, saved); st.remembered = !!(saved.info && (saved.info.name || saved.info.email)); } } catch (e) {}
+      var MEALS = +holder.getAttribute('data-meals') || 5, WEEKS = +holder.getAttribute('data-weeks') || 4;
+      var st = { plan: 'block', tier: 'selecto', cat: 'all', diet: 'all', qty: {}, info: {}, allergies: [], step: 0, remembered: false, renew: true };
+      try { var saved = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (saved && saved.v === 2) { st = Object.assign(st, saved); st.remembered = !!(saved.info && (saved.info.name || saved.info.email)); } } catch (e) {}
       var T_ = function (k) { return holder.getAttribute('data-t-' + k) || ''; };
       var steps = $$('[data-fn-step]', holder), dots = $$('[data-fn-dot]', holder), bar = $('[data-fn-bar]', holder);
       var next = $('[data-fn-next]', holder), prev = $('[data-fn-prev]', holder), finish = $('[data-fn-finish]', holder), err = $('[data-fn-error]', holder);
-      var dishes = $$('[data-fn-dish]', holder);
-      var money = function (cents) {
-        try { return new Intl.NumberFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(cents / 100); } catch (e) { return '$' + Math.round(cents / 100); }
+      var dishes = $$('[data-fn-dish]', holder), tierBtns = $$('[data-tier-choice]', holder);
+      var money = function (n) {
+        try { return new Intl.NumberFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(n); } catch (e) { return '$' + Math.round(n); }
       };
-      var info = function (el) { return { id: el.getAttribute('data-pid'), title: el.getAttribute('data-title'), price: +el.getAttribute('data-price'), variant: el.getAttribute('data-variant'), plan: el.getAttribute('data-plan') }; };
-      var total = function () { var t = 0; dishes.forEach(function (d, i) { if (dishes.findIndex(function (x) { return x.getAttribute('data-pid') === d.getAttribute('data-pid'); }) !== i) return; t += (st.qty[d.getAttribute('data-pid')] || 0) * info(d).price; }); return t; };
+      var tierEl = function () { return $('[data-tier-choice="' + st.tier + '"]', holder) || tierBtns[0]; };
+      var priceOf = function (btn, plan) { return +btn.getAttribute(plan === 'block' ? 'data-block' : 'data-week') || 0; };
       var count = function () { var n = 0; Object.keys(st.qty).forEach(function (k) { n += st.qty[k]; }); return n; };
-      var persist = function () { try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(st)); } catch (e) {} };
+      var persist = function () { try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(Object.assign({ v: 2 }, st))); } catch (e) {} };
       var say = function (msg) { if (!err) return; err.hidden = !msg; err.textContent = msg || ''; };
-
+      var fill = function (tpl, o) { return String(tpl).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; }); };
+      var planTotal = function () { return priceOf(tierEl(), st.plan); };
 
       var render = function () {
-        $$('[data-diet]', holder).forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-diet') === st.diet ? 'true' : 'false'); });
         $$('[data-plan-choice]', holder).forEach(function (b) { b.setAttribute('aria-checked', b.getAttribute('data-plan-choice') === st.plan ? 'true' : 'false'); });
-        $$('[data-cat]', holder).forEach(function (b) { b.setAttribute('aria-checked', b.getAttribute('data-cat') === st.cat ? 'true' : 'false'); });
-        $$('[data-tier-choice]', holder).forEach(function (b) { b.setAttribute('aria-checked', b.getAttribute('data-tier-choice') === st.tier ? 'true' : 'false'); });
-        var shownD = 0;
+        tierBtns.forEach(function (b) {
+          b.setAttribute('aria-checked', b === tierEl() ? 'true' : 'false');
+          var pr = $('[data-fn-tier-price]', b), sub = $('[data-fn-tier-sub]', b), meal = +b.getAttribute('data-meal') || 0;
+          var total = priceOf(b, st.plan), n = st.plan === 'block' ? MEALS * WEEKS : MEALS;
+          if (pr) { pr.firstChild.nodeValue = money(total); if (sub) sub.textContent = n + ' · ' + money(Math.round(total / n)) + ' ' + T_('per-meal'); }
+        });
+        $$('[data-cat]', holder).forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-cat') === st.cat ? 'true' : 'false'); });
+        $$('[data-diet]', holder).forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-diet') === st.diet ? 'true' : 'false'); });
+        var n = count(), full = n >= MEALS, shown = 0;
         dishes.forEach(function (d) {
-          var show = (st.cat === 'all' || d.getAttribute('data-category') === st.cat)
-            && (st.tier === 'all' || d.getAttribute('data-tier') === st.tier)
-            && (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1);
-          d.classList.toggle('is-hidden', !show);
-          if (show) shownD++;
+          var show = d.getAttribute('data-tier') === st.tier && (st.cat === 'all' || d.getAttribute('data-category') === st.cat) && (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1);
+          d.classList.toggle('is-hidden', !show); if (show) shown++;
           var q = st.qty[d.getAttribute('data-pid')] || 0;
           d.classList.toggle('is-picked', q > 0);
-          var ctl = $('[data-fn-qty]', d), out = $('[data-q-out]', d), pick = $('[data-pick]', d);
+          var ctl = $('[data-fn-qty]', d), out = $('[data-q-out]', d), pick = $('[data-pick]', d), plus = $('[data-q-plus]', d);
           if (ctl) ctl.hidden = q === 0; if (out) out.textContent = q;
-          if (pick) { pick.hidden = q > 0; }
+          if (pick) { pick.hidden = q > 0; pick.disabled = full && q === 0 || d.classList.contains('is-blocked'); }
+          if (plus) plus.disabled = full;
         });
-        var e1 = $('[data-fn-empty]', holder); if (e1) e1.hidden = shownD > 0;
-        // summary
-        var menuBtn = $('[data-cat="' + st.cat + '"] strong', holder);
-        var sf = $('[data-fn-s-focus]', holder); if (sf) sf.textContent = menuBtn ? menuBtn.textContent : T_('all');
-        var tierBtn = $('[data-tier-choice="' + st.tier + '"] strong', holder);
-        var stier = $('[data-fn-s-tier]', holder); if (stier) stier.textContent = tierBtn ? tierBtn.textContent : T_('any-tier');
-        var sp = $('[data-fn-s-plan]', holder); if (sp) sp.textContent = st.plan === 'trial' ? T_('trial-name') : T_('block');
-        var list = $('[data-fn-s-list]', holder); if (list) {
+        var e1 = $('[data-fn-empty]', holder); if (e1) e1.hidden = shown > 0;
+        // meter + summary
+        var mn = $('[data-fn-meter-n]', holder); if (mn) mn.textContent = n;
+        var mb = $('[data-fn-meter-bar]', holder); if (mb) mb.style.transform = 'scaleX(' + Math.min(1, n / MEALS) + ')';
+        var meter = $('[data-fn-meter]', holder); if (meter) meter.classList.toggle('is-full', full);
+        var sp = $('[data-fn-s-plan]', holder); if (sp) sp.textContent = st.plan === 'block' ? T_('block-name') : T_('week-name');
+        var stier = $('[data-fn-s-tier]', holder); if (stier) stier.textContent = tierEl().getAttribute('data-name');
+        var sm = $('[data-fn-s-meals]', holder); if (sm) sm.textContent = n + ' / ' + MEALS;
+        var list = $('[data-fn-s-list]', holder);
+        if (list) {
           list.innerHTML = '';
-          var seen = {};
           dishes.forEach(function (d) {
-            var id = d.getAttribute('data-pid'); if (seen[id] || !st.qty[id]) return; seen[id] = 1;
-            var li = document.createElement('li'); var i = info(d);
-            li.innerHTML = '<span></span><b></b>'; li.firstChild.textContent = st.qty[id] + ' × ' + i.title; li.lastChild.textContent = money(i.price * st.qty[id]);
+            var id = d.getAttribute('data-pid'); if (!st.qty[id]) return;
+            var li = document.createElement('li'); li.innerHTML = '<span></span><b></b>'; li.firstChild.textContent = st.qty[id] + ' × ' + d.getAttribute('data-title'); li.lastChild.textContent = '';
             list.appendChild(li);
           });
         }
-        var n = count(), emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
-        var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? (n === 1 ? T_('dish-one') : T_('dishes').replace('{n}', n)) + (st.plan === 'trial' ? ' · ' + T_('trial') : '') : '';
-        var tot = $('[data-fn-s-total]', holder); if (tot) tot.textContent = money(Math.round(total() * (st.plan === 'trial' ? 1 + (+holder.getAttribute('data-trial-pct') || 15) / 100 : 1)));
+        var emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
+        var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? fill(T_('meals'), { n: n, t: MEALS }) : '';
+        var tot = $('[data-fn-s-total]', holder); if (tot) tot.textContent = money(planTotal());
+        var sb = $('[data-fn-s-block]', holder); if (sb) { sb.hidden = false; sb.textContent = st.plan === 'block' ? fill(T_('weeks-x'), { p: money(planTotal() / WEEKS), w: WEEKS }) : fill(T_('per-week'), { p: money(planTotal()) }); }
+        var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step + 1).replace('{t}', steps.length) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
+        var rn = $('[data-fn-renew]', holder); if (rn) { var hasPlan = !!tierEl().getAttribute('data-selling-plan'); rn.hidden = !(hasPlan && st.plan === 'block'); var box = $('[data-fn-renew-box]', holder); if (box) box.checked = st.renew; }
         // stepper
         steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
         dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); });
         if (bar) bar.style.transform = 'scaleX(' + ((st.step + 1) / steps.length) + ')';
-        var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step + 1).replace('{t}', steps.length) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
-        var sb = $('[data-fn-s-block]', holder); if (sb) { var wk = total(); sb.hidden = wk === 0; sb.textContent = st.plan === 'trial' ? T_('trial-total') + ' · ' + money(Math.round(wk * (1 + (+holder.getAttribute('data-trial-pct') || 15) / 100))) : T_('block-total') + ' · ' + money(wk * 4); }
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
-        if (next) { next.hidden = last; next.disabled = (st.step === 2 && count() === 0); }
+        if (next) { next.hidden = last; next.disabled = (st.step === 2 && n !== MEALS); }
         if (finish) finish.hidden = !last;
-        var rem = $('[data-fn-remembered]', holder); if (rem) { rem.hidden = !(st.remembered && st.step === 4); rem.textContent = T_('remembered'); }
+        var rem = $('[data-fn-remembered]', holder); if (rem) { rem.hidden = !(st.remembered && st.step === 3); rem.textContent = T_('remembered'); }
       };
 
-      // a plain stepper: the page keeps scrolling normally; changing step brings the top of the funnel back into view if needed
+      // the page keeps scrolling normally; changing step brings the top of the funnel back into view if needed
       var top = $('.funnel__top', holder);
       var go = function (n) {
         n = Math.max(0, Math.min(steps.length - 1, n)); var moved = n !== st.step; st.step = n; say(''); persist(); render();
@@ -595,21 +601,28 @@
       };
 
       // choices
+      $$('[data-plan-choice]', holder).forEach(function (b) { b.addEventListener('click', function () { st.plan = b.getAttribute('data-plan-choice'); persist(); render(); setTimeout(function () { go(1); }, REDUCE ? 0 : 280); }); });
+      tierBtns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          var t = b.getAttribute('data-tier-choice');
+          if (t !== st.tier) { st.tier = t; st.qty = {}; }            // meals of another tier don't carry over
+          persist(); render(); setTimeout(function () { go(2); }, REDUCE ? 0 : 280);
+        });
+      });
+      $$('[data-cat]', holder).forEach(function (b) { b.addEventListener('click', function () { st.cat = b.getAttribute('data-cat'); persist(); render(); }); });
       $$('[data-diet]', holder).forEach(function (b) { b.addEventListener('click', function () { st.diet = b.getAttribute('data-diet'); persist(); render(); }); });
-      $$('[data-tier-choice]', holder).forEach(function (b) { b.addEventListener('click', function () { st.tier = b.getAttribute('data-tier-choice'); persist(); render(); setTimeout(function () { go(2); }, REDUCE ? 0 : 280); }); });
-      $$('[data-plan-choice]', holder).forEach(function (b) { b.addEventListener('click', function () { st.plan = b.getAttribute('data-plan-choice'); persist(); render(); }); });
-      $$('[data-cat]', holder).forEach(function (b) { b.addEventListener('click', function () { st.cat = b.getAttribute('data-cat'); persist(); render(); setTimeout(function () { go(1); }, REDUCE ? 0 : 280); }); });
+      var renewBox = $('[data-fn-renew-box]', holder); if (renewBox) renewBox.addEventListener('change', function () { st.renew = renewBox.checked; persist(); });
       holder.addEventListener('click', function (e) {
         var d = e.target.closest ? e.target.closest('[data-fn-dish]') : null; if (!d) return;
-        var id = d.getAttribute('data-pid'), cur = st.qty[id] || 0;
-        if (e.target.closest('[data-pick]')) { if (d.classList.contains('is-blocked')) return; st.qty[id] = 1; }
-        else if (e.target.closest('[data-q-plus]')) st.qty[id] = Math.min(20, cur + 1);
+        var id = d.getAttribute('data-pid'), cur = st.qty[id] || 0, n = count();
+        if (e.target.closest('[data-pick]')) { if (d.classList.contains('is-blocked')) return; if (n >= MEALS) { say(T_('full')); return; } st.qty[id] = 1; }
+        else if (e.target.closest('[data-q-plus]')) { if (n >= MEALS) { say(T_('full')); return; } st.qty[id] = cur + 1; }
         else if (e.target.closest('[data-q-minus]')) { if (cur <= 1) delete st.qty[id]; else st.qty[id] = cur - 1; }
         else return;
         say(''); persist(); render();
       });
       var reset = $('[data-fn-reset]', holder);
-      if (reset) reset.addEventListener('click', function () { st.qty = {}; st.diet = 'all'; st.cat = 'all'; st.tier = 'all'; st.plan = 'block'; st.step = 0; persist(); render(); });
+      if (reset) reset.addEventListener('click', function () { st.qty = {}; st.cat = 'all'; st.diet = 'all'; st.tier = 'selecto'; st.plan = 'block'; st.step = 0; persist(); render(); });
 
       // details
       var fields = $$('[data-info]', holder), checks = $$('[data-allergy]', holder), ref = $('[data-fn-ref]', holder);
@@ -620,42 +633,47 @@
       if (ref) { var rs = ''; try { rs = localStorage.getItem('kulinaria_ref') || ''; } catch (e) {} if (rs) ref.value = rs; }
 
       if (next) next.addEventListener('click', function () {
-        if (st.step === 2 && count() === 0) { say(T_('need-dish')); return; }
+        if (st.step === 2 && count() !== MEALS) { say(T_('need-meals')); return; }
         go(st.step + 1);
       });
       if (prev) prev.addEventListener('click', function () { go(st.step - 1); });
-      dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k < st.step || (k > st.step && (k <= 2 || count() > 0))) go(k); }); });
+      dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k < st.step || (k > st.step && (k <= 2 || count() === MEALS))) go(k); }); });
 
-      // finish: save profile + attributes, put the dishes in the cart, continue to the cart (contract + payment)
+      // arriving from a dish page (…/pedido?dish=handle): that dish is already in the plan, at its tier
+      try {
+        var q = (location.search + '&' + (location.hash.split('?')[1] || '')).match(/[?&]dish=([\w-]+)/);
+        if (q) {
+          var pre = dishes.filter(function (d) { return d.getAttribute('data-handle') === q[1]; })[0];
+          if (pre) { st.tier = pre.getAttribute('data-tier'); st.qty = {}; st.qty[pre.getAttribute('data-pid')] = 1; st.step = 1; persist(); }
+        }
+      } catch (e) {}
+
+      // finish: save the profile + attributes, put the PLAN in the cart (one line; the chosen dishes travel as line properties), continue to the cart
       if (finish) finish.addEventListener('click', function (e) {
         e.preventDefault();
-        var i = st.info || {};
+        var i = st.info || {}, tb = tierEl();
         if (!i.name || !i.email || !i.phone) { say(T_('need-info')); return; }
-        if (count() === 0) { say(T_('need-dish')); go(2); return; }
+        if (count() !== MEALS) { say(T_('need-meals')); go(2); return; }
         var p = loadProfile();
         var other = (i.allergy_other || '').split(',').map(function (v) { return v.trim(); }).filter(Boolean);
         p.allergies = Array.from(new Set((st.allergies || []).concat(other)));
         p.dislikes = (i.dislikes || '').split(',').map(function (v) { return v.trim(); }).filter(Boolean);
         p.diets = st.diet === 'all' ? [] : [st.diet];
         try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch (x) {}
+        var list = dishes.filter(function (d) { return st.qty[d.getAttribute('data-pid')]; }).map(function (d) { return st.qty[d.getAttribute('data-pid')] + '× ' + d.getAttribute('data-title'); }).join(' | ');
         var attrs = {
           nombre: i.name, correo: i.email, telefono: i.phone, direccion: [i.street, i.cluster, i.zip].filter(Boolean).join(', '),
-          alergias: p.allergies.join(', '), no_me_gustan: p.dislikes.join(', '), dietas: p.diets.join(', '), menu: st.cat, nivel: st.tier, enfoque: st.diet, plan: st.plan,
-          codigo_referencia: (ref && ref.value) || '', pedido_embudo: dishes.filter(function (d, ix) { return dishes.findIndex(function (z) { return z.getAttribute('data-pid') === d.getAttribute('data-pid'); }) === ix && st.qty[d.getAttribute('data-pid')]; })
-            .map(function (d) { return st.qty[d.getAttribute('data-pid')] + 'x ' + d.getAttribute('data-title'); }).join(' | ')
+          alergias: p.allergies.join(', '), no_me_gustan: p.dislikes.join(', '), dietas: p.diets.join(', '), plan: st.plan, nivel: st.tier,
+          codigo_referencia: (ref && ref.value) || '', pedido_embudo: list
         };
         if (ref && ref.value) { try { localStorage.setItem('kulinaria_ref', ref.value); } catch (x) {} }
-        var items = [];
-        dishes.forEach(function (d, ix) {
-          var id = d.getAttribute('data-pid'); if (!st.qty[id] || dishes.findIndex(function (z) { return z.getAttribute('data-pid') === id; }) !== ix) return;
-          var it = { id: parseInt(d.getAttribute('data-variant'), 10), quantity: st.qty[id] };
-          if (st.plan === 'block' && d.getAttribute('data-plan')) it.selling_plan = parseInt(d.getAttribute('data-plan'), 10);
-          items.push(it);
-        });
+        var props = {}; props[T_('prop-dishes')] = list; props[T_('prop-meals')] = String(MEALS); props[T_('prop-tier')] = tb.getAttribute('data-name'); props[T_('prop-length')] = st.plan === 'block' ? T_('length-block') : T_('length-week');
+        var line = { id: parseInt(tb.getAttribute(st.plan === 'block' ? 'data-variant-block' : 'data-variant-week'), 10), quantity: 1, properties: props };
+        var sp = tb.getAttribute('data-selling-plan'); if (st.plan === 'block' && st.renew && sp) line.selling_plan = parseInt(sp, 10);
         st.remembered = true; persist();
         var go2 = function () { window.location.href = finish.getAttribute('href'); };
         fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ attributes: attrs }) })
-          .then(function () { return fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: items }) }); })
+          .then(function () { return fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: [line] }) }); })
           .then(go2, go2);
       });
 

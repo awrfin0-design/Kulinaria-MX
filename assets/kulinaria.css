@@ -1964,3 +1964,33 @@ a.lang__btn{display:inline-block;text-decoration:none}
 }
 :root[data-theme="fuego"] body:has(.hero) .site-header:not(.is-stuck) .logo,:root[data-theme="fuego"] body:has(.page-head) .site-header:not(.is-stuck) .logo{filter:none}
 @media (max-width:760px){ body .hero--intro .hero__stage{width:calc(100% + 2*var(--pad));margin-inline:calc(var(--pad)*-1)} }
+
+/* =====================================================================
+   v20 — plans (4 weeks / 1 week x 4 tiers) + fading navbar
+   ===================================================================== */
+.fn-meter{position:relative;display:flex;align-items:baseline;gap:6px;margin:6px 0 14px;font-family:var(--font-label);font-size:1.05rem;padding-bottom:10px}
+.fn-meter b{font-family:var(--font-heading);font-size:1.9rem;color:var(--accent);font-weight:600}
+.fn-meter span{color:var(--text-muted);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase}
+.fn-meter i{position:absolute;left:0;right:0;bottom:0;height:4px;border-radius:4px;background:var(--brand-grad);transform-origin:left;transform:scaleX(0);transition:transform .35s var(--ease)}
+.fn-meter::before{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;border-radius:4px;background:var(--line)}
+.fn-meter.is-full b{color:var(--text)}
+.fn-plan{position:relative;display:grid;gap:6px;text-align:left}
+.fn-plan strong{font-family:var(--font-heading);font-size:1.4rem;font-weight:600}
+.fn-plan small{color:var(--text-muted);font-size:.92rem;line-height:1.45}
+.fn-plan__from{font-style:normal;font-family:var(--font-label);font-weight:700;color:var(--accent);letter-spacing:.06em}
+.fn-tier__price small{display:block;font-family:var(--font-label);font-size:.7rem;letter-spacing:.08em;text-transform:none;color:var(--text-muted);margin-top:6px}
+.fn-renew{margin-top:16px}
+.dish__price small{font-family:var(--font-label);font-size:.62em;color:var(--text-muted);letter-spacing:.06em;font-weight:500}
+.meal-card{display:grid;gap:12px;padding:22px;border:1px solid var(--line);border-radius:var(--radius-md);background:var(--bg-raised)}
+.meal-card__price{font-family:var(--font-heading);font-size:2rem;font-weight:600;color:var(--accent);margin:0}
+.meal-card__price small{font-family:var(--font-label);font-size:.5em;color:var(--text-muted);font-weight:500}
+.meal-card p{margin:0}.meal-card__weeks{text-align:center}
+
+/* navbar: transparent at the top; once you scroll, a soft fade (opaque at the very top, clear at the bottom) keeps the logo and links readable over anything */
+@media (min-width:761px){
+  .site-header.is-stuck{background:linear-gradient(180deg,color-mix(in srgb,var(--bg-base) 94%,transparent) 0,color-mix(in srgb,var(--bg-base) 78%,transparent) 55%,transparent 100%);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;border-bottom:0}
+  .site-header.is-stuck::before{content:"";position:absolute;inset:0 0 -26px 0;z-index:-1;pointer-events:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);-webkit-mask-image:linear-gradient(180deg,#000 0,#000 45%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,#000 45%,transparent 100%)}
+  .site-header.is-stuck .site-header__ann{display:none}
+}
+.dish__price small,.fn-dish .dish__price small{display:inline;white-space:nowrap}
+.fn-dish__row{flex-wrap:wrap}

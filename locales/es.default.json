@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin language editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "account": {
     "allergies_tastes": "Alergias y gustos",
@@ -305,7 +296,7 @@
     "one_time_text": "Un solo pago, sin renovación."
   },
   "plans": {
-    "from": "Desde $",
+    "from": "Desde ",
     "pct_more": "% más cara",
     "per_dish": "/ platillo",
     "recommended": "Recomendado",
@@ -313,7 +304,10 @@
     "block_name": "Bloque de 4 semanas",
     "block_short": "Suscripción renovable con entrega semanal. La opción recomendada.",
     "trial_name": "Semana de prueba",
-    "trial_short": "Una sola semana, 15% más cara que el prorrateo del bloque."
+    "trial_short": "Una sola semana, 15% más cara que el prorrateo del bloque.",
+    "per_block": "/ 4 semanas",
+    "per_week": "/ semana",
+    "week_note": "5 comidas, de lunes a viernes."
   },
   "product": {
     "calories": "Calorías (kcal)",
@@ -321,7 +315,10 @@
     "contains": "Contiene",
     "ingredients": "Ingredientes",
     "ingredients_note": "Declaración explícita de cada ingrediente para la prevención de alergias.",
-    "option": "Opción"
+    "option": "Opción",
+    "in_plan_text": "Este platillo se disfruta dentro de tu plan: eliges 5 comidas por semana y pagas una sola vez.",
+    "build_plan": "Armar mi plan con este platillo",
+    "see_plans": "Ver los planes"
   },
   "products": {
     "add_to_selection": "Agregar a mi selección",
@@ -439,18 +436,18 @@
   "funnel": {
     "eyebrow": "Haz tu pedido",
     "steps": "Pasos del pedido",
-    "s1": "Menú",
+    "s1": "Plan",
     "s2": "Nivel",
-    "s3": "Platillos",
-    "s4": "Plan",
+    "s3": "Comidas",
+    "s4": "Tus datos",
     "s5": "Tus datos",
-    "s1_title": "¿Qué menú quieres?",
-    "s1_text": "Elige la línea de cocina de tu semana.",
-    "s2_title": "¿Qué nivel de precio eliges?",
-    "s2_text": "Cada nivel tiene su precio por platillo. Elige el que va contigo.",
+    "s1_title": "¿Cuánto tiempo quieres comer bien?",
+    "s1_text": "Eliges tu plan una vez. Recibes 5 comidas por semana, de lunes a viernes.",
+    "s2_title": "Elige tu nivel",
+    "s2_text": "Todas las comidas de tu plan son de este nivel. Cada nivel suma $70 por comida.",
     "s2_empty": "Esta semana no hay platillos con ese enfoque. Elige otro o ve todo el menú.",
-    "s3_title": "Elige tus platillos",
-    "s3_text": "Solo ves lo del menú y el nivel que elegiste. Toca para agregar y ajusta las cantidades.",
+    "s3_title": "Elige tus 5 comidas de la semana",
+    "s3_text": "Tu selección se repite cada semana de tu plan. Toca para agregar; puedes repetir platillos.",
     "s4_title": "Elige tu plan",
     "s4_text": "El bloque de 4 semanas es la opción con mejor precio. La semana de prueba cuesta 15% más y se compra hasta el sábado a las 10:00 AM.",
     "s5_title": "Tus datos y tu cuenta",
@@ -468,8 +465,8 @@
     "summary_plan": "Plan",
     "summary_dishes": "{n} platillos por semana",
     "summary_dish_one": "1 platillo por semana",
-    "summary_total": "Total estimado por semana",
-    "summary_empty": "Aún no eliges platillos.",
+    "summary_total": "Total del plan",
+    "summary_empty": "Aún no eliges comidas.",
     "trial_note": "Semana de prueba: +15%",
     "need_dish": "Elige al menos un platillo para continuar.",
     "need_info": "Completa tu nombre, correo y teléfono.",
@@ -500,16 +497,37 @@
     "account_text": "Inicia sesión y recuperamos tus datos y alergias. Si eres nuevo, tu cuenta se crea al confirmar el pedido.",
     "create_account": "Crear mi cuenta",
     "logged_as": "Sesión iniciada como",
-    "teaser_t": "Tu bloque de 4 semanas",
-    "teaser_p": "Elige tu menú, tu nivel y tus platillos. Pagas una vez y recibes cada semana.",
-    "teaser_a": "4 semanas · 1 pago",
-    "teaser_b": "Desde $160 por platillo",
+    "teaser_t": "Tu plan de 4 semanas",
+    "teaser_p": "Eliges tu nivel y 5 comidas por semana. Pagas una vez y recibes cada semana.",
+    "teaser_a": "20 comidas · 1 pago",
+    "teaser_b": "Desde $180 por comida",
     "teaser_c": "Cierre: sábado 10:00 AM",
     "teaser_cta": "Armar mi pedido",
     "step_of": "Paso {n} de {t}",
     "block_total": "Bloque de 4 semanas",
     "trial_total": "Semana de prueba",
-    "per_week": "Cada semana"
+    "per_week": "Cada semana",
+    "plan_block": "4 semanas · 20 comidas",
+    "plan_block_text": "Pagas una vez y recibes tus 5 comidas cada semana durante 4 semanas. Es el plan con mejor precio por comida.",
+    "plan_week": "1 semana · 5 comidas",
+    "plan_week_text": "Una sola semana para conocer el servicio. Se compra hasta el sábado a las 10:00 AM.",
+    "meals_word": "comidas",
+    "meals_of": "{n} de {t} comidas",
+    "meal_one": "1 comida",
+    "need_meals": "Elige tus 5 comidas para continuar.",
+    "meals_full": "Ya tienes tus 5 comidas. Quita una para cambiar.",
+    "all_diets_short": "Todas las dietas",
+    "summary_meals": "Comidas",
+    "per_meal": "por comida",
+    "per_week_each": "{p} por semana",
+    "weeks_x": "{p} por semana × {w} semanas",
+    "prop_dishes": "Platillos",
+    "prop_meals": "Comidas por semana",
+    "prop_tier": "Nivel",
+    "prop_length": "Duración",
+    "length_block": "4 semanas",
+    "length_week": "1 semana",
+    "renew": "Renovar automáticamente cada 4 semanas"
   },
   "sitemap": {
     "pedido": "Armar mi pedido",
@@ -571,13 +589,13 @@
     "info": "Cómo se cobra",
     "title": "Así funciona tu pedido",
     "p1_t": "Compras un bloque de 4 semanas",
-    "p1": "Pagas una sola vez y recibes tus platillos cada semana, durante 4 semanas.",
-    "p2_t": "El precio es por platillo",
-    "p2": "Cada platillo tiene un nivel. Tu bloque suma los platillos que elijas cada semana.",
+    "p1": "Eliges un plan: 4 semanas (20 comidas) o 1 semana (5 comidas). Pagas una sola vez.",
+    "p2_t": "El nivel fija el precio por comida",
+    "p2": "Todas las comidas de tu plan son del mismo nivel. Cada nivel suma $70 por comida.",
     "p3_t": "Tu total",
-    "p3": "Platillos de una semana × 4 semanas = el total de tu bloque.",
-    "p4_t": "¿Prefieres probar?",
-    "p4": "La semana de prueba cuesta {{ pct }}% más. Se compra hasta el sábado a las 10:00 AM.",
+    "p3": "5 comidas por semana, de lunes a viernes. Plan de 4 semanas = 20 comidas.",
+    "p4_t": "Plan de 1 semana",
+    "p4": "Cuesta un poco más por comida que el plan de 4 semanas. Se compra hasta el sábado a las 10:00 AM.",
     "per_dish": "por platillo",
     "close": "Entendido"
   },

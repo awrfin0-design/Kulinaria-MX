@@ -29,7 +29,7 @@
               <div class="dish__body">
                 <div>{% render 'tier-badge', tier: 'selecto' %}</div>
                 <h3 class="dish__title">{{ 'dish.sample' | t }} {{ i }}</h3>
-                <div class="dish__meta"><span class="dish__price">${{ settings.price_selecto }}</span></div>
+                <div class="dish__meta"><span class="dish__price">{% render 'plan-price', tier: 'selecto', kind: 'meal', money: true %}</span></div>
               </div>
             </article>
           {%- endfor -%}

@@ -1,0 +1,47 @@
+{%- comment -%}
+  Prints a plan price in whole pesos (or formatted money). The prices live on the 4 plan products of the collection "planes-semanales"
+  (one product per tier; variant 1 = "1 semana", variant 2 = "4 semanas"), so the owner changes them in Products, not in theme code.
+  Params: tier (selecto|exclusivo|signature|reserve) · kind (meal | week | block) · money (true = formatted with the store currency)
+  Fallbacks when the collection is missing: week 1000/1390/1780/2170 and block 20 x meal (180/250/320/390).
+{%- endcomment -%}
+{%- liquid
+  assign t = tier | default: 'selecto'
+  case t
+    when 'exclusivo'
+      assign week = 1390
+      assign meal = 250
+    when 'signature'
+      assign week = 1780
+      assign meal = 320
+    when 'reserve'
+      assign week = 2170
+      assign meal = 390
+    else
+      assign week = 1000
+      assign meal = 180
+  endcase
+  assign block = meal | times: 20
+  for p in collections['planes-semanales'].products
+    if p.metafields.kulinaria.tier.value == t
+      assign week = p.variants[0].price | divided_by: 100
+      if p.variants.size > 1
+        assign block = p.variants[1].price | divided_by: 100
+        assign meal = block | divided_by: 20
+      endif
+    endif
+  endfor
+  case kind
+    when 'week'
+      assign out = week
+    when 'block'
+      assign out = block
+    else
+      assign out = meal
+  endcase
+  if money
+    assign cents = out | times: 100
+    echo cents | money_without_trailing_zeros
+  else
+    echo out
+  endif
+-%}

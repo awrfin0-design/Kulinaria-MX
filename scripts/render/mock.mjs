@@ -3,7 +3,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const TIER_PRICE = { selecto: 16000, exclusivo: 22000, signature: 28000, reserve: 34000 };
+const TIER_PRICE = { selecto: 18000, exclusivo: 25000, signature: 32000, reserve: 39000 };   // per meal (cents)
+const WEEK_PRICE = { selecto: 100000, exclusivo: 139000, signature: 178000, reserve: 217000 };   // 1-week plan (5 meals)
 const mf = (o) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, { value: v }]));
 
 const DISHES = [
@@ -53,20 +54,22 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
     id: 7100 + i, handle: d[0], title: tr(d[1]), price: TIER_PRICE[d[2]], description: `<p>${tr(d[9])}</p>`, type: d[3], plans: true, tr, image: IMG(IMG_OF[d[0]] ?? i, tr(d[1])),
     mf: { tier: d[2], category: d[3], diets: d[4], allergens: d[5], ingredients: d[6], calories: d[7], carbs: d[8], ...(WEEKS[d[0]] ? { weeks: WEEKS[d[0]] } : {}) },
   }));
-  const bloque = product({ id: 7200, handle: 'bloque-4-semanas', title: tr('Bloque Kulinaria · 4 semanas'), price: 64000, requires_selling_plan: true, plans: true, tr,
-    description: tr('<p>Suscripción renovable de 4 semanas con entrega semanal. Un solo pago por bloque.</p>'), image: { src: 'assets/photo-containers.webp', alt: '' } });
-  const prueba = product({ id: 7201, handle: 'semana-de-prueba', title: tr('Semana de prueba'), price: 18400,
-    description: tr('<p>Una sola semana para conocer el servicio, con 15% de recargo frente al precio del bloque.</p>'), image: { src: 'assets/photo-dinner.webp', alt: '' } });
+  const TIER_NAME = { selecto: 'Selecto', exclusivo: 'Exclusivo', signature: 'Signature', reserve: 'Reserve' };
+  const planProducts = Object.keys(TIER_PRICE).map((t, i) => product({ id: 7200 + i, handle: `plan-semanal-${t}`, title: tr(`Plan semanal ${TIER_NAME[t]}`), type: 'plan', plans: true, tr,
+    price: WEEK_PRICE[t], description: tr('<p>5 comidas por semana, de lunes a viernes. Disponible por 1 semana o por 4 semanas.</p>'), image: { src: 'assets/photo-containers.webp', alt: '' },
+    variants: [{ id: 72000 + i * 10, title: tr('1 semana'), price: WEEK_PRICE[t], available: true }, { id: 72001 + i * 10, title: tr('4 semanas'), price: TIER_PRICE[t] * 20, available: true }],
+    mf: { tier: t, meal_price: TIER_PRICE[t] / 100 } }));
   const playera = product({ id: 7300, handle: 'playera-oficial-kulinaria', title: tr('Playera Oficial Kulinaria'), price: 39900,
     description: tr('<p>Playera premium con selector de tallas.</p>'),
     variants: ['S', 'M', 'L', 'XL'].map((s, i) => ({ id: 73000 + i, title: s, price: 39900, available: true })) });
   const shaker = product({ id: 7301, handle: 'vaso-mezclador-premium', title: tr('Vaso mezclador (shaker) premium Kulinaria'), price: 29900,
     description: tr('<p>Shaker oficial para tus batidos.</p>') });
-  const products = [...dishes, bloque, prueba, playera, shaker];
+  const products = [...dishes, ...planProducts, playera, shaker];
 
   const collections = {
     'menu-semanal': { title: tr('Especiales de la semana'), handle: 'menu-semanal', url: '/collections/menu-semanal',
       description: tr('<p>Un menú rotativo de 8 a 10 platillos. Confirma antes del sábado a las 10:00 AM.</p>'), products: dishes, products_count: dishes.length },
+    'planes-semanales': { title: tr('Planes semanales'), handle: 'planes-semanales', url: '/collections/planes-semanales', description: '', products: planProducts, products_count: 4 },
     'kulinaria-store': { title: 'Kulinaria Store', handle: 'kulinaria-store', url: '/collections/kulinaria-store',
       description: tr('<p>Línea Fit Apparel: playera oficial y vaso mezclador premium.</p>'), products: [playera, shaker], products_count: 2 },
     'regalos-de-bienvenida': { title: tr('Regalos de bienvenida'), handle: 'regalos-de-bienvenida', url: '/collections/regalos-de-bienvenida',
@@ -129,9 +132,12 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
     original_line_price: p.price * q, final_line_price: p.price * q, url_to_remove: `/cart/change?line=${i + 1}&quantity=0`,
     selling_plan_allocation: { selling_plan: { name: tr(PLAN_NAME) } },
   });
-  const items = [item(dishes[1], 5, 0), item(dishes[2], 5, 1)];
+  const plan4 = planProducts[1], v4 = plan4.variants[1];
+  const planLine = { ...item(plan4, 1, 0), variant: v4, original_line_price: v4.price, final_line_price: v4.price,
+    properties: { [tr('Platillos')]: '2× Bowl de res magra y quinoa | 3× Salmón gourmet en costra de almendras', [tr('Comidas por semana')]: '5', [tr('Nivel')]: 'Exclusivo', [tr('Duración')]: tr('4 semanas') } };
+  const items = [planLine];
   const total = items.reduce((a, i) => a + i.final_line_price, 0);
-  const cart = { items, item_count: 10, total_discount: 0, items_subtotal_price: total, total_price: total, attributes: {}, currency: { iso_code: 'MXN' } };
+  const cart = { items, item_count: 1, total_discount: 0, items_subtotal_price: total, total_price: total, attributes: {}, currency: { iso_code: 'MXN' } };
 
   const search = { performed: true, terms: tr('salmón'), results: [dishes[2]] };
 

@@ -59,11 +59,11 @@ function adminData_() {
   rows('Platillos').forEach(function (r) {
     var id = String(r[0]); byOrder[id] = byOrder[id] || { items: [], block: false };
     byOrder[id].items.push({ title: String(r[4]), qty: Number(r[6]) || 0 });
-    if (r[8]) byOrder[id].block = true;
+    if (/4\s*(semanas|weeks)|bloque|block/i.test(String(r[8]))) byOrder[id].block = true;
   });
   var orders = rows('Pedidos').map(function (r) {
     var id = String(r[0]), d = byOrder[id] || { items: [], block: false }, planText = String(r[10] || '').toLowerCase();
-    var block = d.block || planText.indexOf('bloque') > -1 || planText === 'block';
+    var block = planText === 'block' || (planText === '' && d.block) || /bloque|4\s*(semanas|weeks)/.test(planText);
     return { id: id, name: String(r[1]), date: new Date(r[2]).toISOString(), customer: String(r[3]), email: String(r[4]), total: Number(r[6]) || 0, currency: String(r[7]),
       paid: String(r[8]).toLowerCase() === 'paid', plan: block ? 'block' : 'trial', items: d.items };
   });
@@ -145,22 +145,51 @@ function handleOrder_(o) {
     default_address: c.default_address || { address1: addr, city: ship.city, zip: ship.zip }, tags: c.tags, note: c.note, created_at: c.created_at, updated_at: o.updated_at }, a);
   // 2. dishes
   var items = (o.line_items || []);
-  var summary = items.map(function (i) { return i.quantity + '× ' + i.title + (i.variant_title ? ' (' + i.variant_title + ')' : ''); }).join(' | ');
+  var dishRows = expandDishes_(items);            // dishes chosen inside a plan line (one weekly selection, repeated every week of the plan)
+  var planLine = items.filter(function (i) { return dishRowsOf_(i).length; })[0];
+  var planKey = a.plan || (planLine && /4/.test(String(planLine.variant_title)) ? 'block' : planLine ? 'week' : '');
+  var summary = dishRows.length
+    ? dishRows.map(function (d) { return d.qty + '× ' + d.title; }).join(' | ') + ' [' + (planLine.title || 'Plan') + ' · ' + (planLine.variant_title || '') + ']'
+    : items.map(function (i) { return i.quantity + '× ' + i.title + (i.variant_title ? ' (' + i.variant_title + ')' : ''); }).join(' | ');
   // 3. order row (remember if it is a brand-new order, to alert the kitchen only once)
   var isNew = !orderExists_(o.id);
   upsertRow_('Pedidos', 1, o.id, [o.id, o.name, o.created_at, name, email, c.phone || a.telefono || '', o.total_price, o.currency, o.financial_status, o.fulfillment_status || 'pendiente',
-    a.plan || '', a.enfoque || '', a.dietas || '', a.alergias || '', a.no_me_gustan || '', addr, a.codigo_referencia || '', a.contrato_aceptado || '', summary, o.note || '']);
+    planKey, a.enfoque || a.nivel || '', a.dietas || '', a.alergias || '', a.no_me_gustan || '', addr, a.codigo_referencia || '', a.contrato_aceptado || '', summary, o.note || '']);
   // 4. dish rows (replace the order's previous rows so re-sent webhooks never duplicate)
   var sh = sheet_('Platillos'), last = sh.getLastRow();
   if (last > 1) {
     var ids = sh.getRange(2, 1, last - 1, 1).getValues();
     for (var r = ids.length - 1; r >= 0; r--) if (String(ids[r][0]) === String(o.id)) sh.deleteRow(r + 2);
   }
-  items.forEach(function (i) {
-    sh.appendRow([o.id, o.name, o.created_at, name, i.title, i.variant_title || '', i.quantity, i.price,
-      (i.selling_plan_allocation && i.selling_plan_allocation.selling_plan && i.selling_plan_allocation.selling_plan.name) || '']);
-  });
+  if (dishRows.length) {
+    dishRows.forEach(function (d) { sh.appendRow([o.id, o.name, o.created_at, name, d.title, a.nivel || '', d.qty, '', d.planLabel]); });
+  } else {
+    items.forEach(function (i) {
+      sh.appendRow([o.id, o.name, o.created_at, name, i.title, i.variant_title || '', i.quantity, i.price,
+        (i.selling_plan_allocation && i.selling_plan_allocation.selling_plan && i.selling_plan_allocation.selling_plan.name) || '']);
+    });
+  }
   if (isNew) alertNewOrder_(o, name, email, addr, a, summary);
+}
+
+
+/** The funnel adds ONE plan line (e.g. "Plan semanal Exclusivo", variant "4 semanas") with the chosen dishes as a line property:
+ *  Platillos: "2× Filete Prime con verduras asadas | 3× Bowl de res magra y quinoa"  (quantities are PER WEEK). */
+function dishRowsOf_(line) {
+  var props = line.properties || [], out = [];
+  props.forEach(function (p) {
+    if (!/^(platillos|dishes)$/i.test(String(p.name || ''))) return;
+    String(p.value || '').split('|').forEach(function (part) {
+      var m = part.trim().match(/^(\d+)\s*[×x]\s*(.+)$/);
+      if (m) out.push({ title: m[2].trim(), qty: Number(m[1]) });
+    });
+  });
+  return out;
+}
+function expandDishes_(items) {
+  var rows = [];
+  items.forEach(function (i) { dishRowsOf_(i).forEach(function (d) { d.planLabel = String(i.variant_title || ''); rows.push(d); }); });
+  return rows;
 }
 
 function orderExists_(id) {
@@ -180,7 +209,7 @@ function alertNewOrder_(o, name, email, addr, a, summary) {
   try {
     var to = PropertiesService.getScriptProperties().getProperty('ALERT_EMAILS');
     if (!to) return;
-    var plan = (a.plan === 'block' || summary.indexOf('Bloque') > -1) ? 'Bloque de 4 semanas' : 'Semana de prueba';
+    var plan = (a.plan === 'block' || /4 semanas/.test(summary)) ? 'Plan de 4 semanas (20 comidas)' : 'Plan de 1 semana (5 comidas)';
     var body = ['Nuevo pedido ' + o.name, '', 'Cliente: ' + name, 'Correo: ' + email, 'Teléfono: ' + ((o.customer && o.customer.phone) || a.telefono || ''), 'Dirección: ' + addr, '',
       'Plan: ' + plan, 'Total: $' + o.total_price + ' ' + o.currency, 'Platillos: ' + summary, '',
       'ALERGIAS: ' + (a.alergias || 'ninguna declarada'), 'No le gustan: ' + (a.no_me_gustan || '-'), 'Dietas: ' + (a.dietas || '-'), '', 'Panel: abre /pages/admin en tu sitio.'].join('\n');
