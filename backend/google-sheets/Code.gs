@@ -31,11 +31,11 @@ function setupSheets() {
   var wk = ss.getSheetByName('Semana') || ss.insertSheet('Semana');
   wk.clear();
   wk.getRange('A1').setValue('Platillos a cocinar (suma de todos los pedidos; filtra por fecha en Platillos)').setFontWeight('bold');
-  wk.getRange('A3').setFormula('=IFERROR(QUERY(Platillos!A2:I,"select E, sum(G) where E is not null group by E order by sum(G) desc label E \'Platillo\', sum(G) \'Cantidad\'",1),"")');
+  wk.getRange('A3').setFormula('=IFERROR(QUERY(Platillos!A1:I,"select E, sum(G) where E is not null group by E order by sum(G) desc label E \'Platillo\', sum(G) \'Cantidad\'",1),"")');
   wk.getRange('D1').setValue('Dietas más pedidas').setFontWeight('bold');
-  wk.getRange('D3').setFormula('=IFERROR(QUERY(Pedidos!A2:T,"select L, count(A) where L is not null group by L order by count(A) desc label L \'Enfoque\', count(A) \'Pedidos\'",1),"")');
+  wk.getRange('D3').setFormula('=IFERROR(QUERY(Pedidos!A1:T,"select L, count(A) where L is not null group by L order by count(A) desc label L \'Enfoque\', count(A) \'Pedidos\'",1),"")');
   wk.getRange('G1').setValue('Alergias declaradas').setFontWeight('bold');
-  wk.getRange('G3').setFormula('=IFERROR(QUERY(Clientes!A2:Q,"select K, count(F) where K is not null and K <> \'\' group by K order by count(F) desc label K \'Alergias\', count(F) \'Clientes\'",1),"")');
+  wk.getRange('G3').setFormula('=IFERROR(QUERY(Clientes!A1:Q,"select K, count(F) where K is not null and K <> \'\' group by K order by count(F) desc label K \'Alergias\', count(F) \'Clientes\'",1),"")');
 }
 
 /**
