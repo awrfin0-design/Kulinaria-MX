@@ -161,7 +161,7 @@
       orders: 'Pedidos del mes', blocks: 'Bloques de 4 semanas', trials: 'Semanas de prueba (sueltas)', clients: 'Clientes nuevos', sales: 'Ventas', avg: 'Ticket promedio', plates: 'Platillos a cocinar', top: 'Platillos más pedidos', mix: 'Bloque vs. suelto',
       perWeek: 'Pedidos por semana', week: 'Semana', month: 'Mes', buffer: 'Colchón de compra (%)', copy: 'Copiar lista', csv: 'Descargar CSV', print: 'Imprimir', copied: 'Lista copiada',
       forWhat: 'Para', dishesWord: 'platillos', activeOrders: 'pedidos activos', missing: 'Sin receta (no entran en la lista):', ingredient: 'Ingrediente', qty: 'Comprar', none: 'No hay pedidos activos en este periodo.',
-      recipesNote: 'Cantidades por porción. Son estimaciones de arranque: el chef las ajusta en la hoja "Recetas" del Google Sheet.', per: 'por porción', waste: 'merma',
+      calc: 'Cálculo', withWaste: 'con merma', recipesNote: 'Cantidades por porción. Son estimaciones de arranque: el chef las ajusta en la hoja "Recetas" del Google Sheet.', per: 'por porción', waste: 'merma',
       date: 'Fecha', order: 'Pedido', client: 'Cliente', plan: 'Plan', items: 'Platillos', total: 'Total', firstDelivery: '1ª entrega', block: 'Bloque 4 sem.', trial: 'Semana de prueba',
       key: 'Contraseña de administración', keyHelp: 'Es la clave ADMIN_KEY que configuraste en el Apps Script.', enter: 'Entrar', badKey: 'Contraseña incorrecta.', loading: 'Cargando…', error: 'No se pudieron cargar los datos', lock: 'Cerrar sesión',
       noRecipes: 'Aún no hay recetas.', cooking: 'Para cocinar', buyList: 'Ver lista de compras', thisWeek: 'Esta semana', nextWeek: 'Próxima semana' },
@@ -169,7 +169,7 @@
       orders: 'Orders this month', blocks: '4-week blocks', trials: 'Trial weeks (loose)', clients: 'New clients', sales: 'Sales', avg: 'Average ticket', plates: 'Dishes to cook', top: 'Most ordered dishes', mix: 'Block vs loose',
       perWeek: 'Orders per week', week: 'Week', month: 'Month', buffer: 'Buying buffer (%)', copy: 'Copy list', csv: 'Download CSV', print: 'Print', copied: 'List copied',
       forWhat: 'For', dishesWord: 'dishes', activeOrders: 'active orders', missing: 'No recipe (not in the list):', ingredient: 'Ingredient', qty: 'Buy', none: 'No active orders in this period.',
-      recipesNote: 'Quantities per portion. Starting estimates: the chef adjusts them in the "Recetas" Google Sheet tab.', per: 'per portion', waste: 'waste',
+      calc: 'Math', withWaste: 'with waste', recipesNote: 'Quantities per portion. Starting estimates: the chef adjusts them in the "Recetas" Google Sheet tab.', per: 'per portion', waste: 'waste',
       date: 'Date', order: 'Order', client: 'Client', plan: 'Plan', items: 'Dishes', total: 'Total', firstDelivery: '1st delivery', block: '4-week block', trial: 'Trial week',
       key: 'Admin password', keyHelp: 'It is the ADMIN_KEY you set in the Apps Script.', enter: 'Enter', badKey: 'Wrong password.', loading: 'Loading…', error: 'Could not load the data', lock: 'Sign out',
       noRecipes: 'No recipes yet.', cooking: 'To cook', buyList: 'See shopping list', thisWeek: 'This week', nextWeek: 'Next week' }
@@ -220,7 +220,9 @@
       r.rows.forEach(function (row) {
         if (row.cat !== cat) { if (cat) out += '</ul>'; cat = row.cat; out += '<h3 class="adm-cat">' + esc(CAT_NAME[lang][cat] || cat) + '</h3><ul class="adm-list">'; }
         var q = fmtQty(row.buy, row.unit), dishes = Object.keys(row.dishes).map(function (d) { return d + ' ×' + row.dishes[d]; }).join(' · ');
-        out += '<li class="' + (checks[row.key] ? 'done' : '') + '"><label><input type="checkbox" data-check="' + esc(row.key) + '"' + (checks[row.key] ? ' checked' : '') + '><span class="adm-name">' + esc(row.name) + '<small>' + esc(dishes) + '</small></span><span class="adm-qty" data-qty="' + esc(row.key) + '"><b>' + esc(q.n) + '</b> ' + esc(q.u) + '</span></label></li>';
+        var fq = function (v) { var x = fmtQty(v, row.unit); return x.n + ' ' + x.u; };
+        var calc = T.calc + ': ' + fq(row.net) + (row.gross > row.net + 0.5 ? ' → ' + T.withWaste + ' ' + fq(row.gross) : '') + ' → +' + S.buffer + '% = ' + fq(row.gross * (1 + S.buffer / 100));
+        out += '<li class="' + (checks[row.key] ? 'done' : '') + '"><label><input type="checkbox" data-check="' + esc(row.key) + '"' + (checks[row.key] ? ' checked' : '') + '><span class="adm-name">' + esc(row.name) + '<small>' + esc(dishes) + '</small><small class="adm-calc">' + esc(calc) + '</small></span><span class="adm-qty" data-qty="' + esc(row.key) + '"><b>' + esc(q.n) + '</b> ' + esc(q.u) + '</span></label></li>';
       });
       out += '</ul>' + missingHtml(r) + '<div class="adm-actions"><button class="adm-btn" data-act="copy">' + T.copy + '</button><button class="adm-btn" data-act="csv">' + T.csv + '</button><button class="adm-btn ghost" data-act="print">' + T.print + '</button></div>';
       return out;

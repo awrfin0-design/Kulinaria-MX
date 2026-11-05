@@ -39,6 +39,7 @@
 .adm-list label{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:14px;padding:14px 4px;cursor:pointer}
 .adm-list input{width:24px;height:24px;accent-color:var(--accent)}
 .adm-name{font-size:1.05rem}.adm-name small{display:block;color:var(--text-muted);font-size:.78rem;margin-top:2px;line-height:1.35}
+.adm-calc{color:var(--accent)!important;opacity:.85}
 .adm-qty{font-family:var(--font-label);font-size:.95rem;color:var(--text-muted);white-space:nowrap}.adm-qty b{font-family:var(--font-heading);font-size:1.6rem;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums}
 .adm-list li.done .adm-name,.adm-list li.done .adm-qty b{text-decoration:line-through;opacity:.45}
 .adm-warn{margin:18px 0 0;padding:12px 16px;border-radius:14px;border:1px solid var(--border-accent);background:var(--accent-wash);font-size:.9rem}
