@@ -2027,3 +2027,175 @@ a.lang__btn{display:inline-block;text-decoration:none}
 
 /* ---- v23: Mi semana ---- */
 .myweek .field{max-width:360px}.myweek .fn-days{margin:var(--space-md) 0}.myweek .btn-row{margin-top:var(--space-md)}
+
+/* ---- v25: the order flow lives in ONE frame (no up-and-down scrolling); meals are picked day by day ---- */
+select.select option{background:var(--bg-raised);color:var(--text)}
+.fn-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.template-page-pedido .funnel.section{padding-top:calc(var(--hdr) + 10px)}
+body .funnel:not(.funnel--teaser) .funnel__stage{display:flex;flex-direction:column;height:calc(100svh - var(--hdr) - 26px);min-height:560px;max-height:940px;overflow:visible}
+.template-page-pedido .funnel:not(.funnel--teaser) .funnel__stage{height:calc(100svh - var(--hdr) - 26px)}
+body .funnel:not(.funnel--teaser) .funnel__top{flex:none;padding-block:4px 2px}
+body .funnel:not(.funnel--teaser) .funnel__bar{flex:none;margin:0 auto 8px}
+body .funnel:not(.funnel--teaser) .funnel__panel{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,300px);gap:clamp(14px,2vw,24px);align-items:stretch}
+body .funnel:not(.funnel--teaser) .funnel__main{min-height:0;display:flex;flex-direction:column;overflow:hidden;padding:0}
+body .funnel:not(.funnel--teaser) .step{margin:0}
+body .funnel:not(.funnel--teaser) .step.is-on{display:flex;flex-direction:column;min-height:0;flex:1 1 auto;border:0;padding:0}
+body .funnel:not(.funnel--teaser) .step[data-fn-step="3"].is-on{overflow-y:auto;scrollbar-width:thin;padding-right:6px}
+body .funnel:not(.funnel--teaser) .step legend{flex:none;margin-bottom:6px;font-size:clamp(1.2rem,1.8vw,1.7rem);float:none;padding:0}
+body .funnel:not(.funnel--teaser) .funnel__aside{align-self:stretch;overflow:auto;max-height:none;margin:0;display:flex;flex-direction:column;gap:8px;padding:16px}
+body .funnel:not(.funnel--teaser) .funnel__actions{flex:none;position:static;padding:8px 0 0;margin:0 auto;background:none;box-shadow:none;border-top:1px solid var(--line)}
+/* step 1: two plan cards that fill the frame */
+.funnel .step[data-fn-step="1"] .fn-plans{flex:1;margin:0 0 8px;align-content:center;max-height:340px;align-self:stretch}
+.funnel .step[data-fn-step="1"] .fn-plan{min-height:210px;justify-content:center}
+/* step 2: week strip + prompt + carousel */
+.fn-week{flex:none;list-style:none;margin:0 0 8px;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.fn-week li{position:relative}
+.fn-day{width:100%;display:grid;grid-template-columns:36px minmax(0,1fr);grid-template-rows:auto auto;column-gap:9px;align-items:center;text-align:left;padding:8px 10px;min-height:58px;border:1px solid var(--line);border-radius:14px;background:var(--bg-raised);color:var(--text);cursor:pointer;transition:border-color .25s,background .25s}
+.fn-day__thumb{grid-row:1/span 2;width:36px;height:36px;border-radius:50%;background:var(--bg-deep) center/cover no-repeat;border:1px dashed var(--line)}
+.fn-day.is-set .fn-day__thumb{border-style:solid;border-color:var(--accent)}
+.fn-day__d{font-family:var(--font-label);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fn-day__dish{font-size:.8rem;line-height:1.15;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.fn-day.is-active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);background:var(--accent-wash)}
+.fn-day.is-active .fn-day__d{color:var(--accent)}
+.fn-day__x{position:absolute;top:-7px;right:-5px;z-index:2;width:22px;height:22px;border-radius:50%;background:var(--text);color:var(--bg-base);font-size:.95rem;line-height:22px;text-align:center;cursor:pointer}
+.fn-day__x[hidden]{display:none}
+.fn-pickbar{flex:none;display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;margin:0 0 8px}
+.fn-prompt{margin:0;flex:1 1 220px;font-family:var(--font-heading);font-size:1.12rem;font-weight:600}
+.fn-pickbar .fn-meter{margin:0;padding-bottom:6px;font-size:.95rem}
+.fn-pickbar .fn-meter b{font-size:1.5rem}
+.fn-sel{display:block}
+.fn-sel select{min-height:40px;padding:0 34px 0 12px;font-size:.85rem;border-radius:12px;max-width:190px}
+.fn-carousel{position:relative;flex:1 1 auto;min-height:0;display:flex}
+.fn-dishes{flex:1;display:flex !important;grid-template-columns:none;gap:12px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:thin;margin:0 !important;padding:2px 2px 10px;max-height:none !important;min-height:0 !important}
+.fn-dish{flex:0 0 clamp(178px,17vw,226px);scroll-snap-align:start;min-height:0;height:100%;display:flex !important;flex-direction:column;padding:0 !important;border-bottom:0 !important}
+.fn-dish.is-hidden{display:none !important}
+.fn-dish__media{position:relative;flex:1 1 auto;min-height:64px;aspect-ratio:auto !important;width:auto !important;height:auto !important;margin:0 !important;border-radius:0 !important}
+.fn-dish__media img{width:100%;height:100%;object-fit:cover}
+.fn-dish__body{flex:0 0 auto;padding:8px 11px 11px !important;gap:3px !important}
+.fn-dish .dish__desc,.fn-dish .compat{display:none !important}
+.fn-dish .tier-badge,.fn-dish .dish__facts{display:block !important}
+.fn-dish .dish__facts{font-size:.76rem;margin:0}
+.fn-dish__title{font-size:.95rem;line-height:1.15;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fn-dish__row{margin-top:2px;flex-wrap:nowrap;gap:8px}
+.fn-dish .dish__price{font-size:1.1rem}.fn-dish .dish__price small{font-size:.62rem}
+.fn-dish .btn--sm{min-height:34px;padding:0 14px}
+.fn-dish.is-picked{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.fn-count{position:absolute;top:8px;left:8px;z-index:2;padding:2px 10px;border-radius:999px;background:var(--accent);color:var(--on-brand);font-size:.8rem;font-weight:700}
+.fn-count[hidden],.fn-up[hidden],.fn-warn[hidden]{display:none}
+.fn-up{margin:2px 0 0}
+.fn-warn{margin:2px 0 0;font-size:.74rem;line-height:1.25;font-weight:700}
+.fn-warn.is-hard{color:#ff6b57}.fn-warn.is-soft{color:var(--accent)}
+.fn-dish.is-blocked .fn-dish__media img{filter:grayscale(1) brightness(.55)}
+.fn-dish.is-blocked .dish__blocked{display:flex;font-size:.78rem;padding:8px;align-items:flex-end;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.78))}
+.fn-dish.is-blocked .dish__blocked strong{display:none}
+.fn-dish.is-blocked .fn-dish__body{opacity:1}
+.fn-dish.is-blocked .fn-add{opacity:.4}
+.fn-arrow{position:absolute;top:36%;z-index:4;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--bg-raised);color:var(--text);cursor:pointer;font-size:1.4rem;line-height:1;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+.fn-arrow--prev{left:-10px}.fn-arrow--next{right:-10px}
+.fn-weeknote{flex:none;margin:6px 0 0;font-size:.8rem;line-height:1.35;color:var(--text-muted)}
+.fn-weeknote strong{color:var(--accent)}
+/* step 3: compact details so the form fits */
+.funnel .step[data-fn-step="3"] .fn-account{padding:8px 14px;margin-bottom:8px}
+.funnel .step[data-fn-step="3"] .form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 12px}
+.funnel .step[data-fn-step="3"] .field{margin:0 0 6px}
+.funnel .step[data-fn-step="3"] .field label{font-size:.7rem}
+.funnel .step[data-fn-step="3"] .input{min-height:42px}
+.funnel .step[data-fn-step="3"] .check-grid{display:flex;flex-wrap:wrap;gap:6px 16px}
+.funnel .step[data-fn-step="3"] .check{font-size:.9rem}
+.funnel .step[data-fn-step="3"] .label{margin:8px 0 4px}
+@media (max-width:900px){
+  body .funnel:not(.funnel--teaser) .funnel__stage{height:calc(100svh - var(--app-top,56px) - var(--safe-b,0px) - 6px);min-height:0;max-height:none;padding-inline:0}
+  .template-page-pedido .funnel.section{padding-top:calc(var(--app-top,56px) + 4px)}
+  body .funnel:not(.funnel--teaser) .funnel__panel{display:flex;flex-direction:column;gap:6px;padding:0 var(--pad)}
+  body .funnel:not(.funnel--teaser) .funnel__main{flex:1 1 auto}
+  body .funnel:not(.funnel--teaser) .funnel__aside{flex:none;overflow:visible;flex-direction:row;flex-wrap:wrap;padding:8px 12px}
+  body .funnel:not(.funnel--teaser) .funnel__actions{padding:8px var(--pad) 10px;max-width:none;width:100%}
+  .funnel .step[data-fn-step="1"] .fn-plans{max-height:none;grid-template-columns:1fr;gap:10px}
+  .funnel .step[data-fn-step="1"] .fn-plan{min-height:0;padding:16px}
+  .fn-week{gap:5px}
+  .fn-day{grid-template-columns:1fr;justify-items:center;text-align:center;padding:6px 2px;min-height:62px;row-gap:2px}
+  .fn-day__thumb{grid-row:auto;width:30px;height:30px}
+  .fn-day__dish{display:none}
+  .fn-day__d{font-size:.56rem;letter-spacing:.04em;white-space:normal;text-align:center;line-height:1.15}
+  .fn-prompt{font-size:1rem;flex-basis:100%}
+  .fn-pickbar .fn-meter{display:none}
+  .fn-sel{flex:1}.fn-sel select{max-width:none;width:100%}
+  .fn-dish{flex-basis:62vw}
+  .fn-arrow{display:none}
+  .fn-weeknote{display:none}
+  .funnel .step[data-fn-step="3"] .form-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-height:640px) and (min-width:901px){.fn-dish__body .dish__facts{display:none !important}.fn-day{min-height:50px}}
+
+/* v25b: alignment, arrows over the photos, blocked cards, notes in the summary */
+body .funnel:not(.funnel--teaser) .funnel__top,body .funnel:not(.funnel--teaser) .funnel__bar,body .funnel:not(.funnel--teaser) .funnel__panel,body .funnel:not(.funnel--teaser) .funnel__actions{box-sizing:border-box;width:100%;max-width:var(--container);margin-inline:auto;padding-inline:clamp(20px,4vw,48px)}
+body .funnel:not(.funnel--teaser) .funnel__bar{width:calc(100% - 2*clamp(20px,4vw,48px));padding-inline:0}
+body .funnel:not(.funnel--teaser) .funnel__actions.container{padding-inline:clamp(20px,4vw,48px)}
+@media (min-width:901px){
+  body .funnel:not(.funnel--teaser) .funnel__stage{min-height:520px}
+  .template-page-pedido .funnel:not(.funnel--teaser) .funnel__stage{height:calc(100svh - var(--hdr) - 70px)}
+}
+.fn-arrow{top:16%}
+.fn-dish.is-blocked .dish__blocked{display:none !important}
+.fn-dish.is-blocked{border-color:#ff6b57}
+.fn-dish.is-blocked .fn-dish__row .dish__price{opacity:.5}
+.funnel__aside .fn-weeknote{margin-top:auto;font-size:.8rem;line-height:1.4}
+.fn-day__d{text-overflow:clip}
+
+/* v25c: plan cards, one-screen details form, bar alignment */
+body .funnel:not(.funnel--teaser) .funnel__bar{max-width:calc(var(--container) - 2*clamp(20px,4vw,48px))}
+.fn-arrow[hidden]{display:none}
+.fn-plan__from{font-size:1.7rem;font-family:var(--font-display);font-weight:400;letter-spacing:0;line-height:1}
+.fn-plan__incl{font-family:var(--font-label);font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.funnel .step[data-fn-step="3"] [data-fn-fields]:not([hidden]){display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:2px 12px;align-content:start}
+.funnel .step[data-fn-step="3"] [data-fn-fields] .form-grid{display:contents}
+.funnel .step[data-fn-step="3"] [data-fn-fields] .form-grid>.field{grid-column:span 3}
+.funnel .step[data-fn-step="3"] [data-fn-fields]>.field{grid-column:span 6}
+.funnel .step[data-fn-step="3"] [data-fn-fields]>.label,.funnel .step[data-fn-step="3"] [data-fn-fields]>.check-grid{grid-column:1/-1}
+.funnel .step[data-fn-step="3"] .fn-contract{margin:8px 0 0}
+.funnel .step[data-fn-step="3"] .fn-saved{margin-bottom:8px}
+@media (max-width:900px){
+  .funnel .step[data-fn-step="3"] [data-fn-fields]:not([hidden]){grid-template-columns:repeat(2,minmax(0,1fr))}
+  .funnel .step[data-fn-step="3"] [data-fn-fields] .form-grid>.field,.funnel .step[data-fn-step="3"] [data-fn-fields]>.field{grid-column:span 1}
+  .fn-plan__from{font-size:1.5rem}
+}
+
+/* v26: allergies WARN (never block); details live in onboarding */
+.fn-warn{display:flex;gap:4px;margin:2px 0 0;font-size:.74rem;line-height:1.25;font-weight:700;color:#f5a524}
+.fn-warn.is-hard{color:#f5a524}.fn-warn.is-soft{color:var(--text-muted);font-weight:600}
+.fn-dish.is-warned{border-color:#f5a524}
+.fn-dish.is-warned .fn-dish__media img{filter:none}
+.fn-dish.is-warned .fn-dish__row .dish__price{opacity:1}
+.fn-dish.is-warned .fn-add{opacity:1}
+.fn-day.has-warn::after{content:"\26A0";position:absolute;top:4px;right:6px;font-size:.8rem;color:#f5a524}
+.btn.is-disabled{opacity:.45;pointer-events:none}
+.myweek .fn-warn{margin:8px 0 0;font-size:.85rem}
+.fn-cut{margin:0 0 6px;font-size:.82rem}
+
+/* v26b: summary column that always shows the total; plain countdown */
+body .funnel:not(.funnel--teaser) .funnel__aside{gap:6px;padding:14px 16px}
+.funnel__aside .countdown{display:block;margin:0 0 2px;padding:0;border:0;background:none;border-radius:0;font-size:.8rem;line-height:1.35;color:var(--text-muted);text-align:left}
+.funnel__aside .countdown strong{display:inline;font-size:inherit;color:var(--accent);letter-spacing:0}
+.funnel__aside .funnel__facts,.funnel__aside .funnel__total,.funnel__aside .funnel__upgrades,.funnel__aside h3{flex:none}
+.funnel__aside h3{font-size:1.25rem}
+.funnel__aside .funnel__list{flex:1 1 auto;min-height:0;overflow:auto;gap:4px;padding-top:8px}
+.funnel__aside .funnel__list li{font-size:.84rem;gap:8px;min-width:0}
+.funnel__aside .funnel__list li span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.funnel__aside .funnel__list li b{flex:none}
+.funnel__aside [data-fn-s-empty],.funnel__aside [data-fn-s-count],.funnel__aside .funnel__block{flex:none;margin:0;font-size:.8rem}
+.funnel__aside .fn-weeknote{flex:none;margin:4px 0 0;font-size:.74rem;line-height:1.35}
+.funnel__aside [data-fn-reset]{flex:none;align-self:flex-start;font-size:.78rem;padding:0}
+.funnel__aside .funnel__total{padding-top:8px}
+.funnel__aside .funnel__total strong{font-size:1.6rem}
+
+/* v26c: phone fit */
+.fn-dish__media{align-self:stretch !important}
+@media (max-width:900px){
+  .funnel .step[data-fn-step="1"] .fn-plan>small{display:none}
+  .funnel .step[data-fn-step="1"] .fn-plan{gap:4px}
+  .funnel .step[data-fn-step="1"] .fn-plan strong{font-size:1.25rem}
+  .funnel .step[data-fn-step="1"] .plan-card__flag{position:static;align-self:flex-start;margin-bottom:2px}
+  body .funnel:not(.funnel--teaser) .funnel__aside .funnel__block,.funnel__aside .fn-weeknote{display:none}
+  .funnel__aside .countdown{flex-basis:100%;font-size:.76rem}
+  .fn-dish{flex-basis:64vw}
+}

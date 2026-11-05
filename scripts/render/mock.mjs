@@ -125,6 +125,7 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
       selling_plan_allocation: { selling_plan: { name: tr(PLAN_NAME) } } })),
   };
   const customer = {
+    orders_count: 1,
     id: 6543210987, first_name: 'Ramón', last_name: 'Chavez', email: 'ramon@ejemplo.com',
     default_address: addr, addresses: [addr], orders: [order], new_address: {},
     metafields: { kulinaria: mf({ referral_code: 'RAMON10', referrals_paid: 3, wallet_balance: 150, allergies: [], dislikes: [] }) },

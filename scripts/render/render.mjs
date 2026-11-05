@@ -255,6 +255,7 @@ export async function renderSite() {
 
   let doc = per.es.routes.find((r) => r.key === 'home').html;
   doc = doc.replace(MAIN_RE, () => `<main id="main" tabindex="-1">${LANGS.map((l) => `<template data-l="${l}">${pagesFor(l)}</template>`).join('\n')}</main>`);
+  doc = doc.replace('data-kx-onb href="/pages/bienvenida"', 'data-kx-onb href="#/pg/bienvenida"');   // the layout sits outside the page templates
   for (const g of ['header-group', 'footer-group']) {
     doc = doc.replace(`<!--@group:${g}-->`, () => LANGS.map((l) => `<template data-l="${l}">${rewrite(per[l].groups[g], 'shell ' + l)}</template>`).join(''));
   }
@@ -339,6 +340,7 @@ const PREVIEW_JS = `
     var key = (h ? h.slice(2) : 'home').split('?')[0] || 'home';
     var found = false;
     pages.forEach(function (p) { var on = p.getAttribute('data-page') === key; p.hidden = !on; if (on) { found = true; document.body.className = document.body.className.replace(/template-\\S+/, 'template-' + (p.getAttribute('data-template') || 'page')); document.title = p.getAttribute('data-title') + ' | ' + M.suffix; } });
+    [].slice.call(document.body.classList).forEach(function (c) { if (c.indexOf('template-page-') === 0) document.body.classList.remove(c); }); if (found && key.indexOf('pg/') === 0) document.body.classList.add('template-page-' + key.slice(3));
     if (!found) { pages.forEach(function (p) { p.hidden = p.getAttribute('data-page') !== '404'; }); }
     [].forEach.call(document.querySelectorAll('.site-nav a'), function (a) {
       if (a.getAttribute('href').split('?')[0] === '#/' + key) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');

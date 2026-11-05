@@ -31,14 +31,14 @@ const J = (r) => JSON.parse(r.s);
 // 1. order webhook: plan line with hidden _platillos + day properties, plus an upgrade line
 const order = { id: 1, name: '#1001', created_at: '2026-11-04T12:00:00-06:00', updated_at: '2026-11-04T12:00:00-06:00', email: 'a@x.com', total_price: '3810.00', currency: 'MXN', financial_status: 'paid',
   customer: { id: 5, first_name: 'Ana', last_name: 'Pérez', email: 'a@x.com' },
-  note_attributes: [{ name: 'plan', value: 'block' }, { name: 'nivel', value: 'selecto' }, { name: 'alergias', value: 'Mariscos' }, { name: 'dias', value: 'Lunes 9 nov: Pollo' }, { name: 'direccion', value: 'Calle Lago 24' }, { name: 'contrato_aceptado', value: 'sí' }],
+  note_attributes: [{ name: 'plan', value: 'block' }, { name: 'nivel', value: 'selecto' }, { name: 'alergias', value: 'Mariscos' }, { name: 'dias', value: 'Lunes 9 nov: Pollo' }, { name: 'alerta_alergias', value: 'Salmón gourmet' }, { name: 'direccion', value: 'Calle Lago 24' }, { name: 'contrato_aceptado', value: 'sí' }],
   line_items: [
     { title: 'Plan semanal Selecto', variant_title: '4 semanas', quantity: 1, price: '3600.00', properties: [{ name: 'Comidas por semana', value: '5' }, { name: 'Lunes 9 nov', value: 'Pollo a las hierbas con puré rústico' }, { name: '_platillos', value: '4× Pollo a las hierbas con puré rústico | 1× Filete Prime con verduras asadas' }] },
     { title: 'Mejora de platillo', variant_title: '+3 niveles', quantity: 1, price: '210.00', properties: [{ name: 'Mejora', value: 'Filete Prime con verduras asadas' }] }] };
 let r = J(fn.doPost({ parameter: { key: 'k', topic: 'orders-create' }, postData: { contents: JSON.stringify(order) } }));
 ok('order webhook accepted', r.ok, JSON.stringify(r));
 ok('dish rows come from the hidden _platillos property (upgrade line adds none)', sheets.Platillos.rows.length === 3 && /Pollo/.test(sheets.Platillos.rows[1][4]) && sheets.Platillos.rows[1][6] === 4, JSON.stringify(sheets.Platillos.rows));
-ok('new-order alert e-mail sent once with the day plan', mails.length === 1 && /Lunes 9 nov/.test(mails[0].body), mails[0] && mails[0].body);
+ok('new-order alert e-mail sent once with the day plan and the allergy warning for flagged dishes', mails.length === 1 && /Lunes 9 nov/.test(mails[0].body) && /PUEDEN contener sus alergias: Salmón gourmet/.test(mails[0].body), mails[0] && mails[0].body);
 fn.doPost({ parameter: { key: 'k', topic: 'orders-create' }, postData: { contents: JSON.stringify(order) } });
 ok('re-delivery of the same webhook does not duplicate the order or the e-mail', sheets.Pedidos.rows.length === 2 && mails.length === 1, sheets.Pedidos.rows.length + '/' + mails.length);
 ok('webhook without the key is refused', J(fn.doPost({ parameter: { topic: 'orders-create' }, postData: { contents: '{}' } })).ok === false);
@@ -53,20 +53,28 @@ ok('another customer cannot read it (token of customer 6 on id 5)', J(fn.doGet({
 fn.doPost({ parameter: {}, postData: { contents: JSON.stringify({ action: 'profile', cid: 5, token: token(5), profile: Object.assign({}, prof, { dislikes: [] }) }) } });
 ok('profile update overwrites the same row (no duplicates)', sheets.Perfiles.rows.length === 2);
 
-// 3. weekly choices
-const put = (cid, week, days, up) => J(fn.doPost({ parameter: {}, postData: { contents: JSON.stringify({ action: 'week', cid, token: token(cid), week, email: 'a@x.com', days, upgrade: up }) } }));
-ok('week choice without upgrade is Confirmada', put(5, '2026-11-16', ['Bowl vegano de garbanzo y tahini', 'Bowl vegano de garbanzo y tahini', 'Crema de calabaza asada', 'Crema de calabaza asada', 'Crema de calabaza asada'], 0).status === 'Confirmada');
-ok('week choice with an upgrade waits for payment', put(5, '2026-11-23', ['Filete Prime con verduras asadas', 'Crema de calabaza asada', 'Crema de calabaza asada', 'Crema de calabaza asada', 'Crema de calabaza asada'], 210).status === 'Pendiente de pago');
+// 3. weekly choices (weeks are relative to "now": the server only accepts weeks that are still open)
+const ymd = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const allowed = (() => { const n = new Date(), dow = n.getDay(), mins = n.getHours() * 60 + n.getMinutes(); let d = ((1 - dow + 7) % 7) || 7; if (dow === 0 || (dow === 6 && mins >= 600)) d += 7; return new Date(n.getFullYear(), n.getMonth(), n.getDate() + d); })();
+const wk = (k) => ymd(new Date(allowed.getFullYear(), allowed.getMonth(), allowed.getDate() + 7 * k));
+const W1 = wk(0), W2 = wk(1), W3 = wk(2);
+const past = ymd(new Date(allowed.getFullYear(), allowed.getMonth(), allowed.getDate() - 7));
+const put = (cid, week, days, up) => J(fn.doGet({ parameter: { action: 'weekset', cid: String(cid), token: token(cid), week, email: 'a@x.com', days: days.join('|'), upgrade: String(up) } }));
+ok('week choice without upgrade is Confirmada', put(5, W1, ['Bowl vegano de garbanzo y tahini', 'Bowl vegano de garbanzo y tahini', 'Crema de calabaza asada', 'Crema de calabaza asada', 'Crema de calabaza asada'], 0).status === 'Confirmada');
+ok('week choice with an upgrade waits for payment', put(5, W2, ['Filete Prime con verduras asadas', 'Crema de calabaza asada', 'Crema de calabaza asada', 'Crema de calabaza asada', 'Crema de calabaza asada'], 210).status === 'Pendiente de pago');
+ok('a week whose Saturday cut-off has passed is refused by the server', put(5, past, ['x'], 0).error === 'closed', JSON.stringify(put(5, past, ['x'], 0)));
+ok('a date that is not a Monday is refused', put(5, wk(0).slice(0, 8) + String(+wk(0).slice(8) + 1).padStart(2, '0'), ['x'], 0).ok === false);
 ok('bad week format is refused', put(5, 'mañana', ['x'], 0).ok === false);
-r = J(fn.doGet({ parameter: { action: 'week', cid: '5', token: token(5), week: '2026-11-16' } }));
+ok('a wrong token cannot save a week', J(fn.doGet({ parameter: { action: 'weekset', cid: '5', token: 'bad', week: W1, days: 'x' } })).ok === false);
+r = J(fn.doGet({ parameter: { action: 'week', cid: '5', token: token(5), week: W1 } }));
 ok('week read returns the saved choice', r.ok && r.selection && r.selection.status === 'Confirmada' && r.selection.items.reduce((a, i) => a + i.qty, 0) === 5, JSON.stringify(r));
-r = J(fn.doGet({ parameter: { action: 'week', cid: '5', token: token(5), week: '2026-11-30' } }));
-ok('an unchosen week offers the previous choice', r.ok && r.selection === null && r.previous && r.previous.week === '2026-11-23', JSON.stringify(r));
-ok('week read with a wrong token is refused', J(fn.doGet({ parameter: { action: 'week', cid: '5', token: 'x', week: '2026-11-16' } })).ok === false);
+r = J(fn.doGet({ parameter: { action: 'week', cid: '5', token: token(5), week: wk(3) } }));
+ok('an unchosen week offers the previous choice', r.ok && r.selection === null && r.previous && r.previous.week === W2, JSON.stringify(r));
+ok('week read with a wrong token is refused', J(fn.doGet({ parameter: { action: 'week', cid: '5', token: 'x', week: W1 } })).ok === false);
 // the paid upgrade (order webhook with the hidden _semana property) flips the status
-const up = Object.assign({}, order, { id: 2, name: '#1002', line_items: [{ title: 'Mejora de platillo', variant_title: '+3 niveles', quantity: 1, price: '210.00', properties: [{ name: 'Mejora', value: 'Filete Prime' }, { name: '_semana', value: '2026-11-23' }] }] });
+const up = Object.assign({}, order, { id: 2, name: '#1002', line_items: [{ title: 'Mejora de platillo', variant_title: '+3 niveles', quantity: 1, price: '210.00', properties: [{ name: 'Mejora', value: 'Filete Prime' }, { name: '_semana', value: W2 }] }] });
 fn.doPost({ parameter: { key: 'k', topic: 'orders-create' }, postData: { contents: JSON.stringify(up) } });
-r = J(fn.doGet({ parameter: { action: 'week', cid: '5', token: token(5), week: '2026-11-23' } }));
+r = J(fn.doGet({ parameter: { action: 'week', cid: '5', token: token(5), week: W2 } }));
 ok('paying the upgrade marks that week Pagada', r.selection && r.selection.status === 'Pagada', JSON.stringify(r));
 
 // 4. admin export carries the confirmed weekly choices
@@ -74,7 +82,9 @@ r = J(fn.doGet({ parameter: { action: 'admin', key: 'adm' } }));
 ok('admin export includes confirmed/paid weekly choices only', r.ok && r.selections.length === 2 && r.selections.every((s) => /^\d{4}-\d{2}-\d{2}$/.test(s.week) && s.items.length), JSON.stringify(r.selections));
 ok('admin export still lists the plan order with its first-week dishes', r.orders.some((o) => o.plan === 'block' && o.items.some((i) => /Pollo/.test(i.title))));
 
-// 5. reminders: Thursday 2026-11-12 (week 1 = Mon 9 Nov, next = Mon 16 Nov already chosen -> no mail; Thursday 19 Nov -> next 23 Nov chosen as pending -> no mail; Thursday 26 Nov -> 30 Nov not chosen -> mail)
+// 5. reminders (fixed dates: week 1 = Mon 9 Nov; the rows are seeded by hand so the test does not depend on today)
+sheets.Selecciones.rows.length = 1;
+sheets.Selecciones.rows.push(['5', 'a@x.com', '2026-11-16', '[]', '', 0, 'Confirmada', new Date()], ['5', 'a@x.com', '2026-11-23', '[]', '', 210, 'Pendiente de pago', new Date()]);
 mails.length = 0;
 fn.sendWeeklyReminders(new Date(2026, 10, 12, 9)); const m1 = mails.length;
 fn.sendWeeklyReminders(new Date(2026, 10, 26, 9)); const m2 = mails.length - m1;

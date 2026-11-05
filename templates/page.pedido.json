@@ -9,20 +9,11 @@
  */
 {
   "sections": {
-    "head": {
-      "type": "page-head",
-      "settings": {
-        "eyebrow": "Armar mi pedido",
-        "heading": "Arma tu *pedido*",
-        "text": "Cuatro pasos para elegir, uno para tus datos. Recordamos todo para la próxima vez.",
-        "art": "air-bowl"
-      }
-    },
     "funnel": {
       "type": "order-funnel",
       "settings": {
         "eyebrow": "Haz tu pedido",
-        "heading": "Arma tu pedido en *3 pasos*",
+        "heading": "Arma tu pedido en *2 pasos*",
         "text": "",
         "collection": "menu-semanal",
         "limit": 12
@@ -104,8 +95,6 @@
     }
   },
   "order": [
-    "head",
     "funnel"
   ]
 }
-

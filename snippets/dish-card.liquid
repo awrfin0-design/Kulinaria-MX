@@ -42,6 +42,7 @@
       </p>
     {%- endif -%}
     <span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
     <div class="dish__meta">
       <span class="dish__price">{% render 'plan-price', tier: tier, kind: 'meal', money: true %}<small> {{ 'funnel.per_meal' | t }}</small></span>
       <a class="dish__go" href="{{ product.url }}" aria-label="{{ 'dish.view_of' | t }} {{ product.title | escape }}">→</a>

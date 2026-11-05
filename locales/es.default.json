@@ -244,7 +244,7 @@
     "dislike_hit": "Contiene ingredientes que marcaste como \"no me gustan\": {list}.",
     "hours": "h",
     "minutes": "min",
-    "not_suitable": "No apto para tu perfil: contiene {list}.",
+    "not_suitable": "⚠ Según nuestros datos, incluye o puede incluir algo a lo que declaraste alergia: {list}.",
     "pause_left": "Quedan {time} para pausar.",
     "remove": "Quitar {name}"
   },
@@ -552,8 +552,16 @@
     "first_delivery": "Primera entrega: lunes {d}.",
     "week_note": "Estas 5 comidas son solo para esa primera semana. Tu plan ya está pagado: regresa cada semana a elegir las siguientes 5 (antes del sábado a las 10:00).",
     "saved_title": "Tus datos están guardados",
-    "includes_block": "al mes · incluye 20 comidas (5 por semana)",
-    "includes_week": "por semana · incluye 5 comidas"
+    "includes_block": "Al mes · incluye 20 comidas (5 por semana)",
+    "includes_week": "Por semana · incluye 5 comidas",
+    "pick": "Elegir",
+    "picked": "Elegido",
+    "pick_for": "Elige el platillo del {d}",
+    "all_done": "¡Semana completa! Revisa y continúa.",
+    "clear_day": "Quitar el platillo de {d}",
+    "prev_dishes": "Platillos anteriores",
+    "next_dishes": "Platillos siguientes",
+    "rolled": "El cierre del sábado ya pasó: ahora eliges la semana del {d}."
   },
   "sitemap": {
     "pedido": "Armar mi pedido",
@@ -663,6 +671,11 @@
     "saved": "Listo: tu semana del {d} quedó guardada.",
     "saved_pay": "Guardamos tu selección. Paga la mejora de platillos ({p}) para confirmarla.",
     "prev": "Cargamos tu selección anterior; cámbiala si quieres.",
-    "error": "No pudimos agregar la mejora al carrito. Intenta de nuevo."
+    "error": "No pudimos agregar la mejora al carrito. Intenta de nuevo.",
+    "warn": "⚠ Según nuestros datos, estos platillos incluyen o pueden incluir algo a lo que declaraste alergia: {list}.",
+    "closed": "Esa semana ya cerró. Elige la siguiente.",
+    "noplan": "Aún no tienes un plan activo. Arma tu pedido para empezar.",
+    "orders": "Ver mis pedidos anteriores",
+    "my_data": "Mis datos"
   }
 }

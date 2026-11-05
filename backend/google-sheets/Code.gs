@@ -47,6 +47,7 @@ function doGet(e) {
   var params = (e && e.parameter) || {};
   if (params.action === 'profile') return out_(profileGet_(params.cid, params.token));
   if (params.action === 'week') return out_(weekGet_(params.cid, params.token, params.week));
+  if (params.action === 'weekset') return out_(weekSet_(params.cid, params.token, { week: params.week, email: params.email, upgrade: params.upgrade, days: String(params.days || '').split('|') }));
   if (params.action !== 'admin') return out_({ ok: true, service: 'kulinaria-sheets' });
   var key = PropertiesService.getScriptProperties().getProperty('ADMIN_KEY');
   if (!key || params.key !== key) return out_({ ok: false, error: 'forbidden' });
@@ -221,7 +222,7 @@ function alertNewOrder_(o, name, email, addr, a, summary) {
     var plan = (a.plan === 'block' || /4 semanas/.test(summary)) ? 'Plan de 4 semanas (20 comidas)' : 'Plan de 1 semana (5 comidas)';
     var body = ['Nuevo pedido ' + o.name, '', 'Cliente: ' + name, 'Correo: ' + email, 'Teléfono: ' + ((o.customer && o.customer.phone) || a.telefono || ''), 'Dirección: ' + addr, '',
       'Plan: ' + plan, 'Total: $' + o.total_price + ' ' + o.currency, 'Platillos: ' + summary, 'Días: ' + (a.dias || '-'), '',
-      'ALERGIAS: ' + (a.alergias || 'ninguna declarada'), 'No le gustan: ' + (a.no_me_gustan || '-'), 'Dietas: ' + (a.dietas || '-'), '', 'Panel: abre /pages/admin en tu sitio.'].join('\n');
+      'ALERGIAS: ' + (a.alergias || 'ninguna declarada'), (a.alerta_alergias ? 'ATENCIÓN: eligió platillos que PUEDEN contener sus alergias: ' + a.alerta_alergias : ''), 'No le gustan: ' + (a.no_me_gustan || '-'), 'Dietas: ' + (a.dietas || '-'), '', 'Panel: abre /pages/admin en tu sitio.'].join('\n');
     MailApp.sendEmail(to, 'Nuevo pedido ' + o.name + ' · ' + name, body);
   } catch (err) { /* never block the order */ }
 }
@@ -287,7 +288,8 @@ function weekGet_(cid, token, week) {
 }
 function weekSet_(cid, token, p) {
   if (!profileTokenOk_(cid, token)) return { ok: false, error: 'forbidden' };
-  var week = String(p.week || ''); if (!/^\d{4}-\d{2}-\d{2}$/.test(week)) return { ok: false, error: 'bad week' };
+  var week = String(p.week || ''); if (!/^\d{4}-\d{2}-\d{2}$/.test(week) || new Date(week + 'T12:00:00').getDay() !== 1) return { ok: false, error: 'bad week' };
+  if (week < allowedMonday_(p.now ? new Date(p.now) : new Date())) return { ok: false, error: 'closed' };
   var days = (p.days || []).slice(0, 5).map(function (t) { return String(t || '').slice(0, 120); }).filter(Boolean);
   var counts = {}; days.forEach(function (t) { counts[t] = (counts[t] || 0) + 1; });
   var items = Object.keys(counts).map(function (t) { return { title: t, qty: counts[t] }; });
@@ -348,4 +350,12 @@ function sendWeeklyReminders(now) {
     try { MailApp.sendEmail(email, 'Elige tus comidas de la próxima semana · Kulinaria', body); sent[email] = 1; n++; } catch (err) { /* keep going */ }
   });
   return 'Recordatorios enviados: ' + n;
+}
+
+/** the first Monday a client can still choose: orders close Saturday 10:00 (script time zone = Mexico). Sunday and Saturday after 10:00 roll to the following Monday. */
+function allowedMonday_(now) {
+  now = now || new Date();
+  var dow = now.getDay(), mins = now.getHours() * 60 + now.getMinutes(), d = ((1 - dow + 7) % 7) || 7;
+  if (dow === 0 || (dow === 6 && mins >= 10 * 60)) d += 7;
+  return ymd_(new Date(now.getFullYear(), now.getMonth(), now.getDate() + d));
 }

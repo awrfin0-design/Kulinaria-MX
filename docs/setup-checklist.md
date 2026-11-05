@@ -24,7 +24,7 @@ Correo `equipo@kulinariamx.com` y teléfono/WhatsApp `525650399656` (el archivo 
 Activar Shopify Payments en modo de prueba (o la pasarela Bogus) y luego crear el plan prepagado en Recharge (precios por entrega: 900 / 1,250 / 1,600 / 1,950 × 4).
 
 ## Cómo funciona el flujo del cliente
-1. Inicia sesión → **Bienvenida** (cuestionario único: datos, dirección, alergias, dieta). Se guarda en el navegador y en la hoja `Perfiles` (firmado por cliente).
-2. **Armar pedido**: plan de 4 semanas (desde $3,600 al mes, 20 comidas) o de 1 semana (desde $1,000, 5 comidas) → asigna un platillo a cada día (lunes a viernes, con fecha) → confirma y acepta el contrato. Un platillo de nivel superior solo suma la diferencia ($70 / $140 / $210 por comida) para esa semana.
-3. Primera entrega: el lunes siguiente (si pide antes del sábado 10:00; después, el lunes de la semana posterior).
-4. **Mi semana** (`/pages/cuenta-semana`): cada semana el cliente elige sus siguientes 5 comidas. Si no elige, se repite la selección anterior (selección automática del sábado). El administrador suma la semana correcta a la lista de compras.
+1. **Cuenta nueva** (sin pedidos): al iniciar sesión pasa automáticamente al cuestionario de **Bienvenida** (una sola vez: datos, dirección, alergias, dieta). Se guarda en el navegador y en la hoja `Perfiles` (firmado por cliente). Después elige su plan.
+2. **Armar pedido** (2 pasos, una sola pantalla): plan de 4 semanas (desde $3,600 al mes, 20 comidas) o de 1 semana (desde $1,000, 5 comidas) → asigna un platillo a cada día (lunes a viernes, con fecha). Un platillo de nivel superior solo suma la diferencia ($70 / $140 / $210 por comida) de esa semana. Las alergias **avisan** (no bloquean): «según nuestros datos incluye o puede incluir…», y la cocina recibe un aviso si se elige uno. Los datos nunca se vuelven a pedir.
+3. Primera entrega: el lunes siguiente (si pide antes del sábado 10:00; después, el lunes de la semana posterior). El calendario cambia solo al pasar el cierre, y el servidor rechaza semanas ya cerradas.
+4. **Cliente que ya paga**: no ve el cuestionario. Entra, va a **Mi semana** (`/pages/cuenta-semana`), elige sus 5 comidas y envía. Si no elige, se repite la semana anterior. Desde ahí puede ver pedidos anteriores o editar sus datos. Recordatorio jueves y viernes por correo.

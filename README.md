@@ -84,14 +84,14 @@ Also: loading screen, gold/olive dust on the background, scroll-scrubbed fire ba
 
 ## Order funnel (home and `/pages/pedido`) — plans, not single dishes
 
-`sections/order-funnel.liquid`, three steps and one live summary:
+`sections/order-funnel.liquid`, two steps in ONE screen (no page scrolling), with a live summary and a cut-off countdown:
 1. **Plan**: 4 weeks (from $3,600 a month, 20 meals) or 1 week (from $1,000, 5 meals). Choosing a plan moves on by itself.
-2. **Meals**: assign a dish to each weekday (Monday to Friday, with the real dates). The first delivery is the coming Monday; after Saturday 10:00 it is the Monday after. Dishes of a higher tier add only the per-meal difference (+$70 / +$140 / +$210) **for that week**; dishes with a declared allergen are blocked.
-3. **Your details**: asked once (onboarding). Returning customers see a saved summary and only accept the contract.
+2. **Meals**: assign a dish to each weekday (Monday to Friday, with the real dates). The first delivery is the coming Monday; after Saturday 10:00 it is the Monday after. Dishes of a higher tier add only the per-meal difference (+$70 / +$140 / +$210) **for that week**; dishes that may contain a declared allergen show a warning (never blocked) and the kitchen is told.
+(There is no details step: they live in the account. The contract is accepted in the cart.)
 
 On confirm the cart is cleared, the details become cart attributes, and ONE plan line is added (variant "1 semana" / "4 semanas" of the "Plan semanal <nivel>" product, day properties, hidden `_platillos`), plus one "Mejora de platillo" line per upgrade level. Prices live in Shopify (collection `planes-semanales` and product `mejora-de-platillo`); the theme reads them with `snippets/plan-price.liquid`.
 
-**Onboarding** (`/pages/bienvenida`, `sections/onboarding.liquid`): a one-time questionnaire after sign-in (contact, delivery address, allergies, dislikes, diet). Stored in the browser and in the Sheet tab `Perfiles`, signed per customer (`customer.id | hmac_sha256: shop.metafields.kulinaria.profile_secret`).
+**Onboarding** (`/pages/bienvenida`, `sections/onboarding.liquid`): a one-time questionnaire, shown automatically to a NEW account right after sign-in (no orders yet, nothing saved; paying customers are forwarded to Mi semana instead) (contact, delivery address, allergies, dislikes, diet). Stored in the browser and in the Sheet tab `Perfiles`, signed per customer (`customer.id | hmac_sha256: shop.metafields.kulinaria.profile_secret`).
 
 **Mi semana** (`/pages/cuenta-semana`): every week the client chooses the next 5 meals for any of the next 4 delivery Mondays. A week left unchosen repeats the previous one (automatic Saturday selection). Choices live in the Sheet tab `Selecciones`; the admin shopping list counts each week's own dishes. Thursday and Friday reminders: `installWeeklyReminders()` in `Code.gs`.
 

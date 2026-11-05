@@ -14,7 +14,7 @@
 
       <div class="header-actions">
         {% render 'lang-switcher' %}
-        <a class="header-login" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}?return_url=%2Fpages%2Fbienvenida{% endif %}">
+        <a class="header-login" href="{% if customer %}/pages/cuenta-semana{% else %}{{ routes.account_login_url }}?return_url=%2Fpages%2Fbienvenida{% endif %}">
           {% render 'icon', name: 'user' %}<span>{% if customer %}{{ 'general.account' | t }}{% else %}{{ 'login.title' | t }}{% endif %}</span>
         </a>
         <a class="icon-link" href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t }}">

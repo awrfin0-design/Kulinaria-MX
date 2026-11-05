@@ -58,7 +58,7 @@
     {{ content_for_header }}
   </head>
 
-  <body class="template-{{ template.name | handleize }}">
+  <body class="template-{{ template.name | handleize }}{% if template.suffix != blank %} template-{{ template.name | handleize }}-{{ template.suffix | handleize }}{% endif %}">
     <a class="skip-link" href="#main">{{ 'general.skip_to_content' | t }}</a>
 
     <div class="loader" id="loader" role="status" aria-label="{{ 'loader.label' | t }}">
@@ -111,7 +111,7 @@
     </div>
 
     {%- if customer -%}
-      <div id="kx-account" hidden data-endpoint="{{ shop.metafields.kulinaria.sheet_url.value }}" data-cid="{{ customer.id }}" data-token="{{ customer.id | hmac_sha256: shop.metafields.kulinaria.profile_secret.value }}"></div>
+      <div id="kx-account" hidden data-orders="{{ customer.orders_count | default: 0 }}" data-endpoint="{{ shop.metafields.kulinaria.sheet_url.value }}" data-cid="{{ customer.id }}" data-token="{{ customer.id | hmac_sha256: shop.metafields.kulinaria.profile_secret.value }}"><a hidden tabindex="-1" aria-hidden="true" data-kx-onb href="/pages/bienvenida"></a></div>
       <script type="application/json" id="kulinaria-customer">
         {
           "allergies": {{ customer.metafields.kulinaria.allergies.value | json }},
