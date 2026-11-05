@@ -447,7 +447,7 @@
     "s2_text": "Todas las comidas de tu plan son de este nivel. Cada nivel suma $70 por comida.",
     "s2_empty": "Esta semana no hay platillos con ese enfoque. Elige otro o ve todo el menú.",
     "s3_title": "Elige tus 5 comidas de la semana",
-    "s3_text": "Tu selección se repite cada semana de tu plan. Toca para agregar; puedes repetir platillos.",
+    "s3_text": "Toca para agregar; puedes repetir platillos. Tu plan parte de la base Selecto: un platillo de nivel superior solo suma la diferencia por comida.",
     "s4_title": "Elige tu plan",
     "s4_text": "El bloque de 4 semanas es la opción con mejor precio. La semana de prueba cuesta 15% más y se compra hasta el sábado a las 10:00 AM.",
     "s5_title": "Tus datos y tu cuenta",
@@ -542,7 +542,9 @@
     "days_missing": "Asigna un platillo a cada día.",
     "first_delivery": "Primera entrega: lunes {d}.",
     "week_note": "Estas 5 comidas son solo para esa primera semana. Tu plan ya está pagado: regresa cada semana a elegir las siguientes 5 (antes del sábado a las 10:00).",
-    "saved_title": "Tus datos están guardados"
+    "saved_title": "Tus datos están guardados",
+    "includes_block": "incluye 20 comidas (5 por semana)",
+    "includes_week": "incluye 5 comidas"
   },
   "sitemap": {
     "pedido": "Armar mi pedido",

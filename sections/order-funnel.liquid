@@ -35,9 +35,8 @@
       </div>
       <ol class="steps__nav" aria-label="{{ 'funnel.steps' | t }}">
         <li data-fn-dot class="is-on"><span>01</span>{{ 'funnel.s1' | t }}</li>
-        <li data-fn-dot><span>02</span>{{ 'funnel.s2' | t }}</li>
-        <li data-fn-dot><span>03</span>{{ 'funnel.s3' | t }}</li>
-        <li data-fn-dot><span>04</span>{{ 'funnel.s4' | t }}</li>
+        <li data-fn-dot><span>02</span>{{ 'funnel.s3' | t }}</li>
+        <li data-fn-dot><span>03</span>{{ 'funnel.s4' | t }}</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -53,20 +52,18 @@
               <span class="plan-card__flag">{{ 'plans.recommended' | t }}</span>
               <strong>{{ 'funnel.plan_block' | t }}</strong>
               <small>{{ 'funnel.plan_block_text' | t }}</small>
-              <em class="fn-plan__from">{{ 'plans.from' | t }}{% render 'plan-price', tier: 'selecto', kind: 'block', money: true %}</em>
+              <em class="fn-plan__from">{{ 'plans.from' | t }}{% render 'plan-price', tier: 'selecto', kind: 'block', money: true %} <span>· {{ 'funnel.includes_block' | t }}</span></em>
             </button>
             <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
               <strong>{{ 'funnel.plan_week' | t }}</strong>
               <small>{{ 'funnel.plan_week_text' | t }}</small>
-              <em class="fn-plan__from">{{ 'plans.from' | t }}{% render 'plan-price', tier: 'selecto', kind: 'week', money: true %}</em>
+              <em class="fn-plan__from">{{ 'plans.from' | t }}{% render 'plan-price', tier: 'selecto', kind: 'week', money: true %} <span>· {{ 'funnel.includes_week' | t }}</span></em>
             </button>
           </div>
+          <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>{{ 'funnel.renew' | t }}</span></label>
         </fieldset>
 
-        <fieldset class="step" data-fn-step="2">
-          <legend>{{ 'funnel.s2_title' | t }} <button class="info-dot" type="button" data-sheet="pricing" aria-label="{{ 'sheet.info' | t }}"><i aria-hidden="true">i</i></button></legend>
-          <p class="text-muted">{{ 'funnel.s2_text' | t }}</p>
-          <div class="fn-tiers" role="radiogroup" aria-label="{{ 'funnel.s2_title' | t }}">
+        <div class="fn-tierdata" data-fn-tierdata hidden aria-hidden="true">
             {%- liquid
               assign pp_selecto = nil
               for pp in plan_coll.products
@@ -127,11 +124,10 @@
               <span class="fn-tier__price" data-fn-tier-price>{% render 'plan-price', tier: 'reserve', kind: 'block', money: true %}<small data-fn-tier-sub></small></span>
               <strong>{{ 'tier.reserve' | t }}</strong><small>{{ 'funnel.tier_reserve' | t }}</small>
             </button>
-          </div>
-          <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>{{ 'funnel.renew' | t }}</span></label>
-        </fieldset>
+        </div>
 
-        <fieldset class="step" data-fn-step="3">
+
+        <fieldset class="step" data-fn-step="2">
           <legend>{{ 'funnel.s3_title' | t }}</legend>
           <p class="text-muted">{{ 'funnel.s3_text' | t }}</p>
           <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / {{ meals_per_week }} <span>{{ 'funnel.meals_word' | t }}</span><i data-fn-meter-bar></i></p>
@@ -161,7 +157,7 @@
           <p class="alert" data-fn-empty hidden>{{ 'funnel.s3_empty' | t }}</p>
         </fieldset>
 
-        <fieldset class="step" data-fn-step="4">
+        <fieldset class="step" data-fn-step="3">
           <legend>{{ 'funnel.s5_title' | t }}</legend>
           <p class="text-muted">{{ 'funnel.s5_text' | t }}</p>
           <div class="fn-account">
@@ -204,7 +200,6 @@
         <h3>{{ 'funnel.your_order' | t }}</h3>
         <dl class="funnel__facts">
           <div><dt>{{ 'funnel.summary_plan' | t }}</dt><dd data-fn-s-plan>{{ 'funnel.plan_block' | t }}</dd></div>
-          <div><dt>{{ 'funnel.summary_tier' | t }}</dt><dd data-fn-s-tier>{{ 'tier.selecto' | t }}</dd></div>
           <div><dt>{{ 'funnel.summary_meals' | t }}</dt><dd data-fn-s-meals>0 / {{ meals_per_week }}</dd></div>
         </dl>
         <ul class="funnel__list" data-fn-s-list></ul>
@@ -234,7 +229,7 @@
   "settings": [
     { "type": "checkbox", "id": "phone_teaser", "label": "En el teléfono, mostrar solo una tarjeta que lleva al pedido completo", "default": false },
     { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Haz tu pedido" },
-    { "type": "text", "id": "heading", "label": "Título (usa *asteriscos* para la parte en cursiva)", "default": "Arma tu pedido en *4 pasos*" },
+    { "type": "text", "id": "heading", "label": "Título (usa *asteriscos* para la parte en cursiva)", "default": "Arma tu pedido en *3 pasos*" },
     { "type": "textarea", "id": "text", "label": "Texto" },
     { "type": "collection", "id": "collection", "label": "Colección de los platillos" },
     { "type": "range", "id": "limit", "label": "Máximo de platillos", "min": 4, "max": 40, "step": 1, "default": 24 }

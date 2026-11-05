@@ -2351,7 +2351,7 @@ Fuego</span>
       <div id="home--shopify-section-hero" class="shopify-section"><section class="hero hero--9 hero--intro tone-dark" data-scroll data-hero >
   <div class="container hero__grid">
     <div class="hero__stage" aria-hidden="true"><img class="hero__poster" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="video-hero-intro-poster.webp" width="640" height="640" alt="" fetchpriority="high" decoding="async">
-      <video class="hero__video hero__video--intro" muted playsinline preload="none" data-poster="assets/video-hero-intro-poster.webp" data-video-src="assets/video-hero-intro.mp4" data-ambient data-hero-video data-once></video>
+      <video class="hero__video hero__video--intro" muted playsinline preload="none" data-poster="assets/video-hero-intro-poster.webp" data-video-src="assets/video-hero-intro.mp4" data-ambient data-hero-video loop></video>
     </div>
     <div class="hero__copy">
       <span class="hero__rule" aria-hidden="true"></span>
@@ -2394,13 +2394,12 @@ Fuego</span>
     <div class="funnel__top container">
       <div class="funnel__title">
         <span class="eyebrow">Haz tu pedido</span>
-        <h2>Arma tu pedido en <em>4 pasos</em></h2>
+        <h2>Arma tu pedido en <em>3 pasos</em></h2>
       </div>
       <ol class="steps__nav" aria-label="Pasos del pedido">
         <li data-fn-dot class="is-on"><span>01</span>Plan</li>
-        <li data-fn-dot><span>02</span>Nivel</li>
-        <li data-fn-dot><span>03</span>Comidas</li>
-        <li data-fn-dot><span>04</span>Tus datos</li>
+        <li data-fn-dot><span>02</span>Comidas</li>
+        <li data-fn-dot><span>03</span>Tus datos</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -2416,20 +2415,18 @@ Fuego</span>
               <span class="plan-card__flag">Recomendado</span>
               <strong>4 semanas · 20 comidas</strong>
               <small>Pagas una vez y recibes tus 5 comidas cada semana durante 4 semanas. Es el plan con mejor precio por comida.</small>
-              <em class="fn-plan__from">Desde $3,600</em>
+              <em class="fn-plan__from">Desde $3,600 <span>· incluye 20 comidas (5 por semana)</span></em>
             </button>
             <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
               <strong>1 semana · 5 comidas</strong>
               <small>Una sola semana para conocer el servicio. Se compra hasta el sábado a las 10:00 AM.</small>
-              <em class="fn-plan__from">Desde $1,000</em>
+              <em class="fn-plan__from">Desde $1,000 <span>· incluye 5 comidas</span></em>
             </button>
           </div>
+          <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renovar automáticamente cada 4 semanas</span></label>
         </fieldset>
 
-        <fieldset class="step" data-fn-step="2">
-          <legend>Elige tu nivel <button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></legend>
-          <p class="text-muted">Todas las comidas de tu plan son de este nivel. Cada nivel suma $70 por comida.</p>
-          <div class="fn-tiers" role="radiogroup" aria-label="Elige tu nivel"><button class="fn-tier fn-tier--selecto" type="button" role="radio" data-tier-choice="selecto" aria-checked="true"
+        <div class="fn-tierdata" data-fn-tierdata hidden aria-hidden="true"><button class="fn-tier fn-tier--selecto" type="button" role="radio" data-tier-choice="selecto" aria-checked="true"
               data-week="1000" data-block="3600" data-meal="180"
               data-variant-week="72000" data-variant-block="72001"
               data-selling-plan="810001" data-name="Selecto">
@@ -2454,13 +2451,12 @@ Fuego</span>
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
               <strong>Reserve $$$</strong><small>Lo más exclusivo de la carta.</small>
             </button>
-          </div>
-          <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renovar automáticamente cada 4 semanas</span></label>
-        </fieldset>
+        </div>
 
-        <fieldset class="step" data-fn-step="3">
+
+        <fieldset class="step" data-fn-step="2">
           <legend>Elige tus 5 comidas de la semana</legend>
-          <p class="text-muted">Tu selección se repite cada semana de tu plan. Toca para agregar; puedes repetir platillos.</p>
+          <p class="text-muted">Toca para agregar; puedes repetir platillos. Tu plan parte de la base Selecto: un platillo de nivel superior solo suma la diferencia por comida.</p>
           <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>comidas</span><i data-fn-meter-bar></i></p>
           <div class="fn-daysbox">
             <p class="label">Asigna cada comida a un día</p>
@@ -2648,7 +2644,7 @@ Fuego</span>
           <p class="alert" data-fn-empty hidden>Esta semana no hay platillos con esa combinación. Cambia de nivel o de menú.</p>
         </fieldset>
 
-        <fieldset class="step" data-fn-step="4">
+        <fieldset class="step" data-fn-step="3">
           <legend>Tus datos y tu cuenta</legend>
           <p class="text-muted">Los guardamos para que la próxima vez sea un clic. Tus alergias bloquean automáticamente los platillos no aptos.</p>
           <div class="fn-account"><p><strong>Sesión iniciada como ramon@ejemplo.com</strong> · <a class="text-link" href="#/cuenta">Mi cuenta</a></p></div>
@@ -2678,7 +2674,6 @@ Fuego</span>
         <h3>Tu pedido</h3>
         <dl class="funnel__facts">
           <div><dt>Plan</dt><dd data-fn-s-plan>4 semanas · 20 comidas</dd></div>
-          <div><dt>Nivel</dt><dd data-fn-s-tier>Selecto</dd></div>
           <div><dt>Comidas</dt><dd data-fn-s-meals>0 / 5</dd></div>
         </dl>
         <ul class="funnel__list" data-fn-s-list></ul>
@@ -7655,13 +7650,12 @@ Pago digital, sin efectivo</li></ul>
     <div class="funnel__top container">
       <div class="funnel__title">
         <span class="eyebrow">Haz tu pedido</span>
-        <h2>Arma tu pedido en <em>4 pasos</em></h2>
+        <h2>Arma tu pedido en <em>3 pasos</em></h2>
       </div>
       <ol class="steps__nav" aria-label="Pasos del pedido">
         <li data-fn-dot class="is-on"><span>01</span>Plan</li>
-        <li data-fn-dot><span>02</span>Nivel</li>
-        <li data-fn-dot><span>03</span>Comidas</li>
-        <li data-fn-dot><span>04</span>Tus datos</li>
+        <li data-fn-dot><span>02</span>Comidas</li>
+        <li data-fn-dot><span>03</span>Tus datos</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -7677,20 +7671,18 @@ Pago digital, sin efectivo</li></ul>
               <span class="plan-card__flag">Recomendado</span>
               <strong>4 semanas · 20 comidas</strong>
               <small>Pagas una vez y recibes tus 5 comidas cada semana durante 4 semanas. Es el plan con mejor precio por comida.</small>
-              <em class="fn-plan__from">Desde $3,600</em>
+              <em class="fn-plan__from">Desde $3,600 <span>· incluye 20 comidas (5 por semana)</span></em>
             </button>
             <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
               <strong>1 semana · 5 comidas</strong>
               <small>Una sola semana para conocer el servicio. Se compra hasta el sábado a las 10:00 AM.</small>
-              <em class="fn-plan__from">Desde $1,000</em>
+              <em class="fn-plan__from">Desde $1,000 <span>· incluye 5 comidas</span></em>
             </button>
           </div>
+          <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renovar automáticamente cada 4 semanas</span></label>
         </fieldset>
 
-        <fieldset class="step" data-fn-step="2">
-          <legend>Elige tu nivel <button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></legend>
-          <p class="text-muted">Todas las comidas de tu plan son de este nivel. Cada nivel suma $70 por comida.</p>
-          <div class="fn-tiers" role="radiogroup" aria-label="Elige tu nivel"><button class="fn-tier fn-tier--selecto" type="button" role="radio" data-tier-choice="selecto" aria-checked="true"
+        <div class="fn-tierdata" data-fn-tierdata hidden aria-hidden="true"><button class="fn-tier fn-tier--selecto" type="button" role="radio" data-tier-choice="selecto" aria-checked="true"
               data-week="1000" data-block="3600" data-meal="180"
               data-variant-week="72000" data-variant-block="72001"
               data-selling-plan="810001" data-name="Selecto">
@@ -7715,13 +7707,12 @@ Pago digital, sin efectivo</li></ul>
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
               <strong>Reserve $$$</strong><small>Lo más exclusivo de la carta.</small>
             </button>
-          </div>
-          <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renovar automáticamente cada 4 semanas</span></label>
-        </fieldset>
+        </div>
 
-        <fieldset class="step" data-fn-step="3">
+
+        <fieldset class="step" data-fn-step="2">
           <legend>Elige tus 5 comidas de la semana</legend>
-          <p class="text-muted">Tu selección se repite cada semana de tu plan. Toca para agregar; puedes repetir platillos.</p>
+          <p class="text-muted">Toca para agregar; puedes repetir platillos. Tu plan parte de la base Selecto: un platillo de nivel superior solo suma la diferencia por comida.</p>
           <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>comidas</span><i data-fn-meter-bar></i></p>
           <div class="fn-daysbox">
             <p class="label">Asigna cada comida a un día</p>
@@ -7909,7 +7900,7 @@ Pago digital, sin efectivo</li></ul>
           <p class="alert" data-fn-empty hidden>Esta semana no hay platillos con esa combinación. Cambia de nivel o de menú.</p>
         </fieldset>
 
-        <fieldset class="step" data-fn-step="4">
+        <fieldset class="step" data-fn-step="3">
           <legend>Tus datos y tu cuenta</legend>
           <p class="text-muted">Los guardamos para que la próxima vez sea un clic. Tus alergias bloquean automáticamente los platillos no aptos.</p>
           <div class="fn-account"><p><strong>Sesión iniciada como ramon@ejemplo.com</strong> · <a class="text-link" href="#/cuenta">Mi cuenta</a></p></div>
@@ -7939,7 +7930,6 @@ Pago digital, sin efectivo</li></ul>
         <h3>Tu pedido</h3>
         <dl class="funnel__facts">
           <div><dt>Plan</dt><dd data-fn-s-plan>4 semanas · 20 comidas</dd></div>
-          <div><dt>Nivel</dt><dd data-fn-s-tier>Selecto</dd></div>
           <div><dt>Comidas</dt><dd data-fn-s-meals>0 / 5</dd></div>
         </dl>
         <ul class="funnel__list" data-fn-s-list></ul>
@@ -8593,7 +8583,7 @@ Pago digital, sin efectivo</li></ul>
       <div id="home--shopify-section-hero" class="shopify-section"><section class="hero hero--9 hero--intro tone-dark" data-scroll data-hero >
   <div class="container hero__grid">
     <div class="hero__stage" aria-hidden="true"><img class="hero__poster" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="video-hero-intro-poster.webp" width="640" height="640" alt="" fetchpriority="high" decoding="async">
-      <video class="hero__video hero__video--intro" muted playsinline preload="none" data-poster="assets/video-hero-intro-poster.webp" data-video-src="assets/video-hero-intro.mp4" data-ambient data-hero-video data-once></video>
+      <video class="hero__video hero__video--intro" muted playsinline preload="none" data-poster="assets/video-hero-intro-poster.webp" data-video-src="assets/video-hero-intro.mp4" data-ambient data-hero-video loop></video>
     </div>
     <div class="hero__copy">
       <span class="hero__rule" aria-hidden="true"></span>
@@ -8636,13 +8626,12 @@ Pago digital, sin efectivo</li></ul>
     <div class="funnel__top container">
       <div class="funnel__title">
         <span class="eyebrow">Place your order</span>
-        <h2>Build your order in <em>4 steps</em></h2>
+        <h2>Build your order in <em>3 steps</em></h2>
       </div>
       <ol class="steps__nav" aria-label="Order steps">
         <li data-fn-dot class="is-on"><span>01</span>Plan</li>
-        <li data-fn-dot><span>02</span>Tier</li>
-        <li data-fn-dot><span>03</span>Meals</li>
-        <li data-fn-dot><span>04</span>Your details</li>
+        <li data-fn-dot><span>02</span>Meals</li>
+        <li data-fn-dot><span>03</span>Your details</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -8658,20 +8647,18 @@ Pago digital, sin efectivo</li></ul>
               <span class="plan-card__flag">Recommended</span>
               <strong>4 weeks · 20 meals</strong>
               <small>You pay once and get your 5 meals every week for 4 weeks. It's the best price per meal.</small>
-              <em class="fn-plan__from">From $3,600</em>
+              <em class="fn-plan__from">From $3,600 <span>· includes 20 meals (5 per week)</span></em>
             </button>
             <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
               <strong>1 week · 5 meals</strong>
               <small>A single week to try the service. You can buy it until Saturday at 10:00 AM.</small>
-              <em class="fn-plan__from">From $1,000</em>
+              <em class="fn-plan__from">From $1,000 <span>· includes 5 meals</span></em>
             </button>
           </div>
+          <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renew automatically every 4 weeks</span></label>
         </fieldset>
 
-        <fieldset class="step" data-fn-step="2">
-          <legend>Choose your tier <button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></legend>
-          <p class="text-muted">All the meals in your plan are from this tier. Each tier adds $70 per meal.</p>
-          <div class="fn-tiers" role="radiogroup" aria-label="Choose your tier"><button class="fn-tier fn-tier--selecto" type="button" role="radio" data-tier-choice="selecto" aria-checked="true"
+        <div class="fn-tierdata" data-fn-tierdata hidden aria-hidden="true"><button class="fn-tier fn-tier--selecto" type="button" role="radio" data-tier-choice="selecto" aria-checked="true"
               data-week="1000" data-block="3600" data-meal="180"
               data-variant-week="72000" data-variant-block="72001"
               data-selling-plan="810001" data-name="Selecto">
@@ -8696,13 +8683,12 @@ Pago digital, sin efectivo</li></ul>
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
               <strong>Reserve $$$</strong><small>The most exclusive on the menu.</small>
             </button>
-          </div>
-          <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renew automatically every 4 weeks</span></label>
-        </fieldset>
+        </div>
 
-        <fieldset class="step" data-fn-step="3">
+
+        <fieldset class="step" data-fn-step="2">
           <legend>Choose your 5 meals for the week</legend>
-          <p class="text-muted">Your selection repeats every week of your plan. Tap to add; you can repeat dishes.</p>
+          <p class="text-muted">Tap to add; you can repeat dishes. Your plan starts at the Selecto base: a higher-tier dish only adds the per-meal difference.</p>
           <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>meals</span><i data-fn-meter-bar></i></p>
           <div class="fn-daysbox">
             <p class="label">Assign each meal to a day</p>
@@ -8890,7 +8876,7 @@ Pago digital, sin efectivo</li></ul>
           <p class="alert" data-fn-empty hidden>There are no dishes with that combination this week. Change the tier or the menu.</p>
         </fieldset>
 
-        <fieldset class="step" data-fn-step="4">
+        <fieldset class="step" data-fn-step="3">
           <legend>Your details and account</legend>
           <p class="text-muted">We save them so next time is a single click. Your allergies automatically block unsuitable dishes.</p>
           <div class="fn-account"><p><strong>Signed in as ramon@ejemplo.com</strong> · <a class="text-link" href="#/cuenta">My account</a></p></div>
@@ -8920,7 +8906,6 @@ Pago digital, sin efectivo</li></ul>
         <h3>Your order</h3>
         <dl class="funnel__facts">
           <div><dt>Plan</dt><dd data-fn-s-plan>4 weeks · 20 meals</dd></div>
-          <div><dt>Tier</dt><dd data-fn-s-tier>Selecto</dd></div>
           <div><dt>Meals</dt><dd data-fn-s-meals>0 / 5</dd></div>
         </dl>
         <ul class="funnel__list" data-fn-s-list></ul>
@@ -13897,13 +13882,12 @@ Digital payment, no cash</li></ul>
     <div class="funnel__top container">
       <div class="funnel__title">
         <span class="eyebrow">Place your order</span>
-        <h2>Build your order in <em>4 steps</em></h2>
+        <h2>Build your order in <em>3 steps</em></h2>
       </div>
       <ol class="steps__nav" aria-label="Order steps">
         <li data-fn-dot class="is-on"><span>01</span>Plan</li>
-        <li data-fn-dot><span>02</span>Tier</li>
-        <li data-fn-dot><span>03</span>Meals</li>
-        <li data-fn-dot><span>04</span>Your details</li>
+        <li data-fn-dot><span>02</span>Meals</li>
+        <li data-fn-dot><span>03</span>Your details</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -13919,20 +13903,18 @@ Digital payment, no cash</li></ul>
               <span class="plan-card__flag">Recommended</span>
               <strong>4 weeks · 20 meals</strong>
               <small>You pay once and get your 5 meals every week for 4 weeks. It's the best price per meal.</small>
-              <em class="fn-plan__from">From $3,600</em>
+              <em class="fn-plan__from">From $3,600 <span>· includes 20 meals (5 per week)</span></em>
             </button>
             <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
               <strong>1 week · 5 meals</strong>
               <small>A single week to try the service. You can buy it until Saturday at 10:00 AM.</small>
-              <em class="fn-plan__from">From $1,000</em>
+              <em class="fn-plan__from">From $1,000 <span>· includes 5 meals</span></em>
             </button>
           </div>
+          <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renew automatically every 4 weeks</span></label>
         </fieldset>
 
-        <fieldset class="step" data-fn-step="2">
-          <legend>Choose your tier <button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></legend>
-          <p class="text-muted">All the meals in your plan are from this tier. Each tier adds $70 per meal.</p>
-          <div class="fn-tiers" role="radiogroup" aria-label="Choose your tier"><button class="fn-tier fn-tier--selecto" type="button" role="radio" data-tier-choice="selecto" aria-checked="true"
+        <div class="fn-tierdata" data-fn-tierdata hidden aria-hidden="true"><button class="fn-tier fn-tier--selecto" type="button" role="radio" data-tier-choice="selecto" aria-checked="true"
               data-week="1000" data-block="3600" data-meal="180"
               data-variant-week="72000" data-variant-block="72001"
               data-selling-plan="810001" data-name="Selecto">
@@ -13957,13 +13939,12 @@ Digital payment, no cash</li></ul>
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
               <strong>Reserve $$$</strong><small>The most exclusive on the menu.</small>
             </button>
-          </div>
-          <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renew automatically every 4 weeks</span></label>
-        </fieldset>
+        </div>
 
-        <fieldset class="step" data-fn-step="3">
+
+        <fieldset class="step" data-fn-step="2">
           <legend>Choose your 5 meals for the week</legend>
-          <p class="text-muted">Your selection repeats every week of your plan. Tap to add; you can repeat dishes.</p>
+          <p class="text-muted">Tap to add; you can repeat dishes. Your plan starts at the Selecto base: a higher-tier dish only adds the per-meal difference.</p>
           <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>meals</span><i data-fn-meter-bar></i></p>
           <div class="fn-daysbox">
             <p class="label">Assign each meal to a day</p>
@@ -14151,7 +14132,7 @@ Digital payment, no cash</li></ul>
           <p class="alert" data-fn-empty hidden>There are no dishes with that combination this week. Change the tier or the menu.</p>
         </fieldset>
 
-        <fieldset class="step" data-fn-step="4">
+        <fieldset class="step" data-fn-step="3">
           <legend>Your details and account</legend>
           <p class="text-muted">We save them so next time is a single click. Your allergies automatically block unsuitable dishes.</p>
           <div class="fn-account"><p><strong>Signed in as ramon@ejemplo.com</strong> · <a class="text-link" href="#/cuenta">My account</a></p></div>
@@ -14181,7 +14162,6 @@ Digital payment, no cash</li></ul>
         <h3>Your order</h3>
         <dl class="funnel__facts">
           <div><dt>Plan</dt><dd data-fn-s-plan>4 weeks · 20 meals</dd></div>
-          <div><dt>Tier</dt><dd data-fn-s-tier>Selecto</dd></div>
           <div><dt>Meals</dt><dd data-fn-s-meals>0 / 5</dd></div>
         </dl>
         <ul class="funnel__list" data-fn-s-list></ul>
@@ -15926,7 +15906,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     $$('[data-funnel]').forEach(function (holder) {
       var MEALS = +holder.getAttribute('data-meals') || 5, WEEKS = +holder.getAttribute('data-weeks') || 4;
       var st = { plan: 'block', tier: 'selecto', cat: 'all', diet: 'all', qty: {}, days: [], info: {}, allergies: [], step: 0, remembered: false, renew: true };
-      try { var saved = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (saved && saved.v === 2) { st = Object.assign(st, saved); st.remembered = !!(saved.info && (saved.info.name || saved.info.email)); } } catch (e) {}
+      try { var saved = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (saved && saved.v === 2) { st = Object.assign(st, saved); st.tier = 'selecto'; st.remembered = !!(saved.info && (saved.info.name || saved.info.email)); } } catch (e) {}
       var T_ = function (k) { return holder.getAttribute('data-t-' + k) || ''; };
       var steps = $$('[data-fn-step]', holder), dots = $$('[data-fn-dot]', holder), bar = $('[data-fn-bar]', holder);
       var next = $('[data-fn-next]', holder), prev = $('[data-fn-prev]', holder), finish = $('[data-fn-finish]', holder), err = $('[data-fn-error]', holder);
@@ -16030,9 +16010,9 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         if (bar) bar.style.transform = 'scaleX(' + ((st.step + 1) / steps.length) + ')';
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
-        if (next) { next.hidden = last; next.disabled = (st.step === 2 && n !== MEALS); }
+        if (next) { next.hidden = last; next.disabled = (st.step === 1 && n !== MEALS); }
         if (finish) finish.hidden = !last;
-        var rem = $('[data-fn-remembered]', holder); if (rem) { rem.hidden = !(st.remembered && st.step === 3); rem.textContent = T_('remembered'); }
+        var rem = $('[data-fn-remembered]', holder); if (rem) { rem.hidden = !(st.remembered && st.step === 2); rem.textContent = T_('remembered'); }
       };
 
       // the page keeps scrolling normally; changing step brings the top of the funnel back into view if needed
@@ -16085,18 +16065,18 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       if (ref) { var rs = ''; try { rs = localStorage.getItem('kulinaria_ref') || ''; } catch (e) {} if (rs) ref.value = rs; }
 
       if (next) next.addEventListener('click', function () {
-        if (st.step === 2 && count() !== MEALS) { say(T_('need-meals')); return; }
+        if (st.step === 1 && count() !== MEALS) { say(T_('need-meals')); return; }
         go(st.step + 1);
       });
       if (prev) prev.addEventListener('click', function () { go(st.step - 1); });
-      dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k < st.step || (k > st.step && (k <= 2 || count() === MEALS))) go(k); }); });
+      dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k < st.step || (k > st.step && (k <= 1 || count() === MEALS))) go(k); }); });
 
       // arriving from a dish page (…/pedido?dish=handle): that dish is already in the plan, at its tier
       try {
         var q = (location.search + '&' + (location.hash.split('?')[1] || '')).match(/[?&]dish=([\w-]+)/);
         if (q) {
           var pre = dishes.filter(function (d) { return d.getAttribute('data-handle') === q[1]; })[0];
-          if (pre) { st.tier = pre.getAttribute('data-tier'); st.days = blankDays(); st.days[0] = pre.getAttribute('data-pid'); if (daysBox) daysBox.removeAttribute('data-built'); st.step = 1; persist(); }
+          if (pre) { st.days = blankDays(); st.days[0] = pre.getAttribute('data-pid'); if (daysBox) daysBox.removeAttribute('data-built'); st.step = 1; persist(); }
         }
       } catch (e) {}
 
@@ -16105,7 +16085,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         e.preventDefault();
         var i = st.info || {}, tb = tierEl();
         if (!i.name || !i.email || !i.phone) { say(T_('need-info')); return; }
-        if (count() !== MEALS) { say(T_('need-meals')); go(2); return; }
+        if (count() !== MEALS) { say(T_('need-meals')); go(1); return; }
         var cbox = $('[data-fn-contract]', holder); if (cbox && !cbox.checked) { say(T_('need-contract')); return; }
         var p = loadProfile();
         var other = (i.allergy_other || '').split(',').map(function (v) { return v.trim(); }).filter(Boolean);

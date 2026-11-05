@@ -9,7 +9,7 @@
       {%- assign hv_src = section.settings.video_url | default: 'video-hero-intro.mp4' -%}
       {%- if section.settings.video_url == blank -%}{%- assign hv_src = 'video-hero-intro.mp4' | asset_url -%}{%- endif -%}
       <img class="hero__poster" src="{{ 'video-hero-intro-poster.webp' | asset_url }}" width="640" height="640" alt="" fetchpriority="high" decoding="async">
-      <video class="hero__video hero__video--intro" muted playsinline preload="none" poster="{{ 'video-hero-intro-poster.webp' | asset_url }}" data-video-src="{{ hv_src }}" data-ambient data-hero-video data-once></video>
+      <video class="hero__video hero__video--intro" muted playsinline preload="none" poster="{{ 'video-hero-intro-poster.webp' | asset_url }}" data-video-src="{{ hv_src }}" data-ambient data-hero-video loop></video>
     </div>
     <div class="hero__copy">
       <span class="hero__rule" aria-hidden="true"></span>

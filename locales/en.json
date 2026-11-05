@@ -447,7 +447,7 @@
     "s2_text": "All the meals in your plan are from this tier. Each tier adds $70 per meal.",
     "s2_empty": "There are no dishes with that focus this week. Pick another or see the whole menu.",
     "s3_title": "Choose your 5 meals for the week",
-    "s3_text": "Your selection repeats every week of your plan. Tap to add; you can repeat dishes.",
+    "s3_text": "Tap to add; you can repeat dishes. Your plan starts at the Selecto base: a higher-tier dish only adds the per-meal difference.",
     "s4_title": "Choose your plan",
     "s4_text": "The 4-week block is the best-value option. The trial week costs 15% more and can be bought until Saturday at 10:00 AM.",
     "s5_title": "Your details and account",
@@ -542,7 +542,9 @@
     "days_missing": "Assign a dish to every day.",
     "first_delivery": "First delivery: Monday {d}.",
     "week_note": "These 5 meals are for that first week only. Your plan is already paid: come back every week to choose the next 5 (before Saturday at 10:00).",
-    "saved_title": "Your details are saved"
+    "saved_title": "Your details are saved",
+    "includes_block": "includes 20 meals (5 per week)",
+    "includes_week": "includes 5 meals"
   },
   "sitemap": {
     "pedido": "Build my order",
