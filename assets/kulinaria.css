@@ -2008,3 +2008,19 @@ a.lang__btn{display:inline-block;text-decoration:none}
 .funnel__upgrades{margin:6px 0 0;font-size:.85rem;color:var(--accent)}
 .fn-contract{margin:var(--space-lg) 0 0}
 .cart-line input.qty[readonly]{opacity:.55;pointer-events:none}
+
+.fn-weeknote{margin:8px 0 0;font-size:.92rem;color:var(--text)}.fn-weeknote strong{color:var(--accent)}
+
+/* ---- v22: onboarding questionnaire + welcome ---- */
+.onboarding{padding-top:0}
+.ob-form,.ob-welcome{margin-top:var(--space-lg)}
+.ob-form .step{display:none;border:0;padding:0;margin:var(--space-lg) 0 0}
+.ob-form .step.is-on{display:block}
+.ob-form legend{font-family:var(--font-heading);font-size:1.25rem;margin-bottom:var(--space-md)}
+.ob-dots{list-style:none;display:flex;gap:8px;margin:var(--space-md) 0 0;padding:0}
+.ob-dots li{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);font-size:.8rem;color:var(--text-muted)}
+.ob-dots li.is-on{background:var(--brand-grad);color:var(--on-brand);border-color:transparent}
+.ob-next{margin:var(--space-md) 0 var(--space-lg);padding-left:1.2em;color:var(--text-muted);display:grid;gap:6px}
+.fn-saved{padding:16px 18px;border:1px solid var(--border-accent);border-radius:16px;background:var(--accent-wash);margin-bottom:var(--space-md)}
+.fn-saved p{margin:0 0 4px}
+[data-fn-fields][hidden],.fn-saved[hidden]{display:none}

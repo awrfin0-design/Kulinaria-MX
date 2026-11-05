@@ -13,7 +13,7 @@
   data-t-per-week="{{ 'funnel.per_week_each' | t }}" data-t-weeks-x="{{ 'funnel.weeks_x' | t }}" data-t-per-meal="{{ 'funnel.per_meal' | t }}"
   data-t-all-lines="{{ 'funnel.all_categories' | t }}" data-t-prop-dishes="{{ 'funnel.prop_dishes' | t }}" data-t-prop-meals="{{ 'funnel.prop_meals' | t }}"
   data-t-prop-tier="{{ 'funnel.prop_tier' | t }}" data-t-prop-length="{{ 'funnel.prop_length' | t }}" data-t-length-block="{{ 'funnel.length_block' | t }}" data-t-length-week="{{ 'funnel.length_week' | t }}"
-  data-t-renew="{{ 'funnel.renew' | t }}" data-t-days="{{ 'funnel.days' | t }}" data-t-day-empty="{{ 'funnel.day_empty' | t }}" data-t-up-badge="{{ 'funnel.up_badge' | t }}" data-t-up-total="{{ 'funnel.up_total' | t }}"
+  data-t-renew="{{ 'funnel.renew' | t }}" data-t-days="{{ 'funnel.days' | t }}" data-t-first="{{ 'funnel.first_delivery' | t }}" data-t-day-empty="{{ 'funnel.day_empty' | t }}" data-t-up-badge="{{ 'funnel.up_badge' | t }}" data-t-up-total="{{ 'funnel.up_total' | t }}"
   data-t-prop-upgrade="{{ 'funnel.prop_upgrade' | t }}" data-t-need-contract="{{ 'funnel.need_contract' | t }}" data-t-days-missing="{{ 'funnel.days_missing' | t }}"
   data-upg-1="{{ upg.variants[0].price | divided_by: 100 | default: 70 }}" data-upg-2="{{ upg.variants[1].price | divided_by: 100 | default: 140 }}" data-upg-3="{{ upg.variants[2].price | divided_by: 100 | default: 210 }}"
   data-upv-1="{{ upg.variants[0].id }}" data-upv-2="{{ upg.variants[1].id }}" data-upv-3="{{ upg.variants[2].id }}" {{ section.shopify_attributes }}>
@@ -139,6 +139,7 @@
             <p class="label">{{ 'funnel.days_title' | t }}</p>
             <p class="text-muted" style="margin:0 0 var(--space-sm)">{{ 'funnel.days_text' | t }}</p>
             <ol class="fn-days" data-fn-days></ol>
+            <p class="fn-weeknote"><strong data-fn-first></strong> {{ 'funnel.week_note' | t }}</p>
             <p class="fn-upnote">{{ 'funnel.up_note' | t }}</p>
           </div>
           <div class="chips fn-cats" role="group" aria-label="{{ 'collection.category' | t }}">
@@ -171,6 +172,8 @@
               <p class="fn-account__links"><a class="btn btn--outline btn--sm" href="{{ routes.account_login_url }}?return_url={{ request.path | default: '/pages/pedido' | url_encode }}">{{ 'login.title' | t }}</a> <a class="text-link" href="{{ routes.account_register_url | default: routes.account_login_url }}?return_url={{ request.path | default: '/pages/pedido' | url_encode }}">{{ 'funnel.create_account' | t }}</a></p>
             {%- endif -%}
           </div>
+          <div class="fn-saved" data-fn-saved hidden><p><strong>{{ 'funnel.saved_title' | t }}</strong></p><p class="text-muted" data-fn-saved-text></p><a class="text-link" href="/pages/bienvenida?edit=1">{{ 'onboarding.edit' | t }}</a></div>
+          <div data-fn-fields>
           <div class="form-grid">
             <div class="field"><label for="fn-name-{{ section.id }}">{{ 'form.full_name' | t }}</label><input class="input" id="fn-name-{{ section.id }}" data-info="name" autocomplete="name"></div>
             <div class="field"><label for="fn-email-{{ section.id }}">{{ 'form.email' | t }}</label><input class="input" id="fn-email-{{ section.id }}" type="email" data-info="email" autocomplete="email"></div>
@@ -189,6 +192,7 @@
           </div>
           <div class="field"><label for="fn-other-{{ section.id }}">{{ 'profile.other_allergies' | t }}</label><input class="input" id="fn-other-{{ section.id }}" data-info="allergy_other" placeholder="{{ 'profile.other_placeholder' | t }}"></div>
           <div class="field"><label for="fn-dis-{{ section.id }}">{{ 'profile.block2' | t }}</label><input class="input" id="fn-dis-{{ section.id }}" data-info="dislikes" placeholder="{{ 'profile.tag_placeholder' | t }}"></div>
+          </div>
           <label class="check fn-contract"><input type="checkbox" data-fn-contract> <span>{{ 'funnel.contract' | t }}{% if settings.contract_page != blank %} <a href="{{ settings.contract_page.url }}" target="_blank" rel="noopener" class="text-link">{{ 'cart.read_contract' | t }}</a>{% endif %}</span></label>
           <p class="alert alert--ok" data-fn-remembered hidden role="status"></p>
         </fieldset>

@@ -537,11 +537,17 @@ await page.locator(`${fnS} [data-plan-choice="block"]`).scrollIntoViewIfNeeded()
 await page.click(`${fnS} [data-plan-choice="block"]`); await page.click(`${fnS} [data-fn-next]`); await page.waitForTimeout(700);
 ok('step 2 shows the 4 tiers with 4-week prices 3,600 / 5,000 / 6,400 / 7,800', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); const t = [...f.querySelectorAll('[data-tier-choice]')]; return f.querySelector('[data-fn-step="2"]').classList.contains('is-on') && t.map((x) => x.getAttribute('data-block')).join() === '3600,5000,6400,7800' && t.map((x) => x.getAttribute('data-week')).join() === '1000,1390,1780,2170' && t.map((x) => x.getAttribute('data-meal')).join() === '180,250,320,390'; }));
 await page.click(`${fnS} [data-tier-choice="exclusivo"]`); await page.click(`${fnS} [data-fn-next]`); await page.waitForTimeout(700);
-ok('step 3 shows only dishes of the chosen tier', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); const vis = [...f.querySelectorAll('[data-fn-dish]:not(.is-hidden)')]; return f.querySelector('[data-fn-step="3"]').classList.contains('is-on') && vis.length >= 1 && vis.every((d) => d.getAttribute('data-tier') === 'exclusivo'); }));
+ok('step 3 shows dishes of the chosen tier and higher ones (upgrades), never lower', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); const vis = [...f.querySelectorAll('[data-fn-dish]:not(.is-hidden)')]; const R = ['selecto','exclusivo','signature','reserve']; return f.querySelector('[data-fn-step="3"]').classList.contains('is-on') && vis.length >= 1 && vis.every((d) => R.indexOf(d.getAttribute('data-tier')) >= 1) && vis.some((d) => d.getAttribute('data-tier') === 'exclusivo'); }));
+ok('there is one weekday slot per meal (Monday to Friday) and the meter counts them', (await page.$$eval(`${fnS} select[data-fn-day]`, (e) => e.length)) === 5);
 ok('"continue" is disabled until 5 meals are chosen', await page.$eval(`${fnS} [data-fn-next]`, (b) => b.disabled));
 for (let i = 0; i < 6; i++) { await page.evaluate(() => { const d = document.querySelector('[data-page="home"] [data-fn-grid] .fn-dish:not(.is-hidden):not(.is-blocked)'); const p = d.querySelector('[data-q-plus]') && d.classList.contains('is-picked') ? d.querySelector('[data-q-plus]') : d.querySelector('[data-pick]'); p.click(); }); await page.waitForTimeout(120); }
 ok('the meter caps at 5 meals per week', (await page.$eval(`${fnS} [data-fn-meter-n]`, (e) => e.textContent.trim())) === '5');
 ok('total for Exclusivo 4-week is $5,000', /5,000/.test(await page.$eval(`${fnS} [data-fn-s-total]`, (e) => e.textContent)));
+const upPid = await page.$eval(`${fnS} [data-fn-dish][data-tier="reserve"]`, (e) => e.getAttribute('data-pid'));
+await page.selectOption(`${fnS} select[data-fn-day="4"]`, upPid); await page.waitForTimeout(300);
+ok('upgrading Friday to a Reserve dish costs the difference of 2 levels ($140) for that week', /5,140/.test(await page.$eval(`${fnS} [data-fn-s-total]`, (e) => e.textContent)) && /140/.test(await page.$eval(`${fnS} [data-fn-s-up]`, (e) => e.textContent)));
+await page.selectOption(`${fnS} select[data-fn-day="4"]`, await page.$eval(`${fnS} select[data-fn-day="3"]`, (e) => e.value)); await page.waitForTimeout(200);
+ok('back to a dish of the same tier the upgrade charge disappears', /5,000/.test(await page.$eval(`${fnS} [data-fn-s-total]`, (e) => e.textContent)));
 await page.click(`${fnS} [data-fn-next]`); await page.waitForTimeout(600);
 ok('step 4 is the details form', await page.$eval(`${fnS} [data-fn-step="4"]`, (e) => e.classList.contains('is-on')));
 ok('step 4 offers sign-in and account creation', await page.evaluate(() => { const a = document.querySelector('[data-page="home"] [data-fn-step="4"] .fn-account'); return !!a && a.querySelectorAll('a').length >= 1; }));
@@ -549,10 +555,13 @@ await page.click(`${fnS} [data-fn-finish]`); await page.waitForTimeout(300);
 ok('step 4 will not finish without name, e-mail and phone', !(await page.$eval(`${fnS} [data-fn-error]`, (e) => e.hidden)) && page.url().endsWith('#/home'));
 await page.fill(`${fnS} [data-info="name"]`, 'Ana Pérez'); await page.fill(`${fnS} [data-info="email"]`, 'ana@ejemplo.com'); await page.fill(`${fnS} [data-info="phone"]`, '+52 999 000 0000');
 await page.fill(`${fnS} [data-info="street"]`, 'Calle Lago 24'); await page.fill(`${fnS} [data-info="cluster"]`, 'Clúster Las Lomas'); await page.check(`${fnS} [data-allergy][value="Mariscos"]`);
-await page.evaluate(() => { const f = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push(String(u).split('/').pop() + ' ' + ((o && o.body) || '').slice(0, 900)); return f.apply(this, arguments); }; });
+await page.evaluate(() => { const f = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push(String(u).split('/').pop() + ' ' + ((o && o.body) || '').slice(0, 3000)); return f.apply(this, arguments); }; });
+await page.click(`${fnS} [data-fn-finish]`); await page.waitForTimeout(300);
+ok('the contract must be accepted in the details step', /contrato|contract/i.test(await page.$eval(`${fnS} [data-fn-error]`, (e) => e.textContent)));
+await page.check(`${fnS} [data-fn-contract]`);
 await page.click(`${fnS} [data-fn-finish]`); await page.waitForTimeout(900);
 const reqs = await page.evaluate(() => window.__calls);
-ok('finishing adds ONE plan line with the dishes as properties and goes to the cart', page.url().endsWith('#/carrito') && reqs.some((r) => /add\.js/.test(r) && /Platillos/.test(r) && /"quantity":1|quantity":1/.test(r)), JSON.stringify(reqs).slice(0, 300));
+ok('finishing adds ONE plan line with the dishes as properties and goes to the cart', page.url().endsWith('#/carrito') && reqs.some((r) => /add\.js/.test(r) && /_platillos/.test(r) && /Lunes/.test(r) && /Viernes/.test(r)) && /cart\/clear/.test(reqs.join(' ')) && /contrato_aceptado/.test(reqs.join(' ')), JSON.stringify(reqs).slice(0, 300));
 const savedProfile = await page.evaluate(() => JSON.parse(localStorage.getItem('kulinaria_profile') || '{}'));
 ok('the allergy profile is stored for the menu filters', (savedProfile.allergies || []).includes('Mariscos'));
 await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
@@ -809,6 +818,27 @@ if (shotDir) {
   await page.goto(`${URL0}#/home`); await page.waitForTimeout(400);
   await page.screenshot({ path: path.join(shotDir, 'mobile_home.png') });
 }
+
+// =====================================================================  v22: onboarding questionnaire (asked once) + welcome
+await page.setViewportSize({ width: 1440, height: 900 });
+await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); }); await page.goto(`${URL0}#/pg/bienvenida`); await page.waitForTimeout(500);
+const obS = '[data-page="pg/bienvenida"] [data-onboarding]';
+ok('onboarding page: a 3-step questionnaire (who, where, allergies/diet)', (await page.$$eval(`${obS} [data-ob-step]`, (e) => e.length)) === 3 && !(await page.$eval(`${obS} [data-ob-form]`, (e) => e.hidden)));
+await page.click(`${obS} [data-ob-next]`); await page.waitForTimeout(150);
+ok('onboarding step 1 will not continue without name, e-mail and phone', await page.$eval(`${obS} [data-ob-step="1"]`, (e) => e.classList.contains('is-on')) && !(await page.$eval(`${obS} [data-ob-error]`, (e) => e.hidden)));
+await page.fill(`${obS} [data-ob="name"]`, 'Ana Pérez'); await page.fill(`${obS} [data-ob="email"]`, 'ana@ejemplo.com'); await page.fill(`${obS} [data-ob="phone"]`, '+52 999 000 0000');
+await page.click(`${obS} [data-ob-next]`); await page.waitForTimeout(150);
+await page.fill(`${obS} [data-ob="street"]`, 'Calle Lago 24'); await page.fill(`${obS} [data-ob="cluster"]`, 'Clúster Las Lomas'); await page.fill(`${obS} [data-ob="zip"]`, '97000');
+await page.click(`${obS} [data-ob-next]`); await page.waitForTimeout(150);
+await page.check(`${obS} [data-ob-allergy][value="Mariscos"]`); await page.check(`${obS} [data-ob-diet][value="Keto"]`); await page.fill(`${obS} [data-ob="dislikes"]`, 'cebolla');
+await page.click(`${obS} [data-ob-save]`); await page.waitForTimeout(400);
+ok('after saving, a welcome screen greets the customer and points to choosing the plan', !(await page.$eval(`${obS} [data-ob-welcome]`, (e) => e.hidden)) && /Ana/.test(await page.$eval(`${obS} [data-ob-hello]`, (e) => e.textContent)) && /pedido/.test(await page.$eval(`${obS} [data-ob-welcome] a.btn--gold`, (e) => e.getAttribute('href'))));
+const obSaved = await page.evaluate(() => ({ f: JSON.parse(localStorage.getItem('kulinaria_funnel') || '{}'), p: JSON.parse(localStorage.getItem('kulinaria_profile') || '{}'), on: localStorage.getItem('kulinaria_onboarded') }));
+ok('the answers are stored once (contact, address, allergies, diet, dislikes)', obSaved.on === '1' && obSaved.f.info.email === 'ana@ejemplo.com' && obSaved.f.info.street === 'Calle Lago 24' && obSaved.p.allergies.includes('Mariscos') && obSaved.p.diets.includes('Keto') && obSaved.p.dislikes.includes('cebolla'));
+await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(900);
+const fnO = '[data-page="pg/pedido"] [data-funnel]';
+ok('the order builder does not ask again: details step shows a saved summary instead of the form', await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); return f.querySelector('[data-fn-fields]').hidden && !f.querySelector('[data-fn-saved]').hidden && /ana@ejemplo.com/.test(f.querySelector('[data-fn-saved-text]').textContent); }));
+ok('the first delivery date is shown (Monday) with a real date on each weekday slot', await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); return /\d/.test(f.querySelector('[data-fn-first]').textContent) && [...f.querySelectorAll('.fn-days label')].every((l) => /\d/.test(l.textContent)); }));
 
 await browser.close();
 ok('no JS errors on any page', errors.length === 0, errors.slice(0, 5).join(' | '));

@@ -45,6 +45,7 @@ function setupSheets() {
  */
 function doGet(e) {
   var params = (e && e.parameter) || {};
+  if (params.action === 'profile') return out_(profileGet_(params.cid, params.token));
   if (params.action !== 'admin') return out_({ ok: true, service: 'kulinaria-sheets' });
   var key = PropertiesService.getScriptProperties().getProperty('ADMIN_KEY');
   if (!key || params.key !== key) return out_({ ok: false, error: 'forbidden' });
@@ -76,6 +77,7 @@ function adminData_() {
 function doPost(e) {
   var props = PropertiesService.getScriptProperties();
   var params = (e && e.parameter) || {};
+  if (e && e.postData && /"action"\s*:\s*"profile"/.test(e.postData.contents || '')) { try { var pb = JSON.parse(e.postData.contents); return out_(profileSet_(pb.cid, pb.token, pb.profile)); } catch (err) { return out_({ ok: false, error: String(err) }); } }
   if (!props.getProperty('WEBHOOK_KEY') || params.key !== props.getProperty('WEBHOOK_KEY')) return out_({ ok: false, error: 'forbidden' });
   var lock = LockService.getScriptLock();
   lock.waitLock(20000);
@@ -215,4 +217,37 @@ function alertNewOrder_(o, name, email, addr, a, summary) {
       'ALERGIAS: ' + (a.alergias || 'ninguna declarada'), 'No le gustan: ' + (a.no_me_gustan || '-'), 'Dietas: ' + (a.dietas || '-'), '', 'Panel: abre /pages/admin en tu sitio.'].join('\n');
     MailApp.sendEmail(to, 'Nuevo pedido ' + o.name + ' · ' + name, body);
   } catch (err) { /* never block the order */ }
+}
+
+
+/* ---------- customer profile (asked once at onboarding) ----------
+ * The theme sends the Shopify customer id plus a token = HMAC-SHA256(customer id, PROFILE_SECRET) computed by Shopify's Liquid on the server,
+ * so only the logged-in customer can read/write their own row. Script property PROFILE_SECRET must equal the Shopify shop metafield kulinaria.profile_secret. */
+function profileTokenOk_(cid, token) {
+  var secret = PropertiesService.getScriptProperties().getProperty('PROFILE_SECRET');
+  if (!secret || !cid || !token) return false;
+  var hex = Utilities.computeHmacSha256Signature(String(cid), secret).map(function (b) { return ('0' + (b & 0xff).toString(16)).slice(-2); }).join('');
+  return hex === String(token).toLowerCase();
+}
+function profileSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet(), sh = ss.getSheetByName('Perfiles');
+  if (!sh) { sh = ss.insertSheet('Perfiles'); sh.getRange(1, 1, 1, 4).setValues([['ID Cliente', 'Actualizado', 'Correo', 'Perfil (JSON)']]).setFontWeight('bold'); }
+  return sh;
+}
+function profileGet_(cid, token) {
+  if (!profileTokenOk_(cid, token)) return { ok: false, error: 'forbidden' };
+  var sh = profileSheet_(), last = sh.getLastRow();
+  for (var r = 2; r <= last; r++) if (String(sh.getRange(r, 1).getValue()) === String(cid)) { try { return { ok: true, profile: JSON.parse(sh.getRange(r, 4).getValue()) }; } catch (e) { return { ok: true, profile: null }; } }
+  return { ok: true, profile: null };
+}
+function profileSet_(cid, token, profile) {
+  if (!profileTokenOk_(cid, token)) return { ok: false, error: 'forbidden' };
+  var lock = LockService.getScriptLock(); lock.waitLock(20000);
+  try {
+    var sh = profileSheet_(), last = sh.getLastRow(), row = 0, email = (profile && profile.info && profile.info.email) || '';
+    for (var r = 2; r <= last; r++) if (String(sh.getRange(r, 1).getValue()) === String(cid)) { row = r; break; }
+    if (!row) row = last + 1;
+    sh.getRange(row, 1, 1, 4).setValues([[String(cid), new Date(), email, JSON.stringify(profile || {})]]);
+    return { ok: true };
+  } finally { lock.releaseLock(); }
 }

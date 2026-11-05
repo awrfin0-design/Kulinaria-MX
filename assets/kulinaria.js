@@ -515,6 +515,69 @@
      On finish it writes the profile + cart attributes (these become order "additional details" and feed the spreadsheet)
      and adds the chosen dishes to the cart. */
   var FUNNEL_KEY = 'kulinaria_funnel';
+  /* ---------- account profile: asked once (onboarding), stored in the browser and in the Google Sheet (signed per customer) ---------- */
+  var ONB_KEY = 'kulinaria_onboarded';
+  function acct() { var a = $('#kx-account'); return a && a.getAttribute('data-endpoint') && a.getAttribute('data-token') ? { url: a.getAttribute('data-endpoint'), cid: a.getAttribute('data-cid'), token: a.getAttribute('data-token') } : null; }
+  function readFunnel() { try { return JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null') || { v: 2 }; } catch (e) { return { v: 2 }; } }
+  function profileBlob() { var f = readFunnel(), p = loadProfile(); return { info: f.info || {}, checks: f.allergies || [], allergies: p.allergies || [], dislikes: p.dislikes || [], diets: p.diets || [], at: Date.now() }; }
+  function pushProfile() {
+    var a = acct(); if (!a) return;
+    try { fetch(a.url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'profile', cid: a.cid, token: a.token, profile: profileBlob() }) }); } catch (e) {}
+  }
+  function pullProfile() {
+    var a = acct(); if (!a) return;
+    try { if (sessionStorage.getItem('kx_pulled') || localStorage.getItem(ONB_KEY)) return; sessionStorage.setItem('kx_pulled', '1'); } catch (e) { return; }
+    fetch(a.url + (a.url.indexOf('?') > -1 ? '&' : '?') + 'action=profile&cid=' + encodeURIComponent(a.cid) + '&token=' + encodeURIComponent(a.token))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.ok || !d.profile || !d.profile.info) return;
+        var f = readFunnel(); f.v = 2; f.info = Object.assign({}, d.profile.info, f.info || {}); f.allergies = d.profile.checks || [];
+        try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(f)); localStorage.setItem(PROFILE_KEY, JSON.stringify({ allergies: d.profile.allergies || [], dislikes: d.profile.dislikes || [], diets: d.profile.diets || [] })); localStorage.setItem(ONB_KEY, '1'); } catch (e) {}
+        location.reload();
+      }).catch(function () {});
+  }
+  function initOnboarding() {
+    var root = $('[data-onboarding]'); if (!root) return;
+    var form = $('[data-ob-form]', root), welcome = $('[data-ob-welcome]', root), err = $('[data-ob-error]', form);
+    var steps = $$('[data-ob-step]', form), dots = $$('.ob-dots li', form), nextB = $('[data-ob-next]', form), prevB = $('[data-ob-prev]', form), saveB = $('[data-ob-save]', form);
+    var fields = $$('[data-ob]', form), acs = $$('[data-ob-allergy]', form), dts = $$('[data-ob-diet]', form);
+    var cn = root.getAttribute('data-customer-name'), ce = root.getAttribute('data-customer-email');
+    var f0 = readFunnel(), info = f0.info || {}, prof = loadProfile(), step = 0;
+    if (ce && !info.email) info.email = ce; if (cn && !info.name) info.name = cn;
+    fields.forEach(function (x) { x.value = info[x.getAttribute('data-ob')] || ''; });
+    acs.forEach(function (c) { c.checked = (f0.allergies || prof.allergies || []).map(norm).indexOf(norm(c.value)) > -1; });
+    dts.forEach(function (c) { c.checked = (prof.diets || []).map(norm).indexOf(norm(c.value)) > -1; });
+    var show = function () {
+      steps.forEach(function (s, k) { s.classList.toggle('is-on', k === step); }); dots.forEach(function (d, k) { d.classList.toggle('is-on', k <= step); });
+      prevB.hidden = step === 0; nextB.hidden = step === steps.length - 1; saveB.hidden = step !== steps.length - 1;
+    };
+    var say = function (m) { err.hidden = !m; err.textContent = m || ''; };
+    var val = function (k) { var x = $('[data-ob="' + k + '"]', form); return x ? x.value.trim() : ''; };
+    var hello = function () { var h = $('[data-ob-hello]', root), n = (val('name') || info.name || '').split(' ')[0]; if (h && n) h.textContent = (root.getAttribute('data-t-welcome') || 'Bienvenido, {n}').replace('{n}', n); };
+    var done = false; try { done = !!localStorage.getItem(ONB_KEY); } catch (e) {}
+    var edit = /[?&]edit=1/.test(location.search + '&' + (location.hash.split('?')[1] || ''));
+    if (done && !edit && ce) { form.hidden = true; welcome.hidden = false; hello(); }
+    nextB.addEventListener('click', function () {
+      if (step === 0 && !(val('name') && /.+@.+/.test(val('email')) && val('phone'))) { say(root.getAttribute('data-t-need')); return; }
+      say(''); step = Math.min(steps.length - 1, step + 1); show();
+    });
+    prevB.addEventListener('click', function () { step = Math.max(0, step - 1); show(); });
+    var editB = $('[data-ob-edit]', root); if (editB) editB.addEventListener('click', function () { welcome.hidden = true; form.hidden = false; step = 0; show(); });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!(val('name') && /.+@.+/.test(val('email')) && val('phone'))) { step = 0; show(); say(root.getAttribute('data-t-need')); return; }
+      var f = readFunnel(); f.v = 2; f.info = f.info || {}; fields.forEach(function (x) { f.info[x.getAttribute('data-ob')] = x.value.trim(); });
+      f.allergies = acs.filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+      var other = val('allergy_other').split(',').map(function (v) { return v.trim(); }).filter(Boolean);
+      var p = loadProfile(); p.allergies = Array.from(new Set(f.allergies.concat(other))); p.dislikes = val('dislikes').split(',').map(function (v) { return v.trim(); }).filter(Boolean);
+      p.diets = dts.filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+      try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(f)); localStorage.setItem(ONB_KEY, '1'); } catch (x) {}
+      saveProfile(p); pushProfile();
+      form.hidden = true; welcome.hidden = false; hello(); window.scrollTo({ top: 0, behavior: REDUCE ? 'auto' : 'smooth' });
+    });
+    show();
+  }
+
   function initFunnel() {
     $$('[data-funnel]').forEach(function (holder) {
       var MEALS = +holder.getAttribute('data-meals') || 5, WEEKS = +holder.getAttribute('data-weeks') || 4;
@@ -533,7 +596,11 @@
       // first visit with an old selection (quantities) -> turn it into day slots
       if (!Array.isArray(st.days) || st.days.length !== MEALS) { var seq = []; Object.keys(st.qty || {}).forEach(function (k) { for (var j = 0; j < st.qty[k]; j++) seq.push(k); }); st.days = blankDays().map(function (x, j) { return seq[j] || ''; }); }
       var eligible = function (d) { return !!d && rank(d.getAttribute('data-tier')) >= rank(st.tier) && !d.classList.contains('is-blocked'); };
-      var upgradeExtra = function () { var sum = 0; st.days.forEach(function (p) { var l = levelOf(byPid(p)); if (l) sum += upg(l); }); return sum * (st.plan === 'block' ? WEEKS : 1); };
+      var upgradeExtra = function () { var sum = 0; st.days.forEach(function (p) { var l = levelOf(byPid(p)); if (l) sum += upg(l); }); return sum; };      // the extra is paid per week, when that week is chosen
+      // the first delivery is the coming Monday; orders after Saturday 10:00 (cut-off) start the Monday after
+      var firstMonday = function () { var n = mxNow(), d = ((1 - n.dow + 7) % 7) || 7; if (n.dow === 0 || (n.dow === 6 && n.minutes >= cutoffMin)) d += 7; return d; };
+      var dateOf = function (i) { try { return new Intl.DateTimeFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { timeZone: TZ, day: 'numeric', month: 'short' }).format(new Date(Date.now() + (firstMonday() + i) * 86400000)); } catch (e) { return ''; } };
+      var dayLabel = function (i) { return (dayNames[i] || ('#' + (i + 1))) + ' ' + dateOf(i); };
       var money = function (n) {
         try { return new Intl.NumberFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(n); } catch (e) { return '$' + Math.round(n); }
       };
@@ -553,7 +620,7 @@
         for (var i = 0; i < MEALS; i++) {
           (function (i) {
             var li = document.createElement('li'), lab = document.createElement('label'), sel = document.createElement('select'), id = 'fn-day-' + i + '-' + Math.random().toString(36).slice(2, 6);
-            sel.className = 'select'; sel.id = id; sel.setAttribute('data-fn-day', i); lab.setAttribute('for', id); lab.textContent = dayNames[i] || ('#' + (i + 1));
+            sel.className = 'select'; sel.id = id; sel.setAttribute('data-fn-day', i); lab.setAttribute('for', id); lab.textContent = dayLabel(i);
             var o0 = document.createElement('option'); o0.value = ''; o0.textContent = T_('day-empty'); sel.appendChild(o0);
             opts.forEach(function (d) { var o = document.createElement('option'), l = levelOf(d); o.value = d.getAttribute('data-pid'); o.textContent = d.getAttribute('data-title') + (l ? ' · ' + fill(T_('up-badge'), { p: money(upg(l)) }) : ''); sel.appendChild(o); });
             sel.addEventListener('change', function () { st.days[i] = sel.value; say(''); persist(); render(); });
@@ -601,15 +668,16 @@
           list.innerHTML = '';
           st.days.forEach(function (pid, i) {
             var d = pid && byPid(pid); if (!d) return; var l = levelOf(d);
-            var li = document.createElement('li'); li.innerHTML = '<span></span><b></b>'; li.firstChild.textContent = (dayNames[i] || '') + ' · ' + d.getAttribute('data-title'); li.lastChild.textContent = l ? '+' + money(upg(l)) : '';
+            var li = document.createElement('li'); li.innerHTML = '<span></span><b></b>'; li.firstChild.textContent = dayLabel(i) + ' · ' + d.getAttribute('data-title'); li.lastChild.textContent = l ? '+' + money(upg(l)) : '';
             list.appendChild(li);
           });
         }
+        var fst = $('[data-fn-first]', holder); if (fst) fst.textContent = fill(T_('first'), { d: dateOf(0) });
         var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : ''; }
         var emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
         var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? fill(T_('meals'), { n: n, t: MEALS }) : '';
         var tot = $('[data-fn-s-total]', holder); if (tot) tot.textContent = money(planTotal());
-        var sb = $('[data-fn-s-block]', holder); if (sb) { sb.hidden = false; sb.textContent = st.plan === 'block' ? fill(T_('weeks-x'), { p: money(planTotal() / WEEKS), w: WEEKS }) : fill(T_('per-week'), { p: money(planTotal()) }); }
+        var sb = $('[data-fn-s-block]', holder); if (sb) { sb.hidden = false; sb.textContent = st.plan === 'block' ? fill(T_('weeks-x'), { p: money(priceOf(tierEl(), st.plan) / WEEKS), w: WEEKS }) : fill(T_('per-week'), { p: money(planTotal()) }); }
         var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step + 1).replace('{t}', steps.length) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
         var rn = $('[data-fn-renew]', holder); if (rn) { var hasPlan = !!tierEl().getAttribute('data-selling-plan'); rn.hidden = !(hasPlan && st.plan === 'block'); var box = $('[data-fn-renew-box]', holder); if (box) box.checked = st.renew; }
         // stepper
@@ -663,6 +731,13 @@
       checks.forEach(function (c) { c.checked = (st.allergies || []).map(norm).indexOf(norm(c.value)) > -1; c.addEventListener('change', function () { st.allergies = checks.filter(function (x) { return x.checked; }).map(function (x) { return x.value; }); persist(); }); });
       var cn = holder.getAttribute('data-customer-name'), ce = holder.getAttribute('data-customer-email');
       if (ce) { st.info = st.info || {}; if (!st.info.email) st.info.email = ce; if (!st.info.name && cn) st.info.name = cn; fields.forEach(function (f) { var v = st.info[f.getAttribute('data-info')]; if (v && !f.value) f.value = v; }); }
+      // asked once at onboarding: show a summary instead of the form
+      var fbox = $('[data-fn-fields]', holder), fsum = $('[data-fn-saved]', holder), have = false;
+      try { have = !!localStorage.getItem(ONB_KEY); } catch (e) {}
+      if (have && fbox && fsum && st.info && st.info.name && st.info.email && st.info.phone) {
+        fbox.hidden = true; fsum.hidden = false; var ft = $('[data-fn-saved-text]', fsum);
+        if (ft) ft.textContent = [st.info.name, st.info.email, st.info.phone, [st.info.street, st.info.cluster, st.info.zip].filter(Boolean).join(', ')].filter(Boolean).join(' · ');
+      }
       if (ref) { var rs = ''; try { rs = localStorage.getItem('kulinaria_ref') || ''; } catch (e) {} if (rs) ref.value = rs; }
 
       if (next) next.addEventListener('click', function () {
@@ -704,7 +779,7 @@
         };
         if (ref && ref.value) { try { localStorage.setItem('kulinaria_ref', ref.value); } catch (x) {} }
         var props = {}; props[T_('prop-meals')] = String(MEALS); props[T_('prop-tier')] = tb.getAttribute('data-name'); props[T_('prop-length')] = st.plan === 'block' ? T_('length-block') : T_('length-week');
-        st.days.forEach(function (p, k) { var dd = byPid(p); if (dd) props[dayNames[k] || String(k + 1)] = dd.getAttribute('data-title'); });
+        st.days.forEach(function (p, k) { var dd = byPid(p); if (dd) props[dayLabel(k)] = dd.getAttribute('data-title'); });
         props['_platillos'] = list;
         var line = { id: parseInt(tb.getAttribute(st.plan === 'block' ? 'data-variant-block' : 'data-variant-week'), 10), quantity: 1, properties: props };
         var sp = tb.getAttribute('data-selling-plan'); if (st.plan === 'block' && st.renew && sp) line.selling_plan = parseInt(sp, 10);
@@ -712,9 +787,9 @@
         for (var lvl = 1; lvl <= 3; lvl++) {
           var names = []; st.days.forEach(function (p) { var dd = byPid(p); if (dd && levelOf(dd) === lvl) names.push(dd.getAttribute('data-title')); });
           var vid = parseInt(holder.getAttribute('data-upv-' + lvl), 10);
-          if (names.length && vid) { var up = {}; up[T_('prop-upgrade')] = names.join(', '); lines.push({ id: vid, quantity: names.length * (st.plan === 'block' ? WEEKS : 1), properties: up }); }
+          if (names.length && vid) { var up = {}; up[T_('prop-upgrade')] = names.join(', '); lines.push({ id: vid, quantity: names.length, properties: up }); }
         }
-        st.remembered = true; persist();
+        st.remembered = true; persist(); try { localStorage.setItem(ONB_KEY, '1'); } catch (x) {} pushProfile();
         var go2 = function () { window.location.href = finish.getAttribute('href'); };
         fetch('/cart/clear.js', { method: 'POST' })
           .then(function () { return fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ attributes: attrs }) }); })
@@ -1073,7 +1148,7 @@
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

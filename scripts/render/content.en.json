@@ -638,5 +638,9 @@
  "Nivel": "Tier",
  "Duración": "Length",
  "Cada nivel suma $70 MXN por comida sobre el anterior. El precio incluye el empaque óptimo y la preparación del chef.": "Each tier adds $70 MXN per meal over the previous one. The price includes optimal packaging and the chef's preparation.",
- "Cada nivel suma $70 MXN por comida sobre el anterior.": "Each tier adds $70 MXN per meal over the previous one."
+ "Cada nivel suma $70 MXN por comida sobre el anterior.": "Each tier adds $70 MXN per meal over the previous one.",
+ "Mejora de platillo": "Dish upgrade",
+ "Bienvenida": "Welcome",
+ "Cuéntanos de *ti*": "Tell us about *you*",
+ "Una sola vez. Con esto personalizamos tu menú y no tendrás que volver a llenarlo.": "Just once. We use this to personalise your menu so you never have to fill it in again."
 }

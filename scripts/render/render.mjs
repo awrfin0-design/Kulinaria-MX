@@ -33,6 +33,7 @@ function makeEngine(state, lang) {
     const vars = kw(a);
     return raw.replace(/\{\{\s*(\w+)\s*\}\}/g, (m, n) => (vars[n] !== undefined ? vars[n] : m));
   });
+  engine.registerFilter('hmac_sha256', () => 'preview-token');
   engine.registerFilter('upcase', (v) => String(v ?? '').toUpperCase());
   engine.registerFilter('asset_url', (f) => `assets/${f}`);
   engine.registerFilter('stylesheet_tag', (u) => `<link rel="stylesheet" href="${u}">`);
@@ -187,7 +188,7 @@ async function renderLang(lang) {
     P('menu', '/collections/menu-semanal', 'collection', 'Especiales de la semana', { template: { name: 'collection' }, collection: store.collections['menu-semanal'], page_title: T_('Especiales de la semana') }),
     P('tienda', '/collections/kulinaria-store', 'collection.store', 'Kulinaria Store', { template: { name: 'collection', suffix: 'store' }, collection: store.collections['kulinaria-store'], page_title: 'Kulinaria Store' }),
     ...store.products.map((p) => ({ key: 'p/' + p.handle, url: p.url, tpl: 'product', title: p.title, g: { template: { name: 'product' }, product: p, page_title: p.title } })),
-    ...[...JSON.parse(read('scripts/render/pages.json')).map(([h, tpl]) => [h, tpl]), ['perfil', 'page.profile']].map(([h, tpl]) =>
+    ...[...JSON.parse(read('scripts/render/pages.json')).map(([h, tpl]) => [h, tpl]), ['perfil', 'page.profile'], ['bienvenida', 'page.bienvenida']].map(([h, tpl]) =>
       ({ key: 'pg/' + h, url: '/pages/' + h, tpl, title: store.pages[h].title, g: { template: { name: 'page' }, page: store.pages[h], page_title: store.pages[h].title } })),
     P('carrito', '/cart', 'cart', 'Mi selección', { template: { name: 'cart' }, page_title: T_('Mi selección') }),
     P('cuenta', '/account', 'customers/account', 'Mi cuenta', { template: { name: 'customers/account' }, page_title: T_('Mi cuenta') }),

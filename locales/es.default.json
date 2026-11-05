@@ -534,12 +534,15 @@
     "day_empty": "Elegir platillo",
     "up_badge": "+{p} por comida",
     "up_total": "Incluye mejoras de platillo: +{p}",
-    "up_note": "¿Quieres un platillo de nivel superior? Puedes elegirlo: pagas solo la diferencia por comida (cada semana de tu plan).",
+    "up_note": "¿Quieres un platillo de nivel superior? Puedes elegirlo: pagas solo la diferencia por comida, de esa semana.",
     "prop_upgrade": "Mejora",
     "up_line": "Mejora de platillo",
     "need_contract": "Acepta el contrato para continuar.",
     "contract": "Acepto el contrato de adhesión y los términos de servicio de Kulinaria MX.",
-    "days_missing": "Asigna un platillo a cada día."
+    "days_missing": "Asigna un platillo a cada día.",
+    "first_delivery": "Primera entrega: lunes {d}.",
+    "week_note": "Estas 5 comidas son solo para esa primera semana. Tu plan ya está pagado: regresa cada semana a elegir las siguientes 5 (antes del sábado a las 10:00).",
+    "saved_title": "Tus datos están guardados"
   },
   "sitemap": {
     "pedido": "Armar mi pedido",
@@ -617,5 +620,26 @@
     "denied_text": "Esta cuenta no tiene permiso para ver el panel de administración.",
     "login_title": "Acceso de administración",
     "login_text": "Inicia sesión con la cuenta autorizada para continuar."
+  },
+  "onboarding": {
+    "eyebrow": "Tu perfil",
+    "title": "Cuéntanos de ti, una sola vez",
+    "text": "Con esto armamos tu menú y bloqueamos lo que no puedes comer. No tendrás que volver a llenarlo; puedes cambiarlo cuando quieras en Mi cuenta.",
+    "s1": "¿Quién eres?",
+    "s2": "¿Dónde te entregamos?",
+    "s3": "Alergias, gustos y dieta",
+    "save": "Guardar y entrar",
+    "need": "Completa tu nombre, correo y teléfono.",
+    "welcome": "Bienvenido, {n}",
+    "guest_title": "Primero inicia sesión",
+    "guest_text": "Entra o crea tu cuenta y te haremos unas preguntas rápidas para personalizar tu menú.",
+    "done_eyebrow": "Todo listo",
+    "done_title": "Bienvenido a Kulinaria",
+    "done_text": "Guardamos tus datos. Ya no tendrás que escribirlos otra vez.",
+    "next1": "Elige tu plan: 4 semanas o 1 semana.",
+    "next2": "Asigna un platillo a cada día de tu primera semana.",
+    "next3": "Cada semana regresas a elegir tus siguientes 5 comidas (tu plan ya está pagado).",
+    "choose_plan": "Elegir mi plan",
+    "edit": "Editar mis datos"
   }
 }

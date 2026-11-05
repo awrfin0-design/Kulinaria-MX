@@ -80,7 +80,7 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
   };
 
   const PAGE_LIST = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/render/pages.json'), 'utf8'));
-  const pages = Object.fromEntries([...PAGE_LIST.map(([handle, , title]) => [handle, title]), ['perfil', 'Mi perfil de alergias']]
+  const pages = Object.fromEntries([...PAGE_LIST.map(([handle, , title]) => [handle, title]), ['perfil', 'Mi perfil de alergias'], ['bienvenida', 'Bienvenida']]
     .map(([handle, title]) => [handle, { handle, title: tr(title), url: `/pages/${handle}`, content: '' }]));
 
   const link = (title, url, links = []) => ({ title: tr(title), url, current: false, links: links.map(([t, u]) => ({ title: tr(t), url: u, current: false, links: [] })) });

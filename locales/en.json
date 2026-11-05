@@ -534,12 +534,15 @@
     "day_empty": "Choose a dish",
     "up_badge": "+{p} per meal",
     "up_total": "Includes dish upgrades: +{p}",
-    "up_note": "Want a higher-tier dish? Go ahead: you only pay the per-meal difference (every week of your plan).",
+    "up_note": "Want a higher-tier dish? Go ahead: you only pay the per-meal difference, for that week.",
     "prop_upgrade": "Upgrade",
     "up_line": "Dish upgrade",
     "need_contract": "Accept the contract to continue.",
     "contract": "I accept the Kulinaria MX subscription contract and terms of service.",
-    "days_missing": "Assign a dish to every day."
+    "days_missing": "Assign a dish to every day.",
+    "first_delivery": "First delivery: Monday {d}.",
+    "week_note": "These 5 meals are for that first week only. Your plan is already paid: come back every week to choose the next 5 (before Saturday at 10:00).",
+    "saved_title": "Your details are saved"
   },
   "sitemap": {
     "pedido": "Build my order",
@@ -617,5 +620,26 @@
     "denied_text": "This account is not allowed to see the admin panel.",
     "login_title": "Admin access",
     "login_text": "Sign in with the authorised account to continue."
+  },
+  "onboarding": {
+    "eyebrow": "Your profile",
+    "title": "Tell us about you, just once",
+    "text": "We use this to build your menu and block what you can't eat. You won't have to fill it in again; change it anytime in My account.",
+    "s1": "Who are you?",
+    "s2": "Where do we deliver?",
+    "s3": "Allergies, tastes and diet",
+    "save": "Save and enter",
+    "need": "Please complete your name, e-mail and phone.",
+    "welcome": "Welcome, {n}",
+    "guest_title": "Sign in first",
+    "guest_text": "Sign in or create your account and we'll ask a few quick questions to personalise your menu.",
+    "done_eyebrow": "You're all set",
+    "done_title": "Welcome to Kulinaria",
+    "done_text": "We saved your details. You won't have to type them again.",
+    "next1": "Choose your plan: 4 weeks or 1 week.",
+    "next2": "Assign a dish to each day of your first week.",
+    "next3": "Every week you come back to choose your next 5 meals (your plan is already paid).",
+    "choose_plan": "Choose my plan",
+    "edit": "Edit my details"
   }
 }

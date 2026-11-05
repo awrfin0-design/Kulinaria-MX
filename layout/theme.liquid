@@ -111,6 +111,7 @@
     </div>
 
     {%- if customer -%}
+      <div id="kx-account" hidden data-endpoint="{{ shop.metafields.kulinaria.sheet_url.value }}" data-cid="{{ customer.id }}" data-token="{{ customer.id | hmac_sha256: shop.metafields.kulinaria.profile_secret.value }}"></div>
       <script type="application/json" id="kulinaria-customer">
         {
           "allergies": {{ customer.metafields.kulinaria.allergies.value | json }},
