@@ -229,7 +229,10 @@
     bar.firstChild.textContent = lang === 'en' ? 'Build my order' : 'Armar mi pedido'; bar.lastChild.textContent = (lang === 'en' ? 'Continue' : 'Continuar') + ' \u2192';
     document.body.appendChild(bar);
     if (document.documentElement.getAttribute('data-returning')) { var ob = $('[data-order-cta]', bar); ob.setAttribute('href', '/pages/cuenta-semana'); ob.textContent = (lang === 'en' ? 'Choose my week' : 'Elegir mi semana') + ' \u2192'; bar.firstChild.textContent = lang === 'en' ? 'Your week is paid' : 'Tu semana está pagada'; }
-    new IntersectionObserver(function (en) { en.forEach(function (e) { var on = !e.isIntersecting && e.boundingClientRect.top < 0; bar.hidden = false; bar.classList.toggle('is-on', on); }); }, { threshold: 0.12 }).observe(hero);
+    var heroGone = false, builderOn = false, paint = function () { bar.hidden = false; bar.classList.toggle('is-on', heroGone && !builderOn); };
+    new IntersectionObserver(function (en) { en.forEach(function (e) { heroGone = !e.isIntersecting && e.boundingClientRect.top < 0; paint(); }); }, { threshold: 0.12 }).observe(hero);
+    var builder = $('[data-funnel]');   // the order builder is itself the call to action: the bar steps aside while it is on screen
+    if (builder) new IntersectionObserver(function (en) { en.forEach(function (e) { builderOn = e.isIntersecting; paint(); }); }, { threshold: 0.02 }).observe(builder);
   }
   function initOnbBanner() { $$('[data-onb-banner]').forEach(function (b) { b.hidden = isOnboarded(); }); }
   function initProfileForm() { $$('[data-profile-form]').forEach(initOneProfileForm); }

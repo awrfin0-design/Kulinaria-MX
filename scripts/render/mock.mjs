@@ -57,7 +57,7 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
   // seasonal staples (collection "temporada"): limited-edition dishes that the season allows
   const SEASONAL = [
     ['chiles-en-nogada', 'Chiles en nogada de temporada', 'signature', ['Nuez', 'Lácteos'], ['Chile poblano', 'Res', 'Nuez de Castilla', 'Granada'], 690, 48, 'Chile poblano relleno de picadillo, bañado en nogada y granada. Solo en temporada.', 'Septiembre', 6],
-    ['pan-calabaza-especias', 'Pan de calabaza con especias', 'exclusivo', ['Gluten', 'Huevo'], ['Calabaza', 'Canela', 'Nuez moscada', 'Avena'], 320, 38, 'Pan húmedo de calabaza de otoño con canela y nuez moscada.', 'Otoño', 10],
+    ['pan-calabaza-especias', 'Pan de calabaza con especias', 'exclusivo', ['Gluten', 'Huevo'], ['Calabaza', 'Canela', 'Moscada', 'Avena'], 320, 38, 'Pan húmedo de calabaza de otoño con canela y nuez moscada.', 'Otoño', 10],
   ];
   const seasonal = SEASONAL.map((d, i) => product({ id: 7600 + i, handle: d[0], title: tr(d[1]), price: TIER_PRICE[d[2]], description: `<p>${tr(d[7])}</p>`, type: 'temporada', plans: true, tr, image: IMG(d[9], tr(d[1])),
     mf: { tier: d[2], category: 'temporada', diets: [], allergens: d[3], ingredients: d[4], calories: d[5], carbs: d[6], protein: Math.round(d[5] * 0.28 / 4), fat: Math.round(d[5] * 0.3 / 9), fiber: 4, season: tr(d[8]) } }));

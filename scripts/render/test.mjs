@@ -30,7 +30,7 @@ const ok = (name, cond, extra = '') => { results.push({ name, ok: !!cond }); if 
 ok('no dead internal links in rendered templates', dead.length === 0, JSON.stringify(dead));
 
 const browser = await chromium.launch();
-const SKIP_LOADER = () => { try { sessionStorage.setItem('kx-seen', '1'); if (!sessionStorage.getItem('kx-test-norules')) { localStorage.setItem('kx-rules-ok', '1'); sessionStorage.setItem('kx-test-start', '1'); } } catch (e) {} };
+const SKIP_LOADER = () => { try { sessionStorage.setItem('kx-seen', '1'); if (!sessionStorage.getItem('kx-test-norules')) { localStorage.setItem('kx-rules-ok', '1'); sessionStorage.setItem('kx-test-start', '1'); } if (!sessionStorage.getItem('kx-test-returning')) sessionStorage.setItem('kx_newplan', '1'); } catch (e) {} };
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 await ctx.addInitScript(SKIP_LOADER);
 const page = await ctx.newPage();
@@ -113,7 +113,7 @@ await page.click('[data-page="pg/perfil"] button[type="submit"]'); await page.wa
 ok('profile saved message', await page.$eval('[data-page="pg/perfil"] [data-profile-msg]', (e) => !e.hidden));
 await page.goto(`${URL0}#/menu`); await page.waitForTimeout(100);
 const blocked = await page.$$eval(`${scope} .dish.is-warned`, (e) => e.map((x) => x.querySelector('.dish__title').textContent.trim()));
-ok('allergic dish (frutos secos) gets a warning, but stays available', blocked.length === 1 && /Salmón/.test(blocked[0]) && (await page.$eval(`${scope} .dish.is-warned [data-fn-warn]`, (e) => !e.hidden && /datos|data/i.test(e.textContent))), blocked.join('|'));
+ok('allergic dish (frutos secos) gets a warning, but stays available', blocked.length === 2 && /Salmón/.test(blocked[0]) && /nogada/i.test(blocked[1]) && (await page.$eval(`${scope} .dish.is-warned [data-fn-warn]`, (e) => !e.hidden && /datos|data/i.test(e.textContent))), blocked.join('|'));
 ok('dislike lowers compatibility on vegan bowl (cebolla)', /70%|40%|7\d%/.test(await page.$eval(`${scope} [data-dish][data-category="bowls-de-la-semana"][data-tier="exclusivo"] [data-compat]`, (e) => e.textContent)));
 await page.goto(`${URL0}#/p/salmon-costra-almendras`); await page.waitForTimeout(100);
 ok('product alert visible, the plan button stays available', await page.evaluate(() => {
@@ -1299,14 +1299,14 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('order builder, menu step: the seasonal toggle swaps the weekly cards for the 2 limited-edition ones', sc0 === 9 && sc1 === 2, `${sc0} -> ${sc1}`);
 
   // returning customer: every order button leads to Mi semana and the builder offers it first
-  await page.evaluate(() => { localStorage.setItem('kx-test-orders', '1'); sessionStorage.removeItem('kx_newplan'); sessionStorage.removeItem('kx_credits'); }); await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(1200);
+  await page.evaluate(() => { localStorage.setItem('kx-test-orders', '1'); sessionStorage.setItem('kx-test-returning', '1'); sessionStorage.removeItem('kx_newplan'); sessionStorage.removeItem('kx_credits'); }); await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(1200);
   ok('returning customer: the order builder opens with "Ya tienes un plan activo" and a button to Mi semana (the steps are hidden)', await page.evaluate((pf) => { const r = document.querySelector(pf + '[data-fn-returning]'); return !!r && !r.hidden && !!r.querySelector('a[href="/pages/cuenta-semana"]') && getComputedStyle(document.querySelector(pf + '.funnel__panel')).display === 'none'; }, PF));
   await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1200);
   ok('returning customer: the hero order button leads to Mi semana', await page.evaluate(() => { const a = document.querySelector('[data-page="home"] .hero [data-order-cta]'); return !!a && a.getAttribute('href') === '/pages/cuenta-semana' && /semana/i.test(a.textContent); }));
   await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(1000);
   await page.click(`${PF}[data-fn-newplan]`); await page.waitForTimeout(300);
   ok('"I want to buy a new plan" brings the four steps back', await page.evaluate((pf) => getComputedStyle(document.querySelector(pf + '.funnel__panel')).display !== 'none' && document.querySelectorAll(pf + '[data-fn-dot]').length === 4, PF));
-  await page.evaluate(() => { localStorage.setItem('kx-test-orders', '0'); sessionStorage.removeItem('kx_newplan'); sessionStorage.removeItem('kx_credits'); localStorage.removeItem('kulinaria_funnel'); });
+  await page.evaluate(() => { localStorage.setItem('kx-test-orders', '0'); sessionStorage.removeItem('kx-test-returning'); sessionStorage.setItem('kx_newplan', '1'); sessionStorage.removeItem('kx_credits'); localStorage.removeItem('kulinaria_funnel'); });
 
   // the rules fit the desktop frame (no scrolling to read them) and the tick still gates the next button
   await page.evaluate(() => { sessionStorage.setItem('kx-test-norules', '1'); localStorage.removeItem('kx-rules-ok'); }); await page.reload(); await page.waitForTimeout(1000);

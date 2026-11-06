@@ -1,0 +1,26 @@
+// Phone: step pills on every step, contained welcome film on the home page. Output: /tmp/st-*.png
+import { createRequire } from 'node:module';
+const { chromium } = createRequire(import.meta.url)('playwright');
+const b = await chromium.launch();
+const ctx = await b.newContext({ viewport: { width: 390, height: 800 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 });
+await ctx.addInitScript(() => { sessionStorage.setItem('kx-seen', '1'); sessionStorage.setItem('kx_newplan', '1'); sessionStorage.setItem('kx_ob_asked', '1'); try { localStorage.setItem('kx-rules-ok', '1'); localStorage.setItem('kx-tour-planner', '1'); localStorage.setItem('kx-test-orders', '0'); } catch (e) {} });
+const page = await ctx.newPage();
+const errs = []; page.on('pageerror', (e) => errs.push(e.message));
+await page.goto('file:///home/user/Kulinaria-MX/preview/index.html#/pg/pedido'); await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.reload(); await page.waitForTimeout(900);
+const F = '[data-page="pg/pedido"] ';
+const step = () => page.$eval(F + '[data-funnel]', (f) => f.getAttribute('data-step'));
+console.log('opens on step', await step());
+await page.screenshot({ path: '/tmp/st-1.png' });
+await page.tap(F + '.steps__nav li:nth-child(3)'); await page.waitForTimeout(500);
+console.log('tap 3 ->', await step());
+await page.screenshot({ path: '/tmp/st-3.png' });
+await page.tap(F + '.steps__nav li:nth-child(4)'); await page.waitForTimeout(500);
+console.log('tap 4 ->', await step());
+await page.screenshot({ path: '/tmp/st-4.png' });
+await page.tap(F + '.steps__nav li:nth-child(2)'); await page.waitForTimeout(500);
+console.log('tap 2 ->', await step());
+await page.goto('file:///home/user/Kulinaria-MX/preview/index.html#/home'); await page.reload(); await page.waitForTimeout(900);
+await page.evaluate(() => { const f = document.querySelector('[data-page="home"] .welcome-video__frame'); window.scrollTo(0, f.getBoundingClientRect().top + scrollY - 70); }); await page.waitForTimeout(500);
+await page.screenshot({ path: '/tmp/st-home.png' });
+console.log(errs.join('|') || 'no page errors');
+await b.close();

@@ -2981,3 +2981,8 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
   /* section 2 (welcome film): contained in a frame, with the page margins, not edge to edge */
   body .welcome-video__frame{margin-inline:0;border-radius:22px;border:1px solid var(--border-accent);aspect-ratio:4/5;max-height:72svh}
 }
+/* v64b — phone, step 1 flows with the page: nothing in it may collapse to a flex-basis of 0 (it was being covered by the next section) */
+@media (max-width:760px){
+  body .funnel[data-step="0"]:not(.funnel--teaser) :is(.funnel__panel,.funnel__main,.step[data-fn-step="0"].is-on,.fn-rules){flex:none !important;height:auto !important;min-height:0}
+  body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__main{display:block}
+}
