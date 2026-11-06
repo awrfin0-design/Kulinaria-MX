@@ -1227,21 +1227,33 @@
       };
       var tourArmed = false;
       /* rules step: the button unlocks only after reading to the end and ticking "I understand" */
-      var rulesBox = $('[data-fn-rules]', holder), rChk = $('[data-fn-rules-check]', holder), rBtn = $('[data-fn-rules-next]', holder), rHint = $('[data-fn-rules-hint]', holder), rulesRead = !!st.rulesOk;
-      var rulesSeenEnd = false;
+      var rulesBox = $('[data-fn-rules]', holder), rRail = $('[data-fn-rules-rail]', holder), rChk = $('[data-fn-rules-check]', holder), rBtn = $('[data-fn-rules-next]', holder), rHint = $('[data-fn-rules-hint]', holder), rulesRead = !!st.rulesOk, rulesSeenEnd = false;
       var rulesState = function () {
         if (!rulesBox) return;
         if (st.rulesOk || rulesSeenEnd) rulesRead = true;
-        if (!rulesRead) { var atEnd = rulesBox.scrollHeight > rulesBox.clientHeight + 4 && rulesBox.scrollTop + rulesBox.clientHeight >= rulesBox.scrollHeight - 12; if (atEnd) rulesRead = true; }
-        if (rChk) { rChk.disabled = !rulesRead; if (st.rulesOk) rChk.checked = true; }
+        if (!rulesRead && rRail) { var atEnd = rRail.scrollWidth > rRail.clientWidth + 4 && rRail.scrollLeft + rRail.clientWidth >= rRail.scrollWidth - 14; if (atEnd) rulesRead = true; }
+        if (rChk) rChk.disabled = !rulesRead;                      // never ticked for the visitor: they tick it once they are done
         if (rBtn) rBtn.disabled = !(rulesRead && rChk && rChk.checked);
         if (rHint) rHint.hidden = rulesRead;
         rulesBox.classList.toggle('is-read', rulesRead);
       };
       if (rulesBox) {
-        var endEl = $('[data-fn-rules-end]', holder);
-        if (endEl && window.IntersectionObserver) new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting && e.intersectionRatio > 0.6 && st.step === 0) { rulesSeenEnd = true; rulesState(); } }); }, { threshold: [0.6, 1] }).observe(endEl);
-        rulesBox.addEventListener('scroll', function () { window.requestAnimationFrame(rulesState); }, { passive: true });
+        var lastCard = $('[data-fn-rules-last]', holder);
+        if (lastCard && rRail && window.IntersectionObserver) new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting && e.intersectionRatio > 0.6 && st.step === 0) { rulesSeenEnd = true; rulesState(); } }); }, { root: rRail, threshold: [0.6, 1] }).observe(lastCard);
+        if (rRail) rRail.addEventListener('scroll', function () { window.requestAnimationFrame(rulesState); }, { passive: true });
+        $$('[data-fn-rules-arrow]', holder).forEach(function (ar) { ar.addEventListener('click', function () { if (rRail) rRail.scrollBy({ left: (+ar.getAttribute('data-fn-rules-arrow')) * Math.max(220, rRail.clientWidth * 0.8), behavior: REDUCE ? 'auto' : 'smooth' }); }); });
+        // phone: the tick and the button are the last slide of the row; desktop: they sit under the row
+        var endBox = $('[data-fn-rules-end]', holder), slot = $('[data-fn-rules-slot]', holder), phoneMq = window.matchMedia ? window.matchMedia('(max-width:760px)') : null;
+        var placeEnd = function () { if (!endBox || !slot) return; if (phoneMq && phoneMq.matches) slot.appendChild(endBox); else rulesBox.appendChild(endBox); };
+        placeEnd(); if (phoneMq && phoneMq.addEventListener) phoneMq.addEventListener('change', placeEnd);
+        // dots under the row on the phone
+        var dotsBox = document.createElement('div'); dotsBox.className = 'fn-rules__dots'; dotsBox.setAttribute('aria-hidden', 'true');
+        if (rRail) { $$('.fn-rcard', rRail).forEach(function () { dotsBox.appendChild(document.createElement('i')); }); $('.fn-rules__carousel', holder).appendChild(dotsBox);
+          var paintDots = function () { var cards = $$('.fn-rcard', rRail), w = cards[0] ? cards[0].getBoundingClientRect().width + 12 : 1, k = Math.min(cards.length - 1, Math.round(rRail.scrollLeft / Math.max(1, w))); $$('i', dotsBox).forEach(function (d, n) { d.classList.toggle('on', n === k); }); };
+          rRail.addEventListener('scroll', function () { window.requestAnimationFrame(paintDots); }, { passive: true }); paintDots();
+          var finalCard = $('[data-fn-rules-final]', holder);
+          if (finalCard && window.IntersectionObserver) new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting && e.intersectionRatio > 0.6 && st.step === 0) { rulesSeenEnd = true; rulesState(); } }); }, { root: rRail, threshold: [0.6, 1] }).observe(finalCard);
+        }
         if (rChk) rChk.addEventListener('change', rulesState);
         if (rBtn) rBtn.addEventListener('click', function () { st.rulesOk = true; try { localStorage.setItem(RULES_KEY, '1'); } catch (x) {} persist(); go(1); });
       }

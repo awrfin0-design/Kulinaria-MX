@@ -693,6 +693,7 @@
     "ret_go": "Choose my week",
     "ret_new": "I want to buy a new plan",
     "ret_hint": "Your plan is already paid: you only pick your 5 dishes for the week, with your notes, and you are done.",
+    "rules_final_t": "Last step: confirm it",
     "rec_title": "How you are charged",
     "rec_auto": "The 4-week plan is paid upfront in a single charge and renews automatically every 4 weeks with the same payment method, until you cancel or pause it from your account (before the Saturday 10:00 cut-off).",
     "rec_manual": "The 4-week plan is paid upfront in a single charge. When your 4 weeks end we let you know to renew: nothing is charged without your confirmation.",

@@ -2986,3 +2986,46 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
   body .funnel[data-step="0"]:not(.funnel--teaser) :is(.funnel__panel,.funnel__main,.step[data-fn-step="0"].is-on,.fn-rules){flex:none !important;height:auto !important;min-height:0}
   body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__main{display:block}
 }
+
+/* =====================================================================
+   v65 — step 1: the rules are vertical cards in a row (like the menu step); scroll through them, then tick
+   ===================================================================== */
+.fn-rules{display:flex !important;flex-direction:column;gap:10px;overflow:visible !important;-webkit-mask-image:none !important;mask-image:none !important;padding:0 !important;align-content:normal}
+.fn-rules__head{flex:none;display:grid;gap:2px}
+.fn-rules__title{margin:0;font-size:clamp(1.15rem,2.2vw,1.6rem);line-height:1.15}
+.fn-rules__lede{margin:0;font-size:.8rem;color:var(--text-muted)}
+.fn-rules__carousel{position:relative;flex:1 1 0;min-height:0;display:flex}
+.fn-rules__rail{flex:1;display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;padding:2px 2px 6px;min-height:0}
+.fn-rcard{flex:0 0 clamp(210px,21vw,270px);scroll-snap-align:start;display:flex;flex-direction:column;gap:8px;padding:16px 16px 18px;border:1px solid var(--line);border-radius:16px;background:var(--bg-raised);min-height:0;overflow:hidden}
+.fn-rcard .fn-rules__n{flex:none;width:34px;height:34px;font-size:.9rem}
+.fn-rcard h4{margin:0;font-size:1.02rem;line-height:1.2}
+.fn-rcard p{margin:0;font-size:.82rem;line-height:1.5;color:var(--text-muted)}
+.fn-rcard--ex{border-color:var(--border-accent);background:var(--accent-wash);justify-content:flex-start}
+.fn-rcard--ex p{color:var(--text);font-size:.84rem}
+.fn-rcard .fn-rules__bar{height:40px;border-radius:10px}
+.fn-rules__end{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;padding:2px 0 0}
+.fn-rules__hint{margin:0;color:var(--accent);font-size:.8rem;font-weight:600}
+.fn-rules.is-read .fn-rules__hint{display:none}
+@media (min-width:901px){
+  .funnel .step[data-fn-step="0"] .fn-arrow{display:grid !important}
+  .fn-rcard h4{font-size:.98rem}.fn-rcard p{font-size:.78rem}
+  .fn-rules__carousel{flex:1 1 0}
+}
+.fn-rcard--final{display:none}
+.fn-rules__dots{display:none}
+@media (max-width:760px){
+  .fn-rcard--final{display:flex;justify-content:flex-start}
+  .fn-rcard--final .fn-rules__end{display:flex;flex-direction:column;align-items:stretch;gap:14px;margin-top:6px}
+  .fn-rules__dots{display:flex;justify-content:center;gap:6px;padding:8px 0 0}
+  .fn-rules__dots i{width:6px;height:6px;border-radius:50%;background:var(--line);transition:width .25s,background .25s}
+  .fn-rules__dots i.on{width:18px;border-radius:6px;background:var(--accent)}
+  .fn-rcard{flex:0 0 100% !important;min-height:300px}
+  .fn-rules__rail{gap:12px;padding-bottom:2px}
+  .fn-rules__carousel{flex:none;display:block}
+  .fn-rcard{flex-basis:78vw;padding:16px 16px 20px}
+  .fn-rcard h4{font-size:1.1rem}.fn-rcard p{font-size:.88rem}
+  .fn-rules .fn-arrow{display:none !important}
+  .fn-rules__end{flex-direction:column;align-items:stretch}
+  .fn-rules__end .btn{width:100%}
+  .fn-rules__hint{order:-1}
+}

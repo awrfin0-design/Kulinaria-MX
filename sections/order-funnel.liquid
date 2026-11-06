@@ -66,28 +66,30 @@
           {%- assign r_meal = r_mn | times: 100 | money_without_trailing_zeros -%}
           {%- assign r_wk = r_bn | divided_by: 4 | times: 100 | money_without_trailing_zeros -%}
           <div class="fn-rules" data-fn-rules>
-            <h3 class="fn-rules__title">{{ 'funnel.rules_title' | t }}</h3>
-            <p class="fn-rules__lede">{{ 'funnel.rules_lede' | t }}</p>
-            <ol class="fn-rules__list">
-              {%- for n in (1..3) -%}
-                {%- assign kt = 'funnel.rules_' | append: n | append: '_t' -%}{%- assign kp = 'funnel.rules_' | append: n | append: '_p' -%}
-                <li><b class="fn-rules__n">{{ n }}</b><div><h4>{{ kt | t }}</h4><p>{{ kp | t | replace: '[block]', r_block | replace: '[week]', r_week | replace: '[wk]', r_wk | replace: '[meal]', r_meal }}</p></div></li>
-              {%- endfor -%}
-            </ol>
-            <div class="fn-rules__ex" role="group" aria-label="{{ 'funnel.rules_ex_t' | t }}">
-              <h4>{{ 'funnel.rules_ex_t' | t }}</h4>
-              <div class="fn-rules__bar" aria-hidden="true"><i class="is-budget" style="flex:900">$900</i><i class="is-extra" style="flex:380">+$380</i></div>
-              <p class="fn-rules__legend"><span class="k-budget">{{ 'funnel.rules_ex_budget' | t }}</span><span class="k-extra">{{ 'funnel.rules_ex_extra' | t }}</span></p>
-              <p>{{ 'funnel.rules_ex_p' | t }}</p>
+            <div class="fn-rules__head"><h3 class="fn-rules__title">{{ 'funnel.rules_title' | t }}</h3><p class="fn-rules__lede">{{ 'funnel.rules_lede' | t }}</p></div>
+            <div class="fn-rules__carousel">
+              <button class="fn-arrow fn-arrow--prev" type="button" data-fn-rules-arrow="-1" aria-label="{{ 'funnel.prev_dishes' | t }}">&#8249;</button>
+              <div class="fn-rules__rail" data-fn-rules-rail>
+                {%- for n in (1..3) -%}
+                  {%- assign kt = 'funnel.rules_' | append: n | append: '_t' -%}{%- assign kp = 'funnel.rules_' | append: n | append: '_p' -%}
+                  <article class="fn-rcard"><b class="fn-rules__n">{{ n }}</b><h4>{{ kt | t }}</h4><p>{{ kp | t | replace: '[block]', r_block | replace: '[week]', r_week | replace: '[wk]', r_wk | replace: '[meal]', r_meal }}</p></article>
+                {%- endfor -%}
+                <article class="fn-rcard fn-rcard--ex" role="group" aria-label="{{ 'funnel.rules_ex_t' | t }}">
+                  <h4>{{ 'funnel.rules_ex_t' | t }}</h4>
+                  <div class="fn-rules__bar" aria-hidden="true"><i class="is-budget" style="flex:900">$900</i><i class="is-extra" style="flex:380">+$380</i></div>
+                  <p class="fn-rules__legend"><span class="k-budget">{{ 'funnel.rules_ex_budget' | t }}</span><span class="k-extra">{{ 'funnel.rules_ex_extra' | t }}</span></p>
+                  <p>{{ 'funnel.rules_ex_p' | t }}</p>
+                </article>
+                {%- for n in (4..7) -%}
+                  {%- assign kt = 'funnel.rules_' | append: n | append: '_t' -%}{%- assign kp = 'funnel.rules_' | append: n | append: '_p' -%}
+                  <article class="fn-rcard"{% if n == 7 %} data-fn-rules-last{% endif %}><b class="fn-rules__n">{{ n }}</b><h4>{{ kt | t }}</h4><p>{{ kp | t | replace: '[block]', r_block | replace: '[week]', r_week | replace: '[wk]', r_wk | replace: '[meal]', r_meal }}</p></article>
+                {%- endfor -%}
+                <article class="fn-rcard fn-rcard--final" data-fn-rules-final><b class="fn-rules__n">&#10003;</b><h4>{{ 'funnel.rules_final_t' | t }}</h4><div data-fn-rules-slot></div></article>
+              </div>
+              <button class="fn-arrow fn-arrow--next" type="button" data-fn-rules-arrow="1" aria-label="{{ 'funnel.next_dishes' | t }}">&#8250;</button>
             </div>
-            <ol class="fn-rules__list" start="4">
-              {%- for n in (4..7) -%}
-                {%- assign kt = 'funnel.rules_' | append: n | append: '_t' -%}{%- assign kp = 'funnel.rules_' | append: n | append: '_p' -%}
-                <li><b class="fn-rules__n">{{ n }}</b><div><h4>{{ kt | t }}</h4><p>{{ kp | t | replace: '[block]', r_block | replace: '[week]', r_week | replace: '[wk]', r_wk | replace: '[meal]', r_meal }}</p></div></li>
-              {%- endfor -%}
-            </ol>
             <div class="fn-rules__end" data-fn-rules-end>
-              <p class="fn-rules__hint" data-fn-rules-hint>{{ 'funnel.rules_scroll' | t }} &darr;</p>
+              <p class="fn-rules__hint" data-fn-rules-hint>{{ 'funnel.rules_scroll' | t }} &rarr;</p>
               <label class="check fn-rules__check"><input type="checkbox" data-fn-rules-check disabled> <span>{{ 'funnel.rules_check' | t }}</span></label>
               <button class="btn btn--gold" type="button" data-fn-rules-next disabled>{{ 'funnel.rules_next' | t }} &rarr;</button>
             </div>

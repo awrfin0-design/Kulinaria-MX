@@ -2995,6 +2995,28 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
   body.template-index .rail{margin-inline:0}
 }
 
+/* =====================================================================
+   v64 — phone: a stepper you can tap to move freely between the four steps · the welcome film sits in a frame
+   ===================================================================== */
+@media (max-width:760px){
+  body .funnel:not(.funnel--teaser) .funnel__top{display:block;padding:0;margin:0}
+  body .funnel:not(.funnel--teaser) .funnel__top .steps__nav{display:flex !important;gap:6px;margin:2px var(--pad) 6px;width:auto}
+  body .funnel:not(.funnel--teaser) .funnel__top .steps__nav li{flex:1;display:flex;justify-content:center;align-items:center;min-height:40px;padding:0;border:1px solid var(--line);border-radius:999px;font-size:0;gap:0;cursor:pointer;color:var(--text-muted);background:var(--panel)}
+  body .funnel:not(.funnel--teaser) .funnel__top .steps__nav li span{font:700 .78rem var(--font-label);letter-spacing:.04em;color:var(--text)}
+  body .funnel:not(.funnel--teaser) .funnel__top .steps__nav li.is-done{border-color:var(--accent)}
+  body .funnel:not(.funnel--teaser) .funnel__top .steps__nav li.is-on{background:var(--accent);border-color:var(--accent)}
+  body .funnel:not(.funnel--teaser) .funnel__top .steps__nav li.is-on span{color:#fff}
+  body .funnel:not(.funnel--teaser) .funnel__top .steps__nav li:focus-visible{outline:2px solid var(--accent-hi);outline-offset:2px}
+  body .funnel__stepcount{margin-top:0}
+  /* section 2 (welcome film): contained in a frame, with the page margins, not edge to edge */
+  body .welcome-video__frame{margin-inline:0;border-radius:22px;border:1px solid var(--border-accent);aspect-ratio:4/5;max-height:72svh}
+}
+/* v64b — phone, step 1 flows with the page: nothing in it may collapse to a flex-basis of 0 (it was being covered by the next section) */
+@media (max-width:760px){
+  body .funnel[data-step="0"]:not(.funnel--teaser) :is(.funnel__panel,.funnel__main,.step[data-fn-step="0"].is-on,.fn-rules){flex:none !important;height:auto !important;min-height:0}
+  body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__main{display:block}
+}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -3906,7 +3928,7 @@ Fuego</span>
     </div>
   </div>
 </article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7601" data-handle="pan-calabaza-especias"
-  data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Pan de calabaza con especias" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Nuez moscada|Avena">
+  data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Pan de calabaza con especias" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Edición limitada</span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -3918,7 +3940,7 @@ Fuego</span>
     <h2 class="dd__title" data-dd-title>Pan de calabaza con especias</h2><p class="dd__desc">Pan húmedo de calabaza de otoño con canela y nuez moscada.</p><h3 class="dd__h">Información nutricional</h3>
       <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>320<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>22<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>38<small> g</small></dd></div><div><dt>Grasas</dt><dd>11<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
       <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><h3 class="dd__h">Ingredientes</h3>
-      <p class="dd__list">Calabaza · Canela · Nuez moscada · Avena</p><h3 class="dd__h">Alérgenos</h3>
+      <p class="dd__list">Calabaza · Canela · Moscada · Avena</p><h3 class="dd__h">Alérgenos</h3>
     <p class="dd__list dd__allergens">Gluten · Huevo</p>
   </div>
 </div>
@@ -4917,7 +4939,7 @@ Pago digital, sin efectivo</li></ul>
   <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
 </article><article class="dish is-hidden is-seasonal" data-dish data-has-detail data-seasonal="true"
   data-category="temporada" data-tier="exclusivo"
-  data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Nuez moscada|Avena">
+  data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena">
   <a class="dish__media surface-walnut" data-tilt-card href="#/p/pan-calabaza-especias" aria-label="Pan de calabaza con especias"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="lazy"><span class="dish__pill" aria-hidden="true">Ver ficha</span><span class="dish__ribbon">Edición limitada · Otoño</span></a>
   <div class="dish__body">
     <div><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
@@ -4937,7 +4959,7 @@ Pago digital, sin efectivo</li></ul>
     <h2 class="dd__title" data-dd-title>Pan de calabaza con especias</h2><p class="dd__desc">Pan húmedo de calabaza de otoño con canela y nuez moscada.</p><h3 class="dd__h">Información nutricional</h3>
       <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>320<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>22<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>38<small> g</small></dd></div><div><dt>Grasas</dt><dd>11<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
       <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><h3 class="dd__h">Ingredientes</h3>
-      <p class="dd__list">Calabaza · Canela · Nuez moscada · Avena</p><h3 class="dd__h">Alérgenos</h3>
+      <p class="dd__list">Calabaza · Canela · Moscada · Avena</p><h3 class="dd__h">Alérgenos</h3>
     <p class="dd__list dd__allergens">Gluten · Huevo</p>
   </div>
 </div>
@@ -7802,7 +7824,7 @@ Pago digital, sin efectivo</li></ul>
     </div>
 <div data-page="p/pan-calabaza-especias" data-template="product" data-title="Pan de calabaza con especias" hidden>
       <div id="p-pan-calabaza-especias--shopify-section-main" class="shopify-section"><section class="section" >
-  <div class="container product" data-dish-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Nuez moscada|Avena"><div class="product__media surface-walnut"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="eager"></div>
+  <div class="container product" data-dish-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena"><div class="product__media surface-walnut"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="eager"></div>
 
     <div class="product__info">
       <div>
@@ -7817,7 +7839,7 @@ Pago digital, sin efectivo</li></ul>
         <p class="legal-note">El peso de la proteína se establece en bruto antes de su cocción. La contracción natural durante el proceso de preparación culinaria puede dar como resultado un peso inferior al publicado, quedando sujeto a variaciones.</p><div>
           <h3>Ingredientes</h3>
           <p class="text-muted">Declaración explícita de cada ingrediente para la prevención de alergias.</p>
-          <div class="chips"><span class="chip" style="cursor:default">Calabaza</span><span class="chip" style="cursor:default">Canela</span><span class="chip" style="cursor:default">Nuez moscada</span><span class="chip" style="cursor:default">Avena</span></div>
+          <div class="chips"><span class="chip" style="cursor:default">Calabaza</span><span class="chip" style="cursor:default">Canela</span><span class="chip" style="cursor:default">Moscada</span><span class="chip" style="cursor:default">Avena</span></div>
         </div><div>
           <h3>Contiene</h3>
           <div class="chips"><span class="tier-badge tier-badge--exclusivo">Gluten</span><span class="tier-badge tier-badge--exclusivo">Huevo</span></div>
@@ -12507,7 +12529,7 @@ Pago digital, sin efectivo</li></ul>
     </div>
   </div>
 </article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7601" data-handle="pan-calabaza-especias"
-  data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Pan de calabaza con especias" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Nuez moscada|Avena">
+  data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Pan de calabaza con especias" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Edición limitada</span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -12519,7 +12541,7 @@ Pago digital, sin efectivo</li></ul>
     <h2 class="dd__title" data-dd-title>Pan de calabaza con especias</h2><p class="dd__desc">Pan húmedo de calabaza de otoño con canela y nuez moscada.</p><h3 class="dd__h">Información nutricional</h3>
       <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>320<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>22<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>38<small> g</small></dd></div><div><dt>Grasas</dt><dd>11<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
       <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><h3 class="dd__h">Ingredientes</h3>
-      <p class="dd__list">Calabaza · Canela · Nuez moscada · Avena</p><h3 class="dd__h">Alérgenos</h3>
+      <p class="dd__list">Calabaza · Canela · Moscada · Avena</p><h3 class="dd__h">Alérgenos</h3>
     <p class="dd__list dd__allergens">Gluten · Huevo</p>
   </div>
 </div>
@@ -13705,7 +13727,7 @@ Pago digital, sin efectivo</li></ul>
     </div>
   </div>
 </article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7601" data-handle="pan-calabaza-especias"
-  data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Spiced pumpkin bread" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Nuez moscada|Avena">
+  data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Spiced pumpkin bread" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Limited edition</span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -13717,7 +13739,7 @@ Pago digital, sin efectivo</li></ul>
     <h2 class="dd__title" data-dd-title>Spiced pumpkin bread</h2><p class="dd__desc">Moist autumn pumpkin bread with cinnamon and nutmeg.</p><h3 class="dd__h">Nutrition facts</h3>
       <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>320<small> kcal</small></dd></div><div><dt>Protein</dt><dd>22<small> g</small></dd></div><div><dt>Carbs</dt><dd>38<small> g</small></dd></div><div><dt>Fat</dt><dd>11<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
       <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><h3 class="dd__h">Ingredients</h3>
-      <p class="dd__list">Pumpkin · Canela · Nuez moscada · Avena</p><h3 class="dd__h">Allergens</h3>
+      <p class="dd__list">Pumpkin · Canela · Moscada · Avena</p><h3 class="dd__h">Allergens</h3>
     <p class="dd__list dd__allergens">Gluten · Egg</p>
   </div>
 </div>
@@ -14716,7 +14738,7 @@ Digital payment, no cash</li></ul>
   <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
 </article><article class="dish is-hidden is-seasonal" data-dish data-has-detail data-seasonal="true"
   data-category="temporada" data-tier="exclusivo"
-  data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Nuez moscada|Avena">
+  data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena">
   <a class="dish__media surface-walnut" data-tilt-card href="#/p/pan-calabaza-especias" aria-label="Spiced pumpkin bread"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="lazy"><span class="dish__pill" aria-hidden="true">View dish</span><span class="dish__ribbon">Limited edition · Otoño</span></a>
   <div class="dish__body">
     <div><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
@@ -14736,7 +14758,7 @@ Digital payment, no cash</li></ul>
     <h2 class="dd__title" data-dd-title>Spiced pumpkin bread</h2><p class="dd__desc">Moist autumn pumpkin bread with cinnamon and nutmeg.</p><h3 class="dd__h">Nutrition facts</h3>
       <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>320<small> kcal</small></dd></div><div><dt>Protein</dt><dd>22<small> g</small></dd></div><div><dt>Carbs</dt><dd>38<small> g</small></dd></div><div><dt>Fat</dt><dd>11<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
       <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><h3 class="dd__h">Ingredients</h3>
-      <p class="dd__list">Pumpkin · Canela · Nuez moscada · Avena</p><h3 class="dd__h">Allergens</h3>
+      <p class="dd__list">Pumpkin · Canela · Moscada · Avena</p><h3 class="dd__h">Allergens</h3>
     <p class="dd__list dd__allergens">Gluten · Egg</p>
   </div>
 </div>
@@ -17601,7 +17623,7 @@ Digital payment, no cash</li></ul>
     </div>
 <div data-page="p/pan-calabaza-especias" data-template="product" data-title="Pan de calabaza con especias" hidden>
       <div id="p-pan-calabaza-especias--shopify-section-main" class="shopify-section"><section class="section" >
-  <div class="container product" data-dish-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Nuez moscada|Avena"><div class="product__media surface-walnut"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="eager"></div>
+  <div class="container product" data-dish-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena"><div class="product__media surface-walnut"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="eager"></div>
 
     <div class="product__info">
       <div>
@@ -17616,7 +17638,7 @@ Digital payment, no cash</li></ul>
         <p class="legal-note">Protein weight is set raw, before cooking. The natural shrinkage during preparation can result in a lower weight than published, subject to variation.</p><div>
           <h3>Ingredients</h3>
           <p class="text-muted">Every ingredient is declared explicitly to prevent allergies.</p>
-          <div class="chips"><span class="chip" style="cursor:default">Pumpkin</span><span class="chip" style="cursor:default">Canela</span><span class="chip" style="cursor:default">Nuez moscada</span><span class="chip" style="cursor:default">Avena</span></div>
+          <div class="chips"><span class="chip" style="cursor:default">Pumpkin</span><span class="chip" style="cursor:default">Canela</span><span class="chip" style="cursor:default">Moscada</span><span class="chip" style="cursor:default">Avena</span></div>
         </div><div>
           <h3>Contains</h3>
           <div class="chips"><span class="tier-badge tier-badge--exclusivo">Gluten</span><span class="tier-badge tier-badge--exclusivo">Egg</span></div>
@@ -22306,7 +22328,7 @@ Digital payment, no cash</li></ul>
     </div>
   </div>
 </article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7601" data-handle="pan-calabaza-especias"
-  data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Spiced pumpkin bread" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Nuez moscada|Avena">
+  data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Spiced pumpkin bread" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Limited edition</span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -22318,7 +22340,7 @@ Digital payment, no cash</li></ul>
     <h2 class="dd__title" data-dd-title>Spiced pumpkin bread</h2><p class="dd__desc">Moist autumn pumpkin bread with cinnamon and nutmeg.</p><h3 class="dd__h">Nutrition facts</h3>
       <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>320<small> kcal</small></dd></div><div><dt>Protein</dt><dd>22<small> g</small></dd></div><div><dt>Carbs</dt><dd>38<small> g</small></dd></div><div><dt>Fat</dt><dd>11<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
       <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><h3 class="dd__h">Ingredients</h3>
-      <p class="dd__list">Pumpkin · Canela · Nuez moscada · Avena</p><h3 class="dd__h">Allergens</h3>
+      <p class="dd__list">Pumpkin · Canela · Moscada · Avena</p><h3 class="dd__h">Allergens</h3>
     <p class="dd__list dd__allergens">Gluten · Egg</p>
   </div>
 </div>
@@ -23946,7 +23968,10 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     bar.firstChild.textContent = lang === 'en' ? 'Build my order' : 'Armar mi pedido'; bar.lastChild.textContent = (lang === 'en' ? 'Continue' : 'Continuar') + ' \u2192';
     document.body.appendChild(bar);
     if (document.documentElement.getAttribute('data-returning')) { var ob = $('[data-order-cta]', bar); ob.setAttribute('href', '/pages/cuenta-semana'); ob.textContent = (lang === 'en' ? 'Choose my week' : 'Elegir mi semana') + ' \u2192'; bar.firstChild.textContent = lang === 'en' ? 'Your week is paid' : 'Tu semana está pagada'; }
-    new IntersectionObserver(function (en) { en.forEach(function (e) { var on = !e.isIntersecting && e.boundingClientRect.top < 0; bar.hidden = false; bar.classList.toggle('is-on', on); }); }, { threshold: 0.12 }).observe(hero);
+    var heroGone = false, builderOn = false, paint = function () { bar.hidden = false; bar.classList.toggle('is-on', heroGone && !builderOn); };
+    new IntersectionObserver(function (en) { en.forEach(function (e) { heroGone = !e.isIntersecting && e.boundingClientRect.top < 0; paint(); }); }, { threshold: 0.12 }).observe(hero);
+    var builder = $('[data-funnel]');   // the order builder is itself the call to action: the bar steps aside while it is on screen
+    if (builder) new IntersectionObserver(function (en) { en.forEach(function (e) { builderOn = e.isIntersecting; paint(); }); }, { threshold: 0.02 }).observe(builder);
   }
   function initOnbBanner() { $$('[data-onb-banner]').forEach(function (b) { b.hidden = isOnboarded(); }); }
   function initProfileForm() { $$('[data-profile-form]').forEach(initOneProfileForm); }
@@ -24767,8 +24792,9 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       if (st.cat && st.cat !== 'all' && st.cat !== 'seasonal' && !GROUPS[st.cat]) st.cat = 'all';
       var RULES_KEY = 'kx-rules-ok';
       try { if (localStorage.getItem(RULES_KEY)) st.rulesOk = true; } catch (e) {}
-      if (st.sv !== 4) { st.sv = 4; st.step = 0; }
-      if (!st.rulesOk) st.step = 0; else if (st.step === 0) st.step = 1;
+      st.sv = 4;
+      var startAtPlan = false; try { startAtPlan = location.protocol === 'file:' && !!sessionStorage.getItem('kx-test-start') && !!st.rulesOk; } catch (e) {}   // local preview only (test hook)
+      st.step = startAtPlan ? 1 : 0;
       var T_ = function (k) { return holder.getAttribute('data-t-' + k) || ''; };
       var steps = $$('[data-fn-step]', holder), dots = $$('[data-fn-dot]', holder), bar = $('[data-fn-bar]', holder);
       var next = $('[data-fn-next]', holder), prev = $('[data-fn-prev]', holder), finish = $('[data-fn-finish]', holder), err = $('[data-fn-error]', holder);
@@ -25127,7 +25153,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         go(st.step + 1);
       });
       if (prev) prev.addEventListener('click', function () { go(st.step - 1); });
-      dots.forEach(function (d, k) { d.addEventListener('click', function () { go(k); }); });
+      dots.forEach(function (d, k) { d.setAttribute('role', 'button'); d.tabIndex = 0; d.addEventListener('click', function () { go(k); }); d.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(k); } }); });
 
       // arriving from a dish page (…/pedido?dish=handle): that dish is already in the plan, at its tier
       try {
