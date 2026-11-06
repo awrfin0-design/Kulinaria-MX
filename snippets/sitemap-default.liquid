@@ -17,10 +17,10 @@
   </ul>
 </div>
 <div class="sitemap__group" style="--i:2">
-  <a class="sitemap__top" href="/account/register"><span>03</span>{{ 'sitemap.registro_group' | t }}</a>
+  <a class="sitemap__top" href="{% render 'menu-url', u: '/account/register' %}"><span>03</span>{{ 'sitemap.registro_group' | t }}</a>
   <ul class="sitemap__sub">
-    <li><a href="/account/register">{{ 'sitemap.register' | t }}</a></li>
-    <li><a href="/account/login">{{ 'sitemap.login' | t }}</a></li>
+    <li><a href="{% render 'menu-url', u: '/account/register' %}">{{ 'sitemap.register' | t }}</a></li>
+    <li><a href="{% render 'menu-url', u: '/account/login' %}">{{ 'sitemap.login' | t }}</a></li>
     <li><a href="/pages/checkout">{{ 'sitemap.checkout' | t }}</a></li>
     <li><a href="/pages/confirmacion">{{ 'sitemap.confirmation' | t }}</a></li>
     <li><a href="/cart">{{ 'sitemap.cart' | t }}</a></li>

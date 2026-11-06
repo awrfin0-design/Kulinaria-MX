@@ -23,10 +23,10 @@
         {%- if nested -%}
           {%- for link in menu.links -%}{%- capture tx_ltitle -%}{% render 'tx', s: link.title %}{%- endcapture -%}
             <div class="sitemap__group" style="--i:{{ forloop.index0 }}">
-              <a class="sitemap__top" href="{{ link.url }}"><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{{ tx_ltitle }}</a>
+              <a class="sitemap__top" href="{% render 'menu-url', u: link.url %}"><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{{ tx_ltitle }}</a>
               {%- if link.links.size > 0 -%}
                 <ul class="sitemap__sub">
-                  {%- for child in link.links -%}{%- capture tx_ctitle -%}{% render 'tx', s: child.title %}{%- endcapture -%}<li><a href="{{ child.url }}">{{ tx_ctitle }}</a></li>{%- endfor -%}
+                  {%- for child in link.links -%}{%- capture tx_ctitle -%}{% render 'tx', s: child.title %}{%- endcapture -%}<li><a href="{% render 'menu-url', u: child.url %}">{{ tx_ctitle }}</a></li>{%- endfor -%}
                 </ul>
               {%- endif -%}
             </div>
