@@ -1160,8 +1160,7 @@
         var phone = window.matchMedia && window.matchMedia('(max-width:760px)').matches;
         return [
           { sel: '.step[data-fn-step="3"] [data-fn-week]', t: 'tour-1' },
-          { sel: '.step[data-fn-step="3"] [data-fn-grid] [data-fn-dish]:not(.is-hidden)', t: phone ? 'tour-2m' : 'tour-2' },
-          { sel: '.step[data-fn-step="3"] [data-fn-grid] [data-fn-note-t]', t: 'tour-3' },
+          phone ? { sel: '.funnel__aside [data-fn-barpick]', t: 'tour-2m' } : { sel: '.step[data-fn-step="3"] [data-fn-grid] [data-fn-dish]:not(.is-hidden)', t: 'tour-2' },
           { sel: phone ? '.funnel__aside' : '.funnel__aside .funnel__total', t: 'tour-4' }
         ];
       };
@@ -1171,12 +1170,13 @@
         var r = tg.getBoundingClientRect(), pad = 6, sp = $('.fn-tour__spot', tourEl), bb = $('.fn-tour__bubble', tourEl);
         sp.style.cssText = 'left:' + (r.left - pad) + 'px;top:' + (r.top - pad) + 'px;width:' + (r.width + pad * 2) + 'px;height:' + (r.height + pad * 2) + 'px';
         bb.style.maxWidth = Math.min(340, window.innerWidth - 24) + 'px';
-        var bh = bb.offsetHeight, bw = bb.offsetWidth, below = window.innerHeight - r.bottom, top, left;
+        var bh = bb.offsetHeight, bw = bb.offsetWidth, below = window.innerHeight - r.bottom, above = r.top, top, left;
         if (r.right + bw + 28 <= window.innerWidth && r.height > 100) {           // room beside a tall target (a card): put the note next to it
           left = r.right + 18; top = Math.min(Math.max(10, r.top + 10), window.innerHeight - bh - 10);
         } else {
-          top = below > bh + 24 ? r.bottom + 14 : Math.max(10, r.top - bh - 14);
-          if (below <= bh + 24 && r.top < bh + 24) top = Math.max(10, window.innerHeight - bh - 16);
+          if (below >= bh + 20) top = r.bottom + 12;
+          else if (above >= bh + 20) top = r.top - bh - 12;
+          else top = (r.top + r.height / 2 > window.innerHeight / 2) ? 12 : window.innerHeight - bh - 12;
           left = Math.min(Math.max(12, r.left + r.width / 2 - bw / 2), window.innerWidth - bw - 12);
         }
         bb.style.top = top + 'px'; bb.style.left = left + 'px';
@@ -1193,7 +1193,7 @@
       var startTour = function (force) {
         if (tourEl) return;
         if (!force) { try { if (localStorage.getItem(TOUR_KEY)) return; } catch (x) {} if (navigator.webdriver) return; }
-        st.step = 2; persist(); render();
+        st.step = 3; persist(); render();
         tourI = 0; tourEl = document.createElement('div'); tourEl.className = 'fn-tour';
         tourEl.innerHTML = '<div class="fn-tour__spot"></div><div class="fn-tour__bubble" role="dialog" aria-live="polite"><p class="fn-tour__text"></p><div class="fn-tour__row"><span class="fn-tour__count"></span><button type="button" class="fn-tour__skip"></button><button type="button" class="btn btn--gold btn--sm fn-tour__next"></button></div></div>';
         $('.fn-tour__skip', tourEl).textContent = T_('tour-skip');
@@ -1282,7 +1282,8 @@
         $$('[data-fn-budget]', holder).forEach(function (bud) {
           var wk = st.plan === 'block' ? Math.round(priceOf(tierEl(), 'block') / 4) : priceOf(tierEl(), 'week'), exb = upgradeExtra();
           bud.innerHTML = '';
-          var bt = document.createElement('span'); bt.textContent = fill(T_('budget'), { w: money(wk), t: money(planTotal() - exb) }) + ' ' + (exb ? fill(T_('budget-x'), { x: money(exb) }) : T_('budget-ok')) + ' ';
+          var smallUi = window.matchMedia && window.matchMedia('(max-width:760px)').matches && !bud.classList.contains('fn-budget--aside');
+          var bt = document.createElement('span'); bt.textContent = (smallUi ? fill(T_('budget-short'), { w: money(wk) }) : fill(T_('budget'), { w: money(wk), t: money(planTotal() - exb) })) + ' ' + (exb ? fill(T_('budget-x'), { x: money(exb) }) : T_('budget-ok')) + ' ';
           var bl = document.createElement('button'); bl.type = 'button'; bl.className = 'text-link'; bl.textContent = T_('how-open'); bl.setAttribute('data-fn-how-open', '');
           var tg2 = document.createElement('button'); tg2.type = 'button'; tg2.className = 'text-link'; tg2.textContent = T_('tour-guide'); tg2.setAttribute('data-fn-tour-open', '');
           bud.appendChild(bt); bud.appendChild(bl); bud.appendChild(tg2);

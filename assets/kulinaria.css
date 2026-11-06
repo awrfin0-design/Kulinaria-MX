@@ -2864,3 +2864,37 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
   .fn-rules__list{grid-template-columns:1fr}
   .fn-rules__list li{padding:12px 14px}
 }
+
+/* =====================================================================
+   v60 — phone: the plan step scrolls with the page (bar sticks to the bottom), the menu pill no longer covers the cards, the planner can scroll
+   ===================================================================== */
+@media (max-width:760px){
+  /* step 1 (plan): ordinary page scrolling, nothing nested, so the last plan card can always be reached */
+  body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__stage{height:auto !important;min-height:calc(100svh - var(--app-top,56px));overflow:visible}
+  body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__panel{flex:none}
+  body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__main{overflow:visible;flex:none}
+  body .funnel[data-step="1"] .step[data-fn-step="1"].is-on{overflow:visible;height:auto}
+  body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__aside{position:sticky;bottom:calc(8px + var(--safe-b,0px));z-index:30;margin-top:12px}
+  /* step 2 (menu): the cards stop above the orange pill */
+  .fn-carousel--show{padding-bottom:78px}
+  .fn-gonext{bottom:10px}
+  .fn-sc{max-height:none}
+  /* step 3 (planner): the whole step scrolls (no visible bar) when the screen is short, the deck keeps a usable height */
+  .funnel .step[data-fn-step="3"].is-on{overflow-y:auto !important;overflow-x:hidden;display:flex;flex-direction:column;height:100%;min-height:0}
+  .funnel .step[data-fn-step="3"] .fn-carousel{flex:none !important;height:min(440px,64svh);min-height:340px}
+  .funnel .step[data-fn-step="3"] .fn-budget{font-size:.64rem}
+}
+.fn-tour__bubble{font-size:.84rem}
+@media (max-width:760px){.fn-tour__bubble{padding:11px 13px}.fn-tour__text{font-size:.82rem}.fn-tour__next{min-height:36px;padding:0 14px}}
+
+@media (max-width:760px){
+  .funnel .step[data-fn-step="3"] .fn-budget [data-fn-how-open]{display:none}
+  .funnel .step[data-fn-step="3"] .fn-budget{padding:5px 10px}
+}
+/* v60b — phone planner: the photo has a fixed, modest height so the dish name, note line and price are in the first view */
+@media (max-width:760px){
+  .funnel .step[data-fn-step="3"] .fn-carousel{height:auto !important;min-height:0 !important;flex:none !important}
+  .funnel .step[data-fn-step="3"] .fn-dishes{height:auto !important;align-items:flex-start}
+  .funnel .step[data-fn-step="3"] .fn-dish{height:auto !important;min-height:0 !important}
+  .funnel .step[data-fn-step="3"] .fn-dish__media{flex:none !important;height:clamp(120px,24svh,190px) !important;min-height:0 !important}
+}
