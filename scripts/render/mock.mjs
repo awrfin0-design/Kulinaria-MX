@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const TIER_PRICE = { selecto: 18000, exclusivo: 25000, signature: 32000, reserve: 39000 };   // per meal (cents)
-const WEEK_PRICE = { selecto: 100000, exclusivo: 139000, signature: 178000, reserve: 217000 };   // 1-week plan (5 meals)
+const WEEK_PRICE = { selecto: 100000, exclusivo: 135000, signature: 170000, reserve: 205000 };   // 1-week plan (5 meals)
 const mf = (o) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, { value: v }]));
 
 const DISHES = [

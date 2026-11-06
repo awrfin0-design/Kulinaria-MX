@@ -201,6 +201,12 @@
     "name": "Firma del sitio",
     "settings": [
       {
+        "type": "checkbox",
+        "id": "show_author_credit",
+        "label": "Mostrar la firma del sitio en el pie de página",
+        "default": false
+      },
+      {
         "type": "text",
         "id": "author_name",
         "label": "Autor",

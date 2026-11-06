@@ -1095,6 +1095,9 @@
       if (!st.cardNotes || typeof st.cardNotes !== 'object') st.cardNotes = {};
       var cardNote = function (pid) { return st.cardNotes[pid] || (st.cardNotes[pid] = { off: [], note: '' }); };
       var syncCardToDay = function (pid, day) { var c = st.cardNotes[pid]; if (c && (c.off.length || c.note)) st.mods[day] = { off: c.off.slice(), note: c.note }; };
+      var closeNotes = function (except) { $$('[data-fn-note].is-open', holder).forEach(function (b) { if (b === except) return; var p = $('[data-fn-note-box]', b); if (p) p.hidden = true; b.classList.remove('is-open'); }); };
+      document.addEventListener('click', function (e) { closeNotes(e.target.closest ? e.target.closest('[data-fn-note]') : null); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeNotes(null); });
       var buildNotes = function () {
         $$('[data-fn-note]', holder).forEach(function (box) {
           if (box.getAttribute('data-built')) return; box.setAttribute('data-built', '1');
@@ -1107,6 +1110,8 @@
           });
           inp.value = c0.note || '';
           inp.addEventListener('input', function () { cardNote(pid).note = inp.value; if (st.days[st.active] === pid) syncCardToDay(pid, st.active); persist(); render(); });
+          var dn = document.createElement('button'); dn.type = 'button'; dn.className = 'fn-note__done'; dn.textContent = T_('mods-done');
+          dn.addEventListener('click', function (e) { e.stopPropagation(); pane.hidden = true; box.classList.remove('is-open'); }); pane.appendChild(dn);
           t.addEventListener('click', function (e) { e.stopPropagation(); pane.hidden = !pane.hidden; box.classList.toggle('is-open', !pane.hidden); });
           box.addEventListener('click', function (e) { e.stopPropagation(); });
         });

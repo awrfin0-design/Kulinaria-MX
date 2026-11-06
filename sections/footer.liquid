@@ -51,7 +51,7 @@
 
     <div class="footer-bottom">
       <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}{{ 'footer.rights' | t }}</span>
-      <span class="footer-credit">{{ 'footer.made_by' | t }} {%- if settings.author_url != blank %} <a href="{{ settings.author_url }}" target="_blank" rel="noopener">{{ settings.author_name | default: 'Alan Waizel' }}</a>{%- else %} {{ settings.author_name | default: 'Alan Waizel' }}{%- endif %} · <a href="{{ settings.agency_url | default: 'https://vellumandquill.com' }}" target="_blank" rel="noopener">{{ settings.agency_name | default: 'Vellum &amp; Quill' }}</a></span>
+      {%- if settings.show_author_credit -%}      <span class="footer-credit">{{ 'footer.made_by' | t }} {%- if settings.author_url != blank %} <a href="{{ settings.author_url }}" target="_blank" rel="noopener">{{ settings.author_name | default: 'Alan Waizel' }}</a>{%- else %} {{ settings.author_name | default: 'Alan Waizel' }}{%- endif %} · <a href="{{ settings.agency_url | default: 'https://vellumandquill.com' }}" target="_blank" rel="noopener">{{ settings.agency_name | default: 'Vellum &amp; Quill' }}</a></span>{%- endif -%}
       <span class="footer-legal"><a href="/pages/terminos">{{ 'footer.terms' | t }}</a> · <a href="/pages/privacidad">{{ 'footer.privacy' | t }}</a></span>
       <span>{{ 'footer.digital_only' | t }}</span>
     </div>

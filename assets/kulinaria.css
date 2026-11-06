@@ -3038,3 +3038,34 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
   body .funnel:not(.funnel--teaser){padding-bottom:34px}
   .fn-rules__dots{padding-bottom:10px}
 }
+
+/* =====================================================================
+   v67 — phone: the whole builder scrolls with the page (no frame with scroll areas inside it, so a finger can always carry on to the next section);
+   only the card rows move sideways
+   ===================================================================== */
+@media (max-width:760px){
+  body .funnel:not(.funnel--teaser) .funnel__stage{height:auto !important;min-height:0 !important;max-height:none !important;overflow:visible !important}
+  body .funnel:not(.funnel--teaser) .funnel__panel{flex:none !important;display:flex;flex-direction:column;overflow:visible !important}
+  body .funnel:not(.funnel--teaser) .funnel__main{flex:none !important;height:auto !important;overflow:visible !important;overscroll-behavior:auto !important;display:block}
+  body .funnel .step.is-on{height:auto !important;min-height:0 !important;overflow:visible !important;flex:none !important}
+  .funnel .step[data-fn-step="2"].is-on{display:block}
+  .funnel .step[data-fn-step="3"].is-on{display:flex;flex-direction:column;gap:8px}
+  /* menu step */
+  .fn-carousel--show{display:block !important;height:auto !important;min-height:0 !important;padding-bottom:0 !important;overflow:visible !important;-webkit-mask-image:none !important;mask-image:none !important}
+  .fn-showcase{height:auto !important;overflow-x:auto !important;overflow-y:hidden !important;overscroll-behavior-x:contain;padding:2px 0 8px !important}
+  .fn-sc{flex:0 0 78vw !important;height:auto !important;max-height:none !important}
+  .fn-sc__img{flex:none !important;height:min(50svh,340px) !important;min-height:0 !important}
+  .fn-gonext{position:sticky !important;left:auto !important;right:auto !important;top:auto !important;bottom:calc(10px + env(safe-area-inset-bottom,0px)) !important;margin:12px 0 0 !important;width:100% !important;z-index:30}
+  /* planner */
+  .funnel .step[data-fn-step="3"] .fn-carousel{height:auto !important;min-height:0 !important;overflow:visible !important}
+  .funnel .step[data-fn-step="3"] .fn-dishes{height:auto !important;overflow-x:auto !important;overflow-y:hidden !important;overscroll-behavior-x:contain}
+  body .funnel[data-step="3"]:not(.funnel--teaser) .funnel__aside{position:sticky;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:30;margin-top:12px}
+  /* rules */
+  .fn-rules__rail{overscroll-behavior-x:contain}
+}
+
+/* v68 — the mouse wheel / a finger over the middle of the builder still scrolls the page (nothing in it keeps the scroll to itself) */
+.funnel__main,.funnel .step,.funnel .fn-carousel,.funnel .fn-rules{overscroll-behavior:auto !important}
+.funnel .fn-dishes,.funnel .fn-showcase,.funnel .fn-rules__rail,.funnel .fn-week{overscroll-behavior:contain auto !important}
+.fn-note__done{justify-self:end;border:0;border-radius:999px;background:var(--accent);color:#fff;font:700 .66rem var(--font-label);letter-spacing:.1em;text-transform:uppercase;padding:7px 16px;cursor:pointer}
+@media (max-width:760px){.fn-note__done{padding:11px 20px;font-size:.74rem}}

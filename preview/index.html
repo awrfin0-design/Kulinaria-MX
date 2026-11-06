@@ -3069,6 +3069,37 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
   .fn-rules__dots{padding-bottom:10px}
 }
 
+/* =====================================================================
+   v67 — phone: the whole builder scrolls with the page (no frame with scroll areas inside it, so a finger can always carry on to the next section);
+   only the card rows move sideways
+   ===================================================================== */
+@media (max-width:760px){
+  body .funnel:not(.funnel--teaser) .funnel__stage{height:auto !important;min-height:0 !important;max-height:none !important;overflow:visible !important}
+  body .funnel:not(.funnel--teaser) .funnel__panel{flex:none !important;display:flex;flex-direction:column;overflow:visible !important}
+  body .funnel:not(.funnel--teaser) .funnel__main{flex:none !important;height:auto !important;overflow:visible !important;overscroll-behavior:auto !important;display:block}
+  body .funnel .step.is-on{height:auto !important;min-height:0 !important;overflow:visible !important;flex:none !important}
+  .funnel .step[data-fn-step="2"].is-on{display:block}
+  .funnel .step[data-fn-step="3"].is-on{display:flex;flex-direction:column;gap:8px}
+  /* menu step */
+  .fn-carousel--show{display:block !important;height:auto !important;min-height:0 !important;padding-bottom:0 !important;overflow:visible !important;-webkit-mask-image:none !important;mask-image:none !important}
+  .fn-showcase{height:auto !important;overflow-x:auto !important;overflow-y:hidden !important;overscroll-behavior-x:contain;padding:2px 0 8px !important}
+  .fn-sc{flex:0 0 78vw !important;height:auto !important;max-height:none !important}
+  .fn-sc__img{flex:none !important;height:min(50svh,340px) !important;min-height:0 !important}
+  .fn-gonext{position:sticky !important;left:auto !important;right:auto !important;top:auto !important;bottom:calc(10px + env(safe-area-inset-bottom,0px)) !important;margin:12px 0 0 !important;width:100% !important;z-index:30}
+  /* planner */
+  .funnel .step[data-fn-step="3"] .fn-carousel{height:auto !important;min-height:0 !important;overflow:visible !important}
+  .funnel .step[data-fn-step="3"] .fn-dishes{height:auto !important;overflow-x:auto !important;overflow-y:hidden !important;overscroll-behavior-x:contain}
+  body .funnel[data-step="3"]:not(.funnel--teaser) .funnel__aside{position:sticky;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:30;margin-top:12px}
+  /* rules */
+  .fn-rules__rail{overscroll-behavior-x:contain}
+}
+
+/* v68 — the mouse wheel / a finger over the middle of the builder still scrolls the page (nothing in it keeps the scroll to itself) */
+.funnel__main,.funnel .step,.funnel .fn-carousel,.funnel .fn-rules{overscroll-behavior:auto !important}
+.funnel .fn-dishes,.funnel .fn-showcase,.funnel .fn-rules__rail,.funnel .fn-week{overscroll-behavior:contain auto !important}
+.fn-note__done{justify-self:end;border:0;border-radius:999px;background:var(--accent);color:#fff;font:700 .66rem var(--font-label);letter-spacing:.1em;text-transform:uppercase;padding:7px 16px;cursor:pointer}
+@media (max-width:760px){.fn-note__done{padding:11px 20px;font-size:.74rem}}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -3576,19 +3607,19 @@ Fuego</span>
               <span class="fn-tier__price" data-fn-tier-price>$3,600<small data-fn-tier-sub></small></span>
               <strong>Selecto</strong><small>Cocina diaria saludable al mejor precio.</small>
             </button><button class="fn-tier fn-tier--exclusivo" type="button" role="radio" data-tier-choice="exclusivo" aria-checked="false"
-              data-week="1390" data-block="5000" data-meal="250"
+              data-week="1350" data-block="5000" data-meal="250"
               data-variant-week="72010" data-variant-block="72011"
               data-selling-plan="810001" data-name="Exclusivo $">
               <span class="fn-tier__price" data-fn-tier-price>$5,000<small data-fn-tier-sub></small></span>
               <strong>Exclusivo $</strong><small>Ingredientes y cortes de mayor calidad.</small>
             </button><button class="fn-tier fn-tier--signature" type="button" role="radio" data-tier-choice="signature" aria-checked="false"
-              data-week="1780" data-block="6400" data-meal="320"
+              data-week="1700" data-block="6400" data-meal="320"
               data-variant-week="72020" data-variant-block="72021"
               data-selling-plan="810001" data-name="Signature $$">
               <span class="fn-tier__price" data-fn-tier-price>$6,400<small data-fn-tier-sub></small></span>
               <strong>Signature $$</strong><small>Platillos de autor del chef.</small>
             </button><button class="fn-tier fn-tier--reserve" type="button" role="radio" data-tier-choice="reserve" aria-checked="false"
-              data-week="2170" data-block="7800" data-meal="390"
+              data-week="2050" data-block="7800" data-meal="390"
               data-variant-week="72030" data-variant-block="72031"
               data-selling-plan="810001" data-name="Reserve $$$">
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
@@ -3761,7 +3792,7 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7102" data-handle="salmon-costra-almendras"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7102" data-handle="salmon-costra-almendras"
   data-title="Salmón gourmet en costra de almendras" data-label="Salmón gourmet en costra de almendras" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -3819,7 +3850,7 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7104" data-handle="arrachera-carbon"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7104" data-handle="arrachera-carbon"
   data-title="Arrachera al carbón con maíz y espárragos" data-label="Arrachera al carbón con maíz y espárragos" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -3848,7 +3879,7 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="434" data-pid="7105" data-handle="filete-prime"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="410" data-pid="7105" data-handle="filete-prime"
   data-title="Filete Prime con verduras asadas" data-label="Filete Prime con verduras asadas" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -3877,7 +3908,7 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7106" data-handle="bowl-vegano-garbanzo"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7106" data-handle="bowl-vegano-garbanzo"
   data-title="Bowl vegano de garbanzo y tahini" data-label="Bowl vegano de garbanzo y tahini" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -3964,7 +3995,7 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7600" data-handle="chiles-en-nogada"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7600" data-handle="chiles-en-nogada"
   data-seasonal="true" data-title="Chiles en nogada de temporada" data-label="Chiles en nogada de temporada" data-category="temporada" data-tier="signature" data-diets="" data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Chiles en nogada de temporada" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Edición limitada</span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -3993,7 +4024,7 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7601" data-handle="pan-calabaza-especias"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7601" data-handle="pan-calabaza-especias"
   data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Pan de calabaza con especias" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Edición limitada</span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -8356,7 +8387,7 @@ Pago digital, sin efectivo</li></ul>
           <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Plan semanal Exclusivo</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,390</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,350</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 comidas por semana, de lunes a viernes. Disponible por 1 semana o por 4 semanas.</p></div><div class="meal-card">
@@ -8378,7 +8409,7 @@ Pago digital, sin efectivo</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 1390,
+    "price": 1350,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-exclusivo"
   }
@@ -8581,7 +8612,7 @@ Pago digital, sin efectivo</li></ul>
           <span class="tier-badge tier-badge--signature">Signature $$</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Plan semanal Signature</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,780</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,700</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 comidas por semana, de lunes a viernes. Disponible por 1 semana o por 4 semanas.</p></div><div class="meal-card">
@@ -8603,7 +8634,7 @@ Pago digital, sin efectivo</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 1780,
+    "price": 1700,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-signature"
   }
@@ -8806,7 +8837,7 @@ Pago digital, sin efectivo</li></ul>
           <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Plan semanal Reserve</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$2,170</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$2,050</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 comidas por semana, de lunes a viernes. Disponible por 1 semana o por 4 semanas.</p></div><div class="meal-card">
@@ -8828,7 +8859,7 @@ Pago digital, sin efectivo</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 2170,
+    "price": 2050,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-reserve"
   }
@@ -12442,19 +12473,19 @@ Pago digital, sin efectivo</li></ul>
               <span class="fn-tier__price" data-fn-tier-price>$3,600<small data-fn-tier-sub></small></span>
               <strong>Selecto</strong><small>Cocina diaria saludable al mejor precio.</small>
             </button><button class="fn-tier fn-tier--exclusivo" type="button" role="radio" data-tier-choice="exclusivo" aria-checked="false"
-              data-week="1390" data-block="5000" data-meal="250"
+              data-week="1350" data-block="5000" data-meal="250"
               data-variant-week="72010" data-variant-block="72011"
               data-selling-plan="810001" data-name="Exclusivo $">
               <span class="fn-tier__price" data-fn-tier-price>$5,000<small data-fn-tier-sub></small></span>
               <strong>Exclusivo $</strong><small>Ingredientes y cortes de mayor calidad.</small>
             </button><button class="fn-tier fn-tier--signature" type="button" role="radio" data-tier-choice="signature" aria-checked="false"
-              data-week="1780" data-block="6400" data-meal="320"
+              data-week="1700" data-block="6400" data-meal="320"
               data-variant-week="72020" data-variant-block="72021"
               data-selling-plan="810001" data-name="Signature $$">
               <span class="fn-tier__price" data-fn-tier-price>$6,400<small data-fn-tier-sub></small></span>
               <strong>Signature $$</strong><small>Platillos de autor del chef.</small>
             </button><button class="fn-tier fn-tier--reserve" type="button" role="radio" data-tier-choice="reserve" aria-checked="false"
-              data-week="2170" data-block="7800" data-meal="390"
+              data-week="2050" data-block="7800" data-meal="390"
               data-variant-week="72030" data-variant-block="72031"
               data-selling-plan="810001" data-name="Reserve $$$">
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
@@ -12627,7 +12658,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7102" data-handle="salmon-costra-almendras"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7102" data-handle="salmon-costra-almendras"
   data-title="Salmón gourmet en costra de almendras" data-label="Salmón gourmet en costra de almendras" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -12685,7 +12716,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7104" data-handle="arrachera-carbon"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7104" data-handle="arrachera-carbon"
   data-title="Arrachera al carbón con maíz y espárragos" data-label="Arrachera al carbón con maíz y espárragos" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -12714,7 +12745,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="434" data-pid="7105" data-handle="filete-prime"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="410" data-pid="7105" data-handle="filete-prime"
   data-title="Filete Prime con verduras asadas" data-label="Filete Prime con verduras asadas" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -12743,7 +12774,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7106" data-handle="bowl-vegano-garbanzo"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7106" data-handle="bowl-vegano-garbanzo"
   data-title="Bowl vegano de garbanzo y tahini" data-label="Bowl vegano de garbanzo y tahini" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -12830,7 +12861,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7600" data-handle="chiles-en-nogada"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7600" data-handle="chiles-en-nogada"
   data-seasonal="true" data-title="Chiles en nogada de temporada" data-label="Chiles en nogada de temporada" data-category="temporada" data-tier="signature" data-diets="" data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Chiles en nogada de temporada" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Edición limitada</span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -12859,7 +12890,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7601" data-handle="pan-calabaza-especias"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7601" data-handle="pan-calabaza-especias"
   data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Pan de calabaza con especias" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Edición limitada</span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -13712,19 +13743,19 @@ Pago digital, sin efectivo</li></ul>
               <span class="fn-tier__price" data-fn-tier-price>$3,600<small data-fn-tier-sub></small></span>
               <strong>Selecto</strong><small>Healthy everyday cooking at the best price.</small>
             </button><button class="fn-tier fn-tier--exclusivo" type="button" role="radio" data-tier-choice="exclusivo" aria-checked="false"
-              data-week="1390" data-block="5000" data-meal="250"
+              data-week="1350" data-block="5000" data-meal="250"
               data-variant-week="72010" data-variant-block="72011"
               data-selling-plan="810001" data-name="Exclusivo $">
               <span class="fn-tier__price" data-fn-tier-price>$5,000<small data-fn-tier-sub></small></span>
               <strong>Exclusivo $</strong><small>Higher-quality ingredients and cuts.</small>
             </button><button class="fn-tier fn-tier--signature" type="button" role="radio" data-tier-choice="signature" aria-checked="false"
-              data-week="1780" data-block="6400" data-meal="320"
+              data-week="1700" data-block="6400" data-meal="320"
               data-variant-week="72020" data-variant-block="72021"
               data-selling-plan="810001" data-name="Signature $$">
               <span class="fn-tier__price" data-fn-tier-price>$6,400<small data-fn-tier-sub></small></span>
               <strong>Signature $$</strong><small>The chef's signature dishes.</small>
             </button><button class="fn-tier fn-tier--reserve" type="button" role="radio" data-tier-choice="reserve" aria-checked="false"
-              data-week="2170" data-block="7800" data-meal="390"
+              data-week="2050" data-block="7800" data-meal="390"
               data-variant-week="72030" data-variant-block="72031"
               data-selling-plan="810001" data-name="Reserve $$$">
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
@@ -13897,7 +13928,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7102" data-handle="salmon-costra-almendras"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7102" data-handle="salmon-costra-almendras"
   data-title="Salmón gourmet en costra de almendras" data-label="Gourmet salmon in an almond crust" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -13955,7 +13986,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7104" data-handle="arrachera-carbon"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7104" data-handle="arrachera-carbon"
   data-title="Arrachera al carbón con maíz y espárragos" data-label="Charcoal-grilled skirt steak with corn and asparagus" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -13984,7 +14015,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="434" data-pid="7105" data-handle="filete-prime"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="410" data-pid="7105" data-handle="filete-prime"
   data-title="Filete Prime con verduras asadas" data-label="Prime filet with roasted vegetables" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -14013,7 +14044,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7106" data-handle="bowl-vegano-garbanzo"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7106" data-handle="bowl-vegano-garbanzo"
   data-title="Bowl vegano de garbanzo y tahini" data-label="Vegan chickpea and tahini bowl" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -14100,7 +14131,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7600" data-handle="chiles-en-nogada"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7600" data-handle="chiles-en-nogada"
   data-seasonal="true" data-title="Chiles en nogada de temporada" data-label="Seasonal chiles en nogada" data-category="temporada" data-tier="signature" data-diets="" data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Seasonal chiles en nogada" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Limited edition</span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -14129,7 +14160,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7601" data-handle="pan-calabaza-especias"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7601" data-handle="pan-calabaza-especias"
   data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Spiced pumpkin bread" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Limited edition</span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -18492,7 +18523,7 @@ Digital payment, no cash</li></ul>
           <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Exclusivo weekly plan</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,390</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,350</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 meals a week, Monday to Friday. Available for 1 week or for 4 weeks.</p></div><div class="meal-card">
@@ -18514,7 +18545,7 @@ Digital payment, no cash</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 1390,
+    "price": 1350,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-exclusivo"
   }
@@ -18717,7 +18748,7 @@ Digital payment, no cash</li></ul>
           <span class="tier-badge tier-badge--signature">Signature $$</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Signature weekly plan</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,780</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,700</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 meals a week, Monday to Friday. Available for 1 week or for 4 weeks.</p></div><div class="meal-card">
@@ -18739,7 +18770,7 @@ Digital payment, no cash</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 1780,
+    "price": 1700,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-signature"
   }
@@ -18942,7 +18973,7 @@ Digital payment, no cash</li></ul>
           <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Reserve weekly plan</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$2,170</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$2,050</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 meals a week, Monday to Friday. Available for 1 week or for 4 weeks.</p></div><div class="meal-card">
@@ -18964,7 +18995,7 @@ Digital payment, no cash</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 2170,
+    "price": 2050,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-reserve"
   }
@@ -22578,19 +22609,19 @@ Digital payment, no cash</li></ul>
               <span class="fn-tier__price" data-fn-tier-price>$3,600<small data-fn-tier-sub></small></span>
               <strong>Selecto</strong><small>Healthy everyday cooking at the best price.</small>
             </button><button class="fn-tier fn-tier--exclusivo" type="button" role="radio" data-tier-choice="exclusivo" aria-checked="false"
-              data-week="1390" data-block="5000" data-meal="250"
+              data-week="1350" data-block="5000" data-meal="250"
               data-variant-week="72010" data-variant-block="72011"
               data-selling-plan="810001" data-name="Exclusivo $">
               <span class="fn-tier__price" data-fn-tier-price>$5,000<small data-fn-tier-sub></small></span>
               <strong>Exclusivo $</strong><small>Higher-quality ingredients and cuts.</small>
             </button><button class="fn-tier fn-tier--signature" type="button" role="radio" data-tier-choice="signature" aria-checked="false"
-              data-week="1780" data-block="6400" data-meal="320"
+              data-week="1700" data-block="6400" data-meal="320"
               data-variant-week="72020" data-variant-block="72021"
               data-selling-plan="810001" data-name="Signature $$">
               <span class="fn-tier__price" data-fn-tier-price>$6,400<small data-fn-tier-sub></small></span>
               <strong>Signature $$</strong><small>The chef's signature dishes.</small>
             </button><button class="fn-tier fn-tier--reserve" type="button" role="radio" data-tier-choice="reserve" aria-checked="false"
-              data-week="2170" data-block="7800" data-meal="390"
+              data-week="2050" data-block="7800" data-meal="390"
               data-variant-week="72030" data-variant-block="72031"
               data-selling-plan="810001" data-name="Reserve $$$">
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
@@ -22763,7 +22794,7 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7102" data-handle="salmon-costra-almendras"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7102" data-handle="salmon-costra-almendras"
   data-title="Salmón gourmet en costra de almendras" data-label="Gourmet salmon in an almond crust" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -22821,7 +22852,7 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7104" data-handle="arrachera-carbon"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7104" data-handle="arrachera-carbon"
   data-title="Arrachera al carbón con maíz y espárragos" data-label="Charcoal-grilled skirt steak with corn and asparagus" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -22850,7 +22881,7 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="434" data-pid="7105" data-handle="filete-prime"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="410" data-pid="7105" data-handle="filete-prime"
   data-title="Filete Prime con verduras asadas" data-label="Prime filet with roasted vegetables" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -22879,7 +22910,7 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7106" data-handle="bowl-vegano-garbanzo"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7106" data-handle="bowl-vegano-garbanzo"
   data-title="Bowl vegano de garbanzo y tahini" data-label="Vegan chickpea and tahini bowl" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -22966,7 +22997,7 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7600" data-handle="chiles-en-nogada"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7600" data-handle="chiles-en-nogada"
   data-seasonal="true" data-title="Chiles en nogada de temporada" data-label="Seasonal chiles en nogada" data-category="temporada" data-tier="signature" data-diets="" data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Seasonal chiles en nogada" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Limited edition</span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -22995,7 +23026,7 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7601" data-handle="pan-calabaza-especias"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7601" data-handle="pan-calabaza-especias"
   data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Spiced pumpkin bread" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Limited edition</span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -23754,9 +23785,7 @@ Digital payment, no cash</li></ul>
     <p class="footer-mega" data-scroll="in" aria-hidden="true">Arte del fuego</p>
 
     <div class="footer-bottom">
-      <span>© 2026 Kulinaria MX. Todos los derechos reservados.</span>
-      <span class="footer-credit">Hecho por Alan Waizel · <a href="https://vellumandquill.com" target="_blank" rel="noopener">Vellum & Quill</a></span>
-      <span class="footer-legal"><a href="#/pg/terminos">Términos y condiciones</a> · <a href="#/pg/privacidad">Aviso de privacidad</a></span>
+      <span>© 2026 Kulinaria MX. Todos los derechos reservados.</span><span class="footer-legal"><a href="#/pg/terminos">Términos y condiciones</a> · <a href="#/pg/privacidad">Aviso de privacidad</a></span>
       <span>Pago 100% digital · No se acepta efectivo</span>
     </div>
   </div>
@@ -23798,9 +23827,7 @@ Digital payment, no cash</li></ul>
     <p class="footer-mega" data-scroll="in" aria-hidden="true">Arte del fuego</p>
 
     <div class="footer-bottom">
-      <span>© 2026 Kulinaria MX. All rights reserved.</span>
-      <span class="footer-credit">Made by Alan Waizel · <a href="https://vellumandquill.com" target="_blank" rel="noopener">Vellum & Quill</a></span>
-      <span class="footer-legal"><a href="#/pg/terminos">Terms and conditions</a> · <a href="#/pg/privacidad">Privacy notice</a></span>
+      <span>© 2026 Kulinaria MX. All rights reserved.</span><span class="footer-legal"><a href="#/pg/terminos">Terms and conditions</a> · <a href="#/pg/privacidad">Privacy notice</a></span>
       <span>100% digital payment · no cash accepted</span>
     </div>
   </div>
@@ -25578,6 +25605,9 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       if (!st.cardNotes || typeof st.cardNotes !== 'object') st.cardNotes = {};
       var cardNote = function (pid) { return st.cardNotes[pid] || (st.cardNotes[pid] = { off: [], note: '' }); };
       var syncCardToDay = function (pid, day) { var c = st.cardNotes[pid]; if (c && (c.off.length || c.note)) st.mods[day] = { off: c.off.slice(), note: c.note }; };
+      var closeNotes = function (except) { $$('[data-fn-note].is-open', holder).forEach(function (b) { if (b === except) return; var p = $('[data-fn-note-box]', b); if (p) p.hidden = true; b.classList.remove('is-open'); }); };
+      document.addEventListener('click', function (e) { closeNotes(e.target.closest ? e.target.closest('[data-fn-note]') : null); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeNotes(null); });
       var buildNotes = function () {
         $$('[data-fn-note]', holder).forEach(function (box) {
           if (box.getAttribute('data-built')) return; box.setAttribute('data-built', '1');
@@ -25590,6 +25620,8 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           });
           inp.value = c0.note || '';
           inp.addEventListener('input', function () { cardNote(pid).note = inp.value; if (st.days[st.active] === pid) syncCardToDay(pid, st.active); persist(); render(); });
+          var dn = document.createElement('button'); dn.type = 'button'; dn.className = 'fn-note__done'; dn.textContent = T_('mods-done');
+          dn.addEventListener('click', function (e) { e.stopPropagation(); pane.hidden = true; box.classList.remove('is-open'); }); pane.appendChild(dn);
           t.addEventListener('click', function (e) { e.stopPropagation(); pane.hidden = !pane.hidden; box.classList.toggle('is-open', !pane.hidden); });
           box.addEventListener('click', function (e) { e.stopPropagation(); });
         });

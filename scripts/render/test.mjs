@@ -1219,7 +1219,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.unroute('https://script.example/**'); await page.evaluate(() => document.getElementById('adm-lead').remove());
   await page.goto(`${URL0}#/pg/embajadores`); await page.waitForTimeout(400);
   ok('ambassador page: one page with the code/credits card, the rules (FAQ) and the request form (no separate rules / request pages)', await page.evaluate(() => { const p = document.querySelector('[data-page="pg/embajadores"]'); return !!p.querySelector('.hub__card') && !!p.querySelector('.accordion') && !!p.querySelector('form') && p.querySelectorAll('.accordion details').length >= 6; }));
-  ok('every page shows the author signature (Alan Waizel · Vellum & Quill linking to vellumandquill.com)', await page.evaluate(() => { const c = document.querySelector('.footer-credit'); return !!c && /Alan Waizel/.test(c.textContent) && /Vellum/.test(c.textContent) && !!c.querySelector('a[href="https://vellumandquill.com"]'); }));
+  ok('the author signature is switched off for now (it can be turned on in the theme settings)', await page.evaluate(() => !document.querySelector('.footer-credit')));
   ok('contact forms hand a copy to the sheet (lead wrapper with the endpoint)', await page.evaluate(() => { const w = document.querySelector('[data-page="pg/embajadores"] [data-lead-wrap]'); return !!w && w.getAttribute('data-kind') === 'embajador'; }));
 }
 

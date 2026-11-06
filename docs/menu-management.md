@@ -39,9 +39,9 @@ Se venden **planes**, no platillos sueltos. Los precios viven en los 4 productos
 
 | Nivel | Por comida | 1 semana (5 comidas) | 4 semanas (20 comidas) |
 |---|---|---|---|
-| Selecto | $180 | $1,000 | $3,600 |
-| Exclusivo | $250 | $1,390 | $5,000 |
-| Signature | $320 | $1,780 | $6,400 |
-| Reserve | $390 | $2,170 | $7,800 |
+| Selecto | $180 (1 semana: $200) | $1,000 | $3,600 |
+| Exclusivo | $250 (1 semana: $270) | $1,350 | $5,000 |
+| Signature | $320 (1 semana: $340) | $1,700 | $6,400 |
+| Reserve | $390 (1 semana: $410) | $2,050 | $7,800 |
 
 Para cambiar un precio, edita la variante del producto plan; el sitio lo lee solo (snippet `plan-price`). El precio del platillo individual es solo informativo (precio por comida).
