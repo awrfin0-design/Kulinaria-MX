@@ -460,6 +460,11 @@
     "sold_out": "Sold out"
   },
   "profile": {
+    "people_edit": "Edit person",
+    "people_save": "Save person",
+    "people_cancel": "Cancel",
+    "people_edit_btn": "Edit",
+    "people_name_req": "Enter the person's name.",
     "people_t": "My family and other people",
     "people_p": "If you order for your partner, your kids or other people, add them here. Each one has their own allergies and tastes, and in the order you choose who each plan is for. You don't need another account.",
     "people_name": "Name",

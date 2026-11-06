@@ -460,6 +460,11 @@
     "sold_out": "Agotado"
   },
   "profile": {
+    "people_edit": "Editar persona",
+    "people_save": "Guardar persona",
+    "people_cancel": "Cancelar",
+    "people_edit_btn": "Editar",
+    "people_name_req": "Escribe el nombre de la persona.",
     "people_t": "Mi familia y otras personas",
     "people_p": "Si pides para tu pareja, tus hijos u otras personas, agrégalas aquí. Cada una tiene sus propias alergias y gustos, y en el pedido eliges para quién es cada plan. No necesitas otra cuenta.",
     "people_name": "Nombre",

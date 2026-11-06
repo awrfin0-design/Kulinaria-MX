@@ -19,7 +19,7 @@
     {%- if customer -%}<div class="hub__card" data-hub-profile style="margin-bottom:var(--space-lg)" data-t-none="{{ 'acct.hub_profile_none' | t }}" data-t-allergies="{{ 'acct.hub_allergies' | t }}" data-t-dislikes="{{ 'acct.hub_dislikes' | t }}" data-t-diets="{{ 'acct.hub_diets' | t }}" data-t-people="{{ 'acct.hub_people' | t }}"><h3>{{ 'acct.hub_profile_t' | t }}</h3><div class="hub__list" data-hub-profile-body></div></div>{%- endif -%}
 
     {%- if customer -%}
-    <form data-profile-form class="panel panel--gold" novalidate data-t-people-none="{{ 'profile.people_none' | t }}">
+    <form data-profile-form class="panel panel--gold" novalidate data-t-people-none="{{ 'profile.people_none' | t }}" data-t-people-edit="{{ 'profile.people_edit_btn' | t }}">
       <h3>{{ 'profile.block1' | t }} <span class="tier-badge tier-badge--exclusivo" style="vertical-align:middle;margin-left:8px">{{ 'profile.critical' | t }}</span></h3>
       <p class="text-muted">{{ 'profile.block1_text' | t }}</p>
       <div class="check-grid">
@@ -60,11 +60,31 @@
       <h3 id="familia">{{ 'profile.people_t' | t }}</h3>
       <p class="text-muted">{{ 'profile.people_p' | t }}</p>
       <ul class="people" data-people-list></ul>
-      <div class="people__add" data-people-add data-t-remove="{{ 'profile.people_remove' | t }}">
-        <div class="field"><label for="pp-name">{{ 'profile.people_name' | t }}</label><input class="input" id="pp-name" data-pp-name autocomplete="off"></div>
-        <div class="field"><label for="pp-al">{{ 'profile.people_allergies' | t }}</label><input class="input" id="pp-al" data-pp-al list="allergy-list" placeholder="{{ 'profile.people_ph' | t }}"></div>
-        <div class="field"><label for="pp-dl">{{ 'profile.people_dislikes' | t }}</label><input class="input" id="pp-dl" data-pp-dl placeholder="{{ 'profile.people_ph2' | t }}"></div>
-        <button class="btn btn--outline" type="button" data-pp-add>{{ 'profile.people_add' | t }}</button>
+      <button class="btn btn--outline" type="button" data-pe-open>{{ 'profile.people_add' | t }}</button>
+      <div class="pe panel" data-person-editor hidden data-t-new="{{ 'profile.people_add' | t }}" data-t-edit="{{ 'profile.people_edit' | t }}" data-t-remove="{{ 'profile.people_remove' | t }}">
+        <h4 data-pe-title>{{ 'profile.people_add' | t }}</h4>
+        <div class="field"><label for="pe-name">{{ 'profile.people_name' | t }}</label><input class="input" id="pe-name" data-pe-name autocomplete="off"></div>
+        <h5>{{ 'profile.block1' | t }}</h5>
+        <div class="check-grid">
+          {%- for a in allergy_list -%}
+            {%- assign ah = a | handleize -%}{%- assign ak = 'allergen.' | append: ah -%}
+            <label class="check"><input type="checkbox" data-pe-allergy value="{{ a }}"> <span>{{ ak | t }}</span></label>
+          {%- endfor -%}
+        </div>
+        <div class="field"><label for="pe-other">{{ 'profile.other_allergies' | t }}</label><input class="input" id="pe-other" data-pe-other list="allergy-list" placeholder="{{ 'profile.other_placeholder' | t }}"></div>
+        <h5>{{ 'profile.block2' | t }}</h5>
+        <div class="tag-input" data-pe-tags><input type="text" data-pe-tag-input placeholder="{{ 'profile.tag_placeholder' | t }}" aria-label="{{ 'profile.add_ingredient' | t }}"></div>
+        <div class="chips" style="margin-top:8px">
+          {%- for s in suggest_list -%}{%- assign sh = s | handleize -%}{%- assign sk = 'allergen.' | append: sh -%}<button class="chip" type="button" data-pe-suggest="{{ s }}">+ {{ sk | t }}</button>{%- endfor -%}
+        </div>
+        <h5>{{ 'profile.diets' | t }}</h5>
+        <div class="check-grid">
+          {%- for d in diet_list -%}
+            {%- assign dh = d | handleize -%}{%- assign dk = 'diet.' | append: dh -%}
+            <label class="check"><input type="checkbox" data-pe-diet value="{{ d }}"> <span>{{ dk | t }}</span></label>
+          {%- endfor -%}
+        </div>
+        <div class="btn-row" style="margin-top:var(--space-md)"><button class="btn btn--gold" type="button" data-pe-save>{{ 'profile.people_save' | t }}</button><button class="btn btn--ghost" type="button" data-pe-cancel>{{ 'profile.people_cancel' | t }}</button></div>
       </div>
 
       <p class="legal-note">{{ tx_disclaimer }}</p>

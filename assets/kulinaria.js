@@ -214,28 +214,63 @@
     };
     tagInput.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addTag(tagInput.value); } });
     $$('[data-suggest]', form).forEach(function (b) { b.addEventListener('click', function () { addTag(b.getAttribute('data-suggest')); }); });
-    // family members / other people the account orders for: each has their own allergies and dislikes
-    var plist = $('[data-people-list]', form), padd = $('[data-people-add]', form);
-    if (plist && padd) {
+    // family members / other people the account orders for: each has their own allergies, dislikes and diets (same questions as for the account holder)
+    var plist = $('[data-people-list]', form), editor = $('[data-person-editor]', form), openBtn = $('[data-pe-open]', form);
+    if (plist && editor && openBtn) {
       if (!Array.isArray(p.people)) p.people = [];
-      var split = function (v) { return String(v || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean); };
-      var persist2 = function () { saveProfile(p); pushProfile(); applyProfile(); };
       var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+      var persist2 = function () { saveProfile(p); pushProfile(); applyProfile(); };
+      var eName = $('[data-pe-name]', editor), eOther = $('[data-pe-other]', editor), eTags = $('[data-pe-tags]', editor), eTagIn = $('[data-pe-tag-input]', editor), eTitle = $('[data-pe-title]', editor);
+      var editing = '', dis = [];
+      var allergyBoxes = function () { return $$('[data-pe-allergy]', editor); }, dietBoxes = function () { return $$('[data-pe-diet]', editor); };
+      var paintTags = function () {
+        $$('.tag', eTags).forEach(function (t) { t.remove(); });
+        dis.forEach(function (d, i) {
+          var t = document.createElement('span'); t.className = 'tag'; t.textContent = d + ' ';
+          var x = document.createElement('button'); x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label', T('remove', { name: d }));
+          x.addEventListener('click', function () { dis.splice(i, 1); paintTags(); });
+          t.appendChild(x); eTags.insertBefore(t, eTagIn);
+        });
+      };
+      var addDis = function (v) { v = String(v || '').trim(); if (!v) return; if (dis.map(norm).indexOf(norm(v)) < 0) dis.push(v); eTagIn.value = ''; paintTags(); };
+      eTagIn.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addDis(eTagIn.value); } });
+      $$('[data-pe-suggest]', editor).forEach(function (b) { b.addEventListener('click', function () { addDis(b.getAttribute('data-pe-suggest')); }); });
+      var openEditor = function (id) {
+        editing = id || '';
+        var who = (p.people || []).filter(function (x) { return x.id === id; })[0] || { name: '', allergies: [], dislikes: [], diets: [] };
+        eName.value = who.name || ''; dis = (who.dislikes || []).slice();
+        allergyBoxes().forEach(function (c) { c.checked = (who.allergies || []).map(norm).indexOf(norm(c.value)) > -1; });
+        dietBoxes().forEach(function (c) { c.checked = (who.diets || []).map(norm).indexOf(norm(c.value)) > -1; });
+        eOther.value = (who.allergies || []).filter(function (a) { return !allergyBoxes().some(function (c) { return norm(c.value) === norm(a); }); }).join(', ');
+        eTitle.textContent = editing ? editor.getAttribute('data-t-edit') : editor.getAttribute('data-t-new');
+        paintTags(); editor.hidden = false; openBtn.hidden = true; eName.focus();
+      };
+      var closeEditor = function () { editor.hidden = true; openBtn.hidden = false; editing = ''; };
       var paintPeople = function () {
         plist.innerHTML = '';
         if (!p.people.length) { var li0 = document.createElement('li'); li0.className = 'text-muted'; li0.textContent = form.getAttribute('data-t-people-none') || ''; plist.appendChild(li0); return; }
         p.people.forEach(function (x, i) {
           var li = document.createElement('li');
-          li.innerHTML = '<div><strong>' + esc(x.name) + '</strong><span>' + esc((x.allergies || []).join(', ') || '—') + (x.dislikes && x.dislikes.length ? ' · ' + esc(x.dislikes.join(', ')) : '') + '</span></div>';
-          var b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn--ghost btn--sm'; b.textContent = padd.getAttribute('data-t-remove') || '×';
-          b.addEventListener('click', function () { p.people.splice(i, 1); persist2(); paintPeople(); });
-          li.appendChild(b); plist.appendChild(li);
+          var chips = (x.allergies || []).map(function (a) { return '<span class="pchip pchip--al">' + esc(a) + '</span>'; }).concat((x.dislikes || []).map(function (a) { return '<span class="pchip">' + esc(a) + '</span>'; }), (x.diets || []).map(function (a) { return '<span class="pchip pchip--di">' + esc(a) + '</span>'; })).join('');
+          li.innerHTML = '<div><strong>' + esc(x.name) + '</strong><div class="pchips">' + (chips || '<span class="text-muted">—</span>') + '</div></div>';
+          var box = document.createElement('div'); box.className = 'people__act';
+          var eb = document.createElement('button'); eb.type = 'button'; eb.className = 'btn btn--outline btn--sm'; eb.textContent = form.getAttribute('data-t-people-edit') || 'Edit'; eb.addEventListener('click', function () { openEditor(x.id); });
+          var rb = document.createElement('button'); rb.type = 'button'; rb.className = 'btn btn--ghost btn--sm'; rb.textContent = editor.getAttribute('data-t-remove') || '×'; rb.addEventListener('click', function () { p.people.splice(i, 1); persist2(); paintPeople(); });
+          box.appendChild(eb); box.appendChild(rb); li.appendChild(box); plist.appendChild(li);
         });
       };
-      $('[data-pp-add]', padd).addEventListener('click', function () {
-        var n = $('[data-pp-name]', padd), al = $('[data-pp-al]', padd), dl = $('[data-pp-dl]', padd); var name = n.value.trim(); if (!name) { n.focus(); return; }
-        p.people.push({ id: 'p' + Date.now().toString(36), name: name, allergies: split(al.value), dislikes: split(dl.value), diets: [] });
-        n.value = ''; al.value = ''; dl.value = ''; persist2(); paintPeople();
+      openBtn.addEventListener('click', function () { openEditor(''); });
+      $('[data-pe-cancel]', editor).addEventListener('click', closeEditor);
+      $('[data-pe-save]', editor).addEventListener('click', function () {
+        var name = eName.value.trim(); if (!name) { eName.focus(); return; }
+        if (eTagIn.value.trim()) addDis(eTagIn.value);
+        var al = allergyBoxes().filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+        String(eOther.value || '').split(',').forEach(function (v) { v = v.trim(); if (v && al.map(norm).indexOf(norm(v)) < 0) al.push(v); });
+        var di = dietBoxes().filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+        var rec = { id: editing || ('p' + Date.now().toString(36)), name: name, allergies: al, dislikes: dis.slice(), diets: di };
+        var at = p.people.map(function (x) { return x.id; }).indexOf(rec.id);
+        if (at > -1) p.people[at] = rec; else p.people.push(rec);
+        persist2(); paintPeople(); closeEditor();
       });
       paintPeople();
     }
