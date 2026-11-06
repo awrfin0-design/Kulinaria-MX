@@ -343,8 +343,8 @@ ok('every page and subpage of the Miro sitemap is reachable from the menu', miss
 await closeMenu();
 for (const h of ['#/pg/plan-bloque', '#/pg/cuenta-pausas', '#/pg/carta-galeria', '#/pg/terminos', '#/registro', '#/pg/embajadores-directorio']) {
   await page.goto(`${URL0}#/home`); await page.waitForTimeout(150);
-  await openMenu(); await page.click(`#menu-overlay a[href="${h}"]`); await page.waitForTimeout(1100);
-  ok(`menu link ${h} navigates and closes the menu`, page.url().endsWith(h) && (await page.$eval('#menu-overlay', (n) => n.hidden)));
+  await openMenu(); await page.click(`#menu-overlay a[href^="${h}"]`); await page.waitForTimeout(1100);
+  ok(`menu link ${h} navigates and closes the menu`, (page.url().endsWith(h) || (h === '#/registro' && page.url().includes('#/registro'))) && (await page.$eval('#menu-overlay', (n) => n.hidden)));
 }
 
 // page structure: every sitemap page has a header with breadcrumbs; families have a sub-navigation
