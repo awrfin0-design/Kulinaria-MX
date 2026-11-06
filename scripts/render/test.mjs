@@ -686,7 +686,7 @@ await page.evaluate(() => { location.hash = '#/pg/pedido'; }); await page.waitFo
 await page.click('[data-page="pg/pedido"] [data-fn-next]'); await page.waitForTimeout(500); await page.click('[data-page="pg/pedido"] [data-fn-sc-next]'); await page.waitForTimeout(500);
 await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-dish]:not(.is-hidden) [data-pick]').click()); await page.waitForTimeout(400);
 const blk = await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); return { total: f.querySelector('[data-fn-s-total]').textContent, count: f.querySelector('[data-fn-stepcount]').textContent }; });
-ok('phone: the summary shows the 4-week Selecto price and the step counter reads "2 de 2"', /3,600/.test(blk.total) && /2 de 2/.test(blk.count), JSON.stringify(blk));
+ok('phone: the summary shows the 4-week Selecto price and the step counter reads "4 de 4"', /3,600/.test(blk.total) && /4 de 4/.test(blk.count), JSON.stringify(blk));
 await page.setViewportSize({ width: 1440, height: 900 });
 // v14: "Capítulos" phone design
 await page.setViewportSize({ width: 390, height: 844 });
@@ -695,7 +695,7 @@ const chap = await page.evaluate(() => {
   const pg = document.querySelector('[data-page="home"]'); const hero = pg.querySelector('.hero'); const h1 = hero.querySelector('h1');
   const rgb = (c) => c.match(/\d+/g).map(Number); const lum = ([r, g, b]) => (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
   const dishes = [...pg.querySelectorAll('.rail .dish')]; const track = pg.querySelector('.rail__track');
-  const teaser = pg.querySelector('.funnel--teaser');
+  const teaser = pg.querySelector('.funnel--teaser') || pg.querySelector('[data-funnel]');
   return { tabs: !!document.querySelector('.app-tabs') && getComputedStyle(document.querySelector('.app-tabs')).display !== 'none', dark: document.documentElement.getAttribute('data-theme'),
     heroH: Math.round(hero.getBoundingClientRect().height), vh: innerHeight, h1lum: lum(rgb(getComputedStyle(h1).color)), bodyClass: document.body.className,
     slideW: dishes[0] ? Math.round(dishes[0].getBoundingClientRect().width) : 0, swipe: track ? getComputedStyle(track).scrollSnapType : '', slides: dishes.length,
@@ -705,7 +705,7 @@ ok('phone: there is no bottom tab bar (burger-only navigation)', !chap.tabs, JSO
 const heroPhone = await page.evaluate(() => { const hero = document.querySelector('[data-page="home"] .hero'), st = hero.querySelector('.hero__stage').getBoundingClientRect(), v = hero.querySelector('.hero__video--intro'), cp = hero.querySelector('.hero__copy').getBoundingClientRect(); return { stageW: Math.round(st.width), square: Math.abs(st.width - st.height) < 3, fit: getComputedStyle(v).objectFit, copyBelow: cp.top >= st.bottom - st.height * 0.12, h: Math.round(hero.getBoundingClientRect().height), vh: innerHeight }; }); heroPhone.h1lum = chap.h1lum;
 ok('phone: the intro video is full-bleed (full width), the headline and button sit in a strip right under it and the hero fits the screen', heroPhone.stageW === 390 && heroPhone.copyBelow && heroPhone.h <= heroPhone.vh + 60 && heroPhone.h1lum > 0.8, JSON.stringify(heroPhone));
 ok('phone: chapter 2 shows one dish per screen and you swipe sideways between dishes', chap.slideW === 390 && /x/.test(chap.swipe) && chap.slides >= 5, JSON.stringify(chap));
-ok('phone: chapter 3 ("Tu bloque") is a full-screen photo with the order button over it', chap.teaserH >= chap.vh - 2 && chap.teaserBg, JSON.stringify(chap));
+ok('phone: chapter 3 is the real order builder (step 1 first, with tappable step pills), not a photo teaser', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); return !!f && !f.classList.contains('funnel--teaser') && f.getAttribute('data-step') === '0' && f.querySelectorAll('.steps__nav li').length === 4; }), JSON.stringify(chap));
 ok('the preview switches the body template class page by page (like Shopify)', await page.evaluate(() => { location.hash = '#/p/pollo-a-las-hierbas'; return new Promise((r) => setTimeout(() => r(document.body.classList.contains('template-product') && !document.body.classList.contains('template-index')), 300)); }));
 await page.evaluate(() => { location.hash = '#/home'; }); await page.waitForTimeout(300);
 await page.click('[data-menu-open]'); await page.waitForTimeout(900);
