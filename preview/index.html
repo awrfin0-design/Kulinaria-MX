@@ -2459,6 +2459,54 @@ body .funnel:not(.funnel--teaser) .step.is-on::-webkit-scrollbar,body .funnel:no
 .fn-mods__note{display:grid;gap:4px;font-size:.8rem}
 .fn-mods__note .input{width:100%}
 
+/* =====================================================================
+   v50 — hero: video centred, text strip right beneath it (desktop); full-bleed film + text strip on the phone
+   ===================================================================== */
+@media (min-width:761px){
+  .hero--intro{padding-bottom:64px}
+  .hero--intro .hero__grid{grid-template-columns:minmax(0,1fr);justify-items:center;gap:clamp(10px,2vh,22px)}
+  .hero--intro .hero__stage{order:1;width:min(100%,min(54svh,520px))}
+  .hero--intro .hero__copy{order:2;max-width:min(860px,92vw);text-align:center;display:grid;justify-items:center;gap:8px}
+  .hero--intro .hero__rule{display:none}
+  .hero--intro .hero__copy h1{font-size:clamp(1.9rem,3.2vw,3.1rem);margin:0;line-height:1.08}
+  .hero--intro .hero__copy h1 em{display:inline;font-size:1em;white-space:normal}
+  .hero--intro .hero__sub{margin:0;max-width:56ch}
+  .hero--intro .hero__cta{margin-top:6px;justify-content:center}
+}
+@media (max-width:760px){
+  body .hero--intro .hero__stage{order:1;width:calc(100% + 2*var(--pad));margin-inline:calc(var(--pad)*-1);aspect-ratio:auto;height:min(56svh,calc(100vw*1.15));-webkit-mask-image:linear-gradient(#000 84%,transparent);mask-image:linear-gradient(#000 84%,transparent)}
+  body .hero--intro .hero__poster,body .hero--intro .hero__video{object-fit:cover}
+  body .hero--intro .hero__copy{margin-top:-14px;padding:0 0 22px;text-align:center;display:grid;justify-items:center;gap:6px}
+  body .hero--intro .hero__rule{display:none}
+  body .hero--intro .hero__copy h1{font-size:1.45rem;line-height:1.12;margin:0}
+  body .hero--intro .hero__copy h1 em{display:inline;font-size:1em}
+  body .hero--intro .hero__sub{margin:0;font-size:.86rem;line-height:1.4}
+  body .hero--intro .hero__cta{margin-top:6px;justify-content:center}
+}
+
+/* =====================================================================
+   v50 — welcome film + compact home menu on the phone
+   ===================================================================== */
+.welcome-video__head{text-align:center;margin-bottom:var(--space-md,20px)}
+.welcome-video__frame{max-width:960px;margin:0 auto;border-radius:var(--r-card,18px);overflow:hidden;border:1px solid var(--border-accent);background:#000;aspect-ratio:16/9}
+.welcome-video__video{width:100%;height:100%;display:block;object-fit:cover}
+@media (max-width:760px){
+  body .welcome-video{padding-block:16px}
+  body .welcome-video__head{margin-bottom:10px}
+  body .welcome-video__head h2{font-size:1.35rem}
+  body .welcome-video__frame{aspect-ratio:4/5;max-height:62svh;margin-inline:calc(var(--pad)*-1);border-radius:0;border-inline:0}
+  /* "diets" block on the home: one scrolling row of chips + a swipeable rail of small dish cards instead of a long vertical list of photos */
+  body [data-dchips]{flex-wrap:nowrap;overflow-x:auto;margin-inline:calc(var(--pad)*-1);padding:2px var(--pad) 6px;scrollbar-width:none}
+  body [data-dchips]::-webkit-scrollbar{display:none}
+  body [data-dchips] .chip{flex:none}
+  body .dc-grid{display:flex;grid-template-columns:none;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:calc(var(--pad)*-1);padding:2px var(--pad) 10px;scrollbar-width:none;overscroll-behavior-x:contain}
+  body .dc-grid::-webkit-scrollbar{display:none}
+  body .dc-grid .dish{flex:0 0 62%;max-width:240px;scroll-snap-align:start}
+  body .dc-grid .dish .dish__media,body .dc-grid .dish img{aspect-ratio:4/3;height:auto;max-height:130px;object-fit:cover}
+  body .dc-grid .dish p,body .dc-grid .dish .dish__desc{display:none}
+}
+@media (max-width:760px){ body .hero--intro .hero__scroll{display:none} body .hero--intro .hero__poster,body .hero--intro .hero__video{object-position:50% 38%} }
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -2854,7 +2902,7 @@ Fuego</span>
 </section>
 
 
-</div><div id="home--shopify-section-marquee" class="shopify-section"><section class="marquee" aria-label="Arte del fuego" style="--speed:80s" >
+</div><div id="home--shopify-section-welcome" class="shopify-section"></div><div id="home--shopify-section-marquee" class="shopify-section"><section class="marquee" aria-label="Arte del fuego" style="--speed:80s" >
   <div class="marquee__track"><div class="marquee__group"><span class="marquee__item" >Cocina de autor entregada en tu puerta</span><span class="marquee__item" >Cortes y pescados sellados al fuego</span><span class="marquee__item" >Envases de vidrio reutilizables y listos para calentar</span><span class="marquee__item" >Un menú rotativo cada semana, con tu perfil de alergias al frente</span><span class="marquee__item" >Pausas flexibles y saldo a favor, sin efectivo</span><span class="marquee__item" >Pedidos hasta el sábado a las 10:00 AM</span><span class="marquee__item" >Ingredientes y alérgenos declarados en cada platillo</span></div><div class="marquee__group" aria-hidden="true"><span class="marquee__item" >Cocina de autor entregada en tu puerta</span><span class="marquee__item" >Cortes y pescados sellados al fuego</span><span class="marquee__item" >Envases de vidrio reutilizables y listos para calentar</span><span class="marquee__item" >Un menú rotativo cada semana, con tu perfil de alergias al frente</span><span class="marquee__item" >Pausas flexibles y saldo a favor, sin efectivo</span><span class="marquee__item" >Pedidos hasta el sábado a las 10:00 AM</span><span class="marquee__item" >Ingredientes y alérgenos declarados en cada platillo</span></div><div class="marquee__group" aria-hidden="true"><span class="marquee__item" >Cocina de autor entregada en tu puerta</span><span class="marquee__item" >Cortes y pescados sellados al fuego</span><span class="marquee__item" >Envases de vidrio reutilizables y listos para calentar</span><span class="marquee__item" >Un menú rotativo cada semana, con tu perfil de alergias al frente</span><span class="marquee__item" >Pausas flexibles y saldo a favor, sin efectivo</span><span class="marquee__item" >Pedidos hasta el sábado a las 10:00 AM</span><span class="marquee__item" >Ingredientes y alérgenos declarados en cada platillo</span></div><div class="marquee__group" aria-hidden="true"><span class="marquee__item" >Cocina de autor entregada en tu puerta</span><span class="marquee__item" >Cortes y pescados sellados al fuego</span><span class="marquee__item" >Envases de vidrio reutilizables y listos para calentar</span><span class="marquee__item" >Un menú rotativo cada semana, con tu perfil de alergias al frente</span><span class="marquee__item" >Pausas flexibles y saldo a favor, sin efectivo</span><span class="marquee__item" >Pedidos hasta el sábado a las 10:00 AM</span><span class="marquee__item" >Ingredientes y alérgenos declarados en cada platillo</span></div></div>
 </section>
 
@@ -3272,7 +3320,7 @@ Fuego</span>
   <div class="container">
     <div class="rail" data-rail>
       <div class="rail__head">
-        <div class="section__head"><span class="eyebrow">Especiales de la semana</span><h2>Esta semana <em>en <span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-black.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-cream.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true"></span></em></h2><p class="lede">Un menú rotativo de 8 a 10 platillos. Cada uno con una sola foto del emplatado final, vista desde arriba.</p></div><div class="rail__nav">
+        <div class="section__head"><span class="eyebrow">Especiales de la semana</span><h2>Esta semana <em>en <span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-black.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-cream.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true"></span></em></h2><p class="lede">Variedad gourmet para toda tu semana. Personaliza tu selección antes del sábado a las 10 a.m.</p></div><div class="rail__nav">
             <button class="rail-btn" type="button" data-rail-prev aria-label="Anterior">←</button>
             <button class="rail-btn" type="button" data-rail-next aria-label="Siguiente">→</button>
           </div></div>
@@ -3912,8 +3960,8 @@ Pago digital, sin efectivo</li></ul>
     <div class="container">
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Ruta de navegación">
-          <a href="#/home">Inicio</a><i aria-hidden="true">/</i><span>Especiales de la semana</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Especiales de la <em>semana</em></h1><p class="hero__sub">Un menú rotativo de 8 a 10 platillos. Confirma antes del sábado a las 10:00 AM.</p></div>
+          <a href="#/home">Inicio</a><i aria-hidden="true">/</i><span>Menú de la semana</span></nav>
+        <span class="hero__rule" aria-hidden="true"></span><h1>Menú de la <em>semana</em></h1><p class="hero__sub">Variedad gourmet para toda tu semana. Personaliza tu selección antes del sábado a las 10 a.m.</p></div>
     </div>
   </div></header>
 
@@ -12201,7 +12249,7 @@ Pago digital, sin efectivo</li></ul>
 </section>
 
 
-</div><div id="home--shopify-section-marquee" class="shopify-section"><section class="marquee" aria-label="Arte del fuego" style="--speed:80s" >
+</div><div id="home--shopify-section-welcome" class="shopify-section"></div><div id="home--shopify-section-marquee" class="shopify-section"><section class="marquee" aria-label="Arte del fuego" style="--speed:80s" >
   <div class="marquee__track"><div class="marquee__group"><span class="marquee__item" >Signature cooking delivered to your door</span><span class="marquee__item" >Cuts and fish seared over fire</span><span class="marquee__item" >Reusable glass containers, ready to heat</span><span class="marquee__item" >A rotating menu every week, with your allergy profile first</span><span class="marquee__item" >Flexible pauses and store credit, no cash</span><span class="marquee__item" >Orders until Saturday at 10:00 AM</span><span class="marquee__item" >Ingredients and allergens declared on every dish</span></div><div class="marquee__group" aria-hidden="true"><span class="marquee__item" >Signature cooking delivered to your door</span><span class="marquee__item" >Cuts and fish seared over fire</span><span class="marquee__item" >Reusable glass containers, ready to heat</span><span class="marquee__item" >A rotating menu every week, with your allergy profile first</span><span class="marquee__item" >Flexible pauses and store credit, no cash</span><span class="marquee__item" >Orders until Saturday at 10:00 AM</span><span class="marquee__item" >Ingredients and allergens declared on every dish</span></div><div class="marquee__group" aria-hidden="true"><span class="marquee__item" >Signature cooking delivered to your door</span><span class="marquee__item" >Cuts and fish seared over fire</span><span class="marquee__item" >Reusable glass containers, ready to heat</span><span class="marquee__item" >A rotating menu every week, with your allergy profile first</span><span class="marquee__item" >Flexible pauses and store credit, no cash</span><span class="marquee__item" >Orders until Saturday at 10:00 AM</span><span class="marquee__item" >Ingredients and allergens declared on every dish</span></div><div class="marquee__group" aria-hidden="true"><span class="marquee__item" >Signature cooking delivered to your door</span><span class="marquee__item" >Cuts and fish seared over fire</span><span class="marquee__item" >Reusable glass containers, ready to heat</span><span class="marquee__item" >A rotating menu every week, with your allergy profile first</span><span class="marquee__item" >Flexible pauses and store credit, no cash</span><span class="marquee__item" >Orders until Saturday at 10:00 AM</span><span class="marquee__item" >Ingredients and allergens declared on every dish</span></div></div>
 </section>
 
@@ -12619,7 +12667,7 @@ Pago digital, sin efectivo</li></ul>
   <div class="container">
     <div class="rail" data-rail>
       <div class="rail__head">
-        <div class="section__head"><span class="eyebrow">Weekly specials</span><h2>This week <em>at <span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-black.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-cream.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true"></span></em></h2><p class="lede">A rotating menu of 8 to 10 dishes. Each with a single photo of the final plating, seen from above.</p></div><div class="rail__nav">
+        <div class="section__head"><span class="eyebrow">Weekly specials</span><h2>This week <em>at <span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-black.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-cream.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true"></span></em></h2><p class="lede">Gourmet variety for your whole week. Personalize your selection before Saturday at 10 a.m.</p></div><div class="rail__nav">
             <button class="rail-btn" type="button" data-rail-prev aria-label="Previous">←</button>
             <button class="rail-btn" type="button" data-rail-next aria-label="Next">→</button>
           </div></div>
@@ -13259,8 +13307,8 @@ Digital payment, no cash</li></ul>
     <div class="container">
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Breadcrumb">
-          <a href="#/home">Home</a><i aria-hidden="true">/</i><span>Weekly specials</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Weekly <em>specials</em></h1><p class="hero__sub">A rotating menu of 8 to 10 dishes. Confirm before Saturday at 10:00 AM.</p></div>
+          <a href="#/home">Home</a><i aria-hidden="true">/</i><span>Menu of the week</span></nav>
+        <span class="hero__rule" aria-hidden="true"></span><h1>Menu of the <em>week</em></h1><p class="hero__sub">Gourmet variety for your whole week. Personalize your selection before Saturday at 10 a.m.</p></div>
     </div>
   </div></header>
 

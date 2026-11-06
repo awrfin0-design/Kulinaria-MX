@@ -111,7 +111,7 @@
       "settings": {
         "eyebrow": "Especiales de la semana",
         "heading": "Esta semana *en Kulinaria*",
-        "text": "Un menú rotativo de 8 a 10 platillos. Cada uno con una sola foto del emplatado final, vista desde arriba.",
+        "text": "Variedad gourmet para toda tu semana. Personaliza tu selección antes del sábado a las 10 a.m.",
         "collection": "menu-semanal",
         "limit": 6,
         "button_label": "Ver el menú completo",
@@ -423,6 +423,13 @@
       "type": "cta-banner",
       "settings": {}
     },
+    "welcome": {
+      "type": "welcome-video",
+      "settings": {
+        "eyebrow": "Bienvenido",
+        "heading": "Conoce *Kulinaria*"
+      }
+    },
     "marquee": {
       "type": "marquee",
       "settings": {
@@ -572,6 +579,7 @@
   },
   "order": [
     "hero",
+    "welcome",
     "marquee",
     "funnel",
     "dishes",
