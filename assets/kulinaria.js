@@ -1048,6 +1048,25 @@
       /* per-day tweaks: ingredients to leave out + a free note, saved with the order lines (kitchen sees them) */
       if (!Array.isArray(st.mods) || st.mods.length !== MEALS) st.mods = blankDays().map(function () { return { off: [], note: '' }; });
       var modsKey = '', modsOpen = -1, sumOpen = -1;
+      if (!st.cardNotes || typeof st.cardNotes !== 'object') st.cardNotes = {};
+      var cardNote = function (pid) { return st.cardNotes[pid] || (st.cardNotes[pid] = { off: [], note: '' }); };
+      var syncCardToDay = function (pid, day) { var c = st.cardNotes[pid]; if (c && (c.off.length || c.note)) st.mods[day] = { off: c.off.slice(), note: c.note }; };
+      var buildNotes = function () {
+        $$('[data-fn-note]', holder).forEach(function (box) {
+          if (box.getAttribute('data-built')) return; box.setAttribute('data-built', '1');
+          var d = box.closest('[data-fn-dish]'), pid = d.getAttribute('data-pid'), chips = $('[data-fn-note-chips]', box), inp = $('[data-fn-note-in]', box), pane = $('[data-fn-note-box]', box), t = $('[data-fn-note-t]', box);
+          var ing = (d.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean), c0 = cardNote(pid);
+          ing.forEach(function (name) {
+            var b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = fill(T_('mods-without'), { i: name }); b.setAttribute('aria-pressed', c0.off.indexOf(name) > -1 ? 'true' : 'false');
+            b.addEventListener('click', function () { var c = cardNote(pid), k = c.off.indexOf(name); if (k > -1) c.off.splice(k, 1); else c.off.push(name); b.setAttribute('aria-pressed', k > -1 ? 'false' : 'true'); if (st.days[st.active] === pid) syncCardToDay(pid, st.active); persist(); });
+            chips.appendChild(b);
+          });
+          inp.value = c0.note || '';
+          inp.addEventListener('input', function () { cardNote(pid).note = inp.value; if (st.days[st.active] === pid) syncCardToDay(pid, st.active); persist(); });
+          t.addEventListener('click', function (e) { e.stopPropagation(); pane.hidden = !pane.hidden; box.classList.toggle('is-open', !pane.hidden); });
+          box.addEventListener('click', function (e) { e.stopPropagation(); });
+        });
+      };
       var modsOf = function (i) { return st.mods[i] || (st.mods[i] = { off: [], note: '' }); };
       var modsText = function (i) { var m = st.mods[i]; if (!m) return ''; var parts = (m.off || []).map(function (x) { return fill(T_('mods-without'), { i: x }); }); if (m.note) parts.push(m.note); return parts.join(', '); };
       var renderMods = function () {
@@ -1161,14 +1180,13 @@
           });
         }
         var fst = $('[data-fn-first]', holder); if (fst) fst.textContent = fill(T_('first'), { d: dateOf(0) });
-        var bud = $('[data-fn-budget]', holder);
-        if (bud) {
+        $$('[data-fn-budget]', holder).forEach(function (bud) {
           var wk = st.plan === 'block' ? Math.round(priceOf(tierEl(), 'block') / 4) : priceOf(tierEl(), 'week'), exb = upgradeExtra();
           bud.innerHTML = '';
           var bt = document.createElement('span'); bt.textContent = fill(T_('budget'), { w: money(wk), t: money(planTotal() - exb) }) + ' ' + (exb ? fill(T_('budget-x'), { x: money(exb) }) : T_('budget-ok')) + ' ';
           var bl = document.createElement('button'); bl.type = 'button'; bl.className = 'text-link'; bl.textContent = T_('how-open'); bl.setAttribute('data-fn-how-open', '');
           bud.appendChild(bt); bud.appendChild(bl);
-        }
+        });
         var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : ''; }
         var emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
         var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? fill(T_('meals'), { n: n, t: MEALS }) : '';
@@ -1176,6 +1194,7 @@
         var sb = $('[data-fn-s-block]', holder); if (sb) { sb.hidden = false; sb.textContent = st.plan === 'block' ? fill(T_('weeks-x'), { p: money(priceOf(tierEl(), st.plan) / WEEKS), w: WEEKS }) : fill(T_('per-week'), { p: money(planTotal()) }); }
         var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step + 1).replace('{t}', steps.length) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
         var rn = $('[data-fn-renew]', holder); if (rn) { var hasPlan = !!tierEl().getAttribute('data-selling-plan'); rn.hidden = !(hasPlan && st.plan === 'block'); var box = $('[data-fn-renew-box]', holder); if (box) box.checked = st.renew; }
+        buildNotes();
         renderMods();
         holder.setAttribute('data-step', String(st.step + 1));
         // stepper
@@ -1230,6 +1249,7 @@
         var id = d.getAttribute('data-pid');
         if (!e.target.closest('[data-pick]')) return;
         if (st.days[st.active] !== id) { st.mods[st.active] = { off: [], note: '' }; modsOpen = -1; }
+        syncCardToDay(id, st.active);
         st.days[st.active] = id;
         for (var o = 1; o <= MEALS; o++) { var k = (st.active + o) % MEALS; if (!st.days[k]) { st.active = k; break; } }   // move on to the next empty day
         say(''); persist(); render();

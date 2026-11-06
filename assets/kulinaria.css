@@ -2674,3 +2674,76 @@ body .hero--intro:after{content:none !important}
   .funnel .step[data-fn-step="3"] .fn-dish__media img{position:absolute;inset:0}
   .funnel .step[data-fn-step="3"] .fn-budget .text-link{font-size:.66rem}
 }
+
+/* =====================================================================
+   v56 — menu step = the menu card at about half size (side scroll), planner step = slightly smaller vertical cards with the note built in
+   ===================================================================== */
+.fn-sc{flex:0 0 clamp(150px,12.5vw,186px);border-radius:12px}
+.fn-sc__img{flex:1 1 auto;min-height:70px}
+.fn-sc .tier-badge{position:static;align-self:flex-start;padding:3px 9px;font-size:.54rem;letter-spacing:.1em;background:none;z-index:auto}
+.fn-sc__body{padding:8px 10px 10px;gap:4px;align-content:start}
+.fn-sc__body h3{font-size:.86rem;line-height:1.18}
+.fn-sc__desc{font-size:.64rem;line-height:1.32;-webkit-line-clamp:2;color:var(--text-muted)}
+.fn-sc__facts{margin:0;font-size:.6rem;color:var(--text-muted)}
+.fn-sc__row{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:2px}
+.fn-sc__price{font-family:var(--font-heading);font-size:.95rem;color:var(--accent);white-space:nowrap}.fn-sc__price small{font:500 .56rem var(--font-body);color:var(--text-muted)}
+.fn-sc__go{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--accent);color:var(--accent);display:grid;place-items:center;font-size:.8rem}
+/* planner cards: a bit smaller than the menu-page card, note inside */
+.fn-dish{flex:0 0 clamp(172px,15vw,218px)}
+.fn-note{margin:2px 0 0}
+.fn-note__t{background:none;border:0;padding:2px 0;color:var(--text-muted);font:500 .62rem var(--font-body);letter-spacing:.04em;cursor:pointer;text-align:left}
+.fn-note__t:hover,.fn-note.is-open .fn-note__t{color:var(--accent)}
+.fn-note__box{display:grid;gap:5px;margin-top:4px}
+.fn-note__chips{display:flex;flex-wrap:wrap;gap:4px}
+.fn-note__chips .chip{padding:3px 8px;font-size:.58rem}
+.fn-note__in{width:100%;min-height:28px;border-radius:8px;border:1px solid var(--line);background:var(--bg-deep);color:var(--text);padding:0 8px;font:500 .64rem var(--font-body)}
+@media (max-width:760px){
+  .fn-sc{flex:0 0 62vw !important;height:100% !important;max-height:420px;border-radius:18px}
+  .fn-sc__img{min-height:130px}
+  .fn-sc__body{padding:10px 12px 12px;gap:5px}
+  .fn-sc__body h3{font-size:1.05rem}
+  .fn-sc__desc{font-size:.76rem;-webkit-line-clamp:3;color:var(--text-muted)}
+  .fn-sc__facts{font-size:.72rem}
+  .fn-sc__price{font-size:1.15rem}.fn-sc__price small{font-size:.66rem}
+  .fn-sc__go{width:34px;height:34px;font-size:1rem}
+  .fn-sc .tier-badge{font-size:.6rem;padding:4px 11px}
+  .funnel .step[data-fn-step="3"] .fn-dish{flex:0 0 68vw !important}
+  .funnel .step[data-fn-step="3"] .fn-note__t{font-size:.72rem;padding:6px 0}
+  .funnel .step[data-fn-step="3"] .fn-note__in{min-height:38px;font-size:.8rem}
+  .funnel .step[data-fn-step="3"] .fn-note__chips .chip{padding:6px 11px;font-size:.68rem}
+}
+
+/* budget: inside the step on the phone, in the summary panel on desktop */
+.fn-budget--aside{display:none}
+@media (min-width:901px){
+  .funnel .step[data-fn-step="3"] .fn-budget,.funnel .step[data-fn-step="3"] .fn-mods__tip{display:none}
+  .funnel__aside .fn-budget--aside{display:block;flex:none;margin:0;font-size:.74rem}
+}
+/* v56b — planner cards: the photo takes what is left, the text never shrinks, the note opens over the lower part of the card */
+.funnel .step[data-fn-step="3"] .fn-dish{position:relative;overflow:hidden}
+.funnel .step[data-fn-step="3"] .fn-dish__media{position:relative;flex:1 1 0 !important;min-height:84px !important;height:auto !important}
+.funnel .step[data-fn-step="3"] .fn-dish__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.funnel .step[data-fn-step="3"] .fn-dish__body>*{flex-shrink:0}
+.fn-note__box{position:absolute;left:0;right:0;bottom:0;z-index:6;background:var(--bg-raised);border-top:1px solid var(--accent);padding:10px 11px 11px;margin:0;box-shadow:0 -14px 28px rgba(0,0,0,.5)}
+.fn-note__box[hidden]{display:none}
+@media (min-width:901px) and (max-height:780px){
+  .funnel .step[data-fn-step="3"] .fn-dish .dish__desc{display:none !important}
+}
+/* v56c — the planner step is a column: strip and bar take their height, the card row takes the rest (never taller than the frame) */
+.funnel .step[data-fn-step="3"].is-on{display:flex;flex-direction:column;gap:8px;height:100%;min-height:0;overflow:hidden}
+.funnel .step[data-fn-step="3"] .fn-carousel{flex:1 1 0;min-height:0}
+.funnel .step[data-fn-step="3"] .fn-dishes{height:100%;max-height:none;min-height:0}
+.funnel .step[data-fn-step="3"] :is(.fn-para,.fn-week,.fn-pickbar,.fn-mods,.fn-mods__tip,.fn-budget,legend){flex:none}
+.funnel .step[data-fn-step="3"] .fn-dish__body{flex:0 0 auto !important}
+@media (min-width:901px) and (max-height:780px){
+  .funnel .step[data-fn-step="3"] .fn-dish .dish__facts{display:none !important}
+  .funnel .step[data-fn-step="3"] .fn-dish .tier-badge{padding:3px 10px;font-size:.58rem}
+  .funnel .step[data-fn-step="3"] .fn-dish__body{padding:7px 11px 9px !important}
+}
+.funnel .step[data-fn-step="3"] .fn-dish__media img{height:100% !important;max-height:none !important;aspect-ratio:auto !important}
+@media (min-width:901px){
+  .funnel .step[data-fn-step="3"].is-on{gap:4px}
+  .funnel .step[data-fn-step="3"] :is(.fn-para,.fn-week,.fn-pickbar){margin:0 !important}
+  .funnel .step[data-fn-step="3"] .fn-para{padding:0}
+  .funnel .step[data-fn-step="3"] .fn-dish__media{min-height:64px !important}
+}

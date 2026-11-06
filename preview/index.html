@@ -2705,6 +2705,79 @@ body .hero--intro:after{content:none !important}
   .funnel .step[data-fn-step="3"] .fn-budget .text-link{font-size:.66rem}
 }
 
+/* =====================================================================
+   v56 — menu step = the menu card at about half size (side scroll), planner step = slightly smaller vertical cards with the note built in
+   ===================================================================== */
+.fn-sc{flex:0 0 clamp(150px,12.5vw,186px);border-radius:12px}
+.fn-sc__img{flex:1 1 auto;min-height:70px}
+.fn-sc .tier-badge{position:static;align-self:flex-start;padding:3px 9px;font-size:.54rem;letter-spacing:.1em;background:none;z-index:auto}
+.fn-sc__body{padding:8px 10px 10px;gap:4px;align-content:start}
+.fn-sc__body h3{font-size:.86rem;line-height:1.18}
+.fn-sc__desc{font-size:.64rem;line-height:1.32;-webkit-line-clamp:2;color:var(--text-muted)}
+.fn-sc__facts{margin:0;font-size:.6rem;color:var(--text-muted)}
+.fn-sc__row{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:2px}
+.fn-sc__price{font-family:var(--font-heading);font-size:.95rem;color:var(--accent);white-space:nowrap}.fn-sc__price small{font:500 .56rem var(--font-body);color:var(--text-muted)}
+.fn-sc__go{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--accent);color:var(--accent);display:grid;place-items:center;font-size:.8rem}
+/* planner cards: a bit smaller than the menu-page card, note inside */
+.fn-dish{flex:0 0 clamp(172px,15vw,218px)}
+.fn-note{margin:2px 0 0}
+.fn-note__t{background:none;border:0;padding:2px 0;color:var(--text-muted);font:500 .62rem var(--font-body);letter-spacing:.04em;cursor:pointer;text-align:left}
+.fn-note__t:hover,.fn-note.is-open .fn-note__t{color:var(--accent)}
+.fn-note__box{display:grid;gap:5px;margin-top:4px}
+.fn-note__chips{display:flex;flex-wrap:wrap;gap:4px}
+.fn-note__chips .chip{padding:3px 8px;font-size:.58rem}
+.fn-note__in{width:100%;min-height:28px;border-radius:8px;border:1px solid var(--line);background:var(--bg-deep);color:var(--text);padding:0 8px;font:500 .64rem var(--font-body)}
+@media (max-width:760px){
+  .fn-sc{flex:0 0 62vw !important;height:100% !important;max-height:420px;border-radius:18px}
+  .fn-sc__img{min-height:130px}
+  .fn-sc__body{padding:10px 12px 12px;gap:5px}
+  .fn-sc__body h3{font-size:1.05rem}
+  .fn-sc__desc{font-size:.76rem;-webkit-line-clamp:3;color:var(--text-muted)}
+  .fn-sc__facts{font-size:.72rem}
+  .fn-sc__price{font-size:1.15rem}.fn-sc__price small{font-size:.66rem}
+  .fn-sc__go{width:34px;height:34px;font-size:1rem}
+  .fn-sc .tier-badge{font-size:.6rem;padding:4px 11px}
+  .funnel .step[data-fn-step="3"] .fn-dish{flex:0 0 68vw !important}
+  .funnel .step[data-fn-step="3"] .fn-note__t{font-size:.72rem;padding:6px 0}
+  .funnel .step[data-fn-step="3"] .fn-note__in{min-height:38px;font-size:.8rem}
+  .funnel .step[data-fn-step="3"] .fn-note__chips .chip{padding:6px 11px;font-size:.68rem}
+}
+
+/* budget: inside the step on the phone, in the summary panel on desktop */
+.fn-budget--aside{display:none}
+@media (min-width:901px){
+  .funnel .step[data-fn-step="3"] .fn-budget,.funnel .step[data-fn-step="3"] .fn-mods__tip{display:none}
+  .funnel__aside .fn-budget--aside{display:block;flex:none;margin:0;font-size:.74rem}
+}
+/* v56b — planner cards: the photo takes what is left, the text never shrinks, the note opens over the lower part of the card */
+.funnel .step[data-fn-step="3"] .fn-dish{position:relative;overflow:hidden}
+.funnel .step[data-fn-step="3"] .fn-dish__media{position:relative;flex:1 1 0 !important;min-height:84px !important;height:auto !important}
+.funnel .step[data-fn-step="3"] .fn-dish__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.funnel .step[data-fn-step="3"] .fn-dish__body>*{flex-shrink:0}
+.fn-note__box{position:absolute;left:0;right:0;bottom:0;z-index:6;background:var(--bg-raised);border-top:1px solid var(--accent);padding:10px 11px 11px;margin:0;box-shadow:0 -14px 28px rgba(0,0,0,.5)}
+.fn-note__box[hidden]{display:none}
+@media (min-width:901px) and (max-height:780px){
+  .funnel .step[data-fn-step="3"] .fn-dish .dish__desc{display:none !important}
+}
+/* v56c — the planner step is a column: strip and bar take their height, the card row takes the rest (never taller than the frame) */
+.funnel .step[data-fn-step="3"].is-on{display:flex;flex-direction:column;gap:8px;height:100%;min-height:0;overflow:hidden}
+.funnel .step[data-fn-step="3"] .fn-carousel{flex:1 1 0;min-height:0}
+.funnel .step[data-fn-step="3"] .fn-dishes{height:100%;max-height:none;min-height:0}
+.funnel .step[data-fn-step="3"] :is(.fn-para,.fn-week,.fn-pickbar,.fn-mods,.fn-mods__tip,.fn-budget,legend){flex:none}
+.funnel .step[data-fn-step="3"] .fn-dish__body{flex:0 0 auto !important}
+@media (min-width:901px) and (max-height:780px){
+  .funnel .step[data-fn-step="3"] .fn-dish .dish__facts{display:none !important}
+  .funnel .step[data-fn-step="3"] .fn-dish .tier-badge{padding:3px 10px;font-size:.58rem}
+  .funnel .step[data-fn-step="3"] .fn-dish__body{padding:7px 11px 9px !important}
+}
+.funnel .step[data-fn-step="3"] .fn-dish__media img{height:100% !important;max-height:none !important;aspect-ratio:auto !important}
+@media (min-width:901px){
+  .funnel .step[data-fn-step="3"].is-on{gap:4px}
+  .funnel .step[data-fn-step="3"] :is(.fn-para,.fn-week,.fn-pickbar){margin:0 !important}
+  .funnel .step[data-fn-step="3"] .fn-para{padding:0}
+  .funnel .step[data-fn-step="3"] .fn-dish__media{min-height:64px !important}
+}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -3215,76 +3288,67 @@ Fuego</span>
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Platillos anteriores">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
             <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Pollo a las hierbas con puré rústico</h3><p class="fn-sc__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de papa.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> por comida</small></span><span>480 kcal</span><span>34 g proteína</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Pollo a las hierbas con puré rústico</h3><p class="fn-sc__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de papa.</p><p class="fn-sc__facts">480 kcal · 22 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Bowl de res magra y quinoa</h3><p class="fn-sc__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> por comida</small></span><span>560 kcal</span><span>39 g proteína</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Bowl de res magra y quinoa</h3><p class="fn-sc__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="fn-sc__facts">560 kcal · 34 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Salmón gourmet en costra de almendras</h3><p class="fn-sc__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry rostizado.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$250<small> por comida</small></span><span>520 kcal</span><span>36 g proteína</span></p>
+    <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+    <h3>Salmón gourmet en costra de almendras</h3><p class="fn-sc__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry rostizado.</p><p class="fn-sc__facts">520 kcal · 14 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Omelette de claras con espinaca</h3><p class="fn-sc__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> por comida</small></span><span>310 kcal</span><span>22 g proteína</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Omelette de claras con espinaca</h3><p class="fn-sc__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="fn-sc__facts">310 kcal · 8 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"><span class="tier-badge tier-badge--signature">Signature $$</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Arrachera al carbón con maíz y espárragos</h3><p class="fn-sc__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$320<small> por comida</small></span><span>640 kcal</span><span>45 g proteína</span></p>
+    <span class="tier-badge tier-badge--signature">Signature $$</span>
+
+    <h3>Arrachera al carbón con maíz y espárragos</h3><p class="fn-sc__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="fn-sc__facts">640 kcal · 28 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$320<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Filete Prime con verduras asadas</h3><p class="fn-sc__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin perder su punto.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$390<small> por comida</small></span><span>710 kcal</span><span>50 g proteína</span></p>
+    <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+
+    <h3>Filete Prime con verduras asadas</h3><p class="fn-sc__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin perder su punto.</p><p class="fn-sc__facts">710 kcal · 16 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$390<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Bowl vegano de garbanzo y tahini</h3><p class="fn-sc__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$250<small> por comida</small></span><span>450 kcal</span><span>32 g proteína</span></p>
+    <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+    <h3>Bowl vegano de garbanzo y tahini</h3><p class="fn-sc__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="fn-sc__facts">450 kcal · 52 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Crema de calabaza asada</h3><p class="fn-sc__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> por comida</small></span><span>220 kcal</span><span>15 g proteína</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Crema de calabaza asada</h3><p class="fn-sc__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="fn-sc__facts">220 kcal · 18 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Mini pasta de pollo para peques</h3><p class="fn-sc__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> por comida</small></span><span>380 kcal</span><span>27 g proteína</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Mini pasta de pollo para peques</h3><p class="fn-sc__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="fn-sc__facts">380 kcal · 44 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article></div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Platillos siguientes">&#8250;</button>
@@ -3330,6 +3394,7 @@ Fuego</span>
 
     <h3 class="fn-dish__title">Pollo a las hierbas con puré rústico</h3><p class="dish__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de ...</p><p class="dish__facts">480 kcal · 22 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -3359,6 +3424,7 @@ Fuego</span>
 
     <h3 class="fn-dish__title">Bowl de res magra y quinoa</h3><p class="dish__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="dish__facts">560 kcal · 34 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -3388,6 +3454,7 @@ Fuego</span>
 
     <h3 class="fn-dish__title">Salmón gourmet en costra de almendras</h3><p class="dish__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry ro...</p><p class="dish__facts">520 kcal · 14 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$250</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -3417,6 +3484,7 @@ Fuego</span>
 
     <h3 class="fn-dish__title">Omelette de claras con espinaca</h3><p class="dish__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="dish__facts">310 kcal · 8 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -3446,6 +3514,7 @@ Fuego</span>
 
     <h3 class="fn-dish__title">Arrachera al carbón con maíz y espárragos</h3><p class="dish__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="dish__facts">640 kcal · 28 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$320</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -3475,6 +3544,7 @@ Fuego</span>
 
     <h3 class="fn-dish__title">Filete Prime con verduras asadas</h3><p class="dish__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin per...</p><p class="dish__facts">710 kcal · 16 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$390</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -3504,6 +3574,7 @@ Fuego</span>
 
     <h3 class="fn-dish__title">Bowl vegano de garbanzo y tahini</h3><p class="dish__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="dish__facts">450 kcal · 52 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$250</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -3533,6 +3604,7 @@ Fuego</span>
 
     <h3 class="fn-dish__title">Crema de calabaza asada</h3><p class="dish__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="dish__facts">220 kcal · 18 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -3562,6 +3634,7 @@ Fuego</span>
 
     <h3 class="fn-dish__title">Mini pasta de pollo para peques</h3><p class="dish__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="dish__facts">380 kcal · 44 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -3591,6 +3664,7 @@ Fuego</span>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Total del plan</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
+        <p class="fn-budget fn-budget--aside" data-fn-budget></p>
         <details class="fn-more"><summary>Cómo se cobra</summary>
         <p class="fn-weeknote"><strong data-fn-first></strong> Estas comidas son para tu primera semana; los días que dejes vacíos no se entregan (hasta 5 comidas). Cada semana vuelves a elegir las siguientes, antes del sábado a las 10:00. ¿Quieres un platillo de nivel superior? Puedes elegirlo: pagas solo la diferencia por comida, de esa semana.</p>
         <div class="fn-rec"><p data-fn-rec="auto" hidden>El plan de 4 semanas se paga por adelantado en un solo cargo y se renueva automáticamente cada 4 semanas con el mismo método de pago, hasta que lo canceles o pauses desde tu cuenta (antes del cierre del sábado 10:00).</p><p data-fn-rec="manual" hidden>El plan de 4 semanas se paga por adelantado en un solo cargo. Al terminar tus 4 semanas te avisamos para renovar: no se hace ningún cargo sin tu confirmación.</p><p data-fn-rec="week" hidden>La semana de prueba es un pago único de 1 semana: no se renueva.</p><p>Cada semana eliges tus platillos dentro de tu plan sin costo extra. Solo se cobra aparte la diferencia de los platillos de nivel superior (por comida, esa semana).</p></div>
@@ -11589,76 +11663,67 @@ Pago digital, sin efectivo</li></ul>
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Platillos anteriores">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
             <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Pollo a las hierbas con puré rústico</h3><p class="fn-sc__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de papa.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> por comida</small></span><span>480 kcal</span><span>34 g proteína</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Pollo a las hierbas con puré rústico</h3><p class="fn-sc__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de papa.</p><p class="fn-sc__facts">480 kcal · 22 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Bowl de res magra y quinoa</h3><p class="fn-sc__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> por comida</small></span><span>560 kcal</span><span>39 g proteína</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Bowl de res magra y quinoa</h3><p class="fn-sc__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="fn-sc__facts">560 kcal · 34 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Salmón gourmet en costra de almendras</h3><p class="fn-sc__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry rostizado.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$250<small> por comida</small></span><span>520 kcal</span><span>36 g proteína</span></p>
+    <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+    <h3>Salmón gourmet en costra de almendras</h3><p class="fn-sc__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry rostizado.</p><p class="fn-sc__facts">520 kcal · 14 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Omelette de claras con espinaca</h3><p class="fn-sc__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> por comida</small></span><span>310 kcal</span><span>22 g proteína</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Omelette de claras con espinaca</h3><p class="fn-sc__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="fn-sc__facts">310 kcal · 8 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"><span class="tier-badge tier-badge--signature">Signature $$</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Arrachera al carbón con maíz y espárragos</h3><p class="fn-sc__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$320<small> por comida</small></span><span>640 kcal</span><span>45 g proteína</span></p>
+    <span class="tier-badge tier-badge--signature">Signature $$</span>
+
+    <h3>Arrachera al carbón con maíz y espárragos</h3><p class="fn-sc__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="fn-sc__facts">640 kcal · 28 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$320<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Filete Prime con verduras asadas</h3><p class="fn-sc__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin perder su punto.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$390<small> por comida</small></span><span>710 kcal</span><span>50 g proteína</span></p>
+    <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+
+    <h3>Filete Prime con verduras asadas</h3><p class="fn-sc__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin perder su punto.</p><p class="fn-sc__facts">710 kcal · 16 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$390<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Bowl vegano de garbanzo y tahini</h3><p class="fn-sc__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$250<small> por comida</small></span><span>450 kcal</span><span>32 g proteína</span></p>
+    <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+    <h3>Bowl vegano de garbanzo y tahini</h3><p class="fn-sc__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="fn-sc__facts">450 kcal · 52 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Crema de calabaza asada</h3><p class="fn-sc__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> por comida</small></span><span>220 kcal</span><span>15 g proteína</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Crema de calabaza asada</h3><p class="fn-sc__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="fn-sc__facts">220 kcal · 18 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Mini pasta de pollo para peques</h3><p class="fn-sc__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> por comida</small></span><span>380 kcal</span><span>27 g proteína</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Mini pasta de pollo para peques</h3><p class="fn-sc__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="fn-sc__facts">380 kcal · 44 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article></div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Platillos siguientes">&#8250;</button>
@@ -11704,6 +11769,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Pollo a las hierbas con puré rústico</h3><p class="dish__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de ...</p><p class="dish__facts">480 kcal · 22 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -11733,6 +11799,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Bowl de res magra y quinoa</h3><p class="dish__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="dish__facts">560 kcal · 34 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -11762,6 +11829,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Salmón gourmet en costra de almendras</h3><p class="dish__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry ro...</p><p class="dish__facts">520 kcal · 14 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$250</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -11791,6 +11859,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Omelette de claras con espinaca</h3><p class="dish__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="dish__facts">310 kcal · 8 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -11820,6 +11889,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Arrachera al carbón con maíz y espárragos</h3><p class="dish__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="dish__facts">640 kcal · 28 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$320</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -11849,6 +11919,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Filete Prime con verduras asadas</h3><p class="dish__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin per...</p><p class="dish__facts">710 kcal · 16 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$390</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -11878,6 +11949,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Bowl vegano de garbanzo y tahini</h3><p class="dish__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="dish__facts">450 kcal · 52 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$250</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -11907,6 +11979,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Crema de calabaza asada</h3><p class="dish__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="dish__facts">220 kcal · 18 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -11936,6 +12009,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Mini pasta de pollo para peques</h3><p class="dish__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="dish__facts">380 kcal · 44 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Nota o quitar ingredientes</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="Ej. sin cebolla, salsa aparte…" aria-label="Nota para la cocina (opcional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -11965,6 +12039,7 @@ Pago digital, sin efectivo</li></ul>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Total del plan</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
+        <p class="fn-budget fn-budget--aside" data-fn-budget></p>
         <details class="fn-more"><summary>Cómo se cobra</summary>
         <p class="fn-weeknote"><strong data-fn-first></strong> Estas comidas son para tu primera semana; los días que dejes vacíos no se entregan (hasta 5 comidas). Cada semana vuelves a elegir las siguientes, antes del sábado a las 10:00. ¿Quieres un platillo de nivel superior? Puedes elegirlo: pagas solo la diferencia por comida, de esa semana.</p>
         <div class="fn-rec"><p data-fn-rec="auto" hidden>El plan de 4 semanas se paga por adelantado en un solo cargo y se renueva automáticamente cada 4 semanas con el mismo método de pago, hasta que lo canceles o pauses desde tu cuenta (antes del cierre del sábado 10:00).</p><p data-fn-rec="manual" hidden>El plan de 4 semanas se paga por adelantado en un solo cargo. Al terminar tus 4 semanas te avisamos para renovar: no se hace ningún cargo sin tu confirmación.</p><p data-fn-rec="week" hidden>La semana de prueba es un pago único de 1 semana: no se renueva.</p><p>Cada semana eliges tus platillos dentro de tu plan sin costo extra. Solo se cobra aparte la diferencia de los platillos de nivel superior (por comida, esa semana).</p></div>
@@ -12767,76 +12842,67 @@ Pago digital, sin efectivo</li></ul>
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Previous dishes">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
             <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Herb chicken with rustic mash</h3><p class="fn-sc__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> per meal</small></span><span>480 kcal</span><span>34 g protein</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Herb chicken with rustic mash</h3><p class="fn-sc__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="fn-sc__facts">480 kcal · 22 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Lean beef and quinoa bowl</h3><p class="fn-sc__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> per meal</small></span><span>560 kcal</span><span>39 g protein</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Lean beef and quinoa bowl</h3><p class="fn-sc__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="fn-sc__facts">560 kcal · 34 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Gourmet salmon in an almond crust</h3><p class="fn-sc__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$250<small> per meal</small></span><span>520 kcal</span><span>36 g protein</span></p>
+    <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+    <h3>Gourmet salmon in an almond crust</h3><p class="fn-sc__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="fn-sc__facts">520 kcal · 14 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Egg-white omelette with spinach</h3><p class="fn-sc__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> per meal</small></span><span>310 kcal</span><span>22 g protein</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Egg-white omelette with spinach</h3><p class="fn-sc__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="fn-sc__facts">310 kcal · 8 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"><span class="tier-badge tier-badge--signature">Signature $$</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Charcoal-grilled skirt steak with corn and asparagus</h3><p class="fn-sc__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$320<small> per meal</small></span><span>640 kcal</span><span>45 g protein</span></p>
+    <span class="tier-badge tier-badge--signature">Signature $$</span>
+
+    <h3>Charcoal-grilled skirt steak with corn and asparagus</h3><p class="fn-sc__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="fn-sc__facts">640 kcal · 28 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$320<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Prime filet with roasted vegetables</h3><p class="fn-sc__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losing its doneness.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$390<small> per meal</small></span><span>710 kcal</span><span>50 g protein</span></p>
+    <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+
+    <h3>Prime filet with roasted vegetables</h3><p class="fn-sc__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losing its doneness.</p><p class="fn-sc__facts">710 kcal · 16 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$390<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Vegan chickpea and tahini bowl</h3><p class="fn-sc__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$250<small> per meal</small></span><span>450 kcal</span><span>32 g protein</span></p>
+    <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+    <h3>Vegan chickpea and tahini bowl</h3><p class="fn-sc__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="fn-sc__facts">450 kcal · 52 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Roasted pumpkin cream soup</h3><p class="fn-sc__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> per meal</small></span><span>220 kcal</span><span>15 g protein</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Roasted pumpkin cream soup</h3><p class="fn-sc__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="fn-sc__facts">220 kcal · 18 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Mini chicken pasta for little ones</h3><p class="fn-sc__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> per meal</small></span><span>380 kcal</span><span>27 g protein</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Mini chicken pasta for little ones</h3><p class="fn-sc__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="fn-sc__facts">380 kcal · 44 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article></div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Next dishes">&#8250;</button>
@@ -12882,6 +12948,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Herb chicken with rustic mash</h3><p class="dish__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="dish__facts">480 kcal · 22 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -12911,6 +12978,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Lean beef and quinoa bowl</h3><p class="dish__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="dish__facts">560 kcal · 34 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -12940,6 +13008,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Gourmet salmon in an almond crust</h3><p class="dish__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="dish__facts">520 kcal · 14 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$250</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -12969,6 +13038,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Egg-white omelette with spinach</h3><p class="dish__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="dish__facts">310 kcal · 8 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -12998,6 +13068,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Charcoal-grilled skirt steak with corn and asparagus</h3><p class="dish__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="dish__facts">640 kcal · 28 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$320</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -13027,6 +13098,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Prime filet with roasted vegetables</h3><p class="dish__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losin...</p><p class="dish__facts">710 kcal · 16 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$390</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -13056,6 +13128,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Vegan chickpea and tahini bowl</h3><p class="dish__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="dish__facts">450 kcal · 52 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$250</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -13085,6 +13158,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Roasted pumpkin cream soup</h3><p class="dish__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="dish__facts">220 kcal · 18 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -13114,6 +13188,7 @@ Pago digital, sin efectivo</li></ul>
 
     <h3 class="fn-dish__title">Mini chicken pasta for little ones</h3><p class="dish__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="dish__facts">380 kcal · 44 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -13143,6 +13218,7 @@ Pago digital, sin efectivo</li></ul>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Plan total</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
+        <p class="fn-budget fn-budget--aside" data-fn-budget></p>
         <details class="fn-more"><summary>How you are charged</summary>
         <p class="fn-weeknote"><strong data-fn-first></strong> These meals are for your first week; days you leave empty are not delivered (up to 5 meals). Every week you come back to choose the next ones, before Saturday at 10:00. Want a higher-tier dish? Go ahead: you only pay the per-meal difference, for that week.</p>
         <div class="fn-rec"><p data-fn-rec="auto" hidden>The 4-week plan is paid upfront in a single charge and renews automatically every 4 weeks with the same payment method, until you cancel or pause it from your account (before the Saturday 10:00 cut-off).</p><p data-fn-rec="manual" hidden>The 4-week plan is paid upfront in a single charge. When your 4 weeks end we let you know to renew: nothing is charged without your confirmation.</p><p data-fn-rec="week" hidden>The trial week is a one-time payment for 1 week: it does not renew.</p><p>Each week you choose your dishes within your plan at no extra cost. Only the difference for higher-tier dishes is charged separately (per meal, that week).</p></div>
@@ -21141,76 +21217,67 @@ Digital payment, no cash</li></ul>
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Previous dishes">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
             <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Herb chicken with rustic mash</h3><p class="fn-sc__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> per meal</small></span><span>480 kcal</span><span>34 g protein</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Herb chicken with rustic mash</h3><p class="fn-sc__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="fn-sc__facts">480 kcal · 22 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Lean beef and quinoa bowl</h3><p class="fn-sc__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> per meal</small></span><span>560 kcal</span><span>39 g protein</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Lean beef and quinoa bowl</h3><p class="fn-sc__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="fn-sc__facts">560 kcal · 34 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Gourmet salmon in an almond crust</h3><p class="fn-sc__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$250<small> per meal</small></span><span>520 kcal</span><span>36 g protein</span></p>
+    <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+    <h3>Gourmet salmon in an almond crust</h3><p class="fn-sc__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="fn-sc__facts">520 kcal · 14 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Egg-white omelette with spinach</h3><p class="fn-sc__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> per meal</small></span><span>310 kcal</span><span>22 g protein</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Egg-white omelette with spinach</h3><p class="fn-sc__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="fn-sc__facts">310 kcal · 8 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"><span class="tier-badge tier-badge--signature">Signature $$</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Charcoal-grilled skirt steak with corn and asparagus</h3><p class="fn-sc__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$320<small> per meal</small></span><span>640 kcal</span><span>45 g protein</span></p>
+    <span class="tier-badge tier-badge--signature">Signature $$</span>
+
+    <h3>Charcoal-grilled skirt steak with corn and asparagus</h3><p class="fn-sc__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="fn-sc__facts">640 kcal · 28 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$320<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Prime filet with roasted vegetables</h3><p class="fn-sc__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losing its doneness.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$390<small> per meal</small></span><span>710 kcal</span><span>50 g protein</span></p>
+    <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+
+    <h3>Prime filet with roasted vegetables</h3><p class="fn-sc__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losing its doneness.</p><p class="fn-sc__facts">710 kcal · 16 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$390<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Vegan chickpea and tahini bowl</h3><p class="fn-sc__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$250<small> per meal</small></span><span>450 kcal</span><span>32 g protein</span></p>
+    <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+    <h3>Vegan chickpea and tahini bowl</h3><p class="fn-sc__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="fn-sc__facts">450 kcal · 52 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Roasted pumpkin cream soup</h3><p class="fn-sc__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> per meal</small></span><span>220 kcal</span><span>15 g protein</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Roasted pumpkin cream soup</h3><p class="fn-sc__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="fn-sc__facts">220 kcal · 18 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article><article class="fn-sc">
-  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
-
-  </div>
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"></div>
   <div class="fn-sc__body">
-    <h3>Mini chicken pasta for little ones</h3><p class="fn-sc__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="fn-sc__meta">
-      <span class="fn-sc__price">$180<small> per meal</small></span><span>380 kcal</span><span>27 g protein</span></p>
+    <span class="tier-badge tier-badge--selecto">Selecto</span>
+
+    <h3>Mini chicken pasta for little ones</h3><p class="fn-sc__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="fn-sc__facts">380 kcal · 44 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
 </article></div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Next dishes">&#8250;</button>
@@ -21256,6 +21323,7 @@ Digital payment, no cash</li></ul>
 
     <h3 class="fn-dish__title">Herb chicken with rustic mash</h3><p class="dish__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="dish__facts">480 kcal · 22 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -21285,6 +21353,7 @@ Digital payment, no cash</li></ul>
 
     <h3 class="fn-dish__title">Lean beef and quinoa bowl</h3><p class="dish__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="dish__facts">560 kcal · 34 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -21314,6 +21383,7 @@ Digital payment, no cash</li></ul>
 
     <h3 class="fn-dish__title">Gourmet salmon in an almond crust</h3><p class="dish__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="dish__facts">520 kcal · 14 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$250</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -21343,6 +21413,7 @@ Digital payment, no cash</li></ul>
 
     <h3 class="fn-dish__title">Egg-white omelette with spinach</h3><p class="dish__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="dish__facts">310 kcal · 8 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -21372,6 +21443,7 @@ Digital payment, no cash</li></ul>
 
     <h3 class="fn-dish__title">Charcoal-grilled skirt steak with corn and asparagus</h3><p class="dish__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="dish__facts">640 kcal · 28 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$320</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -21401,6 +21473,7 @@ Digital payment, no cash</li></ul>
 
     <h3 class="fn-dish__title">Prime filet with roasted vegetables</h3><p class="dish__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losin...</p><p class="dish__facts">710 kcal · 16 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$390</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -21430,6 +21503,7 @@ Digital payment, no cash</li></ul>
 
     <h3 class="fn-dish__title">Vegan chickpea and tahini bowl</h3><p class="dish__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="dish__facts">450 kcal · 52 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$250</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -21459,6 +21533,7 @@ Digital payment, no cash</li></ul>
 
     <h3 class="fn-dish__title">Roasted pumpkin cream soup</h3><p class="dish__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="dish__facts">220 kcal · 18 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -21488,6 +21563,7 @@ Digital payment, no cash</li></ul>
 
     <h3 class="fn-dish__title">Mini chicken pasta for little ones</h3><p class="dish__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="dish__facts">380 kcal · 44 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ Note or leave out ingredients</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="E.g. no onion, sauce on the side…" aria-label="Note for the kitchen (optional)"></div></div>
     <div class="fn-dish__row">
       <span class="dish__price"><span data-fn-price>$180</span><small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -21517,6 +21593,7 @@ Digital payment, no cash</li></ul>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Plan total</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
+        <p class="fn-budget fn-budget--aside" data-fn-budget></p>
         <details class="fn-more"><summary>How you are charged</summary>
         <p class="fn-weeknote"><strong data-fn-first></strong> These meals are for your first week; days you leave empty are not delivered (up to 5 meals). Every week you come back to choose the next ones, before Saturday at 10:00. Want a higher-tier dish? Go ahead: you only pay the per-meal difference, for that week.</p>
         <div class="fn-rec"><p data-fn-rec="auto" hidden>The 4-week plan is paid upfront in a single charge and renews automatically every 4 weeks with the same payment method, until you cancel or pause it from your account (before the Saturday 10:00 cut-off).</p><p data-fn-rec="manual" hidden>The 4-week plan is paid upfront in a single charge. When your 4 weeks end we let you know to renew: nothing is charged without your confirmation.</p><p data-fn-rec="week" hidden>The trial week is a one-time payment for 1 week: it does not renew.</p><p>Each week you choose your dishes within your plan at no extra cost. Only the difference for higher-tier dishes is charged separately (per meal, that week).</p></div>
@@ -23999,6 +24076,25 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       /* per-day tweaks: ingredients to leave out + a free note, saved with the order lines (kitchen sees them) */
       if (!Array.isArray(st.mods) || st.mods.length !== MEALS) st.mods = blankDays().map(function () { return { off: [], note: '' }; });
       var modsKey = '', modsOpen = -1, sumOpen = -1;
+      if (!st.cardNotes || typeof st.cardNotes !== 'object') st.cardNotes = {};
+      var cardNote = function (pid) { return st.cardNotes[pid] || (st.cardNotes[pid] = { off: [], note: '' }); };
+      var syncCardToDay = function (pid, day) { var c = st.cardNotes[pid]; if (c && (c.off.length || c.note)) st.mods[day] = { off: c.off.slice(), note: c.note }; };
+      var buildNotes = function () {
+        $$('[data-fn-note]', holder).forEach(function (box) {
+          if (box.getAttribute('data-built')) return; box.setAttribute('data-built', '1');
+          var d = box.closest('[data-fn-dish]'), pid = d.getAttribute('data-pid'), chips = $('[data-fn-note-chips]', box), inp = $('[data-fn-note-in]', box), pane = $('[data-fn-note-box]', box), t = $('[data-fn-note-t]', box);
+          var ing = (d.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean), c0 = cardNote(pid);
+          ing.forEach(function (name) {
+            var b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = fill(T_('mods-without'), { i: name }); b.setAttribute('aria-pressed', c0.off.indexOf(name) > -1 ? 'true' : 'false');
+            b.addEventListener('click', function () { var c = cardNote(pid), k = c.off.indexOf(name); if (k > -1) c.off.splice(k, 1); else c.off.push(name); b.setAttribute('aria-pressed', k > -1 ? 'false' : 'true'); if (st.days[st.active] === pid) syncCardToDay(pid, st.active); persist(); });
+            chips.appendChild(b);
+          });
+          inp.value = c0.note || '';
+          inp.addEventListener('input', function () { cardNote(pid).note = inp.value; if (st.days[st.active] === pid) syncCardToDay(pid, st.active); persist(); });
+          t.addEventListener('click', function (e) { e.stopPropagation(); pane.hidden = !pane.hidden; box.classList.toggle('is-open', !pane.hidden); });
+          box.addEventListener('click', function (e) { e.stopPropagation(); });
+        });
+      };
       var modsOf = function (i) { return st.mods[i] || (st.mods[i] = { off: [], note: '' }); };
       var modsText = function (i) { var m = st.mods[i]; if (!m) return ''; var parts = (m.off || []).map(function (x) { return fill(T_('mods-without'), { i: x }); }); if (m.note) parts.push(m.note); return parts.join(', '); };
       var renderMods = function () {
@@ -24112,14 +24208,13 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           });
         }
         var fst = $('[data-fn-first]', holder); if (fst) fst.textContent = fill(T_('first'), { d: dateOf(0) });
-        var bud = $('[data-fn-budget]', holder);
-        if (bud) {
+        $$('[data-fn-budget]', holder).forEach(function (bud) {
           var wk = st.plan === 'block' ? Math.round(priceOf(tierEl(), 'block') / 4) : priceOf(tierEl(), 'week'), exb = upgradeExtra();
           bud.innerHTML = '';
           var bt = document.createElement('span'); bt.textContent = fill(T_('budget'), { w: money(wk), t: money(planTotal() - exb) }) + ' ' + (exb ? fill(T_('budget-x'), { x: money(exb) }) : T_('budget-ok')) + ' ';
           var bl = document.createElement('button'); bl.type = 'button'; bl.className = 'text-link'; bl.textContent = T_('how-open'); bl.setAttribute('data-fn-how-open', '');
           bud.appendChild(bt); bud.appendChild(bl);
-        }
+        });
         var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : ''; }
         var emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
         var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? fill(T_('meals'), { n: n, t: MEALS }) : '';
@@ -24127,6 +24222,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var sb = $('[data-fn-s-block]', holder); if (sb) { sb.hidden = false; sb.textContent = st.plan === 'block' ? fill(T_('weeks-x'), { p: money(priceOf(tierEl(), st.plan) / WEEKS), w: WEEKS }) : fill(T_('per-week'), { p: money(planTotal()) }); }
         var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step + 1).replace('{t}', steps.length) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
         var rn = $('[data-fn-renew]', holder); if (rn) { var hasPlan = !!tierEl().getAttribute('data-selling-plan'); rn.hidden = !(hasPlan && st.plan === 'block'); var box = $('[data-fn-renew-box]', holder); if (box) box.checked = st.renew; }
+        buildNotes();
         renderMods();
         holder.setAttribute('data-step', String(st.step + 1));
         // stepper
@@ -24181,6 +24277,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var id = d.getAttribute('data-pid');
         if (!e.target.closest('[data-pick]')) return;
         if (st.days[st.active] !== id) { st.mods[st.active] = { off: [], note: '' }; modsOpen = -1; }
+        syncCardToDay(id, st.active);
         st.days[st.active] = id;
         for (var o = 1; o <= MEALS; o++) { var k = (st.active + o) % MEALS; if (!st.days[k]) { st.active = k; break; } }   // move on to the next empty day
         say(''); persist(); render();
