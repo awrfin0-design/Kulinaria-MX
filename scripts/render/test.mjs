@@ -570,7 +570,7 @@ await page.evaluate(() => { const f = window.fetch; window.__calls = []; window.
 await page.locator(`${fnS} [data-fn-finish]`).scrollIntoViewIfNeeded();
 await page.click(`${fnS} [data-fn-finish]`); await page.waitForTimeout(1000);
 const reqs = await page.evaluate(() => window.__calls);
-ok('confirming adds ONE plan line with the dishes as properties, and goes to the cart', page.url().endsWith('#/carrito') && reqs.some((r) => /add\.js/.test(r) && /_platillos/.test(r) && /Lunes/.test(r) && /Viernes/.test(r)) && /clear\.js/.test(reqs.join(' ')) && /update\.js/.test(reqs.join(' ')) && !/contrato_aceptado/.test(reqs.join(' ')), JSON.stringify(reqs).slice(0, 300));
+ok('confirming adds ONE plan line with the dishes as properties, and goes to the cart', page.url().endsWith('#/carrito') && reqs.some((r) => /add\.js/.test(r) && /_platillos/.test(r) && /Lunes/.test(r) && /Viernes/.test(r)) && /cart\.js/.test(reqs.join(' ')) && /update\.js/.test(reqs.join(' ')) && !/contrato_aceptado/.test(reqs.join(' ')), JSON.stringify(reqs).slice(0, 300));
 await page.evaluate(() => { localStorage.clear(); });
 // the dedicated page and the complete menu
 await page.goto(`${URL0}#/pg/pedido`); await page.waitForTimeout(500);
