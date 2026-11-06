@@ -1,6 +1,6 @@
 {%- liquid
   assign layout = section.settings.layout
-  assign cats = 'desayunos-premium,al-fuego-y-mar,bowls-de-la-semana,diario-premium,kulinaria-junior,sopas-y-entradas,postres-y-snacks,batidos-y-bebidas' | split: ','
+  assign cats = 'al-fuego,desayunos,bowls,diario,keto-low-carb,fit-proteina,veggie,sin-gluten,junior,entradas,snacks-postres' | split: ','
   assign diets = 'keto,sin-gluten,vegetariano,vegano,bajo-calorias,bajo-carbos,alto-proteina' | split: ','
   assign tiers = 'selecto,exclusivo,signature,reserve' | split: ','
 -%}
@@ -20,8 +20,8 @@
       <div class="menu-shell" data-filters>
         <div class="filter-sticky">
           <div class="chips" role="group" aria-label="{{ 'collection.category' | t }}">
-            <button class="chip" type="button" data-filter="category" data-value="all" aria-pressed="true">{{ 'collection.all' | t }}</button>
-            {%- for c in cats -%}{%- assign ck = 'category.' | append: c -%}
+            <button class="chip" type="button" data-filter="category" data-value="all" aria-pressed="true">{{ 'menu_group.all' | t }}</button>
+            {%- for c in cats -%}{%- assign ck = 'menu_group.' | append: c -%}
               <button class="chip" type="button" data-filter="category" data-value="{{ c }}" aria-pressed="false">{{ ck | t }}</button>
             {%- endfor -%}
           </div>
@@ -29,14 +29,6 @@
         </div>
 
         <div class="filter-secondary">
-          <div class="filter-bar__row">
-            <span class="filter-bar__label">{{ 'collection.focus' | t }}</span>
-            <div class="chips">
-              {%- for d in diets -%}{%- assign dk = 'diet.' | append: d -%}
-                <button class="chip" type="button" data-filter="diet" data-value="{{ d }}" aria-pressed="false">{{ dk | t }}</button>
-              {%- endfor -%}
-            </div>
-          </div>
           <div class="filter-bar__row">
             <span class="filter-bar__label">{{ 'collection.level' | t }}</span>
             <div class="chips">

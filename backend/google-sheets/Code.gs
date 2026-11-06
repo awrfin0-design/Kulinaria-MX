@@ -22,7 +22,7 @@
 
 var SHEETS = {
   Clientes: ['ID Shopify', 'Creado', 'Actualizado', 'Nombre', 'Apellido', 'Correo', 'Teléfono', 'Dirección', 'Ciudad', 'CP', 'Alergias', 'No me gustan', 'Dietas', 'Código de referencia', 'Plan', 'Etiquetas', 'Notas'],
-  Pedidos: ['ID Shopify', 'Pedido', 'Fecha', 'Cliente', 'Correo', 'Teléfono', 'Total', 'Moneda', 'Pago', 'Entrega', 'Plan', 'Enfoque', 'Dietas', 'Alergias', 'No me gustan', 'Dirección de entrega', 'Código de referencia', 'Contrato aceptado', 'Platillos', 'Nota', 'Días (JSON)', 'ID Cliente', 'Para'],
+  Pedidos: ['ID Shopify', 'Pedido', 'Fecha', 'Cliente', 'Correo', 'Teléfono', 'Total', 'Moneda', 'Pago', 'Entrega', 'Plan', 'Enfoque', 'Dietas', 'Alergias', 'No me gustan', 'Dirección de entrega', 'Código de referencia', 'Contrato aceptado', 'Platillos', 'Nota', 'Días (JSON)', 'ID Cliente', 'Para', 'Notas cocina'],
   Platillos: ['ID Pedido', 'Pedido', 'Fecha', 'Cliente', 'Platillo', 'Variante', 'Cantidad', 'Precio unitario', 'Plan de suscripción']
 };
 
@@ -71,7 +71,7 @@ function adminData_() {
   var sel = loadSelections_(), pz = loadPauses_();
   var orders = loadOrders_().filter(function (o) { return o.isPlan; }).map(function (o) {
     var byWeek = {}, rw = resolveOrderWeeks_(o, sel, pz); rw.forEach(function (w) { byWeek[w.week] = w.items; });
-    return { holder: o.customer, para: o.para, phone: o.phone, address: o.address, allergies: o.allergies, dislikes: o.dislikes, weeks: rw.map(function (w) { return { week: w.week, slots: w.slots, src: w.src }; }), paused: rw.paused, id: o.id, name: o.name, date: new Date(o.date).toISOString(), customer: o.para ? o.customer + ' · ' + o.para : o.customer, email: o.email, cid: o.cid, total: o.total, currency: o.currency, paid: o.paid,
+    return { holder: o.customer, para: o.para, notes: o.notes, phone: o.phone, address: o.address, allergies: o.allergies, dislikes: o.dislikes, weeks: rw.map(function (w) { return { week: w.week, slots: w.slots, src: w.src }; }), paused: rw.paused, id: o.id, name: o.name, date: new Date(o.date).toISOString(), customer: o.para ? o.customer + ' · ' + o.para : o.customer, email: o.email, cid: o.cid, total: o.total, currency: o.currency, paid: o.paid,
       plan: o.block ? 'block' : 'trial', items: countItems_(o.slots), byWeek: byWeek };
   });
   orders.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
@@ -188,7 +188,7 @@ function handleOrder_(o) {
     var dt = line ? (lineProp_(line, '_dietas') || a.dietas || '') : (a.dietas || '');
     var rowSummary = line ? summaryOf(line, rows) : summary;
     var row = upsertRow_('Pedidos', 1, key, [key, o.name, o.created_at, name, email, c.phone || a.telefono || '', total, o.currency, o.financial_status, o.fulfillment_status || 'pendiente',
-      planKey, a.enfoque || a.nivel || '', dt, al, dl, addr, a.codigo_referencia || '', a.contrato_aceptado || '', rowSummary, o.note || '', JSON.stringify(slots), String(c.id || ''), para]);
+      planKey, a.enfoque || a.nivel || '', dt, al, dl, addr, a.codigo_referencia || '', a.contrato_aceptado || '', rowSummary, o.note || '', JSON.stringify(slots), String(c.id || ''), para, line ? lineProp_(line, '_notas') : '']);
     try { sheet_('Pedidos').getRange(row, 4).setFontWeight('bold'); } catch (e0) { /* formatting never blocks an order */ }
     rows.forEach(function (d) { sh.appendRow([o.id, o.name, o.created_at, para || name, d.title, a.nivel || '', d.qty, '', line ? String(line.variant_title || '') : '']); });
   };
@@ -335,7 +335,7 @@ function loadOrders_() {
     slots = slots.length ? padSlots_(slots) : slotsFromSummary_(r[18]);
     var pl = String(r[10] || '').toLowerCase();
     return { id: String(r[0]), name: String(r[1]), date: r[2], customer: String(r[3]), email: String(r[4] || '').toLowerCase(), phone: String(r[5] || ''), total: Number(r[6]) || 0, currency: String(r[7]),
-      paid: String(r[8]).toLowerCase() === 'paid', isPlan: pl !== '', block: pl === 'block' || /bloque|4/.test(pl), address: String(r[15] || ''), allergies: String(r[13] || ''), dislikes: String(r[14] || ''), slots: slots, cid: String(r[21] || ''), para: String(r[22] || ''), summary: String(r[18] || '') };
+      paid: String(r[8]).toLowerCase() === 'paid', isPlan: pl !== '', block: pl === 'block' || /bloque|4/.test(pl), address: String(r[15] || ''), allergies: String(r[13] || ''), dislikes: String(r[14] || ''), slots: slots, cid: String(r[21] || ''), para: String(r[22] || ''), notes: String(r[23] || ''), summary: String(r[18] || '') };
   });
 }
 function loadSelections_() {

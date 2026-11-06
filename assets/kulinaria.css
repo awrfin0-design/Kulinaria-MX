@@ -2410,3 +2410,21 @@ body .funnel:not(.funnel--teaser) .step.is-on::-webkit-scrollbar,body .funnel:no
 @media (max-width:600px){.people li{flex-direction:column;align-items:flex-start}}
 
 .footer-credit a{text-decoration:underline;text-underline-offset:3px}
+
+/* funnel: "how it works" tutorial in the plan step */
+.fn-how{margin:10px 0 4px;padding:10px 14px;border:1px solid var(--border-accent);border-radius:14px;background:var(--accent-wash)}
+.fn-how summary{cursor:pointer;font-weight:600;font-size:.95rem;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px}.fn-how summary::-webkit-details-marker{display:none}.fn-how summary::after{content:'+';font-size:1.2rem;color:var(--accent)}.fn-how[open] summary::after{content:'–'}.fn-how[open] summary{margin-bottom:10px}
+.fn-how__list{list-style:none;counter-reset:fnh;margin:0;padding:0;display:grid;gap:10px}
+.fn-how__list li{counter-increment:fnh;position:relative;padding-left:34px;display:grid;gap:2px;font-size:.88rem;line-height:1.45}
+.fn-how__list li::before{content:counter(fnh);position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--bg,#000);display:grid;place-items:center;font-size:.75rem;font-weight:700}
+.fn-how__list strong{font-size:.92rem}
+.fn-how__list span{color:var(--text-muted,inherit);opacity:.9}
+.fn-how__ex{margin:12px 0 0;padding:10px 12px;border-radius:10px;border:1px dashed var(--border-accent);font-size:.85rem;line-height:1.45}
+
+/* funnel: per-day ingredient tweaks */
+.fn-mods{margin:10px 0;padding:12px 14px;border:1px solid var(--border-accent);border-radius:14px;background:var(--accent-wash);display:grid;gap:8px}
+.fn-mods[hidden]{display:none}
+.fn-mods p{margin:0}.fn-mods__t{font-weight:600;font-size:.9rem}.fn-mods__h,.fn-mods__w{font-size:.78rem;opacity:.85;line-height:1.4}
+.fn-mods__chips{display:flex;flex-wrap:wrap;gap:6px}
+.fn-mods__note{display:grid;gap:4px;font-size:.8rem}
+.fn-mods__note .input{width:100%}

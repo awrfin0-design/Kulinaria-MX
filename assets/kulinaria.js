@@ -31,6 +31,20 @@
     return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
   };
 
+  /* menu groups: 7 follow the dish category, 4 follow the diets of the dish (a dish can be in several) */
+  var GROUPS = {
+    'al-fuego': { cat: ['al-fuego-y-mar'] }, desayunos: { cat: ['desayunos-premium'] }, bowls: { cat: ['bowls-de-la-semana'] }, diario: { cat: ['diario-premium'] },
+    'keto-low-carb': { diet: ['keto', 'bajo-carbos'] }, 'fit-proteina': { diet: ['alto-proteina'] }, veggie: { diet: ['vegetariano', 'vegano'] }, 'sin-gluten': { diet: ['sin-gluten', 'libre-de-gluten'] },
+    junior: { cat: ['kulinaria-junior'] }, entradas: { cat: ['sopas-y-entradas'] }, 'snacks-postres': { cat: ['postres-y-snacks', 'batidos-y-bebidas'] }
+  };
+  function inGroup(card, gid) {
+    if (!gid || gid === 'all') return true;
+    var g = GROUPS[gid]; if (!g) return card.getAttribute('data-category') === gid;
+    if (g.cat) return g.cat.indexOf(card.getAttribute('data-category')) > -1;
+    var d = (card.getAttribute('data-diets') || '').split('|'); return g.diet.some(function (x) { return d.indexOf(x) > -1; });
+  }
+  function groupForDiet(slug) { var out = ''; Object.keys(GROUPS).forEach(function (k) { if (!out && GROUPS[k].diet && GROUPS[k].diet.indexOf(slug) > -1) out = k; }); return out; }
+
   // Current wall-clock time in the store timezone.
   function mxNow() {
     var parts = new Intl.DateTimeFormat('en-US', {
@@ -294,7 +308,7 @@
     var scope = bar.closest('section') || document;
     var run = function () {
       $$('[data-dish]', scope).forEach(function (c) {
-        var okCat = state.category === 'all' || c.getAttribute('data-category') === state.category;
+        var okCat = inGroup(c, state.category);
         var diets = (c.getAttribute('data-diets') || '').split('|');
         var okDiet = state.diets.every(function (d) { return diets.indexOf(d) > -1; });
         var okTier = state.tier === 'all' || c.getAttribute('data-tier') === state.tier;
@@ -328,9 +342,9 @@
       $$('[data-filter="diet"][aria-pressed="true"]', bar).forEach(function (x) { x.click(); });
       var allCat = $('[data-filter="category"][data-value="all"]', bar); if (allCat) allCat.click();
       var allTier = $('[data-filter="tier"][data-value="all"]', bar); if (allTier) allTier.click();
-      if (q.get('categoria')) { var cb = $('[data-filter="category"][data-value="' + q.get('categoria') + '"]', bar); if (cb) cb.click(); }
+      if (q.get('categoria')) { var cv = q.get('categoria'); if (!GROUPS[cv]) Object.keys(GROUPS).forEach(function (k) { if (GROUPS[k].cat && GROUPS[k].cat.indexOf(cv) > -1) cv = k; }); var cb = $('[data-filter="category"][data-value="' + cv + '"]', bar); if (cb) cb.click(); }
       if (q.get('dieta')) {
-        var db = $('[data-filter="diet"][data-value="' + q.get('dieta') + '"]', bar);
+        var gdb = groupForDiet(q.get('dieta')), db = gdb ? $('[data-filter="category"][data-value="' + gdb + '"]', bar) : $('[data-filter="diet"][data-value="' + q.get('dieta') + '"]', bar);
         if (db && db.getAttribute('aria-pressed') !== 'true') db.click();
       }
     };
@@ -996,6 +1010,7 @@
       var MEALS = +holder.getAttribute('data-meals') || 5, WEEKS = +holder.getAttribute('data-weeks') || 4;
       var st = { plan: 'block', tier: 'selecto', cat: 'all', diet: 'all', qty: {}, days: [], info: {}, allergies: [], step: 0, remembered: false, renew: true };
       try { var saved = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (saved && saved.v === 2) { st = Object.assign(st, saved); st.tier = 'selecto'; st.remembered = !!(saved.info && (saved.info.name || saved.info.email)); } } catch (e) {}
+      if (st.cat && st.cat !== 'all' && !GROUPS[st.cat]) st.cat = 'all';
       var T_ = function (k) { return holder.getAttribute('data-t-' + k) || ''; };
       var steps = $$('[data-fn-step]', holder), dots = $$('[data-fn-dot]', holder), bar = $('[data-fn-bar]', holder);
       var next = $('[data-fn-next]', holder), prev = $('[data-fn-prev]', holder), finish = $('[data-fn-finish]', holder), err = $('[data-fn-error]', holder);
@@ -1023,6 +1038,36 @@
       var tierEl = function () { return $('[data-tier-choice="' + st.tier + '"]', holder) || tierBtns[0]; };
       var priceOf = function (btn, plan) { return +btn.getAttribute(plan === 'block' ? 'data-block' : 'data-week') || 0; };
       var count = function () { return st.days.filter(Boolean).length; };
+      /* per-day tweaks: ingredients to leave out + a free note, saved with the order lines (kitchen sees them) */
+      if (!Array.isArray(st.mods) || st.mods.length !== MEALS) st.mods = blankDays().map(function () { return { off: [], note: '' }; });
+      var modsKey = '';
+      var modsOf = function (i) { return st.mods[i] || (st.mods[i] = { off: [], note: '' }); };
+      var modsText = function (i) { var m = st.mods[i]; if (!m) return ''; var parts = (m.off || []).map(function (x) { return fill(T_('mods-without'), { i: x }); }); if (m.note) parts.push(m.note); return parts.join(', '); };
+      var renderMods = function () {
+        var box = $('[data-fn-mods]', holder); if (!box) return;
+        var dish = st.days[st.active] && byPid(st.days[st.active]);
+        if (!dish) { box.hidden = true; modsKey = ''; return; }
+        var key = st.active + '|' + dish.getAttribute('data-pid') + '|' + st.step; box.hidden = false;
+        if (key === modsKey) return; modsKey = key;
+        var m = modsOf(st.active);
+        var ing = (dish.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean);
+        box.innerHTML = '';
+        var h = document.createElement('p'); h.className = 'fn-mods__t'; h.textContent = fill(T_('mods-title'), { d: dayLabel(st.active), p: lab(dish) }); box.appendChild(h);
+        if (ing.length) {
+          var hint = document.createElement('p'); hint.className = 'fn-mods__h'; hint.textContent = T_('mods-hint'); box.appendChild(hint);
+          var chips = document.createElement('div'); chips.className = 'fn-mods__chips';
+          ing.forEach(function (name) {
+            var b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = name; b.setAttribute('aria-pressed', m.off.indexOf(name) > -1 ? 'true' : 'false');
+            b.addEventListener('click', function () { var k = m.off.indexOf(name); if (k > -1) m.off.splice(k, 1); else m.off.push(name); b.setAttribute('aria-pressed', k > -1 ? 'false' : 'true'); persist(); });
+            chips.appendChild(b);
+          });
+          box.appendChild(chips);
+        }
+        var lb = document.createElement('label'); lb.className = 'fn-mods__note'; var sp = document.createElement('span'); sp.textContent = T_('mods-note'); lb.appendChild(sp);
+        var inp = document.createElement('input'); inp.type = 'text'; inp.className = 'input'; inp.maxLength = 140; inp.value = m.note || ''; inp.placeholder = T_('mods-ph'); inp.setAttribute('data-fn-mods-note', '');
+        inp.addEventListener('input', function () { m.note = inp.value; persist(); }); lb.appendChild(inp); box.appendChild(lb);
+        var w = document.createElement('p'); w.className = 'fn-mods__w'; w.textContent = T_('mods-warn'); box.appendChild(w);
+      };
       var persist = function () { try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(Object.assign({ v: 2 }, st))); } catch (e) {} };
       var say = function (msg) { if (!err) return; err.hidden = !msg; err.textContent = msg || ''; };
       var fill = function (tpl, o) { return String(tpl).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; }); };
@@ -1071,7 +1116,7 @@
         var csel = $('[data-fn-cat]', holder); if (csel) csel.value = st.cat; var dsel = $('[data-fn-diet]', holder); if (dsel) dsel.value = st.diet;
         var n = count(), full = n >= MEALS, shown = 0;
         dishes.forEach(function (d) {
-          var show = rank(d.getAttribute('data-tier')) >= rank(st.tier) && (st.cat === 'all' || d.getAttribute('data-category') === st.cat) && (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1);
+          var show = rank(d.getAttribute('data-tier')) >= rank(st.tier) && inGroup(d, st.cat) && (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1);
           d.classList.toggle('is-hidden', !show); if (show) shown++;
           var q = st.qty[d.getAttribute('data-pid')] || 0;
           // the per-meal price follows the chosen plan: 4-week block = block price / 20 meals, 1-week plan = week price / 5 meals (so 5 meals add up to the plan price)
@@ -1108,6 +1153,7 @@
         var sb = $('[data-fn-s-block]', holder); if (sb) { sb.hidden = false; sb.textContent = st.plan === 'block' ? fill(T_('weeks-x'), { p: money(priceOf(tierEl(), st.plan) / WEEKS), w: WEEKS }) : fill(T_('per-week'), { p: money(planTotal()) }); }
         var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step + 1).replace('{t}', steps.length) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
         var rn = $('[data-fn-renew]', holder); if (rn) { var hasPlan = !!tierEl().getAttribute('data-selling-plan'); rn.hidden = !(hasPlan && st.plan === 'block'); var box = $('[data-fn-renew-box]', holder); if (box) box.checked = st.renew; }
+        renderMods();
         // stepper
         steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
         dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); });
@@ -1154,6 +1200,7 @@
         var d = e.target.closest ? e.target.closest('[data-fn-dish]') : null; if (!d) return;
         var id = d.getAttribute('data-pid');
         if (!e.target.closest('[data-pick]')) return;
+        if (st.days[st.active] !== id) st.mods[st.active] = { off: [], note: '' };
         st.days[st.active] = id;
         for (var o = 1; o <= MEALS; o++) { var k = (st.active + o) % MEALS; if (!st.days[k]) { st.active = k; break; } }   // move on to the next empty day
         say(''); persist(); render();
@@ -1217,6 +1264,7 @@
         var props = {}; props[T_('prop-meals')] = String(count()); props[T_('prop-tier')] = tb.getAttribute('data-name'); props[T_('prop-length')] = st.plan === 'block' ? T_('length-block') : T_('length-week');
         st.days.forEach(function (q, k) { var dd = byPid(q); if (dd) props[dayLabel(k)] = dd.getAttribute('data-title'); });
         props['_platillos'] = list; props['_para'] = paraId; if (paraName) { props[T_('prop-for') || 'Para'] = paraName; props['_para_nombre'] = paraName; }
+        var notesAll = st.days.map(function (q, k) { var tx = q ? modsText(k) : ''; return tx ? dayLabel(k) + ': ' + tx : ''; }).filter(Boolean).join(' | '); if (notesAll) { props[T_('prop-notes')] = notesAll; props['_notas'] = notesAll; }
         props['_dias'] = attrs.dias; props['_alergias'] = attrs.alergias || '-'; props['_no_me_gustan'] = attrs.no_me_gustan || '-'; props['_dietas'] = attrs.dietas || '-'; props['_alerta'] = attrs.alerta_alergias || '-';
         var line = { id: parseInt(tb.getAttribute(st.plan === 'block' ? 'data-variant-block' : 'data-variant-week'), 10), quantity: 1, properties: props };
         var sp = tb.getAttribute('data-selling-plan'); if (st.plan === 'block' && st.renew && sp) line.selling_plan = parseInt(sp, 10);

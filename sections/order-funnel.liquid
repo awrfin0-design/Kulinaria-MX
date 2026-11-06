@@ -15,6 +15,7 @@
   data-t-per-week="{{ 'funnel.per_week_each' | t }}" data-t-weeks-x="{{ 'funnel.weeks_x' | t }}" data-t-per-meal="{{ 'funnel.per_meal' | t }}"
   data-t-all-lines="{{ 'funnel.all_categories' | t }}" data-t-prop-dishes="{{ 'funnel.prop_dishes' | t }}" data-t-prop-meals="{{ 'funnel.prop_meals' | t }}"
   data-t-prop-tier="{{ 'funnel.prop_tier' | t }}" data-t-prop-length="{{ 'funnel.prop_length' | t }}" data-t-length-block="{{ 'funnel.length_block' | t }}" data-t-length-week="{{ 'funnel.length_week' | t }}"
+  data-t-mods-title="{{ 'funnel.mods_title' | t }}" data-t-mods-hint="{{ 'funnel.mods_hint' | t }}" data-t-mods-note="{{ 'funnel.mods_note' | t }}" data-t-mods-ph="{{ 'funnel.mods_ph' | t }}" data-t-mods-warn="{{ 'funnel.mods_warn' | t }}" data-t-mods-without="{{ 'funnel.mods_without' | t }}" data-t-prop-notes="{{ 'funnel.prop_notes' | t }}" data-t-mods-open="{{ 'funnel.mods_open' | t }}"
   data-t-para-me="{{ 'funnel.para_me' | t }}" data-t-prop-for="{{ 'funnel.prop_for' | t }}"
   data-t-renew="{{ 'funnel.renew' | t }}" data-t-days="{{ 'funnel.days' | t }}" data-t-finish="{{ 'funnel.finish' | t }}" data-t-finish-guest="{{ 'funnel.finish_guest' | t }}" data-t-credit="{{ 'funnel.credit' | t }}" data-t-rolled="{{ 'funnel.rolled' | t }}" data-t-pick="{{ 'funnel.pick' | t }}" data-t-picked="{{ 'funnel.picked' | t }}" data-t-pick-for="{{ 'funnel.pick_for' | t }}" data-t-all-done="{{ 'funnel.all_done' | t }}" data-t-clear-day="{{ 'funnel.clear_day' | t }}" data-t-first="{{ 'funnel.first_delivery' | t }}" data-t-day-empty="{{ 'funnel.day_empty' | t }}" data-t-up-badge="{{ 'funnel.up_badge' | t }}" data-t-up-total="{{ 'funnel.up_total' | t }}"
   data-t-prop-upgrade="{{ 'funnel.prop_upgrade' | t }}" data-t-need-contract="{{ 'funnel.need_contract' | t }}" data-t-days-missing="{{ 'funnel.days_missing' | t }}"
@@ -65,6 +66,22 @@
               <span class="fn-plan__incl">{{ 'funnel.includes_week' | t }}</span>
             </button>
           </div>
+          {%- capture hw_bn %}{% render 'plan-price', tier: 'selecto', kind: 'block' %}{% endcapture -%}
+          {%- capture hw_wn %}{% render 'plan-price', tier: 'selecto', kind: 'week' %}{% endcapture -%}
+          {%- assign hw_bn = hw_bn | strip | plus: 0 -%}{%- assign hw_wn = hw_wn | strip | plus: 0 -%}
+          {%- assign hw_block = hw_bn | times: 100 | money_without_trailing_zeros -%}
+          {%- assign hw_week = hw_wn | times: 100 | money_without_trailing_zeros -%}
+          {%- assign hw_wk = hw_bn | divided_by: 4 | times: 100 | money_without_trailing_zeros -%}
+          <details class="fn-how" data-fn-how>
+            <summary>{{ 'funnel.how_title' | t }}</summary>
+            <ol class="fn-how__list">
+              {%- for n in (1..5) -%}
+                {%- assign kt = 'funnel.how_' | append: n | append: '_t' -%}{%- assign kp = 'funnel.how_' | append: n | append: '_p' -%}
+                <li><strong>{{ kt | t }}</strong><span>{{ kp | t | replace: '[block]', hw_block | replace: '[week]', hw_week | replace: '[wk]', hw_wk }}</span></li>
+              {%- endfor -%}
+            </ol>
+            <p class="fn-how__ex">{{ 'funnel.how_ex' | t | replace: '[block]', hw_block }}</p>
+          </details>
           <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>{{ 'funnel.renew' | t }}</span></label>
         </fieldset>
 
@@ -136,19 +153,15 @@
           <legend class="fn-sr">{{ 'funnel.s3_title' | t }}</legend>
           <div class="fn-para" data-fn-para-wrap hidden><label for="fn-para-{{ section.id }}">{{ 'funnel.para' | t }}</label><select class="select" id="fn-para-{{ section.id }}" data-fn-para></select><a class="text-link" href="/pages/cuenta-perfil#familia">{{ 'funnel.para_add' | t }}</a></div>
           <ol class="fn-week" data-fn-week aria-label="{{ 'funnel.days_title' | t }}"></ol>
+          <div class="fn-mods" data-fn-mods hidden></div>
           <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / {{ meals_per_week }} <span>{{ 'funnel.meals_word' | t }}</span><i data-fn-meter-bar></i></p>
             <label class="fn-sel"><span class="fn-sr">{{ 'collection.category' | t }}</span>
               <select class="select" data-fn-cat>
-                <option value="all">{{ 'funnel.all_categories' | t }}</option>
-                {%- assign cats = 'desayunos-premium,al-fuego-y-mar,bowls-de-la-semana,diario-premium,kulinaria-junior,sopas-y-entradas,postres-y-snacks,batidos-y-bebidas' | split: ',' -%}
-                {%- for c in cats -%}{%- assign ck = 'category.' | append: c -%}<option value="{{ c }}">{{ ck | t }}</option>{%- endfor -%}
-              </select></label>
-            <label class="fn-sel"><span class="fn-sr">{{ 'funnel.diet_filter' | t }}</span>
-              <select class="select" data-fn-diet>
-                <option value="all">{{ 'funnel.all_diets_short' | t }}</option>
-                {%- for block in section.blocks -%}{%- capture tx_b_label -%}{% render 'tx', s: block.settings.label %}{%- endcapture -%}<option value="{{ block.settings.slug }}" {{ block.shopify_attributes }}>{{ tx_b_label }}</option>{%- endfor -%}
+                <option value="all">{{ 'menu_group.all' | t }}</option>
+                {%- assign cats = 'al-fuego,desayunos,bowls,diario,keto-low-carb,fit-proteina,veggie,sin-gluten,junior,entradas,snacks-postres' | split: ',' -%}
+                {%- for c in cats -%}{%- assign ck = 'menu_group.' | append: c -%}<option value="{{ c }}">{{ ck | t }}</option>{%- endfor -%}
               </select></label>
           </div>
           <div class="fn-carousel">

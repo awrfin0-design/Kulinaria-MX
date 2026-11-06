@@ -86,15 +86,16 @@ for (const base of groups) {
 await page.goto(`${URL0}#/menu`); await page.waitForTimeout(150);
 const scope = '[data-page="menu"]';
 ok('menu shows the 9 dishes scheduled for this week (2 are planned for later weeks)', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 9);
-await page.click(`${scope} [data-filter="category"][data-value="al-fuego-y-mar"]`);
+await page.click(`${scope} [data-filter="category"][data-value="al-fuego"]`);
 ok('category filter -> 3 dishes', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 3);
-await page.click(`${scope} [data-filter="diet"][data-value="keto"]`);
-ok('category + keto -> 2 dishes', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 2);
-ok('counter matches', (await page.$eval(`${scope} [data-count]`, (e) => e.textContent.trim())) === '2');
+await page.click(`${scope} [data-filter="category"][data-value="keto-low-carb"]`);
+const ketoOk = await page.evaluate((sc) => { const v = [...document.querySelectorAll(sc + ' [data-dish]:not(.is-hidden)')]; return v.length > 0 && v.every((x) => /keto|bajo-carbos/.test(x.getAttribute('data-diets'))) && document.querySelector(sc + ' [data-count]').textContent.trim() === String(v.length); }, scope);
+ok('keto / low carb group shows only keto or low-carb dishes and the counter matches', ketoOk);
+ok('the 12 menu groups are offered (all + 11) and the old diet row is gone', await page.evaluate((sc) => document.querySelectorAll(sc + ' [data-filter="category"]').length === 12 && !document.querySelector(sc + ' [data-filter="diet"]'), scope));
 await page.goto(`${URL0}#/home`); await page.reload();
-await page.goto(`${URL0}#/menu?dieta=vegano`); await page.reload(); await page.waitForFunction(() => document.querySelectorAll('[data-page="menu"] [data-dish]:not(.is-hidden)').length === 1, null, { timeout: 6000 }).catch(() => {}); await page.waitForTimeout(300);
+await page.goto(`${URL0}#/menu?dieta=vegano`); await page.reload(); await page.waitForFunction(() => document.querySelectorAll('[data-page="menu"] [data-dish]:not(.is-hidden)').length < 9, null, { timeout: 6000 }).catch(() => {}); await page.waitForTimeout(300);
 const vgN = await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.map((x) => x.getAttribute('data-diets')));
-ok('deep link ?dieta=vegano filters menu', vgN.length === 1, JSON.stringify(vgN));
+ok('deep link ?dieta=vegano opens the Veggie group (vegetarian + vegan dishes only)', vgN.length >= 1 && vgN.every((x) => /vegano|vegetariano/.test(x)), JSON.stringify(vgN));
 
 // ---- home diet chip deep-links into the filtered menu without reload
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(100);
@@ -430,8 +431,8 @@ for (const k of keys.filter((k) => !k.startsWith('p/') || k === 'p/salmon-costra
 }
 ok('no Spanish UI strings leak into the English storefront', leaks.length === 0, leaks.join(' | '));
 await page.goto(`${URL0}#/menu`); await page.waitForTimeout(250);
-ok('menu filters are translated and still work in English', (await page.$eval('[data-page="menu"] [data-filter="category"][data-value="al-fuego-y-mar"]', (b) => b.textContent.trim())) === 'Fire & Sea');
-await page.click('[data-page="menu"] [data-filter="category"][data-value="al-fuego-y-mar"]');
+ok('menu filters are translated and still work in English', (await page.$eval('[data-page="menu"] [data-filter="category"][data-value="al-fuego"]', (b) => b.textContent.trim())) === "From the fire");
+await page.click('[data-page="menu"] [data-filter="category"][data-value="al-fuego"]');
 ok('category filter works in English', (await page.$$eval('[data-page="menu"] [data-dish]:not(.is-hidden)', (e) => e.length)) === 3);
 await page.goto(`${URL0}#/pg/perfil`); await page.waitForTimeout(150);
 await page.check('[data-page="pg/perfil"] input[name="allergy"][value="Frutos secos"]'); await page.click('[data-page="pg/perfil"] button[type="submit"]'); await page.waitForTimeout(100);
@@ -1220,6 +1221,25 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('ambassador page: one page with the code/credits card, the rules (FAQ) and the request form (no separate rules / request pages)', await page.evaluate(() => { const p = document.querySelector('[data-page="pg/embajadores"]'); return !!p.querySelector('.hub__card') && !!p.querySelector('.accordion') && !!p.querySelector('form') && p.querySelectorAll('.accordion details').length >= 6; }));
   ok('every page shows the author signature (Alan Waizel · Vellum & Quill linking to vellumandquill.com)', await page.evaluate(() => { const c = document.querySelector('.footer-credit'); return !!c && /Alan Waizel/.test(c.textContent) && /Vellum/.test(c.textContent) && !!c.querySelector('a[href="https://vellumandquill.com"]'); }));
   ok('contact forms hand a copy to the sheet (lead wrapper with the endpoint)', await page.evaluate(() => { const w = document.querySelector('[data-page="pg/embajadores"] [data-lead-wrap]'); return !!w && w.getAttribute('data-kind') === 'embajador'; }));
+}
+
+
+// =====================================================================  v49: funnel tutorial + per-day ingredient tweaks
+{
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.evaluate(() => { location.hash = '#/pg/pedido'; }); await page.reload(); await page.waitForTimeout(800);
+  const how = await page.evaluate(() => { const d = document.querySelector('[data-page="pg/pedido"] [data-fn-how]'); return d ? { open: d.open, items: d.querySelectorAll('li').length, txt: d.textContent } : null; });
+  ok('plan step has a "how it works" tutorial (5 steps + worked example) that starts closed so the step still fits', !!how && how.open === false && how.items === 5 && /\$3,600|3,600/.test(how.txt) && /\$70/.test(how.txt) && /2 × \$70/.test(how.txt), JSON.stringify(how && how.items));
+  await page.click('[data-page="pg/pedido"] [data-fn-how] summary'); await page.waitForTimeout(150);
+  ok('the tutorial opens on tap', await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-how]').open));
+  await page.click('[data-page="pg/pedido"] [data-fn-next]'); await page.waitForTimeout(600);
+  await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-dish]:not(.is-hidden) [data-pick]').click()); await page.waitForTimeout(400);
+  const mods = await page.evaluate(() => { const m = document.querySelector('[data-page="pg/pedido"] [data-fn-mods]'); return m && !m.hidden ? { chips: m.querySelectorAll('.chip').length, inp: !!m.querySelector('[data-fn-mods-note]'), warn: /alergia|allergy/i.test(m.textContent) } : null; });
+  ok('after picking a dish, the day offers its ingredients to leave out, a free note and the allergy disclaimer', !!mods && mods.chips >= 1 && mods.inp && mods.warn, JSON.stringify(mods));
+  await page.click('[data-page="pg/pedido"] [data-fn-mods] .chip'); await page.fill('[data-page="pg/pedido"] [data-fn-mods-note]', 'salsa aparte'); await page.waitForTimeout(150);
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('kulinaria_funnel')).mods[0]);
+  ok('tweaks are saved with the day (ingredient off + note)', saved.off.length === 1 && saved.note === 'salsa aparte', JSON.stringify(saved));
+  await page.evaluate(() => localStorage.removeItem('kulinaria_funnel'));
 }
 
 await browser.close();
