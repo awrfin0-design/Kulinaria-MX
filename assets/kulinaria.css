@@ -2199,3 +2199,69 @@ body .funnel:not(.funnel--teaser) .funnel__aside{gap:6px;padding:14px 16px}
   .funnel__aside .countdown{flex-basis:100%;font-size:.76rem}
   .fn-dish{flex-basis:64vw}
 }
+
+/* v28: credit boxes, one action bar (Back · Start over · Confirm), skip week */
+.fn-actions{display:flex;align-items:center;gap:14px}
+.fn-actions [data-fn-prev]{margin-right:auto}
+.fn-actions .fn-reset{font-size:.9rem;color:var(--text-muted)}
+.fn-credit{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 16px;margin:0 0 12px;border:1px solid var(--border-accent);border-radius:16px;background:var(--accent-wash)}
+.fn-credit p{margin:0;font-size:.92rem;flex:1 1 280px}
+.fn-credit[hidden]{display:none}
+.mw-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:10px 0}
+.mw-stats div{padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:var(--bg-raised)}
+.mw-stats dt{font-family:var(--font-label);font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+.mw-stats dd{margin:4px 0 0;font-family:var(--font-heading);font-size:1.6rem;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums}
+.mw-note{margin:6px 0 var(--space-md);font-size:.9rem}
+.mw-count{margin:4px 0 0;font-size:.9rem;color:var(--text-muted)}
+.mw-buy,.mw-credit{margin-bottom:var(--space-md)}
+.mw-buy[hidden],.mw-credit[hidden],[data-mw-planner][hidden],[data-mw-none][hidden]{display:none}
+.myweek .btn-row{gap:10px;flex-wrap:wrap}
+@media (max-width:900px){
+  .fn-actions{gap:10px}
+  .fn-actions .fn-reset{font-size:.8rem}
+  .mw-stats{grid-template-columns:1fr 1fr 1fr;gap:8px}.mw-stats dd{font-size:1.25rem}.mw-stats div{padding:10px}
+}
+.funnel__aside .funnel__list{align-content:start}
+
+/* v28b: the buttons live INSIDE the summary box: [Back / Start over] next to [Continue] */
+.funnel__aside .fn-actions{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 14px;align-items:center;margin:10px 0 0;padding:12px 0 0;border-top:1px solid var(--line);flex:none}
+.funnel__aside .fn-links{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.funnel__aside .fn-links .text-link{font-size:.82rem;padding:0;margin:0;color:var(--text-muted);white-space:nowrap}
+.funnel__aside .fn-actions .btn{width:100%;min-height:48px;padding-inline:14px;justify-self:stretch;grid-column:2;font-size:.74rem;letter-spacing:.1em;text-align:center}
+.funnel__aside .fn-actions .btn[hidden]{display:none}
+.funnel__aside .fn-actions [data-fn-prev]{margin-right:0}
+.funnel__aside .fn-cut{flex:none}
+body .funnel:not(.funnel--teaser) .funnel__aside{min-width:0}
+@media (min-width:901px){body .funnel:not(.funnel--teaser) .funnel__panel{grid-template-columns:minmax(0,1fr) minmax(280px,330px)}}
+@media (max-width:900px){
+  body .funnel:not(.funnel--teaser) .funnel__aside{flex-direction:column;align-items:stretch;flex-wrap:nowrap;padding:10px 12px}
+  .funnel__aside .fn-actions{padding-top:8px;margin-top:6px}
+  .funnel__aside .fn-actions .btn{min-height:46px;font-size:.72rem}
+}
+/* v28c: roomy button, plain small links, row pinned to the bottom of the box */
+.funnel__aside .fn-actions{margin-top:auto !important;grid-template-columns:minmax(0,max-content) minmax(0,1fr);gap:8px 12px}
+.funnel__aside .fn-links .text-link{font-family:var(--font-body);font-size:.84rem;letter-spacing:.01em;text-transform:none;font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.funnel__aside .fn-actions .btn{border-radius:16px;line-height:1.2;padding:12px 14px;min-height:50px;white-space:normal}
+.funnel__aside .funnel__list{flex:0 1 auto}
+.funnel__aside .fn-weeknote{margin-bottom:6px}
+
+/* v29: every dish card has exactly the same size, photo area and text area (badges never change the layout) */
+.fn-dish{height:100% !important}
+.fn-dish__media{flex:0 0 52% !important;height:auto !important}
+.fn-dish__body{flex:1 1 0 !important;min-height:0;display:flex !important;flex-direction:column;justify-content:flex-start;gap:3px !important;overflow:hidden}
+.fn-dish__row{margin-top:auto !important}
+.fn-dish__title{min-height:2.3em}
+.fn-warn{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.fn-up{display:block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0 !important}
+.fn-day{min-height:60px;height:100%}
+.fn-week li{display:flex}
+.fn-sel select,.fn-pickbar .select{height:40px;min-height:40px}
+.fn-plans .fn-plan{min-height:210px}
+
+/* v30: pausar entregas */
+.mypause .mp-form{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin:var(--space-md) 0}
+.mypause .mp-form .field{flex:1 1 220px;margin:0}
+.mypause .mp-form h3{flex:1 1 100%;margin:0}
+.mypause .mp-status{margin:var(--space-md) 0 4px;font-family:var(--font-heading);font-size:1.3rem;color:var(--accent)}
+.mypause .mp-status.is-paused{color:var(--text)}
+.mypause [hidden]{display:none}

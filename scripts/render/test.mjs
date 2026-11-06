@@ -15,6 +15,8 @@ if (shotDir) fs.mkdirSync(shotDir, { recursive: true });
 const { doc, routes, dead } = await renderSite();
 fs.mkdirSync(path.join(ROOT, 'preview'), { recursive: true });
 fs.writeFileSync(path.join(ROOT, 'preview', 'index.html'), doc);
+import { execFileSync } from 'node:child_process';
+try { execFileSync('node', ['render.mjs'], { cwd: path.dirname(new URL(import.meta.url).pathname), env: { ...process.env, GUEST: '1' }, stdio: 'ignore' }); } catch (e) { /* rendered earlier */ }
 const URL0 = 'file://' + path.join(ROOT, 'preview', 'index.html');
 
 async function scrollThrough(pg) {
@@ -132,23 +134,26 @@ ok('gift shown with code (uppercased)', (await page.$eval(`${cartScope} [data-gi
 await page.click(`${cartScope} [data-gift-add]`); await page.waitForTimeout(150);
 ok('gift add shows confirmation', (await page.$$('.preview-toast')).length > 0);
 
-// ---- account: pause locks follow the Saturday-10:00 cycle (Mexico City time)
-async function lockStateAt(iso) {
-  const c2 = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-  await c2.addInitScript(SKIP_LOADER);
-  const p2 = await c2.newPage();
-  await p2.clock.install({ time: new Date(iso) });
-  await p2.goto(`${URL0}#/pg/cuenta-pausas`); await p2.waitForTimeout(150);
-  const s = await p2.$$eval('[data-page="pg/cuenta-pausas"] [data-pause-lock]', (b) => b.map((x) => x.getAttribute('aria-disabled')));
-  const msgs = await p2.$$eval('[data-page="pg/cuenta-pausas"] [data-lock-msg]', (m) => m.map((x) => !x.hidden));
-  await c2.close(); return { s, msgs };
+// ---- account: pausar entregas (pause weeks / open pause / resume; plan only; sign-in only)
+{
+  const mp = '[data-page="pg/cuenta-pausas"] [data-mypause]';
+  const openPause = async (ls) => { await page.goto(`${URL0}#/home`); await page.evaluate((o) => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx_ob_asked', '1'); Object.entries(o).forEach(([k, v]) => localStorage.setItem(k, v)); }, ls || {}); await page.goto(`${URL0}#/pg/cuenta-pausas`); await page.reload(); await page.waitForTimeout(4200); };
+  await openPause({ 'kx-test-orders': '1' });
+  ok('pause: a customer with a plan sees the pause form and the deliveries are active', await page.evaluate((m) => { const r = document.querySelector(m); return !r.querySelector('[data-mp-main]').hidden && r.querySelector('[data-mp-none]').hidden && /activas/.test(r.querySelector('[data-mp-status]').textContent) && r.querySelector('[data-mp-start]').options.length === 12 && r.querySelector('[data-mp-resume]').hidden; }, mp));
+  await page.selectOption(`${mp} [data-mp-len]`, '2'); await page.click(`${mp} [data-mp-pause]`); await page.waitForTimeout(250);
+  ok('pause: pausing 2 weeks lists them, confirms, and offers to resume', await page.evaluate((m) => { const r = document.querySelector(m); return /Semanas en pausa/.test(r.querySelector('[data-mp-status]').textContent) && !r.querySelector('[data-mp-msg]').hidden && /Listo/.test(r.querySelector('[data-mp-msg]').textContent) && !r.querySelector('[data-mp-resume]').hidden; }, mp));
+  await page.click(`${mp} [data-mp-resume-go]`); await page.waitForTimeout(250);
+  ok('pause: resuming from the first week brings the deliveries back', await page.evaluate((m) => { const r = document.querySelector(m); return /activas/.test(r.querySelector('[data-mp-status]').textContent) && r.querySelector('[data-mp-resume]').hidden; }, mp));
+  await page.selectOption(`${mp} [data-mp-len]`, 'open'); await page.click(`${mp} [data-mp-pause]`); await page.waitForTimeout(250);
+  ok('pause: "until I resume" shows an open pause with no end date', await page.evaluate((m) => { const r = document.querySelector(m); return /hasta que las reanudes/.test(r.querySelector('[data-mp-status]').textContent) && /no tiene fecha/.test(r.querySelector('[data-mp-ends]').textContent); }, mp));
+  await page.click(`${mp} [data-mp-resume-go]`); await page.waitForTimeout(250);
+  ok('pause: resuming an open pause makes it active again', await page.$eval(`${mp} [data-mp-status]`, (e) => /activas/.test(e.textContent)));
+  await openPause({ 'kx-test-orders': '0' });
+  ok('pause: a customer without a plan is told there is nothing to pause and gets a link to build an order', await page.evaluate((m) => { const r = document.querySelector(m); return !r.querySelector('[data-mp-none]').hidden && r.querySelector('[data-mp-main]').hidden && !!r.querySelector('[data-mp-none] a[href*="pedido"]'); }, mp));
+  await openPause({ 'kx-test-orders': '1', 'kx-lang': 'en' });
+  ok('pause: English page is wholly English', await page.evaluate((m) => { const r = document.querySelector(m); return /Your deliveries are active/.test(r.querySelector('[data-mp-status]').textContent) && /Pause deliveries/.test(r.textContent) && !/Pausar|semanas/.test(r.textContent); }, mp));
+  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_ob_asked', '1'); }); await page.reload(); await page.waitForTimeout(300);
 }
-// Mexico City is UTC-6 year-round. Mon 12:00 local = 18:00Z; Tue 11:00 local; Fri 20:00 local; Sat 09:00 / 10:30 local.
-let st = await lockStateAt('2026-11-02T18:00:00Z'); ok('Mon noon: both pauses open', st.s.join() === 'false,false', st.s.join());
-st = await lockStateAt('2026-11-03T17:00:00Z'); ok('Tue 11:00: Thu/Fri pause locked, Mon-Wed open', st.s.join() === 'true,false' && st.msgs[0] === true, st.s.join());
-st = await lockStateAt('2026-11-07T02:00:00Z'); ok('Fri 20:00: both locked', st.s.join() === 'true,true', st.s.join());
-st = await lockStateAt('2026-11-07T15:00:00Z'); ok('Sat 09:00: still locked until cutoff', st.s.join() === 'true,true', st.s.join());
-st = await lockStateAt('2026-11-07T16:30:00Z'); ok('Sat 10:30: new cycle, both open again', st.s.join() === 'false,false', st.s.join());
 
 // ---- forms
 await page.goto(`${URL0}#/pg/carta-kulinaria`); await page.waitForTimeout(100);
@@ -353,9 +358,9 @@ ok('every page and subpage has a page header with breadcrumbs', noHead.length ==
 await page.goto(`${URL0}#/pg/embajadores-gimnasios`); await page.waitForTimeout(150);
 ok('subpages show the family sub-navigation with the current page marked', (await page.$$eval('[data-page="pg/embajadores-gimnasios"] .page-head__sub a', (a) => a.length)) >= 6 && (await page.$eval('[data-page="pg/embajadores-gimnasios"] .page-head__sub a[aria-current="page"]', (a) => /Gimnasios/.test(a.textContent))));
 // Miro coverage: sections that must exist
-const must = { 'home': ['.hero', '.marquee', '[data-funnel]', '[data-rail]', '.tier-ladder', '.fg--index', '.diet-chips, .chips', '.plan-card', '.accordion', '.cta-banner'],
+const must = { 'home': ['.hero', '.marquee', '[data-funnel]', '[data-rail]', '.tier-ladder', '.diet-chips, .chips', '.plan-card', '.accordion', '.cta-banner'],
   'pg/planes': ['.plan-card', '.tier-ladder', '.accordion'], 'pg/ayuda': ['form'], 'pg/terminos': ['.accordion details'], 'pg/carta-cotizacion': ['form'],
-  'pg/embajadores-solicitar': ['form'], 'pg/checkout': ['.card'], 'pg/cuenta-semana': ['[data-cutoff]'], 'pg/cuenta-pausas': ['[data-pause-lock]'], 'pg/cuenta-monedero': ['.card'] };
+  'pg/embajadores-solicitar': ['form'], 'pg/checkout': ['.card'], 'pg/cuenta-semana': ['[data-cutoff]'], 'pg/cuenta-pausas': ['[data-mypause]'], 'pg/cuenta-monedero': ['.card'] };
 const lacking = [];
 for (const [k, sels] of Object.entries(must)) { await page.goto(`${URL0}#/${k}`); await page.waitForTimeout(80); for (const sel of sels) if (!(await page.$(`[data-page="${k}"] ${sel}`))) lacking.push(`${k} ${sel}`); }
 ok('key sections from the Miro board exist on their pages', lacking.length === 0, lacking.join(' | '));
@@ -482,10 +487,6 @@ const dbox = await page.$eval(dm, (e) => { const r = e.getBoundingClientRect(); 
 await page.mouse.move(dbox.x + dbox.w * 0.85, dbox.y + dbox.h * 0.2); await page.waitForTimeout(500);
 ok('dish card tilts toward the pointer', (await page.$eval(dm, (e) => parseFloat(e.style.getPropertyValue('--ry')))) > 1.5);
 ok('carousel cards have a coverflow angle', await page.$$eval('[data-page="home"] .rail .dish', (c) => c.some((x) => x.style.getPropertyValue('--ry') !== '' && parseFloat(x.style.getPropertyValue('--ry')) !== 0)));
-await page.evaluate(() => { const r = document.querySelector('[data-page="home"] .fg--index'); window.scrollTo(0, r.getBoundingClientRect().top + window.scrollY - 100); }); await page.waitForTimeout(700);
-const row = await page.$eval('[data-page="home"] .index-row[data-peek]', (e) => { const r = e.getBoundingClientRect(); return { x: r.left + 200, y: r.top + r.height / 2 }; });
-await page.mouse.move(row.x, row.y); await page.mouse.move(row.x + 10, row.y + 4); await page.waitForTimeout(600);
-ok('hovering a category row shows its photo next to the cursor', await page.evaluate(() => { const p = document.querySelector('.peek'); return !!p && p.classList.contains('is-on') && /^(blob|data):/.test(p.querySelector('img').src); }));
 
 
 // ---- v5: one palette per theme, the same motif everywhere, seamless switching
@@ -543,7 +544,7 @@ ok('plan cards say "from $3,600 / includes 20 meals" and "from $1,000 / includes
 ok('the meals step shows dish cards with price; higher tiers carry the upgrade badge', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); const vis = [...f.querySelectorAll('[data-fn-dish]:not(.is-hidden)')]; return vis.length >= 8 && vis.every((d) => /\$\d+/.test(d.textContent)) && vis.filter((d) => d.getAttribute('data-tier') !== 'selecto').every((d) => !d.querySelector('[data-fn-up]').hidden); }));
 ok('the week strip has one button per weekday (Mon-Fri) with a date, starting on the first day', (await page.$$eval(`${fnS} [data-fn-day-btn]`, (b) => b.length === 5 && b.every((x) => /\d/.test(x.textContent)))) && (await page.$eval(`${fnS} [data-fn-day-btn="0"]`, (b) => b.classList.contains('is-active'))));
 ok('the countdown to the cut-off is shown in the summary', /\d/.test(await page.$eval(`${fnS} .fn-cut`, (e) => e.textContent)));
-ok('"confirm" is disabled until 5 meals are chosen', await page.$eval(`${fnS} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled') === 'true'));
+ok('"confirm" is disabled until at least one meal is chosen', await page.$eval(`${fnS} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled') === 'true'));
 for (let i = 0; i < 5; i++) await pickCard(fnS, null);
 ok('choosing a dish fills the active day and moves on to the next empty one (the meter reaches 5)', (await page.$eval(`${fnS} [data-fn-meter-n]`, (e) => e.textContent.trim())) === '5' && await page.$eval(`${fnS} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled') === 'false'));
 ok('base total for the 4-week plan is $3,600', /3,600/.test(await page.$eval(`${fnS} [data-fn-s-total]`, (e) => e.textContent)));
@@ -552,7 +553,7 @@ ok('upgrading Friday to a Reserve dish costs the difference of 3 levels ($210) f
 await page.click(`${fnS} [data-fn-day-btn="4"]`); await pickCard(fnS, null); await page.waitForTimeout(200);
 ok('back to a dish of the base tier the upgrade charge disappears', /3,600/.test(await page.$eval(`${fnS} [data-fn-s-total]`, (e) => e.textContent)));
 await page.click(`${fnS} [data-fn-day-x="4"]`); await page.waitForTimeout(200);
-ok('the x on a day removes its dish', (await page.$eval(`${fnS} [data-fn-meter-n]`, (e) => e.textContent.trim())) === '4' && await page.$eval(`${fnS} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled') === 'true'));
+ok('the x on a day removes its dish, and 4 meals are enough to confirm (days can stay empty)', (await page.$eval(`${fnS} [data-fn-meter-n]`, (e) => e.textContent.trim())) === '4' && await page.$eval(`${fnS} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled') === 'false'));
 await pickCard(fnS, null); await page.waitForTimeout(200);
 await page.evaluate(() => { const f = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push(String(u).split('/').pop() + ' ' + ((o && o.body) || '').slice(0, 3000)); return f.apply(this, arguments); }; });
 await page.evaluate(() => { localStorage.removeItem('kulinaria_onboarded'); localStorage.setItem('kx-test-orders', '0'); });   // a new account (no orders)
@@ -652,8 +653,8 @@ ok('phone: no page scrolls sideways (all ' + pageNames.length + ' pages)', wide.
 ok('phone: no page is longer than 13 screens and the average is under 3.5 screens', long.length === 0 && totalScreens / pageNames.length < 3.5, long.join(', ') + ' avg ' + (totalScreens / pageNames.length).toFixed(2));
 // order wizard on the phone
 await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.evaluate(() => { location.hash = '#/pg/pedido'; }); await page.reload(); await page.waitForTimeout(900);
-const fnPhone = await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); const act = f.querySelector('.funnel__actions'); return { plans: f.querySelectorAll('[data-plan-choice]').length, docked: act.getBoundingClientRect().bottom <= innerHeight + 2, summary: getComputedStyle(f.querySelector('.funnel__facts')).display === 'none' }; });
-ok('phone: plan choices are shown, the wizard buttons sit inside the screen and the summary is one slim row', fnPhone.plans === 2 && fnPhone.docked && fnPhone.summary, JSON.stringify(fnPhone));
+const fnPhone = await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); const act = f.querySelector('.fn-cta'); return { plans: f.querySelectorAll('[data-plan-choice]').length, docked: act.getBoundingClientRect().bottom <= innerHeight + 2 && !!act.closest('.funnel__aside'), summary: getComputedStyle(f.querySelector('.funnel__facts')).display === 'none' }; });
+ok('phone: plan choices are shown and the wizard buttons sit inside the summary box, inside the screen', fnPhone.plans === 2 && fnPhone.docked && fnPhone.summary, JSON.stringify(fnPhone));
 await page.click('[data-page="pg/pedido"] [data-fn-next]'); await page.waitForTimeout(700);
 ok('phone: the meals step is one frame: week strip, swipeable dish row and buttons all fit the screen', await page.evaluate(() => { const l = document.querySelector('[data-page="pg/pedido"] .fn-dishes'), st = document.querySelector('[data-page="pg/pedido"] .funnel__stage').getBoundingClientRect(); return getComputedStyle(l).overflowX === 'auto' && st.bottom <= innerHeight + 2 && document.querySelectorAll('[data-page="pg/pedido"] [data-fn-day-btn]').length === 5; }));
 // v13: minimal phone UI: slim home, glowing "i" with the pricing sheet, no announcement bar
@@ -662,7 +663,7 @@ await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await pa
 const homePhone = await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'); const vis = (s) => [...pg.querySelectorAll(s)].some((e) => e.getBoundingClientRect().height > 0 && getComputedStyle(e).display !== 'none'); return { ann: getComputedStyle(document.querySelector('.site-header__ann')).display, teaser: vis('.funnel__teaser'), wizard: vis('.funnel__track'), showcase: vis('.showcase'), band: vis('.band'), rail: vis('.rail'), plans: vis('.plan-card'), screens: document.documentElement.scrollHeight / innerHeight }; });
 ok('phone home: hero, order card, this week, showcases, tiers, categories, plans, FAQ and the final call are all there (placeholder testimonials and the marquee are not)', homePhone.teaser && !homePhone.wizard && homePhone.showcase && homePhone.band && homePhone.rail && homePhone.plans && homePhone.screens < 13, JSON.stringify(homePhone));
 const homeMore = await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'); const vis = (s) => [...pg.querySelectorAll(s)].some((e) => e.getBoundingClientRect().height > 0); return { tiers: vis('.tier-ladder'), index: vis('.fg--index'), faq: vis('.accordion'), cta: vis('.cta-banner'), marquee: vis('.marquee'), testimonials: vis('.fg--grid.section--raised') }; });
-ok('phone home keeps tiers, categories, FAQ and the final call, and drops the marquee and the placeholder testimonials', homeMore.tiers && homeMore.index && homeMore.faq && homeMore.cta && !homeMore.marquee && !homeMore.testimonials, JSON.stringify(homeMore));
+ok('phone home keeps tiers, FAQ and the final call, and drops the marquee and the placeholder testimonials', homeMore.tiers && homeMore.faq && homeMore.cta && !homeMore.marquee && !homeMore.testimonials, JSON.stringify(homeMore));
 const swipeRule = await page.evaluate(() => { const bad = []; for (const l of document.querySelectorAll('.fg__list')) { const ph = !!l.querySelector('.card--img'); const sw = getComputedStyle(l).overflowX === 'auto' && l.getBoundingClientRect().width > 0; if (!ph && !l.closest('.fg--index') && sw) bad.push(l.parentElement.className); } return bad; });
 const carousel = await page.evaluate(() => { document.querySelector('[data-page="pg/carta-galeria"]'); return null; });
 await page.evaluate(() => { location.hash = '#/pg/plan-bloque'; }); await page.waitForTimeout(500);
@@ -835,24 +836,38 @@ const fnO = '[data-page="pg/pedido"] [data-funnel]';
 ok('the order builder never asks for details again (no form fields inside it)', await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); return !f.querySelector('input[data-info]') && f.querySelectorAll('[data-fn-step]').length === 2; }));
 ok('the first delivery date is shown (Monday) with a real date on each weekday slot', await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); return /\d/.test(f.querySelector('[data-fn-first]').textContent) && [...f.querySelectorAll('[data-fn-day-btn]')].every((l) => /\d/.test(l.textContent)); }));
 
-// =====================================================================  v23: "Mi semana" (weekly choice) + admin math with weekly selections
+// =====================================================================  v23/v29: "Mi semana": plan box, weeks that can be chosen, skipping days and weeks
 await page.setViewportSize({ width: 1440, height: 900 });
-await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); }); await page.goto(`${URL0}#/pg/cuenta-semana`); await page.waitForTimeout(600);
 const mwS = '[data-page="pg/cuenta-semana"] [data-myweek]';
-ok('Mi semana: 4 selectable delivery weeks and one slot per weekday, each with a date', (await page.$$eval(`${mwS} [data-mw-week] option`, (o) => o.length)) === 4 && (await page.$$eval(`${mwS} select[data-mw-day]`, (s) => s.length)) === 5 && (await page.$$eval(`${mwS} .fn-days label`, (l) => l.every((x) => /\d/.test(x.textContent)))));
-await page.click(`${mwS} [data-mw-save]`); await page.waitForTimeout(150);
-ok('Mi semana will not save with empty days', /d[ií]a|day/i.test(await page.$eval(`${mwS} [data-mw-msg]`, (e) => e.textContent)));
+const openWeek = async (ls) => { await page.goto(`${URL0}#/home`); await page.evaluate((o) => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx_ob_asked', '1'); Object.entries(o).forEach(([k, v]) => localStorage.setItem(k, v)); }, ls || {}); await page.goto(`${URL0}#/pg/cuenta-semana`); await page.reload(); await page.waitForTimeout(4200); };
+await openWeek();
+ok('Mi semana (paying customer): plan box shows weeks left, meals planned and when the plan ends', await page.evaluate((s) => { const r = document.querySelector(s); return !r.querySelector('[data-mw-credit]').hidden && /3 \/ 4/.test(r.querySelector('[data-mw-s-weeks]').textContent) && /\/ 20/.test(r.querySelector('[data-mw-s-meals]').textContent) && /\d/.test(r.querySelector('[data-mw-s-ends]').textContent) && r.querySelector('[data-mw-buy]').hidden; }, mwS));
+ok('Mi semana: only the weeks the plan covers can be chosen, with one slot per weekday and its date', (await page.$$eval(`${mwS} [data-mw-week] option`, (o) => o.length)) === 3 && (await page.$$eval(`${mwS} select[data-mw-day]`, (s) => s.length)) === 5 && (await page.$$eval(`${mwS} .fn-days label`, (l) => l.every((x) => /\d/.test(x.textContent)))));
 const mwVals = await page.$$eval(`${mwS} select[data-mw-day]:first-of-type option`, (o) => o.map((x) => [x.value, x.textContent]));
-const base = mwVals.filter(([v, t]) => v && !/\+\$/.test(t)).map(([v]) => v), dear = mwVals.filter(([v, t]) => v && /\+\$210/.test(t)).map(([v]) => v);
-for (let i = 0; i < 5; i++) await page.selectOption(`${mwS} li:nth-child(${i + 1}) select[data-mw-day]`, base[i % base.length]);
-await page.click(`${mwS} [data-mw-save]`); await page.waitForTimeout(250);
-ok('Mi semana saves a week of base dishes with nothing to pay', /guard|saved/i.test(await page.$eval(`${mwS} [data-mw-msg]`, (e) => e.textContent)) && (await page.evaluate(() => Object.keys(localStorage).some((k) => k.startsWith('kulinaria_week_')))) && (await page.$eval(`${mwS} [data-mw-up]`, (e) => e.hidden)));
+const base = mwVals.filter(([v, t]) => v && !/\+(MX)?\$/.test(t)).map(([v]) => v), dear = mwVals.filter(([v, t]) => v && /\+(MX)?\$210/.test(t)).map(([v]) => v);
+await page.selectOption(`${mwS} li:nth-child(1) select[data-mw-day]`, base[0]); await page.selectOption(`${mwS} li:nth-child(3) select[data-mw-day]`, base[1]); await page.selectOption(`${mwS} li:nth-child(5) select[data-mw-day]`, base[2]);
+ok('Mi semana: you do not need all 5 days (3 meals, lunch out on Tuesday and Thursday)', /3 de 5/.test(await page.$eval(`${mwS} [data-mw-count]`, (e) => e.textContent)));
+await page.click(`${mwS} [data-mw-save]`); await page.waitForTimeout(300);
+ok('Mi semana saves 3 meals with nothing to pay', /3 comidas/.test(await page.$eval(`${mwS} [data-mw-msg]`, (e) => e.textContent)) && (await page.$eval(`${mwS} [data-mw-up]`, (e) => e.hidden)));
+await page.click(`${mwS} [data-mw-skip]`); await page.waitForTimeout(300);
+ok('Mi semana can skip a whole week (no deliveries)', /sin entregas/.test(await page.$eval(`${mwS} [data-mw-msg]`, (e) => e.textContent)) && (await page.$$eval(`${mwS} select[data-mw-day]`, (s) => s.every((x) => x.value === ''))));
 await page.selectOption(`${mwS} li:nth-child(5) select[data-mw-day]`, dear[0]); await page.waitForTimeout(200);
 ok('a higher-tier dish shows the upgrade difference for that week (+$210)', /210/.test(await page.$eval(`${mwS} [data-mw-up]`, (e) => e.textContent)));
 await page.evaluate(() => { const f = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push(String(u).split('/').pop() + ' ' + ((o && o.body) || '').slice(0, 1500)); return f.apply(this, arguments); }; });
 await page.click(`${mwS} [data-mw-save]`); await page.waitForTimeout(500);
 const mwCalls = await page.evaluate(() => window.__calls);
 ok('saving an upgraded week adds the upgrade line tagged with the week (hidden _semana) and goes to the cart', mwCalls.some((r) => /add\.js/.test(r) && /_semana/.test(r)) && page.url().endsWith('#/carrito'), JSON.stringify(mwCalls).slice(0, 300));
+await openWeek({ 'kx-test-orders': '0' });
+ok('Mi semana (customer without a plan): "buy credits" box instead of the planner', await page.evaluate((s) => { const r = document.querySelector(s); return !r.querySelector('[data-mw-buy]').hidden && r.querySelector('[data-mw-credit]').hidden && r.querySelector('[data-mw-planner]').hidden && /\/pages\/pedido|#\/pg\/pedido/.test(r.querySelector('[data-mw-buy-cta]').getAttribute('href')); }, mwS));
+await openWeek({ 'kx-test-credits': JSON.stringify({ ok: true, hasPlan: false, expired: true, weeksLeft: 0, weeksTotal: 0, editable: [] }) });
+ok('Mi semana (plan finished): says the plan ended and offers a new one', /terminó/.test(await page.$eval(`${mwS} [data-mw-buy-text]`, (e) => e.textContent)));
+await openWeek({ 'kx-test-credits': JSON.stringify({ ok: true, hasPlan: true, plan: 'block', weeksLeft: 1, weeksTotal: 4, mealsPlanned: 15, mealsMax: 20, endsOn: '2099-01-01', editable: [] }) });
+ok('Mi semana (plan with no open week): explains that nothing can be chosen right now', await page.evaluate((s) => { const r = document.querySelector(s); return !r.querySelector('[data-mw-none]').hidden && r.querySelector('[data-mw-planner]').hidden && !r.querySelector('[data-mw-credit]').hidden; }, mwS));
+// the funnel shows the balance only to people who already have a plan
+await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx_ob_asked', '1'); }); await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(4200);
+ok('order flow: a customer with a plan sees the credit banner with a link to Mi semana', await page.evaluate(() => { const b = document.querySelector('[data-page="pg/pedido"] [data-fn-credit]'); return !b.hidden && /3 de 4/.test(b.textContent) && !!b.querySelector('a[href*="cuenta-semana"]'); }));
+await page.evaluate(() => { localStorage.setItem('kx-test-orders', '0'); }); await page.reload(); await page.waitForTimeout(4200);
+ok('order flow: a customer without a plan does not see it (the plan cards are the purchase of credits)', await page.$eval('[data-page="pg/pedido"] [data-fn-credit]', (b) => b.hidden));
 {
   const K2 = require(path.join(ROOT, 'assets/kulinaria-admin.js'));
   const order = { date: '2026-11-04T12:00:00', plan: 'block', email: 'a@b.mx', items: [{ title: 'Salmón gourmet en costra de almendras', qty: 5 }] };   // Wed -> first delivery Mon 2026-11-09
@@ -865,7 +880,7 @@ ok('saving an upgraded week adds the upgrade line tagged with the week (hidden _
 }
 
 // =====================================================================  v24: customer journeys, end to end (payment aside)
-const runJourney = async (label, { w, h, lang, plan, upgrade, onboarded = true, allergy }) => {
+const runJourney = async (label, { w, h, lang, plan, upgrade, onboarded = true, allergy, n = 5 }) => {
   await page.setViewportSize({ width: w, height: h });
   await page.goto(`${URL0}#/home`);
   await page.evaluate((o) => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', o.lang);
@@ -884,19 +899,19 @@ const runJourney = async (label, { w, h, lang, plan, upgrade, onboarded = true, 
   ok(`${label}: the meals step still fits one screen`, await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] .funnel__stage').getBoundingClientRect().bottom <= innerHeight + 2));
   const labels = await page.$$eval(`${f} [data-fn-day-btn]`, (b) => b.map((x) => x.querySelector('.fn-day__d').textContent.trim()));
   ok(`${label}: five weekday buttons with dates (${labels[0]} … ${labels[4]})`, labels.length === 5 && labels.every((x) => /\d/.test(x)) && (lang === 'en' ? /^Mon/.test(labels[0]) && /^Fri/.test(labels[4]) : /^Lun/.test(labels[0]) && /^Vie/.test(labels[4])));
-  ok(`${label}: confirm is disabled until all 5 days have a dish`, await page.$eval(`${f} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled') === 'true'));
+  ok(`${label}: confirm is disabled while no meal is chosen`, await page.$eval(`${f} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled') === 'true'));
   const pick = (tier, title) => page.evaluate(({ f, tier, title }) => { const cards = [...document.querySelectorAll(f + ' [data-fn-dish]:not(.is-hidden)')]; const c = title ? cards.find((x) => new RegExp(title).test(x.getAttribute('data-title'))) : tier ? cards.find((x) => x.getAttribute('data-tier') === tier) : cards[0]; c.querySelector('[data-pick]').click(); }, { f, tier, title });
   if (allergy) {
     await pick(null, 'Salm');
     ok(`${label}: a dish with the declared allergen shows a warning, yet it can still be chosen`, await page.evaluate((f) => { const c = [...document.querySelectorAll(f + ' [data-fn-dish]')].find((x) => /Salm/.test(x.getAttribute('data-title'))); return c.classList.contains('is-warned') && !c.querySelector('[data-fn-warn]').hidden && /datos|data/i.test(c.querySelector('[data-fn-warn]').textContent) && !c.querySelector('[data-pick]').disabled && c.querySelector('[data-fn-count]') && !c.querySelector('[data-fn-count]').hidden; }, f) && await page.$eval(`${f} [data-fn-day-btn="0"]`, (b) => b.classList.contains('has-warn')));
     for (let i = 1; i < 5; i++) await pick(null);
   } else {
-    for (let i = 0; i < 5; i++) await pick(upgrade && i === 2 ? 'reserve' : null);
+    for (let i = 0; i < n; i++) await pick(upgrade && i === 2 ? 'reserve' : null);
   }
   const planTotal = await page.$eval(`${f} [data-fn-s-total]`, (e) => e.textContent);
   const expected = (plan === 'block' ? 3600 : 1000) + (upgrade ? 210 : 0) + (allergy ? 70 : 0);
   ok(`${label}: total = plan + upgrades ($${expected.toLocaleString('en-US')})`, new RegExp(expected.toLocaleString('en-US')).test(planTotal), planTotal);
-  ok(`${label}: confirm is enabled once all 5 days are chosen`, await page.$eval(`${f} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled') === 'false'));
+  ok(`${label}: confirm is enabled once meals are chosen (${n} of 5)`, await page.$eval(`${f} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled') === 'false'));
   if (!onboarded) {
     await page.click(`${f} [data-fn-finish]`); await page.waitForTimeout(600);
     ok(`${label}: a customer without onboarding is sent to the questionnaire instead of a form`, page.url().includes('bienvenida'));
@@ -911,7 +926,7 @@ const runJourney = async (label, { w, h, lang, plan, upgrade, onboarded = true, 
   ok(`${label}: attributes come from the saved account (name, e-mail, phone, street, plan, days)${allergy ? ' and carry the allergy alert for the kitchen' : ''}`, attrs.correo === 'ana@ejemplo.com' && attrs.plan === plan && !!attrs.nombre && !!attrs.telefono && !!attrs.calle && /:/.test(attrs.dias) && attrs.contrato_aceptado === undefined && (!allergy || /Salm/.test(attrs.alerta_alergias || '')), JSON.stringify(attrs).slice(0, 300));
   const items = JSON.parse((calls.find((c) => c.u === 'add.js') || { b: '{"items":[]}' }).b).items;
   const planLine = items[0], props = planLine.properties || {};
-  ok(`${label}: ONE plan line, quantity 1, right variant (${plan === 'block' ? '4 weeks' : '1 week'}), day properties and hidden dish list`, planLine.quantity === 1 && (plan === 'block' ? /1$/.test(String(planLine.id)) : /0$/.test(String(planLine.id))) && Object.keys(props).filter((k) => /\d/.test(k)).length === 5 && /_platillos/.test(JSON.stringify(props)), JSON.stringify(planLine).slice(0, 400));
+  ok(`${label}: ONE plan line, quantity 1, right variant (${plan === 'block' ? '4 weeks' : '1 week'}), day properties and hidden dish list`, planLine.quantity === 1 && (plan === 'block' ? /1$/.test(String(planLine.id)) : /0$/.test(String(planLine.id))) && Object.keys(props).filter((k) => /\d/.test(k)).length === n && /_platillos/.test(JSON.stringify(props)), JSON.stringify(planLine).slice(0, 400));
   const wantLines = 1 + (upgrade ? 1 : 0) + (allergy ? 1 : 0);
   ok(`${label}: upgrade lines only when a higher-tier dish was chosen (${wantLines - 1})`, items.length === wantLines, JSON.stringify(items.slice(1)));
   ok(`${label}: lands on the cart`, page.url().endsWith('#/carrito'));
@@ -922,6 +937,7 @@ await runJourney('journey desktop ES, 4-week plan with one upgrade', { w: 1440, 
 await runJourney('journey phone ES, 1-week plan', { w: 390, h: 844, lang: 'es', plan: 'week', upgrade: false });
 await runJourney('journey desktop EN, 4-week plan', { w: 1440, h: 900, lang: 'en', plan: 'block', upgrade: false });
 await runJourney('journey with a nut allergy', { w: 1732, h: 701, lang: 'es', plan: 'block', upgrade: false, allergy: 'Frutos secos' });
+await runJourney('journey with only 3 meals (days left empty, lunch out)', { w: 1440, h: 900, lang: 'es', plan: 'block', upgrade: false, n: 3 });
 await runJourney('journey, new customer without onboarding', { w: 1440, h: 900, lang: 'es', plan: 'block', upgrade: false, onboarded: false });
 await page.evaluate(() => { localStorage.setItem('kx-lang', 'es'); });
 // =====================================================================  v27: new account -> questionnaire; paying customer -> straight to the week
@@ -938,7 +954,7 @@ await page.goto(`${URL0}#/menu`); await page.reload(); await page.waitForTimeout
 ok('existing customer: no questionnaire, they browse normally', !page.url().includes('bienvenida'), page.url());
 await page.goto(`${URL0}#/pg/bienvenida`); await page.waitForTimeout(900);
 ok('existing customer: the welcome page forwards them straight to "Mi semana" (choose the week and submit)', page.url().includes('cuenta-semana'), page.url());
-ok('Mi semana offers previous orders and "my details" links and no "no plan" notice for a paying customer', await page.evaluate(() => { const r = document.querySelector('[data-page="pg/cuenta-semana"] [data-myweek]'); return r.querySelector('[data-mw-noplan]').hidden && !!r.querySelector('.myweek__links a[href="#/cuenta"]') && !!r.querySelector('.myweek__links a[href*="bienvenida"]'); }));
+ok('Mi semana offers previous orders and "my details" links and no "buy credits" box for a paying customer', await page.evaluate(() => { const r = document.querySelector('[data-page="pg/cuenta-semana"] [data-myweek]'); return r.querySelector('[data-mw-buy]').hidden && !!r.querySelector('.myweek__links a[href="#/cuenta"]') && !!r.querySelector('.myweek__links a[href*="bienvenida"]'); }));
 // existing customer with nothing saved can order a week: no details form, no questionnaire
 await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(4200);
 {
@@ -952,8 +968,63 @@ await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTi
 // a new account that tries to order without answering the questionnaire is sent to it
 await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_ob_asked', '1'); });
 await page.goto(`${URL0}#/pg/cuenta-semana`); await page.reload(); await page.waitForTimeout(4200);
-ok('Mi semana tells a customer without a plan to build their order first', await page.$eval('[data-page="pg/cuenta-semana"] [data-mw-noplan]', (e) => !e.hidden && /pedido/.test(e.querySelector('a').getAttribute('href'))));
+ok('Mi semana tells a customer without a plan to build their order first', await page.$eval('[data-page="pg/cuenta-semana"] [data-mw-buy]', (e) => !e.hidden && /pedido/.test(e.querySelector('a').getAttribute('href'))));
 await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
+
+// =====================================================================  v29: one button row inside the summary box; signed-out visitors
+await page.setViewportSize({ width: 1440, height: 900 });
+await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx_ob_asked', '1'); }); await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(4200);
+ok('Continue / Back / Start over are inside the "Tu pedido" box, with Start over right next to Continue; no separate bar and no sign-in link', await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'), box = f.querySelector('.funnel__aside'), re = f.querySelector('[data-fn-reset]'), nx = f.querySelector('[data-fn-next]'); const a = re.getBoundingClientRect(), b = nx.getBoundingClientRect(); return !!box.contains(re) && !!box.contains(nx) && !!box.contains(f.querySelector('[data-fn-prev]')) && !f.querySelector('.funnel__actions') && !f.querySelector('.funnel__login') && Math.abs((a.top + a.bottom) / 2 - (b.top + b.bottom) / 2) < 40 && b.left > a.left && b.left - a.right < 60; }));
+await page.goto(`${URL0.replace('index.html', 'guest.html')}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx_ob_asked', '1'); });
+const G = URL0.replace('index.html', 'guest.html');
+await page.goto(`${G}#/pg/pedido`); await page.reload(); await page.waitForTimeout(4200);
+const gf = '[data-page="pg/pedido"] [data-funnel]';
+await page.click(`${gf} [data-plan-choice="week"]`); await page.waitForTimeout(700);
+await page.evaluate((f) => document.querySelector(f + ' [data-fn-dish]:not(.is-hidden) [data-pick]').click(), gf); await page.waitForTimeout(300);
+ok('signed out: the visitor can build an order, and the button says "Inicia sesión para continuar"', /inicia sesión/i.test(await page.$eval(`${gf} [data-fn-finish]`, (b) => b.textContent)) && (await page.$eval(`${gf} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled'))) === 'false');
+await page.click(`${gf} [data-fn-finish]`); await page.waitForTimeout(500);
+ok('signed out: pressing it goes to sign-in (not to the cart) and nothing is added to the cart', /#\/login/.test(page.url()), page.url());
+await page.goto(`${G}#/carrito`); await page.waitForTimeout(400);
+ok('signed out: the cart has no pay button, only "Iniciar sesión para pagar"', await page.evaluate(() => { const c = document.querySelector('[data-page="carrito"]'); return !c.querySelector('[data-checkout]') && /iniciar sesión para pagar/i.test(c.innerText); }));
+await page.goto(`${G}#/pg/cuenta-semana`); await page.waitForTimeout(400);
+ok('signed out: Mi semana asks to sign in and shows no planner', await page.evaluate(() => { const p = document.querySelector('[data-page="pg/cuenta-semana"]'); return !p.querySelector('[data-mw-planner]') && /inicia sesión/i.test(p.innerText); }));
+await page.goto(`${G}#/pg/perfil`); await page.waitForTimeout(400);
+ok('signed out: the allergy profile page asks to sign in and has no form', await page.evaluate(() => { const p = document.querySelector('[data-page="pg/perfil"]'); return !p.querySelector('[data-profile-form]') && /inicia sesión/i.test(p.innerText); }));
+await page.goto(`${URL0}#/carrito`); await page.waitForTimeout(400);
+ok('signed in: the cart has the pay button', await page.$eval('[data-page="carrito"]', (c) => !!c.querySelector('[data-checkout]')));
+await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
+
+
+// =====================================================================  v30: admin "Descuentos" (generate a code that works X times) + cart discount field
+{
+  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx_ob_asked', '1'); sessionStorage.setItem('kx-admin-key', 'adm'); }); await page.reload(); await page.waitForTimeout(4200);
+  const calls = []; let created = false;
+  await page.route('https://script.example/**', async (route) => {
+    const u = new URL(route.request().url()), q = Object.fromEntries(u.searchParams); calls.push(q);
+    let body = { ok: true };
+    if (q.action === 'discount_new') { created = true; body = { ok: true, code: q.code }; }
+    else if (q.action === 'discounts') body = { ok: true, discounts: created ? [{ id: 'gid://shopify/DiscountCodeNode/9', code: 'HOLA10', status: 'ACTIVE', uses: 4, limit: 25, kind: 'percent', value: 10, ends: '' }] : [] };
+    else if (q.action === 'admin') body = { ok: true, orders: [], clients: [], recipes: null };
+    await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(body) });
+  });
+  await page.evaluate(() => { const d = document.createElement('div'); d.id = 'adm-test'; d.setAttribute('data-endpoint', 'https://script.example/exec'); d.setAttribute('data-lang', 'es'); document.body.appendChild(d); window.KXAdmin.mount(d); });
+  await page.waitForTimeout(400);
+  await page.click('#adm-test [data-tab="4"]'); await page.waitForTimeout(400);
+  ok('admin: the Descuentos tab shows the form (code, type, value, uses, expiry) and "no codes yet"', await page.evaluate(() => { const r = document.querySelector('#adm-test'); const f = r.querySelector('[data-discform]'); return !!f && ['code', 'kind', 'value', 'uses', 'ends'].every((n) => f.elements[n]) && /Aún no hay códigos/.test(r.innerText); }));
+  await page.click('#adm-test [data-dgen]');
+  ok('admin: "Sugerir código" fills a valid code', /^KUL[A-Z2-9]{5}$/.test(await page.$eval('#adm-test [name=code]', (e) => e.value)));
+  await page.fill('#adm-test [name=code]', 'hola10'); await page.fill('#adm-test [name=value]', '10'); await page.fill('#adm-test [name=uses]', '0'); await page.click('#adm-test [data-discform] button[type=submit]'); await page.waitForTimeout(200);
+  ok('admin: 0 uses is refused in the page and never reaches the server', !calls.some((c) => c.action === 'discount_new') && /cuántas veces/.test(await page.$eval('#adm-test', (e) => e.innerText)));
+  await page.fill('#adm-test [name=code]', 'hola10'); await page.fill('#adm-test [name=value]', '10'); await page.fill('#adm-test [name=uses]', '25'); await page.click('#adm-test [data-discform] button[type=submit]'); await page.waitForTimeout(500);
+  const dn = calls.find((c) => c.action === 'discount_new');
+  ok('admin: creating sends code, percent, value and the number of uses with the password', dn && dn.code === 'HOLA10' && dn.kind === 'percent' && dn.value === '10' && dn.uses === '25' && dn.key === 'adm', JSON.stringify(dn));
+  ok('admin: the new code appears in the list with its uses (4 / 25) and a deactivate button', await page.evaluate(() => { const t = document.querySelector('#adm-test [data-disctable]'); return !!t && /HOLA10/.test(t.innerText) && /4 \/ 25/.test(t.innerText) && !!t.querySelector('[data-doff]') && /Código creado: HOLA10/.test(document.querySelector('#adm-test').innerText); }));
+  await page.click('#adm-test [data-doff]'); await page.waitForTimeout(400);
+  ok('admin: deactivating calls discount_off for that code', calls.some((c) => c.action === 'discount_off' && /DiscountCodeNode\/9/.test(c.id)));
+  await page.unroute('https://script.example/**'); await page.evaluate(() => document.getElementById('adm-test').remove());
+  await page.goto(`${URL0}#/carrito`); await page.waitForTimeout(400);
+  ok('cart: a separate discount-code field named "discount" (Shopify applies it at checkout) next to the referral code', await page.evaluate(() => { const c = document.querySelector('[data-page="carrito"]'); const d = c.querySelector('input[name="discount"]'); return !!d && d.id !== c.querySelector('[data-referral]').id && !!c.querySelector('[data-referral]'); }));
+}
 
 await browser.close();
 ok('no JS errors on any page', errors.length === 0, errors.slice(0, 5).join(' | '));

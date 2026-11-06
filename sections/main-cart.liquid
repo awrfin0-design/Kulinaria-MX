@@ -57,6 +57,12 @@
               <input class="input" id="ref" name="attributes[codigo_referencia]" value="{{ cart.attributes.codigo_referencia }}" placeholder="JUANFIT" data-referral autocomplete="off" style="text-transform:uppercase">
             </div>
 
+            <div class="field">
+              <label for="disc">{{ 'cart.discount_label' | t }}</label>
+              <input class="input" id="disc" name="discount" value="{{ cart.discount_applications.first.title }}" placeholder="BIENVENIDO10" data-discount autocomplete="off" style="text-transform:uppercase">
+              <p class="text-muted" style="font-size:.85rem;margin:4px 0 0">{{ 'cart.discount_hint' | t }}</p>
+            </div>
+
             <div data-gift hidden style="margin-top:var(--space-lg)">
               <h3>{{ 'cart.gift_title' | t }}</h3>
               <p class="text-muted">{{ 'cart.gift_text' | t }}</p>
@@ -96,7 +102,12 @@
               </span>
             </label>
 
-            <button class="btn btn--gold btn--block" type="submit" name="checkout" data-checkout disabled>{{ 'cart.checkout' | t }}</button>
+            {%- if customer -%}
+              <button class="btn btn--gold btn--block" type="submit" name="checkout" data-checkout disabled>{{ 'cart.checkout' | t }}</button>
+            {%- else -%}
+              <p class="alert alert--warn">{{ 'cart.login_needed' | t }}</p>
+              <a class="btn btn--gold btn--block" href="{% render 'login-url', back: routes.cart_url %}">{{ 'cart.login_cta' | t }}</a>
+            {%- endif -%}
           </div>
         </aside>
       </form>

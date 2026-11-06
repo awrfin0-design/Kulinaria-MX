@@ -15,13 +15,19 @@ El texto se escribe en español en el editor o en el producto, y su versión en 
    - `PROFILE_SECRET` = el mismo valor que el metacampo de la tienda `kulinaria.profile_secret` (ya creado en Shopify; pídelo al desarrollador, no se guarda en el repositorio).
    - `ADMIN_KEY`, `WEBHOOK_KEY`, `ALERT_EMAILS` (equipo@kulinariamx.com), opcional `SITE_URL`.
 3. Ejecuta una vez `installWeeklyReminders()` (recordatorio jueves y viernes a las 9:00 a clientes de plan de 4 semanas que no han elegido la semana siguiente).
-4. Pestañas nuevas que se crean solas: `Perfiles`, `Selecciones`.
+4. Ejecuta también `setupSheets()` una vez (agrega las columnas nuevas a `Pedidos`).
+5. Pestañas que se crean solas: `Perfiles`, `Selecciones`, `Pausas`, `Entregas` y `Resumen`. **Entregas** = una fila por cliente y semana (qué va en la caja cada día, qué días hay entrega, dirección, teléfono, alergias). **Resumen** = esta semana y la próxima: entregas y comidas por día, platillos por día, totales y clientes en pausa. Se actualizan solos con cada pedido, elección o pausa, y cada día a las 5:00.
+6. **Códigos de descuento** (pestaña *Descuentos* de `/pages/admin`): en Shopify → Configuración → Apps → Desarrollar apps → crea una app personalizada con los permisos de Admin API `read_discounts` y `write_discounts`, instálala y copia el token (`shpat_…`). En las propiedades del Apps Script agrega `SHOPIFY_STORE` (`tu-tienda.myshopify.com`) y `SHOPIFY_TOKEN` (puede ser la misma app que usa `RecetasAuto.gs` si le agregas esos dos permisos). Después, en `/pages/admin` → Descuentos: escribe un código, el valor y **cuántas veces se puede usar en total**; Shopify deja de aceptarlo cuando se agotan los usos. El cliente lo escribe en el carrito (campo «Código de descuento»).
+7. **Pausar entregas**: el cliente lo hace solo en `/pages/cuenta-pausas` (semanas sueltas o «hasta que yo reanude»). Una semana pausada no se consume: el plan termina una semana después por cada semana en pausa. El corte es el mismo (sábado 10:00).
 
 ## 3. Recetas automáticas (opcional)
 Pega `RecetasAuto.gs`, crea una app personalizada en Shopify con permiso `read_products`, guarda `SHOPIFY_STORE` y `SHOPIFY_TOKEN` en las propiedades y ejecuta `installAutoRecipes()`. Las recetas nuevas quedan como **BORRADOR** hasta que el chef las apruebe.
 
 ## 4. Personalizar tema (Marca y contacto)
 Correo `equipo@kulinariamx.com` y teléfono/WhatsApp `525650399656` (el archivo de ajustes no se sincroniza solo).
+
+## 4b. Cuentas obligatorias (Shopify no permite activarlo por API)
+Shopify → Configuración → Pago (Checkout) → **Cuentas de cliente → Obligatorias** (requerir inicio de sesión). Así nadie paga sin haber iniciado sesión; el tema ya bloquea el botón de pago en el carrito para visitantes.
 
 ## 5. Pagos (pendiente)
 Activar Shopify Payments en modo de prueba (o la pasarela Bogus) y luego crear el plan prepagado en Recharge (precios por entrega: 900 / 1,250 / 1,600 / 1,950 × 4).

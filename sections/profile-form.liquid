@@ -17,6 +17,7 @@
       <p class="lede">{{ tx_s_text }}</p>
     </div>
 
+    {%- if customer -%}
     <form data-profile-form class="panel panel--gold" novalidate>
       <h3>{{ 'profile.block1' | t }} <span class="tier-badge tier-badge--exclusivo" style="vertical-align:middle;margin-left:8px">{{ 'profile.critical' | t }}</span></h3>
       <p class="text-muted">{{ 'profile.block1_text' | t }}</p>
@@ -58,6 +59,13 @@
       <button class="btn btn--gold" type="submit">{{ 'profile.save' | t }}</button>
       <p class="alert alert--ok form-msg" data-profile-msg hidden role="status">{{ 'profile.saved' | t }}</p>
     </form>
+    {%- else -%}
+      <div class="panel panel--gold">
+        <h3>{{ 'myweek.guest_title' | t }}</h3>
+        <p class="text-muted">{{ 'profile.guest' | t }}</p>
+        <div class="btn-row"><a class="btn btn--gold" href="{% render 'login-url', back: '/pages/perfil' %}">{{ 'login.title' | t }}</a><a class="btn btn--outline" href="{% render 'login-url', kind: 'register', back: '/pages/bienvenida' %}">{{ 'funnel.create_account' | t }}</a></div>
+      </div>
+    {%- endif -%}
   </div>
 </section>
 

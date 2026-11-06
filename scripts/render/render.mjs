@@ -172,6 +172,7 @@ async function renderLang(lang) {
     // the preview has a demo customer and no Apps Script: the admin page shows demo data for them (the real store's values stay in the template)
     if (tplName === 'page.admin') for (const k of Object.keys(t.sections)) Object.assign(t.sections[k].settings || {}, { admin_emails: 'ramon@ejemplo.com', admin_endpoint: '' });
     current = { ...store.globals, ...pageGlobals };
+    if (process.env.GUEST) current.customer = null;          // GUEST=1 renders the whole site signed out (to check what a visitor sees)
     for (const k of Object.keys(state.globals)) delete state.globals[k];
     Object.assign(state.globals, current);   // Shopify exposes these inside snippets too
     let inner = '';
@@ -397,7 +398,7 @@ const PREVIEW_JS = `
 // ---------------------------------------------------------------- CLI
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const { doc, routes, dead, untranslated } = await renderSite();
-  const out = path.join(ROOT, 'preview', 'index.html');
+  const out = path.join(ROOT, 'preview', process.env.GUEST ? 'guest.html' : 'index.html');
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, doc);
   console.log(`rendered ${routes.length} pages x 2 languages -> preview/index.html (${Math.round(doc.length / 1024)} KB)`);

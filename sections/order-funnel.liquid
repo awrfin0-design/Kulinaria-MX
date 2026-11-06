@@ -15,7 +15,7 @@
   data-t-per-week="{{ 'funnel.per_week_each' | t }}" data-t-weeks-x="{{ 'funnel.weeks_x' | t }}" data-t-per-meal="{{ 'funnel.per_meal' | t }}"
   data-t-all-lines="{{ 'funnel.all_categories' | t }}" data-t-prop-dishes="{{ 'funnel.prop_dishes' | t }}" data-t-prop-meals="{{ 'funnel.prop_meals' | t }}"
   data-t-prop-tier="{{ 'funnel.prop_tier' | t }}" data-t-prop-length="{{ 'funnel.prop_length' | t }}" data-t-length-block="{{ 'funnel.length_block' | t }}" data-t-length-week="{{ 'funnel.length_week' | t }}"
-  data-t-renew="{{ 'funnel.renew' | t }}" data-t-days="{{ 'funnel.days' | t }}" data-t-rolled="{{ 'funnel.rolled' | t }}" data-t-pick="{{ 'funnel.pick' | t }}" data-t-picked="{{ 'funnel.picked' | t }}" data-t-pick-for="{{ 'funnel.pick_for' | t }}" data-t-all-done="{{ 'funnel.all_done' | t }}" data-t-clear-day="{{ 'funnel.clear_day' | t }}" data-t-first="{{ 'funnel.first_delivery' | t }}" data-t-day-empty="{{ 'funnel.day_empty' | t }}" data-t-up-badge="{{ 'funnel.up_badge' | t }}" data-t-up-total="{{ 'funnel.up_total' | t }}"
+  data-t-renew="{{ 'funnel.renew' | t }}" data-t-days="{{ 'funnel.days' | t }}" data-t-finish="{{ 'funnel.finish' | t }}" data-t-finish-guest="{{ 'funnel.finish_guest' | t }}" data-t-credit="{{ 'funnel.credit' | t }}" data-t-rolled="{{ 'funnel.rolled' | t }}" data-t-pick="{{ 'funnel.pick' | t }}" data-t-picked="{{ 'funnel.picked' | t }}" data-t-pick-for="{{ 'funnel.pick_for' | t }}" data-t-all-done="{{ 'funnel.all_done' | t }}" data-t-clear-day="{{ 'funnel.clear_day' | t }}" data-t-first="{{ 'funnel.first_delivery' | t }}" data-t-day-empty="{{ 'funnel.day_empty' | t }}" data-t-up-badge="{{ 'funnel.up_badge' | t }}" data-t-up-total="{{ 'funnel.up_total' | t }}"
   data-t-prop-upgrade="{{ 'funnel.prop_upgrade' | t }}" data-t-need-contract="{{ 'funnel.need_contract' | t }}" data-t-days-missing="{{ 'funnel.days_missing' | t }}"
   data-upg-1="{{ upg.variants[0].price | divided_by: 100 | default: 70 }}" data-upg-2="{{ upg.variants[1].price | divided_by: 100 | default: 140 }}" data-upg-3="{{ upg.variants[2].price | divided_by: 100 | default: 210 }}"
   data-upv-1="{{ upg.variants[0].id }}" data-upv-2="{{ upg.variants[1].id }}" data-upv-3="{{ upg.variants[2].id }}" {{ section.shopify_attributes }}>
@@ -48,6 +48,7 @@
         <fieldset class="step is-on" data-fn-step="1">
           <legend>{{ 'funnel.s1_title' | t }}</legend>
           <p class="text-muted">{{ 'funnel.s1_text' | t }}</p>
+          <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="/pages/cuenta-semana" data-fn-credit-link>{{ 'funnel.credit_cta' | t }}</a></div>
           <div class="fn-plans" role="radiogroup" aria-label="{{ 'funnel.s1_title' | t }}">
             <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
               <span class="plan-card__flag">{{ 'plans.recommended' | t }}</span>
@@ -178,18 +179,15 @@
         <p class="funnel__block" data-fn-s-block hidden></p>
         <p class="fn-weeknote"><strong data-fn-first></strong> {{ 'funnel.week_note' | t }} {{ 'funnel.up_note' | t }}</p>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
-        <button class="text-link" type="button" data-fn-reset>{{ 'funnel.reset' | t }}</button>
+        <div class="fn-actions fn-cta">
+          <span class="fn-links">
+            <button class="text-link" type="button" data-fn-prev hidden>{{ 'funnel.back' | t }}</button>
+            <button class="text-link fn-reset" type="button" data-fn-reset>{{ 'funnel.reset' | t }}</button>
+          </span>
+          <button class="btn btn--gold" type="button" data-fn-next disabled>{{ 'funnel.next' | t }}</button>
+          <a class="btn btn--gold" data-fn-finish href="{{ routes.cart_url }}" hidden>{{ 'funnel.finish' | t }}</a>
+        </div>
       </aside>
-    </div>
-    <div class="funnel__actions container">
-      <div class="steps__actions fn-actions">
-        <button class="text-link" type="button" data-fn-prev hidden>{{ 'funnel.back' | t }}</button>
-        <button class="btn btn--gold" type="button" data-fn-next disabled>{{ 'funnel.next' | t }}</button>
-        <a class="btn btn--gold" data-fn-finish href="{{ routes.cart_url }}" hidden>{{ 'funnel.finish' | t }}</a>
-      </div>
-      {%- unless customer -%}
-      <p class="funnel__login text-muted">{{ 'reg.have_account' | t }} <a href="{% render 'login-url', back: request.path %}">{{ 'login.title' | t }}</a></p>
-      {%- endunless -%}
     </div>
    </div>
   </div>

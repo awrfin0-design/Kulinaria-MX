@@ -163,80 +163,6 @@
         "t4"
       ]
     },
-    "categories": {
-      "type": "feature-grid",
-      "settings": {
-        "eyebrow": "Categorías",
-        "heading": "Del desayuno a la cena, al fuego *y al mar*",
-        "columns": "3",
-        "background": "base",
-        "layout": "index"
-      },
-      "blocks": {
-        "c1": {
-          "type": "item",
-          "settings": {
-            "title": "Desayunos Premium",
-            "text": "<p>Para empezar el día con intención.</p>",
-            "link": "/collections/menu-semanal?categoria=desayunos-premium",
-            "art": "dish-3"
-          }
-        },
-        "c2": {
-          "type": "item",
-          "settings": {
-            "title": "Al Fuego y Mar",
-            "text": "<p>Cortes, aves y pesca premium.</p>",
-            "link": "/collections/menu-semanal?categoria=al-fuego-y-mar",
-            "art": "dish-1"
-          }
-        },
-        "c3": {
-          "type": "item",
-          "settings": {
-            "title": "Bowls de la Semana",
-            "text": "<p>Frescos, completos y de temporada.</p>",
-            "link": "/collections/menu-semanal?categoria=bowls-de-la-semana",
-            "art": "dish-6"
-          }
-        },
-        "c4": {
-          "type": "item",
-          "settings": {
-            "title": "Balanceado / Diario Premium",
-            "text": "<p>La base de tu semana.</p>",
-            "link": "/collections/menu-semanal?categoria=diario-premium",
-            "art": "dish-0"
-          }
-        },
-        "c5": {
-          "type": "item",
-          "settings": {
-            "title": "Kulinaria Junior",
-            "text": "<p>Platillos pensados para los más pequeños.</p>",
-            "link": "/collections/menu-semanal?categoria=kulinaria-junior",
-            "art": "dish-7"
-          }
-        },
-        "c6": {
-          "type": "item",
-          "settings": {
-            "title": "Entradas y complementos",
-            "text": "<p>Sopas, cremas, postres y snacks saludables, batidos y bebidas.</p>",
-            "link": "/collections/menu-semanal?categoria=sopas-y-entradas",
-            "art": "dish-2"
-          }
-        }
-      },
-      "block_order": [
-        "c1",
-        "c2",
-        "c3",
-        "c4",
-        "c5",
-        "c6"
-      ]
-    },
     "diets": {
       "type": "diet-chips",
       "settings": {
@@ -652,7 +578,6 @@
     "glass",
     "band",
     "tiers",
-    "categories",
     "chef",
     "diets",
     "plans",

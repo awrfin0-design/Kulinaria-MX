@@ -2230,6 +2230,72 @@ body .funnel:not(.funnel--teaser) .funnel__aside{gap:6px;padding:14px 16px}
   .fn-dish{flex-basis:64vw}
 }
 
+/* v28: credit boxes, one action bar (Back · Start over · Confirm), skip week */
+.fn-actions{display:flex;align-items:center;gap:14px}
+.fn-actions [data-fn-prev]{margin-right:auto}
+.fn-actions .fn-reset{font-size:.9rem;color:var(--text-muted)}
+.fn-credit{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 16px;margin:0 0 12px;border:1px solid var(--border-accent);border-radius:16px;background:var(--accent-wash)}
+.fn-credit p{margin:0;font-size:.92rem;flex:1 1 280px}
+.fn-credit[hidden]{display:none}
+.mw-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:10px 0}
+.mw-stats div{padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:var(--bg-raised)}
+.mw-stats dt{font-family:var(--font-label);font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+.mw-stats dd{margin:4px 0 0;font-family:var(--font-heading);font-size:1.6rem;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums}
+.mw-note{margin:6px 0 var(--space-md);font-size:.9rem}
+.mw-count{margin:4px 0 0;font-size:.9rem;color:var(--text-muted)}
+.mw-buy,.mw-credit{margin-bottom:var(--space-md)}
+.mw-buy[hidden],.mw-credit[hidden],[data-mw-planner][hidden],[data-mw-none][hidden]{display:none}
+.myweek .btn-row{gap:10px;flex-wrap:wrap}
+@media (max-width:900px){
+  .fn-actions{gap:10px}
+  .fn-actions .fn-reset{font-size:.8rem}
+  .mw-stats{grid-template-columns:1fr 1fr 1fr;gap:8px}.mw-stats dd{font-size:1.25rem}.mw-stats div{padding:10px}
+}
+.funnel__aside .funnel__list{align-content:start}
+
+/* v28b: the buttons live INSIDE the summary box: [Back / Start over] next to [Continue] */
+.funnel__aside .fn-actions{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 14px;align-items:center;margin:10px 0 0;padding:12px 0 0;border-top:1px solid var(--line);flex:none}
+.funnel__aside .fn-links{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.funnel__aside .fn-links .text-link{font-size:.82rem;padding:0;margin:0;color:var(--text-muted);white-space:nowrap}
+.funnel__aside .fn-actions .btn{width:100%;min-height:48px;padding-inline:14px;justify-self:stretch;grid-column:2;font-size:.74rem;letter-spacing:.1em;text-align:center}
+.funnel__aside .fn-actions .btn[hidden]{display:none}
+.funnel__aside .fn-actions [data-fn-prev]{margin-right:0}
+.funnel__aside .fn-cut{flex:none}
+body .funnel:not(.funnel--teaser) .funnel__aside{min-width:0}
+@media (min-width:901px){body .funnel:not(.funnel--teaser) .funnel__panel{grid-template-columns:minmax(0,1fr) minmax(280px,330px)}}
+@media (max-width:900px){
+  body .funnel:not(.funnel--teaser) .funnel__aside{flex-direction:column;align-items:stretch;flex-wrap:nowrap;padding:10px 12px}
+  .funnel__aside .fn-actions{padding-top:8px;margin-top:6px}
+  .funnel__aside .fn-actions .btn{min-height:46px;font-size:.72rem}
+}
+/* v28c: roomy button, plain small links, row pinned to the bottom of the box */
+.funnel__aside .fn-actions{margin-top:auto !important;grid-template-columns:minmax(0,max-content) minmax(0,1fr);gap:8px 12px}
+.funnel__aside .fn-links .text-link{font-family:var(--font-body);font-size:.84rem;letter-spacing:.01em;text-transform:none;font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.funnel__aside .fn-actions .btn{border-radius:16px;line-height:1.2;padding:12px 14px;min-height:50px;white-space:normal}
+.funnel__aside .funnel__list{flex:0 1 auto}
+.funnel__aside .fn-weeknote{margin-bottom:6px}
+
+/* v29: every dish card has exactly the same size, photo area and text area (badges never change the layout) */
+.fn-dish{height:100% !important}
+.fn-dish__media{flex:0 0 52% !important;height:auto !important}
+.fn-dish__body{flex:1 1 0 !important;min-height:0;display:flex !important;flex-direction:column;justify-content:flex-start;gap:3px !important;overflow:hidden}
+.fn-dish__row{margin-top:auto !important}
+.fn-dish__title{min-height:2.3em}
+.fn-warn{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.fn-up{display:block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0 !important}
+.fn-day{min-height:60px;height:100%}
+.fn-week li{display:flex}
+.fn-sel select,.fn-pickbar .select{height:40px;min-height:40px}
+.fn-plans .fn-plan{min-height:210px}
+
+/* v30: pausar entregas */
+.mypause .mp-form{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin:var(--space-md) 0}
+.mypause .mp-form .field{flex:1 1 220px;margin:0}
+.mypause .mp-form h3{flex:1 1 100%;margin:0}
+.mypause .mp-status{margin:var(--space-md) 0 4px;font-family:var(--font-heading);font-size:1.3rem;color:var(--accent)}
+.mypause .mp-status.is-paused{color:var(--text)}
+.mypause [hidden]{display:none}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -2316,6 +2382,11 @@ body .funnel:not(.funnel--teaser) .funnel__aside{gap:6px;padding:14px 16px}
 }
 
 .adm-hist{grid-column:1/-1}.adm-hist table{width:100%;border-collapse:collapse;font-size:.92rem}.adm-hist th{font-family:var(--font-label);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}.adm-hist td{padding:8px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}.adm-hist tr.now td{color:var(--accent);font-weight:700}
+
+.adm-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;align-items:end}
+.adm-form label{display:block;font-family:var(--font-label);font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.adm-form input,.adm-form select{display:block;width:100%;min-height:46px;margin-top:6px;border-radius:14px;border:1px solid var(--line);background:var(--bg-base);color:var(--text);padding:0 12px;font:inherit;text-transform:none;letter-spacing:0;font-weight:400}
+.adm-inline{display:flex;gap:8px;align-items:flex-end}.adm-inline input{flex:1 1 auto}
 </style></head>
 
   <body class="template-index">
@@ -2560,13 +2631,13 @@ Fuego</span>
 
 </div><div id="home--shopify-section-funnel" class="shopify-section"><section class="section funnel funnel--teaser" id="home--pedido-funnel" data-funnel data-cart-url="/cart" data-meals="5" data-weeks="4" data-customer-name="" data-customer-email="ramon@ejemplo.com"
   data-t-meals="{n} de {t} comidas" data-t-meal-one="1 comida" data-t-empty="Aún no eliges comidas."
-  data-t-need-meals="Elige tus 5 comidas para continuar." data-t-full="Ya tienes tus 5 comidas. Quita una para cambiar." data-t-need-info="Completa tu nombre, correo y teléfono."
+  data-t-need-meals="Elige al menos una comida para continuar." data-t-full="Ya tienes tus 5 comidas. Quita una para cambiar." data-t-need-info="Completa tu nombre, correo y teléfono."
   data-t-add="Agregar" data-t-remembered="Recordamos tus datos de la última vez." data-t-saved="Guardamos tu selección y tus datos para la próxima vez. Siguiente paso: tu contrato y pago."
   data-t-step-of="Paso {n} de {t}" data-t-block-name="4 semanas · 20 comidas" data-t-week-name="1 semana · 5 comidas"
   data-t-per-week="{p} por semana" data-t-weeks-x="{p} por semana × {w} semanas" data-t-per-meal="por comida"
   data-t-all-lines="Todas" data-t-prop-dishes="Platillos" data-t-prop-meals="Comidas por semana"
   data-t-prop-tier="Nivel" data-t-prop-length="Duración" data-t-length-block="4 semanas" data-t-length-week="1 semana"
-  data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-pick="Elegir" data-t-picked="Elegido" data-t-pick-for="Elige el platillo del {d}" data-t-all-done="¡Semana completa! Revisa y continúa." data-t-clear-day="Quitar el platillo de {d}" data-t-first="Primera entrega: lunes {d}." data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
+  data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-finish="Confirmar y continuar" data-t-finish-guest="Inicia sesión para continuar" data-t-credit="Tienes un plan activo: te quedan {w} de {t} semanas (hasta el {e}). Elige las comidas de cada semana en Mi semana. ¿Quieres más créditos? Elige un plan aquí abajo." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-pick="Elegir" data-t-picked="Elegido" data-t-pick-for="Elige el platillo del {d}" data-t-all-done="¡Semana completa! Revisa y continúa." data-t-clear-day="Quitar el platillo de {d}" data-t-first="Primera entrega: lunes {d}." data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
   data-t-prop-upgrade="Mejora" data-t-need-contract="Acepta el contrato para continuar." data-t-days-missing="Asigna un platillo a cada día."
   data-upg-1="70" data-upg-2="140" data-upg-3="210"
   data-upv-1="74001" data-upv-2="74002" data-upv-3="74003" >
@@ -2597,6 +2668,7 @@ Fuego</span>
         <fieldset class="step is-on" data-fn-step="1">
           <legend>¿Cuánto tiempo quieres comer bien?</legend>
           <p class="text-muted">Eliges tu plan una vez. Recibes 5 comidas por semana, de lunes a viernes.</p>
+          <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="#/pg/cuenta-semana" data-fn-credit-link>Ir a Mi semana</a></div>
           <div class="fn-plans" role="radiogroup" aria-label="¿Cuánto tiempo quieres comer bien?">
             <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
               <span class="plan-card__flag">Recomendado</span>
@@ -2826,17 +2898,18 @@ Fuego</span>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Total del plan</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
-        <p class="fn-weeknote"><strong data-fn-first></strong> Estas 5 comidas son solo para esa primera semana. Tu plan ya está pagado: regresa cada semana a elegir las siguientes 5 (antes del sábado a las 10:00). ¿Quieres un platillo de nivel superior? Puedes elegirlo: pagas solo la diferencia por comida, de esa semana.</p>
+        <p class="fn-weeknote"><strong data-fn-first></strong> Estas comidas son para tu primera semana; los días que dejes vacíos no se entregan (hasta 5 comidas). Cada semana vuelves a elegir las siguientes, antes del sábado a las 10:00. ¿Quieres un platillo de nivel superior? Puedes elegirlo: pagas solo la diferencia por comida, de esa semana.</p>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
-        <button class="text-link" type="button" data-fn-reset>Empezar de nuevo</button>
+        <div class="fn-actions fn-cta">
+          <span class="fn-links">
+            <button class="text-link" type="button" data-fn-prev hidden>Atrás</button>
+            <button class="text-link fn-reset" type="button" data-fn-reset>Empezar de nuevo</button>
+          </span>
+          <button class="btn btn--gold" type="button" data-fn-next disabled>Continuar</button>
+          <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirmar y continuar</a>
+        </div>
       </aside>
     </div>
-    <div class="funnel__actions container">
-      <div class="steps__actions fn-actions">
-        <button class="text-link" type="button" data-fn-prev hidden>Atrás</button>
-        <button class="btn btn--gold" type="button" data-fn-next disabled>Continuar</button>
-        <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirmar y continuar</a>
-      </div></div>
    </div>
   </div>
 </section>
@@ -3008,29 +3081,6 @@ Fuego</span>
           <p class="tier-row__text">La máxima gama: cortes Prime y mariscos selectos, acondicionados para mantener su calidad al recalentar.</p>
           <p class="tier-row__price gold-text">$390<small>MXN / platillo</small></p>
         </article></div><p class="text-muted" style="margin-top:var(--space-lg)">Los precios se muestran por platillo. Se editan en Personalizar tema, Niveles y precios.</p></div>
-</section>
-
-
-</div><div id="home--shopify-section-categories" class="shopify-section"><section class="section fg fg--index " >
-  <div class="container"><div class="section__head"><span class="eyebrow">Categorías</span><h2>Del desayuno a la cena, al fuego <em>y al mar</em></h2></div><div class="fg__list"><a class="index-row" href="#/menu?categoria=desayunos-premium" data-peek="assets/photo-dish-3.webp" >
-            <span class="index-row__n">01</span>
-            <span class="index-row__t">Desayunos Premium</span>
-            <p class="index-row__d">Para empezar el día con intención.</p><span class="index-row__a" aria-hidden="true">→</span></a><a class="index-row" href="#/menu?categoria=al-fuego-y-mar" data-peek="assets/photo-dish-1.webp" >
-            <span class="index-row__n">02</span>
-            <span class="index-row__t">Al Fuego y Mar</span>
-            <p class="index-row__d">Cortes, aves y pesca premium.</p><span class="index-row__a" aria-hidden="true">→</span></a><a class="index-row" href="#/menu?categoria=bowls-de-la-semana" data-peek="assets/photo-dish-6.webp" >
-            <span class="index-row__n">03</span>
-            <span class="index-row__t">Bowls de la Semana</span>
-            <p class="index-row__d">Frescos, completos y de temporada.</p><span class="index-row__a" aria-hidden="true">→</span></a><a class="index-row" href="#/menu?categoria=diario-premium" data-peek="assets/photo-dish-0.webp" >
-            <span class="index-row__n">04</span>
-            <span class="index-row__t">Balanceado / Diario Premium</span>
-            <p class="index-row__d">La base de tu semana.</p><span class="index-row__a" aria-hidden="true">→</span></a><a class="index-row" href="#/menu?categoria=kulinaria-junior" data-peek="assets/photo-dish-7.webp" >
-            <span class="index-row__n">05</span>
-            <span class="index-row__t">Kulinaria Junior</span>
-            <p class="index-row__d">Platillos pensados para los más pequeños.</p><span class="index-row__a" aria-hidden="true">→</span></a><a class="index-row" href="#/menu?categoria=sopas-y-entradas" data-peek="assets/photo-dish-2.webp" >
-            <span class="index-row__n">06</span>
-            <span class="index-row__t">Entradas y complementos</span>
-            <p class="index-row__d">Sopas, cremas, postres y snacks saludables, batidos y bebidas.</p><span class="index-row__a" aria-hidden="true">→</span></a></div></div>
 </section>
 
 
@@ -7612,17 +7662,39 @@ Pago digital, sin efectivo</li></ul>
           data-upg-1="70" data-upg-2="140" data-upg-3="210"
           data-upv-1="74001" data-upv-2="74002" data-upv-3="74003"
           data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
-          data-t-prop-upgrade="Mejora" data-t-need="Asigna un platillo a cada día." data-t-warn="⚠ Según nuestros datos, estos platillos incluyen o pueden incluir algo a lo que declaraste alergia: {list}." data-t-closed="Esa semana ya cerró. Elige la siguiente." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-saved="Listo: tu semana del {d} quedó guardada." data-t-saved-pay="Guardamos tu selección. Paga la mejora de platillos ({p}) para confirmarla." data-t-prev="Cargamos tu selección anterior; cámbiala si quieres." data-t-week-opt="Lunes {a} – viernes {b}" data-t-error="No pudimos agregar la mejora al carrito. Intenta de nuevo.">
-          <p class="countdown" data-cutoff>Confirma tus platillos antes del sábado 10:00 AM · quedan <strong data-cutoff-value>…</strong></p>
-          <p class="alert alert--warn" data-mw-noplan hidden>Aún no tienes un plan activo. Arma tu pedido para empezar. <a class="text-link" href="#/pg/pedido">Elegir mi plan</a></p>
-          <p class="text-muted">Tu plan ya está pagado. Elige qué comerás cada día de la semana; si no eliges antes del sábado a las 10:00, repetimos tu selección anterior.</p><div class="field"><label for="pg-cuenta-semana--mw-week">Semana de entrega</label><select class="select" id="pg-cuenta-semana--mw-week" data-mw-week></select></div>
-          <ol class="fn-days" data-mw-days></ol>
-          <p class="funnel__upgrades" data-mw-up hidden></p>
-          <p class="fn-warn is-hard" data-mw-warn hidden role="note"></p>
-          <p class="alert alert--ok" data-mw-msg hidden role="status"></p>
-          <a hidden data-mw-cart href="#/carrito" tabindex="-1" aria-hidden="true"></a>
-          <div class="btn-row"><button class="btn btn--gold" type="button" data-mw-save>Guardar mi semana</button><a class="btn btn--outline" href="#/cuenta">Administrar suscripción</a></div>
-          <p class="myweek__links"><a class="text-link" href="#/cuenta">Ver mis pedidos anteriores</a> · <a class="text-link" href="#/pg/bienvenida?edit=1">Mis datos</a></p>
+          data-t-prop-upgrade="Mejora" data-t-warn="⚠ Según nuestros datos, estos platillos incluyen o pueden incluir algo a lo que declaraste alergia: {list}." data-t-closed="Esa semana ya cerró. Elige la siguiente." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}."
+          data-t-saved="Listo: {n} comidas guardadas para la semana del {d}." data-t-skipped="Listo: la semana del {d} quedó sin entregas." data-t-saved-pay="Guardamos tu selección. Paga la mejora de platillos ({p}) para confirmarla." data-t-prev="Cargamos tu selección anterior; cámbiala si quieres." data-t-week-opt="Lunes {a} – viernes {b}" data-t-error="No pudimos agregar la mejora al carrito. Intenta de nuevo."
+          data-t-count="{n} de 5 comidas elegidas" data-t-buy-none="Aún no tienes un plan activo. Elige un plan de 4 semanas o de 1 semana y escoge tus comidas." data-t-buy-expired="Tu plan terminó. Elige un plan nuevo para seguir recibiendo tus comidas." data-t-credits-error="No pudimos cargar tu plan en este momento. Intenta de nuevo en un momento."
+          data-t-err-noplan="No encontramos un plan pagado en tu cuenta." data-t-err-notcovered="Esa semana no está incluida en tu plan."><div data-mw-body >
+            <div class="mw-buy" data-mw-buy hidden>
+              <h3>Compra tus créditos</h3>
+              <p class="text-muted" data-mw-buy-text></p>
+              <div class="btn-row"><a class="btn btn--gold" data-mw-buy-cta href="#/pg/pedido">Elegir un plan</a></div>
+            </div>
+            <div class="mw-credit" data-mw-credit hidden>
+              <h3>Tu plan</h3>
+              <dl class="mw-stats">
+                <div><dt>Semanas restantes</dt><dd data-mw-s-weeks>—</dd></div>
+                <div><dt>Comidas planeadas</dt><dd data-mw-s-meals>—</dd></div>
+                <div><dt>Tu plan termina</dt><dd data-mw-s-ends>—</dd></div>
+              </dl>
+              <p class="text-muted mw-note">Hasta 5 comidas por semana; los días que no elijas no se entregan. <a class="text-link" href="#/pg/pedido">¿Más créditos? Elige un plan nuevo.</a></p>
+            </div>
+            <p class="alert alert--warn" data-mw-none hidden>No hay semanas abiertas para elegir ahora. Vuelve después del próximo cierre.</p>
+            <div data-mw-planner hidden>
+              <p class="countdown" data-cutoff>Confirma tus platillos antes del sábado 10:00 AM · quedan <strong data-cutoff-value>…</strong></p>
+              <p class="text-muted">Tu plan ya está pagado. Elige qué comerás cada día (hasta 5 comidas); deja vacío el día que no quieras, por ejemplo si comes fuera. Si no eliges nada, repetimos tu selección anterior; para no recibir nada esa semana, usa «Saltar esta semana».</p>
+              <div class="field"><label for="pg-cuenta-semana--mw-week">Semana de entrega</label><select class="select" id="pg-cuenta-semana--mw-week" data-mw-week></select></div>
+              <ol class="fn-days" data-mw-days></ol>
+              <p class="mw-count" data-mw-count></p>
+              <p class="funnel__upgrades" data-mw-up hidden></p>
+              <p class="fn-warn is-hard" data-mw-warn hidden role="note"></p>
+              <p class="alert alert--ok" data-mw-msg hidden role="status"></p>
+              <a hidden data-mw-cart href="#/carrito" tabindex="-1" aria-hidden="true"></a>
+              <div class="btn-row"><button class="btn btn--outline" type="button" data-mw-skip>Saltar esta semana</button><button class="btn btn--gold" type="button" data-mw-save>Guardar mi semana</button></div>
+            </div>
+            <p class="myweek__links"><a class="text-link" href="#/cuenta">Ver mis pedidos anteriores</a> · <a class="text-link" href="#/pg/bienvenida?edit=1">Mis datos</a> · <a class="text-link" href="#/cuenta">Administrar suscripción</a></p>
+          </div>
           <ul hidden data-mw-dishes><li data-pid="7100" data-title="Pollo a las hierbas con puré rústico" data-label="Pollo a las hierbas con puré rústico" data-tier="selecto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas"></li><li data-pid="7101" data-title="Bowl de res magra y quinoa" data-label="Bowl de res magra y quinoa" data-tier="selecto" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro"></li><li data-pid="7102" data-title="Salmón gourmet en costra de almendras" data-label="Salmón gourmet en costra de almendras" data-tier="exclusivo" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón"></li><li data-pid="7103" data-title="Omelette de claras con espinaca" data-label="Omelette de claras con espinaca" data-tier="selecto" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones"></li><li data-pid="7104" data-title="Arrachera al carbón con maíz y espárragos" data-label="Arrachera al carbón con maíz y espárragos" data-tier="signature" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas"></li><li data-pid="7105" data-title="Filete Prime con verduras asadas" data-label="Filete Prime con verduras asadas" data-tier="reserve" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla"></li><li data-pid="7106" data-title="Bowl vegano de garbanzo y tahini" data-label="Bowl vegano de garbanzo y tahini" data-tier="exclusivo" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla"></li><li data-pid="7107" data-title="Crema de calabaza asada" data-label="Crema de calabaza asada" data-tier="selecto" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo"></li><li data-pid="7110" data-title="Mini pasta de pollo para peques" data-label="Mini pasta de pollo para peques" data-tier="selecto" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate"></li></ul>
         </div></div>
       </div>
@@ -7660,25 +7732,35 @@ Pago digital, sin efectivo</li></ul>
       </nav>
 
       <div class="account-content">
-        <div class="account-block" id="pg-cuenta-pausas--pausas"><h2>Pausar próximo bloque de entregas</h2>
-        <p class="text-muted">Pausa manualmente por imprevistos o viajes. Las ventanas se bloquean automáticamente.</p>
-        <div class="pause-grid">
-          <div class="card">
-            <h3>Entregas de jueves y viernes</h3>
-            <p class="text-muted">Pausa a más tardar el martes a las 10:00 AM.</p>
-            <a class="btn btn--outline" data-pause-lock data-lock-day="2" data-lock-hour="10" href="#/cuenta">Pausar próximo bloque de entregas</a>
-            <p class="alert alert--warn" data-lock-msg hidden>Tiempo límite de pausa agotado para el siguiente periodo</p>
-            <p class="text-muted" data-lock-left style="font-size:.85rem"></p>
+        <div class="account-block" id="pg-cuenta-pausas--pausas"><h2>Pausar entregas</h2>
+        <div class="panel panel--gold mypause" data-mypause
+          data-t-st-active="Tus entregas están activas." data-t-st-weeks="Semanas en pausa: {list}." data-t-st-open="Tus entregas están en pausa desde el {d} hasta que las reanudes." data-t-st-ends="Tu plan termina el {d}." data-t-st-ends-open="Tu plan no tiene fecha de término mientras la pausa siga abierta."
+          data-t-len-1="1 semana" data-t-len-n="{n} semanas" data-t-len-open="Hasta que yo las reanude" data-t-week-opt="{a} – {b}"
+          data-t-done="Listo: pausamos {n} · {list}. Tu plan termina el {d}." data-t-done-open="Listo: tus entregas quedan en pausa desde el {d}. Cuando quieras, las reanudas aquí." data-t-resumed="Listo: reanudamos tus entregas desde el {d}."
+          data-t-err-closed="Esa semana ya cerró (el corte es el sábado a las 10:00). Elige una semana posterior." data-t-err-noplan="No encontramos un plan activo en tu cuenta." data-t-err="No pudimos guardar el cambio. Intenta de nuevo." data-t-error-load="No pudimos consultar tu plan. Intenta de nuevo en un momento."><div data-mp-body >
+            <p class="text-muted">¿Viaje, imprevisto o simplemente una pausa? Pausa tus entregas cuando quieras. No pierdes nada: las semanas pausadas no se consumen y tu plan termina una semana después por cada semana en pausa.</p>
+            <div data-mp-none hidden>
+              <p class="alert alert--warn" data-mp-none-text>Aún no tienes un plan activo, así que no hay entregas que pausar.</p>
+              <div class="btn-row"><a class="btn btn--gold" href="#/pg/pedido">Elegir un plan</a></div>
+            </div>
+            <div data-mp-main hidden>
+              <p class="mp-status" data-mp-status role="status"></p>
+              <p class="text-muted" data-mp-ends></p>
+              <div class="mp-form">
+                <div class="field"><label for="pg-cuenta-pausas--mp-start">Pausar desde la semana del</label><select class="select" id="pg-cuenta-pausas--mp-start" data-mp-start></select></div>
+                <div class="field"><label for="pg-cuenta-pausas--mp-len">Durante</label><select class="select" id="pg-cuenta-pausas--mp-len" data-mp-len></select></div>
+                <button class="btn btn--gold" type="button" data-mp-pause>Pausar entregas</button>
+              </div>
+              <div class="mp-form" data-mp-resume hidden>
+                <h3>Reanudar entregas</h3>
+                <div class="field"><label for="pg-cuenta-pausas--mp-from">Reanudar desde la semana del</label><select class="select" id="pg-cuenta-pausas--mp-from" data-mp-from></select></div>
+                <button class="btn btn--outline" type="button" data-mp-resume-go>Reanudar entregas</button>
+              </div>
+              <p class="alert alert--ok" data-mp-msg hidden role="status"></p>
+              <p class="legal-note">El corte para pausar o reanudar una semana es el sábado a las 10:00 de la semana anterior. Las pausas también detienen los recordatorios por correo.</p>
+            </div>
           </div>
-          <div class="card">
-            <h3>Entregas de lunes a miércoles</h3>
-            <p class="text-muted">Pausa a más tardar el viernes a las 7:00 PM. Es el corte más importante: si no pausas, tu nuevo pedido se asigna el sábado a las 10:00 AM con cargo al plan vigente.</p>
-            <a class="btn btn--outline" data-pause-lock data-lock-day="5" data-lock-hour="19" href="#/cuenta">Pausar próximo bloque de entregas</a>
-            <p class="alert alert--warn" data-lock-msg hidden>Tiempo límite de pausa agotado para el siguiente periodo</p>
-            <p class="text-muted" data-lock-left style="font-size:.85rem"></p>
-          </div>
-        </div>
-        <p class="legal-note" style="margin-top:var(--space-lg)">Al pausar, tienes un máximo de 30 días naturales para reanudar. Pasado ese plazo el contrato se cancela y se pierde el saldo acumulado.</p></div>
+        </div></div>
       </div>
     </div></div>
 </section>
@@ -7888,13 +7970,13 @@ Pago digital, sin efectivo</li></ul>
 <div data-page="pg/pedido" data-template="page" data-title="Armar mi pedido" hidden>
       <div id="pg-pedido--shopify-section-funnel" class="shopify-section"><section class="section funnel" id="pg-pedido--pedido-funnel" data-funnel data-cart-url="/cart" data-meals="5" data-weeks="4" data-customer-name="" data-customer-email="ramon@ejemplo.com"
   data-t-meals="{n} de {t} comidas" data-t-meal-one="1 comida" data-t-empty="Aún no eliges comidas."
-  data-t-need-meals="Elige tus 5 comidas para continuar." data-t-full="Ya tienes tus 5 comidas. Quita una para cambiar." data-t-need-info="Completa tu nombre, correo y teléfono."
+  data-t-need-meals="Elige al menos una comida para continuar." data-t-full="Ya tienes tus 5 comidas. Quita una para cambiar." data-t-need-info="Completa tu nombre, correo y teléfono."
   data-t-add="Agregar" data-t-remembered="Recordamos tus datos de la última vez." data-t-saved="Guardamos tu selección y tus datos para la próxima vez. Siguiente paso: tu contrato y pago."
   data-t-step-of="Paso {n} de {t}" data-t-block-name="4 semanas · 20 comidas" data-t-week-name="1 semana · 5 comidas"
   data-t-per-week="{p} por semana" data-t-weeks-x="{p} por semana × {w} semanas" data-t-per-meal="por comida"
   data-t-all-lines="Todas" data-t-prop-dishes="Platillos" data-t-prop-meals="Comidas por semana"
   data-t-prop-tier="Nivel" data-t-prop-length="Duración" data-t-length-block="4 semanas" data-t-length-week="1 semana"
-  data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-pick="Elegir" data-t-picked="Elegido" data-t-pick-for="Elige el platillo del {d}" data-t-all-done="¡Semana completa! Revisa y continúa." data-t-clear-day="Quitar el platillo de {d}" data-t-first="Primera entrega: lunes {d}." data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
+  data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-finish="Confirmar y continuar" data-t-finish-guest="Inicia sesión para continuar" data-t-credit="Tienes un plan activo: te quedan {w} de {t} semanas (hasta el {e}). Elige las comidas de cada semana en Mi semana. ¿Quieres más créditos? Elige un plan aquí abajo." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-pick="Elegir" data-t-picked="Elegido" data-t-pick-for="Elige el platillo del {d}" data-t-all-done="¡Semana completa! Revisa y continúa." data-t-clear-day="Quitar el platillo de {d}" data-t-first="Primera entrega: lunes {d}." data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
   data-t-prop-upgrade="Mejora" data-t-need-contract="Acepta el contrato para continuar." data-t-days-missing="Asigna un platillo a cada día."
   data-upg-1="70" data-upg-2="140" data-upg-3="210"
   data-upv-1="74001" data-upv-2="74002" data-upv-3="74003" >
@@ -7925,6 +8007,7 @@ Pago digital, sin efectivo</li></ul>
         <fieldset class="step is-on" data-fn-step="1">
           <legend>¿Cuánto tiempo quieres comer bien?</legend>
           <p class="text-muted">Eliges tu plan una vez. Recibes 5 comidas por semana, de lunes a viernes.</p>
+          <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="#/pg/cuenta-semana" data-fn-credit-link>Ir a Mi semana</a></div>
           <div class="fn-plans" role="radiogroup" aria-label="¿Cuánto tiempo quieres comer bien?">
             <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
               <span class="plan-card__flag">Recomendado</span>
@@ -8154,17 +8237,18 @@ Pago digital, sin efectivo</li></ul>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Total del plan</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
-        <p class="fn-weeknote"><strong data-fn-first></strong> Estas 5 comidas son solo para esa primera semana. Tu plan ya está pagado: regresa cada semana a elegir las siguientes 5 (antes del sábado a las 10:00). ¿Quieres un platillo de nivel superior? Puedes elegirlo: pagas solo la diferencia por comida, de esa semana.</p>
+        <p class="fn-weeknote"><strong data-fn-first></strong> Estas comidas son para tu primera semana; los días que dejes vacíos no se entregan (hasta 5 comidas). Cada semana vuelves a elegir las siguientes, antes del sábado a las 10:00. ¿Quieres un platillo de nivel superior? Puedes elegirlo: pagas solo la diferencia por comida, de esa semana.</p>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
-        <button class="text-link" type="button" data-fn-reset>Empezar de nuevo</button>
+        <div class="fn-actions fn-cta">
+          <span class="fn-links">
+            <button class="text-link" type="button" data-fn-prev hidden>Atrás</button>
+            <button class="text-link fn-reset" type="button" data-fn-reset>Empezar de nuevo</button>
+          </span>
+          <button class="btn btn--gold" type="button" data-fn-next disabled>Continuar</button>
+          <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirmar y continuar</a>
+        </div>
       </aside>
     </div>
-    <div class="funnel__actions container">
-      <div class="steps__actions fn-actions">
-        <button class="text-link" type="button" data-fn-prev hidden>Atrás</button>
-        <button class="btn btn--gold" type="button" data-fn-next disabled>Continuar</button>
-        <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirmar y continuar</a>
-      </div></div>
    </div>
   </div>
 </section>
@@ -8244,9 +8328,7 @@ Pago digital, sin efectivo</li></ul>
       <h2>Cuéntanos qué no puedes (o <em>no quieres) comer</em></h2>
       <div class="divider-gold"><i></i></div>
       <p class="lede">Este cuestionario es obligatorio al inscribirte. Evita errores en la cocina y mejora tu experiencia.</p>
-    </div>
-
-    <form data-profile-form class="panel panel--gold" novalidate>
+    </div><form data-profile-form class="panel panel--gold" novalidate>
       <h3>Bloque 1 · Alergias y restricciones médicas <span class="tier-badge tier-badge--exclusivo" style="vertical-align:middle;margin-left:8px">Crítico</span></h3>
       <p class="text-muted">Los platillos que contengan estos ingredientes (o trazas) se bloquean por completo en tu menú.</p>
       <div class="check-grid"><label class="check"><input type="checkbox" name="allergy" value="Gluten"> <span>Gluten</span></label><label class="check"><input type="checkbox" name="allergy" value="Lácteos"> <span>Lácteos</span></label><label class="check"><input type="checkbox" name="allergy" value="Frutos secos"> <span>Frutos secos</span></label><label class="check"><input type="checkbox" name="allergy" value="Mariscos"> <span>Mariscos</span></label></div>
@@ -8269,8 +8351,7 @@ Pago digital, sin efectivo</li></ul>
       <p class="legal-note">El sitio cruza los ingredientes con el perfil que declaraste. Eres responsable de declarar con detalle tus alergias y restricciones al inscribirte.</p>
       <button class="btn btn--gold" type="submit">Guardar mi perfil</button>
       <p class="alert alert--ok form-msg" data-profile-msg hidden role="status">Perfil guardado. El menú ya se filtra con tus datos y tus siguientes pedidos lo incluirán.</p>
-    </form>
-  </div>
+    </form></div>
 </section>
 
 
@@ -8388,6 +8469,12 @@ Pago digital, sin efectivo</li></ul>
               <input class="input" id="carrito--ref" name="attributes[codigo_referencia]" value="" placeholder="JUANFIT" data-referral autocomplete="off" style="text-transform:uppercase">
             </div>
 
+            <div class="field">
+              <label for="carrito--disc">Código de descuento</label>
+              <input class="input" id="carrito--disc" name="discount" value="" placeholder="BIENVENIDO10" data-discount autocomplete="off" style="text-transform:uppercase">
+              <p class="text-muted" style="font-size:.85rem;margin:4px 0 0">Se aplica en el pago. Cada código tiene un número limitado de usos.</p>
+            </div>
+
             <div data-gift hidden style="margin-top:var(--space-lg)">
               <h3>Tu regalo de bienvenida</h3>
               <p class="text-muted">Elige uno sin costo con tu primer bloque de 4 semanas.</p><div class="gift-options"><label><input type="radio" name="gift" value="73000" checked>
@@ -8407,10 +8494,7 @@ Pago digital, sin efectivo</li></ul>
               <input type="checkbox" name="attributes[contrato_aceptado]" value="sí" data-contract >
               <span>
                 Acepto el contrato de adhesión y los términos de servicio de Kulinaria MX, incluida la selección automática de los sábados, las reglas de renovación y la política de no reembolso. <a href="#/pg/ayuda" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline">Leer contrato</a></span>
-            </label>
-
-            <button class="btn btn--gold btn--block" type="submit" name="checkout" data-checkout disabled>Continuar al pago</button>
-          </div>
+            </label><button class="btn btn--gold btn--block" type="submit" name="checkout" data-checkout disabled>Continuar al pago</button></div>
         </aside>
       </form></div>
 </section>
@@ -8822,13 +8906,13 @@ Pago digital, sin efectivo</li></ul>
 
 </div><div id="home--shopify-section-funnel" class="shopify-section"><section class="section funnel funnel--teaser" id="home--pedido-funnel" data-funnel data-cart-url="/cart" data-meals="5" data-weeks="4" data-customer-name="" data-customer-email="ramon@ejemplo.com"
   data-t-meals="{n} of {t} meals" data-t-meal-one="1 meal" data-t-empty="You haven't chosen any meals yet."
-  data-t-need-meals="Choose your 5 meals to continue." data-t-full="You already have your 5 meals. Remove one to change." data-t-need-info="Please fill in your name, email and phone."
+  data-t-need-meals="Choose at least one meal to continue." data-t-full="You already have your 5 meals. Remove one to change." data-t-need-info="Please fill in your name, email and phone."
   data-t-add="Add" data-t-remembered="We remembered your details from last time." data-t-saved="We saved your selection and details for next time. Next step: your contract and payment."
   data-t-step-of="Step {n} of {t}" data-t-block-name="4 weeks · 20 meals" data-t-week-name="1 week · 5 meals"
   data-t-per-week="{p} per week" data-t-weeks-x="{p} per week × {w} weeks" data-t-per-meal="per meal"
   data-t-all-lines="All" data-t-prop-dishes="Dishes" data-t-prop-meals="Meals per week"
   data-t-prop-tier="Tier" data-t-prop-length="Length" data-t-length-block="4 weeks" data-t-length-week="1 week"
-  data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-pick="Choose" data-t-picked="Chosen" data-t-pick-for="Choose the dish for {d}" data-t-all-done="Week complete! Review and continue." data-t-clear-day="Remove the dish for {d}" data-t-first="First delivery: Monday {d}." data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
+  data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-finish="Confirm and continue" data-t-finish-guest="Sign in to continue" data-t-credit="You have an active plan: {w} of {t} weeks left (until {e}). Choose each week's meals in My week. Want more credits? Pick a plan below." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-pick="Choose" data-t-picked="Chosen" data-t-pick-for="Choose the dish for {d}" data-t-all-done="Week complete! Review and continue." data-t-clear-day="Remove the dish for {d}" data-t-first="First delivery: Monday {d}." data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
   data-t-prop-upgrade="Upgrade" data-t-need-contract="Accept the contract to continue." data-t-days-missing="Assign a dish to every day."
   data-upg-1="70" data-upg-2="140" data-upg-3="210"
   data-upv-1="74001" data-upv-2="74002" data-upv-3="74003" >
@@ -8859,6 +8943,7 @@ Pago digital, sin efectivo</li></ul>
         <fieldset class="step is-on" data-fn-step="1">
           <legend>How long do you want to eat well?</legend>
           <p class="text-muted">You pick your plan once. You get 5 meals a week, Monday to Friday.</p>
+          <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="#/pg/cuenta-semana" data-fn-credit-link>Go to My week</a></div>
           <div class="fn-plans" role="radiogroup" aria-label="How long do you want to eat well?">
             <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
               <span class="plan-card__flag">Recommended</span>
@@ -9088,17 +9173,18 @@ Pago digital, sin efectivo</li></ul>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Plan total</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
-        <p class="fn-weeknote"><strong data-fn-first></strong> These 5 meals are for that first week only. Your plan is already paid: come back every week to choose the next 5 (before Saturday at 10:00). Want a higher-tier dish? Go ahead: you only pay the per-meal difference, for that week.</p>
+        <p class="fn-weeknote"><strong data-fn-first></strong> These meals are for your first week; days you leave empty are not delivered (up to 5 meals). Every week you come back to choose the next ones, before Saturday at 10:00. Want a higher-tier dish? Go ahead: you only pay the per-meal difference, for that week.</p>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
-        <button class="text-link" type="button" data-fn-reset>Start over</button>
+        <div class="fn-actions fn-cta">
+          <span class="fn-links">
+            <button class="text-link" type="button" data-fn-prev hidden>Back</button>
+            <button class="text-link fn-reset" type="button" data-fn-reset>Start over</button>
+          </span>
+          <button class="btn btn--gold" type="button" data-fn-next disabled>Continue</button>
+          <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirm and continue</a>
+        </div>
       </aside>
     </div>
-    <div class="funnel__actions container">
-      <div class="steps__actions fn-actions">
-        <button class="text-link" type="button" data-fn-prev hidden>Back</button>
-        <button class="btn btn--gold" type="button" data-fn-next disabled>Continue</button>
-        <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirm and continue</a>
-      </div></div>
    </div>
   </div>
 </section>
@@ -9270,29 +9356,6 @@ Pago digital, sin efectivo</li></ul>
           <p class="tier-row__text">The top range: Prime cuts and select seafood, conditioned to keep their quality when reheated.</p>
           <p class="tier-row__price gold-text">$390<small>MXN / dish</small></p>
         </article></div><p class="text-muted" style="margin-top:var(--space-lg)">Prices are shown per dish. Edit them in Customize theme, Levels and prices.</p></div>
-</section>
-
-
-</div><div id="home--shopify-section-categories" class="shopify-section"><section class="section fg fg--index " >
-  <div class="container"><div class="section__head"><span class="eyebrow">Categories</span><h2>From breakfast to dinner, by fire <em>and by sea</em></h2></div><div class="fg__list"><a class="index-row" href="#/menu?categoria=desayunos-premium" data-peek="assets/photo-dish-3.webp" >
-            <span class="index-row__n">01</span>
-            <span class="index-row__t">Premium Breakfasts</span>
-            <p class="index-row__d">To start the day with intention.</p><span class="index-row__a" aria-hidden="true">→</span></a><a class="index-row" href="#/menu?categoria=al-fuego-y-mar" data-peek="assets/photo-dish-1.webp" >
-            <span class="index-row__n">02</span>
-            <span class="index-row__t">Fire & Sea</span>
-            <p class="index-row__d">Premium cuts, poultry and seafood.</p><span class="index-row__a" aria-hidden="true">→</span></a><a class="index-row" href="#/menu?categoria=bowls-de-la-semana" data-peek="assets/photo-dish-6.webp" >
-            <span class="index-row__n">03</span>
-            <span class="index-row__t">Bowls of the Week</span>
-            <p class="index-row__d">Fresh, complete and seasonal.</p><span class="index-row__a" aria-hidden="true">→</span></a><a class="index-row" href="#/menu?categoria=diario-premium" data-peek="assets/photo-dish-0.webp" >
-            <span class="index-row__n">04</span>
-            <span class="index-row__t">Balanced / Premium Daily</span>
-            <p class="index-row__d">The base of your week.</p><span class="index-row__a" aria-hidden="true">→</span></a><a class="index-row" href="#/menu?categoria=kulinaria-junior" data-peek="assets/photo-dish-7.webp" >
-            <span class="index-row__n">05</span>
-            <span class="index-row__t">Kulinaria Junior</span>
-            <p class="index-row__d">Dishes designed for the little ones.</p><span class="index-row__a" aria-hidden="true">→</span></a><a class="index-row" href="#/menu?categoria=sopas-y-entradas" data-peek="assets/photo-dish-2.webp" >
-            <span class="index-row__n">06</span>
-            <span class="index-row__t">Starters and sides</span>
-            <p class="index-row__d">Soups, creams, desserts and healthy snacks, smoothies and drinks.</p><span class="index-row__a" aria-hidden="true">→</span></a></div></div>
 </section>
 
 
@@ -13874,17 +13937,39 @@ Digital payment, no cash</li></ul>
           data-upg-1="70" data-upg-2="140" data-upg-3="210"
           data-upv-1="74001" data-upv-2="74002" data-upv-3="74003"
           data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
-          data-t-prop-upgrade="Upgrade" data-t-need="Assign a dish to every day." data-t-warn="⚠ According to our data, these dishes include or may include something you declared an allergy to: {list}." data-t-closed="That week is closed. Choose the next one." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-saved="Done: your week of {d} is saved." data-t-saved-pay="We saved your selection. Pay the dish upgrade ({p}) to confirm it." data-t-prev="We loaded your previous selection; change it if you like." data-t-week-opt="Monday {a} – Friday {b}" data-t-error="We couldn't add the upgrade to your cart. Please try again.">
-          <p class="countdown" data-cutoff>Confirm your dishes before Saturday 10:00 AM · time left: <strong data-cutoff-value>…</strong></p>
-          <p class="alert alert--warn" data-mw-noplan hidden>You don't have an active plan yet. Build your order to get started. <a class="text-link" href="#/pg/pedido">Choose my plan</a></p>
-          <p class="text-muted">Your plan is already paid. Choose what you'll eat each day of the week; if you don't choose before Saturday at 10:00, we repeat your previous selection.</p><div class="field"><label for="pg-cuenta-semana--mw-week">Delivery week</label><select class="select" id="pg-cuenta-semana--mw-week" data-mw-week></select></div>
-          <ol class="fn-days" data-mw-days></ol>
-          <p class="funnel__upgrades" data-mw-up hidden></p>
-          <p class="fn-warn is-hard" data-mw-warn hidden role="note"></p>
-          <p class="alert alert--ok" data-mw-msg hidden role="status"></p>
-          <a hidden data-mw-cart href="#/carrito" tabindex="-1" aria-hidden="true"></a>
-          <div class="btn-row"><button class="btn btn--gold" type="button" data-mw-save>Save my week</button><a class="btn btn--outline" href="#/cuenta">Manage subscription</a></div>
-          <p class="myweek__links"><a class="text-link" href="#/cuenta">See my previous orders</a> · <a class="text-link" href="#/pg/bienvenida?edit=1">My details</a></p>
+          data-t-prop-upgrade="Upgrade" data-t-warn="⚠ According to our data, these dishes include or may include something you declared an allergy to: {list}." data-t-closed="That week is closed. Choose the next one." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}."
+          data-t-saved="Done: {n} meals saved for the week of {d}." data-t-skipped="Done: the week of {d} has no deliveries." data-t-saved-pay="We saved your selection. Pay the dish upgrade ({p}) to confirm it." data-t-prev="We loaded your previous selection; change it if you like." data-t-week-opt="Monday {a} – Friday {b}" data-t-error="We couldn't add the upgrade to your cart. Please try again."
+          data-t-count="{n} of 5 meals chosen" data-t-buy-none="You don't have an active plan yet. Pick a 4-week or 1-week plan and choose your meals." data-t-buy-expired="Your plan has ended. Pick a new plan to keep receiving your meals." data-t-credits-error="We couldn't load your plan right now. Please try again in a moment."
+          data-t-err-noplan="We couldn't find a paid plan on your account." data-t-err-notcovered="That week isn't included in your plan."><div data-mw-body >
+            <div class="mw-buy" data-mw-buy hidden>
+              <h3>Buy your credits</h3>
+              <p class="text-muted" data-mw-buy-text></p>
+              <div class="btn-row"><a class="btn btn--gold" data-mw-buy-cta href="#/pg/pedido">Choose a plan</a></div>
+            </div>
+            <div class="mw-credit" data-mw-credit hidden>
+              <h3>Your plan</h3>
+              <dl class="mw-stats">
+                <div><dt>Weeks left</dt><dd data-mw-s-weeks>—</dd></div>
+                <div><dt>Meals planned</dt><dd data-mw-s-meals>—</dd></div>
+                <div><dt>Your plan ends</dt><dd data-mw-s-ends>—</dd></div>
+              </dl>
+              <p class="text-muted mw-note">Up to 5 meals a week; days you don't choose are not delivered. <a class="text-link" href="#/pg/pedido">More credits? Pick a new plan.</a></p>
+            </div>
+            <p class="alert alert--warn" data-mw-none hidden>There are no open weeks to choose right now. Come back after the next cut-off.</p>
+            <div data-mw-planner hidden>
+              <p class="countdown" data-cutoff>Confirm your dishes before Saturday 10:00 AM · time left: <strong data-cutoff-value>…</strong></p>
+              <p class="text-muted">Your plan is already paid. Choose what you'll eat each day (up to 5 meals); leave empty any day you don't want one, for example when you eat out. If you choose nothing, we repeat your previous selection; to receive nothing that week, use "Skip this week".</p>
+              <div class="field"><label for="pg-cuenta-semana--mw-week">Delivery week</label><select class="select" id="pg-cuenta-semana--mw-week" data-mw-week></select></div>
+              <ol class="fn-days" data-mw-days></ol>
+              <p class="mw-count" data-mw-count></p>
+              <p class="funnel__upgrades" data-mw-up hidden></p>
+              <p class="fn-warn is-hard" data-mw-warn hidden role="note"></p>
+              <p class="alert alert--ok" data-mw-msg hidden role="status"></p>
+              <a hidden data-mw-cart href="#/carrito" tabindex="-1" aria-hidden="true"></a>
+              <div class="btn-row"><button class="btn btn--outline" type="button" data-mw-skip>Skip this week</button><button class="btn btn--gold" type="button" data-mw-save>Save my week</button></div>
+            </div>
+            <p class="myweek__links"><a class="text-link" href="#/cuenta">See my previous orders</a> · <a class="text-link" href="#/pg/bienvenida?edit=1">My details</a> · <a class="text-link" href="#/cuenta">Manage subscription</a></p>
+          </div>
           <ul hidden data-mw-dishes><li data-pid="7100" data-title="Pollo a las hierbas con puré rústico" data-label="Herb chicken with rustic mash" data-tier="selecto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas"></li><li data-pid="7101" data-title="Bowl de res magra y quinoa" data-label="Lean beef and quinoa bowl" data-tier="selecto" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro"></li><li data-pid="7102" data-title="Salmón gourmet en costra de almendras" data-label="Gourmet salmon in an almond crust" data-tier="exclusivo" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón"></li><li data-pid="7103" data-title="Omelette de claras con espinaca" data-label="Egg-white omelette with spinach" data-tier="selecto" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones"></li><li data-pid="7104" data-title="Arrachera al carbón con maíz y espárragos" data-label="Charcoal-grilled skirt steak with corn and asparagus" data-tier="signature" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas"></li><li data-pid="7105" data-title="Filete Prime con verduras asadas" data-label="Prime filet with roasted vegetables" data-tier="reserve" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla"></li><li data-pid="7106" data-title="Bowl vegano de garbanzo y tahini" data-label="Vegan chickpea and tahini bowl" data-tier="exclusivo" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla"></li><li data-pid="7107" data-title="Crema de calabaza asada" data-label="Roasted pumpkin cream soup" data-tier="selecto" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo"></li><li data-pid="7110" data-title="Mini pasta de pollo para peques" data-label="Mini chicken pasta for little ones" data-tier="selecto" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate"></li></ul>
         </div></div>
       </div>
@@ -13922,25 +14007,35 @@ Digital payment, no cash</li></ul>
       </nav>
 
       <div class="account-content">
-        <div class="account-block" id="pg-cuenta-pausas--pausas"><h2>Pause next delivery block</h2>
-        <p class="text-muted">Pause manually for surprises or trips. Windows lock automatically.</p>
-        <div class="pause-grid">
-          <div class="card">
-            <h3>Thursday & Friday deliveries</h3>
-            <p class="text-muted">Pause by Tuesday 10:00 AM at the latest.</p>
-            <a class="btn btn--outline" data-pause-lock data-lock-day="2" data-lock-hour="10" href="#/cuenta">Pause next delivery block</a>
-            <p class="alert alert--warn" data-lock-msg hidden>Pause time limit exceeded for the next period</p>
-            <p class="text-muted" data-lock-left style="font-size:.85rem"></p>
+        <div class="account-block" id="pg-cuenta-pausas--pausas"><h2>Pause deliveries</h2>
+        <div class="panel panel--gold mypause" data-mypause
+          data-t-st-active="Your deliveries are active." data-t-st-weeks="Paused weeks: {list}." data-t-st-open="Your deliveries are paused from {d} until you resume them." data-t-st-ends="Your plan ends on {d}." data-t-st-ends-open="Your plan has no end date while the pause stays open."
+          data-t-len-1="1 week" data-t-len-n="{n} weeks" data-t-len-open="Until I resume" data-t-week-opt="{a} – {b}"
+          data-t-done="Done: we paused {n} · {list}. Your plan now ends on {d}." data-t-done-open="Done: your deliveries are paused from {d}. You can resume them here whenever you like." data-t-resumed="Done: we resumed your deliveries from {d}."
+          data-t-err-closed="That week is already closed (the cut-off is Saturday at 10:00). Choose a later week." data-t-err-noplan="We couldn't find an active plan on your account." data-t-err="We couldn't save the change. Please try again." data-t-error-load="We couldn't check your plan. Please try again in a moment."><div data-mp-body >
+            <p class="text-muted">Trip, surprise or just a break? Pause your deliveries whenever you need. You lose nothing: paused weeks aren't used up, and your plan ends one week later for every week you pause.</p>
+            <div data-mp-none hidden>
+              <p class="alert alert--warn" data-mp-none-text>You don't have an active plan yet, so there are no deliveries to pause.</p>
+              <div class="btn-row"><a class="btn btn--gold" href="#/pg/pedido">Choose a plan</a></div>
+            </div>
+            <div data-mp-main hidden>
+              <p class="mp-status" data-mp-status role="status"></p>
+              <p class="text-muted" data-mp-ends></p>
+              <div class="mp-form">
+                <div class="field"><label for="pg-cuenta-pausas--mp-start">Pause from the week of</label><select class="select" id="pg-cuenta-pausas--mp-start" data-mp-start></select></div>
+                <div class="field"><label for="pg-cuenta-pausas--mp-len">For</label><select class="select" id="pg-cuenta-pausas--mp-len" data-mp-len></select></div>
+                <button class="btn btn--gold" type="button" data-mp-pause>Pause deliveries</button>
+              </div>
+              <div class="mp-form" data-mp-resume hidden>
+                <h3>Resume deliveries</h3>
+                <div class="field"><label for="pg-cuenta-pausas--mp-from">Resume from the week of</label><select class="select" id="pg-cuenta-pausas--mp-from" data-mp-from></select></div>
+                <button class="btn btn--outline" type="button" data-mp-resume-go>Resume deliveries</button>
+              </div>
+              <p class="alert alert--ok" data-mp-msg hidden role="status"></p>
+              <p class="legal-note">The cut-off to pause or resume a week is Saturday at 10:00 the week before. Pausing also stops the e-mail reminders.</p>
+            </div>
           </div>
-          <div class="card">
-            <h3>Monday to Wednesday deliveries</h3>
-            <p class="text-muted">Pause by Friday 7:00 PM at the latest. This is the most important cut-off: if you don't pause, your new order is assigned on Saturday at 10:00 AM and charged to your current plan.</p>
-            <a class="btn btn--outline" data-pause-lock data-lock-day="5" data-lock-hour="19" href="#/cuenta">Pause next delivery block</a>
-            <p class="alert alert--warn" data-lock-msg hidden>Pause time limit exceeded for the next period</p>
-            <p class="text-muted" data-lock-left style="font-size:.85rem"></p>
-          </div>
-        </div>
-        <p class="legal-note" style="margin-top:var(--space-lg)">When you pause you have up to 30 calendar days to resume. After that the contract is cancelled and any accumulated balance is lost.</p></div>
+        </div></div>
       </div>
     </div></div>
 </section>
@@ -14150,13 +14245,13 @@ Digital payment, no cash</li></ul>
 <div data-page="pg/pedido" data-template="page" data-title="Armar mi pedido" hidden>
       <div id="pg-pedido--shopify-section-funnel" class="shopify-section"><section class="section funnel" id="pg-pedido--pedido-funnel" data-funnel data-cart-url="/cart" data-meals="5" data-weeks="4" data-customer-name="" data-customer-email="ramon@ejemplo.com"
   data-t-meals="{n} of {t} meals" data-t-meal-one="1 meal" data-t-empty="You haven't chosen any meals yet."
-  data-t-need-meals="Choose your 5 meals to continue." data-t-full="You already have your 5 meals. Remove one to change." data-t-need-info="Please fill in your name, email and phone."
+  data-t-need-meals="Choose at least one meal to continue." data-t-full="You already have your 5 meals. Remove one to change." data-t-need-info="Please fill in your name, email and phone."
   data-t-add="Add" data-t-remembered="We remembered your details from last time." data-t-saved="We saved your selection and details for next time. Next step: your contract and payment."
   data-t-step-of="Step {n} of {t}" data-t-block-name="4 weeks · 20 meals" data-t-week-name="1 week · 5 meals"
   data-t-per-week="{p} per week" data-t-weeks-x="{p} per week × {w} weeks" data-t-per-meal="per meal"
   data-t-all-lines="All" data-t-prop-dishes="Dishes" data-t-prop-meals="Meals per week"
   data-t-prop-tier="Tier" data-t-prop-length="Length" data-t-length-block="4 weeks" data-t-length-week="1 week"
-  data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-pick="Choose" data-t-picked="Chosen" data-t-pick-for="Choose the dish for {d}" data-t-all-done="Week complete! Review and continue." data-t-clear-day="Remove the dish for {d}" data-t-first="First delivery: Monday {d}." data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
+  data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-finish="Confirm and continue" data-t-finish-guest="Sign in to continue" data-t-credit="You have an active plan: {w} of {t} weeks left (until {e}). Choose each week's meals in My week. Want more credits? Pick a plan below." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-pick="Choose" data-t-picked="Chosen" data-t-pick-for="Choose the dish for {d}" data-t-all-done="Week complete! Review and continue." data-t-clear-day="Remove the dish for {d}" data-t-first="First delivery: Monday {d}." data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
   data-t-prop-upgrade="Upgrade" data-t-need-contract="Accept the contract to continue." data-t-days-missing="Assign a dish to every day."
   data-upg-1="70" data-upg-2="140" data-upg-3="210"
   data-upv-1="74001" data-upv-2="74002" data-upv-3="74003" >
@@ -14187,6 +14282,7 @@ Digital payment, no cash</li></ul>
         <fieldset class="step is-on" data-fn-step="1">
           <legend>How long do you want to eat well?</legend>
           <p class="text-muted">You pick your plan once. You get 5 meals a week, Monday to Friday.</p>
+          <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="#/pg/cuenta-semana" data-fn-credit-link>Go to My week</a></div>
           <div class="fn-plans" role="radiogroup" aria-label="How long do you want to eat well?">
             <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
               <span class="plan-card__flag">Recommended</span>
@@ -14416,17 +14512,18 @@ Digital payment, no cash</li></ul>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Plan total</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
-        <p class="fn-weeknote"><strong data-fn-first></strong> These 5 meals are for that first week only. Your plan is already paid: come back every week to choose the next 5 (before Saturday at 10:00). Want a higher-tier dish? Go ahead: you only pay the per-meal difference, for that week.</p>
+        <p class="fn-weeknote"><strong data-fn-first></strong> These meals are for your first week; days you leave empty are not delivered (up to 5 meals). Every week you come back to choose the next ones, before Saturday at 10:00. Want a higher-tier dish? Go ahead: you only pay the per-meal difference, for that week.</p>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
-        <button class="text-link" type="button" data-fn-reset>Start over</button>
+        <div class="fn-actions fn-cta">
+          <span class="fn-links">
+            <button class="text-link" type="button" data-fn-prev hidden>Back</button>
+            <button class="text-link fn-reset" type="button" data-fn-reset>Start over</button>
+          </span>
+          <button class="btn btn--gold" type="button" data-fn-next disabled>Continue</button>
+          <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirm and continue</a>
+        </div>
       </aside>
     </div>
-    <div class="funnel__actions container">
-      <div class="steps__actions fn-actions">
-        <button class="text-link" type="button" data-fn-prev hidden>Back</button>
-        <button class="btn btn--gold" type="button" data-fn-next disabled>Continue</button>
-        <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirm and continue</a>
-      </div></div>
    </div>
   </div>
 </section>
@@ -14506,9 +14603,7 @@ Digital payment, no cash</li></ul>
       <h2>Tell us what you can&#39;t (or don&#39;t <em>want to) eat</em></h2>
       <div class="divider-gold"><i></i></div>
       <p class="lede">This questionnaire is mandatory when you sign up. It prevents mistakes in the kitchen and improves your experience.</p>
-    </div>
-
-    <form data-profile-form class="panel panel--gold" novalidate>
+    </div><form data-profile-form class="panel panel--gold" novalidate>
       <h3>Block 1 · Allergies and medical restrictions <span class="tier-badge tier-badge--exclusivo" style="vertical-align:middle;margin-left:8px">Critical</span></h3>
       <p class="text-muted">Dishes containing these ingredients (or traces) are blocked completely in your menu.</p>
       <div class="check-grid"><label class="check"><input type="checkbox" name="allergy" value="Gluten"> <span>Gluten</span></label><label class="check"><input type="checkbox" name="allergy" value="Lácteos"> <span>Dairy</span></label><label class="check"><input type="checkbox" name="allergy" value="Frutos secos"> <span>Tree nuts</span></label><label class="check"><input type="checkbox" name="allergy" value="Mariscos"> <span>Shellfish</span></label></div>
@@ -14531,8 +14626,7 @@ Digital payment, no cash</li></ul>
       <p class="legal-note">The site cross-checks ingredients against the profile you declared. You are responsible for declaring your allergies and restrictions in detail when you sign up.</p>
       <button class="btn btn--gold" type="submit">Save my profile</button>
       <p class="alert alert--ok form-msg" data-profile-msg hidden role="status">Profile saved. The menu is now filtered with your data and your next orders will include it.</p>
-    </form>
-  </div>
+    </form></div>
 </section>
 
 
@@ -14650,6 +14744,12 @@ Digital payment, no cash</li></ul>
               <input class="input" id="carrito--ref" name="attributes[codigo_referencia]" value="" placeholder="JUANFIT" data-referral autocomplete="off" style="text-transform:uppercase">
             </div>
 
+            <div class="field">
+              <label for="carrito--disc">Discount code</label>
+              <input class="input" id="carrito--disc" name="discount" value="" placeholder="BIENVENIDO10" data-discount autocomplete="off" style="text-transform:uppercase">
+              <p class="text-muted" style="font-size:.85rem;margin:4px 0 0">Applied at checkout. Each code can only be used a limited number of times.</p>
+            </div>
+
             <div data-gift hidden style="margin-top:var(--space-lg)">
               <h3>Your welcome gift</h3>
               <p class="text-muted">Choose one at no cost with your first 4-week block.</p><div class="gift-options"><label><input type="radio" name="gift" value="73000" checked>
@@ -14669,10 +14769,7 @@ Digital payment, no cash</li></ul>
               <input type="checkbox" name="attributes[contrato_aceptado]" value="sí" data-contract >
               <span>
                 I accept the adhesion contract and the Kulinaria MX terms of service, including the automatic Saturday selection, renewal rules and the no-refund policy. <a href="#/pg/ayuda" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline">Read contract</a></span>
-            </label>
-
-            <button class="btn btn--gold btn--block" type="submit" name="checkout" data-checkout disabled>Continue to payment</button>
-          </div>
+            </label><button class="btn btn--gold btn--block" type="submit" name="checkout" data-checkout disabled>Continue to payment</button></div>
         </aside>
       </form></div>
 </section>
@@ -15315,6 +15412,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     var by = {};
     (selections || []).forEach(function (s) { by[String(s.email || '').toLowerCase() + '|' + s.week] = s.items || []; });
     orders.forEach(function (o) {
+      if (o.byWeek) return;                     // the Sheet already resolved every week (skips, automatic repeats, credits)
       var cur = o.items || [], map = {}, e = String(o.email || '').toLowerCase();
       deliveryWeeks(o, cutoff).forEach(function (w, i) { if (i > 0 && by[e + '|' + w]) cur = by[e + '|' + w]; map[w] = cur; });
       o.byWeek = map;
@@ -15458,13 +15556,14 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
 
   var api = { CAT_ORDER: CAT_ORDER, CAT_NAME: CAT_NAME, ymd: ymd, parseYmd: parseYmd, addDays: addDays, mondayOf: mondayOf, firstDeliveryMonday: firstDeliveryMonday,
     weeksOf: weeksOf, deliveryWeeks: deliveryWeeks, weeksInMonth: weeksInMonth, norm: norm, normalizeRecipes: normalizeRecipes, findRecipe: findRecipe, recipeList: recipeList,
-    shopping: shopping, itemsOf: itemsOf, attachWeeklies: attachWeeklies, weeklyHistory: weeklyHistory, activeBlocks: activeBlocks, fmtQty: fmtQty, monthTally: monthTally, demoData: demoData };
+    mount: mount, shopping: shopping, itemsOf: itemsOf, attachWeeklies: attachWeeklies, weeklyHistory: weeklyHistory, activeBlocks: activeBlocks, fmtQty: fmtQty, monthTally: monthTally, demoData: demoData };
 
   /* ================================================================== the screen (browser only) */
   if (typeof document === 'undefined') return api;
 
   var STR = {
-    es: { title: 'Panel de administración', demo: 'Datos de demostración. Conecta el Google Sheet (docs/admin.md) para ver los pedidos reales.', tabs: ['Resumen', 'Lista de compras', 'Recetas', 'Pedidos'],
+    es: { title: 'Panel de administración', demo: 'Datos de demostración. Conecta el Google Sheet (docs/admin.md) para ver los pedidos reales.', tabs: ['Resumen', 'Lista de compras', 'Recetas', 'Pedidos', 'Descuentos'],
+      dTitle: 'Generar código de descuento', dHelp: 'Crea un código y dile cuántas veces se puede usar en total. Shopify lo aplica en el pago y deja de aceptarlo cuando se agotan los usos.', dCode: 'Código', dGen: 'Sugerir código', dKind: 'Tipo', dPercent: 'Porcentaje (%)', dAmount: 'Monto fijo (MXN)', dValue: 'Valor', dUses: 'Usos en total', dEnds: 'Vence (opcional)', dCreate: 'Crear código', dList: 'Códigos creados', dUsed: 'Usos', dStatus: 'Estado', dOff: 'Desactivar', dNone: 'Aún no hay códigos.', dDemo: 'Conecta el Google Sheet (docs/setup-checklist.md) para crear códigos reales.', dOk: 'Código creado: ', dDone: 'Código desactivado.', dErrTok: 'Falta conectar Shopify: en el Apps Script agrega las propiedades SHOPIFY_STORE y SHOPIFY_TOKEN (ver docs/setup-checklist.md).', dErrCode: 'El código debe tener de 3 a 30 letras, números, guiones o guion bajo.', dErrVal: 'Escribe un valor válido (porcentaje de 1 a 100).', dErrUses: 'Escribe cuántas veces se puede usar (1 o más).', dErr: 'No se pudo completar: ', dActive: 'Activo', dExpired: 'Agotado o vencido', dScheduled: 'Programado', dUnlimited: '—',
       orders: 'Pedidos del mes', blocks: 'Planes de 4 semanas', trials: 'Planes de 1 semana', clients: 'Clientes nuevos', sales: 'Ventas', avg: 'Ticket promedio', plates: 'Platillos a cocinar', top: 'Platillos más pedidos', mix: 'Bloque vs. suelto',
       perWeek: 'Pedidos por semana', week: 'Semana', month: 'Mes', buffer: 'Colchón de compra (%)', copy: 'Copiar lista', csv: 'Descargar CSV', print: 'Imprimir', copied: 'Lista copiada',
       forWhat: 'Para', dishesWord: 'platillos', activeOrders: 'pedidos activos', missing: 'Sin receta (no entran en la lista):', ingredient: 'Ingrediente', qty: 'Comprar', none: 'No hay pedidos activos en este periodo.',
@@ -15472,7 +15571,8 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       date: 'Fecha', order: 'Pedido', client: 'Cliente', plan: 'Plan', items: 'Platillos', total: 'Total', firstDelivery: '1ª entrega', block: 'Bloque 4 sem.', trial: 'Semana de prueba',
       key: 'Contraseña de administración', keyHelp: 'Es la clave ADMIN_KEY que configuraste en el Apps Script.', enter: 'Entrar', badKey: 'Contraseña incorrecta.', loading: 'Cargando…', error: 'No se pudieron cargar los datos', lock: 'Cerrar sesión',
       noRecipes: 'Aún no hay recetas.', cooking: 'Para cocinar', buyList: 'Ver lista de compras', thisWeek: 'Esta semana', nextWeek: 'Próxima semana' },
-    en: { title: 'Admin panel', demo: 'Demo data. Connect the Google Sheet (docs/admin.md) to see real orders.', tabs: ['Summary', 'Shopping list', 'Recipes', 'Orders'],
+    en: { title: 'Admin panel', demo: 'Demo data. Connect the Google Sheet (docs/admin.md) to see real orders.', tabs: ['Summary', 'Shopping list', 'Recipes', 'Orders', 'Discounts'],
+      dTitle: 'Generate a discount code', dHelp: 'Create a code and say how many times it can be used in total. Shopify applies it at checkout and stops accepting it when the uses run out.', dCode: 'Code', dGen: 'Suggest a code', dKind: 'Type', dPercent: 'Percentage (%)', dAmount: 'Fixed amount (MXN)', dValue: 'Value', dUses: 'Total uses', dEnds: 'Expires (optional)', dCreate: 'Create code', dList: 'Codes created', dUsed: 'Uses', dStatus: 'Status', dOff: 'Deactivate', dNone: 'No codes yet.', dDemo: 'Connect the Google Sheet (docs/setup-checklist.md) to create real codes.', dOk: 'Code created: ', dDone: 'Code deactivated.', dErrTok: 'Shopify is not connected: add the SHOPIFY_STORE and SHOPIFY_TOKEN properties in the Apps Script (see docs/setup-checklist.md).', dErrCode: 'The code needs 3 to 30 letters, numbers, hyphens or underscores.', dErrVal: 'Enter a valid value (percentage from 1 to 100).', dErrUses: 'Enter how many times it can be used (1 or more).', dErr: 'Could not complete: ', dActive: 'Active', dExpired: 'Used up or expired', dScheduled: 'Scheduled', dUnlimited: '—',
       orders: 'Orders this month', blocks: '4-week blocks', trials: 'Trial weeks (loose)', clients: 'New clients', sales: 'Sales', avg: 'Average ticket', plates: 'Dishes to cook', top: 'Most ordered dishes', mix: 'Block vs loose',
       perWeek: 'Orders per week', week: 'Week', month: 'Month', buffer: 'Buying buffer (%)', copy: 'Copy list', csv: 'Download CSV', print: 'Print', copied: 'List copied',
       forWhat: 'For', dishesWord: 'dishes', activeOrders: 'active orders', missing: 'No recipe (not in the list):', ingredient: 'Ingredient', qty: 'Buy', none: 'No active orders in this period.',
@@ -15490,7 +15590,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     var endpoint = el.getAttribute('data-endpoint') || '';
     var recipes = normalizeRecipes(window.KX_RECIPES || { dishes: {} });
     var now = new Date();
-    var S = { tab: 0, year: now.getFullYear(), month: now.getMonth(), mode: 'week', week: ymd(addDays(mondayOf(now), 7)), buffer: 5, data: null };
+    var adminKey = '', S = { disc: null, discMsg: '', discBad: false, tab: 0, year: now.getFullYear(), month: now.getMonth(), mode: 'week', week: ymd(addDays(mondayOf(now), 7)), buffer: 5, data: null };
     try { var b = parseFloat(localStorage.getItem('kx-admin-buffer')); if (b >= 0 && b <= 50) S.buffer = b; } catch (e) {}
     var checksKey = function () { return 'kx-admin-checks:' + (S.mode === 'week' ? S.week : S.year + '-' + S.month); };
     var getChecks = function () { try { return JSON.parse(localStorage.getItem(checksKey()) || '{}'); } catch (e) { return {}; } };
@@ -15552,21 +15652,56 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       }).join('') + '</tbody></table></div>';
     }
 
+    function viewDiscounts() {
+      var f = '<section class="adm-card"><h3>' + T.dTitle + '</h3><p class="adm-muted">' + T.dHelp + '</p>' +
+        '<form class="adm-form" data-discform><label>' + T.dCode + '<span class="adm-inline"><input name="code" maxlength="30" autocomplete="off" required style="text-transform:uppercase"><button class="adm-btn ghost" type="button" data-dgen>' + T.dGen + '</button></span></label>' +
+        '<label>' + T.dKind + '<select name="kind"><option value="percent">' + T.dPercent + '</option><option value="amount">' + T.dAmount + '</option></select></label>' +
+        '<label>' + T.dValue + '<input name="value" type="number" min="1" step="1" required></label>' +
+        '<label>' + T.dUses + '<input name="uses" type="number" min="1" step="1" required></label>' +
+        '<label>' + T.dEnds + '<input name="ends" type="date"></label>' +
+        '<button class="adm-btn" type="submit">' + T.dCreate + '</button></form>' +
+        '<p class="' + (S.discBad ? 'adm-warn' : 'adm-muted') + '" data-discmsg role="status"' + (S.discMsg ? '' : ' hidden') + '>' + esc(S.discMsg) + '</p></section>';
+      if (!endpoint) return '<p class="adm-demo">' + T.dDemo + '</p>' + f;
+      var rows = (S.disc || []);
+      var tab = rows.length ? '<div class="adm-tablewrap"><table class="adm-table" data-disctable><thead><tr><th>' + T.dCode + '</th><th>' + T.dValue + '</th><th>' + T.dUsed + '</th><th>' + T.dStatus + '</th><th></th></tr></thead><tbody>' + rows.map(function (d) {
+        var st = d.status === 'ACTIVE' ? T.dActive : d.status === 'SCHEDULED' ? T.dScheduled : T.dExpired;
+        return '<tr><td><b>' + esc(d.code) + '</b></td><td>' + (d.kind === 'percent' ? d.value + ' %' : money(d.value, lang)) + '</td><td>' + d.uses + ' / ' + (d.limit || T.dUnlimited) + '</td><td>' + st + '</td><td>' + (d.status === 'ACTIVE' ? '<button class="adm-btn ghost" data-doff="' + esc(d.id) + '">' + T.dOff + '</button>' : '') + '</td></tr>';
+      }).join('') + '</tbody></table></div>' : '<p class="adm-empty">' + (S.disc ? T.dNone : T.loading) + '</p>';
+      return f + '<h3 class="adm-cat">' + T.dList + '</h3>' + tab;
+    }
+    var dErr = function (j) { return j.error === 'no_token' ? T.dErrTok : j.error === 'bad_code' ? T.dErrCode : j.error === 'bad_value' ? T.dErrVal : j.error === 'bad_uses' ? T.dErrUses : T.dErr + (j.detail || j.error || ''); };
+    var dCall = function (params, cb) {
+      var q = Object.keys(params).map(function (k) { return k + '=' + encodeURIComponent(params[k]); }).join('&');
+      fetch(endpoint + (endpoint.indexOf('?') > -1 ? '&' : '?') + 'key=' + encodeURIComponent(adminKey) + '&' + q).then(function (r) { return r.json(); }).then(cb).catch(function () { cb({ ok: false, error: 'net', detail: T.error }); });
+    };
+    var dLoad = function () { if (!endpoint) return; dCall({ action: 'discounts' }, function (j) { if (j.ok) S.disc = j.discounts || []; else { S.disc = []; S.discMsg = dErr(j); S.discBad = true; } if (S.tab === 4) render(); }); };
     function render() {
       var banner = S.data.demo ? '<p class="adm-demo">' + T.demo + '</p>' : '';
-      var body = [viewSummary, viewShopping, viewRecipes, viewOrders][S.tab]();
+      var body = [viewSummary, viewShopping, viewRecipes, viewOrders, viewDiscounts][S.tab]();
       el.innerHTML = '<header class="adm-head"><h1>' + T.title + '</h1><div class="adm-tabs" role="tablist">' + T.tabs.map(function (n, i) { return '<button role="tab" aria-selected="' + (S.tab === i) + '" data-tab="' + i + '">' + n + '</button>'; }).join('') + '</div></header>' + banner + '<div class="adm-body">' + body + '</div>';
     }
 
     el.addEventListener('click', function (e) {
       var t = e.target.closest('button'); if (!t) return;
-      if (t.hasAttribute('data-tab')) { S.tab = +t.getAttribute('data-tab'); render(); return; }
+      if (t.hasAttribute('data-tab')) { S.tab = +t.getAttribute('data-tab'); render(); if (S.tab === 4 && S.disc === null) dLoad(); return; }
+      if (t.hasAttribute('data-dgen')) { var cf = el.querySelector('[data-discform] [name=code]'), w = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', c2 = 'KUL'; for (var gi = 0; gi < 5; gi++) c2 += w.charAt(Math.floor(Math.random() * w.length)); cf.value = c2; return; }
+      if (t.hasAttribute('data-doff')) { dCall({ action: 'discount_off', id: t.getAttribute('data-doff') }, function (j) { S.discMsg = j.ok ? T.dDone : dErr(j); S.discBad = !j.ok; S.disc = null; render(); dLoad(); }); return; }
       if (t.hasAttribute('data-m')) { var d = new Date(S.year, S.month + (+t.getAttribute('data-m')), 1); S.year = d.getFullYear(); S.month = d.getMonth(); render(); return; }
       if (t.hasAttribute('data-w')) { S.week = ymd(addDays(parseYmd(S.week), 7 * (+t.getAttribute('data-w')))); render(); return; }
       if (t.hasAttribute('data-mode')) { S.mode = t.getAttribute('data-mode'); render(); return; }
       if (t.hasAttribute('data-go')) { S.week = t.getAttribute('data-week'); S.mode = 'week'; S.tab = 1; render(); return; }
       if (t.hasAttribute('data-act')) exportList(t.getAttribute('data-act'));
       if (t.hasAttribute('data-lock')) { try { sessionStorage.removeItem('kx-admin-key'); } catch (x) {} location.reload(); }
+    });
+    el.addEventListener('submit', function (e) {
+      var fm = e.target.closest('[data-discform]'); if (!fm) return; e.preventDefault();
+      var g = function (n) { return fm.elements[n].value; }, code = g('code').toUpperCase().trim();
+      var bad = function (m) { S.discMsg = m; S.discBad = true; render(); };
+      if (!/^[A-Z0-9_-]{3,30}$/.test(code)) { bad(T.dErrCode); return; }
+      if (!(+g('value') > 0) || (g('kind') === 'percent' && +g('value') > 100)) { bad(T.dErrVal); return; }
+      if (!(+g('uses') >= 1)) { bad(T.dErrUses); return; }
+      if (!endpoint) { bad(T.dDemo); return; }
+      dCall({ action: 'discount_new', code: code, kind: g('kind'), value: g('value'), uses: g('uses'), ends: g('ends') }, function (j) { S.discMsg = j.ok ? T.dOk + j.code : dErr(j); S.discBad = !j.ok; S.disc = null; render(); if (j.ok) dLoad(); else S.disc = []; });
     });
     el.addEventListener('change', function (e) {
       var c = e.target.closest('[data-check]');
@@ -15589,6 +15724,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       el.querySelector('[data-keyform]').addEventListener('submit', function (ev) { ev.preventDefault(); var k = el.querySelector('input').value; try { sessionStorage.setItem('kx-admin-key', k); } catch (x) {} load(k); });
     }
     function load(key) {
+      adminKey = key || '';
       if (!endpoint) { S.data = demoData(now, recipes); render(); return; }
       el.innerHTML = '<p class="adm-empty">' + T.loading + '</p>';
       var url = endpoint + (endpoint.indexOf('?') > -1 ? '&' : '?') + 'action=admin&key=' + encodeURIComponent(key || '');
@@ -15685,34 +15821,6 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     };
     tick();
     setInterval(tick, 30000);
-  }
-
-  /* Pause locks: <button data-pause-lock data-lock-day="2" data-lock-hour="10"> ...
-     lock-day is the weekday of the deadline (0=Sun..6=Sat) inside the Sat->Fri cycle. */
-  function initPauseLocks() {
-    var btns = $$('[data-pause-lock]');
-    if (!btns.length) return;
-    var apply = function () {
-      var into = minutesIntoCycle();
-      btns.forEach(function (b) {
-        var day = parseInt(b.getAttribute('data-lock-day'), 10);
-        var hour = parseInt(b.getAttribute('data-lock-hour'), 10);
-        var dayOffset = (day - 6 + 7) % 7; // days after Saturday
-        var deadline = dayOffset * 1440 + hour * 60 - cutoffMin;
-        if (deadline < 0) deadline += 7 * 1440;
-        var locked = into >= deadline;
-        b.disabled = locked;
-        b.setAttribute('aria-disabled', locked ? 'true' : 'false');
-        var msg = b.parentNode.querySelector('[data-lock-msg]');
-        if (msg) {
-          msg.hidden = !locked;
-        }
-        var left = b.parentNode.querySelector('[data-lock-left]');
-        if (left) left.textContent = locked ? '' : T('pauseLeft', { time: fmtCountdown(deadline - into) });
-      });
-    };
-    apply();
-    setInterval(apply, 30000);
   }
 
   /* ---------- profile (allergies + dislikes) ---------- */
@@ -15914,9 +16022,11 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     var ref = $('[data-referral]', form), refMsg = $('[data-referral-msg]', form), giftBox = $('[data-gift]', form);
     var saved = ''; try { saved = localStorage.getItem('kulinaria_ref') || ''; } catch (e) {}
     if (ref && !ref.value && saved) ref.value = saved;
+    // discount code created by the admin (Descuentos tab): kept in the form so Shopify applies it at checkout
+    var disc = $('[data-discount]', form); if (disc) disc.addEventListener('input', function () { disc.value = disc.value.toUpperCase().replace(/[^A-Z0-9_-]/g, ''); });
     var showGift = function () { if (giftBox) giftBox.hidden = !(ref && ref.value.trim().length >= 3); };
     if (ref) {
-      ref.addEventListener('input', function () { ref.value = ref.value.toUpperCase().replace(/[^A-Z0-9_]/g, ''); showGift(); });
+      ref.addEventListener('input', function () { ref.value = ref.value.toUpperCase().replace(/[^A-Z0-9_-]/g, ''); showGift(); });
       ref.addEventListener('change', function () {
         try { localStorage.setItem('kulinaria_ref', ref.value); } catch (e) {}
         fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -16187,7 +16297,25 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         location.reload();
       }).catch(function () { guardOnboarding(); });
   }
-  /* ---------- "Mi semana": every week the client picks the next 5 meals (the plan is already paid) ---------- */
+  /* ---------- plan credits: weeks left, meals planned and which weeks can still be chosen (asked from the Sheet; signed-in customers only) ---------- */
+  function mxIso(d) { try { return new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d); } catch (e) { return ''; } }
+  function firstOpenOffset() { var n = mxNow(), d = ((1 - n.dow + 7) % 7) || 7; if (n.dow === 0 || (n.dow === 6 && n.minutes >= cutoffMin)) d += 7; return d; }
+  function fallbackCredits() {   // no backend reachable (local preview): an existing customer is treated as having a 4-week plan
+    var n = ordersCount(), off = firstOpenOffset(), ed = [];
+    if (n > 0) for (var k = 0; k < 3; k++) ed.push(mxIso(new Date(Date.now() + (off + 7 * k) * 86400000)));
+    return { ok: true, hasPlan: n > 0, plan: n > 0 ? 'block' : '', weeksLeft: n > 0 ? 3 : 0, weeksTotal: n > 0 ? 4 : 0, mealsPlanned: 0, mealsMax: n > 0 ? 20 : 0, endsOn: ed[2] || '', editable: ed, fallback: true };
+  }
+  function loadCredits(cb, fresh) {
+    try { if (location.protocol === 'file:') { var o = localStorage.getItem('kx-test-credits'); if (o) { cb(JSON.parse(o)); return; } } } catch (e) {}   // local preview only
+    var a = acct(); if (!a) { cb(fallbackCredits()); return; }
+    try { var c = JSON.parse(sessionStorage.getItem('kx_credits') || 'null'); if (!fresh && c && Date.now() - c.t < 60000) { cb(c.c); return; } } catch (e) {}
+    fetch(a.url + (a.url.indexOf('?') > -1 ? '&' : '?') + 'action=credits&cid=' + encodeURIComponent(a.cid) + '&token=' + encodeURIComponent(a.token))
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j && j.ok && typeof j.hasPlan === 'boolean') { try { sessionStorage.setItem('kx_credits', JSON.stringify({ t: Date.now(), c: j })); } catch (e) {} cb(j); } else cb(null); })
+      .catch(function () { cb(null); });
+  }
+
+  /* ---------- "Mi semana": signed-in customers choose up to 5 meals per covered week; empty days are not delivered ---------- */
   function initMyWeek() {
     var root = $('[data-myweek]'); if (!root) return;
     var T_ = function (k) { return root.getAttribute('data-t-' + k) || ''; };
@@ -16195,6 +16323,8 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     var lang = cfg.lang === 'en' ? 'en-US' : 'es-MX';
     var money = function (n) { try { return new Intl.NumberFormat(lang, { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(n); } catch (e) { return '$' + Math.round(n); } };
     var fmt = function (d) { try { return new Intl.DateTimeFormat(lang, { timeZone: TZ, day: 'numeric', month: 'short' }).format(d); } catch (e) { return ''; } };
+    var isoDate = function (iso, add) { var p = String(iso).split('-'); return new Date(+p[0], +p[1] - 1, +p[2] + (add || 0), 12); };
+    if (!$('#kx-account')) return;                                  // signed out: the page shows the sign-in notice and keeps everything else hidden
     var TIERS = ['selecto', 'exclusivo', 'signature', 'reserve'], rank = function (t) { var r = TIERS.indexOf(t); return r < 0 ? 0 : r; };
     var dayNames = (T_('days') || 'Lun,Mar,Mié,Jue,Vie').split(',');
     var upg = function (n) { return +root.getAttribute('data-upg-' + n) || 70 * n; };
@@ -16203,28 +16333,20 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     var warnOf = function (d) { return allergyHits(prof, d.al.map(norm), d.ing.map(norm)); };
     var level = function (d) { return d ? Math.max(0, Math.min(3, rank(d.tier))) : 0; };   // every plan starts at the Selecto base
     var byTitle = function (t) { return dishes.filter(function (d) { return d.title === t; })[0]; };
-    // the first delivery is the coming Monday; after Saturday 10:00 (cut-off) the Monday after
-    var mondayOffset = function () { var n = mxNow(), d = ((1 - n.dow + 7) % 7) || 7; if (n.dow === 0 || (n.dow === 6 && n.minutes >= cutoffMin)) d += 7; return d; };
-    var weekDate = function (k, i) { return new Date(Date.now() + (mondayOffset() + 7 * k + (i || 0)) * 86400000); };
-    var iso = function (d) { try { var p = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d); return p; } catch (e) { return ''; } };
-    var noplan = $('[data-mw-noplan]', root); if (noplan) noplan.hidden = ordersCount() > 0;
-    var weekSel = $('[data-mw-week]', root), box = $('[data-mw-days]', root), up = $('[data-mw-up]', root), msg = $('[data-mw-msg]', root), save = $('[data-mw-save]', root);
-    var a = acct(), days = ['', '', '', '', ''];
-    var buildWeeks = function () {
-      var keep = weekSel.value; weekSel.innerHTML = '';
-      for (var k = 0; k < 4; k++) { var o = document.createElement('option'); o.value = iso(weekDate(k)); o.textContent = fill(T_('week-opt'), { a: fmt(weekDate(k)), b: fmt(weekDate(k, 4)) }); weekSel.appendChild(o); }
-      if (keep && $$('option', weekSel).some(function (x) { return x.value === keep; })) weekSel.value = keep;
-    };
-    buildWeeks();
+    var body = $('[data-mw-body]', root), buy = $('[data-mw-buy]', root), card = $('[data-mw-credit]', root), planner = $('[data-mw-planner]', root), noneOpen = $('[data-mw-none]', root);
+    var weekSel = $('[data-mw-week]', root), box = $('[data-mw-days]', root), up = $('[data-mw-up]', root), msg = $('[data-mw-msg]', root), save = $('[data-mw-save]', root), skip = $('[data-mw-skip]', root);
+    var a = acct(), days = ['', '', '', '', ''], credits = null, keepMsg = '';
     var say = function (m, bad) { msg.hidden = !m; msg.textContent = m || ''; msg.classList.toggle('alert--warn', !!bad); msg.classList.toggle('alert--ok', !bad); };
     var extra = function () { var s = 0; days.forEach(function (t) { var l = level(byTitle(t)); if (l) s += upg(l); }); return s; };
+    var meals = function () { return days.filter(Boolean).length; };
     var paint = function () {
-      var kk = weekSel.selectedIndex < 0 ? 0 : weekSel.selectedIndex;
+      var w = weekSel.value;
       $$('select[data-mw-day]', box).forEach(function (s) { s.value = days[+s.getAttribute('data-mw-day')] || ''; });
-      $$('label', box).forEach(function (l, i) { l.textContent = (dayNames[i] || '') + ' ' + fmt(weekDate(kk, i)); });
+      $$('label', box).forEach(function (l, i) { l.textContent = w ? (dayNames[i] || '') + ' ' + fmt(isoDate(w, i)) : (dayNames[i] || ''); });
       var ex = extra(); up.hidden = !ex; up.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : '';
       var flagged = []; days.forEach(function (t) { var d = byTitle(t); if (d && warnOf(d).length && flagged.indexOf(d.label) < 0) flagged.push(d.label); });
       var wn = $('[data-mw-warn]', root); if (wn) { wn.hidden = !flagged.length; wn.textContent = flagged.length ? fill(T_('warn'), { list: flagged.join(', ') }) : ''; }
+      var cnt = $('[data-mw-count]', root); if (cnt) cnt.textContent = fill(T_('count'), { n: meals() });
     };
     for (var i = 0; i < 5; i++) (function (i) {
       var li = document.createElement('li'), lab = document.createElement('label'), sel = document.createElement('select'), id = 'mw-day-' + i;
@@ -16234,51 +16356,148 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       sel.addEventListener('change', function () { days[i] = sel.value; say(''); paint(); });
       li.appendChild(lab); li.appendChild(sel); box.appendChild(li);
     })(i);
-    var fromItems = function (items) { var out = []; (items || []).forEach(function (it) { for (var j = 0; j < (+it.qty || 1); j++) out.push(it.title); }); while (out.length < 5) out.push(''); return out.slice(0, 5); };
-    var local = function (w) { try { return JSON.parse(localStorage.getItem('kulinaria_week_' + w) || 'null'); } catch (e) { return null; } };
+    var buildWeeks = function () {
+      var keep = weekSel.value; weekSel.innerHTML = '';
+      ((credits && credits.editable) || []).forEach(function (w) { var o = document.createElement('option'); o.value = w; o.textContent = fill(T_('week-opt'), { a: fmt(isoDate(w)), b: fmt(isoDate(w, 4)) }); weekSel.appendChild(o); });
+      if (keep && $$('option', weekSel).some(function (x) { return x.value === keep; })) weekSel.value = keep;
+    };
+    var slotsOf = function (s) { var out = (s && s.slots) ? s.slots.slice(0, 5) : []; if (!out.length) (s && s.items || []).forEach(function (it) { for (var j = 0; j < (+it.qty || 1); j++) out.push(it.title); }); while (out.length < 5) out.push(''); return out; };
     var loadWeek = function () {
-      var w = weekSel.value; days = ['', '', '', '', '']; say(''); paint();
+      var w = weekSel.value; days = ['', '', '', '', '']; say(keepMsg || ''); keepMsg = ''; paint(); if (!w) return;
       var done = function (sel, prev) {
-        if (sel && sel.items && sel.items.length) days = fromItems(sel.items);
-        else if (prev && prev.items && prev.items.length) { days = fromItems(prev.items); say(T_('prev'), false); }
+        if (sel) days = slotsOf(sel); else if (prev) { days = slotsOf(prev); if (meals()) say(T_('prev'), false); }
         days = days.map(function (t) { return byTitle(t) ? t : ''; }); paint();
       };
-      if (a) {
-        fetch(a.url + (a.url.indexOf('?') > -1 ? '&' : '?') + 'action=week&cid=' + encodeURIComponent(a.cid) + '&token=' + encodeURIComponent(a.token) + '&week=' + encodeURIComponent(w))
-          .then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) done(j.selection, j.previous); }).catch(function () {});
-      } else { var l = local(w); if (l) done({ items: l.items }, null); }
+      if (a) fetch(a.url + (a.url.indexOf('?') > -1 ? '&' : '?') + 'action=week&cid=' + encodeURIComponent(a.cid) + '&token=' + encodeURIComponent(a.token) + '&week=' + encodeURIComponent(w))
+        .then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok) done(j.selection, j.previous); }).catch(function () {});
     };
-    weekSel.addEventListener('change', loadWeek);
-    save.addEventListener('click', function () {
-      if (days.filter(Boolean).length !== 5) { say(T_('need'), true); return; }
-      var w = weekSel.value, kk = weekSel.selectedIndex, ex = extra(), counts = {};
-      days.forEach(function (t) { counts[t] = (counts[t] || 0) + 1; });
-      var items = Object.keys(counts).map(function (t) { return { title: t, qty: counts[t] }; });
-      var label = fmt(weekDate(kk)) + ' – ' + fmt(weekDate(kk, 4)), email = ((readFunnel().info || {}).email) || '';
-      try { localStorage.setItem('kulinaria_week_' + w, JSON.stringify({ items: items, upgrade: ex })); } catch (e) {}
-      var proceed = function () {
-      if (!ex) { say(fill(T_('saved'), { d: label }), false); return; }
-      // the difference of the higher-tier dishes is paid for that week: one line per upgrade level
-      var lines = [];
-      for (var lv = 1; lv <= 3; lv++) {
-        var names = days.filter(function (t) { return level(byTitle(t)) === lv; }), vid = parseInt(root.getAttribute('data-upv-' + lv), 10);
-        if (names.length && vid) { var p = {}; p[T_('prop-upgrade')] = names.join(', '); p._semana = w; lines.push({ id: vid, quantity: names.length, properties: p }); }
+    var show = function (c) {
+      credits = c; var ok = !!(c && c.hasPlan), open = ok && c.editable && c.editable.length;
+      buy.hidden = ok; card.hidden = !ok; planner.hidden = !open; noneOpen.hidden = !(ok && !open);
+      if (!ok) {
+        $('[data-mw-buy-text]', root).textContent = c === null ? T_('credits-error') : (c.expired ? T_('buy-expired') : T_('buy-none'));
+        $('[data-mw-buy-cta]', root).hidden = c === null;
+        return;
       }
-      say(fill(T_('saved-pay'), { p: money(ex) }), false);
-      if (!lines.length) return;
-      fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: lines }) })
-        .then(function () { var c = $('[data-mw-cart]', root); window.location.href = (c && c.getAttribute('href')) || '/cart'; }, function () { say(T_('error'), true); });
+      $('[data-mw-s-weeks]', root).textContent = c.weeksLeft + ' / ' + c.weeksTotal;
+      $('[data-mw-s-meals]', root).textContent = c.mealsPlanned + ' / ' + c.mealsMax;
+      $('[data-mw-s-ends]', root).textContent = c.endsOn ? fmt(isoDate(c.endsOn)) : '—';
+      buildWeeks(); if (open) loadWeek();
+    };
+    var refresh = function (fresh) { loadCredits(show, fresh); };
+    weekSel.addEventListener('change', loadWeek);
+    var submit = function () {
+      var w = weekSel.value; if (!w) return;
+      var ex = extra(), n = meals(), label = fmt(isoDate(w)) + ' – ' + fmt(isoDate(w, 4));
+      var ok = function () { keepMsg = n ? fill(T_('saved'), { n: n, d: label }) : fill(T_('skipped'), { d: label }); say(keepMsg, false); refresh(true); };
+      var proceed = function () {
+        if (!ex) { ok(); return; }
+        // the difference of the higher-tier dishes is paid for that week: one line per upgrade level
+        var lines = [];
+        for (var lv = 1; lv <= 3; lv++) {
+          var names = days.filter(function (t) { return level(byTitle(t)) === lv; }), vid = parseInt(root.getAttribute('data-upv-' + lv), 10);
+          if (names.length && vid) { var p = {}; p[T_('prop-upgrade')] = names.join(', '); p._semana = w; lines.push({ id: vid, quantity: names.length, properties: p }); }
+        }
+        say(fill(T_('saved-pay'), { p: money(ex) }), false);
+        if (!lines.length) return;
+        fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: lines }) })
+          .then(function () { var c = $('[data-mw-cart]', root); window.location.href = (c && c.getAttribute('href')) || '/cart'; }, function () { say(T_('error'), true); });
       };
       if (!a) { proceed(); return; }
-      fetch(a.url + (a.url.indexOf('?') > -1 ? '&' : '?') + 'action=weekset&cid=' + encodeURIComponent(a.cid) + '&token=' + encodeURIComponent(a.token) + '&week=' + encodeURIComponent(w) + '&email=' + encodeURIComponent(email) + '&upgrade=' + ex + '&days=' + encodeURIComponent(days.join('|')))
+      fetch(a.url + (a.url.indexOf('?') > -1 ? '&' : '?') + 'action=weekset&cid=' + encodeURIComponent(a.cid) + '&token=' + encodeURIComponent(a.token) + '&week=' + encodeURIComponent(w) + '&upgrade=' + ex + '&days=' + encodeURIComponent(days.join('|')))
         .then(function (r) { return r.json(); })
-        .then(function (j) { if (j && j.ok === false) { say(j.error === 'closed' ? T_('closed') : T_('error'), true); if (j.error === 'closed') { buildWeeks(); loadWeek(); } return; } proceed(); })
-        .catch(function () { proceed(); });
+        .then(function (j) {
+          if (j && j.ok === false) {
+            say(j.error === 'closed' ? T_('closed') : j.error === 'no_plan' ? T_('err-noplan') : j.error === 'not_covered' ? T_('err-notcovered') : T_('error'), true);
+            if (j.error === 'closed' || j.error === 'not_covered') refresh(true);
+            return;
+          }
+          proceed();
+        })
+        .catch(function () { say(T_('error'), true); });
+    };
+    save.addEventListener('click', submit);
+    skip.addEventListener('click', function () { days = ['', '', '', '', '']; paint(); submit(); });
+    refresh(false);
+    var firstOpen = mxIso(new Date(Date.now() + firstOpenOffset() * 86400000));
+    var roll = function () { var f = mxIso(new Date(Date.now() + firstOpenOffset() * 86400000)); if (f !== firstOpen) { firstOpen = f; say(fill(T_('rolled'), { d: fmt(isoDate(f)) }), false); refresh(true); } };
+    setInterval(roll, 15000); document.addEventListener('visibilitychange', function () { if (!document.hidden) roll(); });
+  }
+
+  /* ---------- "Pausar entregas": pause some weeks or everything until the customer resumes; the plan simply ends later ---------- */
+  function initMyPause() {
+    var root = $('[data-mypause]'); if (!root || !$('#kx-account')) return;
+    var T_ = function (k) { return root.getAttribute('data-t-' + k) || ''; };
+    var fill = function (tpl, o) { return String(tpl).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; }); };
+    var lang = cfg.lang === 'en' ? 'en-US' : 'es-MX';
+    var fmt = function (d) { try { return new Intl.DateTimeFormat(lang, { timeZone: TZ, day: 'numeric', month: 'short' }).format(d); } catch (e) { return ''; } };
+    var isoDate = function (iso, add) { var p = String(iso).split('-'); return new Date(+p[0], +p[1] - 1, +p[2] + (add || 0), 12); };
+    var none = $('[data-mp-none]', root), main = $('[data-mp-main]', root), st = $('[data-mp-status]', root), ends = $('[data-mp-ends]', root);
+    var start = $('[data-mp-start]', root), len = $('[data-mp-len]', root), resumeBox = $('[data-mp-resume]', root), from = $('[data-mp-from]', root), msg = $('[data-mp-msg]', root);
+    var a = acct(), credits = null;
+    var say = function (m, bad) { msg.hidden = !m; msg.textContent = m || ''; msg.classList.toggle('alert--warn', !!bad); msg.classList.toggle('alert--ok', !bad); };
+    var wk = function (w) { return fmt(isoDate(w)); };
+    var fill2 = function (sel, vals, label) { sel.innerHTML = ''; vals.forEach(function (v) { var o = document.createElement('option'); o.value = v; o.textContent = label(v); sel.appendChild(o); }); };
+    /* local preview (no backend): pauses live in this browser only */
+    var LOCAL = 'kx_pause_local';
+    var readLocal = function () { try { return JSON.parse(localStorage.getItem(LOCAL) || 'null') || { weeks: [], from: '' }; } catch (e) { return { weeks: [], from: '' }; } };
+    var withLocal = function (c) {
+      if (!c || c.ok === false || a) return c;
+      var l = readLocal(), open = firstOpenMonday(), weeks = (l.weeks || []).filter(function (w) { return w >= open; }).sort();
+      return Object.assign({}, c, { nextOpen: open, paused: weeks, pausedFrom: l.from && l.from >= open ? l.from : (l.from ? open : ''), endsOn: l.from ? '' : c.endsOn });
+    };
+    var firstOpenMonday = function () { return mxIso(new Date(Date.now() + firstOpenOffset() * 86400000)); };
+    var show = function (c0) {
+      var c = withLocal(c0); credits = c;
+      if (c === null) { none.hidden = false; main.hidden = true; $('[data-mp-none-text]', root).textContent = T_('error-load'); return; }
+      var ok = !!c.hasPlan; none.hidden = ok; main.hidden = !ok; if (!ok) { $('[data-mp-none-text]', root).textContent = $('[data-mp-none-text]', root).getAttribute('data-orig') || $('[data-mp-none-text]', root).textContent; return; }
+      var open = c.nextOpen || firstOpenMonday(), weeks = [], k;
+      for (k = 0; k < 12; k++) weeks.push(mxIso(isoDate(open, 7 * k)));
+      var keepS = start.value; fill2(start, weeks, function (w) { return fill(T_('week-opt'), { a: wk(w), b: fmt(isoDate(w, 4)) }); }); if (keepS && weeks.indexOf(keepS) > -1) start.value = keepS;
+      var keepL = len.value; len.innerHTML = '';
+      [1, 2, 3, 4, 'open'].forEach(function (n) { var o = document.createElement('option'); o.value = n; o.textContent = n === 'open' ? T_('len-open') : n === 1 ? T_('len-1') : fill(T_('len-n'), { n: n }); len.appendChild(o); }); if (keepL) len.value = keepL;
+      var paused = c.paused || [];
+      st.textContent = c.pausedFrom ? fill(T_('st-open'), { d: wk(c.pausedFrom) }) : paused.length ? fill(T_('st-weeks'), { list: paused.map(wk).join(', ') }) : T_('st-active');
+      st.classList.toggle('is-paused', !!(c.pausedFrom || paused.length));
+      ends.textContent = c.endsOn ? fill(T_('st-ends'), { d: wk(c.endsOn) }) : (c.pausedFrom ? T_('st-ends-open') : '');
+      resumeBox.hidden = !(c.pausedFrom || paused.length);
+      if (!resumeBox.hidden) {
+        var lastP = c.pausedFrom ? weeks[weeks.length - 1] : paused[paused.length - 1], res = [], d = 0, w2;
+        do { w2 = mxIso(isoDate(open, 7 * d)); res.push(w2); d++; } while (w2 < lastP && d < 60);
+        res.push(mxIso(isoDate(open, 7 * d)));
+        fill2(from, res, function (w) { return fill(T_('week-opt'), { a: wk(w), b: fmt(isoDate(w, 4)) }); });
+      }
+    };
+    var call = function (params, onOk) {
+      if (!a) { onOk(localCall(params)); return; }
+      var q = Object.keys(params).map(function (k) { return k + '=' + encodeURIComponent(params[k]); }).join('&');
+      fetch(a.url + (a.url.indexOf('?') > -1 ? '&' : '?') + 'action=pause&cid=' + encodeURIComponent(a.cid) + '&token=' + encodeURIComponent(a.token) + '&' + q)
+        .then(function (r) { return r.json(); }).then(function (j) { onOk(j); }).catch(function () { onOk({ ok: false, error: 'net' }); });
+    };
+    var localCall = function (p) {
+      var l = readLocal();
+      if (p.mode === 'weeks') p.weeks.split('|').forEach(function (w) { if (l.weeks.indexOf(w) < 0) l.weeks.push(w); });
+      else if (p.mode === 'from') l.from = p.week;
+      else if (p.mode === 'resume') { var out = []; l.weeks.forEach(function (w) { if (w < p.week) out.push(w); }); if (l.from && l.from < p.week) { var d = 0, x; while ((x = mxIso(isoDate(l.from, 7 * d))) < p.week && d < 60) { out.push(x); d++; } } l.weeks = out; l.from = ''; }
+      try { localStorage.setItem(LOCAL, JSON.stringify(l)); } catch (e) {}
+      return Object.assign({}, fallbackCredits(), { ok: true });
+    };
+    var done = function (j, okMsg) {
+      if (!j || j.ok === false) { say(j && j.error === 'closed' ? T_('err-closed') : j && j.error === 'no_plan' ? T_('err-noplan') : T_('err'), true); return; }
+      try { sessionStorage.removeItem('kx_credits'); } catch (e) {}
+      show(j); say(okMsg(j), false);
+    };
+    $('[data-mp-pause]', root).addEventListener('click', function () {
+      var w = start.value, n = len.value; if (!w) return;
+      if (n === 'open') { call({ mode: 'from', week: w }, function (j) { done(j, function () { return fill(T_('done-open'), { d: wk(w) }); }); }); return; }
+      var list = []; for (var k = 0; k < +n; k++) list.push(mxIso(isoDate(w, 7 * k)));
+      call({ mode: 'weeks', weeks: list.join('|') }, function (j) { done(j, function (c) { return fill(T_('done'), { n: list.length === 1 ? T_('len-1') : fill(T_('len-n'), { n: list.length }), list: list.map(wk).join(', '), d: c.endsOn ? wk(c.endsOn) : '—' }); }); });
     });
-    loadWeek();
-    var firstWeek = weekSel.options[0].value;
-    var rollWeeks = function () { var f = iso(weekDate(0)); if (f !== firstWeek) { firstWeek = f; var was = weekSel.value; buildWeeks(); if (was !== weekSel.value) { loadWeek(); say(fill(T_('rolled'), { d: fmt(weekDate(0)) }), false); } else paint(); } };
-    setInterval(rollWeeks, 15000); document.addEventListener('visibilitychange', function () { if (!document.hidden) rollWeeks(); });
+    $('[data-mp-resume-go]', root).addEventListener('click', function () {
+      var w = from.value; if (!w) return;
+      call({ mode: 'resume', week: w }, function (j) { done(j, function () { return fill(T_('resumed'), { d: wk(w) }); }); });
+    });
+    loadCredits(show, true);
   }
 
   function initOnboarding() {
@@ -16450,8 +16669,8 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         if (bar) bar.style.transform = 'scaleX(' + ((st.step + 1) / steps.length) + ')';
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
-        if (next) { next.hidden = last; next.disabled = (st.step === 1 && n !== MEALS); }
-        if (finish) { finish.hidden = !last; finish.classList.toggle('is-disabled', n !== MEALS); finish.setAttribute('aria-disabled', n !== MEALS ? 'true' : 'false'); }
+        if (next) { next.hidden = last; next.disabled = (st.step === 1 && n < 1); }
+        if (finish) { finish.hidden = !last; finish.classList.toggle('is-disabled', n < 1); finish.setAttribute('aria-disabled', n < 1 ? 'true' : 'false'); var fl = holder.getAttribute(ce ? 'data-t-finish' : 'data-t-finish-guest'); if (fl && finish.textContent.trim() !== fl) finish.textContent = fl; }
         var rem = $('[data-fn-remembered]', holder); if (rem) { rem.hidden = !(st.remembered && st.step === 2); rem.textContent = T_('remembered'); }
       };
 
@@ -16513,11 +16732,11 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       if (ref) { var rs = ''; try { rs = localStorage.getItem('kulinaria_ref') || ''; } catch (e) {} if (rs) ref.value = rs; }
 
       if (next) next.addEventListener('click', function () {
-        if (st.step === 1 && count() !== MEALS) { say(T_('need-meals')); return; }
+        if (st.step === 1 && count() < 1) { say(T_('need-meals')); return; }
         go(st.step + 1);
       });
       if (prev) prev.addEventListener('click', function () { go(st.step - 1); });
-      dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k < st.step || (k > st.step && (k <= 1 || count() === MEALS))) go(k); }); });
+      dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k < st.step || (k > st.step && (k <= 1 || count() >= 1))) go(k); }); });
 
       // arriving from a dish page (…/pedido?dish=handle): that dish is already in the plan, at its tier
       try {
@@ -16531,7 +16750,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       // finish: the details live in the account (onboarding). Here we only need a signed-in, onboarded customer; then the PLAN goes in the cart.
       if (finish) finish.addEventListener('click', function (e) {
         e.preventDefault();
-        if (count() !== MEALS) { say(T_('need-meals')); go(1); return; }
+        if (count() < 1) { say(T_('need-meals')); go(1); return; }
         persist();
         var lnk = function (sel) { var a = $(sel, holder); return a && a.getAttribute('href'); };
         var onb = false; try { onb = !!localStorage.getItem(ONB_KEY); } catch (x) {}
@@ -16550,7 +16769,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           plan: st.plan, nivel: st.tier, pedido_embudo: list
         };
         var rc = ''; try { rc = localStorage.getItem('kulinaria_ref') || ''; } catch (x) {} if (rc) attrs.codigo_referencia = rc;
-        var props = {}; props[T_('prop-meals')] = String(MEALS); props[T_('prop-tier')] = tb.getAttribute('data-name'); props[T_('prop-length')] = st.plan === 'block' ? T_('length-block') : T_('length-week');
+        var props = {}; props[T_('prop-meals')] = String(count()); props[T_('prop-tier')] = tb.getAttribute('data-name'); props[T_('prop-length')] = st.plan === 'block' ? T_('length-block') : T_('length-week');
         st.days.forEach(function (q, k) { var dd = byPid(q); if (dd) props[dayLabel(k)] = dd.getAttribute('data-title'); });
         props['_platillos'] = list;
         var line = { id: parseInt(tb.getAttribute(st.plan === 'block' ? 'data-variant-block' : 'data-variant-week'), 10), quantity: 1, properties: props };
@@ -16568,6 +16787,12 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           .then(go2, go2);
       });
 
+      // customers who already have a plan see their balance here; everyone else just sees the plans (the plan cards ARE the purchase of credits)
+      if (ce) loadCredits(function (c) {
+        var box = $('[data-fn-credit]', holder); if (!box || !c || !c.hasPlan) return;
+        var ends = ''; try { var p = String(c.endsOn).split('-'); ends = new Intl.DateTimeFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { timeZone: TZ, day: 'numeric', month: 'short' }).format(new Date(+p[0], +p[1] - 1, +p[2], 12)); } catch (e) {}
+        $('[data-fn-credit-text]', box).textContent = fill(T_('credit'), { w: c.weeksLeft, t: c.weeksTotal, e: ends }); box.hidden = false;
+      });
       var gridEl = $('[data-fn-grid]', holder);
       var arrows = function () { if (!gridEl) return; var pv = $('[data-fn-arrow="-1"]', holder), nx = $('[data-fn-arrow="1"]', holder); if (pv) pv.hidden = gridEl.scrollLeft < 8; if (nx) nx.hidden = gridEl.scrollLeft + gridEl.clientWidth >= gridEl.scrollWidth - 8; };
       if (gridEl) { gridEl.addEventListener('scroll', arrows, { passive: true }); window.addEventListener('resize', arrows); }
@@ -16926,7 +17151,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initPauseLocks, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
