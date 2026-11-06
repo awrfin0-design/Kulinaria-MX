@@ -1150,6 +1150,55 @@
         $$('[data-fn-dish]:not(.is-hidden)', rail).forEach(function (c) { var r = c.getBoundingClientRect(), dd = Math.abs(r.left + r.width / 2 - mid); if (dd < bd && !c.classList.contains('is-blocked')) { bd = dd; best = c; } });
         var pb = best && $('[data-pick]', best); if (pb) pb.click();
       });
+      /* guided tour of the planner (coach marks): shown the first time the planner opens, and again from "Ver guía" */
+      var tourEl = null, tourI = 0, TOUR_KEY = 'kx-tour-planner';
+      var tourSteps = function () {
+        var phone = window.matchMedia && window.matchMedia('(max-width:760px)').matches;
+        return [
+          { sel: '.step[data-fn-step="3"] [data-fn-week]', t: 'tour-1' },
+          { sel: '.step[data-fn-step="3"] [data-fn-grid] [data-fn-dish]:not(.is-hidden)', t: phone ? 'tour-2m' : 'tour-2' },
+          { sel: '.step[data-fn-step="3"] [data-fn-grid] [data-fn-note-t]', t: 'tour-3' },
+          { sel: phone ? '.funnel__aside' : '.funnel__aside .funnel__total', t: 'tour-4' }
+        ];
+      };
+      var tourClose = function (remember) { if (tourEl) { tourEl.remove(); tourEl = null; } if (remember) { try { localStorage.setItem(TOUR_KEY, '1'); } catch (x) {} } window.removeEventListener('resize', tourPlace); };
+      var tourPlace = function () {
+        if (!tourEl) return; var steps3 = tourSteps(), st3 = steps3[tourI], tg = $(st3.sel, holder); if (!tg) return;
+        var r = tg.getBoundingClientRect(), pad = 6, sp = $('.fn-tour__spot', tourEl), bb = $('.fn-tour__bubble', tourEl);
+        sp.style.cssText = 'left:' + (r.left - pad) + 'px;top:' + (r.top - pad) + 'px;width:' + (r.width + pad * 2) + 'px;height:' + (r.height + pad * 2) + 'px';
+        bb.style.maxWidth = Math.min(340, window.innerWidth - 24) + 'px';
+        var bh = bb.offsetHeight, bw = bb.offsetWidth, below = window.innerHeight - r.bottom, top, left;
+        if (r.right + bw + 28 <= window.innerWidth && r.height > 100) {           // room beside a tall target (a card): put the note next to it
+          left = r.right + 18; top = Math.min(Math.max(10, r.top + 10), window.innerHeight - bh - 10);
+        } else {
+          top = below > bh + 24 ? r.bottom + 14 : Math.max(10, r.top - bh - 14);
+          if (below <= bh + 24 && r.top < bh + 24) top = Math.max(10, window.innerHeight - bh - 16);
+          left = Math.min(Math.max(12, r.left + r.width / 2 - bw / 2), window.innerWidth - bw - 12);
+        }
+        bb.style.top = top + 'px'; bb.style.left = left + 'px';
+      };
+      var tourShow = function () {
+        if (!tourEl) return; var arr = tourSteps(), st3 = arr[tourI], tg = $(st3.sel, holder);
+        if (!tg) { if (tourI < arr.length - 1) { tourI++; tourShow(); } else tourClose(true); return; }
+        tg.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        $('.fn-tour__text', tourEl).textContent = T_(st3.t);
+        $('.fn-tour__count', tourEl).textContent = (tourI + 1) + ' / ' + arr.length;
+        $('.fn-tour__next', tourEl).textContent = tourI === arr.length - 1 ? T_('tour-done') : T_('tour-next');
+        window.requestAnimationFrame(tourPlace);
+      };
+      var startTour = function (force) {
+        if (tourEl) return;
+        if (!force) { try { if (localStorage.getItem(TOUR_KEY)) return; } catch (x) {} if (navigator.webdriver) return; }
+        st.step = 2; persist(); render();
+        tourI = 0; tourEl = document.createElement('div'); tourEl.className = 'fn-tour';
+        tourEl.innerHTML = '<div class="fn-tour__spot"></div><div class="fn-tour__bubble" role="dialog" aria-live="polite"><p class="fn-tour__text"></p><div class="fn-tour__row"><span class="fn-tour__count"></span><button type="button" class="fn-tour__skip"></button><button type="button" class="btn btn--gold btn--sm fn-tour__next"></button></div></div>';
+        $('.fn-tour__skip', tourEl).textContent = T_('tour-skip');
+        $('.fn-tour__skip', tourEl).addEventListener('click', function () { tourClose(true); });
+        $('.fn-tour__next', tourEl).addEventListener('click', function () { if (tourI >= tourSteps().length - 1) { tourClose(true); return; } tourI++; tourShow(); });
+        document.body.appendChild(tourEl); window.addEventListener('resize', tourPlace);
+        window.setTimeout(tourShow, 120);
+      };
+      var tourArmed = false;
       var render = function () {
         // dishes of a lower tier or blocked by the profile cannot stay in the plan; slots are the source of truth
         st.days = st.days.map(function (p) { return p && eligible(byPid(p)) ? p : ''; });
@@ -1205,7 +1254,8 @@
           bud.innerHTML = '';
           var bt = document.createElement('span'); bt.textContent = fill(T_('budget'), { w: money(wk), t: money(planTotal() - exb) }) + ' ' + (exb ? fill(T_('budget-x'), { x: money(exb) }) : T_('budget-ok')) + ' ';
           var bl = document.createElement('button'); bl.type = 'button'; bl.className = 'text-link'; bl.textContent = T_('how-open'); bl.setAttribute('data-fn-how-open', '');
-          bud.appendChild(bt); bud.appendChild(bl);
+          var tg2 = document.createElement('button'); tg2.type = 'button'; tg2.className = 'text-link'; tg2.textContent = T_('tour-guide'); tg2.setAttribute('data-fn-tour-open', '');
+          bud.appendChild(bt); bud.appendChild(bl); bud.appendChild(tg2);
         });
         var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : ''; }
         var emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
@@ -1217,6 +1267,7 @@
         buildNotes();
         renderMods();
         holder.setAttribute('data-step', String(st.step + 1));
+        if (st.step === 2 && !tourArmed) { tourArmed = true; window.setTimeout(function () { startTour(false); }, 600); }
         // stepper
         steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
         dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); });
@@ -1264,6 +1315,9 @@
         var db = e.target.closest ? e.target.closest('[data-fn-day-btn]') : null;
         if (db) { st.active = +db.getAttribute('data-fn-day-btn'); persist(); render(); return; }
         if (e.target.closest && e.target.closest('[data-fn-how-open]')) { st.step = 0; var hw = $('[data-fn-how]', holder); if (hw) hw.open = true; persist(); render(); return; }
+        if (e.target.closest && e.target.closest('[data-fn-sc-next]')) { go(2); return; }
+        if (e.target.closest && e.target.closest('[data-fn-prev-sc]')) { go(0); return; }
+        if (e.target.closest && e.target.closest('[data-fn-tour-open]')) { startTour(true); return; }
         var sa = e.target.closest ? e.target.closest('[data-fn-sc-arrow]') : null;
         if (sa) { var sg = $('[data-fn-sc-grid]', holder); if (sg) sg.scrollBy({ left: (+sa.getAttribute('data-fn-sc-arrow')) * Math.max(220, sg.clientWidth * 0.8), behavior: REDUCE ? 'auto' : 'smooth' }); return; }
         var ar = e.target.closest ? e.target.closest('[data-fn-arrow]') : null;

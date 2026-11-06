@@ -2790,3 +2790,37 @@ body .hero--intro:after{content:none !important}
 @media (min-width:761px){
   .funnel .step[data-fn-step="3"] .fn-dish .fn-add::after{max-width:none !important;opacity:1 !important;margin:0 !important;overflow:visible}
 }
+
+/* =====================================================================
+   v58 — step 2 is for looking (no summary panel, one orange arrow to step 3) · coach-mark tour for the planner
+   ===================================================================== */
+.fn-menunote{flex:none;display:flex;align-items:baseline;gap:12px;margin:0 0 8px;font-size:.78rem;color:var(--text-muted);line-height:1.4}
+.fn-menunote p{margin:0}
+.fn-menunote .text-link{flex:none;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;background:none;border:0;cursor:pointer;color:var(--accent);padding:0}
+.fn-gonext{position:absolute;right:0;top:50%;translate:0 -50%;z-index:6;width:46px;height:46px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:1.3rem;line-height:1;display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 24px rgba(255,98,0,.4)}
+.fn-gonext:active{transform:translateY(-50%) scale(.95)}
+.fn-carousel--show{padding-right:58px}
+.funnel[data-step="2"] .funnel__aside{display:none !important}
+@media (min-width:901px){
+  body .funnel[data-step="2"]:not(.funnel--teaser) .funnel__panel{grid-template-columns:minmax(0,1fr)}
+  .funnel[data-step="2"] .fn-sc{flex-basis:clamp(150px,12.5vw,186px)}
+}
+@media (max-width:760px){
+  .fn-carousel--show{padding-right:0}
+  .fn-gonext{right:8px;top:auto;bottom:18px;translate:none;width:54px;height:54px}
+  .fn-gonext:active{transform:scale(.95)}
+  .fn-menunote{font-size:.7rem;gap:8px}
+}
+.fn-tour{position:fixed;inset:0;z-index:1200;pointer-events:none}
+.fn-tour__spot{position:fixed;border-radius:16px;box-shadow:0 0 0 9999px rgba(0,0,0,.72),0 0 0 2px var(--accent);transition:left .35s,top .35s,width .35s,height .35s}
+.fn-tour__bubble{position:fixed;pointer-events:auto;background:var(--bg-raised,#1a1a1a);border:1px solid var(--accent);border-radius:18px;padding:14px 16px;box-shadow:0 20px 50px rgba(0,0,0,.6);display:grid;gap:10px;color:var(--text,#f5f5f5);width:max-content}
+.fn-tour__text{margin:0;font-size:.9rem;line-height:1.45}
+.fn-tour__row{display:flex;align-items:center;gap:10px}
+.fn-tour__count{margin-right:auto;font:700 .66rem var(--font-label);letter-spacing:.14em;color:var(--text-muted)}
+.fn-tour__skip{background:none;border:0;color:var(--text-muted);font:600 .72rem var(--font-label);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;padding:6px 4px}
+.fn-tour__next{min-height:40px;padding:0 18px}
+@media (prefers-reduced-motion:reduce){.fn-tour__spot{transition:none}}
+/* no CSS translate on the step arrow: plain offsets keep the click target exact everywhere */
+.fn-gonext{translate:none !important;top:calc(50% - 23px)}
+.fn-gonext:active{transform:scale(.95)}
+@media (max-width:760px){.fn-gonext{top:auto;bottom:18px}}

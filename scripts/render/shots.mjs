@@ -13,7 +13,7 @@ for (const [name, vp, mob] of [['d', { width: 1430, height: 650 }, false], ['p',
   await page.screenshot({ path: `/tmp/shot-${name}1.png` });
   await click(F + '[data-fn-next]'); await page.waitForTimeout(600);
   await page.screenshot({ path: `/tmp/shot-${name}2.png` });
-  await click(F + '[data-fn-next]'); await page.waitForTimeout(500);
+  await click(F + '[data-fn-sc-next]'); await page.waitForTimeout(500);
   await page.evaluate(() => { document.querySelector('[data-page="pg/pedido"] .step[data-fn-step="3"] [data-fn-dish] [data-pick]').click(); });
   await page.waitForTimeout(300);
   await page.evaluate(() => { document.querySelectorAll('[data-page="pg/pedido"] .step[data-fn-step="3"] [data-fn-dish] [data-fn-note-t]')[1].click(); });

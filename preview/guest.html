@@ -2778,6 +2778,49 @@ body .hero--intro:after{content:none !important}
   .funnel .step[data-fn-step="3"] .fn-dish__media{min-height:64px !important}
 }
 
+/* =====================================================================
+   v57 — phone: home = cinematic scroll (hero, welcome film, menu deck, plans, a bar that slides in) · planner = app deck (day slots, deck of cards, bar picks)
+   ===================================================================== */
+.home-bar{display:none}
+@media (max-width:760px){
+  .home-bar{display:flex;position:fixed;left:12px;right:12px;bottom:calc(var(--tabbar,64px) + var(--safe-b,0px) + 10px);z-index:45;align-items:center;gap:10px;padding:7px 7px 7px 18px;border-radius:999px;background:rgba(23,23,23,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);translate:0 220%;transition:translate .4s cubic-bezier(.2,.8,.2,1)}
+  .home-bar[hidden]{display:none}
+  .home-bar.is-on{translate:0 0}
+  .home-bar span{flex:1;font-size:.78rem;color:var(--text-muted)}
+  .home-bar .btn{min-height:44px}
+  /* home menu deck: cards a bit over half the screen so the next one shows, snap card by card */
+  body [data-page="home"] .rail__track{scroll-snap-type:x mandatory;gap:12px;padding-inline:var(--pad,20px);scroll-padding-inline:var(--pad,20px)}
+  body [data-page="home"] .rail__track>.dish{flex:0 0 64vw !important;scroll-snap-align:start}
+  /* planner app deck: the bar carries the action; cards keep price and a quiet arrow */
+  .funnel .step[data-fn-step="3"] .fn-dish .btn--sm.fn-add{display:none}
+  .funnel .step[data-fn-step="3"] .fn-dish__row::after{content:"\2192";flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--accent);color:var(--accent);display:grid;place-items:center;font-size:1rem;margin-left:auto}
+  .funnel .step[data-fn-step="3"] .fn-dish__row{justify-content:space-between}
+  body .funnel:not(.funnel--teaser) .funnel__aside .fn-cta .fn-barpick{flex:1;min-height:50px;font-size:.78rem;padding:0 12px}
+  body .funnel.is-deck .funnel__aside .fn-cta .fn-barpick{display:inline-flex}
+}
+
+/* the pick button on a planner card is just an arrow (a check once it is the dish of the active day) */
+@media (min-width:761px){
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add{font-size:0 !important;letter-spacing:0;width:34px;min-width:34px;height:34px;min-height:34px;padding:0 !important;border-radius:50%;display:grid;place-items:center;flex:none !important}
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add::after{content:"\2192";font-size:1rem;line-height:1}
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add.is-on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add.is-on::after{content:"\2713"}
+}
+.fn-up[hidden]{display:none !important}
+@media (max-width:760px){
+  .funnel .step[data-fn-step="3"] .fn-dish .dish__desc{display:none !important}
+  .funnel .step[data-fn-step="3"] .fn-dish__media{min-height:150px !important}
+  .funnel .step[data-fn-step="3"] .fn-dish>.fn-up{position:absolute;left:0;top:calc(100% - 238px);z-index:3}
+}
+@media (min-width:761px){
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add{position:relative;color:var(--accent);border-color:var(--accent)}
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add::after{position:absolute;inset:0;display:grid;place-items:center;font-size:1rem;color:currentColor}
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add.is-on{color:#fff}
+}
+@media (min-width:761px){
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add::after{max-width:none !important;opacity:1 !important;margin:0 !important;overflow:visible}
+}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -3185,7 +3228,7 @@ Fuego</span>
   data-t-per-week="{p} por semana" data-t-weeks-x="{p} por semana × {w} semanas" data-t-per-meal="por comida"
   data-t-all-lines="Todas" data-t-prop-dishes="Platillos" data-t-prop-meals="Comidas por semana"
   data-t-prop-tier="Nivel" data-t-prop-length="Duración" data-t-length-block="4 semanas" data-t-length-week="1 semana"
-  data-t-budget="Tu plan incluye {w} por semana en comidas. Lo que elijas por encima se cobra aparte esa semana, además de tu pago inicial de {t}." data-t-budget-x="Esta semana: +{x} extra." data-t-budget-ok="Esta semana: sin extra." data-t-how-open="¿Cómo funciona?" data-t-mods-done="Listo" data-t-mods-edit="Quitar ingredientes o añadir nota a {d}" data-t-mods-title="Ajustes para {d}: {p}" data-t-mods-hint="¿Algo que quitar? Toca un ingrediente para pedirlo sin él." data-t-mods-note="Nota para la cocina (opcional)" data-t-mods-ph="Ej. sin cebolla, salsa aparte…" data-t-mods-warn="Es una preferencia de gusto: no sustituye avisar de una alergia (tu perfil). Haremos lo posible por respetarla." data-t-mods-without="Sin {i}" data-t-prop-notes="Notas de cocina" data-t-mods-open="Quitar ingredientes o añadir nota"
+  data-t-budget="Tu plan incluye {w} por semana en comidas. Lo que elijas por encima se cobra aparte esa semana, además de tu pago inicial de {t}." data-t-budget-x="Esta semana: +{x} extra." data-t-budget-ok="Esta semana: sin extra." data-t-how-open="¿Cómo funciona?" data-t-pick-day="Elegir para {d}" data-t-mods-done="Listo" data-t-mods-edit="Quitar ingredientes o añadir nota a {d}" data-t-mods-title="Ajustes para {d}: {p}" data-t-mods-hint="¿Algo que quitar? Toca un ingrediente para pedirlo sin él." data-t-mods-note="Nota para la cocina (opcional)" data-t-mods-ph="Ej. sin cebolla, salsa aparte…" data-t-mods-warn="Es una preferencia de gusto: no sustituye avisar de una alergia (tu perfil). Haremos lo posible por respetarla." data-t-mods-without="Sin {i}" data-t-prop-notes="Notas de cocina" data-t-mods-open="Quitar ingredientes o añadir nota"
   data-t-para-me="Para mí" data-t-prop-for="Para"
   data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-finish="Confirmar y continuar" data-t-finish-guest="Inicia sesión para continuar" data-t-credit="Tienes un plan activo: te quedan {w} de {t} semanas (hasta el {e}). Elige las comidas de cada semana en Mi semana. ¿Quieres más créditos? Elige un plan aquí abajo." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-pick="Elegir" data-t-picked="Elegido" data-t-pick-for="Elige el platillo del {d}" data-t-all-done="¡Semana completa! Revisa y continúa." data-t-clear-day="Quitar el platillo de {d}" data-t-first="Primera entrega: lunes {d}." data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
   data-t-prop-upgrade="Mejora" data-t-need-contract="Acepta el contrato para continuar." data-t-days-missing="Asigna un platillo a cada día."
@@ -3664,6 +3707,7 @@ Fuego</span>
             <button class="text-link fn-reset" type="button" data-fn-reset>Empezar de nuevo</button>
           </span>
           <button class="btn btn--gold" type="button" data-fn-next disabled>Continuar</button>
+          <button class="btn btn--gold fn-barpick" type="button" data-fn-barpick hidden></button>
           <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirmar y continuar</a>
         </div>
       </aside>
@@ -11297,7 +11341,7 @@ Pago digital, sin efectivo</li></ul>
   data-t-per-week="{p} por semana" data-t-weeks-x="{p} por semana × {w} semanas" data-t-per-meal="por comida"
   data-t-all-lines="Todas" data-t-prop-dishes="Platillos" data-t-prop-meals="Comidas por semana"
   data-t-prop-tier="Nivel" data-t-prop-length="Duración" data-t-length-block="4 semanas" data-t-length-week="1 semana"
-  data-t-budget="Tu plan incluye {w} por semana en comidas. Lo que elijas por encima se cobra aparte esa semana, además de tu pago inicial de {t}." data-t-budget-x="Esta semana: +{x} extra." data-t-budget-ok="Esta semana: sin extra." data-t-how-open="¿Cómo funciona?" data-t-mods-done="Listo" data-t-mods-edit="Quitar ingredientes o añadir nota a {d}" data-t-mods-title="Ajustes para {d}: {p}" data-t-mods-hint="¿Algo que quitar? Toca un ingrediente para pedirlo sin él." data-t-mods-note="Nota para la cocina (opcional)" data-t-mods-ph="Ej. sin cebolla, salsa aparte…" data-t-mods-warn="Es una preferencia de gusto: no sustituye avisar de una alergia (tu perfil). Haremos lo posible por respetarla." data-t-mods-without="Sin {i}" data-t-prop-notes="Notas de cocina" data-t-mods-open="Quitar ingredientes o añadir nota"
+  data-t-budget="Tu plan incluye {w} por semana en comidas. Lo que elijas por encima se cobra aparte esa semana, además de tu pago inicial de {t}." data-t-budget-x="Esta semana: +{x} extra." data-t-budget-ok="Esta semana: sin extra." data-t-how-open="¿Cómo funciona?" data-t-pick-day="Elegir para {d}" data-t-mods-done="Listo" data-t-mods-edit="Quitar ingredientes o añadir nota a {d}" data-t-mods-title="Ajustes para {d}: {p}" data-t-mods-hint="¿Algo que quitar? Toca un ingrediente para pedirlo sin él." data-t-mods-note="Nota para la cocina (opcional)" data-t-mods-ph="Ej. sin cebolla, salsa aparte…" data-t-mods-warn="Es una preferencia de gusto: no sustituye avisar de una alergia (tu perfil). Haremos lo posible por respetarla." data-t-mods-without="Sin {i}" data-t-prop-notes="Notas de cocina" data-t-mods-open="Quitar ingredientes o añadir nota"
   data-t-para-me="Para mí" data-t-prop-for="Para"
   data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-finish="Confirmar y continuar" data-t-finish-guest="Inicia sesión para continuar" data-t-credit="Tienes un plan activo: te quedan {w} de {t} semanas (hasta el {e}). Elige las comidas de cada semana en Mi semana. ¿Quieres más créditos? Elige un plan aquí abajo." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-pick="Elegir" data-t-picked="Elegido" data-t-pick-for="Elige el platillo del {d}" data-t-all-done="¡Semana completa! Revisa y continúa." data-t-clear-day="Quitar el platillo de {d}" data-t-first="Primera entrega: lunes {d}." data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
   data-t-prop-upgrade="Mejora" data-t-need-contract="Acepta el contrato para continuar." data-t-days-missing="Asigna un platillo a cada día."
@@ -11776,6 +11820,7 @@ Pago digital, sin efectivo</li></ul>
             <button class="text-link fn-reset" type="button" data-fn-reset>Empezar de nuevo</button>
           </span>
           <button class="btn btn--gold" type="button" data-fn-next disabled>Continuar</button>
+          <button class="btn btn--gold fn-barpick" type="button" data-fn-barpick hidden></button>
           <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirmar y continuar</a>
         </div>
       </aside>
@@ -12406,7 +12451,7 @@ Pago digital, sin efectivo</li></ul>
   data-t-per-week="{p} per week" data-t-weeks-x="{p} per week × {w} weeks" data-t-per-meal="per meal"
   data-t-all-lines="All" data-t-prop-dishes="Dishes" data-t-prop-meals="Meals per week"
   data-t-prop-tier="Tier" data-t-prop-length="Length" data-t-length-block="4 weeks" data-t-length-week="1 week"
-  data-t-budget="Your plan includes {w} per week in meals. Anything you choose above that is charged separately that week, on top of your {t} upfront payment." data-t-budget-x="This week: +{x} extra." data-t-budget-ok="This week: no extra." data-t-how-open="How does it work?" data-t-mods-done="Done" data-t-mods-edit="Leave out ingredients or add a note for {d}" data-t-mods-title="Tweaks for {d}: {p}" data-t-mods-hint="Anything to leave out? Tap an ingredient to ask for it without." data-t-mods-note="Note for the kitchen (optional)" data-t-mods-ph="E.g. no onion, sauce on the side…" data-t-mods-warn="This is a taste preference: it does not replace telling us about an allergy (your profile). We will do our best to respect it." data-t-mods-without="No {i}" data-t-prop-notes="Kitchen notes" data-t-mods-open="Remove ingredients or add a note"
+  data-t-budget="Your plan includes {w} per week in meals. Anything you choose above that is charged separately that week, on top of your {t} upfront payment." data-t-budget-x="This week: +{x} extra." data-t-budget-ok="This week: no extra." data-t-how-open="How does it work?" data-t-pick-day="Choose for {d}" data-t-mods-done="Done" data-t-mods-edit="Leave out ingredients or add a note for {d}" data-t-mods-title="Tweaks for {d}: {p}" data-t-mods-hint="Anything to leave out? Tap an ingredient to ask for it without." data-t-mods-note="Note for the kitchen (optional)" data-t-mods-ph="E.g. no onion, sauce on the side…" data-t-mods-warn="This is a taste preference: it does not replace telling us about an allergy (your profile). We will do our best to respect it." data-t-mods-without="No {i}" data-t-prop-notes="Kitchen notes" data-t-mods-open="Remove ingredients or add a note"
   data-t-para-me="For me" data-t-prop-for="For"
   data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-finish="Confirm and continue" data-t-finish-guest="Sign in to continue" data-t-credit="You have an active plan: {w} of {t} weeks left (until {e}). Choose each week's meals in My week. Want more credits? Pick a plan below." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-pick="Choose" data-t-picked="Chosen" data-t-pick-for="Choose the dish for {d}" data-t-all-done="Week complete! Review and continue." data-t-clear-day="Remove the dish for {d}" data-t-first="First delivery: Monday {d}." data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
   data-t-prop-upgrade="Upgrade" data-t-need-contract="Accept the contract to continue." data-t-days-missing="Assign a dish to every day."
@@ -12885,6 +12930,7 @@ Pago digital, sin efectivo</li></ul>
             <button class="text-link fn-reset" type="button" data-fn-reset>Start over</button>
           </span>
           <button class="btn btn--gold" type="button" data-fn-next disabled>Continue</button>
+          <button class="btn btn--gold fn-barpick" type="button" data-fn-barpick hidden></button>
           <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirm and continue</a>
         </div>
       </aside>
@@ -20518,7 +20564,7 @@ Digital payment, no cash</li></ul>
   data-t-per-week="{p} per week" data-t-weeks-x="{p} per week × {w} weeks" data-t-per-meal="per meal"
   data-t-all-lines="All" data-t-prop-dishes="Dishes" data-t-prop-meals="Meals per week"
   data-t-prop-tier="Tier" data-t-prop-length="Length" data-t-length-block="4 weeks" data-t-length-week="1 week"
-  data-t-budget="Your plan includes {w} per week in meals. Anything you choose above that is charged separately that week, on top of your {t} upfront payment." data-t-budget-x="This week: +{x} extra." data-t-budget-ok="This week: no extra." data-t-how-open="How does it work?" data-t-mods-done="Done" data-t-mods-edit="Leave out ingredients or add a note for {d}" data-t-mods-title="Tweaks for {d}: {p}" data-t-mods-hint="Anything to leave out? Tap an ingredient to ask for it without." data-t-mods-note="Note for the kitchen (optional)" data-t-mods-ph="E.g. no onion, sauce on the side…" data-t-mods-warn="This is a taste preference: it does not replace telling us about an allergy (your profile). We will do our best to respect it." data-t-mods-without="No {i}" data-t-prop-notes="Kitchen notes" data-t-mods-open="Remove ingredients or add a note"
+  data-t-budget="Your plan includes {w} per week in meals. Anything you choose above that is charged separately that week, on top of your {t} upfront payment." data-t-budget-x="This week: +{x} extra." data-t-budget-ok="This week: no extra." data-t-how-open="How does it work?" data-t-pick-day="Choose for {d}" data-t-mods-done="Done" data-t-mods-edit="Leave out ingredients or add a note for {d}" data-t-mods-title="Tweaks for {d}: {p}" data-t-mods-hint="Anything to leave out? Tap an ingredient to ask for it without." data-t-mods-note="Note for the kitchen (optional)" data-t-mods-ph="E.g. no onion, sauce on the side…" data-t-mods-warn="This is a taste preference: it does not replace telling us about an allergy (your profile). We will do our best to respect it." data-t-mods-without="No {i}" data-t-prop-notes="Kitchen notes" data-t-mods-open="Remove ingredients or add a note"
   data-t-para-me="For me" data-t-prop-for="For"
   data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-finish="Confirm and continue" data-t-finish-guest="Sign in to continue" data-t-credit="You have an active plan: {w} of {t} weeks left (until {e}). Choose each week's meals in My week. Want more credits? Pick a plan below." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-pick="Choose" data-t-picked="Chosen" data-t-pick-for="Choose the dish for {d}" data-t-all-done="Week complete! Review and continue." data-t-clear-day="Remove the dish for {d}" data-t-first="First delivery: Monday {d}." data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
   data-t-prop-upgrade="Upgrade" data-t-need-contract="Accept the contract to continue." data-t-days-missing="Assign a dish to every day."
@@ -20997,6 +21043,7 @@ Digital payment, no cash</li></ul>
             <button class="text-link fn-reset" type="button" data-fn-reset>Start over</button>
           </span>
           <button class="btn btn--gold" type="button" data-fn-next disabled>Continue</button>
+          <button class="btn btn--gold fn-barpick" type="button" data-fn-barpick hidden></button>
           <a class="btn btn--gold" data-fn-finish href="#/carrito" hidden>Confirm and continue</a>
         </div>
       </aside>
@@ -22547,6 +22594,17 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     });
   }
 
+  /* phone home (cinematic scroll): a slim bar slides in once the hero has gone, so ordering is always one thumb away */
+  function initHomeBar() {
+    var hero = $('.hero--intro'); if (!hero || !window.IntersectionObserver || !(window.matchMedia && window.matchMedia('(max-width:760px)').matches)) return;
+    if ($('.home-bar')) return;
+    var bar = document.createElement('div'); bar.className = 'home-bar'; bar.setAttribute('hidden', '');
+    var tx = document.documentElement.getAttribute('data-home-cta') || '', lang = (document.documentElement.lang || 'es').slice(0, 2);
+    bar.innerHTML = '<span></span><a class="btn btn--gold btn--sm" href="/pages/pedido"></a>';
+    bar.firstChild.textContent = lang === 'en' ? 'Build my order' : 'Armar mi pedido'; bar.lastChild.textContent = (lang === 'en' ? 'Continue' : 'Continuar') + ' \u2192';
+    document.body.appendChild(bar);
+    new IntersectionObserver(function (en) { en.forEach(function (e) { var on = !e.isIntersecting && e.boundingClientRect.top < 0; bar.hidden = false; bar.classList.toggle('is-on', on); }); }, { threshold: 0.12 }).observe(hero);
+  }
   function initOnbBanner() { $$('[data-onb-banner]').forEach(function (b) { b.hidden = isOnboarded(); }); }
   function initProfileForm() { $$('[data-profile-form]').forEach(initOneProfileForm); }
   function initOneProfileForm(form) {
@@ -23475,6 +23533,14 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         });
       };
 
+      // phone planner (app deck): the bar button picks the card that is in the middle of the row for the active day
+      var barPick = $('[data-fn-barpick]', holder);
+      if (barPick) barPick.addEventListener('click', function () {
+        var rail = $('.step[data-fn-step="3"] [data-fn-grid]', holder); if (!rail) return;
+        var mid = rail.getBoundingClientRect().left + rail.clientWidth * 0.4, best = null, bd = 1e9;
+        $$('[data-fn-dish]:not(.is-hidden)', rail).forEach(function (c) { var r = c.getBoundingClientRect(), dd = Math.abs(r.left + r.width / 2 - mid); if (dd < bd && !c.classList.contains('is-blocked')) { bd = dd; best = c; } });
+        var pb = best && $('[data-pick]', best); if (pb) pb.click();
+      });
       var render = function () {
         // dishes of a lower tier or blocked by the profile cannot stay in the plan; slots are the source of truth
         st.days = st.days.map(function (p) { return p && eligible(byPid(p)) ? p : ''; });
@@ -23500,6 +23566,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           var cb = $('[data-fn-count]', d); if (cb) { cb.hidden = q === 0; cb.textContent = '×' + q; }
           var pick = $('[data-pick]', d);
           if (pick) { pick.hidden = false; pick.disabled = false; pick.textContent = st.days[st.active] === d.getAttribute('data-pid') ? T_('picked') : T_('pick'); }
+          if (pick) { pick.classList.toggle('is-on', st.days[st.active] === d.getAttribute('data-pid')); pick.setAttribute('aria-label', pick.textContent); }
         });
         var e1 = $('[data-fn-empty]', holder); if (e1) e1.hidden = shown > 0;
         // meter + summary
@@ -23548,7 +23615,10 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
         if (next) { next.hidden = last; next.disabled = false; }
-        if (finish) { finish.hidden = !last; finish.classList.toggle('is-disabled', n < 1); finish.setAttribute('aria-disabled', n < 1 ? 'true' : 'false'); var fl = holder.getAttribute(ce ? 'data-t-finish' : 'data-t-finish-guest'); if (fl && finish.textContent.trim() !== fl) finish.textContent = fl; }
+        var phoneUi = window.matchMedia && window.matchMedia('(max-width:760px)').matches, bp = $('[data-fn-barpick]', holder), deckMode = !!(bp && phoneUi && st.step === 2 && n < MEALS);
+        if (bp) { bp.hidden = !deckMode; if (deckMode) bp.textContent = fill(T_('pick-day'), { d: dayLabel(st.active) }); }
+        holder.classList.toggle('is-deck', deckMode);
+        if (finish) { finish.hidden = !last || deckMode; finish.classList.toggle('is-disabled', n < 1); finish.setAttribute('aria-disabled', n < 1 ? 'true' : 'false'); var fl = holder.getAttribute(ce ? 'data-t-finish' : 'data-t-finish-guest'); if (fl && finish.textContent.trim() !== fl) finish.textContent = fl; }
         var rem = $('[data-fn-remembered]', holder); if (rem) { rem.hidden = !(st.remembered && st.step === 2); rem.textContent = T_('remembered'); }
       };
 
@@ -24064,7 +24134,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

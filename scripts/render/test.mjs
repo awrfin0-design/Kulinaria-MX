@@ -545,7 +545,7 @@ ok('step 1 offers the 4-week and the 1-week plan', (await page.$$eval(`${fnS} [d
 ok('the funnel is a plain stepper: not sticky', await page.evaluate(() => getComputedStyle(document.querySelector('[data-page="home"] .funnel__stage')).position === 'static'));
 ok('the whole funnel is one frame: it is never taller than the screen', await page.evaluate(() => document.querySelector('[data-page="home"] .funnel__stage').getBoundingClientRect().height <= innerHeight + 2));
 await page.locator(`${fnS} [data-plan-choice="block"]`).scrollIntoViewIfNeeded(); await page.waitForTimeout(400);
-await page.click(`${fnS} [data-plan-choice="block"]`); await page.waitForTimeout(800);
+await page.click(`${fnS} [data-plan-choice="block"]`); await page.waitForTimeout(800); await page.click(`${fnS} [data-fn-sc-next]`); await page.waitForTimeout(500);
 ok('plan cards say "from $3,600 / includes 20 meals" and "from $1,000 / includes 5 meals", and there is no tier step', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); const p = (k) => f.querySelector(`[data-plan-choice="${k}"]`).textContent; const t = [...f.querySelectorAll('[data-tier-choice]')]; return /3,600/.test(p('block')) && /20/.test(p('block')) && /1,000/.test(p('week')) && /5/.test(p('week')) && f.querySelector('[data-fn-step="2"]').classList.contains('is-on') && t.map((x) => x.getAttribute('data-block')).join() === '3600,5000,6400,7800' && t.map((x) => x.getAttribute('data-meal')).join() === '180,250,320,390' && !f.querySelector('[data-fn-tierdata]').offsetParent; }));
 ok('the meals step shows dish cards with price; higher tiers carry the upgrade badge', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); const vis = [...f.querySelectorAll('[data-fn-dish]:not(.is-hidden)')]; return vis.length >= 8 && vis.every((d) => /\$\d+/.test(d.textContent)) && vis.filter((d) => d.getAttribute('data-tier') !== 'selecto').every((d) => !d.querySelector('[data-fn-up]').hidden); }));
 ok('the week strip has one button per weekday (Mon-Fri) with a date, starting on the first day', (await page.$$eval(`${fnS} [data-fn-day-btn]`, (b) => b.length === 5 && b.every((x) => /\d/.test(x.textContent)))) && (await page.$eval(`${fnS} [data-fn-day-btn="0"]`, (b) => b.classList.contains('is-active'))));
@@ -661,7 +661,7 @@ ok('phone: no page is longer than 13 screens and the average is under 3.9 screen
 await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.evaluate(() => { location.hash = '#/pg/pedido'; }); await page.reload(); await page.waitForTimeout(900);
 const fnPhone = await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); const act = f.querySelector('.fn-cta'); return { plans: f.querySelectorAll('[data-plan-choice]').length, docked: act.getBoundingClientRect().bottom <= innerHeight + 2 && !!act.closest('.funnel__aside'), summary: getComputedStyle(f.querySelector('.funnel__facts')).display === 'none' }; });
 ok('phone: plan choices are shown and the wizard buttons sit inside the summary box, inside the screen', fnPhone.plans === 2 && fnPhone.docked && fnPhone.summary, JSON.stringify(fnPhone));
-await page.click('[data-page="pg/pedido"] [data-fn-next]'); await page.waitForTimeout(700);
+await page.click('[data-page="pg/pedido"] [data-fn-next]'); await page.waitForTimeout(500); await page.click('[data-page="pg/pedido"] [data-fn-sc-next]'); await page.waitForTimeout(500);
 ok('phone: the meals step is one frame: week strip, swipeable dish row and buttons all fit the screen', await page.evaluate(() => { const l = document.querySelector('[data-page="pg/pedido"] .fn-dishes'), st = document.querySelector('[data-page="pg/pedido"] .funnel__stage').getBoundingClientRect(); return getComputedStyle(l).overflowX === 'auto' && st.bottom <= innerHeight + 2 && document.querySelectorAll('[data-page="pg/pedido"] [data-fn-day-btn]').length === 5; }));
 // v13: minimal phone UI: slim home, glowing "i" with the pricing sheet, no announcement bar
 await page.setViewportSize({ width: 390, height: 844 });
@@ -686,7 +686,7 @@ ok('phone: the glowing "i" opens a bottom sheet that explains the 4-week block a
 await page.keyboard.press('Escape'); await page.waitForTimeout(500);
 ok('phone: the sheet closes with Escape or the button', await page.evaluate(() => !document.getElementById('sheet-pricing').classList.contains('is-open')));
 await page.evaluate(() => { location.hash = '#/pg/pedido'; }); await page.waitForTimeout(500);
-await page.click('[data-page="pg/pedido"] [data-fn-next]'); await page.waitForTimeout(700);
+await page.click('[data-page="pg/pedido"] [data-fn-next]'); await page.waitForTimeout(500); await page.click('[data-page="pg/pedido"] [data-fn-sc-next]'); await page.waitForTimeout(500);
 await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-dish]:not(.is-hidden) [data-pick]').click()); await page.waitForTimeout(400);
 const blk = await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); return { total: f.querySelector('[data-fn-s-total]').textContent, count: f.querySelector('[data-fn-stepcount]').textContent }; });
 ok('phone: the summary shows the 4-week Selecto price and the step counter reads "2 de 2"', /3,600/.test(blk.total) && /2 de 2/.test(blk.count), JSON.stringify(blk));
@@ -900,7 +900,9 @@ const runJourney = async (label, { w, h, lang, plan, upgrade, onboarded = true, 
   else ok(`${label}: plan cards read "Desde $3,600 · al mes · incluye 20 comidas" and "Desde $1,000 · por semana · incluye 5 comidas"`, /3,600/.test(txt) && /al mes/i.test(txt) && /1,000/.test(txt) && /por semana/i.test(txt), txt.slice(0, 300));
   ok(`${label}: 3 steps (plan, menu, your week), counter starts at 1 of 3, and the flow fits one screen`, (await page.$$eval(`${f} [data-fn-dot]`, (d) => d.length)) === 3 && /1\D+3/.test(await page.$eval(`${f} [data-fn-stepcount]`, (e) => e.textContent)) && await page.evaluate(() => { window.scrollTo(0, 0); return document.querySelector('[data-page="pg/pedido"] .funnel__stage').getBoundingClientRect().bottom <= innerHeight + 2; }));
   await page.click(`${f} [data-plan-choice="${plan}"]`); await page.waitForTimeout(800);
-  ok(`${label}: choosing a plan goes straight to the meals`, await page.$eval(`${f} [data-fn-step="2"]`, (e) => e.classList.contains('is-on')));
+  ok(`${label}: choosing a plan opens the menu step (cards only) and its orange arrow leads to the planner`, await page.$eval(`${f} [data-fn-step="2"]`, (e) => e.classList.contains('is-on')));
+  await page.click(`${f} [data-fn-sc-next]`); await page.waitForTimeout(500);
+  ok(`${label}: the planner (step 3) is open`, await page.$eval(`${f} [data-fn-step="3"]`, (e) => e.classList.contains('is-on')));
   await page.evaluate(() => window.scrollTo(0, 0));
   ok(`${label}: the meals step still fits one screen`, await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] .funnel__stage').getBoundingClientRect().bottom <= innerHeight + 2));
   const labels = await page.$$eval(`${f} [data-fn-day-btn]`, (b) => b.map((x) => x.querySelector('.fn-day__d').textContent.trim()));
@@ -965,7 +967,7 @@ ok('Mi semana offers previous orders and "my details" links and no "buy credits"
 await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(4200);
 {
   const f = '[data-page="pg/pedido"] [data-funnel]';
-  await page.click(`${f} [data-plan-choice="week"]`); await page.waitForTimeout(700);
+  await page.click(`${f} [data-plan-choice="week"]`); await page.waitForTimeout(700); await page.click(`${f} [data-fn-sc-next]`); await page.waitForTimeout(500);
   for (let i = 0; i < 5; i++) await page.evaluate((f) => document.querySelector(f + ' [data-fn-dish]:not(.is-hidden) [data-pick]').click(), f);
   await page.evaluate(() => { const fe = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push(String(u).split('/').pop()); return fe.apply(this, arguments); }; });
   await page.click(`${f} [data-fn-finish]`); await page.waitForTimeout(1000);
@@ -985,7 +987,7 @@ await page.goto(`${URL0.replace('index.html', 'guest.html')}#/home`); await page
 const G = URL0.replace('index.html', 'guest.html');
 await page.goto(`${G}#/pg/pedido`); await page.reload(); await page.waitForTimeout(4200);
 const gf = '[data-page="pg/pedido"] [data-funnel]';
-await page.click(`${gf} [data-plan-choice="week"]`); await page.waitForTimeout(700);
+await page.click(`${gf} [data-plan-choice="week"]`); await page.waitForTimeout(700); await page.click(`${gf} [data-fn-sc-next]`); await page.waitForTimeout(500);
 await page.evaluate((f) => document.querySelector(f + ' [data-fn-dish]:not(.is-hidden) [data-pick]').click(), gf); await page.waitForTimeout(300);
 ok('signed out: the visitor can build an order, and the button says "Inicia sesión para continuar"', /inicia sesión/i.test(await page.$eval(`${gf} [data-fn-finish]`, (b) => b.textContent)) && (await page.$eval(`${gf} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled'))) === 'false');
 await page.click(`${gf} [data-fn-finish]`); await page.waitForTimeout(500);
@@ -1233,7 +1235,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('plan step has a "how it works" tutorial (6 steps + worked example) that starts closed so the step still fits', !!how && how.open === false && how.items === 6 && /\$3,600|3,600/.test(how.txt) && /\$70/.test(how.txt) && /2 × \$70/.test(how.txt), JSON.stringify(how && how.items));
   await page.click('[data-page="pg/pedido"] [data-fn-how] summary'); await page.waitForTimeout(150);
   ok('the tutorial opens on tap', await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-how]').open));
-  await page.click('[data-page="pg/pedido"] [data-fn-next]'); await page.waitForTimeout(600);
+  await page.click('[data-page="pg/pedido"] [data-fn-next]'); await page.waitForTimeout(500); await page.click('[data-page="pg/pedido"] [data-fn-sc-next]'); await page.waitForTimeout(500);
   await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-dish]:not(.is-hidden) [data-pick]').click()); await page.waitForTimeout(400);
   ok('the pencil appears on a day with a dish and the tweak panel starts closed', await page.evaluate(() => { const e = document.querySelector('[data-page="pg/pedido"] [data-fn-day-edit="0"]'); const m = document.querySelector('[data-page="pg/pedido"] [data-fn-mods]'); return !!e && !e.hidden && m.hidden; }));
   await page.click('[data-page="pg/pedido"] .fn-week [data-fn-day-edit="0"]'); await page.waitForTimeout(250);
