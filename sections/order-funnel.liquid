@@ -32,6 +32,14 @@
   {%- unless section.settings.phone_teaser -%}<div class="funnel__bgphoto" aria-hidden="true">{% render 'photo', art: 'air-steak-dark', alt: '' %}</div>{%- endunless -%}
   <div class="funnel__track" data-fn-track>
    <div class="funnel__stage" data-fn-stage>
+    <div class="fn-gate container" data-fn-gate hidden>
+      <h3>{{ 'funnel.gate_t' | t }}</h3>
+      <p class="fn-gate__p">{{ 'funnel.gate_p' | t }}</p>
+      <ol class="fn-gate__steps">
+        <li data-fn-gate-s1><b>1</b><div><h4>{{ 'funnel.gate_1' | t }}</h4><div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="{% render 'login-url', back: '/pages/bienvenida' %}">{{ 'funnel.gate_login' | t }}</a><a class="btn btn--outline" href="{% render 'login-url', kind: 'register', back: '/pages/bienvenida' %}">{{ 'funnel.gate_register' | t }}</a></div><p class="fn-gate__ok">&#10003; {{ 'funnel.gate_done' | t }}</p></div></li>
+        <li data-fn-gate-s2><b>2</b><div><h4>{{ 'funnel.gate_2' | t }}</h4><div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="/pages/bienvenida">{{ 'funnel.gate_go' | t }} &rarr;</a></div><p class="fn-gate__ok">&#10003; {{ 'funnel.gate_done' | t }}</p></div></li>
+      </ol>
+    </div>
     <div class="fn-returning container" data-fn-returning hidden>
       <h3>{{ 'funnel.ret_t' | t }}</h3>
       <p data-fn-returning-text></p>

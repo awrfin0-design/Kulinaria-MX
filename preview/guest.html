@@ -3069,6 +3069,58 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
   .fn-rules__dots{padding-bottom:10px}
 }
 
+/* =====================================================================
+   v67 — phone: the whole builder scrolls with the page (no frame with scroll areas inside it, so a finger can always carry on to the next section);
+   only the card rows move sideways
+   ===================================================================== */
+@media (max-width:760px){
+  body .funnel:not(.funnel--teaser) .funnel__stage{height:auto !important;min-height:0 !important;max-height:none !important;overflow:visible !important}
+  body .funnel:not(.funnel--teaser) .funnel__panel{flex:none !important;display:flex;flex-direction:column;overflow:visible !important}
+  body .funnel:not(.funnel--teaser) .funnel__main{flex:none !important;height:auto !important;overflow:visible !important;overscroll-behavior:auto !important;display:block}
+  body .funnel .step.is-on{height:auto !important;min-height:0 !important;overflow:visible !important;flex:none !important}
+  .funnel .step[data-fn-step="2"].is-on{display:block}
+  .funnel .step[data-fn-step="3"].is-on{display:flex;flex-direction:column;gap:8px}
+  /* menu step */
+  .fn-carousel--show{display:block !important;height:auto !important;min-height:0 !important;padding-bottom:0 !important;overflow:visible !important;-webkit-mask-image:none !important;mask-image:none !important}
+  .fn-showcase{height:auto !important;overflow-x:auto !important;overflow-y:hidden !important;overscroll-behavior-x:contain;padding:2px 0 8px !important}
+  .fn-sc{flex:0 0 78vw !important;height:auto !important;max-height:none !important}
+  .fn-sc__img{flex:none !important;height:min(50svh,340px) !important;min-height:0 !important}
+  .fn-gonext{position:sticky !important;left:auto !important;right:auto !important;top:auto !important;bottom:calc(10px + env(safe-area-inset-bottom,0px)) !important;margin:12px 0 0 !important;width:100% !important;z-index:30}
+  /* planner */
+  .funnel .step[data-fn-step="3"] .fn-carousel{height:auto !important;min-height:0 !important;overflow:visible !important}
+  .funnel .step[data-fn-step="3"] .fn-dishes{height:auto !important;overflow-x:auto !important;overflow-y:hidden !important;overscroll-behavior-x:contain}
+  body .funnel[data-step="3"]:not(.funnel--teaser) .funnel__aside{position:sticky;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:30;margin-top:12px}
+  /* rules */
+  .fn-rules__rail{overscroll-behavior-x:contain}
+}
+
+/* v68 — the mouse wheel / a finger over the middle of the builder still scrolls the page (nothing in it keeps the scroll to itself) */
+.funnel__main,.funnel .step,.funnel .fn-carousel,.funnel .fn-rules{overscroll-behavior:auto !important}
+.funnel .fn-dishes,.funnel .fn-showcase,.funnel .fn-rules__rail,.funnel .fn-week{overscroll-behavior:contain auto !important}
+.fn-note__done{justify-self:end;border:0;border-radius:999px;background:var(--accent);color:#fff;font:700 .66rem var(--font-label);letter-spacing:.1em;text-transform:uppercase;padding:7px 16px;cursor:pointer}
+@media (max-width:760px){.fn-note__done{padding:11px 20px;font-size:.74rem}}
+
+/* =====================================================================
+   v69 — steps 1 and 2 before the builder: account + questionnaire
+   ===================================================================== */
+.fn-gate{display:grid;gap:12px;padding:clamp(18px,3vw,34px);border:1px solid var(--border-accent);border-radius:22px;background:var(--accent-wash);margin-block:12px}
+.fn-gate[hidden]{display:none}
+.fn-gate h3{margin:0;font-size:clamp(1.3rem,2.6vw,1.9rem)}
+.fn-gate__p{margin:0;color:var(--text-muted);font-size:.9rem;max-width:60ch}
+.fn-gate__steps{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:12px}
+.fn-gate__steps li{display:grid;grid-template-columns:38px minmax(0,1fr);gap:14px;align-items:start;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:var(--bg-raised)}
+.fn-gate__steps li>b{width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:700 1rem var(--font-label)}
+.fn-gate__steps h4{margin:0 0 8px;font-size:1.05rem}
+.fn-gate__row{display:flex;flex-wrap:wrap;gap:10px}
+.fn-gate__row[hidden]{display:none}
+.fn-gate__ok{display:none;margin:0;color:var(--accent);font-weight:700;font-size:.85rem}
+.fn-gate__steps li.is-done .fn-gate__ok{display:block}
+.fn-gate__steps li.is-done>b{background:var(--ok,#3fa66b)}
+.fn-gate__steps li.is-wait{opacity:.55}
+.funnel.is-gated :is(.funnel__top,.funnel__bar,.funnel__stepcount,.funnel__panel,.fn-returning){display:none !important}
+.ob-dots li{min-width:26px}
+@media (max-width:760px){.fn-gate__steps li{grid-template-columns:32px minmax(0,1fr);gap:10px;padding:14px}.fn-gate__row .btn{flex:1}}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -3491,6 +3543,14 @@ Fuego</span>
     <a class="btn btn--gold btn--block" href="#/pg/pedido" data-order-cta data-returning-label="Elegir mi semana">Armar mi pedido</a>
   </div><div class="funnel__bgphoto" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-steak-dark.webp" width="1200" height="800" alt="" class="" loading="lazy" decoding="async"></div><div class="funnel__track" data-fn-track>
    <div class="funnel__stage" data-fn-stage>
+    <div class="fn-gate container" data-fn-gate hidden>
+      <h3>Antes de pedir: tu cuenta</h3>
+      <p class="fn-gate__p">Son dos pasos cortos y no vuelves a llenarlos. Así cada platillo se revisa contra tus alergias y gustos.</p>
+      <ol class="fn-gate__steps">
+        <li data-fn-gate-s1><b>1</b><div><h4>Inicia sesión o crea tu cuenta</h4><div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Iniciar sesión</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Crear cuenta</a></div><p class="fn-gate__ok">&#10003; Listo</p></div></li>
+        <li data-fn-gate-s2><b>2</b><div><h4>Cuéntanos de ti: datos, entrega, alergias y gustos</h4><div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="#/pg/bienvenida">Hacer el cuestionario &rarr;</a></div><p class="fn-gate__ok">&#10003; Listo</p></div></li>
+      </ol>
+    </div>
     <div class="fn-returning container" data-fn-returning hidden>
       <h3>Ya tienes un plan activo</h3>
       <p data-fn-returning-text></p>
@@ -3564,19 +3624,19 @@ Fuego</span>
               <span class="fn-tier__price" data-fn-tier-price>$3,600<small data-fn-tier-sub></small></span>
               <strong>Selecto</strong><small>Cocina diaria saludable al mejor precio.</small>
             </button><button class="fn-tier fn-tier--exclusivo" type="button" role="radio" data-tier-choice="exclusivo" aria-checked="false"
-              data-week="1390" data-block="5000" data-meal="250"
+              data-week="1350" data-block="5000" data-meal="250"
               data-variant-week="72010" data-variant-block="72011"
               data-selling-plan="810001" data-name="Exclusivo $">
               <span class="fn-tier__price" data-fn-tier-price>$5,000<small data-fn-tier-sub></small></span>
               <strong>Exclusivo $</strong><small>Ingredientes y cortes de mayor calidad.</small>
             </button><button class="fn-tier fn-tier--signature" type="button" role="radio" data-tier-choice="signature" aria-checked="false"
-              data-week="1780" data-block="6400" data-meal="320"
+              data-week="1700" data-block="6400" data-meal="320"
               data-variant-week="72020" data-variant-block="72021"
               data-selling-plan="810001" data-name="Signature $$">
               <span class="fn-tier__price" data-fn-tier-price>$6,400<small data-fn-tier-sub></small></span>
               <strong>Signature $$</strong><small>Platillos de autor del chef.</small>
             </button><button class="fn-tier fn-tier--reserve" type="button" role="radio" data-tier-choice="reserve" aria-checked="false"
-              data-week="2170" data-block="7800" data-meal="390"
+              data-week="2050" data-block="7800" data-meal="390"
               data-variant-week="72030" data-variant-block="72031"
               data-selling-plan="810001" data-name="Reserve $$$">
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
@@ -3749,7 +3809,7 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7102" data-handle="salmon-costra-almendras"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7102" data-handle="salmon-costra-almendras"
   data-title="Salmón gourmet en costra de almendras" data-label="Salmón gourmet en costra de almendras" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -3807,7 +3867,7 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7104" data-handle="arrachera-carbon"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7104" data-handle="arrachera-carbon"
   data-title="Arrachera al carbón con maíz y espárragos" data-label="Arrachera al carbón con maíz y espárragos" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -3836,7 +3896,7 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="434" data-pid="7105" data-handle="filete-prime"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="410" data-pid="7105" data-handle="filete-prime"
   data-title="Filete Prime con verduras asadas" data-label="Filete Prime con verduras asadas" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -3865,7 +3925,7 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7106" data-handle="bowl-vegano-garbanzo"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7106" data-handle="bowl-vegano-garbanzo"
   data-title="Bowl vegano de garbanzo y tahini" data-label="Bowl vegano de garbanzo y tahini" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -3952,7 +4012,7 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7600" data-handle="chiles-en-nogada"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7600" data-handle="chiles-en-nogada"
   data-seasonal="true" data-title="Chiles en nogada de temporada" data-label="Chiles en nogada de temporada" data-category="temporada" data-tier="signature" data-diets="" data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Chiles en nogada de temporada" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Edición limitada</span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -3981,7 +4041,7 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7601" data-handle="pan-calabaza-especias"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7601" data-handle="pan-calabaza-especias"
   data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Pan de calabaza con especias" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Edición limitada</span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -8344,7 +8404,7 @@ Pago digital, sin efectivo</li></ul>
           <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Plan semanal Exclusivo</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,390</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,350</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 comidas por semana, de lunes a viernes. Disponible por 1 semana o por 4 semanas.</p></div><div class="meal-card">
@@ -8366,7 +8426,7 @@ Pago digital, sin efectivo</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 1390,
+    "price": 1350,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-exclusivo"
   }
@@ -8569,7 +8629,7 @@ Pago digital, sin efectivo</li></ul>
           <span class="tier-badge tier-badge--signature">Signature $$</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Plan semanal Signature</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,780</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,700</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 comidas por semana, de lunes a viernes. Disponible por 1 semana o por 4 semanas.</p></div><div class="meal-card">
@@ -8591,7 +8651,7 @@ Pago digital, sin efectivo</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 1780,
+    "price": 1700,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-signature"
   }
@@ -8794,7 +8854,7 @@ Pago digital, sin efectivo</li></ul>
           <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Plan semanal Reserve</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$2,170</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$2,050</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 comidas por semana, de lunes a viernes. Disponible por 1 semana o por 4 semanas.</p></div><div class="meal-card">
@@ -8816,7 +8876,7 @@ Pago digital, sin efectivo</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 2170,
+    "price": 2050,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-reserve"
   }
@@ -12094,6 +12154,14 @@ Pago digital, sin efectivo</li></ul>
     <a class="btn btn--gold btn--block" href="#/pg/pedido" data-order-cta data-returning-label="Elegir mi semana">Armar mi pedido</a>
   </div><div class="funnel__bgphoto" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-steak-dark.webp" width="1200" height="800" alt="" class="" loading="lazy" decoding="async"></div><div class="funnel__track" data-fn-track>
    <div class="funnel__stage" data-fn-stage>
+    <div class="fn-gate container" data-fn-gate hidden>
+      <h3>Antes de pedir: tu cuenta</h3>
+      <p class="fn-gate__p">Son dos pasos cortos y no vuelves a llenarlos. Así cada platillo se revisa contra tus alergias y gustos.</p>
+      <ol class="fn-gate__steps">
+        <li data-fn-gate-s1><b>1</b><div><h4>Inicia sesión o crea tu cuenta</h4><div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Iniciar sesión</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Crear cuenta</a></div><p class="fn-gate__ok">&#10003; Listo</p></div></li>
+        <li data-fn-gate-s2><b>2</b><div><h4>Cuéntanos de ti: datos, entrega, alergias y gustos</h4><div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="#/pg/bienvenida">Hacer el cuestionario &rarr;</a></div><p class="fn-gate__ok">&#10003; Listo</p></div></li>
+      </ol>
+    </div>
     <div class="fn-returning container" data-fn-returning hidden>
       <h3>Ya tienes un plan activo</h3>
       <p data-fn-returning-text></p>
@@ -12167,19 +12235,19 @@ Pago digital, sin efectivo</li></ul>
               <span class="fn-tier__price" data-fn-tier-price>$3,600<small data-fn-tier-sub></small></span>
               <strong>Selecto</strong><small>Cocina diaria saludable al mejor precio.</small>
             </button><button class="fn-tier fn-tier--exclusivo" type="button" role="radio" data-tier-choice="exclusivo" aria-checked="false"
-              data-week="1390" data-block="5000" data-meal="250"
+              data-week="1350" data-block="5000" data-meal="250"
               data-variant-week="72010" data-variant-block="72011"
               data-selling-plan="810001" data-name="Exclusivo $">
               <span class="fn-tier__price" data-fn-tier-price>$5,000<small data-fn-tier-sub></small></span>
               <strong>Exclusivo $</strong><small>Ingredientes y cortes de mayor calidad.</small>
             </button><button class="fn-tier fn-tier--signature" type="button" role="radio" data-tier-choice="signature" aria-checked="false"
-              data-week="1780" data-block="6400" data-meal="320"
+              data-week="1700" data-block="6400" data-meal="320"
               data-variant-week="72020" data-variant-block="72021"
               data-selling-plan="810001" data-name="Signature $$">
               <span class="fn-tier__price" data-fn-tier-price>$6,400<small data-fn-tier-sub></small></span>
               <strong>Signature $$</strong><small>Platillos de autor del chef.</small>
             </button><button class="fn-tier fn-tier--reserve" type="button" role="radio" data-tier-choice="reserve" aria-checked="false"
-              data-week="2170" data-block="7800" data-meal="390"
+              data-week="2050" data-block="7800" data-meal="390"
               data-variant-week="72030" data-variant-block="72031"
               data-selling-plan="810001" data-name="Reserve $$$">
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
@@ -12352,7 +12420,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7102" data-handle="salmon-costra-almendras"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7102" data-handle="salmon-costra-almendras"
   data-title="Salmón gourmet en costra de almendras" data-label="Salmón gourmet en costra de almendras" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -12410,7 +12478,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7104" data-handle="arrachera-carbon"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7104" data-handle="arrachera-carbon"
   data-title="Arrachera al carbón con maíz y espárragos" data-label="Arrachera al carbón con maíz y espárragos" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -12439,7 +12507,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="434" data-pid="7105" data-handle="filete-prime"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="410" data-pid="7105" data-handle="filete-prime"
   data-title="Filete Prime con verduras asadas" data-label="Filete Prime con verduras asadas" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -12468,7 +12536,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7106" data-handle="bowl-vegano-garbanzo"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7106" data-handle="bowl-vegano-garbanzo"
   data-title="Bowl vegano de garbanzo y tahini" data-label="Bowl vegano de garbanzo y tahini" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -12555,7 +12623,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7600" data-handle="chiles-en-nogada"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7600" data-handle="chiles-en-nogada"
   data-seasonal="true" data-title="Chiles en nogada de temporada" data-label="Chiles en nogada de temporada" data-category="temporada" data-tier="signature" data-diets="" data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Chiles en nogada de temporada" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Edición limitada</span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -12584,7 +12652,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7601" data-handle="pan-calabaza-especias"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7601" data-handle="pan-calabaza-especias"
   data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Pan de calabaza con especias" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Edición limitada</span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
@@ -12755,7 +12823,7 @@ Pago digital, sin efectivo</li></ul>
 
 
 </div><div id="pg-bienvenida--shopify-section-ob" class="shopify-section"><section class="section onboarding" data-onboarding data-next-url="/pages/pedido"
-  data-t-welcome="Bienvenido, {n}" data-t-need="Completa tu nombre, correo y teléfono." >
+  data-t-welcome="Bienvenido, {n}" data-t-need-addr="Escribe tu calle, colonia o clúster, ciudad y código postal para poder entregarte." data-t-need-consent="Marca las tres confirmaciones para guardar tu perfil." data-t-need="Completa tu nombre, correo y teléfono." >
   <div class="container" style="max-width:820px">
     <a hidden tabindex="-1" aria-hidden="true" data-ob-week href="#/pg/cuenta-semana"></a><div class="panel panel--gold" data-ob-guest>
         <h2>Primero inicia sesión</h2>
@@ -12778,7 +12846,7 @@ Pago digital, sin efectivo</li></ul>
       <p class="eyebrow">Tu perfil</p>
       <h2>Cuéntanos de ti, una sola vez</h2>
       <p class="text-muted">Con esto armamos tu menú y bloqueamos lo que no puedes comer. No tendrás que volver a llenarlo; puedes cambiarlo cuando quieras en Mi cuenta.</p>
-      <ol class="ob-dots" aria-hidden="true"><li class="is-on">1</li><li>2</li><li>3</li></ol>
+      <ol class="ob-dots" aria-hidden="true"><li class="is-on">1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li></ol>
 
       <fieldset class="step is-on" data-ob-step="1">
         <legend>¿Quién eres?</legend>
@@ -12786,6 +12854,7 @@ Pago digital, sin efectivo</li></ul>
           <div class="field"><label for="pg-bienvenida--ob-name">Nombre completo</label><input class="input" id="pg-bienvenida--ob-name" data-ob="name" autocomplete="name"></div>
           <div class="field"><label for="pg-bienvenida--ob-email">Correo</label><input class="input" id="pg-bienvenida--ob-email" type="email" data-ob="email" autocomplete="email"></div>
           <div class="field"><label for="pg-bienvenida--ob-phone">Teléfono / WhatsApp</label><input class="input" id="pg-bienvenida--ob-phone" type="tel" data-ob="phone" autocomplete="tel"></div>
+          <div class="field"><label for="pg-bienvenida--ob-birth">Fecha de nacimiento (opcional)</label><input class="input" id="pg-bienvenida--ob-birth" type="date" data-ob="birth" autocomplete="bday"></div>
         </div>
       </fieldset>
 
@@ -12793,22 +12862,65 @@ Pago digital, sin efectivo</li></ul>
         <legend>¿Dónde te entregamos?</legend>
         <div class="form-grid">
           <div class="field"><label for="pg-bienvenida--ob-street">Calle y número de lote / casa</label><input class="input" id="pg-bienvenida--ob-street" data-ob="street" autocomplete="address-line1"></div>
+          <div class="field"><label for="pg-bienvenida--ob-num">Número exterior e interior</label><input class="input" id="pg-bienvenida--ob-num" data-ob="num" autocomplete="address-line2"></div>
           <div class="field"><label for="pg-bienvenida--ob-cluster">Clúster y referencias de acceso</label><input class="input" id="pg-bienvenida--ob-cluster" data-ob="cluster"></div>
-          <div class="field"><label for="pg-bienvenida--ob-zip">Código postal</label><input class="input" id="pg-bienvenida--ob-zip" data-ob="zip" autocomplete="postal-code"></div>
+          <div class="field"><label for="pg-bienvenida--ob-city">Ciudad</label><input class="input" id="pg-bienvenida--ob-city" data-ob="city" autocomplete="address-level2"></div>
+          <div class="field"><label for="pg-bienvenida--ob-zip">Código postal</label><input class="input" id="pg-bienvenida--ob-zip" data-ob="zip" autocomplete="postal-code" inputmode="numeric"></div>
+          <div class="field"><label for="pg-bienvenida--ob-window">Horario preferido de entrega</label><select class="select" id="pg-bienvenida--ob-window" data-ob="window"><option value="">Elige una opción</option><option value="any">Cualquiera</option><option value="am">Mañana (8 a 12)</option><option value="pm">Tarde (12 a 17)</option><option value="eve">Noche (17 a 21)</option></select></div>
         </div>
+        <div class="field"><label for="pg-bienvenida--ob-refs">Referencias para llegar</label><input class="input" id="pg-bienvenida--ob-refs" data-ob="refs"></div>
+        <div class="field"><label for="pg-bienvenida--ob-access">Indicaciones de acceso (caseta, piso, timbre)</label><input class="input" id="pg-bienvenida--ob-access" data-ob="access"></div>
       </fieldset>
 
       <fieldset class="step" data-ob-step="3">
-        <legend>Alergias, gustos y dieta</legend>
+        <legend>Tu casa y tu mesa</legend>
+        <p class="label">¿Cuántas personas comerán de tu pedido?</p>
+        <div class="form-grid">
+          <div class="field"><label for="pg-bienvenida--ob-adults">Adultos</label><input class="input" id="pg-bienvenida--ob-adults" type="number" min="1" max="12" inputmode="numeric" data-ob="adults" value="1"></div>
+          <div class="field"><label for="pg-bienvenida--ob-kids">Niños</label><input class="input" id="pg-bienvenida--ob-kids" type="number" min="0" max="12" inputmode="numeric" data-ob="kids" value="0"></div>
+        </div>
+        <p class="legal-note">Si cocinamos para más de una persona, después agregas a cada una con sus propias alergias en Mi cuenta, Familia.</p>
+        <p class="label">¿Qué comidas te interesan más?</p>
+        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-group="meals" value="desayunos"> <span>Desayunos</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="comidas"> <span>Comidas</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="cenas"> <span>Cenas</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="snacks"> <span>Snacks</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="postres"> <span>Postres</span></label></div>
+      </fieldset>
+
+      <fieldset class="step" data-ob-step="4">
+        <legend>Alergias y salud</legend>
         <p class="label">Bloque 1 · Alergias y restricciones médicas</p>
         <div class="check-grid"><label class="check"><input type="checkbox" data-ob-allergy value="Gluten"> <span>Gluten</span></label><label class="check"><input type="checkbox" data-ob-allergy value="Lácteos"> <span>Lácteos</span></label><label class="check"><input type="checkbox" data-ob-allergy value="Frutos secos"> <span>Frutos secos</span></label><label class="check"><input type="checkbox" data-ob-allergy value="Mariscos"> <span>Mariscos</span></label></div>
         <div class="field"><label for="pg-bienvenida--ob-other">Otras alergias</label>
           <input class="input" id="pg-bienvenida--ob-other" data-ob="allergy_other" list="pg-bienvenida--ob-allergy-list" placeholder="Separa con comas: soya, huevo, ajonjolí">
           <datalist id="pg-bienvenida--ob-allergy-list"><option value="Soya"></option><option value="Huevo"></option><option value="Ajonjolí"></option><option value="Pescado"></option><option value="Cacahuate"></option><option value="Nuez"></option><option value="Almendra"></option><option value="Mostaza"></option><option value="Apio"></option><option value="Sulfitos"></option><option value="Maíz"></option><option value="Fresa"></option><option value="Aguacate"></option></datalist></div>
-        <div class="field"><label for="pg-bienvenida--ob-dis">Bloque 2 · Ingredientes que no me gustan</label><input class="input" id="pg-bienvenida--ob-dis" data-ob="dislikes" placeholder="Ej. jitomate"></div>
-        <p class="label">Preferencias dietéticas</p>
-        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-diet value="Keto"> <span>Keto</span></label><label class="check"><input type="checkbox" data-ob-diet value="Libre de gluten"> <span>Libre de gluten</span></label><label class="check"><input type="checkbox" data-ob-diet value="Vegetariano"> <span>Vegetariano</span></label><label class="check"><input type="checkbox" data-ob-diet value="Vegano"> <span>Vegano</span></label></div>
+        <div class="field"><label for="pg-bienvenida--ob-severity">¿Qué tan seria es tu alergia?</label><select class="select" id="pg-bienvenida--ob-severity" data-ob="severity"><option value="">Elige una opción</option><option value="leve">Intolerancia leve</option><option value="fuerte">Reacción fuerte</option><option value="anafilaxia">Riesgo de anafilaxia</option></select></div>
+        <p class="label">Condiciones de salud que debemos considerar</p>
+        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-group="conditions" value="diabetes"> <span>Diabetes</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="hipertension"> <span>Hipertensión</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="celiaquia"> <span>Celiaquía</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="embarazo"> <span>Embarazo o lactancia</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="colesterol"> <span>Colesterol alto</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="ninguna"> <span>Ninguna</span></label></div>
         <p class="legal-note">El sitio cruza los ingredientes con el perfil que declaraste. Eres responsable de declarar con detalle tus alergias y restricciones al inscribirte.</p>
+      </fieldset>
+
+      <fieldset class="step" data-ob-step="5">
+        <legend>Gustos y objetivos</legend>
+        <p class="label">Preferencias dietéticas</p>
+        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-diet value="Keto"> <span>Keto</span></label><label class="check"><input type="checkbox" data-ob-diet value="Libre de gluten"> <span>Libre de gluten</span></label><label class="check"><input type="checkbox" data-ob-diet value="Vegetariano"> <span>Vegetariano</span></label><label class="check"><input type="checkbox" data-ob-diet value="Vegano"> <span>Vegano</span></label><label class="check"><input type="checkbox" data-ob-diet value="Bajo en carbohidratos"> <span>Bajo en carbohidratos</span></label>
+          <label class="check"><input type="checkbox" data-ob-diet value="Alto en proteína"> <span>Alto en proteína</span></label>
+        </div>
+        <div class="field"><label for="pg-bienvenida--ob-dis">Bloque 2 · Ingredientes que no me gustan</label><input class="input" id="pg-bienvenida--ob-dis" data-ob="dislikes" placeholder="Ej. jitomate"></div>
+        <div class="form-grid">
+          <div class="field"><label for="pg-bienvenida--ob-goal">Tu objetivo</label><select class="select" id="pg-bienvenida--ob-goal" data-ob="goal"><option value="">Elige una opción</option><option value="mejor">Comer mejor</option><option value="bajar">Bajar de peso</option><option value="musculo">Ganar músculo</option><option value="mantener">Mantener mi peso</option><option value="deporte">Rendimiento deportivo</option></select></div>
+          <div class="field"><label for="pg-bienvenida--ob-kcal">Calorías al día (si las conoces)</label><input class="input" id="pg-bienvenida--ob-kcal" type="number" min="800" max="6000" inputmode="numeric" data-ob="kcal"></div>
+          <div class="field"><label for="pg-bienvenida--ob-spice">Nivel de picante</label><select class="select" id="pg-bienvenida--ob-spice" data-ob="spice"><option value="">Elige una opción</option><option value="0">Nada</option><option value="1">Suave</option><option value="2">Medio</option><option value="3">Fuerte</option></select></div>
+        </div>
+      </fieldset>
+
+      <fieldset class="step" data-ob-step="6">
+        <legend>Último paso</legend>
+        <div class="form-grid">
+          <div class="field"><label for="pg-bienvenida--ob-ref">Código de referencia (si tienes)</label><input class="input" id="pg-bienvenida--ob-ref" data-ob="ref" autocapitalize="characters"></div>
+          <div class="field"><label for="pg-bienvenida--ob-heard">¿Cómo nos conociste?</label><select class="select" id="pg-bienvenida--ob-heard" data-ob="heard"><option value="">Elige una opción</option><option value="instagram">Instagram</option><option value="amigos">Amigos o familia</option><option value="gym">Entrenador o gimnasio</option><option value="web">Búsqueda en internet</option><option value="otro">Otro</option></select></div>
+          <div class="field"><label for="pg-bienvenida--ob-contact">¿Cómo prefieres que te avisemos?</label><select class="select" id="pg-bienvenida--ob-contact" data-ob="contact"><option value="">Elige una opción</option><option value="correo">Correo</option><option value="whatsapp">WhatsApp</option><option value="ambos">Los dos</option></select></div>
+        </div>
+        <label class="check"><input type="checkbox" data-ob-consent> <span>Acepto los términos y el aviso de privacidad.</span></label>
+        <label class="check"><input type="checkbox" data-ob-consent> <span>Autorizo que usen mis datos para entregar mi pedido y cuidar mis alergias.</span></label>
+        <label class="check"><input type="checkbox" data-ob-consent> <span>Entiendo que la cocina maneja ingredientes comunes y no puede garantizar la ausencia total de trazas.</span></label>
       </fieldset>
 
       <p class="alert alert--warn" data-ob-error hidden role="alert"></p>
@@ -13294,6 +13406,14 @@ Pago digital, sin efectivo</li></ul>
     <a class="btn btn--gold btn--block" href="#/pg/pedido" data-order-cta data-returning-label="Choose my week">Build my order</a>
   </div><div class="funnel__bgphoto" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-steak-dark.webp" width="1200" height="800" alt="" class="" loading="lazy" decoding="async"></div><div class="funnel__track" data-fn-track>
    <div class="funnel__stage" data-fn-stage>
+    <div class="fn-gate container" data-fn-gate hidden>
+      <h3>Before you order: your account</h3>
+      <p class="fn-gate__p">Two short steps, and you never fill them in again. Every dish is then checked against your allergies and tastes.</p>
+      <ol class="fn-gate__steps">
+        <li data-fn-gate-s1><b>1</b><div><h4>Sign in or create your account</h4><div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Create account</a></div><p class="fn-gate__ok">&#10003; Done</p></div></li>
+        <li data-fn-gate-s2><b>2</b><div><h4>Tell us about you: details, delivery, allergies and tastes</h4><div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="#/pg/bienvenida">Take the questionnaire &rarr;</a></div><p class="fn-gate__ok">&#10003; Done</p></div></li>
+      </ol>
+    </div>
     <div class="fn-returning container" data-fn-returning hidden>
       <h3>You already have an active plan</h3>
       <p data-fn-returning-text></p>
@@ -13367,19 +13487,19 @@ Pago digital, sin efectivo</li></ul>
               <span class="fn-tier__price" data-fn-tier-price>$3,600<small data-fn-tier-sub></small></span>
               <strong>Selecto</strong><small>Healthy everyday cooking at the best price.</small>
             </button><button class="fn-tier fn-tier--exclusivo" type="button" role="radio" data-tier-choice="exclusivo" aria-checked="false"
-              data-week="1390" data-block="5000" data-meal="250"
+              data-week="1350" data-block="5000" data-meal="250"
               data-variant-week="72010" data-variant-block="72011"
               data-selling-plan="810001" data-name="Exclusivo $">
               <span class="fn-tier__price" data-fn-tier-price>$5,000<small data-fn-tier-sub></small></span>
               <strong>Exclusivo $</strong><small>Higher-quality ingredients and cuts.</small>
             </button><button class="fn-tier fn-tier--signature" type="button" role="radio" data-tier-choice="signature" aria-checked="false"
-              data-week="1780" data-block="6400" data-meal="320"
+              data-week="1700" data-block="6400" data-meal="320"
               data-variant-week="72020" data-variant-block="72021"
               data-selling-plan="810001" data-name="Signature $$">
               <span class="fn-tier__price" data-fn-tier-price>$6,400<small data-fn-tier-sub></small></span>
               <strong>Signature $$</strong><small>The chef's signature dishes.</small>
             </button><button class="fn-tier fn-tier--reserve" type="button" role="radio" data-tier-choice="reserve" aria-checked="false"
-              data-week="2170" data-block="7800" data-meal="390"
+              data-week="2050" data-block="7800" data-meal="390"
               data-variant-week="72030" data-variant-block="72031"
               data-selling-plan="810001" data-name="Reserve $$$">
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
@@ -13552,7 +13672,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7102" data-handle="salmon-costra-almendras"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7102" data-handle="salmon-costra-almendras"
   data-title="Salmón gourmet en costra de almendras" data-label="Gourmet salmon in an almond crust" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -13610,7 +13730,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7104" data-handle="arrachera-carbon"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7104" data-handle="arrachera-carbon"
   data-title="Arrachera al carbón con maíz y espárragos" data-label="Charcoal-grilled skirt steak with corn and asparagus" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -13639,7 +13759,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="434" data-pid="7105" data-handle="filete-prime"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="410" data-pid="7105" data-handle="filete-prime"
   data-title="Filete Prime con verduras asadas" data-label="Prime filet with roasted vegetables" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -13668,7 +13788,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7106" data-handle="bowl-vegano-garbanzo"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7106" data-handle="bowl-vegano-garbanzo"
   data-title="Bowl vegano de garbanzo y tahini" data-label="Vegan chickpea and tahini bowl" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -13755,7 +13875,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7600" data-handle="chiles-en-nogada"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7600" data-handle="chiles-en-nogada"
   data-seasonal="true" data-title="Chiles en nogada de temporada" data-label="Seasonal chiles en nogada" data-category="temporada" data-tier="signature" data-diets="" data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Seasonal chiles en nogada" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Limited edition</span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -13784,7 +13904,7 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7601" data-handle="pan-calabaza-especias"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7601" data-handle="pan-calabaza-especias"
   data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Spiced pumpkin bread" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Limited edition</span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -18147,7 +18267,7 @@ Digital payment, no cash</li></ul>
           <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Exclusivo weekly plan</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,390</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,350</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 meals a week, Monday to Friday. Available for 1 week or for 4 weeks.</p></div><div class="meal-card">
@@ -18169,7 +18289,7 @@ Digital payment, no cash</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 1390,
+    "price": 1350,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-exclusivo"
   }
@@ -18372,7 +18492,7 @@ Digital payment, no cash</li></ul>
           <span class="tier-badge tier-badge--signature">Signature $$</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Signature weekly plan</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,780</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,700</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 meals a week, Monday to Friday. Available for 1 week or for 4 weeks.</p></div><div class="meal-card">
@@ -18394,7 +18514,7 @@ Digital payment, no cash</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 1780,
+    "price": 1700,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-signature"
   }
@@ -18597,7 +18717,7 @@ Digital payment, no cash</li></ul>
           <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Reserve weekly plan</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$2,170</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$2,050</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 meals a week, Monday to Friday. Available for 1 week or for 4 weeks.</p></div><div class="meal-card">
@@ -18619,7 +18739,7 @@ Digital payment, no cash</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 2170,
+    "price": 2050,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-reserve"
   }
@@ -21897,6 +22017,14 @@ Digital payment, no cash</li></ul>
     <a class="btn btn--gold btn--block" href="#/pg/pedido" data-order-cta data-returning-label="Choose my week">Build my order</a>
   </div><div class="funnel__bgphoto" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-steak-dark.webp" width="1200" height="800" alt="" class="" loading="lazy" decoding="async"></div><div class="funnel__track" data-fn-track>
    <div class="funnel__stage" data-fn-stage>
+    <div class="fn-gate container" data-fn-gate hidden>
+      <h3>Before you order: your account</h3>
+      <p class="fn-gate__p">Two short steps, and you never fill them in again. Every dish is then checked against your allergies and tastes.</p>
+      <ol class="fn-gate__steps">
+        <li data-fn-gate-s1><b>1</b><div><h4>Sign in or create your account</h4><div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Create account</a></div><p class="fn-gate__ok">&#10003; Done</p></div></li>
+        <li data-fn-gate-s2><b>2</b><div><h4>Tell us about you: details, delivery, allergies and tastes</h4><div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="#/pg/bienvenida">Take the questionnaire &rarr;</a></div><p class="fn-gate__ok">&#10003; Done</p></div></li>
+      </ol>
+    </div>
     <div class="fn-returning container" data-fn-returning hidden>
       <h3>You already have an active plan</h3>
       <p data-fn-returning-text></p>
@@ -21970,19 +22098,19 @@ Digital payment, no cash</li></ul>
               <span class="fn-tier__price" data-fn-tier-price>$3,600<small data-fn-tier-sub></small></span>
               <strong>Selecto</strong><small>Healthy everyday cooking at the best price.</small>
             </button><button class="fn-tier fn-tier--exclusivo" type="button" role="radio" data-tier-choice="exclusivo" aria-checked="false"
-              data-week="1390" data-block="5000" data-meal="250"
+              data-week="1350" data-block="5000" data-meal="250"
               data-variant-week="72010" data-variant-block="72011"
               data-selling-plan="810001" data-name="Exclusivo $">
               <span class="fn-tier__price" data-fn-tier-price>$5,000<small data-fn-tier-sub></small></span>
               <strong>Exclusivo $</strong><small>Higher-quality ingredients and cuts.</small>
             </button><button class="fn-tier fn-tier--signature" type="button" role="radio" data-tier-choice="signature" aria-checked="false"
-              data-week="1780" data-block="6400" data-meal="320"
+              data-week="1700" data-block="6400" data-meal="320"
               data-variant-week="72020" data-variant-block="72021"
               data-selling-plan="810001" data-name="Signature $$">
               <span class="fn-tier__price" data-fn-tier-price>$6,400<small data-fn-tier-sub></small></span>
               <strong>Signature $$</strong><small>The chef's signature dishes.</small>
             </button><button class="fn-tier fn-tier--reserve" type="button" role="radio" data-tier-choice="reserve" aria-checked="false"
-              data-week="2170" data-block="7800" data-meal="390"
+              data-week="2050" data-block="7800" data-meal="390"
               data-variant-week="72030" data-variant-block="72031"
               data-selling-plan="810001" data-name="Reserve $$$">
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
@@ -22155,7 +22283,7 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7102" data-handle="salmon-costra-almendras"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7102" data-handle="salmon-costra-almendras"
   data-title="Salmón gourmet en costra de almendras" data-label="Gourmet salmon in an almond crust" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -22213,7 +22341,7 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7104" data-handle="arrachera-carbon"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7104" data-handle="arrachera-carbon"
   data-title="Arrachera al carbón con maíz y espárragos" data-label="Charcoal-grilled skirt steak with corn and asparagus" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -22242,7 +22370,7 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="434" data-pid="7105" data-handle="filete-prime"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="390" data-pm-week="410" data-pid="7105" data-handle="filete-prime"
   data-title="Filete Prime con verduras asadas" data-label="Prime filet with roasted vegetables" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -22271,7 +22399,7 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7106" data-handle="bowl-vegano-garbanzo"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7106" data-handle="bowl-vegano-garbanzo"
   data-title="Bowl vegano de garbanzo y tahini" data-label="Vegan chickpea and tahini bowl" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -22358,7 +22486,7 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="356" data-pid="7600" data-handle="chiles-en-nogada"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="320" data-pm-week="340" data-pid="7600" data-handle="chiles-en-nogada"
   data-seasonal="true" data-title="Chiles en nogada de temporada" data-label="Seasonal chiles en nogada" data-category="temporada" data-tier="signature" data-diets="" data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Seasonal chiles en nogada" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Limited edition</span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -22387,7 +22515,7 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="278" data-pid="7601" data-handle="pan-calabaza-especias"
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="250" data-pm-week="270" data-pid="7601" data-handle="pan-calabaza-especias"
   data-seasonal="true" data-title="Pan de calabaza con especias" data-label="Spiced pumpkin bread" data-category="temporada" data-tier="exclusivo" data-diets="" data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="lazy"><span class="fn-count" data-fn-count hidden></span><span class="fn-ribbon">Limited edition</span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
@@ -22558,7 +22686,7 @@ Digital payment, no cash</li></ul>
 
 
 </div><div id="pg-bienvenida--shopify-section-ob" class="shopify-section"><section class="section onboarding" data-onboarding data-next-url="/pages/pedido"
-  data-t-welcome="Welcome, {n}" data-t-need="Please complete your name, e-mail and phone." >
+  data-t-welcome="Welcome, {n}" data-t-need-addr="Write your street, neighborhood or cluster, city and postal code so we can deliver." data-t-need-consent="Tick the three confirmations to save your profile." data-t-need="Please complete your name, e-mail and phone." >
   <div class="container" style="max-width:820px">
     <a hidden tabindex="-1" aria-hidden="true" data-ob-week href="#/pg/cuenta-semana"></a><div class="panel panel--gold" data-ob-guest>
         <h2>Sign in first</h2>
@@ -22581,7 +22709,7 @@ Digital payment, no cash</li></ul>
       <p class="eyebrow">Your profile</p>
       <h2>Tell us about you, just once</h2>
       <p class="text-muted">We use this to build your menu and block what you can't eat. You won't have to fill it in again; change it anytime in My account.</p>
-      <ol class="ob-dots" aria-hidden="true"><li class="is-on">1</li><li>2</li><li>3</li></ol>
+      <ol class="ob-dots" aria-hidden="true"><li class="is-on">1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li></ol>
 
       <fieldset class="step is-on" data-ob-step="1">
         <legend>Who are you?</legend>
@@ -22589,6 +22717,7 @@ Digital payment, no cash</li></ul>
           <div class="field"><label for="pg-bienvenida--ob-name">Full name</label><input class="input" id="pg-bienvenida--ob-name" data-ob="name" autocomplete="name"></div>
           <div class="field"><label for="pg-bienvenida--ob-email">Email</label><input class="input" id="pg-bienvenida--ob-email" type="email" data-ob="email" autocomplete="email"></div>
           <div class="field"><label for="pg-bienvenida--ob-phone">Phone / WhatsApp</label><input class="input" id="pg-bienvenida--ob-phone" type="tel" data-ob="phone" autocomplete="tel"></div>
+          <div class="field"><label for="pg-bienvenida--ob-birth">Birth date (optional)</label><input class="input" id="pg-bienvenida--ob-birth" type="date" data-ob="birth" autocomplete="bday"></div>
         </div>
       </fieldset>
 
@@ -22596,22 +22725,65 @@ Digital payment, no cash</li></ul>
         <legend>Where do we deliver?</legend>
         <div class="form-grid">
           <div class="field"><label for="pg-bienvenida--ob-street">Street and lot / house number</label><input class="input" id="pg-bienvenida--ob-street" data-ob="street" autocomplete="address-line1"></div>
+          <div class="field"><label for="pg-bienvenida--ob-num">Street number and apartment</label><input class="input" id="pg-bienvenida--ob-num" data-ob="num" autocomplete="address-line2"></div>
           <div class="field"><label for="pg-bienvenida--ob-cluster">Cluster and access references</label><input class="input" id="pg-bienvenida--ob-cluster" data-ob="cluster"></div>
-          <div class="field"><label for="pg-bienvenida--ob-zip">Postal code</label><input class="input" id="pg-bienvenida--ob-zip" data-ob="zip" autocomplete="postal-code"></div>
+          <div class="field"><label for="pg-bienvenida--ob-city">City</label><input class="input" id="pg-bienvenida--ob-city" data-ob="city" autocomplete="address-level2"></div>
+          <div class="field"><label for="pg-bienvenida--ob-zip">Postal code</label><input class="input" id="pg-bienvenida--ob-zip" data-ob="zip" autocomplete="postal-code" inputmode="numeric"></div>
+          <div class="field"><label for="pg-bienvenida--ob-window">Preferred delivery time</label><select class="select" id="pg-bienvenida--ob-window" data-ob="window"><option value="">Choose an option</option><option value="any">Any time</option><option value="am">Morning (8 to 12)</option><option value="pm">Afternoon (12 to 5)</option><option value="eve">Evening (5 to 9)</option></select></div>
         </div>
+        <div class="field"><label for="pg-bienvenida--ob-refs">Directions and landmarks</label><input class="input" id="pg-bienvenida--ob-refs" data-ob="refs"></div>
+        <div class="field"><label for="pg-bienvenida--ob-access">Access notes (gate, floor, buzzer)</label><input class="input" id="pg-bienvenida--ob-access" data-ob="access"></div>
       </fieldset>
 
       <fieldset class="step" data-ob-step="3">
-        <legend>Allergies, tastes and diet</legend>
+        <legend>Your home and table</legend>
+        <p class="label">How many people will eat your order?</p>
+        <div class="form-grid">
+          <div class="field"><label for="pg-bienvenida--ob-adults">Adults</label><input class="input" id="pg-bienvenida--ob-adults" type="number" min="1" max="12" inputmode="numeric" data-ob="adults" value="1"></div>
+          <div class="field"><label for="pg-bienvenida--ob-kids">Children</label><input class="input" id="pg-bienvenida--ob-kids" type="number" min="0" max="12" inputmode="numeric" data-ob="kids" value="0"></div>
+        </div>
+        <p class="legal-note">If we cook for more than one person, you add each of them with their own allergies later in My account, Family.</p>
+        <p class="label">Which meals interest you most?</p>
+        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-group="meals" value="desayunos"> <span>Breakfasts</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="comidas"> <span>Lunches</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="cenas"> <span>Dinners</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="snacks"> <span>Snacks</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="postres"> <span>Desserts</span></label></div>
+      </fieldset>
+
+      <fieldset class="step" data-ob-step="4">
+        <legend>Allergies and health</legend>
         <p class="label">Block 1 · Allergies and medical restrictions</p>
         <div class="check-grid"><label class="check"><input type="checkbox" data-ob-allergy value="Gluten"> <span>Gluten</span></label><label class="check"><input type="checkbox" data-ob-allergy value="Lácteos"> <span>Dairy</span></label><label class="check"><input type="checkbox" data-ob-allergy value="Frutos secos"> <span>Tree nuts</span></label><label class="check"><input type="checkbox" data-ob-allergy value="Mariscos"> <span>Shellfish</span></label></div>
         <div class="field"><label for="pg-bienvenida--ob-other">Other allergies</label>
           <input class="input" id="pg-bienvenida--ob-other" data-ob="allergy_other" list="pg-bienvenida--ob-allergy-list" placeholder="Separate with commas: soy, egg, sesame">
           <datalist id="pg-bienvenida--ob-allergy-list"><option value="Soya"></option><option value="Huevo"></option><option value="Ajonjolí"></option><option value="Pescado"></option><option value="Cacahuate"></option><option value="Nuez"></option><option value="Almendra"></option><option value="Mostaza"></option><option value="Apio"></option><option value="Sulfitos"></option><option value="Maíz"></option><option value="Fresa"></option><option value="Aguacate"></option></datalist></div>
-        <div class="field"><label for="pg-bienvenida--ob-dis">Block 2 · Ingredients I don't like</label><input class="input" id="pg-bienvenida--ob-dis" data-ob="dislikes" placeholder="E.g. tomato"></div>
-        <p class="label">Dietary preferences</p>
-        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-diet value="Keto"> <span>Keto</span></label><label class="check"><input type="checkbox" data-ob-diet value="Libre de gluten"> <span>Gluten-free</span></label><label class="check"><input type="checkbox" data-ob-diet value="Vegetariano"> <span>Vegetarian</span></label><label class="check"><input type="checkbox" data-ob-diet value="Vegano"> <span>Vegan</span></label></div>
+        <div class="field"><label for="pg-bienvenida--ob-severity">How serious is your allergy?</label><select class="select" id="pg-bienvenida--ob-severity" data-ob="severity"><option value="">Choose an option</option><option value="leve">Mild intolerance</option><option value="fuerte">Strong reaction</option><option value="anafilaxia">Risk of anaphylaxis</option></select></div>
+        <p class="label">Health conditions we should consider</p>
+        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-group="conditions" value="diabetes"> <span>Diabetes</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="hipertension"> <span>Hypertension</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="celiaquia"> <span>Celiac disease</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="embarazo"> <span>Pregnancy or breastfeeding</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="colesterol"> <span>High cholesterol</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="ninguna"> <span>None</span></label></div>
         <p class="legal-note">The site cross-checks ingredients against the profile you declared. You are responsible for declaring your allergies and restrictions in detail when you sign up.</p>
+      </fieldset>
+
+      <fieldset class="step" data-ob-step="5">
+        <legend>Tastes and goals</legend>
+        <p class="label">Dietary preferences</p>
+        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-diet value="Keto"> <span>Keto</span></label><label class="check"><input type="checkbox" data-ob-diet value="Libre de gluten"> <span>Gluten-free</span></label><label class="check"><input type="checkbox" data-ob-diet value="Vegetariano"> <span>Vegetarian</span></label><label class="check"><input type="checkbox" data-ob-diet value="Vegano"> <span>Vegan</span></label><label class="check"><input type="checkbox" data-ob-diet value="Bajo en carbohidratos"> <span>Low carb</span></label>
+          <label class="check"><input type="checkbox" data-ob-diet value="Alto en proteína"> <span>High protein</span></label>
+        </div>
+        <div class="field"><label for="pg-bienvenida--ob-dis">Block 2 · Ingredients I don't like</label><input class="input" id="pg-bienvenida--ob-dis" data-ob="dislikes" placeholder="E.g. tomato"></div>
+        <div class="form-grid">
+          <div class="field"><label for="pg-bienvenida--ob-goal">Your goal</label><select class="select" id="pg-bienvenida--ob-goal" data-ob="goal"><option value="">Choose an option</option><option value="mejor">Eat better</option><option value="bajar">Lose weight</option><option value="musculo">Build muscle</option><option value="mantener">Keep my weight</option><option value="deporte">Sports performance</option></select></div>
+          <div class="field"><label for="pg-bienvenida--ob-kcal">Calories per day (if you know them)</label><input class="input" id="pg-bienvenida--ob-kcal" type="number" min="800" max="6000" inputmode="numeric" data-ob="kcal"></div>
+          <div class="field"><label for="pg-bienvenida--ob-spice">Spice level</label><select class="select" id="pg-bienvenida--ob-spice" data-ob="spice"><option value="">Choose an option</option><option value="0">None</option><option value="1">Mild</option><option value="2">Medium</option><option value="3">Hot</option></select></div>
+        </div>
+      </fieldset>
+
+      <fieldset class="step" data-ob-step="6">
+        <legend>Last step</legend>
+        <div class="form-grid">
+          <div class="field"><label for="pg-bienvenida--ob-ref">Referral code (if you have one)</label><input class="input" id="pg-bienvenida--ob-ref" data-ob="ref" autocapitalize="characters"></div>
+          <div class="field"><label for="pg-bienvenida--ob-heard">How did you hear about us?</label><select class="select" id="pg-bienvenida--ob-heard" data-ob="heard"><option value="">Choose an option</option><option value="instagram">Instagram</option><option value="amigos">Friends or family</option><option value="gym">Trainer or gym</option><option value="web">Internet search</option><option value="otro">Other</option></select></div>
+          <div class="field"><label for="pg-bienvenida--ob-contact">How should we reach you?</label><select class="select" id="pg-bienvenida--ob-contact" data-ob="contact"><option value="">Choose an option</option><option value="correo">E-mail</option><option value="whatsapp">WhatsApp</option><option value="ambos">Both</option></select></div>
+        </div>
+        <label class="check"><input type="checkbox" data-ob-consent> <span>I accept the terms and the privacy notice.</span></label>
+        <label class="check"><input type="checkbox" data-ob-consent> <span>I allow my data to be used to deliver my order and look after my allergies.</span></label>
+        <label class="check"><input type="checkbox" data-ob-consent> <span>I understand the kitchen handles common ingredients and cannot guarantee the total absence of traces.</span></label>
       </fieldset>
 
       <p class="alert alert--warn" data-ob-error hidden role="alert"></p>
@@ -23076,9 +23248,7 @@ Digital payment, no cash</li></ul>
     <p class="footer-mega" data-scroll="in" aria-hidden="true">Arte del fuego</p>
 
     <div class="footer-bottom">
-      <span>© 2026 Kulinaria MX. Todos los derechos reservados.</span>
-      <span class="footer-credit">Hecho por Alan Waizel · <a href="https://vellumandquill.com" target="_blank" rel="noopener">Vellum & Quill</a></span>
-      <span class="footer-legal"><a href="#/pg/terminos">Términos y condiciones</a> · <a href="#/pg/privacidad">Aviso de privacidad</a></span>
+      <span>© 2026 Kulinaria MX. Todos los derechos reservados.</span><span class="footer-legal"><a href="#/pg/terminos">Términos y condiciones</a> · <a href="#/pg/privacidad">Aviso de privacidad</a></span>
       <span>Pago 100% digital · No se acepta efectivo</span>
     </div>
   </div>
@@ -23120,9 +23290,7 @@ Digital payment, no cash</li></ul>
     <p class="footer-mega" data-scroll="in" aria-hidden="true">Arte del fuego</p>
 
     <div class="footer-bottom">
-      <span>© 2026 Kulinaria MX. All rights reserved.</span>
-      <span class="footer-credit">Made by Alan Waizel · <a href="https://vellumandquill.com" target="_blank" rel="noopener">Vellum & Quill</a></span>
-      <span class="footer-legal"><a href="#/pg/terminos">Terms and conditions</a> · <a href="#/pg/privacidad">Privacy notice</a></span>
+      <span>© 2026 Kulinaria MX. All rights reserved.</span><span class="footer-legal"><a href="#/pg/terminos">Terms and conditions</a> · <a href="#/pg/privacidad">Privacy notice</a></span>
       <span>100% digital payment · no cash accepted</span>
     </div>
   </div>
@@ -24455,7 +24623,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   // A brand-new account (no orders, no saved profile) is taken to the questionnaire right after signing in, once per visit.
   // Existing paying customers are never interrupted: they go straight to choosing their week.
   function guardOnboarding() {
-    var a = $('#kx-account'), ob = $('[data-onboarding]'); if (!a || ordersCount() > 0 || isOnboarded() || (ob && !ob.closest('[hidden]'))) return;
+    var a = $('#kx-account'), ob = $('[data-onboarding]'); if (!a || isOnboarded() || (ob && !ob.closest('[hidden]'))) return;
     try { if (sessionStorage.getItem('kx_ob_asked')) return; sessionStorage.setItem('kx_ob_asked', '1'); } catch (e) { return; }
     var l = $('[data-kx-onb]', a); if (l && l.getAttribute('href')) window.location.href = l.getAttribute('href');
   }
@@ -24796,13 +24964,14 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     var root = $('[data-onboarding]'); if (!root) return;
     var form = $('[data-ob-form]', root), welcome = $('[data-ob-welcome]', root), err = $('[data-ob-error]', form);
     var steps = $$('[data-ob-step]', form), dots = $$('.ob-dots li', form), nextB = $('[data-ob-next]', form), prevB = $('[data-ob-prev]', form), saveB = $('[data-ob-save]', form);
-    var fields = $$('[data-ob]', form), acs = $$('[data-ob-allergy]', form), dts = $$('[data-ob-diet]', form);
+    var fields = $$('[data-ob]', form), acs = $$('[data-ob-allergy]', form), dts = $$('[data-ob-diet]', form), grps = $$('[data-ob-group]', form), cons = $$('[data-ob-consent]', form);
     var cn = root.getAttribute('data-customer-name'), ce = root.getAttribute('data-customer-email');
     var f0 = readFunnel(), info = f0.info || {}, prof = loadProfile(), step = 0;
     if (ce && !info.email) info.email = ce; if (cn && !info.name) info.name = cn;
     fields.forEach(function (x) { x.value = info[x.getAttribute('data-ob')] || ''; });
     acs.forEach(function (c) { c.checked = (f0.allergies || prof.allergies || []).map(norm).indexOf(norm(c.value)) > -1; });
     dts.forEach(function (c) { c.checked = (prof.diets || []).map(norm).indexOf(norm(c.value)) > -1; });
+    grps.forEach(function (c) { c.checked = String(info[c.getAttribute('data-ob-group')] || '').split(', ').indexOf(c.value) > -1; });
     var show = function () {
       steps.forEach(function (s, k) { s.classList.toggle('is-on', k === step); }); dots.forEach(function (d, k) { d.classList.toggle('is-on', k <= step); });
       prevB.hidden = step === 0; nextB.hidden = step === steps.length - 1; saveB.hidden = step !== steps.length - 1;
@@ -24813,22 +24982,31 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     var done = isOnboarded();
     var edit = /[?&]edit=1/.test(location.search + '&' + (location.hash.split('?')[1] || ''));
     var forward = function () {                       // paying customers skip the questionnaire and go straight to choosing their week
-      if (root.closest('[hidden]') || !ce || /[?&]edit=1/.test(location.search + '&' + (location.hash.split('?')[1] || '')) || ordersCount() === 0) return false;
+      if (root.closest('[hidden]') || !ce || /[?&]edit=1/.test(location.search + '&' + (location.hash.split('?')[1] || '')) || ordersCount() === 0 || !isOnboarded()) return false;
       var wl = $('[data-ob-week]', root); if (wl && wl.getAttribute('href')) { window.location.href = wl.getAttribute('href'); return true; } return false;
     };
     window.addEventListener('hashchange', function () { setTimeout(forward, 60); });
     if (forward()) return;
     if (done && !edit && ce) { form.hidden = true; welcome.hidden = false; hello(); }
+    var stepOk = function (k) {
+      if (k === 0 && !(val('name') && /.+@.+/.test(val('email')) && val('phone'))) { say(root.getAttribute('data-t-need')); return false; }
+      if (k === 1 && !(val('street') && val('cluster') && val('city') && val('zip'))) { say(root.getAttribute('data-t-need-addr')); return false; }
+      return true;
+    };
     nextB.addEventListener('click', function () {
-      if (step === 0 && !(val('name') && /.+@.+/.test(val('email')) && val('phone'))) { say(root.getAttribute('data-t-need')); return; }
+      if (!stepOk(step)) return;
       say(''); step = Math.min(steps.length - 1, step + 1); show();
     });
     prevB.addEventListener('click', function () { step = Math.max(0, step - 1); show(); });
     var editB = $('[data-ob-edit]', root); if (editB) editB.addEventListener('click', function () { welcome.hidden = true; form.hidden = false; step = 0; show(); });
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (!(val('name') && /.+@.+/.test(val('email')) && val('phone'))) { step = 0; show(); say(root.getAttribute('data-t-need')); return; }
+      for (var sk = 0; sk < 2; sk++) { if (!stepOk(sk)) { step = sk; show(); return; } }
+      if (cons.length && !cons.every(function (c) { return c.checked; })) { step = steps.length - 1; show(); say(root.getAttribute('data-t-need-consent')); return; }
       var f = readFunnel(); f.v = 2; f.info = f.info || {}; fields.forEach(function (x) { f.info[x.getAttribute('data-ob')] = x.value.trim(); });
+      var gnames = {}; grps.forEach(function (c) { var g = c.getAttribute('data-ob-group'); gnames[g] = gnames[g] || []; if (c.checked) gnames[g].push(c.value); }); Object.keys(gnames).forEach(function (g) { f.info[g] = gnames[g].join(', '); });
+      f.info.consent = new Date().toISOString().slice(0, 10);
+      if (f.info.ref) { try { localStorage.setItem('kulinaria_ref', f.info.ref); } catch (x) {} }
       f.allergies = acs.filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
       var other = val('allergy_other').split(',').map(function (v) { return v.trim(); }).filter(Boolean);
       var p = loadProfile(); p.allergies = Array.from(new Set(f.allergies.concat(other))); p.dislikes = val('dislikes').split(',').map(function (v) { return v.trim(); }).filter(Boolean);
@@ -24854,6 +25032,15 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       st.rulesOk = false;                                         // read from its own key only (never from the saved selection)
       try { if (localStorage.getItem(RULES_KEY)) st.rulesOk = true; } catch (e) {}
       st.sv = 4;
+      // steps 1 and 2 before the builder: sign in, then the questionnaire (shown until both are done; the local preview can skip it for tests)
+      var gate = $('[data-fn-gate]', holder), signedIn = !!$('#kx-account'), onbDone = isOnboarded(), skipGate = false;
+      try { skipGate = location.protocol === 'file:' && localStorage.getItem('kx-test-gate') !== '1'; } catch (e) {}
+      if (gate && !skipGate && (!signedIn || !onbDone)) {
+        gate.hidden = false; holder.classList.add('is-gated');
+        var g1 = $('[data-fn-gate-s1]', gate), g2 = $('[data-fn-gate-s2]', gate);
+        g1.classList.toggle('is-done', signedIn); g2.classList.toggle('is-done', signedIn && onbDone); g2.classList.toggle('is-wait', !signedIn);
+        var a1 = $('[data-fn-gate-a1]', gate), a2 = $('[data-fn-gate-a2]', gate); if (a1) a1.hidden = signedIn; if (a2) a2.hidden = !signedIn || onbDone;
+      }
       var startAtPlan = false; try { startAtPlan = location.protocol === 'file:' && !!sessionStorage.getItem('kx-test-start') && !!st.rulesOk; } catch (e) {}   // local preview only (test hook)
       st.step = startAtPlan ? 1 : 0;
       var REACH_KEY = 'kx_reach';
@@ -24894,6 +25081,9 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       if (!st.cardNotes || typeof st.cardNotes !== 'object') st.cardNotes = {};
       var cardNote = function (pid) { return st.cardNotes[pid] || (st.cardNotes[pid] = { off: [], note: '' }); };
       var syncCardToDay = function (pid, day) { var c = st.cardNotes[pid]; if (c && (c.off.length || c.note)) st.mods[day] = { off: c.off.slice(), note: c.note }; };
+      var closeNotes = function (except) { $$('[data-fn-note].is-open', holder).forEach(function (b) { if (b === except) return; var p = $('[data-fn-note-box]', b); if (p) p.hidden = true; b.classList.remove('is-open'); }); };
+      document.addEventListener('click', function (e) { closeNotes(e.target.closest ? e.target.closest('[data-fn-note]') : null); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeNotes(null); });
       var buildNotes = function () {
         $$('[data-fn-note]', holder).forEach(function (box) {
           if (box.getAttribute('data-built')) return; box.setAttribute('data-built', '1');
@@ -24906,6 +25096,8 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           });
           inp.value = c0.note || '';
           inp.addEventListener('input', function () { cardNote(pid).note = inp.value; if (st.days[st.active] === pid) syncCardToDay(pid, st.active); persist(); render(); });
+          var dn = document.createElement('button'); dn.type = 'button'; dn.className = 'fn-note__done'; dn.textContent = T_('mods-done');
+          dn.addEventListener('click', function (e) { e.stopPropagation(); pane.hidden = true; box.classList.remove('is-open'); }); pane.appendChild(dn);
           t.addEventListener('click', function (e) { e.stopPropagation(); pane.hidden = !pane.hidden; box.classList.toggle('is-open', !pane.hidden); });
           box.addEventListener('click', function (e) { e.stopPropagation(); });
         });
@@ -25262,7 +25454,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var list = dishes.filter(function (d) { return st.qty[d.getAttribute('data-pid')]; }).map(function (d) { return st.qty[d.getAttribute('data-pid')] + '× ' + d.getAttribute('data-title'); }).join(' | ');
         var cl = function (k) { return (i[k] || '').trim(); };
         var attrs = {
-          nombre: i.name, correo: i.email, telefono: i.phone, direccion: [i.street, i.cluster, i.zip].filter(Boolean).join(', '), calle: cl('street'), cluster: cl('cluster'), cp: cl('zip'),
+          nombre: i.name, correo: i.email, telefono: i.phone, direccion: [i.street, i.num, i.cluster, i.city, i.zip].filter(Boolean).join(', ') + (i.refs ? ' · ' + i.refs : '') + (i.access ? ' · ' + i.access : ''), calle: cl('street'), cluster: cl('cluster'), cp: cl('zip'),
           dias: st.days.map(function (q, k) { var d = byPid(q); return (dayNames[k] || k + 1) + ': ' + (d ? d.getAttribute('data-title') : ''); }).join(' | '),
           alergias: (p.allergies || []).join(', '), no_me_gustan: (p.dislikes || []).join(', '), dietas: (p.diets || []).join(', '), alerta_alergias: warned.join(' | '),
           plan: st.plan, nivel: st.tier, pedido_embudo: list

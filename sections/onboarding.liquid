@@ -6,7 +6,7 @@
 -%}
 <section class="section onboarding" data-onboarding data-next-url="{{ section.settings.next_url | default: '/pages/pedido' }}"
   {%- if customer %} data-customer-name="{{ customer.name | escape }}" data-customer-email="{{ customer.email | escape }}"{% endif %}
-  data-t-welcome="{{ 'onboarding.welcome' | t }}" data-t-need="{{ 'onboarding.need' | t }}" {{ section.shopify_attributes }}>
+  data-t-welcome="{{ 'onboarding.welcome' | t }}" data-t-need-addr="{{ 'onboarding.ob_need_addr' | t }}" data-t-need-consent="{{ 'onboarding.ob_need_consent' | t }}" data-t-need="{{ 'onboarding.need' | t }}" {{ section.shopify_attributes }}>
   <div class="container" style="max-width:820px">
     <a hidden tabindex="-1" aria-hidden="true" data-ob-week href="/pages/cuenta-semana"></a>
     {%- unless customer -%}
@@ -34,7 +34,7 @@
       <p class="eyebrow">{{ 'onboarding.eyebrow' | t }}</p>
       <h2>{{ 'onboarding.title' | t }}</h2>
       <p class="text-muted">{{ 'onboarding.text' | t }}</p>
-      <ol class="ob-dots" aria-hidden="true"><li class="is-on">1</li><li>2</li><li>3</li></ol>
+      <ol class="ob-dots" aria-hidden="true"><li class="is-on">1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li></ol>
 
       <fieldset class="step is-on" data-ob-step="1">
         <legend>{{ 'onboarding.s1' | t }}</legend>
@@ -42,6 +42,7 @@
           <div class="field"><label for="ob-name">{{ 'form.full_name' | t }}</label><input class="input" id="ob-name" data-ob="name" autocomplete="name"></div>
           <div class="field"><label for="ob-email">{{ 'form.email' | t }}</label><input class="input" id="ob-email" type="email" data-ob="email" autocomplete="email"></div>
           <div class="field"><label for="ob-phone">{{ 'form.phone_whatsapp' | t }}</label><input class="input" id="ob-phone" type="tel" data-ob="phone" autocomplete="tel"></div>
+          <div class="field"><label for="ob-birth">{{ 'onboarding.ob_birth' | t }}</label><input class="input" id="ob-birth" type="date" data-ob="birth" autocomplete="bday"></div>
         </div>
       </fieldset>
 
@@ -49,13 +50,30 @@
         <legend>{{ 'onboarding.s2' | t }}</legend>
         <div class="form-grid">
           <div class="field"><label for="ob-street">{{ 'addr.street' | t }}</label><input class="input" id="ob-street" data-ob="street" autocomplete="address-line1"></div>
+          <div class="field"><label for="ob-num">{{ 'onboarding.ob_num' | t }}</label><input class="input" id="ob-num" data-ob="num" autocomplete="address-line2"></div>
           <div class="field"><label for="ob-cluster">{{ 'addr.cluster' | t }}</label><input class="input" id="ob-cluster" data-ob="cluster"></div>
-          <div class="field"><label for="ob-zip">{{ 'addr.zip' | t }}</label><input class="input" id="ob-zip" data-ob="zip" autocomplete="postal-code"></div>
+          <div class="field"><label for="ob-city">{{ 'onboarding.ob_city' | t }}</label><input class="input" id="ob-city" data-ob="city" autocomplete="address-level2"></div>
+          <div class="field"><label for="ob-zip">{{ 'addr.zip' | t }}</label><input class="input" id="ob-zip" data-ob="zip" autocomplete="postal-code" inputmode="numeric"></div>
+          <div class="field"><label for="ob-window">{{ 'onboarding.ob_window' | t }}</label><select class="select" id="ob-window" data-ob="window"><option value="">{{ 'onboarding.ob_pick' | t }}</option><option value="any">{{ 'onboarding.ob_w_any' | t }}</option><option value="am">{{ 'onboarding.ob_w_am' | t }}</option><option value="pm">{{ 'onboarding.ob_w_pm' | t }}</option><option value="eve">{{ 'onboarding.ob_w_eve' | t }}</option></select></div>
         </div>
+        <div class="field"><label for="ob-refs">{{ 'onboarding.ob_refs' | t }}</label><input class="input" id="ob-refs" data-ob="refs"></div>
+        <div class="field"><label for="ob-access">{{ 'onboarding.ob_access' | t }}</label><input class="input" id="ob-access" data-ob="access"></div>
       </fieldset>
 
       <fieldset class="step" data-ob-step="3">
         <legend>{{ 'onboarding.s3' | t }}</legend>
+        <p class="label">{{ 'onboarding.ob_people' | t }}</p>
+        <div class="form-grid">
+          <div class="field"><label for="ob-adults">{{ 'onboarding.ob_adults' | t }}</label><input class="input" id="ob-adults" type="number" min="1" max="12" inputmode="numeric" data-ob="adults" value="1"></div>
+          <div class="field"><label for="ob-kids">{{ 'onboarding.ob_kids' | t }}</label><input class="input" id="ob-kids" type="number" min="0" max="12" inputmode="numeric" data-ob="kids" value="0"></div>
+        </div>
+        <p class="legal-note">{{ 'onboarding.ob_people_note' | t }}</p>
+        <p class="label">{{ 'onboarding.ob_meals' | t }}</p>
+        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-group="meals" value="desayunos"> <span>{{ 'onboarding.ob_m_b' | t }}</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="comidas"> <span>{{ 'onboarding.ob_m_l' | t }}</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="cenas"> <span>{{ 'onboarding.ob_m_d' | t }}</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="snacks"> <span>{{ 'onboarding.ob_m_s' | t }}</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="postres"> <span>{{ 'onboarding.ob_m_p' | t }}</span></label></div>
+      </fieldset>
+
+      <fieldset class="step" data-ob-step="4">
+        <legend>{{ 'onboarding.s4' | t }}</legend>
         <p class="label">{{ 'profile.block1' | t }}</p>
         <div class="check-grid">
           {%- for a in allergy_list -%}{%- assign ah = a | handleize -%}{%- assign ak = 'allergen.' | append: ah -%}
@@ -65,14 +83,40 @@
         <div class="field"><label for="ob-other">{{ 'profile.other_allergies' | t }}</label>
           <input class="input" id="ob-other" data-ob="allergy_other" list="ob-allergy-list" placeholder="{{ 'profile.other_placeholder' | t }}">
           <datalist id="ob-allergy-list">{%- for a in allergy_more -%}<option value="{{ a }}"></option>{%- endfor -%}</datalist></div>
-        <div class="field"><label for="ob-dis">{{ 'profile.block2' | t }}</label><input class="input" id="ob-dis" data-ob="dislikes" placeholder="{{ 'profile.tag_placeholder' | t }}"></div>
+        <div class="field"><label for="ob-severity">{{ 'onboarding.ob_sev' | t }}</label><select class="select" id="ob-severity" data-ob="severity"><option value="">{{ 'onboarding.ob_pick' | t }}</option><option value="leve">{{ 'onboarding.ob_sev_1' | t }}</option><option value="fuerte">{{ 'onboarding.ob_sev_2' | t }}</option><option value="anafilaxia">{{ 'onboarding.ob_sev_3' | t }}</option></select></div>
+        <p class="label">{{ 'onboarding.ob_cond' | t }}</p>
+        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-group="conditions" value="diabetes"> <span>{{ 'onboarding.ob_c_dia' | t }}</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="hipertension"> <span>{{ 'onboarding.ob_c_hyp' | t }}</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="celiaquia"> <span>{{ 'onboarding.ob_c_cel' | t }}</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="embarazo"> <span>{{ 'onboarding.ob_c_pre' | t }}</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="colesterol"> <span>{{ 'onboarding.ob_c_col' | t }}</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="ninguna"> <span>{{ 'onboarding.ob_c_none' | t }}</span></label></div>
+        <p class="legal-note">{{ tx_disclaimer }}</p>
+      </fieldset>
+
+      <fieldset class="step" data-ob-step="5">
+        <legend>{{ 'onboarding.s5' | t }}</legend>
         <p class="label">{{ 'profile.diets' | t }}</p>
         <div class="check-grid">
           {%- for d in diet_list -%}{%- assign dh = d | handleize -%}{%- assign dk = 'diet.' | append: dh -%}
             <label class="check"><input type="checkbox" data-ob-diet value="{{ d }}"> <span>{{ dk | t }}</span></label>
           {%- endfor -%}
+          <label class="check"><input type="checkbox" data-ob-diet value="Bajo en carbohidratos"> <span>{{ 'onboarding.ob_d_lowcarb' | t }}</span></label>
+          <label class="check"><input type="checkbox" data-ob-diet value="Alto en proteína"> <span>{{ 'onboarding.ob_d_protein' | t }}</span></label>
         </div>
-        <p class="legal-note">{{ tx_disclaimer }}</p>
+        <div class="field"><label for="ob-dis">{{ 'profile.block2' | t }}</label><input class="input" id="ob-dis" data-ob="dislikes" placeholder="{{ 'profile.tag_placeholder' | t }}"></div>
+        <div class="form-grid">
+          <div class="field"><label for="ob-goal">{{ 'onboarding.ob_goal' | t }}</label><select class="select" id="ob-goal" data-ob="goal"><option value="">{{ 'onboarding.ob_pick' | t }}</option><option value="mejor">{{ 'onboarding.ob_g_any' | t }}</option><option value="bajar">{{ 'onboarding.ob_g_lose' | t }}</option><option value="musculo">{{ 'onboarding.ob_g_gain' | t }}</option><option value="mantener">{{ 'onboarding.ob_g_keep' | t }}</option><option value="deporte">{{ 'onboarding.ob_g_sport' | t }}</option></select></div>
+          <div class="field"><label for="ob-kcal">{{ 'onboarding.ob_kcal' | t }}</label><input class="input" id="ob-kcal" type="number" min="800" max="6000" inputmode="numeric" data-ob="kcal"></div>
+          <div class="field"><label for="ob-spice">{{ 'onboarding.ob_spice' | t }}</label><select class="select" id="ob-spice" data-ob="spice"><option value="">{{ 'onboarding.ob_pick' | t }}</option><option value="0">{{ 'onboarding.ob_sp_0' | t }}</option><option value="1">{{ 'onboarding.ob_sp_1' | t }}</option><option value="2">{{ 'onboarding.ob_sp_2' | t }}</option><option value="3">{{ 'onboarding.ob_sp_3' | t }}</option></select></div>
+        </div>
+      </fieldset>
+
+      <fieldset class="step" data-ob-step="6">
+        <legend>{{ 'onboarding.s6' | t }}</legend>
+        <div class="form-grid">
+          <div class="field"><label for="ob-ref">{{ 'onboarding.ob_ref' | t }}</label><input class="input" id="ob-ref" data-ob="ref" autocapitalize="characters"></div>
+          <div class="field"><label for="ob-heard">{{ 'onboarding.ob_heard' | t }}</label><select class="select" id="ob-heard" data-ob="heard"><option value="">{{ 'onboarding.ob_pick' | t }}</option><option value="instagram">{{ 'onboarding.ob_h_ig' | t }}</option><option value="amigos">{{ 'onboarding.ob_h_friend' | t }}</option><option value="gym">{{ 'onboarding.ob_h_gym' | t }}</option><option value="web">{{ 'onboarding.ob_h_web' | t }}</option><option value="otro">{{ 'onboarding.ob_h_other' | t }}</option></select></div>
+          <div class="field"><label for="ob-contact">{{ 'onboarding.ob_contact' | t }}</label><select class="select" id="ob-contact" data-ob="contact"><option value="">{{ 'onboarding.ob_pick' | t }}</option><option value="correo">{{ 'onboarding.ob_ct_mail' | t }}</option><option value="whatsapp">{{ 'onboarding.ob_ct_wa' | t }}</option><option value="ambos">{{ 'onboarding.ob_ct_both' | t }}</option></select></div>
+        </div>
+        <label class="check"><input type="checkbox" data-ob-consent> <span>{{ 'onboarding.ob_c1' | t }}</span></label>
+        <label class="check"><input type="checkbox" data-ob-consent> <span>{{ 'onboarding.ob_c2' | t }}</span></label>
+        <label class="check"><input type="checkbox" data-ob-consent> <span>{{ 'onboarding.ob_c3' | t }}</span></label>
       </fieldset>
 
       <p class="alert alert--warn" data-ob-error hidden role="alert"></p>

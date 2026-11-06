@@ -656,7 +656,7 @@
   // A brand-new account (no orders, no saved profile) is taken to the questionnaire right after signing in, once per visit.
   // Existing paying customers are never interrupted: they go straight to choosing their week.
   function guardOnboarding() {
-    var a = $('#kx-account'), ob = $('[data-onboarding]'); if (!a || ordersCount() > 0 || isOnboarded() || (ob && !ob.closest('[hidden]'))) return;
+    var a = $('#kx-account'), ob = $('[data-onboarding]'); if (!a || isOnboarded() || (ob && !ob.closest('[hidden]'))) return;
     try { if (sessionStorage.getItem('kx_ob_asked')) return; sessionStorage.setItem('kx_ob_asked', '1'); } catch (e) { return; }
     var l = $('[data-kx-onb]', a); if (l && l.getAttribute('href')) window.location.href = l.getAttribute('href');
   }
@@ -997,13 +997,14 @@
     var root = $('[data-onboarding]'); if (!root) return;
     var form = $('[data-ob-form]', root), welcome = $('[data-ob-welcome]', root), err = $('[data-ob-error]', form);
     var steps = $$('[data-ob-step]', form), dots = $$('.ob-dots li', form), nextB = $('[data-ob-next]', form), prevB = $('[data-ob-prev]', form), saveB = $('[data-ob-save]', form);
-    var fields = $$('[data-ob]', form), acs = $$('[data-ob-allergy]', form), dts = $$('[data-ob-diet]', form);
+    var fields = $$('[data-ob]', form), acs = $$('[data-ob-allergy]', form), dts = $$('[data-ob-diet]', form), grps = $$('[data-ob-group]', form), cons = $$('[data-ob-consent]', form);
     var cn = root.getAttribute('data-customer-name'), ce = root.getAttribute('data-customer-email');
     var f0 = readFunnel(), info = f0.info || {}, prof = loadProfile(), step = 0;
     if (ce && !info.email) info.email = ce; if (cn && !info.name) info.name = cn;
     fields.forEach(function (x) { x.value = info[x.getAttribute('data-ob')] || ''; });
     acs.forEach(function (c) { c.checked = (f0.allergies || prof.allergies || []).map(norm).indexOf(norm(c.value)) > -1; });
     dts.forEach(function (c) { c.checked = (prof.diets || []).map(norm).indexOf(norm(c.value)) > -1; });
+    grps.forEach(function (c) { c.checked = String(info[c.getAttribute('data-ob-group')] || '').split(', ').indexOf(c.value) > -1; });
     var show = function () {
       steps.forEach(function (s, k) { s.classList.toggle('is-on', k === step); }); dots.forEach(function (d, k) { d.classList.toggle('is-on', k <= step); });
       prevB.hidden = step === 0; nextB.hidden = step === steps.length - 1; saveB.hidden = step !== steps.length - 1;
@@ -1014,22 +1015,31 @@
     var done = isOnboarded();
     var edit = /[?&]edit=1/.test(location.search + '&' + (location.hash.split('?')[1] || ''));
     var forward = function () {                       // paying customers skip the questionnaire and go straight to choosing their week
-      if (root.closest('[hidden]') || !ce || /[?&]edit=1/.test(location.search + '&' + (location.hash.split('?')[1] || '')) || ordersCount() === 0) return false;
+      if (root.closest('[hidden]') || !ce || /[?&]edit=1/.test(location.search + '&' + (location.hash.split('?')[1] || '')) || ordersCount() === 0 || !isOnboarded()) return false;
       var wl = $('[data-ob-week]', root); if (wl && wl.getAttribute('href')) { window.location.href = wl.getAttribute('href'); return true; } return false;
     };
     window.addEventListener('hashchange', function () { setTimeout(forward, 60); });
     if (forward()) return;
     if (done && !edit && ce) { form.hidden = true; welcome.hidden = false; hello(); }
+    var stepOk = function (k) {
+      if (k === 0 && !(val('name') && /.+@.+/.test(val('email')) && val('phone'))) { say(root.getAttribute('data-t-need')); return false; }
+      if (k === 1 && !(val('street') && val('cluster') && val('city') && val('zip'))) { say(root.getAttribute('data-t-need-addr')); return false; }
+      return true;
+    };
     nextB.addEventListener('click', function () {
-      if (step === 0 && !(val('name') && /.+@.+/.test(val('email')) && val('phone'))) { say(root.getAttribute('data-t-need')); return; }
+      if (!stepOk(step)) return;
       say(''); step = Math.min(steps.length - 1, step + 1); show();
     });
     prevB.addEventListener('click', function () { step = Math.max(0, step - 1); show(); });
     var editB = $('[data-ob-edit]', root); if (editB) editB.addEventListener('click', function () { welcome.hidden = true; form.hidden = false; step = 0; show(); });
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (!(val('name') && /.+@.+/.test(val('email')) && val('phone'))) { step = 0; show(); say(root.getAttribute('data-t-need')); return; }
+      for (var sk = 0; sk < 2; sk++) { if (!stepOk(sk)) { step = sk; show(); return; } }
+      if (cons.length && !cons.every(function (c) { return c.checked; })) { step = steps.length - 1; show(); say(root.getAttribute('data-t-need-consent')); return; }
       var f = readFunnel(); f.v = 2; f.info = f.info || {}; fields.forEach(function (x) { f.info[x.getAttribute('data-ob')] = x.value.trim(); });
+      var gnames = {}; grps.forEach(function (c) { var g = c.getAttribute('data-ob-group'); gnames[g] = gnames[g] || []; if (c.checked) gnames[g].push(c.value); }); Object.keys(gnames).forEach(function (g) { f.info[g] = gnames[g].join(', '); });
+      f.info.consent = new Date().toISOString().slice(0, 10);
+      if (f.info.ref) { try { localStorage.setItem('kulinaria_ref', f.info.ref); } catch (x) {} }
       f.allergies = acs.filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
       var other = val('allergy_other').split(',').map(function (v) { return v.trim(); }).filter(Boolean);
       var p = loadProfile(); p.allergies = Array.from(new Set(f.allergies.concat(other))); p.dislikes = val('dislikes').split(',').map(function (v) { return v.trim(); }).filter(Boolean);
@@ -1055,6 +1065,15 @@
       st.rulesOk = false;                                         // read from its own key only (never from the saved selection)
       try { if (localStorage.getItem(RULES_KEY)) st.rulesOk = true; } catch (e) {}
       st.sv = 4;
+      // steps 1 and 2 before the builder: sign in, then the questionnaire (shown until both are done; the local preview can skip it for tests)
+      var gate = $('[data-fn-gate]', holder), signedIn = !!$('#kx-account'), onbDone = isOnboarded(), skipGate = false;
+      try { skipGate = location.protocol === 'file:' && localStorage.getItem('kx-test-gate') !== '1'; } catch (e) {}
+      if (gate && !skipGate && (!signedIn || !onbDone)) {
+        gate.hidden = false; holder.classList.add('is-gated');
+        var g1 = $('[data-fn-gate-s1]', gate), g2 = $('[data-fn-gate-s2]', gate);
+        g1.classList.toggle('is-done', signedIn); g2.classList.toggle('is-done', signedIn && onbDone); g2.classList.toggle('is-wait', !signedIn);
+        var a1 = $('[data-fn-gate-a1]', gate), a2 = $('[data-fn-gate-a2]', gate); if (a1) a1.hidden = signedIn; if (a2) a2.hidden = !signedIn || onbDone;
+      }
       var startAtPlan = false; try { startAtPlan = location.protocol === 'file:' && !!sessionStorage.getItem('kx-test-start') && !!st.rulesOk; } catch (e) {}   // local preview only (test hook)
       st.step = startAtPlan ? 1 : 0;
       var REACH_KEY = 'kx_reach';
@@ -1468,7 +1487,7 @@
         var list = dishes.filter(function (d) { return st.qty[d.getAttribute('data-pid')]; }).map(function (d) { return st.qty[d.getAttribute('data-pid')] + '× ' + d.getAttribute('data-title'); }).join(' | ');
         var cl = function (k) { return (i[k] || '').trim(); };
         var attrs = {
-          nombre: i.name, correo: i.email, telefono: i.phone, direccion: [i.street, i.cluster, i.zip].filter(Boolean).join(', '), calle: cl('street'), cluster: cl('cluster'), cp: cl('zip'),
+          nombre: i.name, correo: i.email, telefono: i.phone, direccion: [i.street, i.num, i.cluster, i.city, i.zip].filter(Boolean).join(', ') + (i.refs ? ' · ' + i.refs : '') + (i.access ? ' · ' + i.access : ''), calle: cl('street'), cluster: cl('cluster'), cp: cl('zip'),
           dias: st.days.map(function (q, k) { var d = byPid(q); return (dayNames[k] || k + 1) + ': ' + (d ? d.getAttribute('data-title') : ''); }).join(' | '),
           alergias: (p.allergies || []).join(', '), no_me_gustan: (p.dislikes || []).join(', '), dietas: (p.diets || []).join(', '), alerta_alergias: warned.join(' | '),
           plan: st.plan, nivel: st.tier, pedido_embudo: list

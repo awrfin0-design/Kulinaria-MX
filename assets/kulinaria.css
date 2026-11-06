@@ -3069,3 +3069,24 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
 .funnel .fn-dishes,.funnel .fn-showcase,.funnel .fn-rules__rail,.funnel .fn-week{overscroll-behavior:contain auto !important}
 .fn-note__done{justify-self:end;border:0;border-radius:999px;background:var(--accent);color:#fff;font:700 .66rem var(--font-label);letter-spacing:.1em;text-transform:uppercase;padding:7px 16px;cursor:pointer}
 @media (max-width:760px){.fn-note__done{padding:11px 20px;font-size:.74rem}}
+
+/* =====================================================================
+   v69 — steps 1 and 2 before the builder: account + questionnaire
+   ===================================================================== */
+.fn-gate{display:grid;gap:12px;padding:clamp(18px,3vw,34px);border:1px solid var(--border-accent);border-radius:22px;background:var(--accent-wash);margin-block:12px}
+.fn-gate[hidden]{display:none}
+.fn-gate h3{margin:0;font-size:clamp(1.3rem,2.6vw,1.9rem)}
+.fn-gate__p{margin:0;color:var(--text-muted);font-size:.9rem;max-width:60ch}
+.fn-gate__steps{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:12px}
+.fn-gate__steps li{display:grid;grid-template-columns:38px minmax(0,1fr);gap:14px;align-items:start;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:var(--bg-raised)}
+.fn-gate__steps li>b{width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:700 1rem var(--font-label)}
+.fn-gate__steps h4{margin:0 0 8px;font-size:1.05rem}
+.fn-gate__row{display:flex;flex-wrap:wrap;gap:10px}
+.fn-gate__row[hidden]{display:none}
+.fn-gate__ok{display:none;margin:0;color:var(--accent);font-weight:700;font-size:.85rem}
+.fn-gate__steps li.is-done .fn-gate__ok{display:block}
+.fn-gate__steps li.is-done>b{background:var(--ok,#3fa66b)}
+.fn-gate__steps li.is-wait{opacity:.55}
+.funnel.is-gated :is(.funnel__top,.funnel__bar,.funnel__stepcount,.funnel__panel,.fn-returning){display:none !important}
+.ob-dots li{min-width:26px}
+@media (max-width:760px){.fn-gate__steps li{grid-template-columns:32px minmax(0,1fr);gap:10px;padding:14px}.fn-gate__row .btn{flex:1}}
