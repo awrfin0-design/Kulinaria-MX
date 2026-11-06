@@ -2528,3 +2528,57 @@ h3,h4{font-weight:600}
   /* home: the order builder section is one screen (frame + small breathing room) */
   body:not(.template-page-pedido) .funnel:not(.funnel--teaser).section{padding-block:10px 12px;min-height:0}
 }
+
+/* =====================================================================
+   v52 — order builder, desktop: compact dish grid and slim summary, nothing scrolls
+   ===================================================================== */
+.fn-more{flex:none;font-size:.78rem;line-height:1.4;border-top:1px solid var(--line);padding-top:6px}
+.fn-more summary{cursor:pointer;font-family:var(--font-label);font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:.68rem;color:var(--accent);list-style:none;display:flex;justify-content:space-between}
+.fn-more summary::-webkit-details-marker{display:none}.fn-more summary::after{content:'+'}.fn-more[open] summary::after{content:'–'}
+.fn-more .fn-rec{border:0;background:none;padding:0;margin:4px 0 0}.fn-more .fn-rec p{margin:0 0 4px}
+.fn-more .fn-weeknote{margin:6px 0 0;font-size:.74rem}
+@media (min-width:901px){
+  .funnel .fn-carousel{display:block;overflow:hidden}
+  .funnel .fn-arrow{display:none !important}
+  .funnel .fn-dishes{display:grid !important;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));grid-auto-rows:68px;gap:8px;overflow:hidden;align-content:start;scroll-snap-type:none;padding:2px 0;height:100%}
+  .funnel .fn-dish{flex:none !important;height:68px !important;display:grid !important;grid-template-columns:68px minmax(0,1fr);grid-template-rows:1fr;border-radius:12px;overflow:hidden;position:relative}
+  .funnel .fn-dish__media{grid-column:1;grid-row:1;height:68px !important;min-height:0;width:68px !important}
+  .funnel .fn-dish__media img{width:68px;height:68px;object-fit:cover}
+  .funnel .fn-dish>.fn-up{position:absolute;left:0;bottom:0;width:68px;margin:0;font-size:.6rem;text-align:center;background:rgba(0,0,0,.72);color:#fff;padding:1px 0}
+  .funnel .fn-dish__body{grid-column:2;grid-row:1;display:flex;flex-direction:column;justify-content:space-between;padding:5px 8px 5px !important;gap:0 !important;min-width:0}
+  .funnel .fn-dish .tier-badge,.funnel .fn-dish .dish__facts,.funnel .fn-dish .fn-warn:not(:empty){display:none !important}
+  .funnel .fn-dish .fn-warn:not([hidden]){display:block !important;font-size:.62rem}
+  .funnel .fn-dish__title{font-size:.8rem;line-height:1.15;-webkit-line-clamp:2;margin:0}
+  .funnel .fn-dish__row{margin:0;gap:6px;justify-content:space-between;align-items:center}
+  .funnel .fn-dish .dish__price{font-size:.9rem;white-space:nowrap}.funnel .fn-dish .dish__price small{display:none}
+  .funnel .fn-dish .btn--sm{min-height:26px;padding:0 12px;font-size:.68rem;letter-spacing:.06em}
+  .funnel .fn-dish .fn-count{top:2px;left:2px;font-size:.66rem;padding:0 7px}
+  .funnel .fn-week{gap:8px}
+  .funnel .fn-day{min-height:54px}
+  .funnel .funnel__main{overflow:hidden}
+  .funnel .funnel__aside{overflow:hidden}
+  .funnel .funnel__aside .funnel__list{scrollbar-width:none}.funnel .funnel__aside .funnel__list::-webkit-scrollbar{display:none}
+  .funnel .funnel__aside .fn-cut{font-size:.74rem;margin:0}
+  .funnel .funnel__aside .funnel__facts{font-size:.8rem}
+  .funnel .funnel__aside .funnel__facts div{padding:2px 0}
+  .funnel .funnel__aside .funnel__total strong{font-size:1.35rem}
+}
+
+.fn-s-item{cursor:pointer}.fn-s-ing{display:none}.fn-s-item.is-open .fn-s-ing{display:block}.fn-s-item.is-open .fn-s-ing:empty{display:none}
+
+/* v52 — step 1 on short desktop screens: compact plan cards, tutorial opens as a panel over the step (no scrolling) */
+@media (min-width:901px){
+  .funnel .step[data-fn-step="1"]{position:relative}
+  .funnel .fn-how[open]{position:absolute;left:0;right:0;bottom:0;z-index:6;margin:0;background:var(--bg-raised,#1a1a1a);box-shadow:0 -18px 40px rgba(0,0,0,.45)}
+  .funnel .fn-how[open] .fn-how__list{grid-template-columns:1fr 1fr;gap:8px 22px}
+  .funnel .fn-how__list li{font-size:.8rem}
+  .funnel .fn-how__ex{margin-top:8px;padding:6px 10px;font-size:.78rem}
+}
+@media (min-width:901px) and (max-height:780px){
+  .funnel .step[data-fn-step="1"] .fn-plan>small{display:none}
+  .funnel .step[data-fn-step="1"] .fn-plan{gap:4px;padding-block:12px}
+  .funnel .step[data-fn-step="1"] .fn-plan strong{font-size:1.15rem}
+  .funnel .step[data-fn-step="1"] .fn-plan__from{font-size:1.3rem}
+  .funnel .step[data-fn-step="1"] .fn-credit{padding:8px 12px;font-size:.82rem}
+  .funnel .step[data-fn-step="1"] .fn-credit .btn{padding:8px 16px}
+}

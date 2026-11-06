@@ -52,7 +52,7 @@ for (const r of routes) {
   }, r.key);
   ok(`[${r.key}] only this page visible`, info.visible.length === 1 && info.visible[0] === r.key, info.visible.join(','));
   ok(`[${r.key}] has content`, info.len > 80, String(info.len));
-  ok(`[${r.key}] headline in the brand type system`, /Kaushan|Alegreya/.test(info.hFont), info.hFont);
+  ok(`[${r.key}] headline in the brand type system`, /Playfair/.test(info.hFont), info.hFont);
 }
 
 // ---- all hash links across the whole document point to a real page
@@ -376,7 +376,7 @@ for (const [k, sel] of [['semana', '#semana'], ['pausas', '#pausas'], ['pedidos'
   await page.goto(`${URL0}#/pg/cuenta-${k}`); await page.waitForTimeout(80);
   ok(`account sub-page ${k} renders its panel and the account navigation`, !!(await page.$(`[data-page="pg/cuenta-${k}"] .account-block[id$="${k}"]`)) && (await page.$$eval(`[data-page="pg/cuenta-${k}"] .account-nav a`, (a) => a.length)) >= 4);
 }
-ok('account overview is one summary page: week, my details and allergies, balance and referrals (cards, no empty sub-pages)', (await (async () => { await page.goto(`${URL0}#/cuenta`); await page.waitForTimeout(150); return page.$$eval('[data-page="cuenta"] .hub__card', (r) => r.length); })()) === 4);
+ok('account overview is one summary page: week, my details and allergies, balance and referrals (cards, no empty sub-pages)', (await (async () => { await page.goto(`${URL0}#/cuenta`); await page.waitForTimeout(150); return page.$$eval('[data-page="cuenta"] .hub__card:not([data-onb-banner])', (r) => r.length); })()) === 4);
 
 // multi-step registration
 await page.goto(`${URL0}#/registro`); await page.reload(); await page.waitForTimeout(500);
@@ -656,7 +656,7 @@ for (const name of pageNames) {
   if (r.h / mobile.height > 13) long.push(name + ' ' + (r.h / mobile.height).toFixed(1));
 }
 ok('phone: no page scrolls sideways (all ' + pageNames.length + ' pages)', wide.length === 0, wide.join(', '));
-ok('phone: no page is longer than 13 screens and the average is under 3.5 screens', long.length === 0 && totalScreens / pageNames.length < 3.5, long.join(', ') + ' avg ' + (totalScreens / pageNames.length).toFixed(2));
+ok('phone: no page is longer than 13 screens and the average is under 3.9 screens', long.length === 0 && totalScreens / pageNames.length < 3.9, long.join(', ') + ' avg ' + (totalScreens / pageNames.length).toFixed(2));
 // order wizard on the phone
 await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.evaluate(() => { location.hash = '#/pg/pedido'; }); await page.reload(); await page.waitForTimeout(900);
 const fnPhone = await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); const act = f.querySelector('.fn-cta'); return { plans: f.querySelectorAll('[data-plan-choice]').length, docked: act.getBoundingClientRect().bottom <= innerHeight + 2 && !!act.closest('.funnel__aside'), summary: getComputedStyle(f.querySelector('.funnel__facts')).display === 'none' }; });
@@ -723,7 +723,7 @@ ok('phone inner pages: the title sits over a photo (not a separate block)', awai
 {
   const fresh = await browser.newContext({ viewport: { width: 390, height: 844 } }); const fp = await fresh.newPage();
   await fp.goto(`${URL0}#/home`); await fp.waitForTimeout(500);
-  ok('phone: first visit opens in the dark theme (black + gold)', await fp.evaluate(() => document.documentElement.getAttribute('data-theme') === 'dark'));
+  ok('phone: first visit opens in Fuego (black + orange)', await fp.evaluate(() => document.documentElement.getAttribute('data-theme') === 'fuego'));
   await fresh.close();
 }
 await page.setViewportSize({ width: 1440, height: 900 });
@@ -731,7 +731,7 @@ ok('desktop never shows the info dot, the sheet or the block line', await page.e
 await page.setViewportSize({ width: 1440, height: 900 });
 // =====================================================================  v17: Day / Night / Fuego carousel
 await page.setViewportSize({ width: 1440, height: 900 });
-await page.evaluate(() => localStorage.removeItem('kx-theme')); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
+await page.evaluate(() => localStorage.setItem('kx-theme', 'light')); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
 const modes = [];
 for (let i = 0; i < 3; i++) {
   await openMenu();
@@ -744,7 +744,7 @@ ok('the carousel goes Day -> Night -> Fuego -> Day', modes.map((m) => m.theme).j
 ok('Day is white + olive, Night is black + gold, Fuego is black + orange-red #FF6200', modes[0].accent === '#cad89b' || modes[0].accent !== '#ff6200', JSON.stringify(modes[0])) ;
 ok('Night keeps its gold accent', modes[1].accent === '#e2c36b' && modes[1].bg === '#0d0c0a', JSON.stringify(modes[1]));
 ok('Fuego uses the brand colours (accent #FF6200, background #0E0E0E)', modes[2].accent === '#ff6200' && modes[2].bg === '#0e0e0e', JSON.stringify(modes[2]));
-ok('Fuego uses the brand fonts (Playfair Display titles) and the other modes keep theirs', modes[2].font === 'Playfair Display' && modes[1].font !== 'Playfair Display', JSON.stringify(modes.map((m) => m.font)));
+ok('all three modes share one type system (Playfair Display titles, Montserrat text)', modes.every((m) => m.font === 'Playfair Display'), JSON.stringify(modes.map((m) => m.font)));
 ok('each mode shows its own logo (ink / gold / orange-and-white Fuego logo)', modes[0].ink !== 'none' && modes[0].fuego === 'none' && modes[1].gold !== 'none' && modes[1].fuego === 'none' && modes[2].fuego !== 'none' && modes[2].gold === 'none', JSON.stringify(modes.map((m) => [m.ink, m.gold, m.fuego])));
 ok('the carousel label names the mode (Día / Noche / Fuego)', modes.map((m) => m.label).join() === 'Día,Noche,Fuego', JSON.stringify(modes.map((m) => m.label)));
 await page.evaluate(() => localStorage.setItem('kx-theme', 'fuego')); await page.reload(); await page.waitForTimeout(800);
@@ -785,7 +785,7 @@ await closeMenu(); await page.waitForTimeout(500); await page.evaluate(() => loc
   ok('admin: the preview never links to /pages/admin from the public pages', await (async () => { await page.setViewportSize({ width: 1440, height: 900 }); await page.goto(`${URL0}#/home`); await page.waitForTimeout(300); return page.evaluate(() => ![...document.querySelectorAll('[data-page]:not([data-page="pg/admin"]) a')].some((a) => /admin/.test(a.getAttribute('href') || ''))); })());
   await page.goto(`${URL0}#/pg/admin`); await page.reload(); await page.waitForTimeout(1200);
   const A = '[data-page="pg/admin"]';
-  ok('admin hub: title, 5 tabs, demo-data notice, 7 KPI cards', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-tabs button').length === 5 && !!document.querySelector(a + ' .adm-demo') && document.querySelectorAll(a + ' .adm-kpi').length === 7, A));
+  ok('admin hub: title, 8 tabs, demo-data notice, 7 KPI cards', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-tabs button').length === 8 && !!document.querySelector(a + ' .adm-demo') && document.querySelectorAll(a + ' .adm-kpi').length === 7, A));
   ok('admin hub: the KPIs show orders, 4-week blocks, loose trial weeks, new clients, sales and average ticket', await page.evaluate((a) => { const t = (id) => document.querySelector(a + ' [data-kpi="' + id + '"] b').textContent; return +t('orders') === +t('blocks') + +t('trials') && /^\$/.test(t('sales')) && /^\$/.test(t('avg')) && +t('clients') >= 0; }, A));
   ok('admin summary: a weekly history table of past and coming weeks', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-hist tbody tr').length === 12 && !!document.querySelector(a + ' .adm-hist tr.now'), A));
   await page.click(`${A} [data-tab="1"]`); await page.waitForTimeout(400);

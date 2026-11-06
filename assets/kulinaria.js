@@ -1047,7 +1047,7 @@
       var count = function () { return st.days.filter(Boolean).length; };
       /* per-day tweaks: ingredients to leave out + a free note, saved with the order lines (kitchen sees them) */
       if (!Array.isArray(st.mods) || st.mods.length !== MEALS) st.mods = blankDays().map(function () { return { off: [], note: '' }; });
-      var modsKey = '', modsOpen = -1;
+      var modsKey = '', modsOpen = -1, sumOpen = -1;
       var modsOf = function (i) { return st.mods[i] || (st.mods[i] = { off: [], note: '' }); };
       var modsText = function (i) { var m = st.mods[i]; if (!m) return ''; var parts = (m.off || []).map(function (x) { return fill(T_('mods-without'), { i: x }); }); if (m.note) parts.push(m.note); return parts.join(', '); };
       var renderMods = function () {
@@ -1154,6 +1154,8 @@
             var li = document.createElement('li'); li.innerHTML = '<span></span><b></b><em class="fn-s-ing"></em><i class="fn-s-edit" role="button" tabindex="0" data-fn-day-edit="' + i + '">✎</i>'; li.firstChild.textContent = dayLabel(i) + ' · ' + lab(d); $('b', li).textContent = l ? '+' + money(upg(l)) : '';
             var ingS = (d.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean), mt = modsText(i);
             $('.fn-s-ing', li).textContent = (ingS.length ? ingS.slice(0, 9).join(' · ') : '') + (mt ? '  —  ✎ ' + mt : '');
+            if (i === sumOpen) li.classList.add('is-open'); li.classList.add('fn-s-item');
+            li.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-fn-day-edit]')) return; sumOpen = sumOpen === i ? -1 : i; render(); });
             list.appendChild(li);
           });
         }

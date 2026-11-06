@@ -192,9 +192,11 @@
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>{{ 'funnel.summary_total' | t }}</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
+        <details class="fn-more"><summary>{{ 'funnel.rec_title' | t }}</summary>
         <p class="fn-weeknote"><strong data-fn-first></strong> {{ 'funnel.week_note' | t }} {{ 'funnel.up_note' | t }}</p>
+        <div class="fn-rec"><p data-fn-rec="auto" hidden>{{ 'funnel.rec_auto' | t }}</p><p data-fn-rec="manual" hidden>{{ 'funnel.rec_manual' | t }}</p><p data-fn-rec="week" hidden>{{ 'funnel.rec_week' | t }}</p><p>{{ 'funnel.rec_extra' | t }}</p></div>
+        </details>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
-        <div class="fn-rec"><strong>{{ 'funnel.rec_title' | t }}</strong><p data-fn-rec="auto" hidden>{{ 'funnel.rec_auto' | t }}</p><p data-fn-rec="manual" hidden>{{ 'funnel.rec_manual' | t }}</p><p data-fn-rec="week" hidden>{{ 'funnel.rec_week' | t }}</p><p>{{ 'funnel.rec_extra' | t }}</p></div>
         <div class="fn-actions fn-cta">
           <span class="fn-links">
             <button class="text-link" type="button" data-fn-prev hidden>{{ 'funnel.back' | t }}</button>
