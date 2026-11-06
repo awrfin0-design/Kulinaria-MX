@@ -2559,6 +2559,60 @@ h3,h4{font-weight:600}
   body:not(.template-page-pedido) .funnel:not(.funnel--teaser).section{padding-block:10px 12px;min-height:0}
 }
 
+/* =====================================================================
+   v52 — order builder, desktop: compact dish grid and slim summary, nothing scrolls
+   ===================================================================== */
+.fn-more{flex:none;font-size:.78rem;line-height:1.4;border-top:1px solid var(--line);padding-top:6px}
+.fn-more summary{cursor:pointer;font-family:var(--font-label);font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:.68rem;color:var(--accent);list-style:none;display:flex;justify-content:space-between}
+.fn-more summary::-webkit-details-marker{display:none}.fn-more summary::after{content:'+'}.fn-more[open] summary::after{content:'–'}
+.fn-more .fn-rec{border:0;background:none;padding:0;margin:4px 0 0}.fn-more .fn-rec p{margin:0 0 4px}
+.fn-more .fn-weeknote{margin:6px 0 0;font-size:.74rem}
+@media (min-width:901px){
+  .funnel .fn-carousel{display:block;overflow:hidden}
+  .funnel .fn-arrow{display:none !important}
+  .funnel .fn-dishes{display:grid !important;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));grid-auto-rows:68px;gap:8px;overflow:hidden;align-content:start;scroll-snap-type:none;padding:2px 0;height:100%}
+  .funnel .fn-dish{flex:none !important;height:68px !important;display:grid !important;grid-template-columns:68px minmax(0,1fr);grid-template-rows:1fr;border-radius:12px;overflow:hidden;position:relative}
+  .funnel .fn-dish__media{grid-column:1;grid-row:1;height:68px !important;min-height:0;width:68px !important}
+  .funnel .fn-dish__media img{width:68px;height:68px;object-fit:cover}
+  .funnel .fn-dish>.fn-up{position:absolute;left:0;bottom:0;width:68px;margin:0;font-size:.6rem;text-align:center;background:rgba(0,0,0,.72);color:#fff;padding:1px 0}
+  .funnel .fn-dish__body{grid-column:2;grid-row:1;display:flex;flex-direction:column;justify-content:space-between;padding:5px 8px 5px !important;gap:0 !important;min-width:0}
+  .funnel .fn-dish .tier-badge,.funnel .fn-dish .dish__facts,.funnel .fn-dish .fn-warn:not(:empty){display:none !important}
+  .funnel .fn-dish .fn-warn:not([hidden]){display:block !important;font-size:.62rem}
+  .funnel .fn-dish__title{font-size:.8rem;line-height:1.15;-webkit-line-clamp:2;margin:0}
+  .funnel .fn-dish__row{margin:0;gap:6px;justify-content:space-between;align-items:center}
+  .funnel .fn-dish .dish__price{font-size:.9rem;white-space:nowrap}.funnel .fn-dish .dish__price small{display:none}
+  .funnel .fn-dish .btn--sm{min-height:26px;padding:0 12px;font-size:.68rem;letter-spacing:.06em}
+  .funnel .fn-dish .fn-count{top:2px;left:2px;font-size:.66rem;padding:0 7px}
+  .funnel .fn-week{gap:8px}
+  .funnel .fn-day{min-height:54px}
+  .funnel .funnel__main{overflow:hidden}
+  .funnel .funnel__aside{overflow:hidden}
+  .funnel .funnel__aside .funnel__list{scrollbar-width:none}.funnel .funnel__aside .funnel__list::-webkit-scrollbar{display:none}
+  .funnel .funnel__aside .fn-cut{font-size:.74rem;margin:0}
+  .funnel .funnel__aside .funnel__facts{font-size:.8rem}
+  .funnel .funnel__aside .funnel__facts div{padding:2px 0}
+  .funnel .funnel__aside .funnel__total strong{font-size:1.35rem}
+}
+
+.fn-s-item{cursor:pointer}.fn-s-ing{display:none}.fn-s-item.is-open .fn-s-ing{display:block}.fn-s-item.is-open .fn-s-ing:empty{display:none}
+
+/* v52 — step 1 on short desktop screens: compact plan cards, tutorial opens as a panel over the step (no scrolling) */
+@media (min-width:901px){
+  .funnel .step[data-fn-step="1"]{position:relative}
+  .funnel .fn-how[open]{position:absolute;left:0;right:0;bottom:0;z-index:6;margin:0;background:var(--bg-raised,#1a1a1a);box-shadow:0 -18px 40px rgba(0,0,0,.45)}
+  .funnel .fn-how[open] .fn-how__list{grid-template-columns:1fr 1fr;gap:8px 22px}
+  .funnel .fn-how__list li{font-size:.8rem}
+  .funnel .fn-how__ex{margin-top:8px;padding:6px 10px;font-size:.78rem}
+}
+@media (min-width:901px) and (max-height:780px){
+  .funnel .step[data-fn-step="1"] .fn-plan>small{display:none}
+  .funnel .step[data-fn-step="1"] .fn-plan{gap:4px;padding-block:12px}
+  .funnel .step[data-fn-step="1"] .fn-plan strong{font-size:1.15rem}
+  .funnel .step[data-fn-step="1"] .fn-plan__from{font-size:1.3rem}
+  .funnel .step[data-fn-step="1"] .fn-credit{padding:8px 12px;font-size:.82rem}
+  .funnel .step[data-fn-step="1"] .fn-credit .btn{padding:8px 16px}
+}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -3349,9 +3403,11 @@ Fuego</span>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Total del plan</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
+        <details class="fn-more"><summary>Cómo se cobra</summary>
         <p class="fn-weeknote"><strong data-fn-first></strong> Estas comidas son para tu primera semana; los días que dejes vacíos no se entregan (hasta 5 comidas). Cada semana vuelves a elegir las siguientes, antes del sábado a las 10:00. ¿Quieres un platillo de nivel superior? Puedes elegirlo: pagas solo la diferencia por comida, de esa semana.</p>
+        <div class="fn-rec"><p data-fn-rec="auto" hidden>El plan de 4 semanas se paga por adelantado en un solo cargo y se renueva automáticamente cada 4 semanas con el mismo método de pago, hasta que lo canceles o pauses desde tu cuenta (antes del cierre del sábado 10:00).</p><p data-fn-rec="manual" hidden>El plan de 4 semanas se paga por adelantado en un solo cargo. Al terminar tus 4 semanas te avisamos para renovar: no se hace ningún cargo sin tu confirmación.</p><p data-fn-rec="week" hidden>La semana de prueba es un pago único de 1 semana: no se renueva.</p><p>Cada semana eliges tus platillos dentro de tu plan sin costo extra. Solo se cobra aparte la diferencia de los platillos de nivel superior (por comida, esa semana).</p></div>
+        </details>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
-        <div class="fn-rec"><strong>Cómo se cobra</strong><p data-fn-rec="auto" hidden>El plan de 4 semanas se paga por adelantado en un solo cargo y se renueva automáticamente cada 4 semanas con el mismo método de pago, hasta que lo canceles o pauses desde tu cuenta (antes del cierre del sábado 10:00).</p><p data-fn-rec="manual" hidden>El plan de 4 semanas se paga por adelantado en un solo cargo. Al terminar tus 4 semanas te avisamos para renovar: no se hace ningún cargo sin tu confirmación.</p><p data-fn-rec="week" hidden>La semana de prueba es un pago único de 1 semana: no se renueva.</p><p>Cada semana eliges tus platillos dentro de tu plan sin costo extra. Solo se cobra aparte la diferencia de los platillos de nivel superior (por comida, esa semana).</p></div>
         <div class="fn-actions fn-cta">
           <span class="fn-links">
             <button class="text-link" type="button" data-fn-prev hidden>Atrás</button>
@@ -11374,9 +11430,11 @@ Pago digital, sin efectivo</li></ul>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Total del plan</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
+        <details class="fn-more"><summary>Cómo se cobra</summary>
         <p class="fn-weeknote"><strong data-fn-first></strong> Estas comidas son para tu primera semana; los días que dejes vacíos no se entregan (hasta 5 comidas). Cada semana vuelves a elegir las siguientes, antes del sábado a las 10:00. ¿Quieres un platillo de nivel superior? Puedes elegirlo: pagas solo la diferencia por comida, de esa semana.</p>
+        <div class="fn-rec"><p data-fn-rec="auto" hidden>El plan de 4 semanas se paga por adelantado en un solo cargo y se renueva automáticamente cada 4 semanas con el mismo método de pago, hasta que lo canceles o pauses desde tu cuenta (antes del cierre del sábado 10:00).</p><p data-fn-rec="manual" hidden>El plan de 4 semanas se paga por adelantado en un solo cargo. Al terminar tus 4 semanas te avisamos para renovar: no se hace ningún cargo sin tu confirmación.</p><p data-fn-rec="week" hidden>La semana de prueba es un pago único de 1 semana: no se renueva.</p><p>Cada semana eliges tus platillos dentro de tu plan sin costo extra. Solo se cobra aparte la diferencia de los platillos de nivel superior (por comida, esa semana).</p></div>
+        </details>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
-        <div class="fn-rec"><strong>Cómo se cobra</strong><p data-fn-rec="auto" hidden>El plan de 4 semanas se paga por adelantado en un solo cargo y se renueva automáticamente cada 4 semanas con el mismo método de pago, hasta que lo canceles o pauses desde tu cuenta (antes del cierre del sábado 10:00).</p><p data-fn-rec="manual" hidden>El plan de 4 semanas se paga por adelantado en un solo cargo. Al terminar tus 4 semanas te avisamos para renovar: no se hace ningún cargo sin tu confirmación.</p><p data-fn-rec="week" hidden>La semana de prueba es un pago único de 1 semana: no se renueva.</p><p>Cada semana eliges tus platillos dentro de tu plan sin costo extra. Solo se cobra aparte la diferencia de los platillos de nivel superior (por comida, esa semana).</p></div>
         <div class="fn-actions fn-cta">
           <span class="fn-links">
             <button class="text-link" type="button" data-fn-prev hidden>Atrás</button>
@@ -12394,9 +12452,11 @@ Pago digital, sin efectivo</li></ul>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Plan total</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
+        <details class="fn-more"><summary>How you are charged</summary>
         <p class="fn-weeknote"><strong data-fn-first></strong> These meals are for your first week; days you leave empty are not delivered (up to 5 meals). Every week you come back to choose the next ones, before Saturday at 10:00. Want a higher-tier dish? Go ahead: you only pay the per-meal difference, for that week.</p>
+        <div class="fn-rec"><p data-fn-rec="auto" hidden>The 4-week plan is paid upfront in a single charge and renews automatically every 4 weeks with the same payment method, until you cancel or pause it from your account (before the Saturday 10:00 cut-off).</p><p data-fn-rec="manual" hidden>The 4-week plan is paid upfront in a single charge. When your 4 weeks end we let you know to renew: nothing is charged without your confirmation.</p><p data-fn-rec="week" hidden>The trial week is a one-time payment for 1 week: it does not renew.</p><p>Each week you choose your dishes within your plan at no extra cost. Only the difference for higher-tier dishes is charged separately (per meal, that week).</p></div>
+        </details>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
-        <div class="fn-rec"><strong>How you are charged</strong><p data-fn-rec="auto" hidden>The 4-week plan is paid upfront in a single charge and renews automatically every 4 weeks with the same payment method, until you cancel or pause it from your account (before the Saturday 10:00 cut-off).</p><p data-fn-rec="manual" hidden>The 4-week plan is paid upfront in a single charge. When your 4 weeks end we let you know to renew: nothing is charged without your confirmation.</p><p data-fn-rec="week" hidden>The trial week is a one-time payment for 1 week: it does not renew.</p><p>Each week you choose your dishes within your plan at no extra cost. Only the difference for higher-tier dishes is charged separately (per meal, that week).</p></div>
         <div class="fn-actions fn-cta">
           <span class="fn-links">
             <button class="text-link" type="button" data-fn-prev hidden>Back</button>
@@ -20419,9 +20479,11 @@ Digital payment, no cash</li></ul>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
         <div class="funnel__total"><span>Plan total</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
+        <details class="fn-more"><summary>How you are charged</summary>
         <p class="fn-weeknote"><strong data-fn-first></strong> These meals are for your first week; days you leave empty are not delivered (up to 5 meals). Every week you come back to choose the next ones, before Saturday at 10:00. Want a higher-tier dish? Go ahead: you only pay the per-meal difference, for that week.</p>
+        <div class="fn-rec"><p data-fn-rec="auto" hidden>The 4-week plan is paid upfront in a single charge and renews automatically every 4 weeks with the same payment method, until you cancel or pause it from your account (before the Saturday 10:00 cut-off).</p><p data-fn-rec="manual" hidden>The 4-week plan is paid upfront in a single charge. When your 4 weeks end we let you know to renew: nothing is charged without your confirmation.</p><p data-fn-rec="week" hidden>The trial week is a one-time payment for 1 week: it does not renew.</p><p>Each week you choose your dishes within your plan at no extra cost. Only the difference for higher-tier dishes is charged separately (per meal, that week).</p></div>
+        </details>
         <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
-        <div class="fn-rec"><strong>How you are charged</strong><p data-fn-rec="auto" hidden>The 4-week plan is paid upfront in a single charge and renews automatically every 4 weeks with the same payment method, until you cancel or pause it from your account (before the Saturday 10:00 cut-off).</p><p data-fn-rec="manual" hidden>The 4-week plan is paid upfront in a single charge. When your 4 weeks end we let you know to renew: nothing is charged without your confirmation.</p><p data-fn-rec="week" hidden>The trial week is a one-time payment for 1 week: it does not renew.</p><p>Each week you choose your dishes within your plan at no extra cost. Only the difference for higher-tier dishes is charged separately (per meal, that week).</p></div>
         <div class="fn-actions fn-cta">
           <span class="fn-links">
             <button class="text-link" type="button" data-fn-prev hidden>Back</button>
@@ -22820,7 +22882,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       var count = function () { return st.days.filter(Boolean).length; };
       /* per-day tweaks: ingredients to leave out + a free note, saved with the order lines (kitchen sees them) */
       if (!Array.isArray(st.mods) || st.mods.length !== MEALS) st.mods = blankDays().map(function () { return { off: [], note: '' }; });
-      var modsKey = '', modsOpen = -1;
+      var modsKey = '', modsOpen = -1, sumOpen = -1;
       var modsOf = function (i) { return st.mods[i] || (st.mods[i] = { off: [], note: '' }); };
       var modsText = function (i) { var m = st.mods[i]; if (!m) return ''; var parts = (m.off || []).map(function (x) { return fill(T_('mods-without'), { i: x }); }); if (m.note) parts.push(m.note); return parts.join(', '); };
       var renderMods = function () {
@@ -22927,6 +22989,8 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
             var li = document.createElement('li'); li.innerHTML = '<span></span><b></b><em class="fn-s-ing"></em><i class="fn-s-edit" role="button" tabindex="0" data-fn-day-edit="' + i + '">✎</i>'; li.firstChild.textContent = dayLabel(i) + ' · ' + lab(d); $('b', li).textContent = l ? '+' + money(upg(l)) : '';
             var ingS = (d.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean), mt = modsText(i);
             $('.fn-s-ing', li).textContent = (ingS.length ? ingS.slice(0, 9).join(' · ') : '') + (mt ? '  —  ✎ ' + mt : '');
+            if (i === sumOpen) li.classList.add('is-open'); li.classList.add('fn-s-item');
+            li.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-fn-day-edit]')) return; sumOpen = sumOpen === i ? -1 : i; render(); });
             list.appendChild(li);
           });
         }
