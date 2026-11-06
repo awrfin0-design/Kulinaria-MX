@@ -19067,10 +19067,17 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     'nuez': ['nuez', 'nueces', 'pecana'],
     'almendra': ['almendra']
   };
+  // What the client types may be English or a different spelling: map it to the Spanish names used in the ingredient lists
+  var ALIAS = { 'peanut': 'cacahuate', 'peanuts': 'cacahuate', 'mani': 'cacahuate', 'cacahuates': 'cacahuate', 'nuts': 'frutos secos', 'tree nuts': 'frutos secos', 'nut': 'frutos secos', 'frutos-secos': 'frutos secos',
+    'shellfish': 'mariscos', 'seafood': 'mariscos', 'shrimp': 'camaron', 'prawn': 'camaron', 'crab': 'cangrejo', 'lobster': 'langosta', 'fish': 'pescado', 'salmon': 'salmon', 'tuna': 'atun',
+    'dairy': 'lacteos', 'milk': 'leche', 'cheese': 'queso', 'cream': 'crema', 'butter': 'mantequilla', 'egg': 'huevo', 'eggs': 'huevo', 'huevos': 'huevo', 'wheat': 'gluten', 'soy': 'soya', 'sesame': 'ajonjoli',
+    'almond': 'almendra', 'almonds': 'almendra', 'walnut': 'nuez', 'broccoli': 'brocoli', 'onion': 'cebolla', 'cilantro': 'cilantro', 'coriander': 'cilantro', 'mushroom': 'champinones', 'mushrooms': 'champinones', 'champinon': 'champinones',
+    'tomato': 'jitomate', 'tomate': 'jitomate', 'avocado': 'aguacate', 'corn': 'maiz', 'pork': 'puerco', 'beef': 'res', 'chicken': 'pollo', 'garlic': 'ajo', 'pepper': 'pimiento', 'spinach': 'espinaca', 'carrot': 'zanahoria', 'celery': 'apio', 'mustard': 'mostaza', 'strawberry': 'fresa', 'raisins': 'pasas' };
+  var canon = function (raw) { var a = norm(raw).replace(/\s+/g, ' '); return ALIAS[a] || a; };
   function allergyHits(p, tags, ings) {
     var out = [];
     (p.allergies || []).forEach(function (raw) {
-      var a = norm(raw); if (!a) return;
+      var a = canon(raw); if (!a) return;
       var words = [a].concat(SYN[a] || []);
       var hit = tags.indexOf(a) > -1 || words.some(function (w) { return ings.some(function (i) { return i === w || (w.length >= 4 && i.indexOf(w) > -1) || (i.length >= 4 && w.indexOf(i) > -1); }); });
       if (hit) out.push(raw);
@@ -19078,7 +19085,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     return out;
   }
   function dislikeHits(p, tags, ings) {
-    return (p.dislikes || []).filter(function (raw) { var d = norm(raw); return d && (ings.some(function (i) { return i.indexOf(d) > -1; }) || tags.indexOf(d) > -1); });
+    return (p.dislikes || []).filter(function (raw) { var d = canon(raw); return d && (ings.some(function (i) { return i.indexOf(d) > -1 || (d.length > 3 && d.indexOf(i) > -1 && i.length > 3); }) || tags.indexOf(d) > -1); });
   }
   function applyProfile() {
     var p = loadProfile();
@@ -19217,7 +19224,10 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     var form = $('[data-cart-form]');
     if (!form) return;
     var contract = $('[data-contract]', form), checkout = $('[data-checkout]', form);
-    var gate = function () { if (checkout) checkout.disabled = !(contract && contract.checked); };
+    // a new account must confirm its allergy profile before it can pay (existing customers with orders are not asked again)
+    var needProfile = !!$('#kx-account') && ordersCount() === 0 && !isOnboarded(), pmsg = $('[data-cart-profile]', form);
+    if (pmsg) pmsg.hidden = !needProfile;
+    var gate = function () { if (checkout) checkout.disabled = !(contract && contract.checked) || needProfile; };
     if (contract) { contract.addEventListener('change', gate); gate(); }
 
     var ref = $('[data-referral]', form), refMsg = $('[data-referral-msg]', form), giftBox = $('[data-gift]', form);

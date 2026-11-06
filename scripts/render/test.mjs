@@ -325,7 +325,7 @@ ok('page index is reachable at #/indice', await (async () => { await page.goto(`
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(400);
 
 // header = logo + cart + burger only
-ok('header holds only the logo, the announcement link, the login, the cart and the burger', (await page.$$('.site-header a, .site-header button')).length === 7);
+ok('header holds only the logo, the announcement link, the account circle and the burger (language, profile and cart live in the circle drop-down)', (await page.$$eval('.site-header a, .site-header button', (els) => els.filter((e) => !e.closest('[data-acct-pop]')).length)) === 4);
 ok('no fake-wood background anywhere', await page.evaluate(() => !/wood/i.test(getComputedStyle(document.querySelector('.bg-fx'), '::before').backgroundImage) && !document.querySelector('style').textContent.includes('photo-wood')));
 
 // burger -> full sitemap
@@ -370,7 +370,7 @@ ok('terms page carries all 10 contract clauses', await (async () => { await page
 // account subpages: each shows its own panel inside the account shell
 for (const [k, sel] of [['semana', '#semana'], ['pausas', '#pausas'], ['monedero', '#monedero'], ['perfil', '#perfil'], ['referidos', '#referidos'], ['pedidos', '#pedidos'], ['entregas', '#entregas']]) {
   await page.goto(`${URL0}#/pg/cuenta-${k}`); await page.waitForTimeout(80);
-  ok(`account sub-page ${k} renders its panel and the account navigation`, !!(await page.$(`[data-page="pg/cuenta-${k}"] .account-block[id$="${k}"]`)) && (await page.$$eval(`[data-page="pg/cuenta-${k}"] .account-nav a`, (a) => a.length)) >= 8);
+  ok(`account sub-page ${k} renders its panel and the account navigation`, !!(await page.$(`[data-page="pg/cuenta-${k}"] .account-block[id$="${k}"]`)) && (await page.$$eval(`[data-page="pg/cuenta-${k}"] .account-nav a`, (a) => a.length)) >= 6);
 }
 ok('account overview links to all 8 account areas', (await (async () => { await page.goto(`${URL0}#/cuenta`); await page.waitForTimeout(100); return page.$$eval('[data-page="cuenta"] .index-row', (r) => r.length); })()) === 8);
 

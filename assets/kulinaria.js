@@ -570,7 +570,7 @@
       e.preventDefault();
       var ask = b.getAttribute('data-confirm'); if (ask && !window.confirm(ask)) return;
       b.disabled = true;
-      var done = function () { try { localStorage.removeItem('kx-cart-note'); } catch (x) {} window.location.reload(); };
+      var done = function () { try { var f = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (f) { f.days = []; f.qty = {}; f.sent = false; f.step = 0; localStorage.setItem(FUNNEL_KEY, JSON.stringify(f)); } } catch (x) {} window.location.reload(); };
       try { fetch('/cart/clear.js', { method: 'POST', headers: { Accept: 'application/json' } }).then(done, done); } catch (x) { done(); }
     });
   }
@@ -1109,6 +1109,7 @@
           var vid = parseInt(holder.getAttribute('data-upv-' + lvl), 10);
           if (names.length && vid) { var up = {}; up[T_('prop-upgrade')] = names.join(', '); lines.push({ id: vid, quantity: names.length, properties: up }); }
         }
+        st.sent = true; persist();
         var go2 = function () { window.location.href = guest ? (lnk('[data-fn-login]') || '/pages/bienvenida').replace(/(return_url|return_to)=[^&]*/g, '$1=' + encodeURIComponent(finish.getAttribute('href') || '/cart')) : finish.getAttribute('href'); };
         fetch('/cart/clear.js', { method: 'POST' })
           .then(function () { return fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ attributes: attrs }) }); })
@@ -1127,6 +1128,8 @@
       if (gridEl) { gridEl.addEventListener('scroll', arrows, { passive: true }); window.addEventListener('resize', arrows); }
       applyProfile();
       render();
+      // the order was sent to the cart earlier: if the cart has been emptied since (items removed, cart cleared), the next order starts from a fresh list
+      if (st.sent) { try { fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(function (c) { if (c && !c.item_count) { st.days = blankDays(); st.qty = {}; st.active = 0; st.step = 0; st.sent = false; persist(); render(); } }).catch(function () {}); } catch (e1) {} }
       // ?plan=block / ?plan=week (from the "Get started" buttons of the plans page): the plan is already chosen, go straight to the meals
       try {
         var qs0 = location.search || (location.hash.indexOf('?') > -1 ? location.hash.slice(location.hash.indexOf('?')) : ''), qp = new URLSearchParams(qs0).get('plan');
