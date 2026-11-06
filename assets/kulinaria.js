@@ -122,10 +122,17 @@
     'nuez': ['nuez', 'nueces', 'pecana'],
     'almendra': ['almendra']
   };
+  // What the client types may be English or a different spelling: map it to the Spanish names used in the ingredient lists
+  var ALIAS = { 'peanut': 'cacahuate', 'peanuts': 'cacahuate', 'mani': 'cacahuate', 'cacahuates': 'cacahuate', 'nuts': 'frutos secos', 'tree nuts': 'frutos secos', 'nut': 'frutos secos', 'frutos-secos': 'frutos secos',
+    'shellfish': 'mariscos', 'seafood': 'mariscos', 'shrimp': 'camaron', 'prawn': 'camaron', 'crab': 'cangrejo', 'lobster': 'langosta', 'fish': 'pescado', 'salmon': 'salmon', 'tuna': 'atun',
+    'dairy': 'lacteos', 'milk': 'leche', 'cheese': 'queso', 'cream': 'crema', 'butter': 'mantequilla', 'egg': 'huevo', 'eggs': 'huevo', 'huevos': 'huevo', 'wheat': 'gluten', 'soy': 'soya', 'sesame': 'ajonjoli',
+    'almond': 'almendra', 'almonds': 'almendra', 'walnut': 'nuez', 'broccoli': 'brocoli', 'onion': 'cebolla', 'cilantro': 'cilantro', 'coriander': 'cilantro', 'mushroom': 'champinones', 'mushrooms': 'champinones', 'champinon': 'champinones',
+    'tomato': 'jitomate', 'tomate': 'jitomate', 'avocado': 'aguacate', 'corn': 'maiz', 'pork': 'puerco', 'beef': 'res', 'chicken': 'pollo', 'garlic': 'ajo', 'pepper': 'pimiento', 'spinach': 'espinaca', 'carrot': 'zanahoria', 'celery': 'apio', 'mustard': 'mostaza', 'strawberry': 'fresa', 'raisins': 'pasas' };
+  var canon = function (raw) { var a = norm(raw).replace(/\s+/g, ' '); return ALIAS[a] || a; };
   function allergyHits(p, tags, ings) {
     var out = [];
     (p.allergies || []).forEach(function (raw) {
-      var a = norm(raw); if (!a) return;
+      var a = canon(raw); if (!a) return;
       var words = [a].concat(SYN[a] || []);
       var hit = tags.indexOf(a) > -1 || words.some(function (w) { return ings.some(function (i) { return i === w || (w.length >= 4 && i.indexOf(w) > -1) || (i.length >= 4 && w.indexOf(i) > -1); }); });
       if (hit) out.push(raw);
@@ -133,7 +140,7 @@
     return out;
   }
   function dislikeHits(p, tags, ings) {
-    return (p.dislikes || []).filter(function (raw) { var d = norm(raw); return d && (ings.some(function (i) { return i.indexOf(d) > -1; }) || tags.indexOf(d) > -1); });
+    return (p.dislikes || []).filter(function (raw) { var d = canon(raw); return d && (ings.some(function (i) { return i.indexOf(d) > -1 || (d.length > 3 && d.indexOf(i) > -1 && i.length > 3); }) || tags.indexOf(d) > -1); });
   }
   function applyProfile() {
     var p = loadProfile();
@@ -272,7 +279,10 @@
     var form = $('[data-cart-form]');
     if (!form) return;
     var contract = $('[data-contract]', form), checkout = $('[data-checkout]', form);
-    var gate = function () { if (checkout) checkout.disabled = !(contract && contract.checked); };
+    // a new account must confirm its allergy profile before it can pay (existing customers with orders are not asked again)
+    var needProfile = !!$('#kx-account') && ordersCount() === 0 && !isOnboarded(), pmsg = $('[data-cart-profile]', form);
+    if (pmsg) pmsg.hidden = !needProfile;
+    var gate = function () { if (checkout) checkout.disabled = !(contract && contract.checked) || needProfile; };
     if (contract) { contract.addEventListener('change', gate); gate(); }
 
     var ref = $('[data-referral]', form), refMsg = $('[data-referral-msg]', form), giftBox = $('[data-gift]', form);
@@ -553,6 +563,40 @@
         location.reload();
       }).catch(function () { guardOnboarding(); });
   }
+  /* ---------- clear cart (cart page and header menu) ---------- */
+  function initClearCart() {
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-cart-clear]'); if (!b) return;
+      e.preventDefault();
+      var ask = b.getAttribute('data-confirm'); if (ask && !window.confirm(ask)) return;
+      b.disabled = true;
+      var done = function () { try { localStorage.removeItem('kx-cart-note'); } catch (x) {} window.location.reload(); };
+      try { fetch('/cart/clear.js', { method: 'POST', headers: { Accept: 'application/json' } }).then(done, done); } catch (x) { done(); }
+    });
+  }
+
+  /* ---------- header account menu: initial in a circle, one drop-down (who is signed in, shortcuts, language, cart summary, sign out) ---------- */
+  function initAccountMenu() {
+    var root = $('[data-acct]'); if (!root) return;
+    var btn = $('[data-acct-btn]', root), pop = $('[data-acct-pop]', root), dot = $('[data-acct-dot]', root), todo = $('[data-acct-todo]', root);
+    var count = $('[data-acct-count]', root), total = $('[data-acct-total]', root), txt = $('[data-acct-cart-text]', root);
+    var signedIn = btn.classList.contains('is-in');
+    if (signedIn && !isOnboarded()) { if (dot) dot.hidden = false; if (todo) todo.hidden = false; }
+    var setOpen = function (on) { pop.hidden = !on; btn.setAttribute('aria-expanded', on ? 'true' : 'false'); root.classList.toggle('is-open', on); };
+    var paintCart = function (c) {
+      var n = c.item_count || 0;
+      if (count) { count.hidden = !n; count.textContent = n; }
+      if (total) total.textContent = n ? money0(c.total_price / 100) : '';
+      if (txt) txt.textContent = !n ? txt.getAttribute('data-t-empty') : n === 1 ? txt.getAttribute('data-t-one') : String(txt.getAttribute('data-t-many') || '').replace('{n}', n);
+    };
+    var money0 = function (v) { try { return new Intl.NumberFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(v); } catch (e) { return '$' + Math.round(v); } };
+    var refresh = function () { try { fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(paintCart).catch(function () {}); } catch (e) {} };
+    btn.addEventListener('click', function (e) { e.stopPropagation(); var on = pop.hidden; setOpen(on); if (on) refresh(); });
+    document.addEventListener('click', function (e) { if (!pop.hidden && !root.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) { setOpen(false); btn.focus(); } });
+    root.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('.acct__links a, .acct__todo, .acct__cart a, .acct__out')) setOpen(false); });
+  }
+
   /* ---------- dish detail panel: clicking a dish card opens the full breakdown (photo, description, nutrition, ingredients, allergens) in a side panel ---------- */
   function initDishPanel() {
     var panel = $('[data-dish-panel]'); if (!panel) return;
@@ -1441,7 +1485,7 @@
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

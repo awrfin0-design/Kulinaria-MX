@@ -8,7 +8,7 @@
       <div class="menu-overlay__tools">
         {% render 'lang-switcher' %}
         {% render 'theme-toggle' %}
-        <a class="icon-link" href="{{ routes.account_url }}" aria-label="{{ 'general.account' | t }}">{% render 'icon', name: 'user' %}</a>
+        <a class="icon-link" href="/pages/cuenta" aria-label="{{ 'general.account' | t }}">{% render 'icon', name: 'user' %}</a>
         <a class="icon-link" href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t }}">{% render 'icon', name: 'bag' %}</a>
         <button class="icon-link" type="button" data-menu-close aria-label="{{ 'nav.close' | t }}">{% render 'icon', name: 'close' %}</button>
       </div>

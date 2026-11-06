@@ -1,7 +1,7 @@
 <section class="section" {{ section.shopify_attributes }}>
   <div class="container" style="max-width:960px">
     <div class="section__head">
-      <a class="btn btn--ghost" href="{{ routes.account_url }}">{{ 'general.back_account' | t }}</a>
+      <a class="btn btn--ghost" href="/pages/cuenta">{{ 'general.back_account' | t }}</a>
     </div>
     {%- paginate customer.addresses by 10 -%}
       <div class="grid grid--2">

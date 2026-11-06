@@ -195,7 +195,7 @@ async function renderLang(lang) {
     ...[...JSON.parse(read('scripts/render/pages.json')).map(([h, tpl]) => [h, tpl]), ['perfil', 'page.profile'], ['bienvenida', 'page.bienvenida']].map(([h, tpl]) =>
       ({ key: 'pg/' + h, url: '/pages/' + h, tpl, title: store.pages[h].title, g: { template: { name: 'page' }, page: store.pages[h], page_title: store.pages[h].title } })),
     P('carrito', '/cart', 'cart', 'Mi selección', { template: { name: 'cart' }, page_title: T_('Mi selección') }),
-    P('cuenta', '/account', 'customers/account', 'Mi cuenta', { template: { name: 'customers/account' }, page_title: T_('Mi cuenta') }),
+    P('cuenta', '/pages/cuenta', 'page.cuenta', 'Mi cuenta', { template: { name: 'page', suffix: 'cuenta' }, page: { title: 'Mi cuenta', handle: 'cuenta', content: '', url: '/pages/cuenta', template_suffix: 'cuenta' }, page_title: T_('Mi cuenta') }),
     P('login', '/account/login', 'customers/login', 'Iniciar sesión', { template: { name: 'customers/login' }, customer: null, page_title: T_('Iniciar sesión') }),
     P('registro', '/account/register', 'customers/register', 'Crear cuenta', { template: { name: 'customers/register' }, customer: null, page_title: T_('Crear cuenta') }),
     P('direcciones', '/account/addresses', 'customers/addresses', 'Mis direcciones', { template: { name: 'customers/addresses' }, page_title: T_('Mis direcciones') }),

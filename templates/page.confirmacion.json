@@ -9,7 +9,7 @@
         "heading": "¡Tu bloque *está confirmado!*",
         "text": "Gracias por unirte a Kulinaria. Esto es lo que sigue.",
         "button_label": "Ir a mi cuenta",
-        "button_link": "/account",
+        "button_link": "/pages/cuenta",
         "art": "air-breakfast"
       },
       "blocks": {

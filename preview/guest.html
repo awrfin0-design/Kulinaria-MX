@@ -2349,6 +2349,44 @@ html.has-dish-panel{overflow:hidden}
   .dd__nutri{grid-template-columns:repeat(2,minmax(0,1fr))}.dd__nutri .is-main{grid-column:1/-1}
 }
 
+/* v34: header account menu */
+.acct{position:relative}
+.acct__btn{position:relative;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--accent);background:var(--accent-wash);color:var(--accent);cursor:pointer;font-family:var(--font-heading);font-weight:700;font-size:1.15rem;transition:background .25s,transform .25s}
+.acct__btn:hover,.acct.is-open .acct__btn{background:var(--accent);color:var(--on-brand)}
+.acct__btn svg{width:22px;height:22px}
+.acct__btn.is-in{background:var(--accent);color:var(--on-brand)}
+.acct__btn .cart-count{top:-5px;right:-5px;border:2px solid var(--bg-base)}
+.cart-count[hidden]{display:none}
+.acct__dot{position:absolute;bottom:-1px;right:-1px;width:12px;height:12px;border-radius:50%;background:#ff6b57;border:2px solid var(--bg-base)}
+.acct__dot[hidden],.acct__todo[hidden]{display:none}
+.acct__pop{position:absolute;top:calc(100% + 12px);right:0;z-index:300;width:min(340px,calc(100vw - 24px));padding:16px;border-radius:20px;background:var(--bg-raised);color:var(--text);border:1px solid var(--line);box-shadow:0 22px 60px rgba(0,0,0,.3);display:flex;flex-direction:column;gap:12px;font-family:var(--font-body);filter:none}
+.acct__pop[hidden]{display:none}
+.acct__who{display:flex;gap:12px;align-items:center}
+.acct__avatar{flex:none;width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--on-brand);display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:700;font-size:1.2rem}
+.acct__who strong{display:block;font-size:1.05rem;line-height:1.2}
+.acct__mail{display:block;font-size:.82rem;color:var(--text-muted);word-break:break-all}
+.acct__todo{display:block;padding:10px 12px;border-radius:12px;background:rgba(255,107,87,.14);border:1px solid rgba(255,107,87,.5);color:var(--text);font-size:.88rem;font-weight:700}
+.acct__links{display:flex;flex-direction:column;border-top:1px solid var(--line);padding-top:6px}
+.acct__links a{padding:9px 4px;color:var(--text);font-size:.95rem;border-radius:8px}
+.acct__links a:hover{background:var(--accent-wash)}
+.acct__row{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding-top:12px;font-size:.88rem;color:var(--text-muted)}
+.acct__pop .lang{display:inline-flex !important}
+.acct__cart{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.acct__cart-h{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--font-label);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+.acct__cart-h b{font-family:var(--font-heading);font-size:1.3rem;letter-spacing:0;color:var(--accent);text-transform:none}
+.acct__cart-n{margin:0;font-size:.9rem;color:var(--text-muted)}
+.acct__guest p{margin:4px 0 10px;color:var(--text-muted);font-size:.9rem}
+.acct__btns{display:flex;gap:8px;flex-wrap:wrap}
+.acct__out{display:block;text-align:center;padding:10px;border-top:1px solid var(--line);color:var(--text-muted);font-size:.9rem}
+.acct__out:hover{color:var(--accent)}
+@media (max-width:600px){.acct__pop{position:fixed;top:calc(var(--app-top,56px) + 6px);right:12px;left:12px;width:auto;max-height:calc(100svh - var(--app-top,56px) - 20px);overflow-y:auto}}
+.site-header .header-actions>.acct{filter:none}
+.acct-orders{width:100%;border-collapse:collapse;font-size:.95rem}.acct-orders th,.acct-orders td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}.acct-orders th{font-family:var(--font-label);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.acct-hero{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:16px 18px;margin-bottom:var(--space-lg);border:1px solid var(--line);border-radius:18px;background:var(--bg-raised)}
+.acct-hero .acct__avatar{width:52px;height:52px;font-size:1.4rem}
+.acct-hero__t{flex:1 1 220px}.acct-hero__t strong{display:block;font-size:1.2rem}.acct-hero__t span{color:var(--text-muted);font-size:.9rem;word-break:break-all}
+.acct__clear{align-self:center;background:none;border:0;color:var(--text-muted);font:inherit;font-size:.85rem;text-decoration:underline;cursor:pointer;padding:4px}.acct__clear[hidden]{display:none}.acct__clear:hover{color:var(--accent)}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -2358,7 +2396,7 @@ html.has-dish-panel{overflow:hidden}
         timezone: "America/Mexico_City",
         cutoffHour: 10,
         lang: "es",
-        routes: { cart: "/cart", cartAdd: "/cart/add", account: "/account" },
+        routes: { cart: "/cart", cartAdd: "/cart/add", account: "/pages/cuenta" },
         media: { fire: "assets/video-fire.mp4" },
         logos: { fuego: "assets/logo-fuego.webp", ink: "assets/logo-black.webp", cream: "assets/logo-cream.webp", gold: "assets/logo.webp" },
         i18n: {
@@ -2485,17 +2523,27 @@ html.has-dish-panel{overflow:hidden}
   <img class="logo logo--fuego" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-fuego.webp" width="700" height="342" alt="" aria-hidden="true" decoding="async"></a>
 
       <div class="header-actions">
-        <form method="post" action="/localization" data-shopify-form="localization" accept-charset="UTF-8" class="lang"><input type="hidden" name="country_code" value="MX">
+        <div class="acct" data-acct>
+  <button class="acct__btn" type="button" data-acct-btn aria-haspopup="true" aria-expanded="false" aria-controls="acct-pop" aria-label="Mi cuenta y carrito"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+<span class="cart-count" data-acct-count>1</span>
+    <i class="acct__dot" data-acct-dot hidden aria-hidden="true"></i>
+  </button>
+  <div class="acct__pop" id="acct-pop" data-acct-pop hidden><div class="acct__guest">
+        <strong>Bienvenido a Kulinaria</strong>
+        <p>Inicia sesión para armar tu pedido, ver tu semana y pagar.</p>
+        <div class="acct__btns"><a class="btn btn--gold btn--sm" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Iniciar sesión</a><a class="btn btn--outline btn--sm" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Crear cuenta</a></div>
+      </div><div class="acct__row"><span>Idioma</span><form method="post" action="/localization" data-shopify-form="localization" accept-charset="UTF-8" class="lang"><input type="hidden" name="country_code" value="MX">
     <div class="lang__group" role="group" aria-label="Idioma"><button class="lang__btn" type="submit" name="language_code" value="es" lang="es"
           title="Cambiar a Español" aria-current="true">ES</button><button class="lang__btn" type="submit" name="language_code" value="en" lang="en"
-          title="Cambiar a English">EN</button></div></form>
-        <a class="header-login" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-<span>Iniciar sesión</span>
-        </a>
-        <a class="icon-link" href="#/carrito" aria-label="Carrito">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-<span class="cart-count">1</span></a>
+          title="Cambiar a English">EN</button></div></form></div>
+    <div class="acct__cart">
+      <div class="acct__cart-h"><span>Carrito</span><b data-acct-total>$5,000</b></div>
+      <p class="acct__cart-n" data-acct-cart-text data-t-one="1 producto en tu carrito." data-t-many="{n} productos en tu carrito." data-t-empty="Tu carrito está vacío.">1 producto en tu carrito.</p>
+      <a class="btn btn--gold btn--sm btn--block" href="#/carrito">Ver carrito y pagar</a>
+      <button class="acct__clear" type="button" data-cart-clear data-confirm="¿Vaciar todo el carrito? Se quitarán todos los productos.">Vaciar carrito</button>
+    </div></div>
+</div>
+
         <button class="burger" type="button" data-menu-open aria-haspopup="dialog" aria-controls="menu-overlay" aria-expanded="false" aria-label="Abrir menú"><i></i><i></i></button>
       </div>
     </div>
@@ -2576,17 +2624,27 @@ Fuego</span>
   <img class="logo logo--fuego" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-fuego.webp" width="700" height="342" alt="" aria-hidden="true" decoding="async"></a>
 
       <div class="header-actions">
-        <form method="post" action="/localization" data-shopify-form="localization" accept-charset="UTF-8" class="lang"><input type="hidden" name="country_code" value="MX">
+        <div class="acct" data-acct>
+  <button class="acct__btn" type="button" data-acct-btn aria-haspopup="true" aria-expanded="false" aria-controls="acct-pop" aria-label="My account and cart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+<span class="cart-count" data-acct-count>1</span>
+    <i class="acct__dot" data-acct-dot hidden aria-hidden="true"></i>
+  </button>
+  <div class="acct__pop" id="acct-pop" data-acct-pop hidden><div class="acct__guest">
+        <strong>Welcome to Kulinaria</strong>
+        <p>Sign in to build your order, see your week and pay.</p>
+        <div class="acct__btns"><a class="btn btn--gold btn--sm" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in</a><a class="btn btn--outline btn--sm" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Create account</a></div>
+      </div><div class="acct__row"><span>Language</span><form method="post" action="/localization" data-shopify-form="localization" accept-charset="UTF-8" class="lang"><input type="hidden" name="country_code" value="MX">
     <div class="lang__group" role="group" aria-label="Language"><button class="lang__btn" type="submit" name="language_code" value="es" lang="es"
           title="Switch to Español">ES</button><button class="lang__btn" type="submit" name="language_code" value="en" lang="en"
-          title="Switch to English" aria-current="true">EN</button></div></form>
-        <a class="header-login" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-<span>Sign in</span>
-        </a>
-        <a class="icon-link" href="#/carrito" aria-label="Cart">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-<span class="cart-count">1</span></a>
+          title="Switch to English" aria-current="true">EN</button></div></form></div>
+    <div class="acct__cart">
+      <div class="acct__cart-h"><span>Cart</span><b data-acct-total>$5,000</b></div>
+      <p class="acct__cart-n" data-acct-cart-text data-t-one="1 item in your cart." data-t-many="{n} items in your cart." data-t-empty="Your cart is empty.">1 item in your cart.</p>
+      <a class="btn btn--gold btn--sm btn--block" href="#/carrito">View cart and pay</a>
+      <button class="acct__clear" type="button" data-cart-clear data-confirm="Clear the whole cart? All items will be removed.">Clear cart</button>
+    </div></div>
+</div>
+
         <button class="burger" type="button" data-menu-open aria-haspopup="dialog" aria-controls="menu-overlay" aria-expanded="false" aria-label="Open menu"><i></i><i></i></button>
       </div>
     </div>
@@ -10083,6 +10141,7 @@ Pago digital, sin efectivo</li></ul>
                 </p>
               </div>
             </div><button class="btn btn--outline" type="submit" name="update" style="margin-top:var(--space-lg)">Actualizar cantidades</button>
+          <button class="btn btn--ghost" type="button" data-cart-clear data-confirm="¿Vaciar todo el carrito? Se quitarán todos los productos." style="margin-top:var(--space-lg)">Vaciar carrito</button>
         </div>
 
         <aside class="summary">
@@ -10128,7 +10187,7 @@ Pago digital, sin efectivo</li></ul>
 
 </div>
     </div>
-<div data-page="cuenta" data-template="customers-account" data-title="Mi cuenta" hidden>
+<div data-page="cuenta" data-template="page" data-title="Mi cuenta" hidden>
       <div id="cuenta--shopify-section-head" class="shopify-section"><header class="page-head" >
   <div class="page-head__photo">
     <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-breakfast.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
@@ -10142,60 +10201,11 @@ Pago digital, sin efectivo</li></ul>
 
 
 </div><div id="cuenta--shopify-section-main" class="shopify-section"><section class="section" >
-  <div class="container">
-    <div class="section__head">
-      <span class="eyebrow">Mi cuenta</span>
-      <h2>Hola, </h2>
-      <p class="lede">Tienes el control total de tu semana: elige tus platillos, pausa tu bloque, revisa tu saldo y comparte tu código.</p>
-      <p><a class="btn btn--ghost" href="#/home">Cerrar sesión</a></p>
-    </div>
-
-    <p class="countdown" data-cutoff>Confirma tus platillos antes del sábado 10:00 AM · quedan <strong data-cutoff-value>…</strong></p>
-
-    <div class="fg--index" style="margin-top:var(--space-2xl)">
-      <div class="fg__list"><a class="index-row" href="#/pg/cuenta-semana">
-            <span class="index-row__n">01</span>
-            <span class="index-row__t">Mi semana</span>
-            <p class="index-row__d">Platillos elegidos y cuenta regresiva al cierre del sábado.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a><a class="index-row" href="#/pg/cuenta-pausas">
-            <span class="index-row__n">02</span>
-            <span class="index-row__t">Pausar entregas</span>
-            <p class="index-row__d">Pausa tu próximo bloque antes de que se cierre la ventana.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a><a class="index-row" href="#/pg/cuenta-monedero">
-            <span class="index-row__n">03</span>
-            <span class="index-row__t">Monedero</span>
-            <p class="index-row__d">Crédito interno y saldo a favor.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a><a class="index-row" href="#/pg/cuenta-perfil">
-            <span class="index-row__n">04</span>
-            <span class="index-row__t">Alergias y gustos</span>
-            <p class="index-row__d">Alergias y gustos para la selección automática.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a><a class="index-row" href="#/pg/cuenta-referidos">
-            <span class="index-row__n">05</span>
-            <span class="index-row__t">Mis referidos</span>
-            <p class="index-row__d">Tu código y el progreso de tus referidos.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a><a class="index-row" href="#/pg/cuenta-pedidos">
-            <span class="index-row__n">06</span>
-            <span class="index-row__t">Pedidos y facturas</span>
-            <p class="index-row__d">Historial y facturas liquidadas.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a><a class="index-row" href="#/pg/cuenta-entregas">
-            <span class="index-row__n">07</span>
-            <span class="index-row__t">Entregas y envases</span>
-            <p class="index-row__d">Dirección, espera de cortesía y envases.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a><a class="index-row" href="#/direcciones">
-            <span class="index-row__n">08</span>
-            <span class="index-row__t">Administrar direcciones</span>
-            <p class="index-row__d">Actualiza entrega y suscriptor secundario.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a></div>
-    </div>
-  </div>
+  <div class="container"><div class="section__head">
+        <span class="eyebrow">Mi cuenta</span>
+        <h2>Inicia sesión para ver tu cuenta</h2>
+        <div class="btn-row"><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fcuenta&return_to=%2Fpages%2Fcuenta">Iniciar sesión</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Crear cuenta</a></div>
+      </div></div>
 </section>
 
 
@@ -17943,6 +17953,7 @@ Digital payment, no cash</li></ul>
                 </p>
               </div>
             </div><button class="btn btn--outline" type="submit" name="update" style="margin-top:var(--space-lg)">Update quantities</button>
+          <button class="btn btn--ghost" type="button" data-cart-clear data-confirm="Clear the whole cart? All items will be removed." style="margin-top:var(--space-lg)">Clear cart</button>
         </div>
 
         <aside class="summary">
@@ -17988,7 +17999,7 @@ Digital payment, no cash</li></ul>
 
 </div>
     </div>
-<div data-page="cuenta" data-template="customers-account" data-title="Mi cuenta" hidden>
+<div data-page="cuenta" data-template="page" data-title="Mi cuenta" hidden>
       <div id="cuenta--shopify-section-head" class="shopify-section"><header class="page-head" >
   <div class="page-head__photo">
     <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-breakfast.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
@@ -18002,60 +18013,11 @@ Digital payment, no cash</li></ul>
 
 
 </div><div id="cuenta--shopify-section-main" class="shopify-section"><section class="section" >
-  <div class="container">
-    <div class="section__head">
-      <span class="eyebrow">My account</span>
-      <h2>Hi, </h2>
-      <p class="lede">You're in full control of your week: choose your dishes, pause your block, check your balance and share your code.</p>
-      <p><a class="btn btn--ghost" href="#/home">Sign out</a></p>
-    </div>
-
-    <p class="countdown" data-cutoff>Confirm your dishes before Saturday 10:00 AM · time left: <strong data-cutoff-value>…</strong></p>
-
-    <div class="fg--index" style="margin-top:var(--space-2xl)">
-      <div class="fg__list"><a class="index-row" href="#/pg/cuenta-semana">
-            <span class="index-row__n">01</span>
-            <span class="index-row__t">My week</span>
-            <p class="index-row__d">Chosen dishes and the countdown to Saturday's cut-off.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a><a class="index-row" href="#/pg/cuenta-pausas">
-            <span class="index-row__n">02</span>
-            <span class="index-row__t">Pause deliveries</span>
-            <p class="index-row__d">Pause your next block before the window closes.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a><a class="index-row" href="#/pg/cuenta-monedero">
-            <span class="index-row__n">03</span>
-            <span class="index-row__t">Wallet</span>
-            <p class="index-row__d">Store credit and balance.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a><a class="index-row" href="#/pg/cuenta-perfil">
-            <span class="index-row__n">04</span>
-            <span class="index-row__t">Allergies & tastes</span>
-            <p class="index-row__d">Allergies and tastes used for the automatic selection.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a><a class="index-row" href="#/pg/cuenta-referidos">
-            <span class="index-row__n">05</span>
-            <span class="index-row__t">My referrals</span>
-            <p class="index-row__d">Your code and your referral progress.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a><a class="index-row" href="#/pg/cuenta-pedidos">
-            <span class="index-row__n">06</span>
-            <span class="index-row__t">Orders & invoices</span>
-            <p class="index-row__d">History and paid invoices.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a><a class="index-row" href="#/pg/cuenta-entregas">
-            <span class="index-row__n">07</span>
-            <span class="index-row__t">Deliveries & containers</span>
-            <p class="index-row__d">Address, courtesy wait and containers.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a><a class="index-row" href="#/direcciones">
-            <span class="index-row__n">08</span>
-            <span class="index-row__t">Manage addresses</span>
-            <p class="index-row__d">Update delivery and secondary subscriber.</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a></div>
-    </div>
-  </div>
+  <div class="container"><div class="section__head">
+        <span class="eyebrow">My account</span>
+        <h2>Sign in to see your account</h2>
+        <div class="btn-row"><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fcuenta&return_to=%2Fpages%2Fcuenta">Sign in</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Create account</a></div>
+      </div></div>
 </section>
 
 
@@ -19536,6 +19498,40 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         location.reload();
       }).catch(function () { guardOnboarding(); });
   }
+  /* ---------- clear cart (cart page and header menu) ---------- */
+  function initClearCart() {
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-cart-clear]'); if (!b) return;
+      e.preventDefault();
+      var ask = b.getAttribute('data-confirm'); if (ask && !window.confirm(ask)) return;
+      b.disabled = true;
+      var done = function () { try { localStorage.removeItem('kx-cart-note'); } catch (x) {} window.location.reload(); };
+      try { fetch('/cart/clear.js', { method: 'POST', headers: { Accept: 'application/json' } }).then(done, done); } catch (x) { done(); }
+    });
+  }
+
+  /* ---------- header account menu: initial in a circle, one drop-down (who is signed in, shortcuts, language, cart summary, sign out) ---------- */
+  function initAccountMenu() {
+    var root = $('[data-acct]'); if (!root) return;
+    var btn = $('[data-acct-btn]', root), pop = $('[data-acct-pop]', root), dot = $('[data-acct-dot]', root), todo = $('[data-acct-todo]', root);
+    var count = $('[data-acct-count]', root), total = $('[data-acct-total]', root), txt = $('[data-acct-cart-text]', root);
+    var signedIn = btn.classList.contains('is-in');
+    if (signedIn && !isOnboarded()) { if (dot) dot.hidden = false; if (todo) todo.hidden = false; }
+    var setOpen = function (on) { pop.hidden = !on; btn.setAttribute('aria-expanded', on ? 'true' : 'false'); root.classList.toggle('is-open', on); };
+    var paintCart = function (c) {
+      var n = c.item_count || 0;
+      if (count) { count.hidden = !n; count.textContent = n; }
+      if (total) total.textContent = n ? money0(c.total_price / 100) : '';
+      if (txt) txt.textContent = !n ? txt.getAttribute('data-t-empty') : n === 1 ? txt.getAttribute('data-t-one') : String(txt.getAttribute('data-t-many') || '').replace('{n}', n);
+    };
+    var money0 = function (v) { try { return new Intl.NumberFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(v); } catch (e) { return '$' + Math.round(v); } };
+    var refresh = function () { try { fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(paintCart).catch(function () {}); } catch (e) {} };
+    btn.addEventListener('click', function (e) { e.stopPropagation(); var on = pop.hidden; setOpen(on); if (on) refresh(); });
+    document.addEventListener('click', function (e) { if (!pop.hidden && !root.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) { setOpen(false); btn.focus(); } });
+    root.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('.acct__links a, .acct__todo, .acct__cart a, .acct__out')) setOpen(false); });
+  }
+
   /* ---------- dish detail panel: clicking a dish card opens the full breakdown (photo, description, nutrition, ingredients, allergens) in a side panel ---------- */
   function initDishPanel() {
     var panel = $('[data-dish-panel]'); if (!panel) return;
@@ -20424,7 +20420,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

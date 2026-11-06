@@ -12,11 +12,19 @@
 -%}
 <section class="section" {{ section.shopify_attributes }}>
   <div class="container">
+    {%- unless customer -%}
+      <div class="section__head">
+        <span class="eyebrow">{{ 'general.account' | t }}</span>
+        <h2>{{ 'account.login_needed' | t }}</h2>
+        <div class="btn-row"><a class="btn btn--gold" href="{% render 'login-url', back: '/pages/cuenta' %}">{{ 'login.title' | t }}</a><a class="btn btn--outline" href="{% render 'login-url', kind: 'register', back: '/pages/bienvenida' %}">{{ 'acct.create' | t }}</a></div>
+      </div>
+    {%- else -%}
     <div class="section__head">
       <span class="eyebrow">{{ 'general.account' | t }}</span>
-      <h2>{{ 'account.hello' | t }} {{ customer.first_name | default: customer.email }}</h2>
-      <p class="lede">{{ 'account.intro' | t }}</p>
-      <p><a class="btn btn--ghost" href="{{ routes.account_logout_url }}">{{ 'account.logout' | t }}</a></p>
+      <h2>{{ 'acct.hello_page' | t }} {{ customer.first_name | default: customer.email }}</h2>
+      <p class="lede">{{ 'acct.signed_as' | t }} <strong>{{ customer.email }}</strong></p>
+      <p class="text-muted">{{ 'acct.intro_page' | t }}</p>
+      <p class="btn-row"><a class="btn btn--gold" href="/pages/cuenta-semana">{{ 'account.my_week' | t }}</a><a class="btn btn--ghost" href="{{ routes.account_logout_url }}">{{ 'account.logout' | t }}</a></p>
     </div>
 
     <p class="countdown" data-cutoff>{{ 'cutoff.confirm_dishes' | t }} <strong data-cutoff-value>…</strong></p>
@@ -37,6 +45,18 @@
         {%- endfor -%}
       </div>
     </div>
+
+    <h3 style="margin-top:var(--space-2xl)">{{ 'acct.orders_title' | t }}</h3>
+    {%- if customer.orders.size == 0 -%}
+      <p class="text-muted">{{ 'acct.orders_none' | t }}</p>
+    {%- else -%}
+      <div class="adm-tablewrap"><table class="acct-orders"><thead><tr><th>{{ 'acct.order' | t }}</th><th>{{ 'acct.order_date' | t }}</th><th>{{ 'acct.order_status' | t }}</th><th>{{ 'acct.order_total' | t }}</th></tr></thead><tbody>
+        {%- for order in customer.orders limit: 10 -%}
+          <tr><td><strong>{{ order.name }}</strong></td><td>{{ order.created_at | date: '%d/%m/%Y' }}</td><td>{{ order.financial_status_label }}{% if order.fulfillment_status_label != blank %} · {{ order.fulfillment_status_label }}{% endif %}</td><td>{{ order.total_price | money_without_trailing_zeros }}</td></tr>
+        {%- endfor -%}
+      </tbody></table></div>
+    {%- endif -%}
+    {%- endunless -%}
   </div>
 </section>
 

@@ -4,7 +4,7 @@
       "type": "page-head",
       "settings": {
         "parent_label": "Mi cuenta",
-        "parent_link": "/account",
+        "parent_link": "/pages/cuenta",
         "eyebrow": "Alergias y gustos",
         "heading": "Alergias *y gustos*",
         "text": "Tu perfil para la selección automática.",

@@ -1,0 +1,48 @@
+{%- comment -%}
+  Header account button: a circle with the customer's initial (a person icon when signed out) and one drop-down with everything the visitor needs:
+  who is signed in, shortcuts, language, cart summary and sign out. Nothing here leaves the site except the sign-in page itself.
+{%- endcomment -%}
+{%- liquid
+  assign am_name = customer.first_name | default: customer.name | default: customer.email
+  assign am_initial = am_name | strip | slice: 0 | upcase
+  assign am_back = '/pages/bienvenida'
+-%}
+<div class="acct" data-acct>
+  <button class="acct__btn{% if customer %} is-in{% endif %}" type="button" data-acct-btn aria-haspopup="true" aria-expanded="false" aria-controls="acct-pop" aria-label="{{ 'acct.menu' | t }}">
+    {%- if customer -%}<span class="acct__letter" aria-hidden="true">{{ am_initial }}</span>{%- else -%}{% render 'icon', name: 'user' %}{%- endif -%}
+    <span class="cart-count" data-acct-count{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span>
+    <i class="acct__dot" data-acct-dot hidden aria-hidden="true"></i>
+  </button>
+  <div class="acct__pop" id="acct-pop" data-acct-pop hidden>
+    {%- if customer -%}
+      <div class="acct__who">
+        <span class="acct__avatar" aria-hidden="true">{{ am_initial }}</span>
+        <div><strong>{{ 'acct.hello' | t }} {{ am_name }}</strong><span class="acct__mail">{{ customer.email }}</span></div>
+      </div>
+      <a class="acct__todo" data-acct-todo href="/pages/bienvenida?edit=1" hidden>{{ 'acct.todo' | t }} →</a>
+      <nav class="acct__links" aria-label="{{ 'general.account' | t }}">
+        <a href="/pages/cuenta">{{ 'acct.my_account' | t }}</a>
+        <a href="/pages/cuenta-semana">{{ 'account.my_week' | t }}</a>
+        <a href="/pages/cuenta-pausas">{{ 'account.pause_deliveries' | t }}</a>
+        <a href="/pages/cuenta-perfil">{{ 'account.allergies_tastes' | t }}</a>
+        <a href="/pages/cuenta-pedidos">{{ 'account.orders_invoices' | t }}</a>
+      </nav>
+    {%- else -%}
+      <div class="acct__guest">
+        <strong>{{ 'acct.guest_t' | t }}</strong>
+        <p>{{ 'acct.guest_p' | t }}</p>
+        <div class="acct__btns"><a class="btn btn--gold btn--sm" href="{% render 'login-url', back: am_back %}">{{ 'login.title' | t }}</a><a class="btn btn--outline btn--sm" href="{% render 'login-url', kind: 'register', back: am_back %}">{{ 'acct.create' | t }}</a></div>
+      </div>
+    {%- endif -%}
+    <div class="acct__row"><span>{{ 'acct.language' | t }}</span>{% render 'lang-switcher' %}</div>
+    <div class="acct__cart">
+      <div class="acct__cart-h"><span>{{ 'acct.cart' | t }}</span><b data-acct-total>{% if cart.item_count > 0 %}{{ cart.total_price | money_without_trailing_zeros }}{% endif %}</b></div>
+      <p class="acct__cart-n" data-acct-cart-text data-t-one="{{ 'acct.cart_one' | t }}" data-t-many="{{ 'acct.cart_many' | t }}" data-t-empty="{{ 'acct.cart_empty' | t }}">
+        {%- if cart.item_count == 0 -%}{{ 'acct.cart_empty' | t }}{%- elsif cart.item_count == 1 -%}{{ 'acct.cart_one' | t }}{%- else -%}{{ 'acct.cart_many' | t | replace: '{n}', cart.item_count }}{%- endif -%}
+      </p>
+      <a class="btn btn--gold btn--sm btn--block" href="{{ routes.cart_url }}">{{ 'acct.view_cart' | t }}</a>
+      <button class="acct__clear" type="button" data-cart-clear data-confirm="{{ 'cart.clear_confirm' | t }}"{% if cart.item_count == 0 %} hidden{% endif %}>{{ 'cart.clear' | t }}</button>
+    </div>
+    {%- if customer -%}<a class="acct__out" href="{{ routes.account_logout_url }}">{{ 'account.logout' | t }}</a>{%- endif -%}
+  </div>
+</div>

@@ -8,6 +8,30 @@
  * ------------------------------------------------------------
  */
 {
+  "acct": {
+    "menu": "Mi cuenta y carrito",
+    "hello": "Hola,",
+    "my_account": "Mi cuenta",
+    "language": "Idioma",
+    "cart": "Carrito",
+    "cart_empty": "Tu carrito está vacío.",
+    "cart_one": "1 producto en tu carrito.",
+    "cart_many": "{n} productos en tu carrito.",
+    "view_cart": "Ver carrito y pagar",
+    "todo": "Completa tu perfil de alergias",
+    "guest_t": "Bienvenido a Kulinaria",
+    "guest_p": "Inicia sesión para armar tu pedido, ver tu semana y pagar.",
+    "create": "Crear cuenta",
+    "signed_as": "Sesión iniciada como",
+    "orders_none": "Aún no tienes pedidos.",
+    "orders_title": "Tus pedidos",
+    "order": "Pedido",
+    "order_date": "Fecha",
+    "order_total": "Total",
+    "order_status": "Estado",
+    "hello_page": "Hola,",
+    "intro_page": "Aquí ves tu sesión, tu semana y tus pedidos. Todo se maneja desde este sitio."
+  },
   "account": {
     "allergies_tastes": "Alergias y gustos",
     "auto_order": "Si no registras tus opciones a tiempo, el sábado a las 10:01 AM se genera un pedido automático con tu plan contratado, tu historial y, de forma obligatoria, tus alergias registradas.",
@@ -120,6 +144,10 @@
     "referral_text": "Si un entrenador, amigo o gimnasio te recomendó, escribe su código. Un cliente solo puede quedar ligado a un código.",
     "discount_label": "Código de descuento",
     "discount_hint": "Se aplica en el pago. Cada código tiene un número limitado de usos.",
+    "clear": "Vaciar carrito",
+    "clear_confirm": "¿Vaciar todo el carrito? Se quitarán todos los productos.",
+    "profile_needed": "Antes de pagar, completa tu perfil de alergias y gustos. Así revisamos cada platillo contra lo que no puedes o no quieres comer.",
+    "profile_cta": "Completar mi perfil",
     "referral_title": "Código de referencia",
     "remove": "Quitar",
     "saved_post": "gracias a tu código de referencia",

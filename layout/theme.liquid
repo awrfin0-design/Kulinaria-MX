@@ -43,7 +43,7 @@
         timezone: {{ settings.timezone | default: 'America/Mexico_City' | json }},
         cutoffHour: {{ settings.cutoff_hour | default: 10 | json }},
         lang: {{ request.locale.iso_code | default: 'es' | json }},
-        routes: { cart: {{ routes.cart_url | json }}, cartAdd: {{ routes.cart_add_url | json }}, account: {{ routes.account_url | json }} },
+        routes: { cart: {{ routes.cart_url | json }}, cartAdd: {{ routes.cart_add_url | json }}, account: "/pages/cuenta" },
         media: { fire: {{ 'video-fire.mp4' | asset_url | json }} },
         logos: { fuego: {{ 'logo-fuego.webp' | asset_url | json }}, ink: {{ 'logo-black.webp' | asset_url | json }}, cream: {{ 'logo-cream.webp' | asset_url | json }}, gold: {{ 'logo.webp' | asset_url | json }} },
         i18n: {

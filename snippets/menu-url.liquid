@@ -8,8 +8,8 @@
     render 'login-url', back: '/pages/bienvenida'
   elsif u contains '/account/register'
     render 'login-url', kind: 'register', back: '/pages/bienvenida'
-  elsif u contains '/account/addresses'
-    echo routes.account_url
+  elsif u contains '/account/addresses' or u == '/account'
+    echo '/pages/cuenta'
   else
     echo u
   endif

@@ -4,7 +4,7 @@
       "type": "page-head",
       "settings": {
         "parent_label": "Mi cuenta",
-        "parent_link": "/account",
+        "parent_link": "/pages/cuenta",
         "eyebrow": "Pausar entregas",
         "heading": "Pausar *entregas*",
         "text": "Pausa tu próximo bloque antes de que se cierre la ventana.",

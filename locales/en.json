@@ -8,6 +8,30 @@
  * ------------------------------------------------------------
  */
 {
+  "acct": {
+    "menu": "My account and cart",
+    "hello": "Hi,",
+    "my_account": "My account",
+    "language": "Language",
+    "cart": "Cart",
+    "cart_empty": "Your cart is empty.",
+    "cart_one": "1 item in your cart.",
+    "cart_many": "{n} items in your cart.",
+    "view_cart": "View cart and pay",
+    "todo": "Complete your allergy profile",
+    "guest_t": "Welcome to Kulinaria",
+    "guest_p": "Sign in to build your order, see your week and pay.",
+    "create": "Create account",
+    "signed_as": "Signed in as",
+    "orders_none": "You have no orders yet.",
+    "orders_title": "Your orders",
+    "order": "Order",
+    "order_date": "Date",
+    "order_total": "Total",
+    "order_status": "Status",
+    "hello_page": "Hi,",
+    "intro_page": "Here you see your session, your week and your orders. Everything is handled on this site."
+  },
   "account": {
     "allergies_tastes": "Allergies & tastes",
     "auto_order": "If you don't register your choices in time, at 10:01 AM on Saturday we create an automatic order from your plan, your history and, always, your registered allergies.",
@@ -120,6 +144,10 @@
     "referral_text": "If a trainer, friend or gym recommended us, enter their code. A client can only be linked to one code.",
     "discount_label": "Discount code",
     "discount_hint": "Applied at checkout. Each code can only be used a limited number of times.",
+    "clear": "Clear cart",
+    "clear_confirm": "Clear the whole cart? All items will be removed.",
+    "profile_needed": "Before paying, complete your allergy and taste profile. That's how we check every dish against what you can't or don't want to eat.",
+    "profile_cta": "Complete my profile",
     "referral_title": "Referral code",
     "remove": "Remove",
     "saved_post": "thanks to your referral code",

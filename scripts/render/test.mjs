@@ -124,7 +124,7 @@ await page.evaluate(() => localStorage.clear());
 await page.goto(`${URL0}#/p/bowl-res-quinoa`); await page.reload(); await page.waitForTimeout(100);
 await page.click('[data-page="p/bowl-res-quinoa"] [data-add]'); await page.waitForTimeout(150);
 ok('dish page CTA opens the plan builder with the dish preselected', /#\/pg\/pedido\?dish=bowl-res-quinoa|#\/pedido\?dish=bowl-res-quinoa/.test(page.url()), page.url());
-await page.goto(`${URL0}#/carrito`); await page.waitForTimeout(150);
+await page.evaluate(() => localStorage.setItem('kulinaria_onboarded', '1')); await page.goto(`${URL0}#/carrito`); await page.reload(); await page.waitForTimeout(900);
 const cartScope = '[data-page="carrito"]';
 ok('checkout disabled until contract accepted', await page.$eval(`${cartScope} [data-checkout]`, (e) => e.disabled));
 await page.check(`${cartScope} [data-contract]`);
@@ -1043,6 +1043,48 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.click('[data-dp-pick]'); await page.waitForTimeout(600);
   ok('choosing from the panel assigns the dish to the active day and closes the panel', await page.evaluate(() => document.querySelector('[data-dish-panel]').hidden && document.querySelectorAll('[data-page="pg/pedido"] .fn-day.is-set').length === 1));
   ok('the plans page buttons go to the order flow with the plan preselected (not back to the plans page)', await page.evaluate(() => { const hs = [...document.querySelectorAll('[data-page="pg/planes"] .plan-card .btn')].map((a) => a.getAttribute('href')); return hs.length === 2 && hs.some((h) => /pedido\?plan=block/.test(h)) && hs.some((h) => /pedido\?plan=week/.test(h)); }));
+}
+
+
+// =====================================================================  v34: header account menu, own account page, clear cart
+{
+  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_ob_asked', '1'); sessionStorage.setItem('kx-seen', '1'); }); await page.reload(); await page.waitForTimeout(900);
+  ok('header: one account circle with the customer initial; no separate "Mi cuenta" link, language switch or cart icon in the bar', await page.evaluate(() => { const h = document.querySelector('[data-page="home"] .site-header') || document.querySelector('.site-header'); const b = h.querySelector('.acct__btn'); return !!b && /^[A-Z]$/.test(b.textContent.replace(/\d+/g, '').trim()) && !h.querySelector('.header-login') && !h.querySelector('.header-actions > .icon-link') && !h.querySelector('.header-actions > .lang'); }));
+  await page.evaluate(() => document.querySelector('.site-header .acct__btn').click()); await page.waitForTimeout(300);
+  ok('header menu: shows who is signed in (name + email), shortcuts, language, cart summary and sign out', await page.evaluate(() => { const p = document.querySelector('.site-header [data-acct-pop]'); return !p.hidden && /@/.test(p.querySelector('.acct__mail').textContent) && p.querySelectorAll('.acct__links a').length >= 5 && p.querySelectorAll('.lang__btn').length === 2 && !!p.querySelector('.acct__cart') && !!p.querySelector('.acct__out'); }));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+  ok('header menu: Escape closes it', await page.$eval('.site-header [data-acct-pop]', (p) => p.hidden));
+  await page.goto(`${URL0}#/cuenta`); await page.waitForTimeout(500);
+  ok('account page is our own: greeting with the name, the e-mail signed in, sign out, tiles and the order list (no Shopify page)', await page.evaluate(() => { const p = document.querySelector('[data-page="cuenta"]'); return /Hola/.test(p.querySelector('h2').textContent) && /@/.test(p.innerText) && !!p.querySelector('a[href*="logout"], a[href*="salir"]') && p.querySelectorAll('.index-row').length >= 5; }));
+  await page.goto(`${URL0}#/carrito`); await page.waitForTimeout(400);
+  ok('cart: has a "Vaciar carrito" button', await page.$eval('[data-page="carrito"]', (c) => !!c.querySelector('[data-cart-clear]')));
+  const G2 = URL0.replace('index.html', 'guest.html');
+  await page.goto(`${G2}#/home`); await page.waitForTimeout(600);
+  await page.evaluate(() => document.querySelector('.site-header .acct__btn').click()); await page.waitForTimeout(300);
+  ok('signed out: the header circle opens sign in / create account, language and cart (no initial, no logout)', await page.evaluate(() => { const p = document.querySelector('.site-header [data-acct-pop]'); return !p.hidden && !!p.querySelector('.acct__guest a.btn--gold') && !p.querySelector('.acct__out') && p.querySelectorAll('.lang__btn').length === 2; }));
+  await page.goto(`${URL0}#/home`); await page.waitForTimeout(300);
+}
+
+
+// =====================================================================  v35: allergy / dislike detection (any language) and the profile gate before paying
+{
+  const setProfile = async (prof) => { await page.goto(`${URL0}#/home`); await page.evaluate((pf) => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); localStorage.setItem('kx-test-orders', '0'); localStorage.setItem('kulinaria_onboarded', '1'); sessionStorage.setItem('kx_ob_asked', '1'); sessionStorage.setItem('kx-seen', '1'); localStorage.setItem('kulinaria_profile', JSON.stringify(pf)); }, prof); await page.goto(`${URL0}#/menu`); await page.reload(); await page.waitForTimeout(1200); };
+  const warned = () => page.$$eval('[data-page="menu"] [data-dish].is-warned', (c) => c.map((x) => x.querySelector('.dish__title').textContent.trim()));
+  const compat = (title) => page.evaluate((t) => { const d = [...document.querySelectorAll('[data-page="menu"] [data-dish]')].find((x) => x.querySelector('.dish__title').textContent.trim() === t); return d ? d.querySelector('[data-compat]').textContent : ''; }, 'Filete Prime con verduras asadas');
+  await setProfile({ allergies: ['nuts'], dislikes: [], diets: [] });
+  ok('allergy typed in English ("nuts") flags the dish with almonds', (await warned()).some((t) => /salm/i.test(t)), JSON.stringify(await warned()));
+  await setProfile({ allergies: ['peanuts'], dislikes: [], diets: [] });
+  ok('a peanut allergy does not flag dishes that have no peanuts (almond is not peanut)', (await warned()).length === 0, JSON.stringify(await warned()));
+  await setProfile({ allergies: ['fish'], dislikes: [], diets: [] });
+  ok('a fish allergy ("fish") flags the salmon dish', (await warned()).some((t) => /salm/i.test(t)), JSON.stringify(await warned()));
+  await setProfile({ allergies: ['Mariscos'], dislikes: [], diets: [] });
+  ok('a shellfish allergy ("Mariscos") does not flag the salmon (fish is a separate allergy)', !(await warned()).some((t) => /salm/i.test(t)));
+  await setProfile({ allergies: [], dislikes: ['broccoli'], diets: [] });
+  ok('a dislike typed in English ("broccoli") lowers the match of the dish that has Brócoli', /[0-9]/.test(await compat()) && !/100/.test(await compat()), await compat());
+  await page.evaluate(() => { localStorage.removeItem('kulinaria_onboarded'); }); await page.goto(`${URL0}#/carrito`); await page.reload(); await page.waitForTimeout(900);
+  await page.check('[data-page="carrito"] [data-contract]');
+  ok('a new account that has not confirmed its allergy profile cannot pay yet and is sent to complete it', await page.evaluate(() => { const c = document.querySelector('[data-page="carrito"]'); return c.querySelector('[data-checkout]').disabled && !c.querySelector('[data-cart-profile]').hidden && /bienvenida/.test(c.querySelector('[data-cart-profile] a').getAttribute('href')); }));
+  await page.evaluate(() => { localStorage.setItem('kulinaria_onboarded', '1'); });
 }
 
 await browser.close();

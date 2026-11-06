@@ -2349,6 +2349,44 @@ html.has-dish-panel{overflow:hidden}
   .dd__nutri{grid-template-columns:repeat(2,minmax(0,1fr))}.dd__nutri .is-main{grid-column:1/-1}
 }
 
+/* v34: header account menu */
+.acct{position:relative}
+.acct__btn{position:relative;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--accent);background:var(--accent-wash);color:var(--accent);cursor:pointer;font-family:var(--font-heading);font-weight:700;font-size:1.15rem;transition:background .25s,transform .25s}
+.acct__btn:hover,.acct.is-open .acct__btn{background:var(--accent);color:var(--on-brand)}
+.acct__btn svg{width:22px;height:22px}
+.acct__btn.is-in{background:var(--accent);color:var(--on-brand)}
+.acct__btn .cart-count{top:-5px;right:-5px;border:2px solid var(--bg-base)}
+.cart-count[hidden]{display:none}
+.acct__dot{position:absolute;bottom:-1px;right:-1px;width:12px;height:12px;border-radius:50%;background:#ff6b57;border:2px solid var(--bg-base)}
+.acct__dot[hidden],.acct__todo[hidden]{display:none}
+.acct__pop{position:absolute;top:calc(100% + 12px);right:0;z-index:300;width:min(340px,calc(100vw - 24px));padding:16px;border-radius:20px;background:var(--bg-raised);color:var(--text);border:1px solid var(--line);box-shadow:0 22px 60px rgba(0,0,0,.3);display:flex;flex-direction:column;gap:12px;font-family:var(--font-body);filter:none}
+.acct__pop[hidden]{display:none}
+.acct__who{display:flex;gap:12px;align-items:center}
+.acct__avatar{flex:none;width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--on-brand);display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:700;font-size:1.2rem}
+.acct__who strong{display:block;font-size:1.05rem;line-height:1.2}
+.acct__mail{display:block;font-size:.82rem;color:var(--text-muted);word-break:break-all}
+.acct__todo{display:block;padding:10px 12px;border-radius:12px;background:rgba(255,107,87,.14);border:1px solid rgba(255,107,87,.5);color:var(--text);font-size:.88rem;font-weight:700}
+.acct__links{display:flex;flex-direction:column;border-top:1px solid var(--line);padding-top:6px}
+.acct__links a{padding:9px 4px;color:var(--text);font-size:.95rem;border-radius:8px}
+.acct__links a:hover{background:var(--accent-wash)}
+.acct__row{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding-top:12px;font-size:.88rem;color:var(--text-muted)}
+.acct__pop .lang{display:inline-flex !important}
+.acct__cart{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.acct__cart-h{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--font-label);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+.acct__cart-h b{font-family:var(--font-heading);font-size:1.3rem;letter-spacing:0;color:var(--accent);text-transform:none}
+.acct__cart-n{margin:0;font-size:.9rem;color:var(--text-muted)}
+.acct__guest p{margin:4px 0 10px;color:var(--text-muted);font-size:.9rem}
+.acct__btns{display:flex;gap:8px;flex-wrap:wrap}
+.acct__out{display:block;text-align:center;padding:10px;border-top:1px solid var(--line);color:var(--text-muted);font-size:.9rem}
+.acct__out:hover{color:var(--accent)}
+@media (max-width:600px){.acct__pop{position:fixed;top:calc(var(--app-top,56px) + 6px);right:12px;left:12px;width:auto;max-height:calc(100svh - var(--app-top,56px) - 20px);overflow-y:auto}}
+.site-header .header-actions>.acct{filter:none}
+.acct-orders{width:100%;border-collapse:collapse;font-size:.95rem}.acct-orders th,.acct-orders td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}.acct-orders th{font-family:var(--font-label);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.acct-hero{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:16px 18px;margin-bottom:var(--space-lg);border:1px solid var(--line);border-radius:18px;background:var(--bg-raised)}
+.acct-hero .acct__avatar{width:52px;height:52px;font-size:1.4rem}
+.acct-hero__t{flex:1 1 220px}.acct-hero__t strong{display:block;font-size:1.2rem}.acct-hero__t span{color:var(--text-muted);font-size:.9rem;word-break:break-all}
+.acct__clear{align-self:center;background:none;border:0;color:var(--text-muted);font:inherit;font-size:.85rem;text-decoration:underline;cursor:pointer;padding:4px}.acct__clear[hidden]{display:none}.acct__clear:hover{color:var(--accent)}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -2358,7 +2396,7 @@ html.has-dish-panel{overflow:hidden}
         timezone: "America/Mexico_City",
         cutoffHour: 10,
         lang: "es",
-        routes: { cart: "/cart", cartAdd: "/cart/add", account: "/account" },
+        routes: { cart: "/cart", cartAdd: "/cart/add", account: "/pages/cuenta" },
         media: { fire: "assets/video-fire.mp4" },
         logos: { fuego: "assets/logo-fuego.webp", ink: "assets/logo-black.webp", cream: "assets/logo-cream.webp", gold: "assets/logo.webp" },
         i18n: {
@@ -2485,17 +2523,33 @@ html.has-dish-panel{overflow:hidden}
   <img class="logo logo--fuego" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-fuego.webp" width="700" height="342" alt="" aria-hidden="true" decoding="async"></a>
 
       <div class="header-actions">
-        <form method="post" action="/localization" data-shopify-form="localization" accept-charset="UTF-8" class="lang"><input type="hidden" name="country_code" value="MX">
+        <div class="acct" data-acct>
+  <button class="acct__btn is-in" type="button" data-acct-btn aria-haspopup="true" aria-expanded="false" aria-controls="acct-pop" aria-label="Mi cuenta y carrito"><span class="acct__letter" aria-hidden="true">R</span><span class="cart-count" data-acct-count>1</span>
+    <i class="acct__dot" data-acct-dot hidden aria-hidden="true"></i>
+  </button>
+  <div class="acct__pop" id="acct-pop" data-acct-pop hidden><div class="acct__who">
+        <span class="acct__avatar" aria-hidden="true">R</span>
+        <div><strong>Hola, Ramón</strong><span class="acct__mail">ramon@ejemplo.com</span></div>
+      </div>
+      <a class="acct__todo" data-acct-todo href="#/pg/bienvenida?edit=1" hidden>Completa tu perfil de alergias →</a>
+      <nav class="acct__links" aria-label="Mi cuenta">
+        <a href="#/cuenta">Mi cuenta</a>
+        <a href="#/pg/cuenta-semana">Mi semana</a>
+        <a href="#/pg/cuenta-pausas">Pausar entregas</a>
+        <a href="#/pg/cuenta-perfil">Alergias y gustos</a>
+        <a href="#/pg/cuenta-pedidos">Pedidos y facturas</a>
+      </nav><div class="acct__row"><span>Idioma</span><form method="post" action="/localization" data-shopify-form="localization" accept-charset="UTF-8" class="lang"><input type="hidden" name="country_code" value="MX">
     <div class="lang__group" role="group" aria-label="Idioma"><button class="lang__btn" type="submit" name="language_code" value="es" lang="es"
           title="Cambiar a Español" aria-current="true">ES</button><button class="lang__btn" type="submit" name="language_code" value="en" lang="en"
-          title="Cambiar a English">EN</button></div></form>
-        <a class="header-login" href="#/pg/cuenta-semana">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-<span>Mi cuenta</span>
-        </a>
-        <a class="icon-link" href="#/carrito" aria-label="Carrito">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-<span class="cart-count">1</span></a>
+          title="Cambiar a English">EN</button></div></form></div>
+    <div class="acct__cart">
+      <div class="acct__cart-h"><span>Carrito</span><b data-acct-total>$5,000</b></div>
+      <p class="acct__cart-n" data-acct-cart-text data-t-one="1 producto en tu carrito." data-t-many="{n} productos en tu carrito." data-t-empty="Tu carrito está vacío.">1 producto en tu carrito.</p>
+      <a class="btn btn--gold btn--sm btn--block" href="#/carrito">Ver carrito y pagar</a>
+      <button class="acct__clear" type="button" data-cart-clear data-confirm="¿Vaciar todo el carrito? Se quitarán todos los productos.">Vaciar carrito</button>
+    </div><a class="acct__out" href="#/home">Cerrar sesión</a></div>
+</div>
+
         <button class="burger" type="button" data-menu-open aria-haspopup="dialog" aria-controls="menu-overlay" aria-expanded="false" aria-label="Abrir menú"><i></i><i></i></button>
       </div>
     </div>
@@ -2576,17 +2630,33 @@ Fuego</span>
   <img class="logo logo--fuego" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-fuego.webp" width="700" height="342" alt="" aria-hidden="true" decoding="async"></a>
 
       <div class="header-actions">
-        <form method="post" action="/localization" data-shopify-form="localization" accept-charset="UTF-8" class="lang"><input type="hidden" name="country_code" value="MX">
+        <div class="acct" data-acct>
+  <button class="acct__btn is-in" type="button" data-acct-btn aria-haspopup="true" aria-expanded="false" aria-controls="acct-pop" aria-label="My account and cart"><span class="acct__letter" aria-hidden="true">R</span><span class="cart-count" data-acct-count>1</span>
+    <i class="acct__dot" data-acct-dot hidden aria-hidden="true"></i>
+  </button>
+  <div class="acct__pop" id="acct-pop" data-acct-pop hidden><div class="acct__who">
+        <span class="acct__avatar" aria-hidden="true">R</span>
+        <div><strong>Hi, Ramón</strong><span class="acct__mail">ramon@ejemplo.com</span></div>
+      </div>
+      <a class="acct__todo" data-acct-todo href="#/pg/bienvenida?edit=1" hidden>Complete your allergy profile →</a>
+      <nav class="acct__links" aria-label="My account">
+        <a href="#/cuenta">My account</a>
+        <a href="#/pg/cuenta-semana">My week</a>
+        <a href="#/pg/cuenta-pausas">Pause deliveries</a>
+        <a href="#/pg/cuenta-perfil">Allergies & tastes</a>
+        <a href="#/pg/cuenta-pedidos">Orders & invoices</a>
+      </nav><div class="acct__row"><span>Language</span><form method="post" action="/localization" data-shopify-form="localization" accept-charset="UTF-8" class="lang"><input type="hidden" name="country_code" value="MX">
     <div class="lang__group" role="group" aria-label="Language"><button class="lang__btn" type="submit" name="language_code" value="es" lang="es"
           title="Switch to Español">ES</button><button class="lang__btn" type="submit" name="language_code" value="en" lang="en"
-          title="Switch to English" aria-current="true">EN</button></div></form>
-        <a class="header-login" href="#/pg/cuenta-semana">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-<span>My account</span>
-        </a>
-        <a class="icon-link" href="#/carrito" aria-label="Cart">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-<span class="cart-count">1</span></a>
+          title="Switch to English" aria-current="true">EN</button></div></form></div>
+    <div class="acct__cart">
+      <div class="acct__cart-h"><span>Cart</span><b data-acct-total>$5,000</b></div>
+      <p class="acct__cart-n" data-acct-cart-text data-t-one="1 item in your cart." data-t-many="{n} items in your cart." data-t-empty="Your cart is empty.">1 item in your cart.</p>
+      <a class="btn btn--gold btn--sm btn--block" href="#/carrito">View cart and pay</a>
+      <button class="acct__clear" type="button" data-cart-clear data-confirm="Clear the whole cart? All items will be removed.">Clear cart</button>
+    </div><a class="acct__out" href="#/home">Sign out</a></div>
+</div>
+
         <button class="burger" type="button" data-menu-open aria-haspopup="dialog" aria-controls="menu-overlay" aria-expanded="false" aria-label="Open menu"><i></i><i></i></button>
       </div>
     </div>
@@ -9335,17 +9405,19 @@ Pago digital, sin efectivo</li></ul>
 
 
 </div><div id="pg-cuenta-semana--shopify-section-s1" class="shopify-section"><section class="section" >
-  <div class="container"><div class="account">
+  <div class="container"><div class="acct-hero">
+      <span class="acct__avatar" aria-hidden="true">R</span>
+      <div class="acct-hero__t"><strong>Hola, Ramón</strong><span>ramon@ejemplo.com</span></div>
+      <a class="btn btn--ghost btn--sm" href="#/home">Cerrar sesión</a>
+    </div>
+    <div class="account">
       <nav class="account-nav" aria-label="Mi cuenta">
         <a href="#/cuenta">Resumen</a>
         <a href="#/pg/cuenta-semana" aria-current="page">Mi semana</a>
         <a href="#/pg/cuenta-pausas">Pausar entregas</a>
-        <a href="#/pg/cuenta-monedero">Monedero</a>
         <a href="#/pg/cuenta-perfil">Alergias y gustos</a>
-        <a href="#/pg/cuenta-referidos">Mis referidos</a>
         <a href="#/pg/cuenta-pedidos">Pedidos y facturas</a>
-        <a href="#/pg/cuenta-entregas">Entregas y envases</a>
-        <a href="#/direcciones">Administrar direcciones</a>
+        <a href="#/pg/cuenta-monedero">Monedero · Mis referidos</a>
       </nav>
 
       <div class="account-content">
@@ -9384,7 +9456,7 @@ Pago digital, sin efectivo</li></ul>
               <a hidden data-mw-cart href="#/carrito" tabindex="-1" aria-hidden="true"></a>
               <div class="btn-row"><button class="btn btn--outline" type="button" data-mw-skip>Saltar esta semana</button><button class="btn btn--gold" type="button" data-mw-save>Guardar mi semana</button></div>
             </div>
-            <p class="myweek__links"><a class="text-link" href="#/cuenta">Ver mis pedidos anteriores</a> · <a class="text-link" href="#/pg/bienvenida?edit=1">Mis datos</a> · <a class="text-link" href="#/cuenta">Administrar suscripción</a></p>
+            <p class="myweek__links"><a class="text-link" href="#/cuenta">Ver mis pedidos anteriores</a> · <a class="text-link" href="#/pg/bienvenida?edit=1">Mis datos</a></p>
           </div>
           <ul hidden data-mw-dishes><li data-pid="7100" data-title="Pollo a las hierbas con puré rústico" data-label="Pollo a las hierbas con puré rústico" data-tier="selecto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas"></li><li data-pid="7101" data-title="Bowl de res magra y quinoa" data-label="Bowl de res magra y quinoa" data-tier="selecto" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro"></li><li data-pid="7102" data-title="Salmón gourmet en costra de almendras" data-label="Salmón gourmet en costra de almendras" data-tier="exclusivo" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón"></li><li data-pid="7103" data-title="Omelette de claras con espinaca" data-label="Omelette de claras con espinaca" data-tier="selecto" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones"></li><li data-pid="7104" data-title="Arrachera al carbón con maíz y espárragos" data-label="Arrachera al carbón con maíz y espárragos" data-tier="signature" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas"></li><li data-pid="7105" data-title="Filete Prime con verduras asadas" data-label="Filete Prime con verduras asadas" data-tier="reserve" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla"></li><li data-pid="7106" data-title="Bowl vegano de garbanzo y tahini" data-label="Bowl vegano de garbanzo y tahini" data-tier="exclusivo" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla"></li><li data-pid="7107" data-title="Crema de calabaza asada" data-label="Crema de calabaza asada" data-tier="selecto" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo"></li><li data-pid="7110" data-title="Mini pasta de pollo para peques" data-label="Mini pasta de pollo para peques" data-tier="selecto" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate"></li></ul>
         </div></div>
@@ -9409,17 +9481,19 @@ Pago digital, sin efectivo</li></ul>
 
 
 </div><div id="pg-cuenta-pausas--shopify-section-s1" class="shopify-section"><section class="section" >
-  <div class="container"><div class="account">
+  <div class="container"><div class="acct-hero">
+      <span class="acct__avatar" aria-hidden="true">R</span>
+      <div class="acct-hero__t"><strong>Hola, Ramón</strong><span>ramon@ejemplo.com</span></div>
+      <a class="btn btn--ghost btn--sm" href="#/home">Cerrar sesión</a>
+    </div>
+    <div class="account">
       <nav class="account-nav" aria-label="Mi cuenta">
         <a href="#/cuenta">Resumen</a>
         <a href="#/pg/cuenta-semana">Mi semana</a>
         <a href="#/pg/cuenta-pausas" aria-current="page">Pausar entregas</a>
-        <a href="#/pg/cuenta-monedero">Monedero</a>
         <a href="#/pg/cuenta-perfil">Alergias y gustos</a>
-        <a href="#/pg/cuenta-referidos">Mis referidos</a>
         <a href="#/pg/cuenta-pedidos">Pedidos y facturas</a>
-        <a href="#/pg/cuenta-entregas">Entregas y envases</a>
-        <a href="#/direcciones">Administrar direcciones</a>
+        <a href="#/pg/cuenta-monedero">Monedero · Mis referidos</a>
       </nav>
 
       <div class="account-content">
@@ -9473,17 +9547,19 @@ Pago digital, sin efectivo</li></ul>
 
 
 </div><div id="pg-cuenta-monedero--shopify-section-s1" class="shopify-section"><section class="section" >
-  <div class="container"><div class="account">
+  <div class="container"><div class="acct-hero">
+      <span class="acct__avatar" aria-hidden="true">R</span>
+      <div class="acct-hero__t"><strong>Hola, Ramón</strong><span>ramon@ejemplo.com</span></div>
+      <a class="btn btn--ghost btn--sm" href="#/home">Cerrar sesión</a>
+    </div>
+    <div class="account">
       <nav class="account-nav" aria-label="Mi cuenta">
         <a href="#/cuenta">Resumen</a>
         <a href="#/pg/cuenta-semana">Mi semana</a>
         <a href="#/pg/cuenta-pausas">Pausar entregas</a>
-        <a href="#/pg/cuenta-monedero" aria-current="page">Monedero</a>
         <a href="#/pg/cuenta-perfil">Alergias y gustos</a>
-        <a href="#/pg/cuenta-referidos">Mis referidos</a>
         <a href="#/pg/cuenta-pedidos">Pedidos y facturas</a>
-        <a href="#/pg/cuenta-entregas">Entregas y envases</a>
-        <a href="#/direcciones">Administrar direcciones</a>
+        <a href="#/pg/cuenta-monedero" aria-current="page">Monedero · Mis referidos</a>
       </nav>
 
       <div class="account-content">
@@ -9513,17 +9589,19 @@ Pago digital, sin efectivo</li></ul>
 
 
 </div><div id="pg-cuenta-perfil--shopify-section-s1" class="shopify-section"><section class="section" >
-  <div class="container"><div class="account">
+  <div class="container"><div class="acct-hero">
+      <span class="acct__avatar" aria-hidden="true">R</span>
+      <div class="acct-hero__t"><strong>Hola, Ramón</strong><span>ramon@ejemplo.com</span></div>
+      <a class="btn btn--ghost btn--sm" href="#/home">Cerrar sesión</a>
+    </div>
+    <div class="account">
       <nav class="account-nav" aria-label="Mi cuenta">
         <a href="#/cuenta">Resumen</a>
         <a href="#/pg/cuenta-semana">Mi semana</a>
         <a href="#/pg/cuenta-pausas">Pausar entregas</a>
-        <a href="#/pg/cuenta-monedero">Monedero</a>
         <a href="#/pg/cuenta-perfil" aria-current="page">Alergias y gustos</a>
-        <a href="#/pg/cuenta-referidos">Mis referidos</a>
         <a href="#/pg/cuenta-pedidos">Pedidos y facturas</a>
-        <a href="#/pg/cuenta-entregas">Entregas y envases</a>
-        <a href="#/direcciones">Administrar direcciones</a>
+        <a href="#/pg/cuenta-monedero">Monedero · Mis referidos</a>
       </nav>
 
       <div class="account-content">
@@ -9550,17 +9628,19 @@ Pago digital, sin efectivo</li></ul>
 
 
 </div><div id="pg-cuenta-referidos--shopify-section-s1" class="shopify-section"><section class="section" >
-  <div class="container"><div class="account">
+  <div class="container"><div class="acct-hero">
+      <span class="acct__avatar" aria-hidden="true">R</span>
+      <div class="acct-hero__t"><strong>Hola, Ramón</strong><span>ramon@ejemplo.com</span></div>
+      <a class="btn btn--ghost btn--sm" href="#/home">Cerrar sesión</a>
+    </div>
+    <div class="account">
       <nav class="account-nav" aria-label="Mi cuenta">
         <a href="#/cuenta">Resumen</a>
         <a href="#/pg/cuenta-semana">Mi semana</a>
         <a href="#/pg/cuenta-pausas">Pausar entregas</a>
-        <a href="#/pg/cuenta-monedero">Monedero</a>
         <a href="#/pg/cuenta-perfil">Alergias y gustos</a>
-        <a href="#/pg/cuenta-referidos" aria-current="page">Mis referidos</a>
         <a href="#/pg/cuenta-pedidos">Pedidos y facturas</a>
-        <a href="#/pg/cuenta-entregas">Entregas y envases</a>
-        <a href="#/direcciones">Administrar direcciones</a>
+        <a href="#/pg/cuenta-monedero" aria-current="page">Monedero · Mis referidos</a>
       </nav>
 
       <div class="account-content">
@@ -9593,17 +9673,19 @@ Pago digital, sin efectivo</li></ul>
 
 
 </div><div id="pg-cuenta-pedidos--shopify-section-s1" class="shopify-section"><section class="section" >
-  <div class="container"><div class="account">
+  <div class="container"><div class="acct-hero">
+      <span class="acct__avatar" aria-hidden="true">R</span>
+      <div class="acct-hero__t"><strong>Hola, Ramón</strong><span>ramon@ejemplo.com</span></div>
+      <a class="btn btn--ghost btn--sm" href="#/home">Cerrar sesión</a>
+    </div>
+    <div class="account">
       <nav class="account-nav" aria-label="Mi cuenta">
         <a href="#/cuenta">Resumen</a>
         <a href="#/pg/cuenta-semana">Mi semana</a>
         <a href="#/pg/cuenta-pausas">Pausar entregas</a>
-        <a href="#/pg/cuenta-monedero">Monedero</a>
         <a href="#/pg/cuenta-perfil">Alergias y gustos</a>
-        <a href="#/pg/cuenta-referidos">Mis referidos</a>
         <a href="#/pg/cuenta-pedidos" aria-current="page">Pedidos y facturas</a>
-        <a href="#/pg/cuenta-entregas">Entregas y envases</a>
-        <a href="#/direcciones">Administrar direcciones</a>
+        <a href="#/pg/cuenta-monedero">Monedero · Mis referidos</a>
       </nav>
 
       <div class="account-content">
@@ -9632,17 +9714,19 @@ Pago digital, sin efectivo</li></ul>
 
 
 </div><div id="pg-cuenta-entregas--shopify-section-s1" class="shopify-section"><section class="section" >
-  <div class="container"><div class="account">
+  <div class="container"><div class="acct-hero">
+      <span class="acct__avatar" aria-hidden="true">R</span>
+      <div class="acct-hero__t"><strong>Hola, Ramón</strong><span>ramon@ejemplo.com</span></div>
+      <a class="btn btn--ghost btn--sm" href="#/home">Cerrar sesión</a>
+    </div>
+    <div class="account">
       <nav class="account-nav" aria-label="Mi cuenta">
         <a href="#/cuenta">Resumen</a>
         <a href="#/pg/cuenta-semana">Mi semana</a>
         <a href="#/pg/cuenta-pausas">Pausar entregas</a>
-        <a href="#/pg/cuenta-monedero">Monedero</a>
         <a href="#/pg/cuenta-perfil">Alergias y gustos</a>
-        <a href="#/pg/cuenta-referidos">Mis referidos</a>
         <a href="#/pg/cuenta-pedidos">Pedidos y facturas</a>
-        <a href="#/pg/cuenta-entregas" aria-current="page">Entregas y envases</a>
-        <a href="#/direcciones">Administrar direcciones</a>
+        <a href="#/pg/cuenta-monedero" aria-current="page">Monedero · Mis referidos</a>
       </nav>
 
       <div class="account-content">
@@ -10266,6 +10350,7 @@ Pago digital, sin efectivo</li></ul>
                 </p>
               </div>
             </div><button class="btn btn--outline" type="submit" name="update" style="margin-top:var(--space-lg)">Actualizar cantidades</button>
+          <button class="btn btn--ghost" type="button" data-cart-clear data-confirm="¿Vaciar todo el carrito? Se quitarán todos los productos." style="margin-top:var(--space-lg)">Vaciar carrito</button>
         </div>
 
         <aside class="summary">
@@ -10310,7 +10395,7 @@ Pago digital, sin efectivo</li></ul>
 
 </div>
     </div>
-<div data-page="cuenta" data-template="customers-account" data-title="Mi cuenta" hidden>
+<div data-page="cuenta" data-template="page" data-title="Mi cuenta" hidden>
       <div id="cuenta--shopify-section-head" class="shopify-section"><header class="page-head" >
   <div class="page-head__photo">
     <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-breakfast.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
@@ -10324,12 +10409,12 @@ Pago digital, sin efectivo</li></ul>
 
 
 </div><div id="cuenta--shopify-section-main" class="shopify-section"><section class="section" >
-  <div class="container">
-    <div class="section__head">
+  <div class="container"><div class="section__head">
       <span class="eyebrow">Mi cuenta</span>
       <h2>Hola, Ramón</h2>
-      <p class="lede">Tienes el control total de tu semana: elige tus platillos, pausa tu bloque, revisa tu saldo y comparte tu código.</p>
-      <p><a class="btn btn--ghost" href="#/home">Cerrar sesión</a></p>
+      <p class="lede">Sesión iniciada como <strong>ramon@ejemplo.com</strong></p>
+      <p class="text-muted">Aquí ves tu sesión, tu semana y tus pedidos. Todo se maneja desde este sitio.</p>
+      <p class="btn-row"><a class="btn btn--gold" href="#/pg/cuenta-semana">Mi semana</a><a class="btn btn--ghost" href="#/home">Cerrar sesión</a></p>
     </div>
 
     <p class="countdown" data-cutoff>Confirma tus platillos antes del sábado 10:00 AM · quedan <strong data-cutoff-value>…</strong></p>
@@ -10377,7 +10462,8 @@ Pago digital, sin efectivo</li></ul>
             <span class="index-row__a" aria-hidden="true">→</span>
           </a></div>
     </div>
-  </div>
+
+    <h3 style="margin-top:var(--space-2xl)">Tus pedidos</h3><div class="adm-tablewrap"><table class="acct-orders"><thead><tr><th>Pedido</th><th>Fecha</th><th>Estado</th><th>Total</th></tr></thead><tbody><tr><td><strong>#1001</strong></td><td>24/10/2026</td><td>Pagado · Entregado</td><td>$1,280</td></tr></tbody></table></div></div>
 </section>
 
 
@@ -17378,17 +17464,19 @@ Digital payment, no cash</li></ul>
 
 
 </div><div id="pg-cuenta-semana--shopify-section-s1" class="shopify-section"><section class="section" >
-  <div class="container"><div class="account">
+  <div class="container"><div class="acct-hero">
+      <span class="acct__avatar" aria-hidden="true">R</span>
+      <div class="acct-hero__t"><strong>Hi, Ramón</strong><span>ramon@ejemplo.com</span></div>
+      <a class="btn btn--ghost btn--sm" href="#/home">Sign out</a>
+    </div>
+    <div class="account">
       <nav class="account-nav" aria-label="My account">
         <a href="#/cuenta">Overview</a>
         <a href="#/pg/cuenta-semana" aria-current="page">My week</a>
         <a href="#/pg/cuenta-pausas">Pause deliveries</a>
-        <a href="#/pg/cuenta-monedero">Wallet</a>
         <a href="#/pg/cuenta-perfil">Allergies & tastes</a>
-        <a href="#/pg/cuenta-referidos">My referrals</a>
         <a href="#/pg/cuenta-pedidos">Orders & invoices</a>
-        <a href="#/pg/cuenta-entregas">Deliveries & containers</a>
-        <a href="#/direcciones">Manage addresses</a>
+        <a href="#/pg/cuenta-monedero">Wallet · My referrals</a>
       </nav>
 
       <div class="account-content">
@@ -17427,7 +17515,7 @@ Digital payment, no cash</li></ul>
               <a hidden data-mw-cart href="#/carrito" tabindex="-1" aria-hidden="true"></a>
               <div class="btn-row"><button class="btn btn--outline" type="button" data-mw-skip>Skip this week</button><button class="btn btn--gold" type="button" data-mw-save>Save my week</button></div>
             </div>
-            <p class="myweek__links"><a class="text-link" href="#/cuenta">See my previous orders</a> · <a class="text-link" href="#/pg/bienvenida?edit=1">My details</a> · <a class="text-link" href="#/cuenta">Manage subscription</a></p>
+            <p class="myweek__links"><a class="text-link" href="#/cuenta">See my previous orders</a> · <a class="text-link" href="#/pg/bienvenida?edit=1">My details</a></p>
           </div>
           <ul hidden data-mw-dishes><li data-pid="7100" data-title="Pollo a las hierbas con puré rústico" data-label="Herb chicken with rustic mash" data-tier="selecto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas"></li><li data-pid="7101" data-title="Bowl de res magra y quinoa" data-label="Lean beef and quinoa bowl" data-tier="selecto" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro"></li><li data-pid="7102" data-title="Salmón gourmet en costra de almendras" data-label="Gourmet salmon in an almond crust" data-tier="exclusivo" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón"></li><li data-pid="7103" data-title="Omelette de claras con espinaca" data-label="Egg-white omelette with spinach" data-tier="selecto" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones"></li><li data-pid="7104" data-title="Arrachera al carbón con maíz y espárragos" data-label="Charcoal-grilled skirt steak with corn and asparagus" data-tier="signature" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas"></li><li data-pid="7105" data-title="Filete Prime con verduras asadas" data-label="Prime filet with roasted vegetables" data-tier="reserve" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla"></li><li data-pid="7106" data-title="Bowl vegano de garbanzo y tahini" data-label="Vegan chickpea and tahini bowl" data-tier="exclusivo" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla"></li><li data-pid="7107" data-title="Crema de calabaza asada" data-label="Roasted pumpkin cream soup" data-tier="selecto" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo"></li><li data-pid="7110" data-title="Mini pasta de pollo para peques" data-label="Mini chicken pasta for little ones" data-tier="selecto" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate"></li></ul>
         </div></div>
@@ -17452,17 +17540,19 @@ Digital payment, no cash</li></ul>
 
 
 </div><div id="pg-cuenta-pausas--shopify-section-s1" class="shopify-section"><section class="section" >
-  <div class="container"><div class="account">
+  <div class="container"><div class="acct-hero">
+      <span class="acct__avatar" aria-hidden="true">R</span>
+      <div class="acct-hero__t"><strong>Hi, Ramón</strong><span>ramon@ejemplo.com</span></div>
+      <a class="btn btn--ghost btn--sm" href="#/home">Sign out</a>
+    </div>
+    <div class="account">
       <nav class="account-nav" aria-label="My account">
         <a href="#/cuenta">Overview</a>
         <a href="#/pg/cuenta-semana">My week</a>
         <a href="#/pg/cuenta-pausas" aria-current="page">Pause deliveries</a>
-        <a href="#/pg/cuenta-monedero">Wallet</a>
         <a href="#/pg/cuenta-perfil">Allergies & tastes</a>
-        <a href="#/pg/cuenta-referidos">My referrals</a>
         <a href="#/pg/cuenta-pedidos">Orders & invoices</a>
-        <a href="#/pg/cuenta-entregas">Deliveries & containers</a>
-        <a href="#/direcciones">Manage addresses</a>
+        <a href="#/pg/cuenta-monedero">Wallet · My referrals</a>
       </nav>
 
       <div class="account-content">
@@ -17516,17 +17606,19 @@ Digital payment, no cash</li></ul>
 
 
 </div><div id="pg-cuenta-monedero--shopify-section-s1" class="shopify-section"><section class="section" >
-  <div class="container"><div class="account">
+  <div class="container"><div class="acct-hero">
+      <span class="acct__avatar" aria-hidden="true">R</span>
+      <div class="acct-hero__t"><strong>Hi, Ramón</strong><span>ramon@ejemplo.com</span></div>
+      <a class="btn btn--ghost btn--sm" href="#/home">Sign out</a>
+    </div>
+    <div class="account">
       <nav class="account-nav" aria-label="My account">
         <a href="#/cuenta">Overview</a>
         <a href="#/pg/cuenta-semana">My week</a>
         <a href="#/pg/cuenta-pausas">Pause deliveries</a>
-        <a href="#/pg/cuenta-monedero" aria-current="page">Wallet</a>
         <a href="#/pg/cuenta-perfil">Allergies & tastes</a>
-        <a href="#/pg/cuenta-referidos">My referrals</a>
         <a href="#/pg/cuenta-pedidos">Orders & invoices</a>
-        <a href="#/pg/cuenta-entregas">Deliveries & containers</a>
-        <a href="#/direcciones">Manage addresses</a>
+        <a href="#/pg/cuenta-monedero" aria-current="page">Wallet · My referrals</a>
       </nav>
 
       <div class="account-content">
@@ -17556,17 +17648,19 @@ Digital payment, no cash</li></ul>
 
 
 </div><div id="pg-cuenta-perfil--shopify-section-s1" class="shopify-section"><section class="section" >
-  <div class="container"><div class="account">
+  <div class="container"><div class="acct-hero">
+      <span class="acct__avatar" aria-hidden="true">R</span>
+      <div class="acct-hero__t"><strong>Hi, Ramón</strong><span>ramon@ejemplo.com</span></div>
+      <a class="btn btn--ghost btn--sm" href="#/home">Sign out</a>
+    </div>
+    <div class="account">
       <nav class="account-nav" aria-label="My account">
         <a href="#/cuenta">Overview</a>
         <a href="#/pg/cuenta-semana">My week</a>
         <a href="#/pg/cuenta-pausas">Pause deliveries</a>
-        <a href="#/pg/cuenta-monedero">Wallet</a>
         <a href="#/pg/cuenta-perfil" aria-current="page">Allergies & tastes</a>
-        <a href="#/pg/cuenta-referidos">My referrals</a>
         <a href="#/pg/cuenta-pedidos">Orders & invoices</a>
-        <a href="#/pg/cuenta-entregas">Deliveries & containers</a>
-        <a href="#/direcciones">Manage addresses</a>
+        <a href="#/pg/cuenta-monedero">Wallet · My referrals</a>
       </nav>
 
       <div class="account-content">
@@ -17593,17 +17687,19 @@ Digital payment, no cash</li></ul>
 
 
 </div><div id="pg-cuenta-referidos--shopify-section-s1" class="shopify-section"><section class="section" >
-  <div class="container"><div class="account">
+  <div class="container"><div class="acct-hero">
+      <span class="acct__avatar" aria-hidden="true">R</span>
+      <div class="acct-hero__t"><strong>Hi, Ramón</strong><span>ramon@ejemplo.com</span></div>
+      <a class="btn btn--ghost btn--sm" href="#/home">Sign out</a>
+    </div>
+    <div class="account">
       <nav class="account-nav" aria-label="My account">
         <a href="#/cuenta">Overview</a>
         <a href="#/pg/cuenta-semana">My week</a>
         <a href="#/pg/cuenta-pausas">Pause deliveries</a>
-        <a href="#/pg/cuenta-monedero">Wallet</a>
         <a href="#/pg/cuenta-perfil">Allergies & tastes</a>
-        <a href="#/pg/cuenta-referidos" aria-current="page">My referrals</a>
         <a href="#/pg/cuenta-pedidos">Orders & invoices</a>
-        <a href="#/pg/cuenta-entregas">Deliveries & containers</a>
-        <a href="#/direcciones">Manage addresses</a>
+        <a href="#/pg/cuenta-monedero" aria-current="page">Wallet · My referrals</a>
       </nav>
 
       <div class="account-content">
@@ -17636,17 +17732,19 @@ Digital payment, no cash</li></ul>
 
 
 </div><div id="pg-cuenta-pedidos--shopify-section-s1" class="shopify-section"><section class="section" >
-  <div class="container"><div class="account">
+  <div class="container"><div class="acct-hero">
+      <span class="acct__avatar" aria-hidden="true">R</span>
+      <div class="acct-hero__t"><strong>Hi, Ramón</strong><span>ramon@ejemplo.com</span></div>
+      <a class="btn btn--ghost btn--sm" href="#/home">Sign out</a>
+    </div>
+    <div class="account">
       <nav class="account-nav" aria-label="My account">
         <a href="#/cuenta">Overview</a>
         <a href="#/pg/cuenta-semana">My week</a>
         <a href="#/pg/cuenta-pausas">Pause deliveries</a>
-        <a href="#/pg/cuenta-monedero">Wallet</a>
         <a href="#/pg/cuenta-perfil">Allergies & tastes</a>
-        <a href="#/pg/cuenta-referidos">My referrals</a>
         <a href="#/pg/cuenta-pedidos" aria-current="page">Orders & invoices</a>
-        <a href="#/pg/cuenta-entregas">Deliveries & containers</a>
-        <a href="#/direcciones">Manage addresses</a>
+        <a href="#/pg/cuenta-monedero">Wallet · My referrals</a>
       </nav>
 
       <div class="account-content">
@@ -17675,17 +17773,19 @@ Digital payment, no cash</li></ul>
 
 
 </div><div id="pg-cuenta-entregas--shopify-section-s1" class="shopify-section"><section class="section" >
-  <div class="container"><div class="account">
+  <div class="container"><div class="acct-hero">
+      <span class="acct__avatar" aria-hidden="true">R</span>
+      <div class="acct-hero__t"><strong>Hi, Ramón</strong><span>ramon@ejemplo.com</span></div>
+      <a class="btn btn--ghost btn--sm" href="#/home">Sign out</a>
+    </div>
+    <div class="account">
       <nav class="account-nav" aria-label="My account">
         <a href="#/cuenta">Overview</a>
         <a href="#/pg/cuenta-semana">My week</a>
         <a href="#/pg/cuenta-pausas">Pause deliveries</a>
-        <a href="#/pg/cuenta-monedero">Wallet</a>
         <a href="#/pg/cuenta-perfil">Allergies & tastes</a>
-        <a href="#/pg/cuenta-referidos">My referrals</a>
         <a href="#/pg/cuenta-pedidos">Orders & invoices</a>
-        <a href="#/pg/cuenta-entregas" aria-current="page">Deliveries & containers</a>
-        <a href="#/direcciones">Manage addresses</a>
+        <a href="#/pg/cuenta-monedero" aria-current="page">Wallet · My referrals</a>
       </nav>
 
       <div class="account-content">
@@ -18309,6 +18409,7 @@ Digital payment, no cash</li></ul>
                 </p>
               </div>
             </div><button class="btn btn--outline" type="submit" name="update" style="margin-top:var(--space-lg)">Update quantities</button>
+          <button class="btn btn--ghost" type="button" data-cart-clear data-confirm="Clear the whole cart? All items will be removed." style="margin-top:var(--space-lg)">Clear cart</button>
         </div>
 
         <aside class="summary">
@@ -18353,7 +18454,7 @@ Digital payment, no cash</li></ul>
 
 </div>
     </div>
-<div data-page="cuenta" data-template="customers-account" data-title="Mi cuenta" hidden>
+<div data-page="cuenta" data-template="page" data-title="Mi cuenta" hidden>
       <div id="cuenta--shopify-section-head" class="shopify-section"><header class="page-head" >
   <div class="page-head__photo">
     <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-breakfast.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
@@ -18367,12 +18468,12 @@ Digital payment, no cash</li></ul>
 
 
 </div><div id="cuenta--shopify-section-main" class="shopify-section"><section class="section" >
-  <div class="container">
-    <div class="section__head">
+  <div class="container"><div class="section__head">
       <span class="eyebrow">My account</span>
       <h2>Hi, Ramón</h2>
-      <p class="lede">You're in full control of your week: choose your dishes, pause your block, check your balance and share your code.</p>
-      <p><a class="btn btn--ghost" href="#/home">Sign out</a></p>
+      <p class="lede">Signed in as <strong>ramon@ejemplo.com</strong></p>
+      <p class="text-muted">Here you see your session, your week and your orders. Everything is handled on this site.</p>
+      <p class="btn-row"><a class="btn btn--gold" href="#/pg/cuenta-semana">My week</a><a class="btn btn--ghost" href="#/home">Sign out</a></p>
     </div>
 
     <p class="countdown" data-cutoff>Confirm your dishes before Saturday 10:00 AM · time left: <strong data-cutoff-value>…</strong></p>
@@ -18420,7 +18521,8 @@ Digital payment, no cash</li></ul>
             <span class="index-row__a" aria-hidden="true">→</span>
           </a></div>
     </div>
-  </div>
+
+    <h3 style="margin-top:var(--space-2xl)">Your orders</h3><div class="adm-tablewrap"><table class="acct-orders"><thead><tr><th>Order</th><th>Date</th><th>Status</th><th>Total</th></tr></thead><tbody><tr><td><strong>#1001</strong></td><td>24/10/2026</td><td>Pagado · Entregado</td><td>$1,280</td></tr></tbody></table></div></div>
 </section>
 
 
@@ -19908,6 +20010,40 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         location.reload();
       }).catch(function () { guardOnboarding(); });
   }
+  /* ---------- clear cart (cart page and header menu) ---------- */
+  function initClearCart() {
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-cart-clear]'); if (!b) return;
+      e.preventDefault();
+      var ask = b.getAttribute('data-confirm'); if (ask && !window.confirm(ask)) return;
+      b.disabled = true;
+      var done = function () { try { localStorage.removeItem('kx-cart-note'); } catch (x) {} window.location.reload(); };
+      try { fetch('/cart/clear.js', { method: 'POST', headers: { Accept: 'application/json' } }).then(done, done); } catch (x) { done(); }
+    });
+  }
+
+  /* ---------- header account menu: initial in a circle, one drop-down (who is signed in, shortcuts, language, cart summary, sign out) ---------- */
+  function initAccountMenu() {
+    var root = $('[data-acct]'); if (!root) return;
+    var btn = $('[data-acct-btn]', root), pop = $('[data-acct-pop]', root), dot = $('[data-acct-dot]', root), todo = $('[data-acct-todo]', root);
+    var count = $('[data-acct-count]', root), total = $('[data-acct-total]', root), txt = $('[data-acct-cart-text]', root);
+    var signedIn = btn.classList.contains('is-in');
+    if (signedIn && !isOnboarded()) { if (dot) dot.hidden = false; if (todo) todo.hidden = false; }
+    var setOpen = function (on) { pop.hidden = !on; btn.setAttribute('aria-expanded', on ? 'true' : 'false'); root.classList.toggle('is-open', on); };
+    var paintCart = function (c) {
+      var n = c.item_count || 0;
+      if (count) { count.hidden = !n; count.textContent = n; }
+      if (total) total.textContent = n ? money0(c.total_price / 100) : '';
+      if (txt) txt.textContent = !n ? txt.getAttribute('data-t-empty') : n === 1 ? txt.getAttribute('data-t-one') : String(txt.getAttribute('data-t-many') || '').replace('{n}', n);
+    };
+    var money0 = function (v) { try { return new Intl.NumberFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(v); } catch (e) { return '$' + Math.round(v); } };
+    var refresh = function () { try { fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(paintCart).catch(function () {}); } catch (e) {} };
+    btn.addEventListener('click', function (e) { e.stopPropagation(); var on = pop.hidden; setOpen(on); if (on) refresh(); });
+    document.addEventListener('click', function (e) { if (!pop.hidden && !root.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) { setOpen(false); btn.focus(); } });
+    root.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('.acct__links a, .acct__todo, .acct__cart a, .acct__out')) setOpen(false); });
+  }
+
   /* ---------- dish detail panel: clicking a dish card opens the full breakdown (photo, description, nutrition, ingredients, allergens) in a side panel ---------- */
   function initDishPanel() {
     var panel = $('[data-dish-panel]'); if (!panel) return;
@@ -20796,7 +20932,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

@@ -112,7 +112,7 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
     contract_page: pages.ayuda,
     welcome_gift_collection: collections['regalos-de-bienvenida'],
     instagram_url: 'https://www.instagram.com/kulinariamx', whatsapp_number: '525650399656', tiktok_url: 'https://www.tiktok.com/', facebook_url: 'https://www.facebook.com/',
-    subscription_portal_url: '/account',
+    subscription_portal_url: '',
     admin_emails: 'ramon@ejemplo.com', admin_endpoint: '',
   });
 

@@ -4,7 +4,7 @@
       <span class="eyebrow">{{ 'account.order' | t }}</span>
       <h2 style="font-size:clamp(2rem,4vw,3rem)">{{ order.name }}</h2>
       <p class="text-muted">{{ order.created_at | date: '%d/%m/%Y' }} · {{ order.financial_status_label }} · {{ order.fulfillment_status_label }}</p>
-      <a class="btn btn--ghost" href="{{ routes.account_url }}">{{ 'general.back_account' | t }}</a>
+      <a class="btn btn--ghost" href="/pages/cuenta">{{ 'general.back_account' | t }}</a>
     </div>
     <div class="table-wrap"><table class="table">
       <thead><tr><th>{{ 'order.dish' | t }}</th><th>{{ 'order.quantity' | t }}</th><th style="text-align:right">{{ 'cart.total' | t }}</th></tr></thead>
