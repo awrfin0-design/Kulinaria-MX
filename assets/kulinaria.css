@@ -2824,3 +2824,43 @@ body .hero--intro:after{content:none !important}
 .fn-gonext{translate:none !important;top:calc(50% - 23px)}
 .fn-gonext:active{transform:scale(.95)}
 @media (max-width:760px){.fn-gonext{top:auto;bottom:18px}}
+
+/* =====================================================================
+   v59 — four steps: 0 how it works (read to the end first) · 1 plan · 2 menu · 3 planner
+   ===================================================================== */
+.funnel .step[data-fn-step="0"].is-on{display:flex;flex-direction:column;height:100%;min-height:0;padding:0;border:0}
+.funnel[data-step="0"] .funnel__aside{display:none !important}
+body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-columns:minmax(0,1fr)}
+.fn-rules{flex:1 1 0;min-height:0;overflow-y:auto;overflow-x:hidden;display:grid;gap:14px;align-content:start;padding:2px 4px 22px 0;-webkit-mask-image:linear-gradient(#000 92%,transparent);mask-image:linear-gradient(#000 92%,transparent)}
+.fn-rules.is-read{-webkit-mask-image:none;mask-image:none}
+.fn-rules__title{margin:0;font-size:clamp(1.3rem,2.4vw,1.9rem);line-height:1.15}
+.fn-rules__lede{margin:0;color:var(--text-muted);font-size:.9rem}
+.fn-rules__list{list-style:none;margin:0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.fn-rules__list li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:var(--bg-raised)}
+.fn-rules__n{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:700 .9rem var(--font-label)}
+.fn-rules__list h4{margin:0 0 4px;font-size:1.02rem;line-height:1.2}
+.fn-rules__list p{margin:0;font-size:.84rem;line-height:1.5;color:var(--text-muted)}
+.fn-rules__ex{padding:16px 18px;border:1px solid var(--border-accent);border-radius:16px;background:var(--accent-wash);display:grid;gap:10px}
+.fn-rules__ex h4{margin:0;font-size:1.05rem}
+.fn-rules__ex p{margin:0;font-size:.9rem;line-height:1.5}
+.fn-rules__bar{display:flex;gap:3px;height:44px;border-radius:12px;overflow:hidden}
+.fn-rules__bar i{display:grid;place-items:center;font:700 .9rem var(--font-label);font-style:normal;color:#fff;min-width:0}
+.fn-rules__bar .is-budget{background:#3a3a3a}.fn-rules__bar .is-extra{background:var(--accent)}
+.fn-rules__legend{display:flex;gap:16px;font-size:.7rem !important;color:var(--text-muted)}
+.fn-rules__legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.fn-rules__legend .k-budget::before{background:#3a3a3a}.fn-rules__legend .k-extra::before{background:var(--accent)}
+.fn-rules__end{display:grid;gap:12px;justify-items:start;padding:6px 0 4px}
+.fn-rules__hint{margin:0;color:var(--accent);font-size:.8rem;font-weight:600}
+.fn-rules__check{font-size:.9rem}
+.fn-rules__check input:disabled+span{opacity:.5}
+.fn-rules__end .btn[disabled]{opacity:.45;pointer-events:none}
+/* the orange button of the menu step says what it does */
+.fn-carousel--show{padding-right:0}
+.fn-gonext{width:auto !important;height:48px !important;padding:0 20px !important;border-radius:999px !important;display:inline-flex !important;align-items:center;gap:10px;font:700 .72rem var(--font-label);letter-spacing:.1em;text-transform:uppercase;right:6px;top:auto !important;bottom:14px}
+.fn-gonext i{font-style:normal;font-size:1.1rem;letter-spacing:0}
+@media (max-width:760px){
+  .fn-gonext{right:8px;left:8px;justify-content:center;bottom:16px;height:54px !important;width:auto !important;font-size:.76rem}
+  .fn-rules{padding-bottom:30px}
+  .fn-rules__list{grid-template-columns:1fr}
+  .fn-rules__list li{padding:12px 14px}
+}

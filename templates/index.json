@@ -25,7 +25,7 @@
       "type": "order-funnel",
       "settings": {
         "eyebrow": "Haz tu pedido",
-        "heading": "Arma tu pedido en *3 pasos*",
+        "heading": "Arma tu pedido en *4 pasos*",
         "text": "Del enfoque al contrato: elige, guardamos tus datos y listo. La próxima vez es un clic.",
         "collection": "menu-semanal",
         "limit": 12,

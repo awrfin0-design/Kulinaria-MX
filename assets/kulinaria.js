@@ -1029,6 +1029,10 @@
       var st = { plan: 'block', tier: 'selecto', cat: 'all', diet: 'all', qty: {}, days: [], info: {}, allergies: [], step: 0, remembered: false, renew: true };
       try { var saved = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (saved && saved.v === 2) { st = Object.assign(st, saved); st.tier = 'selecto'; st.remembered = !!(saved.info && (saved.info.name || saved.info.email)); } } catch (e) {}
       if (st.cat && st.cat !== 'all' && !GROUPS[st.cat]) st.cat = 'all';
+      var RULES_KEY = 'kx-rules-ok';
+      try { if (localStorage.getItem(RULES_KEY)) st.rulesOk = true; } catch (e) {}
+      if (st.sv !== 4) { st.sv = 4; st.step = 0; }
+      if (!st.rulesOk) st.step = 0; else if (st.step === 0) st.step = 1;
       var T_ = function (k) { return holder.getAttribute('data-t-' + k) || ''; };
       var steps = $$('[data-fn-step]', holder), dots = $$('[data-fn-dot]', holder), bar = $('[data-fn-bar]', holder);
       var next = $('[data-fn-next]', holder), prev = $('[data-fn-prev]', holder), finish = $('[data-fn-finish]', holder), err = $('[data-fn-error]', holder);
@@ -1199,6 +1203,32 @@
         window.setTimeout(tourShow, 120);
       };
       var tourArmed = false;
+      /* rules step: the button unlocks only after reading to the end and ticking "I understand" */
+      var rulesBox = $('[data-fn-rules]', holder), rChk = $('[data-fn-rules-check]', holder), rBtn = $('[data-fn-rules-next]', holder), rHint = $('[data-fn-rules-hint]', holder), rulesRead = !!st.rulesOk;
+      var rulesState = function () {
+        if (!rulesBox) return;
+        if (st.rulesOk) rulesRead = true;
+        if (!rulesRead) { var atEnd = rulesBox.scrollTop + rulesBox.clientHeight >= rulesBox.scrollHeight - 12, noScroll = rulesBox.scrollHeight <= rulesBox.clientHeight + 4; if (atEnd || (noScroll && rulesBox.clientHeight > 0)) rulesRead = true; }
+        if (rChk) { rChk.disabled = !rulesRead; if (st.rulesOk) rChk.checked = true; }
+        if (rBtn) rBtn.disabled = !(rulesRead && rChk && rChk.checked);
+        if (rHint) rHint.hidden = rulesRead;
+        rulesBox.classList.toggle('is-read', rulesRead);
+      };
+      if (rulesBox) {
+        rulesBox.addEventListener('scroll', function () { window.requestAnimationFrame(rulesState); }, { passive: true });
+        if (rChk) rChk.addEventListener('change', rulesState);
+        if (rBtn) rBtn.addEventListener('click', function () { st.rulesOk = true; try { localStorage.setItem(RULES_KEY, '1'); } catch (x) {} persist(); go(1); });
+      }
+      var fixTopGap = function () {
+        try {
+          if (!(window.matchMedia && window.matchMedia('(max-width:760px)').matches)) { holder.style.paddingTop = ''; return; }
+          var hdr = document.querySelector('.site-header'), stg = $('.funnel__stage', holder); if (!hdr || !stg || holder.classList.contains('funnel--teaser')) return;
+          holder.style.paddingTop = '';
+          var gap = stg.getBoundingClientRect().top - hdr.getBoundingClientRect().bottom;
+          if (gap > 16) holder.style.paddingTop = Math.max(0, (parseFloat(getComputedStyle(holder).paddingTop) || 0) - (gap - 6)) + 'px';
+        } catch (x) {}
+      };
+      window.addEventListener('resize', fixTopGap); window.setTimeout(fixTopGap, 80); window.setTimeout(fixTopGap, 700);
       var render = function () {
         // dishes of a lower tier or blocked by the profile cannot stay in the plan; slots are the source of truth
         st.days = st.days.map(function (p) { return p && eligible(byPid(p)) ? p : ''; });
@@ -1266,8 +1296,9 @@
         var rn = $('[data-fn-renew]', holder); if (rn) { var hasPlan = !!tierEl().getAttribute('data-selling-plan'); rn.hidden = !(hasPlan && st.plan === 'block'); var box = $('[data-fn-renew-box]', holder); if (box) box.checked = st.renew; }
         buildNotes();
         renderMods();
-        holder.setAttribute('data-step', String(st.step + 1));
-        if (st.step === 2 && !tourArmed) { tourArmed = true; window.setTimeout(function () { startTour(false); }, 600); }
+        holder.setAttribute('data-step', steps[st.step].getAttribute('data-fn-step'));
+        if (typeof rulesState === 'function') window.setTimeout(rulesState, 60);
+        if (st.step === 3 && !tourArmed) { tourArmed = true; window.setTimeout(function () { startTour(false); }, 600); }
         // stepper
         steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
         dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); });
@@ -1275,7 +1306,7 @@
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
         if (next) { next.hidden = last; next.disabled = false; }
-        var phoneUi = window.matchMedia && window.matchMedia('(max-width:760px)').matches, bp = $('[data-fn-barpick]', holder), deckMode = !!(bp && phoneUi && st.step === 2 && n < MEALS);
+        var phoneUi = window.matchMedia && window.matchMedia('(max-width:760px)').matches, bp = $('[data-fn-barpick]', holder), deckMode = !!(bp && phoneUi && st.step === 3 && n < MEALS);
         if (bp) { bp.hidden = !deckMode; if (deckMode) bp.textContent = fill(T_('pick-day'), { d: dayLabel(st.active) }); }
         holder.classList.toggle('is-deck', deckMode);
         if (finish) { finish.hidden = !last || deckMode; finish.classList.toggle('is-disabled', n < 1); finish.setAttribute('aria-disabled', n < 1 ? 'true' : 'false'); var fl = holder.getAttribute(ce ? 'data-t-finish' : 'data-t-finish-guest'); if (fl && finish.textContent.trim() !== fl) finish.textContent = fl; }
@@ -1285,7 +1316,7 @@
       // the page keeps scrolling normally; changing step brings the top of the funnel back into view if needed
       var top = $('.funnel__top', holder);
       var go = function (n) {
-        n = Math.max(0, Math.min(steps.length - 1, n)); var moved = n !== st.step; st.step = n; say(''); persist(); render();
+        n = Math.max(0, Math.min(steps.length - 1, n)); if (!st.rulesOk && n > 0) n = 0; var moved = n !== st.step; st.step = n; say(''); persist(); render();
         if (moved && top) {
           var r = top.getBoundingClientRect(), hdr = (parseFloat(getComputedStyle(root).getPropertyValue('--hdr')) || 72) + 8;
           if (r.top < hdr || r.top > window.innerHeight * 0.5) window.scrollTo({ top: r.top + window.scrollY - hdr, behavior: REDUCE ? 'auto' : 'smooth' });
@@ -1293,12 +1324,12 @@
       };
 
       // choices
-      $$('[data-plan-choice]', holder).forEach(function (b) { b.addEventListener('click', function () { st.plan = b.getAttribute('data-plan-choice'); persist(); render(); setTimeout(function () { go(1); }, REDUCE ? 0 : 280); }); });
+      $$('[data-plan-choice]', holder).forEach(function (b) { b.addEventListener('click', function () { st.plan = b.getAttribute('data-plan-choice'); persist(); render(); setTimeout(function () { go(2); }, REDUCE ? 0 : 280); }); });
       tierBtns.forEach(function (b) {
         b.addEventListener('click', function () {
           var t = b.getAttribute('data-tier-choice');
           if (t !== st.tier) { st.tier = t; if (daysBox) daysBox.removeAttribute('data-built'); }            // render() drops slots that no longer fit the tier
-          persist(); render(); setTimeout(function () { go(2); }, REDUCE ? 0 : 280);
+          persist(); render(); setTimeout(function () { go(3); }, REDUCE ? 0 : 280);
         });
       });
       $$('[data-cat]', holder).forEach(function (b) { b.addEventListener('click', function () { st.cat = b.getAttribute('data-cat'); persist(); render(); }); });
@@ -1311,12 +1342,12 @@
         var xb = e.target.closest ? e.target.closest('[data-fn-day-x]') : null;
         if (xb) { var xi = +xb.getAttribute('data-fn-day-x'); st.days[xi] = ''; st.active = xi; say(''); persist(); render(); return; }
         var eb = e.target.closest ? e.target.closest('[data-fn-day-edit]') : null;
-        if (eb) { var ei = +eb.getAttribute('data-fn-day-edit'); st.active = ei; modsOpen = modsOpen === ei ? -1 : ei; modsKey = ''; st.step = 2; persist(); render(); return; }
+        if (eb) { var ei = +eb.getAttribute('data-fn-day-edit'); st.active = ei; modsOpen = modsOpen === ei ? -1 : ei; modsKey = ''; st.step = 3; persist(); render(); return; }
         var db = e.target.closest ? e.target.closest('[data-fn-day-btn]') : null;
         if (db) { st.active = +db.getAttribute('data-fn-day-btn'); persist(); render(); return; }
-        if (e.target.closest && e.target.closest('[data-fn-how-open]')) { st.step = 0; var hw = $('[data-fn-how]', holder); if (hw) hw.open = true; persist(); render(); return; }
-        if (e.target.closest && e.target.closest('[data-fn-sc-next]')) { go(2); return; }
-        if (e.target.closest && e.target.closest('[data-fn-prev-sc]')) { go(0); return; }
+        if (e.target.closest && e.target.closest('[data-fn-how-open]')) { go(0); return; }
+        if (e.target.closest && e.target.closest('[data-fn-sc-next]')) { go(3); return; }
+        if (e.target.closest && e.target.closest('[data-fn-prev-sc]')) { go(1); return; }
         if (e.target.closest && e.target.closest('[data-fn-tour-open]')) { startTour(true); return; }
         var sa = e.target.closest ? e.target.closest('[data-fn-sc-arrow]') : null;
         if (sa) { var sg = $('[data-fn-sc-grid]', holder); if (sg) sg.scrollBy({ left: (+sa.getAttribute('data-fn-sc-arrow')) * Math.max(220, sg.clientWidth * 0.8), behavior: REDUCE ? 'auto' : 'smooth' }); return; }
@@ -1360,14 +1391,14 @@
         var q = (location.search + '&' + (location.hash.split('?')[1] || '')).match(/[?&]dish=([\w-]+)/);
         if (q) {
           var pre = dishes.filter(function (d) { return d.getAttribute('data-handle') === q[1]; })[0];
-          if (pre) { st.days = blankDays(); st.days[0] = pre.getAttribute('data-pid'); st.active = 1; if (daysBox) daysBox.removeAttribute('data-built'); st.step = 1; persist(); }
+          if (pre) { st.days = blankDays(); st.days[0] = pre.getAttribute('data-pid'); st.active = 1; if (daysBox) daysBox.removeAttribute('data-built'); st.step = 3; persist(); }
         }
       } catch (e) {}
 
       // finish: the details live in the account (onboarding). Here we only need a signed-in, onboarded customer; then the PLAN goes in the cart.
       if (finish) finish.addEventListener('click', function (e) {
         e.preventDefault();
-        if (count() < 1) { say(T_('need-meals')); go(1); return; }
+        if (count() < 1) { say(T_('need-meals')); go(3); return; }
         persist();
         var lnk = function (sel) { var a = $(sel, holder); return a && a.getAttribute('href'); };
         var onb = false; try { onb = !!localStorage.getItem(ONB_KEY); } catch (x) {}

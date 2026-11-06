@@ -2821,6 +2821,40 @@ body .hero--intro:after{content:none !important}
   .funnel .step[data-fn-step="3"] .fn-dish .fn-add::after{max-width:none !important;opacity:1 !important;margin:0 !important;overflow:visible}
 }
 
+/* =====================================================================
+   v58 — step 2 is for looking (no summary panel, one orange arrow to step 3) · coach-mark tour for the planner
+   ===================================================================== */
+.fn-menunote{flex:none;display:flex;align-items:baseline;gap:12px;margin:0 0 8px;font-size:.78rem;color:var(--text-muted);line-height:1.4}
+.fn-menunote p{margin:0}
+.fn-menunote .text-link{flex:none;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;background:none;border:0;cursor:pointer;color:var(--accent);padding:0}
+.fn-gonext{position:absolute;right:0;top:50%;translate:0 -50%;z-index:6;width:46px;height:46px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:1.3rem;line-height:1;display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 24px rgba(255,98,0,.4)}
+.fn-gonext:active{transform:translateY(-50%) scale(.95)}
+.fn-carousel--show{padding-right:58px}
+.funnel[data-step="2"] .funnel__aside{display:none !important}
+@media (min-width:901px){
+  body .funnel[data-step="2"]:not(.funnel--teaser) .funnel__panel{grid-template-columns:minmax(0,1fr)}
+  .funnel[data-step="2"] .fn-sc{flex-basis:clamp(150px,12.5vw,186px)}
+}
+@media (max-width:760px){
+  .fn-carousel--show{padding-right:0}
+  .fn-gonext{right:8px;top:auto;bottom:18px;translate:none;width:54px;height:54px}
+  .fn-gonext:active{transform:scale(.95)}
+  .fn-menunote{font-size:.7rem;gap:8px}
+}
+.fn-tour{position:fixed;inset:0;z-index:1200;pointer-events:none}
+.fn-tour__spot{position:fixed;border-radius:16px;box-shadow:0 0 0 9999px rgba(0,0,0,.72),0 0 0 2px var(--accent);transition:left .35s,top .35s,width .35s,height .35s}
+.fn-tour__bubble{position:fixed;pointer-events:auto;background:var(--bg-raised,#1a1a1a);border:1px solid var(--accent);border-radius:18px;padding:14px 16px;box-shadow:0 20px 50px rgba(0,0,0,.6);display:grid;gap:10px;color:var(--text,#f5f5f5);width:max-content}
+.fn-tour__text{margin:0;font-size:.9rem;line-height:1.45}
+.fn-tour__row{display:flex;align-items:center;gap:10px}
+.fn-tour__count{margin-right:auto;font:700 .66rem var(--font-label);letter-spacing:.14em;color:var(--text-muted)}
+.fn-tour__skip{background:none;border:0;color:var(--text-muted);font:600 .72rem var(--font-label);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;padding:6px 4px}
+.fn-tour__next{min-height:40px;padding:0 18px}
+@media (prefers-reduced-motion:reduce){.fn-tour__spot{transition:none}}
+/* no CSS translate on the step arrow: plain offsets keep the click target exact everywhere */
+.fn-gonext{translate:none !important;top:calc(50% - 23px)}
+.fn-gonext:active{transform:scale(.95)}
+@media (max-width:760px){.fn-gonext{top:auto;bottom:18px}}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -3228,7 +3262,7 @@ Fuego</span>
   data-t-per-week="{p} por semana" data-t-weeks-x="{p} por semana × {w} semanas" data-t-per-meal="por comida"
   data-t-all-lines="Todas" data-t-prop-dishes="Platillos" data-t-prop-meals="Comidas por semana"
   data-t-prop-tier="Nivel" data-t-prop-length="Duración" data-t-length-block="4 semanas" data-t-length-week="1 semana"
-  data-t-budget="Tu plan incluye {w} por semana en comidas. Lo que elijas por encima se cobra aparte esa semana, además de tu pago inicial de {t}." data-t-budget-x="Esta semana: +{x} extra." data-t-budget-ok="Esta semana: sin extra." data-t-how-open="¿Cómo funciona?" data-t-pick-day="Elegir para {d}" data-t-mods-done="Listo" data-t-mods-edit="Quitar ingredientes o añadir nota a {d}" data-t-mods-title="Ajustes para {d}: {p}" data-t-mods-hint="¿Algo que quitar? Toca un ingrediente para pedirlo sin él." data-t-mods-note="Nota para la cocina (opcional)" data-t-mods-ph="Ej. sin cebolla, salsa aparte…" data-t-mods-warn="Es una preferencia de gusto: no sustituye avisar de una alergia (tu perfil). Haremos lo posible por respetarla." data-t-mods-without="Sin {i}" data-t-prop-notes="Notas de cocina" data-t-mods-open="Quitar ingredientes o añadir nota"
+  data-t-budget="Tu plan incluye {w} por semana en comidas. Lo que elijas por encima se cobra aparte esa semana, además de tu pago inicial de {t}." data-t-budget-x="Esta semana: +{x} extra." data-t-budget-ok="Esta semana: sin extra." data-t-how-open="¿Cómo funciona?" data-t-pick-day="Elegir para {d}" data-t-tour-1="Tu semana: cada día, de lunes a viernes, es un espacio. Toca un día para elegirle platillo." data-t-tour-2="Desliza las tarjetas y toca la flecha de una para ponerla en el día activo. Después pasa solo al siguiente día." data-t-tour-2m="Desliza las tarjetas y toca el botón naranja de abajo: pone el platillo que ves en el día activo y pasa al siguiente." data-t-tour-3="¿Algo que quitar? Toca “Nota o quitar ingredientes” en la tarjeta: hamburguesa sin cebolla, salsa aparte…" data-t-tour-4="Aquí ves tu total. Tu plan incluye $900 por semana; lo que pases se cobra aparte esa semana. Con los 5 días listos, confirma." data-t-tour-next="Siguiente" data-t-tour-done="Entendido" data-t-tour-skip="Saltar" data-t-tour-guide="Ver guía paso a paso" data-t-mods-done="Listo" data-t-mods-edit="Quitar ingredientes o añadir nota a {d}" data-t-mods-title="Ajustes para {d}: {p}" data-t-mods-hint="¿Algo que quitar? Toca un ingrediente para pedirlo sin él." data-t-mods-note="Nota para la cocina (opcional)" data-t-mods-ph="Ej. sin cebolla, salsa aparte…" data-t-mods-warn="Es una preferencia de gusto: no sustituye avisar de una alergia (tu perfil). Haremos lo posible por respetarla." data-t-mods-without="Sin {i}" data-t-prop-notes="Notas de cocina" data-t-mods-open="Quitar ingredientes o añadir nota"
   data-t-para-me="Para mí" data-t-prop-for="Para"
   data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-finish="Confirmar y continuar" data-t-finish-guest="Inicia sesión para continuar" data-t-credit="Tienes un plan activo: te quedan {w} de {t} semanas (hasta el {e}). Elige las comidas de cada semana en Mi semana. ¿Quieres más créditos? Elige un plan aquí abajo." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-pick="Elegir" data-t-picked="Elegido" data-t-pick-for="Elige el platillo del {d}" data-t-all-done="¡Semana completa! Revisa y continúa." data-t-clear-day="Quitar el platillo de {d}" data-t-first="Primera entrega: lunes {d}." data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
   data-t-prop-upgrade="Mejora" data-t-need-contract="Acepta el contrato para continuar." data-t-days-missing="Asigna un platillo a cada día."
@@ -3315,6 +3349,7 @@ Fuego</span>
 
         <fieldset class="step" data-fn-step="2">
           <legend class="fn-sr">Menú</legend>
+          <div class="fn-menunote"><button class="text-link" type="button" data-fn-prev-sc>&lsaquo; Plan</button><p>Este es el menú de la semana. Cada semana vuelves aquí a elegir tus platillos antes del sábado a las 10:00; hoy solo conócelo.</p></div>
           <div class="fn-carousel fn-carousel--show">
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Platillos anteriores">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
@@ -3383,6 +3418,7 @@ Fuego</span>
   </div>
 </article></div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Platillos siguientes">&#8250;</button>
+            <button class="fn-gonext" type="button" data-fn-sc-next aria-label="Elegir mi semana">&rarr;</button>
           </div>
         </fieldset>
         <fieldset class="step" data-fn-step="3">
@@ -11341,7 +11377,7 @@ Pago digital, sin efectivo</li></ul>
   data-t-per-week="{p} por semana" data-t-weeks-x="{p} por semana × {w} semanas" data-t-per-meal="por comida"
   data-t-all-lines="Todas" data-t-prop-dishes="Platillos" data-t-prop-meals="Comidas por semana"
   data-t-prop-tier="Nivel" data-t-prop-length="Duración" data-t-length-block="4 semanas" data-t-length-week="1 semana"
-  data-t-budget="Tu plan incluye {w} por semana en comidas. Lo que elijas por encima se cobra aparte esa semana, además de tu pago inicial de {t}." data-t-budget-x="Esta semana: +{x} extra." data-t-budget-ok="Esta semana: sin extra." data-t-how-open="¿Cómo funciona?" data-t-pick-day="Elegir para {d}" data-t-mods-done="Listo" data-t-mods-edit="Quitar ingredientes o añadir nota a {d}" data-t-mods-title="Ajustes para {d}: {p}" data-t-mods-hint="¿Algo que quitar? Toca un ingrediente para pedirlo sin él." data-t-mods-note="Nota para la cocina (opcional)" data-t-mods-ph="Ej. sin cebolla, salsa aparte…" data-t-mods-warn="Es una preferencia de gusto: no sustituye avisar de una alergia (tu perfil). Haremos lo posible por respetarla." data-t-mods-without="Sin {i}" data-t-prop-notes="Notas de cocina" data-t-mods-open="Quitar ingredientes o añadir nota"
+  data-t-budget="Tu plan incluye {w} por semana en comidas. Lo que elijas por encima se cobra aparte esa semana, además de tu pago inicial de {t}." data-t-budget-x="Esta semana: +{x} extra." data-t-budget-ok="Esta semana: sin extra." data-t-how-open="¿Cómo funciona?" data-t-pick-day="Elegir para {d}" data-t-tour-1="Tu semana: cada día, de lunes a viernes, es un espacio. Toca un día para elegirle platillo." data-t-tour-2="Desliza las tarjetas y toca la flecha de una para ponerla en el día activo. Después pasa solo al siguiente día." data-t-tour-2m="Desliza las tarjetas y toca el botón naranja de abajo: pone el platillo que ves en el día activo y pasa al siguiente." data-t-tour-3="¿Algo que quitar? Toca “Nota o quitar ingredientes” en la tarjeta: hamburguesa sin cebolla, salsa aparte…" data-t-tour-4="Aquí ves tu total. Tu plan incluye $900 por semana; lo que pases se cobra aparte esa semana. Con los 5 días listos, confirma." data-t-tour-next="Siguiente" data-t-tour-done="Entendido" data-t-tour-skip="Saltar" data-t-tour-guide="Ver guía paso a paso" data-t-mods-done="Listo" data-t-mods-edit="Quitar ingredientes o añadir nota a {d}" data-t-mods-title="Ajustes para {d}: {p}" data-t-mods-hint="¿Algo que quitar? Toca un ingrediente para pedirlo sin él." data-t-mods-note="Nota para la cocina (opcional)" data-t-mods-ph="Ej. sin cebolla, salsa aparte…" data-t-mods-warn="Es una preferencia de gusto: no sustituye avisar de una alergia (tu perfil). Haremos lo posible por respetarla." data-t-mods-without="Sin {i}" data-t-prop-notes="Notas de cocina" data-t-mods-open="Quitar ingredientes o añadir nota"
   data-t-para-me="Para mí" data-t-prop-for="Para"
   data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-finish="Confirmar y continuar" data-t-finish-guest="Inicia sesión para continuar" data-t-credit="Tienes un plan activo: te quedan {w} de {t} semanas (hasta el {e}). Elige las comidas de cada semana en Mi semana. ¿Quieres más créditos? Elige un plan aquí abajo." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-pick="Elegir" data-t-picked="Elegido" data-t-pick-for="Elige el platillo del {d}" data-t-all-done="¡Semana completa! Revisa y continúa." data-t-clear-day="Quitar el platillo de {d}" data-t-first="Primera entrega: lunes {d}." data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
   data-t-prop-upgrade="Mejora" data-t-need-contract="Acepta el contrato para continuar." data-t-days-missing="Asigna un platillo a cada día."
@@ -11428,6 +11464,7 @@ Pago digital, sin efectivo</li></ul>
 
         <fieldset class="step" data-fn-step="2">
           <legend class="fn-sr">Menú</legend>
+          <div class="fn-menunote"><button class="text-link" type="button" data-fn-prev-sc>&lsaquo; Plan</button><p>Este es el menú de la semana. Cada semana vuelves aquí a elegir tus platillos antes del sábado a las 10:00; hoy solo conócelo.</p></div>
           <div class="fn-carousel fn-carousel--show">
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Platillos anteriores">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
@@ -11496,6 +11533,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </article></div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Platillos siguientes">&#8250;</button>
+            <button class="fn-gonext" type="button" data-fn-sc-next aria-label="Elegir mi semana">&rarr;</button>
           </div>
         </fieldset>
         <fieldset class="step" data-fn-step="3">
@@ -12451,7 +12489,7 @@ Pago digital, sin efectivo</li></ul>
   data-t-per-week="{p} per week" data-t-weeks-x="{p} per week × {w} weeks" data-t-per-meal="per meal"
   data-t-all-lines="All" data-t-prop-dishes="Dishes" data-t-prop-meals="Meals per week"
   data-t-prop-tier="Tier" data-t-prop-length="Length" data-t-length-block="4 weeks" data-t-length-week="1 week"
-  data-t-budget="Your plan includes {w} per week in meals. Anything you choose above that is charged separately that week, on top of your {t} upfront payment." data-t-budget-x="This week: +{x} extra." data-t-budget-ok="This week: no extra." data-t-how-open="How does it work?" data-t-pick-day="Choose for {d}" data-t-mods-done="Done" data-t-mods-edit="Leave out ingredients or add a note for {d}" data-t-mods-title="Tweaks for {d}: {p}" data-t-mods-hint="Anything to leave out? Tap an ingredient to ask for it without." data-t-mods-note="Note for the kitchen (optional)" data-t-mods-ph="E.g. no onion, sauce on the side…" data-t-mods-warn="This is a taste preference: it does not replace telling us about an allergy (your profile). We will do our best to respect it." data-t-mods-without="No {i}" data-t-prop-notes="Kitchen notes" data-t-mods-open="Remove ingredients or add a note"
+  data-t-budget="Your plan includes {w} per week in meals. Anything you choose above that is charged separately that week, on top of your {t} upfront payment." data-t-budget-x="This week: +{x} extra." data-t-budget-ok="This week: no extra." data-t-how-open="How does it work?" data-t-pick-day="Choose for {d}" data-t-tour-1="Your week: each day, Monday to Friday, is a slot. Tap a day to choose its dish." data-t-tour-2="Swipe the cards and tap the arrow on one to put it on the active day. It then moves on to the next day by itself." data-t-tour-2m="Swipe the cards and tap the orange button below: it puts the dish you see on the active day and moves to the next one." data-t-tour-3="Something to leave out? Tap “Note or leave out ingredients” on the card: burger without onion, sauce on the side…" data-t-tour-4="Here is your total. Your plan includes $900 a week; anything above is charged separately that week. With all 5 days set, confirm." data-t-tour-next="Next" data-t-tour-done="Got it" data-t-tour-skip="Skip" data-t-tour-guide="Step-by-step guide" data-t-mods-done="Done" data-t-mods-edit="Leave out ingredients or add a note for {d}" data-t-mods-title="Tweaks for {d}: {p}" data-t-mods-hint="Anything to leave out? Tap an ingredient to ask for it without." data-t-mods-note="Note for the kitchen (optional)" data-t-mods-ph="E.g. no onion, sauce on the side…" data-t-mods-warn="This is a taste preference: it does not replace telling us about an allergy (your profile). We will do our best to respect it." data-t-mods-without="No {i}" data-t-prop-notes="Kitchen notes" data-t-mods-open="Remove ingredients or add a note"
   data-t-para-me="For me" data-t-prop-for="For"
   data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-finish="Confirm and continue" data-t-finish-guest="Sign in to continue" data-t-credit="You have an active plan: {w} of {t} weeks left (until {e}). Choose each week's meals in My week. Want more credits? Pick a plan below." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-pick="Choose" data-t-picked="Chosen" data-t-pick-for="Choose the dish for {d}" data-t-all-done="Week complete! Review and continue." data-t-clear-day="Remove the dish for {d}" data-t-first="First delivery: Monday {d}." data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
   data-t-prop-upgrade="Upgrade" data-t-need-contract="Accept the contract to continue." data-t-days-missing="Assign a dish to every day."
@@ -12538,6 +12576,7 @@ Pago digital, sin efectivo</li></ul>
 
         <fieldset class="step" data-fn-step="2">
           <legend class="fn-sr">Menu</legend>
+          <div class="fn-menunote"><button class="text-link" type="button" data-fn-prev-sc>&lsaquo; Plan</button><p>This is the menu of the week. Every week you come back here to choose your dishes before Saturday at 10:00; today, just get to know it.</p></div>
           <div class="fn-carousel fn-carousel--show">
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Previous dishes">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
@@ -12606,6 +12645,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </article></div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Next dishes">&#8250;</button>
+            <button class="fn-gonext" type="button" data-fn-sc-next aria-label="Choose my week">&rarr;</button>
           </div>
         </fieldset>
         <fieldset class="step" data-fn-step="3">
@@ -20564,7 +20604,7 @@ Digital payment, no cash</li></ul>
   data-t-per-week="{p} per week" data-t-weeks-x="{p} per week × {w} weeks" data-t-per-meal="per meal"
   data-t-all-lines="All" data-t-prop-dishes="Dishes" data-t-prop-meals="Meals per week"
   data-t-prop-tier="Tier" data-t-prop-length="Length" data-t-length-block="4 weeks" data-t-length-week="1 week"
-  data-t-budget="Your plan includes {w} per week in meals. Anything you choose above that is charged separately that week, on top of your {t} upfront payment." data-t-budget-x="This week: +{x} extra." data-t-budget-ok="This week: no extra." data-t-how-open="How does it work?" data-t-pick-day="Choose for {d}" data-t-mods-done="Done" data-t-mods-edit="Leave out ingredients or add a note for {d}" data-t-mods-title="Tweaks for {d}: {p}" data-t-mods-hint="Anything to leave out? Tap an ingredient to ask for it without." data-t-mods-note="Note for the kitchen (optional)" data-t-mods-ph="E.g. no onion, sauce on the side…" data-t-mods-warn="This is a taste preference: it does not replace telling us about an allergy (your profile). We will do our best to respect it." data-t-mods-without="No {i}" data-t-prop-notes="Kitchen notes" data-t-mods-open="Remove ingredients or add a note"
+  data-t-budget="Your plan includes {w} per week in meals. Anything you choose above that is charged separately that week, on top of your {t} upfront payment." data-t-budget-x="This week: +{x} extra." data-t-budget-ok="This week: no extra." data-t-how-open="How does it work?" data-t-pick-day="Choose for {d}" data-t-tour-1="Your week: each day, Monday to Friday, is a slot. Tap a day to choose its dish." data-t-tour-2="Swipe the cards and tap the arrow on one to put it on the active day. It then moves on to the next day by itself." data-t-tour-2m="Swipe the cards and tap the orange button below: it puts the dish you see on the active day and moves to the next one." data-t-tour-3="Something to leave out? Tap “Note or leave out ingredients” on the card: burger without onion, sauce on the side…" data-t-tour-4="Here is your total. Your plan includes $900 a week; anything above is charged separately that week. With all 5 days set, confirm." data-t-tour-next="Next" data-t-tour-done="Got it" data-t-tour-skip="Skip" data-t-tour-guide="Step-by-step guide" data-t-mods-done="Done" data-t-mods-edit="Leave out ingredients or add a note for {d}" data-t-mods-title="Tweaks for {d}: {p}" data-t-mods-hint="Anything to leave out? Tap an ingredient to ask for it without." data-t-mods-note="Note for the kitchen (optional)" data-t-mods-ph="E.g. no onion, sauce on the side…" data-t-mods-warn="This is a taste preference: it does not replace telling us about an allergy (your profile). We will do our best to respect it." data-t-mods-without="No {i}" data-t-prop-notes="Kitchen notes" data-t-mods-open="Remove ingredients or add a note"
   data-t-para-me="For me" data-t-prop-for="For"
   data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-finish="Confirm and continue" data-t-finish-guest="Sign in to continue" data-t-credit="You have an active plan: {w} of {t} weeks left (until {e}). Choose each week's meals in My week. Want more credits? Pick a plan below." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-pick="Choose" data-t-picked="Chosen" data-t-pick-for="Choose the dish for {d}" data-t-all-done="Week complete! Review and continue." data-t-clear-day="Remove the dish for {d}" data-t-first="First delivery: Monday {d}." data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
   data-t-prop-upgrade="Upgrade" data-t-need-contract="Accept the contract to continue." data-t-days-missing="Assign a dish to every day."
@@ -20651,6 +20691,7 @@ Digital payment, no cash</li></ul>
 
         <fieldset class="step" data-fn-step="2">
           <legend class="fn-sr">Menu</legend>
+          <div class="fn-menunote"><button class="text-link" type="button" data-fn-prev-sc>&lsaquo; Plan</button><p>This is the menu of the week. Every week you come back here to choose your dishes before Saturday at 10:00; today, just get to know it.</p></div>
           <div class="fn-carousel fn-carousel--show">
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Previous dishes">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
@@ -20719,6 +20760,7 @@ Digital payment, no cash</li></ul>
   </div>
 </article></div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Next dishes">&#8250;</button>
+            <button class="fn-gonext" type="button" data-fn-sc-next aria-label="Choose my week">&rarr;</button>
           </div>
         </fieldset>
         <fieldset class="step" data-fn-step="3">
@@ -23541,6 +23583,55 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         $$('[data-fn-dish]:not(.is-hidden)', rail).forEach(function (c) { var r = c.getBoundingClientRect(), dd = Math.abs(r.left + r.width / 2 - mid); if (dd < bd && !c.classList.contains('is-blocked')) { bd = dd; best = c; } });
         var pb = best && $('[data-pick]', best); if (pb) pb.click();
       });
+      /* guided tour of the planner (coach marks): shown the first time the planner opens, and again from "Ver guía" */
+      var tourEl = null, tourI = 0, TOUR_KEY = 'kx-tour-planner';
+      var tourSteps = function () {
+        var phone = window.matchMedia && window.matchMedia('(max-width:760px)').matches;
+        return [
+          { sel: '.step[data-fn-step="3"] [data-fn-week]', t: 'tour-1' },
+          { sel: '.step[data-fn-step="3"] [data-fn-grid] [data-fn-dish]:not(.is-hidden)', t: phone ? 'tour-2m' : 'tour-2' },
+          { sel: '.step[data-fn-step="3"] [data-fn-grid] [data-fn-note-t]', t: 'tour-3' },
+          { sel: phone ? '.funnel__aside' : '.funnel__aside .funnel__total', t: 'tour-4' }
+        ];
+      };
+      var tourClose = function (remember) { if (tourEl) { tourEl.remove(); tourEl = null; } if (remember) { try { localStorage.setItem(TOUR_KEY, '1'); } catch (x) {} } window.removeEventListener('resize', tourPlace); };
+      var tourPlace = function () {
+        if (!tourEl) return; var steps3 = tourSteps(), st3 = steps3[tourI], tg = $(st3.sel, holder); if (!tg) return;
+        var r = tg.getBoundingClientRect(), pad = 6, sp = $('.fn-tour__spot', tourEl), bb = $('.fn-tour__bubble', tourEl);
+        sp.style.cssText = 'left:' + (r.left - pad) + 'px;top:' + (r.top - pad) + 'px;width:' + (r.width + pad * 2) + 'px;height:' + (r.height + pad * 2) + 'px';
+        bb.style.maxWidth = Math.min(340, window.innerWidth - 24) + 'px';
+        var bh = bb.offsetHeight, bw = bb.offsetWidth, below = window.innerHeight - r.bottom, top, left;
+        if (r.right + bw + 28 <= window.innerWidth && r.height > 100) {           // room beside a tall target (a card): put the note next to it
+          left = r.right + 18; top = Math.min(Math.max(10, r.top + 10), window.innerHeight - bh - 10);
+        } else {
+          top = below > bh + 24 ? r.bottom + 14 : Math.max(10, r.top - bh - 14);
+          if (below <= bh + 24 && r.top < bh + 24) top = Math.max(10, window.innerHeight - bh - 16);
+          left = Math.min(Math.max(12, r.left + r.width / 2 - bw / 2), window.innerWidth - bw - 12);
+        }
+        bb.style.top = top + 'px'; bb.style.left = left + 'px';
+      };
+      var tourShow = function () {
+        if (!tourEl) return; var arr = tourSteps(), st3 = arr[tourI], tg = $(st3.sel, holder);
+        if (!tg) { if (tourI < arr.length - 1) { tourI++; tourShow(); } else tourClose(true); return; }
+        tg.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        $('.fn-tour__text', tourEl).textContent = T_(st3.t);
+        $('.fn-tour__count', tourEl).textContent = (tourI + 1) + ' / ' + arr.length;
+        $('.fn-tour__next', tourEl).textContent = tourI === arr.length - 1 ? T_('tour-done') : T_('tour-next');
+        window.requestAnimationFrame(tourPlace);
+      };
+      var startTour = function (force) {
+        if (tourEl) return;
+        if (!force) { try { if (localStorage.getItem(TOUR_KEY)) return; } catch (x) {} if (navigator.webdriver) return; }
+        st.step = 2; persist(); render();
+        tourI = 0; tourEl = document.createElement('div'); tourEl.className = 'fn-tour';
+        tourEl.innerHTML = '<div class="fn-tour__spot"></div><div class="fn-tour__bubble" role="dialog" aria-live="polite"><p class="fn-tour__text"></p><div class="fn-tour__row"><span class="fn-tour__count"></span><button type="button" class="fn-tour__skip"></button><button type="button" class="btn btn--gold btn--sm fn-tour__next"></button></div></div>';
+        $('.fn-tour__skip', tourEl).textContent = T_('tour-skip');
+        $('.fn-tour__skip', tourEl).addEventListener('click', function () { tourClose(true); });
+        $('.fn-tour__next', tourEl).addEventListener('click', function () { if (tourI >= tourSteps().length - 1) { tourClose(true); return; } tourI++; tourShow(); });
+        document.body.appendChild(tourEl); window.addEventListener('resize', tourPlace);
+        window.setTimeout(tourShow, 120);
+      };
+      var tourArmed = false;
       var render = function () {
         // dishes of a lower tier or blocked by the profile cannot stay in the plan; slots are the source of truth
         st.days = st.days.map(function (p) { return p && eligible(byPid(p)) ? p : ''; });
@@ -23596,7 +23687,8 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           bud.innerHTML = '';
           var bt = document.createElement('span'); bt.textContent = fill(T_('budget'), { w: money(wk), t: money(planTotal() - exb) }) + ' ' + (exb ? fill(T_('budget-x'), { x: money(exb) }) : T_('budget-ok')) + ' ';
           var bl = document.createElement('button'); bl.type = 'button'; bl.className = 'text-link'; bl.textContent = T_('how-open'); bl.setAttribute('data-fn-how-open', '');
-          bud.appendChild(bt); bud.appendChild(bl);
+          var tg2 = document.createElement('button'); tg2.type = 'button'; tg2.className = 'text-link'; tg2.textContent = T_('tour-guide'); tg2.setAttribute('data-fn-tour-open', '');
+          bud.appendChild(bt); bud.appendChild(bl); bud.appendChild(tg2);
         });
         var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : ''; }
         var emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
@@ -23608,6 +23700,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         buildNotes();
         renderMods();
         holder.setAttribute('data-step', String(st.step + 1));
+        if (st.step === 2 && !tourArmed) { tourArmed = true; window.setTimeout(function () { startTour(false); }, 600); }
         // stepper
         steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
         dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); });
@@ -23655,6 +23748,9 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var db = e.target.closest ? e.target.closest('[data-fn-day-btn]') : null;
         if (db) { st.active = +db.getAttribute('data-fn-day-btn'); persist(); render(); return; }
         if (e.target.closest && e.target.closest('[data-fn-how-open]')) { st.step = 0; var hw = $('[data-fn-how]', holder); if (hw) hw.open = true; persist(); render(); return; }
+        if (e.target.closest && e.target.closest('[data-fn-sc-next]')) { go(2); return; }
+        if (e.target.closest && e.target.closest('[data-fn-prev-sc]')) { go(0); return; }
+        if (e.target.closest && e.target.closest('[data-fn-tour-open]')) { startTour(true); return; }
         var sa = e.target.closest ? e.target.closest('[data-fn-sc-arrow]') : null;
         if (sa) { var sg = $('[data-fn-sc-grid]', holder); if (sg) sg.scrollBy({ left: (+sa.getAttribute('data-fn-sc-arrow')) * Math.max(220, sg.clientWidth * 0.8), behavior: REDUCE ? 'auto' : 'smooth' }); return; }
         var ar = e.target.closest ? e.target.closest('[data-fn-arrow]') : null;
