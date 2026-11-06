@@ -1,3 +1,4 @@
+{%- capture tx_disclaimer -%}{% render 'tx', s: settings.allergy_disclaimer %}{%- endcapture -%}
 {%- liquid
   assign allergy_list = 'Gluten,Lácteos,Frutos secos,Mariscos' | split: ','
   assign allergy_more = 'Soya,Huevo,Ajonjolí,Pescado,Cacahuate,Nuez,Almendra,Mostaza,Apio,Sulfitos,Maíz,Fresa,Aguacate' | split: ','
@@ -13,8 +14,8 @@
         <h2>{{ 'onboarding.guest_title' | t }}</h2>
         <p class="text-muted">{{ 'onboarding.guest_text' | t }}</p>
         <div class="btn-row">
-          <a class="btn btn--gold" href="{{ routes.account_login_url }}?return_url=%2Fpages%2Fbienvenida">{{ 'login.title' | t }}</a>
-          <a class="btn btn--outline" href="{{ routes.account_register_url | default: routes.account_login_url }}?return_url=%2Fpages%2Fbienvenida">{{ 'funnel.create_account' | t }}</a>
+          <a class="btn btn--gold" href="{% render 'login-url', back: '/pages/bienvenida' %}">{{ 'login.title' | t }}</a>
+          <a class="btn btn--outline" href="{% render 'login-url', kind: 'register', back: '/pages/bienvenida' %}">{{ 'funnel.create_account' | t }}</a>
         </div>
       </div>
     {%- endunless -%}
@@ -57,7 +58,7 @@
         <legend>{{ 'onboarding.s3' | t }}</legend>
         <p class="label">{{ 'profile.block1' | t }}</p>
         <div class="check-grid">
-          {%- for a in allergy_list -%}{%- assign ak = 'allergen.' | append: a | handleize -%}
+          {%- for a in allergy_list -%}{%- assign ah = a | handleize -%}{%- assign ak = 'allergen.' | append: ah -%}
             <label class="check"><input type="checkbox" data-ob-allergy value="{{ a }}"> <span>{{ ak | t }}</span></label>
           {%- endfor -%}
         </div>
@@ -67,11 +68,11 @@
         <div class="field"><label for="ob-dis">{{ 'profile.block2' | t }}</label><input class="input" id="ob-dis" data-ob="dislikes" placeholder="{{ 'profile.tag_placeholder' | t }}"></div>
         <p class="label">{{ 'profile.diets' | t }}</p>
         <div class="check-grid">
-          {%- for d in diet_list -%}{%- assign dk = 'diet.' | append: d | handleize -%}
+          {%- for d in diet_list -%}{%- assign dh = d | handleize -%}{%- assign dk = 'diet.' | append: dh -%}
             <label class="check"><input type="checkbox" data-ob-diet value="{{ d }}"> <span>{{ dk | t }}</span></label>
           {%- endfor -%}
         </div>
-        <p class="legal-note">{{ settings.allergy_disclaimer }}</p>
+        <p class="legal-note">{{ tx_disclaimer }}</p>
       </fieldset>
 
       <p class="alert alert--warn" data-ob-error hidden role="alert"></p>

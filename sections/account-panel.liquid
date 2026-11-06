@@ -1,3 +1,4 @@
+{%- capture tx_pause_msg -%}{% render 'tx', s: settings.pause_locked_message %}{%- endcapture -%}
 {%- liquid
   assign mf = customer.metafields.kulinaria
   assign portal = settings.subscription_portal_url | default: routes.account_url
@@ -48,7 +49,7 @@
           <p class="alert alert--warn" data-mw-noplan hidden>{{ 'myweek.noplan' | t }} <a class="text-link" href="/pages/pedido">{{ 'nav.cta' | t }}</a></p>
           <p class="text-muted">{{ 'myweek.intro' | t }}</p>
           {%- unless customer -%}
-            <p class="alert alert--warn">{{ 'myweek.guest' | t }} <a class="text-link" href="{{ routes.account_login_url }}?return_url=%2Fpages%2Fcuenta-semana">{{ 'login.title' | t }}</a></p>
+            <p class="alert alert--warn">{{ 'myweek.guest' | t }} <a class="text-link" href="{% render 'login-url', back: '/pages/cuenta-semana' %}">{{ 'login.title' | t }}</a></p>
           {%- endunless -%}
           <div class="field"><label for="mw-week">{{ 'myweek.week_label' | t }}</label><select class="select" id="mw-week" data-mw-week></select></div>
           <ol class="fn-days" data-mw-days></ol>
@@ -59,10 +60,10 @@
           <div class="btn-row"><button class="btn btn--gold" type="button" data-mw-save>{{ 'myweek.save' | t }}</button><a class="btn btn--outline" href="{{ portal }}">{{ 'account.manage_subscription' | t }}</a></div>
           <p class="myweek__links"><a class="text-link" href="{{ routes.account_url }}">{{ 'myweek.orders' | t }}</a> · <a class="text-link" href="/pages/bienvenida?edit=1">{{ 'myweek.my_data' | t }}</a></p>
           <ul hidden data-mw-dishes>
-            {%- for product in collections['menu-semanal'].products limit: 40 -%}
+            {%- for product in collections['menu-semanal'].products limit: 40 -%}{%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}
               {%- capture mw_state -%}{% render 'menu-week', product: product %}{%- endcapture -%}
               {%- if mw_state == 'on' -%}
-                <li data-pid="{{ product.id }}" data-title="{{ product.title | escape }}" data-tier="{{ product.metafields.kulinaria.tier.value | default: 'selecto' }}" data-allergens="{{ product.metafields.kulinaria.allergens.value | join: '|' | escape }}" data-ingredients="{{ product.metafields.kulinaria.ingredients.value | join: '|' | escape }}"></li>
+                <li data-pid="{{ product.id }}" data-title="{{ product.title | escape }}" data-label="{{ tx_ptitle | escape }}" data-tier="{{ product.metafields.kulinaria.tier.value | default: 'selecto' }}" data-allergens="{{ product.metafields.kulinaria.allergens.value | join: '|' | escape }}" data-ingredients="{{ product.metafields.kulinaria.ingredients.value | join: '|' | escape }}"></li>
               {%- endif -%}
             {%- endfor -%}
           </ul>
@@ -75,14 +76,14 @@
             <h3>{{ 'account.thu_fri' | t }}</h3>
             <p class="text-muted">{{ 'account.thu_fri_note' | t }}</p>
             <a class="btn btn--outline" data-pause-lock data-lock-day="2" data-lock-hour="10" href="{{ portal }}">{{ 'account.pause_next' | t }}</a>
-            <p class="alert alert--warn" data-lock-msg hidden>{{ settings.pause_locked_message }}</p>
+            <p class="alert alert--warn" data-lock-msg hidden>{{ tx_pause_msg }}</p>
             <p class="text-muted" data-lock-left style="font-size:.85rem"></p>
           </div>
           <div class="card">
             <h3>{{ 'account.mon_wed' | t }}</h3>
             <p class="text-muted">{{ 'account.mon_wed_note' | t }}</p>
             <a class="btn btn--outline" data-pause-lock data-lock-day="5" data-lock-hour="19" href="{{ portal }}">{{ 'account.pause_next' | t }}</a>
-            <p class="alert alert--warn" data-lock-msg hidden>{{ settings.pause_locked_message }}</p>
+            <p class="alert alert--warn" data-lock-msg hidden>{{ tx_pause_msg }}</p>
             <p class="text-muted" data-lock-left style="font-size:.85rem"></p>
           </div>
         </div>

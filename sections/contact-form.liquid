@@ -1,18 +1,23 @@
+{%- capture tx_s_button_label -%}{% render 'tx', s: section.settings.button_label %}{%- endcapture -%}
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- capture tx_s_success -%}{% render 'tx', s: section.settings.success %}{%- endcapture -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
 {%- liquid
   assign kind = section.settings.kind
 -%}
 <section class="section" {% if kind == 'embajador' %}id="alta"{% elsif kind == 'carta' %}id="cotizacion"{% endif %} {{ section.shopify_attributes }}>
   <div class="container" style="max-width:860px">
     <div class="section__head">
-      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-      <h2>{% render 'headline', text: section.settings.heading %}</h2>
+      {%- if tx_s_eyebrow != blank -%}<span class="eyebrow">{{ tx_s_eyebrow }}</span>{%- endif -%}
+      <h2>{% render 'headline', text: tx_s_heading %}</h2>
       <div class="divider-gold"><i></i></div>
-      {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
+      {%- if tx_s_text != blank -%}<p class="lede">{{ tx_s_text }}</p>{%- endif -%}
     </div>
 
     {%- form 'contact', id: 'kulinaria-contact' -%}
       {%- if form.posted_successfully? -%}
-        <p class="alert alert--ok" role="status">{{ section.settings.success }}</p>
+        <p class="alert alert--ok" role="status">{{ tx_s_success }}</p>
       {%- endif -%}
       {%- if form.errors -%}
         <div class="alert alert--warn" role="alert">{{ form.errors | default_errors }}</div>
@@ -46,7 +51,7 @@
       {%- if kind == 'carta' -%}
         <p class="legal-note">{{ 'form.carta_note' | t }}</p>
       {%- endif -%}
-      <button class="btn btn--gold" type="submit">{{ section.settings.button_label }}</button>
+      <button class="btn btn--gold" type="submit">{{ tx_s_button_label }}</button>
     {%- endform -%}
   </div>
 </section>

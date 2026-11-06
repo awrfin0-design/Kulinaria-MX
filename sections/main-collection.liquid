@@ -52,7 +52,7 @@
         </div>
 
         <div class="dish-grid">
-          {%- for product in collection.products -%}{% render 'dish-card', product: product %}{%- endfor -%}
+          {%- for product in collection.products -%}{%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}{% render 'dish-card', product: product %}{%- endfor -%}
         </div>
         <p class="alert" data-empty hidden>{{ 'collection.no_match' | t }}</p>
       </div>
@@ -60,12 +60,12 @@
       <div class="dish-grid">
         {%- for product in collection.products -%}
           <article class="dish">
-            <a class="dish__media surface-slate" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
-              {%- if product.featured_image -%}{{ product.featured_image | image_url: width: 640 | image_tag: loading: 'lazy', alt: product.title }}{%- else -%}<span class="dish__ph surface-walnut" aria-hidden="true">{% render 'logo', mark: true %}</span>{%- endif -%}
+            <a class="dish__media surface-slate" href="{{ product.url }}" aria-label="{{ tx_ptitle | escape }}">
+              {%- if product.featured_image -%}{{ product.featured_image | image_url: width: 640 | image_tag: loading: 'lazy', alt: tx_ptitle }}{%- else -%}<span class="dish__ph surface-walnut" aria-hidden="true">{% render 'logo', mark: true %}</span>{%- endif -%}
               <span class="dish__pill" aria-hidden="true">{{ 'collection.view_product' | t }}</span>
             </a>
             <div class="dish__body">
-              <h3 class="dish__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+              <h3 class="dish__title"><a href="{{ product.url }}">{{ tx_ptitle }}</a></h3>
               <div class="dish__meta"><span class="dish__price">{{ product.price | money_without_trailing_zeros }}</span><a class="dish__go" href="{{ product.url }}" aria-label="{{ 'collection.view' | t }} {{ product.title | escape }}">→</a></div>
             </div>
           </article>

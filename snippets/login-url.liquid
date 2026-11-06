@@ -1,0 +1,20 @@
+{%- comment -%}
+  Sign-in / create-account address that comes back to a page of ours afterwards.
+  With the new customer accounts Shopify's login address ALREADY contains a "?" (…/redirect?locale=es&region_country=MX), so the return
+  parameters must be joined with "&" in that case, or the link breaks (404).
+  Params: kind ('login' default | 'register') · back (path to return to, default /pages/pedido)
+{%- endcomment -%}
+{%- liquid
+  if kind == 'register'
+    assign li_base = routes.account_register_url | default: routes.account_login_url
+  else
+    assign li_base = routes.account_login_url
+  endif
+  assign li_back = back | default: '/pages/pedido' | url_encode
+  if li_base contains '?'
+    assign li_sep = '&'
+  else
+    assign li_sep = '?'
+  endif
+  echo li_base | append: li_sep | append: 'return_url=' | append: li_back | append: '&return_to=' | append: li_back
+-%}

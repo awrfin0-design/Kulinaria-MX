@@ -1,3 +1,6 @@
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
 {%- liquid
   assign coll = section.settings.collection
   assign day = 86400
@@ -9,9 +12,9 @@
 <section class="section section--raised menu-calendar" {{ section.shopify_attributes }}>
   <div class="container">
     <div class="section__head">
-      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-      <h2>{% render 'headline', text: section.settings.heading %}</h2>
-      {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
+      {%- if tx_s_eyebrow != blank -%}<span class="eyebrow">{{ tx_s_eyebrow }}</span>{%- endif -%}
+      <h2>{% render 'headline', text: tx_s_heading %}</h2>
+      {%- if tx_s_text != blank -%}<p class="lede">{{ tx_s_text }}</p>{%- endif -%}
     </div>
     <div class="menu-calendar__grid">
       {%- assign last_week = section.settings.weeks | default: 4 | minus: 1 -%}
@@ -24,11 +27,11 @@
           <h3>{% if i == 0 %}{{ 'calendar.this_week' | t }}{% else %}{{ 'calendar.week_of' | t: date: wk_label }}{% endif %}</h3>
           <ul>
             {%- if coll != blank -%}
-              {%- for product in coll.products -%}
+              {%- for product in coll.products -%}{%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}
                 {%- capture mw_state -%}{% render 'menu-week', product: product, offset: i %}{%- endcapture -%}
                 {%- if mw_state == 'on' -%}
                   {%- assign n = n | plus: 1 -%}
-                  <li><a href="{{ product.url }}">{{ product.title }}</a> <span>{{ product.price | money_without_trailing_zeros }}</span></li>
+                  <li><a href="{{ product.url }}">{{ tx_ptitle }}</a> <span>{{ product.price | money_without_trailing_zeros }}</span></li>
                 {%- endif -%}
               {%- endfor -%}
             {%- endif -%}

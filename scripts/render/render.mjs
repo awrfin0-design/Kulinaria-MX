@@ -2,6 +2,7 @@
 // and assembles a single-file, fully navigable preview: preview/index.html
 //   node scripts/render/render.mjs        (or: npm run build  inside scripts/render)
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Liquid } from 'liquidjs';
@@ -34,6 +35,7 @@ function makeEngine(state, lang) {
     return raw.replace(/\{\{\s*(\w+)\s*\}\}/g, (m, n) => (vars[n] !== undefined ? vars[n] : m));
   });
   engine.registerFilter('hmac_sha256', () => 'preview-token');
+  engine.registerFilter('md5', (v) => crypto.createHash('md5').update(String(v ?? '')).digest('hex'));
   engine.registerFilter('upcase', (v) => String(v ?? '').toUpperCase());
   engine.registerFilter('asset_url', (f) => `assets/${f}`);
   engine.registerFilter('stylesheet_tag', (u) => `<link rel="stylesheet" href="${u}">`);
@@ -105,7 +107,8 @@ function makeEngine(state, lang) {
 const untranslated = new Set();
 
 async function renderLang(lang) {
-  const tr = (v) => {
+  const tr = (v) => v;          // product / collection / page text is stored in Spanish, exactly like the real store; the theme translates it (snippets/tx.liquid)
+  const _trOld = (v) => {
     if (lang !== 'en' || typeof v !== 'string') return v;
     if (CONTENT_EN[v] !== undefined) return CONTENT_EN[v];
     if (/[A-Za-zÁ-ú]{3,}/.test(v) && !/^(https?:|\/|#|<img|\{)/.test(v) && !/^[a-z0-9\-_/.:?=&%+,#@]+$/.test(v)) untranslated.add(v);
@@ -127,7 +130,7 @@ async function renderLang(lang) {
       case 'link_list': return typeof val === 'string' ? store.linklists[val] : val;
       case 'image_picker': return val || null;
       case 'select': case 'url': case 'link_list_id': return val;
-      default: return tr(val);
+      default: return val;      // content text is translated by the theme itself (snippets/tx.liquid), exactly as on the real store
     }
   };
 
@@ -244,7 +247,7 @@ export async function renderSite() {
   // ---- page index (reachable at #/indice, no banner needed)
   const indexHtml = (lang) => {
     const items = per[lang].routes.filter((r) => r.key !== 'pg/admin' && (!r.key.startsWith('p/') || r.key === 'p/salmon-costra-almendras'))
-      .map((r) => `<li><a href="${r.url}">${r.key.startsWith('p/') ? (lang === 'en' ? 'Dish page' : 'Ficha de platillo') : r.title}</a></li>`).join('');
+      .map((r) => `<li><a href="${r.url}">${r.key.startsWith('p/') ? (lang === 'en' ? 'Dish page' : 'Ficha de platillo') : (lang === 'en' && CONTENT_EN[r.title] ? CONTENT_EN[r.title] : r.title)}</a></li>`).join('');
     return `<section class="section"><div class="container"><div class="section__head"><span class="eyebrow">${lang === 'en' ? 'All pages' : 'Todas las páginas'}</span><h1>${lang === 'en' ? 'Page index' : 'Índice de páginas'}</h1></div><ul class="menu-overlay__more" style="list-style:none">${items}</ul></div></section>`;
   };
 
@@ -255,7 +258,19 @@ export async function renderSite() {
 
   let doc = per.es.routes.find((r) => r.key === 'home').html;
   doc = doc.replace(MAIN_RE, () => `<main id="main" tabindex="-1">${LANGS.map((l) => `<template data-l="${l}">${pagesFor(l)}</template>`).join('\n')}</main>`);
-  doc = doc.replace('data-kx-onb href="/pages/bienvenida"', 'data-kx-onb href="#/pg/bienvenida"');   // the layout sits outside the page templates
+  doc = doc.replace('data-kx-onb href="/pages/bienvenida"', 'data-kx-onb href="#/pg/bienvenida"');
+  // layout pieces that carry text (skip link, loader, pricing sheet) are rendered once per language too
+  {
+    const grab = (html, startRe) => { const m = startRe.exec(html); if (!m) return null; const re = /<(\/?)div\b[^>]*>/g; re.lastIndex = m.index; let depth = 0, x; while ((x = re.exec(html))) { depth += x[1] ? -1 : 1; if (depth === 0) return html.slice(m.index, re.lastIndex); } return null; };
+    const homeOf = (l) => per[l].routes.find((r) => r.key === 'home').html;
+    for (const re of [/<div class="loader" id="loader"/, /<div class="sheet" id="sheet-pricing"/]) {
+      const frag = {}; for (const l of LANGS) frag[l] = grab(homeOf(l), re);
+      if (frag.es && frag.en && doc.includes(frag.es)) doc = doc.replace(frag.es, () => LANGS.map((l) => `<template data-l="${l}">${rewrite(frag[l], 'layout ' + l)}</template>`).join(''));
+    }
+    const skip = {}; for (const l of LANGS) skip[l] = (homeOf(l).match(/<a class="skip-link"[^>]*>[^<]*<\/a>/) || [''])[0];
+    if (skip.es && doc.includes(skip.es)) doc = doc.replace(skip.es, () => LANGS.map((l) => `<template data-l="${l}">${skip[l]}</template>`).join(''));
+  }
+   // the layout sits outside the page templates
   for (const g of ['header-group', 'footer-group']) {
     doc = doc.replace(`<!--@group:${g}-->`, () => LANGS.map((l) => `<template data-l="${l}">${rewrite(per[l].groups[g], 'shell ' + l)}</template>`).join(''));
   }

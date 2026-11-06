@@ -21,17 +21,17 @@
         {%- if a.cp != blank -%}<input type="hidden" name="checkout[shipping_address][zip]" value="{{ a.cp | escape }}">{%- endif -%}
         {%- if a.telefono != blank -%}<input type="hidden" name="checkout[shipping_address][phone]" value="{{ a.telefono | escape }}">{%- endif -%}
         <div>
-          {%- for item in cart.items -%}
+          {%- for item in cart.items -%}{%- capture tx_ititle -%}{% render 'tx', s: item.product.title %}{%- endcapture -%}{%- capture tx_ivar -%}{% render 'tx', s: item.variant.title %}{%- endcapture -%}{%- capture tx_iplan -%}{% render 'tx', s: item.selling_plan_allocation.selling_plan.name %}{%- endcapture -%}
             <div class="cart-line">
               <a href="{{ item.url }}">
-                {%- if item.image -%}{{ item.image | image_url: width: 192 | image_tag: loading: 'lazy', alt: item.product.title }}{%- else -%}<span class="dish__ph surface-slate" style="width:96px;font-size:2rem">{% render 'logo', mark: true %}</span>{%- endif -%}
+                {%- if item.image -%}{{ item.image | image_url: width: 192 | image_tag: loading: 'lazy', alt: tx_ititle }}{%- else -%}<span class="dish__ph surface-slate" style="width:96px;font-size:2rem">{% render 'logo', mark: true %}</span>{%- endif -%}
               </a>
               <div>
-                <h3 style="margin:0 0 4px"><a href="{{ item.url }}">{{ item.product.title }}</a></h3>
-                {%- unless item.product.has_only_default_variant -%}<p class="text-muted" style="margin:0">{{ item.variant.title }}</p>{%- endunless -%}
-                {%- if item.selling_plan_allocation -%}<p class="cart-line__plan" style="margin:0">{{ item.selling_plan_allocation.selling_plan.name }}</p>{%- endif -%}
-                {%- for prop in item.properties -%}{%- assign pk = prop | first -%}
-                  {%- unless pk contains '_' -%}<p class="cart-line__prop text-muted" style="margin:2px 0 0;font-size:.9rem"><strong>{{ pk }}:</strong> {{ prop | last }}</p>{%- endunless -%}
+                <h3 style="margin:0 0 4px"><a href="{{ item.url }}">{{ tx_ititle }}</a></h3>
+                {%- unless item.product.has_only_default_variant -%}<p class="text-muted" style="margin:0">{{ tx_ivar }}</p>{%- endunless -%}
+                {%- if item.selling_plan_allocation -%}<p class="cart-line__plan" style="margin:0">{{ tx_iplan }}</p>{%- endif -%}
+                {%- for prop in item.properties -%}{%- assign pk = prop | first -%}{%- assign pv = prop | last -%}{%- capture tx_pkey -%}{% render 'tx', s: pk %}{%- endcapture -%}{%- capture tx_pval -%}{% render 'tx', s: pv %}{%- endcapture -%}
+                  {%- unless pk contains '_' -%}<p class="cart-line__prop text-muted" style="margin:2px 0 0;font-size:.9rem"><strong>{{ tx_pkey }}:</strong> {{ tx_pval }}</p>{%- endunless -%}
                 {%- endfor -%}
                 {%- if item.properties._regalo_bienvenida -%}<p class="cart-line__plan" style="margin:0">{{ 'cart.welcome_gift_line' | t }}</p>{%- endif -%}
                 <a class="btn btn--ghost" style="padding-left:0" href="{{ item.url_to_remove }}">{{ 'cart.remove' | t }}</a>
@@ -64,11 +64,11 @@
               <div class="gift-options">
                 {%- if gift_col != blank -%}
                   {%- assign gift_n = 0 -%}
-                  {%- for product in gift_col.products -%}
+                  {%- for product in gift_col.products -%}{%- capture tx_gtitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}
                     {%- for variant in product.variants -%}
                       {%- assign gift_n = gift_n | plus: 1 -%}
                       <label><input type="radio" name="gift" value="{{ variant.id }}" {% if gift_n == 1 %}checked{% endif %}>
-                        <span>{{ product.title }}{% unless product.has_only_default_variant %} · {{ variant.title }}{% endunless %} <s class="text-muted">{{ variant.price | money_without_trailing_zeros }}</s> <strong style="color:var(--accent)">$0</strong></span></label>
+                        <span>{{ tx_gtitle }}{% unless product.has_only_default_variant %} · {{ variant.title }}{% endunless %} <s class="text-muted">{{ variant.price | money_without_trailing_zeros }}</s> <strong style="color:var(--accent)">$0</strong></span></label>
                     {%- endfor -%}
                   {%- endfor -%}
                 {%- else -%}

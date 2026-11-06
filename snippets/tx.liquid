@@ -1,0 +1,29 @@
+{%- comment -%}
+  Translates a piece of content text (section/block settings, product text, line-item properties) into the visitor's language.
+  The text is written once, in Spanish, in the theme editor or the product; its English version lives in locales/en.json under
+  "ct.<first 12 chars of the md5 of the Spanish text>" (and the Spanish original in es.default.json).
+  This works whatever the store's default language is. If no translation exists the original text is printed unchanged.
+  Param: s (the text)
+{%- endcomment -%}
+{%- liquid
+  assign tx_in = s | strip
+  if tx_in == blank
+    echo s
+  else
+    assign tx_k = tx_in | md5 | slice: 0, 12 | prepend: 'ct.'
+    assign tx_v = tx_k | t
+    if tx_v contains 'translation missing' and tx_in contains '<'
+      comment
+        Rich text (a product description is wrapped in <p>…</p>): try the plain text too
+      endcomment
+      assign tx_plain = tx_in | strip_html | strip
+      assign tx_k2 = tx_plain | md5 | slice: 0, 12 | prepend: 'ct.'
+      assign tx_v = tx_k2 | t
+    endif
+    if tx_v contains 'translation missing'
+      echo s
+    else
+      echo tx_v
+    endif
+  endif
+-%}

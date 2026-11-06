@@ -1,3 +1,9 @@
+{%- capture tx_s_button2_label -%}{% render 'tx', s: section.settings.button2_label %}{%- endcapture -%}
+{%- capture tx_s_button_label -%}{% render 'tx', s: section.settings.button_label %}{%- endcapture -%}
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- capture tx_s_parent_label -%}{% render 'tx', s: section.settings.parent_label %}{%- endcapture -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
 {%- comment -%} Inner-page header: breadcrumb, title, intro, optional buttons and a sub-navigation to sibling pages. {%- endcomment -%}
 {%- assign head_art = section.settings.art | default: 'air-fish' -%}
 <header class="page-head" {{ section.shopify_attributes }}>
@@ -7,17 +13,17 @@
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="{{ 'nav.breadcrumb' | t }}">
           <a href="{{ routes.root_url }}">{{ 'nav.home' | t }}</a>
-          {%- if section.settings.parent_label != blank -%}<i aria-hidden="true">/</i><a href="{{ section.settings.parent_link }}">{{ section.settings.parent_label }}</a>{%- endif -%}
-          {%- if section.settings.eyebrow != blank -%}<i aria-hidden="true">/</i><span>{{ section.settings.eyebrow }}</span>{%- endif -%}
+          {%- if tx_s_parent_label != blank -%}<i aria-hidden="true">/</i><a href="{{ section.settings.parent_link }}">{{ tx_s_parent_label }}</a>{%- endif -%}
+          {%- if tx_s_eyebrow != blank -%}<i aria-hidden="true">/</i><span>{{ tx_s_eyebrow }}</span>{%- endif -%}
         </nav>
         <span class="hero__rule" aria-hidden="true"></span>
-        {%- assign head_text = section.settings.heading | default: page.title | default: collection.title -%}
+        {%- assign head_raw = section.settings.heading | default: page.title | default: collection.title -%}{%- capture tx_head -%}{% render 'tx', s: head_raw %}{%- endcapture -%}{%- assign head_text = tx_head -%}
         <h1>{% render 'headline', text: head_text %}</h1>
-        {%- if section.settings.text != blank -%}<p class="hero__sub">{{ section.settings.text }}</p>{%- endif -%}
-        {%- if section.settings.button_label != blank -%}
+        {%- if tx_s_text != blank -%}<p class="hero__sub">{{ tx_s_text }}</p>{%- endif -%}
+        {%- if tx_s_button_label != blank -%}
           <div class="hero__cta">
-            <a class="arrow-link" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ section.settings.button_label }}</a>
-            {%- if section.settings.button2_label != blank -%}<a class="text-link" href="{{ section.settings.button2_link }}">{{ section.settings.button2_label }}</a>{%- endif -%}
+            <a class="arrow-link" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ tx_s_button_label }}</a>
+            {%- if tx_s_button2_label != blank -%}<a class="text-link" href="{{ section.settings.button2_link }}">{{ tx_s_button2_label }}</a>{%- endif -%}
           </div>
         {%- endif -%}
       </div>
@@ -25,9 +31,9 @@
   </div>
   {%- if section.blocks.size > 0 -%}
     <div class="container">
-      <nav class="page-head__sub" aria-label="{{ section.settings.heading | escape }}">
-        {%- for block in section.blocks -%}
-          <a href="{{ block.settings.link }}" {% if block.settings.link == request.path %}aria-current="page"{% endif %} {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+      <nav class="page-head__sub" aria-label="{{ tx_s_heading | remove: '*' | escape }}">
+        {%- for block in section.blocks -%}{%- capture tx_b_label -%}{% render 'tx', s: block.settings.label %}{%- endcapture -%}
+          <a href="{{ block.settings.link }}" {% if block.settings.link == request.path %}aria-current="page"{% endif %} {{ block.shopify_attributes }}>{{ tx_b_label }}</a>
         {%- endfor -%}
       </nav>
     </div>

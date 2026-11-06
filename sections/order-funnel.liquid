@@ -1,3 +1,5 @@
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
 {%- liquid
   assign coll = section.settings.collection
   assign meals_per_week = 5
@@ -30,8 +32,8 @@
    <div class="funnel__stage" data-fn-stage>
     <div class="funnel__top container">
       <div class="funnel__title">
-        <span class="eyebrow">{{ section.settings.eyebrow }}</span>
-        <h2>{% render 'headline', text: section.settings.heading %}</h2>
+        <span class="eyebrow">{{ tx_s_eyebrow }}</span>
+        <h2>{% render 'headline', text: tx_s_heading %}</h2>
       </div>
       <ol class="steps__nav" aria-label="{{ 'funnel.steps' | t }}">
         <li data-fn-dot class="is-on"><span>01</span>{{ 'funnel.s1' | t }}</li>
@@ -143,7 +145,7 @@
             <label class="fn-sel"><span class="fn-sr">{{ 'funnel.diet_filter' | t }}</span>
               <select class="select" data-fn-diet>
                 <option value="all">{{ 'funnel.all_diets_short' | t }}</option>
-                {%- for block in section.blocks -%}<option value="{{ block.settings.slug }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</option>{%- endfor -%}
+                {%- for block in section.blocks -%}{%- capture tx_b_label -%}{% render 'tx', s: block.settings.label %}{%- endcapture -%}<option value="{{ block.settings.slug }}" {{ block.shopify_attributes }}>{{ tx_b_label }}</option>{%- endfor -%}
               </select></label>
           </div>
           <div class="fn-carousel">
@@ -158,7 +160,7 @@
 
 
         <p class="alert alert--warn" data-fn-error hidden role="alert"></p>
-        <a hidden tabindex="-1" aria-hidden="true" data-fn-login href="{{ routes.account_login_url }}?return_url={{ request.path | default: '/pages/pedido' | url_encode }}"></a>
+        <a hidden tabindex="-1" aria-hidden="true" data-fn-login href="{% render 'login-url', back: request.path %}"></a>
         <a hidden tabindex="-1" aria-hidden="true" data-fn-onb href="/pages/bienvenida"></a>
       </div>
 
@@ -186,7 +188,7 @@
         <a class="btn btn--gold" data-fn-finish href="{{ routes.cart_url }}" hidden>{{ 'funnel.finish' | t }}</a>
       </div>
       {%- unless customer -%}
-      <p class="funnel__login text-muted">{{ 'reg.have_account' | t }} <a href="{{ routes.account_login_url }}?return_url={{ request.path | default: '/pages/pedido' | url_encode }}">{{ 'login.title' | t }}</a></p>
+      <p class="funnel__login text-muted">{{ 'reg.have_account' | t }} <a href="{% render 'login-url', back: request.path %}">{{ 'login.title' | t }}</a></p>
       {%- endunless -%}
     </div>
    </div>

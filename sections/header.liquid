@@ -1,10 +1,12 @@
+{%- capture tx_s_link_label -%}{% render 'tx', s: section.settings.link_label %}{%- endcapture -%}
+{%- capture tx_s_announcement -%}{% render 'tx', s: section.settings.announcement %}{%- endcapture -%}
 <header class="site-header" {{ section.shopify_attributes }}>
-  {%- if section.settings.announcement != blank -%}
+  {%- if tx_s_announcement != blank -%}
     <div class="site-header__ann">
       <p class="announcement">
-        {{ section.settings.announcement }}
+        {{ tx_s_announcement }}
         {%- if section.settings.show_countdown -%}<span data-cutoff> {{ 'cutoff.closes_in' | t }} <strong data-cutoff-value>…</strong></span>{%- endif -%}
-        {%- if section.settings.link != blank and section.settings.link_label != blank %} · <a href="{{ section.settings.link }}">{{ section.settings.link_label }}</a>{% endif -%}
+        {%- if section.settings.link != blank and tx_s_link_label != blank %} · <a href="{{ section.settings.link }}">{{ tx_s_link_label }}</a>{% endif -%}
       </p>
     </div>
   {%- endif -%}
@@ -14,7 +16,7 @@
 
       <div class="header-actions">
         {% render 'lang-switcher' %}
-        <a class="header-login" href="{% if customer %}/pages/cuenta-semana{% else %}{{ routes.account_login_url }}?return_url=%2Fpages%2Fbienvenida{% endif %}">
+        <a class="header-login" href="{% if customer %}/pages/cuenta-semana{% else %}{% render 'login-url', back: '/pages/bienvenida' %}{% endif %}">
           {% render 'icon', name: 'user' %}<span>{% if customer %}{{ 'general.account' | t }}{% else %}{{ 'login.title' | t }}{% endif %}</span>
         </a>
         <a class="icon-link" href="{{ routes.cart_url }}" aria-label="{{ 'general.cart' | t }}">

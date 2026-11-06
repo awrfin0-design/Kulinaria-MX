@@ -1,3 +1,5 @@
+{%- capture tx_protein -%}{% render 'tx', s: settings.protein_note %}{%- endcapture -%}
+{%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}{%- capture tx_pdesc -%}{% render 'tx', s: product.description %}{%- endcapture -%}
 {%- liquid
   assign mf = product.metafields.kulinaria
   assign tier = mf.tier.value | default: 'selecto'
@@ -11,7 +13,7 @@
     {%- comment -%} One single top-down plated photo per dish. {%- endcomment -%}
     <div class="product__media surface-walnut">
       {%- if product.featured_image -%}
-        {{ product.featured_image | image_url: width: 1100 | image_tag: loading: 'eager', alt: product.featured_image.alt | default: product.title }}
+        {{ product.featured_image | image_url: width: 1100 | image_tag: loading: 'eager', alt: tx_ptitle }}
       {%- else -%}
         <span class="dish__ph surface-slate" aria-hidden="true">{% render 'dish-placeholder', category: product.metafields.kulinaria.category.value %}</span>
       {%- endif -%}
@@ -21,22 +23,22 @@
       <div>
         <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:var(--space-md)">
           {% render 'tier-badge', tier: tier %}
-          {%- if mf.category.value != blank -%}<span class="eyebrow" style="margin:0">{{ mf.category.value | replace: '-', ' ' }}</span>{%- endif -%}
+          {%- if mf.category.value != blank -%}<span class="eyebrow" style="margin:0">{%- assign cat_key = 'category.' | append: mf.category.value -%}{{ cat_key | t }}</span>{%- endif -%}
         </div>
-        <h1 style="font-size:clamp(2rem,3.4vw,3rem)">{{ product.title }}</h1>
+        <h1 style="font-size:clamp(2rem,3.4vw,3rem)">{{ tx_ptitle }}</h1>
         <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>{%- if mf.category.value != blank -%}{% render 'plan-price', tier: mf.tier.value, kind: 'meal', money: true %}<small style="font-size:1rem"> {{ 'funnel.per_meal' | t }}</small>{%- else -%}{{ current_variant.price | money_without_trailing_zeros }}{%- endif -%}</p>{%- if mf.tier.value != blank -%}<button class="info-dot" type="button" data-sheet="pricing" aria-label="{{ 'sheet.info' | t }}"><i aria-hidden="true">i</i></button>{%- endif -%}</div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div>
 
-      {%- if product.description != blank -%}<div class="richtext lede" >{{ product.description }}</div>{%- endif -%}
+      {%- if product.description != blank -%}<div class="richtext lede" >{{ tx_pdesc }}</div>{%- endif -%}
 
       {%- if mf.calories.value or mf.carbs.value -%}
         <div class="spec-list">
           {%- if mf.calories.value -%}<div class="spec"><b>{{ mf.calories.value }}</b><span>{{ 'product.calories' | t }}</span></div>{%- endif -%}
           {%- if mf.carbs.value -%}<div class="spec"><b>{{ mf.carbs.value }} g</b><span>{{ 'product.carbs' | t }}</span></div>{%- endif -%}
         </div>
-        <p class="legal-note">{{ settings.protein_note }}</p>
+        <p class="legal-note">{{ tx_protein }}</p>
       {%- endif -%}
 
       {%- if mf.ingredients.value.size > 0 -%}

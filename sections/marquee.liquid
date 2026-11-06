@@ -1,9 +1,10 @@
-<section class="marquee" aria-label="{{ section.settings.label | escape }}" style="--speed:{{ section.settings.speed }}s" {{ section.shopify_attributes }}>
+{%- capture tx_s_label -%}{% render 'tx', s: section.settings.label %}{%- endcapture -%}
+<section class="marquee" aria-label="{{ tx_s_label | escape }}" style="--speed:{{ section.settings.speed }}s" {{ section.shopify_attributes }}>
   <div class="marquee__track">
     {%- for i in (1..4) -%}
       <div class="marquee__group"{% unless forloop.first %} aria-hidden="true"{% endunless %}>
-        {%- for block in section.blocks -%}
-          <span class="marquee__item" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+        {%- for block in section.blocks -%}{%- capture tx_b_text -%}{% render 'tx', s: block.settings.text %}{%- endcapture -%}
+          <span class="marquee__item" {{ block.shopify_attributes }}>{{ tx_b_text }}</span>
         {%- endfor -%}
       </div>
     {%- endfor -%}

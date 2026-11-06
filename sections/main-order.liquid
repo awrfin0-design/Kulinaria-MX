@@ -9,9 +9,9 @@
     <div class="table-wrap"><table class="table">
       <thead><tr><th>{{ 'order.dish' | t }}</th><th>{{ 'order.quantity' | t }}</th><th style="text-align:right">{{ 'cart.total' | t }}</th></tr></thead>
       <tbody>
-        {%- for line in order.line_items -%}
+        {%- for line in order.line_items -%}{%- capture tx_ltitle -%}{% render 'tx', s: line.title %}{%- endcapture -%}{%- capture tx_lplan -%}{% render 'tx', s: line.selling_plan_allocation.selling_plan.name %}{%- endcapture -%}
           <tr>
-            <td>{{ line.title }}{% if line.selling_plan_allocation %}<br><small style="color:var(--accent)">{{ line.selling_plan_allocation.selling_plan.name }}</small>{% endif %}</td>
+            <td>{{ tx_ltitle }}{% if line.selling_plan_allocation %}<br><small style="color:var(--accent)">{{ tx_lplan }}</small>{% endif %}</td>
             <td>{{ line.quantity }}</td>
             <td style="text-align:right">{{ line.final_line_price | money }}</td>
           </tr>

@@ -1,18 +1,22 @@
+{%- capture tx_s_button2_label -%}{% render 'tx', s: section.settings.button2_label %}{%- endcapture -%}
+{%- capture tx_s_button_label -%}{% render 'tx', s: section.settings.button_label %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
 {%- assign cta_art = section.settings.art | default: 'air-fish' -%}
 <section class="cta-banner" data-scroll {{ section.shopify_attributes }}>
   <div class="cta-banner__bg" aria-hidden="true">{% render 'photo', image: section.settings.image, art: cta_art, alt: '' %}</div>
   <div class="container">
     <div class="cta-banner__copy">
       <span class="hero__rule" aria-hidden="true"></span>
-      <h2>{% render 'headline', text: section.settings.heading %}</h2>
-      <p class="hero__sub">{{ section.settings.text }}</p>
+      <h2>{% render 'headline', text: tx_s_heading %}</h2>
+      <p class="hero__sub">{{ tx_s_text }}</p>
       {%- if section.settings.show_countdown -%}
         <p><span class="countdown" data-cutoff>{{ 'cutoff.orders_close_in' | t }} <strong data-cutoff-value>…</strong></span></p>
       {%- endif -%}
       <div class="hero__cta">
-        <a class="arrow-link" data-magnetic href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ section.settings.button_label }}</a>
-        {%- if section.settings.button2_label != blank -%}
-          <a class="text-link" href="{{ section.settings.button2_link }}">{{ section.settings.button2_label }}</a>
+        <a class="arrow-link" data-magnetic href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ tx_s_button_label }}</a>
+        {%- if tx_s_button2_label != blank -%}
+          <a class="text-link" href="{{ section.settings.button2_link }}">{{ tx_s_button2_label }}</a>
         {%- endif -%}
       </div>
     </div>

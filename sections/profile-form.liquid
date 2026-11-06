@@ -1,3 +1,7 @@
+{%- capture tx_disclaimer -%}{% render 'tx', s: settings.allergy_disclaimer %}{%- endcapture -%}
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
 {%- liquid
   assign allergy_list = 'Gluten,Lácteos,Frutos secos,Mariscos' | split: ','
   assign allergy_more = 'Soya,Huevo,Ajonjolí,Pescado,Cacahuate,Nuez,Almendra,Mostaza,Apio,Sulfitos,Maíz,Fresa,Aguacate' | split: ','
@@ -7,10 +11,10 @@
 <section class="section" {{ section.shopify_attributes }}>
   <div class="container" style="max-width:860px">
     <div class="section__head">
-      <span class="eyebrow">{{ section.settings.eyebrow }}</span>
-      <h2>{% render 'headline', text: section.settings.heading %}</h2>
+      <span class="eyebrow">{{ tx_s_eyebrow }}</span>
+      <h2>{% render 'headline', text: tx_s_heading %}</h2>
       <div class="divider-gold"><i></i></div>
-      <p class="lede">{{ section.settings.text }}</p>
+      <p class="lede">{{ tx_s_text }}</p>
     </div>
 
     <form data-profile-form class="panel panel--gold" novalidate>
@@ -50,7 +54,7 @@
         {%- endfor -%}
       </div>
 
-      <p class="legal-note">{{ settings.allergy_disclaimer }}</p>
+      <p class="legal-note">{{ tx_disclaimer }}</p>
       <button class="btn btn--gold" type="submit">{{ 'profile.save' | t }}</button>
       <p class="alert alert--ok form-msg" data-profile-msg hidden role="status">{{ 'profile.saved' | t }}</p>
     </form>

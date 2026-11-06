@@ -1,16 +1,19 @@
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
 <section class="section {% if section.settings.background == 'raised' %}section--raised{% endif %}" {{ section.shopify_attributes }}>
   <div class="container">
     <div class="section__head">
-      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-      <h2>{% render 'headline', text: section.settings.heading %}</h2>
+      {%- if tx_s_eyebrow != blank -%}<span class="eyebrow">{{ tx_s_eyebrow }}</span>{%- endif -%}
+      <h2>{% render 'headline', text: tx_s_heading %}</h2>
       <div class="divider-gold"><i></i></div>
-      {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
+      {%- if tx_s_text != blank -%}<p class="lede">{{ tx_s_text }}</p>{%- endif -%}
     </div>
     <div class="accordion">
-      {%- for block in section.blocks -%}
+      {%- for block in section.blocks -%}{%- capture tx_b_answer -%}{% render 'tx', s: block.settings.answer %}{%- endcapture -%}{%- capture tx_b_question -%}{% render 'tx', s: block.settings.question %}{%- endcapture -%}
         <details {% if forloop.first and section.settings.open_first %}open{% endif %} {{ block.shopify_attributes }}>
-          <summary>{{ block.settings.question }}</summary>
-          <div class="richtext">{{ block.settings.answer }}</div>
+          <summary>{{ tx_b_question }}</summary>
+          <div class="richtext">{{ tx_b_answer }}</div>
         </details>
       {%- endfor -%}
     </div>

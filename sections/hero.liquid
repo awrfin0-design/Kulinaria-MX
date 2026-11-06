@@ -1,3 +1,8 @@
+{%- capture tx_s_button2_label -%}{% render 'tx', s: section.settings.button2_label %}{%- endcapture -%}
+{%- capture tx_s_button_label -%}{% render 'tx', s: section.settings.button_label %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- capture tx_s_heading_em -%}{% render 'tx', s: section.settings.heading_em %}{%- endcapture -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
 {%- liquid
   assign size = section.settings.size | default: 'full'
   assign art = section.settings.art | default: 'air-steak'
@@ -13,19 +18,19 @@
     </div>
     <div class="hero__copy">
       <span class="hero__rule" aria-hidden="true"></span>
-      <h1>{{ section.settings.heading | escape }}{%- if section.settings.heading_em != blank %} <em>{{ section.settings.heading_em | escape }}</em>{% endif -%}</h1>
-      {%- if section.settings.text != blank -%}<p class="hero__sub">{{ section.settings.text }}</p>{%- endif -%}
+      <h1>{{ tx_s_heading | escape }}{%- if tx_s_heading_em != blank %} <em>{{ tx_s_heading_em | escape }}</em>{% endif -%}</h1>
+      {%- if tx_s_text != blank -%}<p class="hero__sub">{{ tx_s_text }}</p>{%- endif -%}
 
       {%- if section.settings.show_countdown -%}
         <p><span class="countdown" data-cutoff>{{ 'cutoff.orders_close_in' | t }} <strong data-cutoff-value>…</strong></span></p>
       {%- endif -%}
 
       <div class="hero__cta">
-        {%- if section.settings.button_label != blank -%}
-          <a class="arrow-link" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ section.settings.button_label }}</a>
+        {%- if tx_s_button_label != blank -%}
+          <a class="arrow-link" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ tx_s_button_label }}</a>
         {%- endif -%}
-        {%- if section.settings.button2_label != blank -%}
-          <a class="text-link" href="{{ section.settings.button2_link | default: '/collections/menu-semanal' }}">{{ section.settings.button2_label }}</a>
+        {%- if tx_s_button2_label != blank -%}
+          <a class="text-link" href="{{ section.settings.button2_link | default: '/collections/menu-semanal' }}">{{ tx_s_button2_label }}</a>
         {%- endif -%}
       </div>
     </div>

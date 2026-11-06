@@ -1,3 +1,6 @@
+{%- capture tx_s_button_label -%}{% render 'tx', s: section.settings.button_label %}{%- endcapture -%}
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
 <section class="band tone-dark" {{ section.shopify_attributes }}>
   <div class="band__pin">
     <div class="band__media" aria-hidden="true">
@@ -5,15 +8,15 @@
       <div class="band__shade"></div>
     </div>
     <div class="container band__content">
-      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-      <h2>{% render 'headline', text: section.settings.heading %}</h2>
+      {%- if tx_s_eyebrow != blank -%}<span class="eyebrow">{{ tx_s_eyebrow }}</span>{%- endif -%}
+      <h2>{% render 'headline', text: tx_s_heading %}</h2>
       <ol class="band__lines">
-        {%- for block in section.blocks -%}
-          <li class="band__line" style="--i:{{ forloop.index0 }}" {{ block.shopify_attributes }}><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{{ block.settings.text }}</li>
+        {%- for block in section.blocks -%}{%- capture tx_b_text -%}{% render 'tx', s: block.settings.text %}{%- endcapture -%}
+          <li class="band__line" style="--i:{{ forloop.index0 }}" {{ block.shopify_attributes }}><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>{{ tx_b_text }}</li>
         {%- endfor -%}
       </ol>
-      {%- if section.settings.button_label != blank -%}
-        <div class="btn-row"><a class="arrow-link" href="{{ section.settings.button_link | default: '/collections/menu-semanal' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ section.settings.button_label }}</a></div>
+      {%- if tx_s_button_label != blank -%}
+        <div class="btn-row"><a class="arrow-link" href="{{ section.settings.button_link | default: '/collections/menu-semanal' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ tx_s_button_label }}</a></div>
       {%- endif -%}
     </div>
   </div>

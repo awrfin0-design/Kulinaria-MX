@@ -1,3 +1,7 @@
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- capture tx_s_note -%}{% render 'tx', s: section.settings.note %}{%- endcapture -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
 <section class="section{% if section.settings.bg_video %} tiers--video tone-dark{% endif %}" {{ section.shopify_attributes }}>
   {%- if section.settings.bg_video -%}
     <div class="tiers__bg" aria-hidden="true">
@@ -6,22 +10,22 @@
   {%- endif -%}
   <div class="container">
     <div class="section__head">
-      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-      <h2>{% render 'headline', text: section.settings.heading %}</h2>
-      {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
+      {%- if tx_s_eyebrow != blank -%}<span class="eyebrow">{{ tx_s_eyebrow }}</span>{%- endif -%}
+      <h2>{% render 'headline', text: tx_s_heading %}</h2>
+      {%- if tx_s_text != blank -%}<p class="lede">{{ tx_s_text }}</p>{%- endif -%}
     </div>
 
     <div class="tier-ladder">
-      {%- for block in section.blocks -%}
+      {%- for block in section.blocks -%}{%- capture tx_b_text -%}{% render 'tx', s: block.settings.text %}{%- endcapture -%}
         <article class="tier-row tier-row--{{ block.settings.tier }}" {{ block.shopify_attributes }}>
           <span class="tier-row__n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
           <div>{% render 'tier-badge', tier: block.settings.tier %}</div>
-          <p class="tier-row__text">{{ block.settings.text }}</p>
+          <p class="tier-row__text">{{ tx_b_text }}</p>
           <p class="tier-row__price gold-text">{% render 'plan-price', tier: block.settings.tier, kind: 'meal', money: true %}<small>{{ 'tiers.unit' | t }}</small></p>
         </article>
       {%- endfor -%}
     </div>
-    {%- if section.settings.note != blank -%}<p class="text-muted" style="margin-top:var(--space-lg)">{{ section.settings.note }}</p>{%- endif -%}
+    {%- if tx_s_note != blank -%}<p class="text-muted" style="margin-top:var(--space-lg)">{{ tx_s_note }}</p>{%- endif -%}
   </div>
 </section>
 

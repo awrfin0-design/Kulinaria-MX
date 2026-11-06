@@ -1,3 +1,7 @@
+{%- capture tx_s_button_label -%}{% render 'tx', s: section.settings.button_label %}{%- endcapture -%}
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
 {%- assign rail = false -%}
 {%- if section.settings.layout == 'rail' -%}{%- assign rail = true -%}{%- endif -%}
 <section class="section section--raised" {{ section.shopify_attributes }}>
@@ -5,9 +9,9 @@
     <div class="rail" {% if rail %}data-rail{% endif %}>
       <div class="rail__head">
         <div class="section__head">
-          {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-          <h2>{% render 'headline', text: section.settings.heading %}</h2>
-          {%- if section.settings.text != blank -%}<p class="lede">{{ section.settings.text }}</p>{%- endif -%}
+          {%- if tx_s_eyebrow != blank -%}<span class="eyebrow">{{ tx_s_eyebrow }}</span>{%- endif -%}
+          <h2>{% render 'headline', text: tx_s_heading %}</h2>
+          {%- if tx_s_text != blank -%}<p class="lede">{{ tx_s_text }}</p>{%- endif -%}
         </div>
         {%- if rail -%}
           <div class="rail__nav">
@@ -17,7 +21,7 @@
         {%- endif -%}
       </div>
 
-      <div class="{% if rail %}rail__track{% else %}dish-grid{% endif %}" {% if rail %}tabindex="0" role="region" aria-label="{{ section.settings.heading | escape }}"{% endif %}>
+      <div class="{% if rail %}rail__track{% else %}dish-grid{% endif %}" {% if rail %}tabindex="0" role="region" aria-label="{{ tx_s_heading | remove: '*' | escape }}"{% endif %}>
         {%- if section.settings.collection != blank -%}
           {%- for product in section.settings.collection.products limit: section.settings.limit -%}
             {% render 'dish-card', product: product %}
@@ -37,8 +41,8 @@
       </div>
     </div>
 
-    {%- if section.settings.button_label != blank -%}
-      <div class="btn-row"><a class="arrow-link" href="{{ section.settings.button_link | default: section.settings.collection.url | default: '/collections/menu-semanal' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ section.settings.button_label }}</a></div>
+    {%- if tx_s_button_label != blank -%}
+      <div class="btn-row"><a class="arrow-link" href="{{ section.settings.button_link | default: section.settings.collection.url | default: '/collections/menu-semanal' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ tx_s_button_label }}</a></div>
     {%- endif -%}
   </div>
 </section>

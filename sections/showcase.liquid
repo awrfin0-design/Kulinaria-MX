@@ -1,4 +1,9 @@
-{%- assign alt_text = section.settings.heading | escape -%}
+{%- capture tx_s_badge -%}{% render 'tx', s: section.settings.badge %}{%- endcapture -%}
+{%- capture tx_s_button_label -%}{% render 'tx', s: section.settings.button_label %}{%- endcapture -%}
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
+{%- assign alt_text = tx_s_heading | escape -%}
 <section class="section showcase{% if section.settings.reverse %} showcase--reverse{% endif %}" data-scroll="in" {{ section.shopify_attributes }}>
   <div class="container showcase__grid">
     <div class="showcase__media" data-tilt-card>
@@ -16,21 +21,21 @@
           <video class="showcase__video{% if section.settings.video_main %} showcase__video--main{% endif %}" muted loop playsinline preload="none"{% if vposter != blank %} poster="{{ vposter }}"{% endif %} data-video-src="{{ vsrc }}" data-ambient></video>
         {%- endif -%}
       </div>
-      {%- if section.settings.badge != blank -%}<span class="showcase__badge">{{ section.settings.badge }}</span>{%- endif -%}
+      {%- if tx_s_badge != blank -%}<span class="showcase__badge">{{ tx_s_badge }}</span>{%- endif -%}
     </div>
     <div class="showcase__copy">
       <div class="section__head">
-        {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-        <h2>{% render 'headline', text: section.settings.heading %}</h2>
-        {%- if section.settings.text != blank -%}<div class="lede richtext">{{ section.settings.text }}</div>{%- endif -%}
+        {%- if tx_s_eyebrow != blank -%}<span class="eyebrow">{{ tx_s_eyebrow }}</span>{%- endif -%}
+        <h2>{% render 'headline', text: tx_s_heading %}</h2>
+        {%- if tx_s_text != blank -%}<div class="lede richtext">{{ tx_s_text }}</div>{%- endif -%}
       </div>
       {%- if section.blocks.size > 0 -%}
         <ul class="showcase__points">
-          {%- for block in section.blocks -%}<li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>{%- endfor -%}
+          {%- for block in section.blocks -%}{%- capture tx_b_text -%}{% render 'tx', s: block.settings.text %}{%- endcapture -%}<li {{ block.shopify_attributes }}>{{ tx_b_text }}</li>{%- endfor -%}
         </ul>
       {%- endif -%}
-      {%- if section.settings.button_label != blank -%}
-        <div class="btn-row"><a class="arrow-link" href="{{ section.settings.button_link | default: '/collections/menu-semanal' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ section.settings.button_label }}</a></div>
+      {%- if tx_s_button_label != blank -%}
+        <div class="btn-row"><a class="arrow-link" href="{{ section.settings.button_link | default: '/collections/menu-semanal' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ tx_s_button_label }}</a></div>
       {%- endif -%}
     </div>
   </div>

@@ -12,7 +12,7 @@
         <ul>
           {%- assign explore = section.settings.menu_explore -%}
           {%- if explore != blank and explore.links.size > 0 -%}
-            {%- for link in explore.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
+            {%- for link in explore.links -%}{%- capture tx_ltitle -%}{% render 'tx', s: link.title %}{%- endcapture -%}<li><a href="{{ link.url }}">{{ tx_ltitle }}</a></li>{%- endfor -%}
           {%- else -%}
             <li><a href="/collections/menu-semanal">{{ 'nav.weekly_menu' | t }}</a></li>
             <li><a href="/pages/planes">{{ 'nav.plans' | t }}</a></li>
@@ -28,7 +28,7 @@
         <ul>
           {%- assign help = section.settings.menu_help -%}
           {%- if help != blank and help.links.size > 0 -%}
-            {%- for link in help.links -%}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{%- endfor -%}
+            {%- for link in help.links -%}{%- capture tx_ltitle -%}{% render 'tx', s: link.title %}{%- endcapture -%}<li><a href="{{ link.url }}">{{ tx_ltitle }}</a></li>{%- endfor -%}
           {%- else -%}
             <li><a href="/pages/nosotros">{{ 'nav.about' | t }}</a></li>
             <li><a href="/pages/filosofia">{{ 'nav.philosophy' | t }}</a></li>

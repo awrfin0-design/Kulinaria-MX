@@ -1,12 +1,14 @@
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
 <section class="section--tight section" {{ section.shopify_attributes }}>
   <div class="container">
     <div class="section__head">
-      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
-      <h2>{% render 'headline', text: section.settings.heading %}</h2>
+      {%- if tx_s_eyebrow != blank -%}<span class="eyebrow">{{ tx_s_eyebrow }}</span>{%- endif -%}
+      <h2>{% render 'headline', text: tx_s_heading %}</h2>
     </div>
     <div class="chips">
-      {%- for block in section.blocks -%}
-        <a class="chip" href="{{ section.settings.target | default: '/collections/menu-semanal' }}?dieta={{ block.settings.slug }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+      {%- for block in section.blocks -%}{%- capture tx_b_label -%}{% render 'tx', s: block.settings.label %}{%- endcapture -%}
+        <a class="chip" href="{{ section.settings.target | default: '/collections/menu-semanal' }}?dieta={{ block.settings.slug }}" {{ block.shopify_attributes }}>{{ tx_b_label }}</a>
       {%- endfor -%}
     </div>
   </div>

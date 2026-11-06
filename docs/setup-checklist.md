@@ -2,9 +2,12 @@
 
 Todo lo demás ya está en el tema y probado (`node scripts/backend-test.js` y `scripts/render/test.mjs`).
 
-## 1. Idioma de la tienda (causa de la mezcla español/inglés)
-Shopify → Configuración → Idiomas → **Cambiar idioma predeterminado → Español**. Deja Inglés como segundo idioma.
-Después se cargan las traducciones al inglés del contenido de las páginas (Translate & Adapt o `translationsRegister`).
+## 1. Idiomas (español / inglés)
+El tema traduce **por sí mismo** todo el texto de contenido (secciones, productos, carrito, menús), sin depender de cuál sea el idioma predeterminado de Shopify (`snippets/tx.liquid`).
+El texto se escribe en español en el editor o en el producto, y su versión en inglés vive en `locales/en.json` (bloque `ct`, clave = huella md5 del texto en español).
+- **Cambiar un texto en español** en el editor o en un producto: la versión en inglés de ese texto desaparece (se verá en español) hasta agregar la nueva traducción. Para agregarla: añade «texto en español»: «English text» en `scripts/render/content.en.json` y ejecuta `python3 scripts/gen-ct.py`.
+- **Auditoría**: `NODE_PATH=$(npm root -g) node scripts/render/lang-audit.mjs` abre todas las páginas en ambos idiomas y lista cualquier línea en el idioma equivocado.
+- Recomendado a largo plazo (opcional): Shopify → Configuración → Idiomas → idioma predeterminado **Español**, y traducir con Translate & Adapt.
 
 ## 2. Google Apps Script (Code.gs)
 1. Pega `backend/google-sheets/Code.gs` completo y **Implementar → Administrar implementaciones → Editar → Nueva versión** (la URL no cambia).
