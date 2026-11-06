@@ -92,7 +92,7 @@ await page.click(`${scope} [data-filter="diet"][data-value="keto"]`);
 ok('category + keto -> 2 dishes', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 2);
 ok('counter matches', (await page.$eval(`${scope} [data-count]`, (e) => e.textContent.trim())) === '2');
 await page.goto(`${URL0}#/home`); await page.reload();
-await page.goto(`${URL0}#/menu?dieta=vegano`); await page.reload(); await page.waitForTimeout(700);
+await page.goto(`${URL0}#/menu?dieta=vegano`); await page.reload(); await page.waitForFunction(() => document.querySelectorAll('[data-page="menu"] [data-dish]:not(.is-hidden)').length === 1, null, { timeout: 6000 }).catch(() => {}); await page.waitForTimeout(300);
 const vgN = await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.map((x) => x.getAttribute('data-diets')));
 ok('deep link ?dieta=vegano filters menu', vgN.length === 1, JSON.stringify(vgN));
 
