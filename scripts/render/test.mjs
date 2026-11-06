@@ -832,7 +832,7 @@ if (shotDir) {
 }
 // =====================================================================  v22: onboarding questionnaire (asked once) + welcome
 await page.setViewportSize({ width: 1440, height: 900 });
-await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-test-fresh', '1'); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_ob_asked', '1'); }); await page.goto(`${URL0}#/pg/bienvenida`); await page.waitForTimeout(500);
+await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-test-fresh', '1'); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_ob_asked', '1'); }); await page.goto(`${URL0}#/pg/bienvenida`); await page.reload(); await page.waitForTimeout(500);
 const obS = '[data-page="pg/bienvenida"] [data-onboarding]';
 ok('onboarding page: a thorough 6-step questionnaire (who, delivery, household, allergies/health, tastes, consents)', (await page.$$eval(`${obS} [data-ob-step]`, (e) => e.length)) === 6 && !(await page.$eval(`${obS} [data-ob-form]`, (e) => e.hidden)));
 await page.click(`${obS} [data-ob-next]`); await page.waitForTimeout(150);
