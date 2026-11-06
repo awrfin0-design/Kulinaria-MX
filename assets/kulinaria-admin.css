@@ -88,3 +88,7 @@
 .adm-kpi--btn{text-align:left;cursor:pointer;font:inherit;color:inherit;transition:border-color .2s,background .2s}
 .adm-kpi--btn:hover,.adm-kpi--btn.is-on{border-color:var(--accent);background:var(--accent-wash)}
 [data-month-orders]{margin:0 0 18px}
+
+/* KPI tiles: labels reserve two lines so every number lines up */
+.adm-kpi{display:flex;flex-direction:column;justify-content:space-between}
+.adm-kpi span{min-height:2.5em}
