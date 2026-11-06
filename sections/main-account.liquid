@@ -29,21 +29,23 @@
 
     <p class="countdown" data-cutoff>{{ 'cutoff.confirm_dishes' | t }} <strong data-cutoff-value>…</strong></p>
 
-    <div class="fg--index" style="margin-top:var(--space-2xl)">
-      <div class="fg__list">
-        {%- assign tiles = 'semana:account.my_week:/pages/cuenta-semana,pausas:account.pause_deliveries:/pages/cuenta-pausas,monedero:account.wallet:/pages/cuenta-monedero,perfil:account.allergies_tastes:/pages/cuenta-perfil,referidos:account.my_referrals:/pages/cuenta-referidos,pedidos:account.orders_invoices:/pages/cuenta-pedidos,entregas:account.deliveries_containers:/pages/cuenta-entregas,direcciones:account.manage_addresses:/account/addresses' | split: ',' -%}
-        {%- for tile in tiles -%}
-          {%- assign parts = tile | split: ':' -%}
-          {%- assign tkey = parts[1] -%}
-          {%- assign dkey = 'account.tile_' | append: parts[0] -%}
-          <a class="index-row" href="{{ parts[2] }}">
-            <span class="index-row__n">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
-            <span class="index-row__t">{{ tkey | t }}</span>
-            <p class="index-row__d">{{ dkey | t }}</p>
-            <span class="index-row__a" aria-hidden="true">→</span>
-          </a>
-        {%- endfor -%}
-      </div>
+    <div class="hub">
+      <section class="hub__card" data-hub-week>
+        <h3>{{ 'acct.hub_week_t' | t }}</h3>
+        <p class="hub__big" data-hub-week-main data-t-none="{{ 'acct.hub_week_none' | t }}" data-t-some="{{ 'acct.hub_week_some' | t }}">…</p>
+        <div class="btn-row"><a class="btn btn--gold btn--sm" href="/pages/cuenta-semana">{{ 'account.my_week' | t }}</a><a class="btn btn--outline btn--sm" href="/pages/cuenta-pausas">{{ 'account.pause_deliveries' | t }}</a></div>
+      </section>
+      <section class="hub__card" data-hub-profile data-t-none="{{ 'acct.hub_profile_none' | t }}" data-t-allergies="{{ 'acct.hub_allergies' | t }}" data-t-dislikes="{{ 'acct.hub_dislikes' | t }}" data-t-diets="{{ 'acct.hub_diets' | t }}" data-t-people="{{ 'acct.hub_people' | t }}">
+        <h3>{{ 'acct.hub_profile_t' | t }}</h3>
+        <div class="hub__list" data-hub-profile-body>…</div>
+        <div class="btn-row"><a class="btn btn--outline btn--sm" href="/pages/cuenta-perfil">{{ 'acct.hub_profile_cta' | t }}</a></div>
+      </section>
+      <section class="hub__card">
+        <h3>{{ 'acct.hub_benefits_t' | t }}</h3>
+        <dl class="hub__kv"><div><dt>{{ 'acct.hub_wallet' | t }}</dt><dd>{{ wallet | times: 100 | money_without_trailing_zeros }}</dd></div><div><dt>{{ 'acct.hub_code' | t }}</dt><dd>{{ code }}</dd></div><div><dt>{{ 'acct.hub_refs' | t }}</dt><dd>{{ paid }}</dd></div></dl>
+        <p class="text-muted" style="font-size:.9rem">{{ 'acct.hub_benefits_p' | t }}</p>
+        <div class="btn-row"><a class="btn btn--outline btn--sm" href="/collections/kulinaria-store">{{ 'acct.hub_store' | t }}</a></div>
+      </section>
     </div>
 
     <h3 style="margin-top:var(--space-2xl)">{{ 'acct.orders_title' | t }}</h3>

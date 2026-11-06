@@ -9,6 +9,23 @@
  */
 {
   "acct": {
+    "my_data": "Mis datos",
+    "hub_week_t": "Tu semana",
+    "hub_week_none": "Aún no tienes un plan activo. Arma tu pedido y empieza.",
+    "hub_week_some": "Te quedan [w] de [t] semanas · hasta el [e]",
+    "hub_profile_t": "Mis datos y alergias",
+    "hub_profile_none": "Aún no has completado tu perfil. Cuéntanos qué no puedes o no quieres comer.",
+    "hub_allergies": "Alergias",
+    "hub_dislikes": "No me gusta",
+    "hub_diets": "Dietas",
+    "hub_people": "Personas",
+    "hub_profile_cta": "Ver y editar",
+    "hub_benefits_t": "Saldo y referidos",
+    "hub_wallet": "Saldo",
+    "hub_code": "Tu código",
+    "hub_refs": "Referidos",
+    "hub_benefits_p": "Comparte tu código: cada amigo que compra suma a tu saldo. El saldo se usa en la Kulinaria Store.",
+    "hub_store": "Ir a la tienda",
     "menu": "Mi cuenta y carrito",
     "hello": "Hola,",
     "my_account": "Mi cuenta",
@@ -381,6 +398,16 @@
     "sold_out": "Agotado"
   },
   "profile": {
+    "people_t": "Mi familia y otras personas",
+    "people_p": "Si pides para tu pareja, tus hijos u otras personas, agrégalas aquí. Cada una tiene sus propias alergias y gustos, y en el pedido eliges para quién es cada plan. No necesitas otra cuenta.",
+    "people_name": "Nombre",
+    "people_allergies": "Alergias (separadas por coma)",
+    "people_dislikes": "No le gusta (separado por coma)",
+    "people_ph": "Mariscos, cacahuate…",
+    "people_ph2": "brócoli, cebolla…",
+    "people_add": "Agregar persona",
+    "people_remove": "Quitar",
+    "people_none": "Aún no has agregado a nadie.",
     "add_ingredient": "Agregar ingrediente",
     "block1": "Bloque 1 · Alergias y restricciones médicas",
     "block1_text": "Los platillos que contengan estos ingredientes (o trazas) se bloquean por completo en tu menú.",
@@ -490,6 +517,10 @@
     "have_account": "¿Ya tienes cuenta?"
   },
   "funnel": {
+    "para": "¿Para quién es este pedido?",
+    "para_me": "Para mí",
+    "para_add": "+ Agregar a alguien de tu familia",
+    "prop_for": "Para",
     "eyebrow": "Haz tu pedido",
     "steps": "Pasos del pedido",
     "s1": "Plan",

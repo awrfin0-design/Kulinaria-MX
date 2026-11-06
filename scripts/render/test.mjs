@@ -372,7 +372,7 @@ for (const [k, sel] of [['semana', '#semana'], ['pausas', '#pausas'], ['monedero
   await page.goto(`${URL0}#/pg/cuenta-${k}`); await page.waitForTimeout(80);
   ok(`account sub-page ${k} renders its panel and the account navigation`, !!(await page.$(`[data-page="pg/cuenta-${k}"] .account-block[id$="${k}"]`)) && (await page.$$eval(`[data-page="pg/cuenta-${k}"] .account-nav a`, (a) => a.length)) >= 6);
 }
-ok('account overview links to all 8 account areas', (await (async () => { await page.goto(`${URL0}#/cuenta`); await page.waitForTimeout(100); return page.$$eval('[data-page="cuenta"] .index-row', (r) => r.length); })()) === 8);
+ok('account overview is one summary page: week, my details and allergies, balance and referrals (cards, no empty sub-pages)', (await (async () => { await page.goto(`${URL0}#/cuenta`); await page.waitForTimeout(150); return page.$$eval('[data-page="cuenta"] .hub__card', (r) => r.length); })()) === 3);
 
 // multi-step registration
 await page.goto(`${URL0}#/registro`); await page.reload(); await page.waitForTimeout(500);
@@ -1055,7 +1055,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.keyboard.press('Escape'); await page.waitForTimeout(200);
   ok('header menu: Escape closes it', await page.$eval('.site-header [data-acct-pop]', (p) => p.hidden));
   await page.goto(`${URL0}#/cuenta`); await page.waitForTimeout(500);
-  ok('account page is our own: greeting with the name, the e-mail signed in, sign out, tiles and the order list (no Shopify page)', await page.evaluate(() => { const p = document.querySelector('[data-page="cuenta"]'); return /Hola/.test(p.querySelector('h2').textContent) && /@/.test(p.innerText) && !!p.querySelector('a[href*="logout"], a[href*="salir"]') && p.querySelectorAll('.index-row').length >= 5; }));
+  ok('account page is our own: greeting with the name, the e-mail signed in, sign out, tiles and the order list (no Shopify page)', await page.evaluate(() => { const p = document.querySelector('[data-page="cuenta"]'); return /Hola/.test(p.querySelector('h2').textContent) && /@/.test(p.innerText) && !!p.querySelector('a[href*="logout"], a[href*="salir"]') && p.querySelectorAll('.hub__card').length === 3 && !!p.querySelector('table.acct-orders, .text-muted'); }));
   await page.goto(`${URL0}#/carrito`); await page.waitForTimeout(400);
   ok('cart: has a "Vaciar carrito" button', await page.$eval('[data-page="carrito"]', (c) => !!c.querySelector('[data-cart-clear]')));
   const G2 = URL0.replace('index.html', 'guest.html');
@@ -1085,6 +1085,33 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.check('[data-page="carrito"] [data-contract]');
   ok('a new account that has not confirmed its allergy profile cannot pay yet and is sent to complete it', await page.evaluate(() => { const c = document.querySelector('[data-page="carrito"]'); return c.querySelector('[data-checkout]').disabled && !c.querySelector('[data-cart-profile]').hidden && /bienvenida/.test(c.querySelector('[data-cart-profile] a').getAttribute('href')); }));
   await page.evaluate(() => { localStorage.setItem('kulinaria_onboarded', '1'); });
+}
+
+
+// =====================================================================  v39: family members, "for whom", fresh list after the cart is emptied, account nav
+{
+  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); localStorage.setItem('kx-test-orders', '0'); localStorage.setItem('kulinaria_onboarded', '1'); sessionStorage.setItem('kx_ob_asked', '1'); sessionStorage.setItem('kx-seen', '1'); }); await page.reload(); await page.waitForTimeout(900);
+  await page.goto(`${URL0}#/pg/cuenta-perfil`); await page.reload(); await page.waitForTimeout(1200);
+  const pf = '[data-page="pg/cuenta-perfil"]';
+  ok('my details page: shows the profile editor and a summary card, not a redirect', await page.evaluate((s) => { const r = document.querySelector(s); return !!r.querySelector('[data-profile-form]') && !!r.querySelector('[data-hub-profile]') && !!r.querySelector('[data-people-add]'); }, pf));
+  await page.fill(`${pf} [data-pp-name]`, 'Sofía'); await page.fill(`${pf} [data-pp-al]`, 'peanuts, Mariscos'); await page.fill(`${pf} [data-pp-dl]`, 'broccoli'); await page.click(`${pf} [data-pp-add]`); await page.waitForTimeout(300);
+  ok('family: adding a person stores their own allergies and dislikes (no second account)', await page.evaluate(() => { const pr = JSON.parse(localStorage.getItem('kulinaria_profile') || '{}'); const x = (pr.people || [])[0]; return !!x && x.name === 'Sofía' && x.allergies.length === 2 && x.dislikes[0] === 'broccoli'; }));
+  await page.goto(`${URL0}#/pg/pedido?plan=week`); await page.reload(); await page.waitForTimeout(1500);
+  const fn2 = '[data-page="pg/pedido"] [data-funnel]';
+  ok('order flow asks who the order is for (me / the family member)', await page.evaluate((f) => { const w = document.querySelector(f + ' [data-fn-para-wrap]'); const o = [...document.querySelectorAll(f + ' [data-fn-para] option')].map((x) => x.textContent); return !w.hidden && o.length === 2 && o[1] === 'Sofía'; }, fn2));
+  await page.selectOption(`${fn2} [data-fn-para]`, { index: 1 }); await page.waitForTimeout(500);
+  ok('choosing the person applies HER allergies and dislikes to the dishes (the almond/fish salmon is fine for peanuts; broccoli lowers the filet)', await page.evaluate((f) => { const d = [...document.querySelectorAll(f + ' [data-fn-dish]')]; const salm = d.find((x) => /Salm/i.test(x.getAttribute('data-title'))); const fil = d.find((x) => /Filete/i.test(x.getAttribute('data-title'))); return !salm.classList.contains('is-warned') && !!fil.querySelector('[data-fn-warn]') && !fil.querySelector('[data-fn-warn]').hidden; }, fn2));
+  await page.selectOption(`${fn2} [data-fn-para]`, { index: 0 }); await page.waitForTimeout(300);
+  ok('and back to "for me" the person\'s dislike no longer applies', await page.evaluate((f) => { const fil = [...document.querySelectorAll(f + ' [data-fn-dish]')].find((x) => /Filete/i.test(x.getAttribute('data-title'))); return fil.querySelector('[data-fn-warn]').hidden; }, fn2));
+  // fresh list after the order was sent and the cart is empty
+  await page.evaluate(() => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel') || '{}'); f.v = 2; f.days = ['1', '', '', '', '']; f.qty = { 1: 1 }; f.sent = true; localStorage.setItem('kulinaria_funnel', JSON.stringify(f)); });
+  await page.route('**/cart.js', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ item_count: 0, items: [], total_price: 0 }) }));
+  await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1500);
+  ok('after the order went to the cart and the cart was emptied, the order builder starts from a fresh list', await page.evaluate(() => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel') || '{}'); return (f.days || []).filter(Boolean).length === 0 && !f.sent; }));
+  await page.unroute('**/cart.js');
+  await page.goto(`${URL0}#/cuenta-semana`); await page.waitForTimeout(300);
+  await page.goto(`${URL0}#/pg/cuenta-semana`); await page.waitForTimeout(500);
+  ok('account navigation is short: summary, my week, pause, my details (the empty sub-pages are cards on the summary)', await page.$$eval('[data-page="pg/cuenta-semana"] .account-nav a', (a) => a.length <= 5));
 }
 
 await browser.close();

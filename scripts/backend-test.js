@@ -118,6 +118,25 @@ fn.sendWeeklyReminders(new Date(2026, 10, 25, 9)); const m3 = mails.length - m1 
 fn.sendWeeklyReminders(new Date(2026, 11, 10, 9)); const m4 = mails.length - m1 - m2 - m3;
 ok('reminders: none if the next week is already chosen, one when it is not, none on other weekdays or after the plan ends', m1 === 0 && m2 === 1 && m3 === 0 && m4 === 0, [m1, m2, m3, m4].join());
 ok('reminder e-mail links to Mi semana and says it is the last week when it is', mails[0] && /kulinariamx.com\/pages\/cuenta-semana/.test(mails[0].body) && /última semana/.test(mails[0].body) && mails[0].to === 'a@x.com', mails[0] && mails[0].body);
+// ------------------------------------------------------------ 6b. one order for several people (a parent ordering for the family)
+const dishP = 'Pollo a las hierbas con puré rústico', dishB = 'Bowl de res magra y quinoa';
+const fam = { id: 3001, name: '#3001', created_at: '2026-11-04T12:00:00-06:00', updated_at: '2026-11-04T12:00:00-06:00', email: 'b@x.com', total_price: '4900.00', currency: 'MXN', financial_status: 'paid',
+  customer: { id: 8, first_name: 'Beto', last_name: 'Ruiz', email: 'b@x.com' },
+  note_attributes: [{ name: 'plan', value: 'week' }, { name: 'alergias', value: 'Mariscos' }, { name: 'dias', value: 'Lunes: ' + dishB + ' | Martes: | Miércoles: | Jueves: | Viernes: ' }, { name: 'direccion', value: 'Calle Sol 5' }],
+  line_items: [
+    { title: 'Plan semanal Selecto', variant_title: '4 semanas', quantity: 1, price: '3600.00', properties: [{ name: '_platillos', value: '1× ' + dishB }, { name: '_para', value: 'yo' }, { name: '_dias', value: 'Lunes: ' + dishB + ' | Martes: | Miércoles: | Jueves: | Viernes: ' }, { name: '_alergias', value: 'Mariscos' }] },
+    { title: 'Plan semanal Selecto', variant_title: '1 semana', quantity: 1, price: '1000.00', properties: [{ name: '_platillos', value: '2× ' + dishP }, { name: '_para', value: 'p1' }, { name: '_para_nombre', value: 'Sofía' }, { name: '_dias', value: 'Lunes: ' + dishP + ' | Martes: | Miércoles: ' + dishP + ' | Jueves: | Viernes: ' }, { name: '_alergias', value: 'Cacahuate' }] },
+    { title: 'Mejora de platillo', variant_title: '+1 nivel', quantity: 1, price: '300.00', properties: [{ name: '_para', value: 'p1' }] }] };
+fn.doPost({ parameter: { key: 'k', topic: 'orders-create' }, postData: { contents: JSON.stringify(fam) } });
+const famRows = sheets.Pedidos.rows.filter((x) => String(x[0]).indexOf('3001') === 0);
+ok('family order: one row per person (order id and id-2), each with its own plan, allergies and the person it is for', famRows.length === 2 && famRows[0][10] === 'block' && famRows[1][10] === 'week' && famRows[0][22] === '' && famRows[1][22] === 'Sofía' && famRows[0][13] === 'Mariscos' && famRows[1][13] === 'Cacahuate', JSON.stringify(famRows.map((x) => [x[0], x[10], x[13], x[22]])));
+ok('family order: each person row carries its own price (the upgrade goes with Sofía) and its own weekday slots', Number(famRows[0][6]) === 3600 && Number(famRows[1][6]) === 1300 && JSON.parse(famRows[1][20])[2] === dishP && JSON.parse(famRows[0][20])[2] === '', JSON.stringify(famRows.map((x) => [x[6], x[20]])));
+ok('family order: the kitchen dish rows are written for each person', sheets.Platillos.rows.filter((x) => String(x[0]) === '3001' && x[3] === 'Sofía').length === 1);
+const crF = fn.creditsFor_(8, NOW);
+ok('family order: the account holder summary counts their own plan (4 weeks), and only their own weeks can be chosen in Mi semana', crF.hasPlan && crF.weeksTotal === 4 && crF.editable.length === 3, JSON.stringify(crF));
+fn.rebuildDeliveries_(NOW);
+ok('family order: Entregas lists Sofía (account holder in brackets) as a separate delivery with her own dishes and allergies', sheets.Entregas.rows.some((x) => x[1] === 'Sofía (Beto Ruiz)' && x[4] === dishP && x[11] === 'Cacahuate'), JSON.stringify(sheets.Entregas.rows.slice(1, 8).map((x) => x[1])));
+
 // ------------------------------------------------------------ 7. pauses: paused Mondays are not delivered and the plan ends later
 const pause = (body, cid, now) => fn.pauseSet_(cid == null ? 5 : cid, token(cid == null ? 5 : cid), Object.assign({ now: (now || NOW).toISOString() }, body));
 ok('pause needs the signed token', fn.pauseSet_(5, 'bad', { mode: 'weeks', weeks: ['2026-11-16'] }).error === 'forbidden');
@@ -127,7 +146,7 @@ ok('only Mondays can be paused', pause({ mode: 'weeks', weeks: ['2026-11-17'] })
 let pr = pause({ mode: 'weeks', weeks: ['2026-11-16'] });
 ok('pausing one week keeps the weeks left and pushes the end of the plan one week later', pr.ok && pr.weeksLeft === 4 && pr.endsOn === '2026-12-07' && pr.paused.join() === '2026-11-16', JSON.stringify(pr));
 fn.rebuildDeliveries_(NOW);
-const rows7 = sheets.Entregas.rows.slice(1).map((x) => x[0]);
+const rows7 = sheets.Entregas.rows.slice(1).filter((x) => x[1] === 'Ana Pérez').map((x) => x[0]);
 ok('Entregas: the paused Monday disappears and the extra week appears at the end', rows7.indexOf('2026-11-16') < 0 && rows7.indexOf('2026-12-07') >= 0, rows7.join());
 ok('Resumen counts the customers on pause', sheets.Resumen.rows.some((x) => /en pausa/.test(String(x[0]))));
 ok('a paused week can no longer be chosen in Mi semana', set(5, '2026-11-16', [P, '', '', '', ''], 0).error === 'not_covered');
@@ -136,9 +155,9 @@ ok('resuming gives the week back', pr.ok && pr.paused.length === 0 && pr.endsOn 
 pr = pause({ mode: 'from', week: '2026-11-23' });
 ok('an open pause from a Monday: the plan has no end date and the remaining weeks wait', pr.ok && pr.pausedFrom === '2026-11-23' && pr.endsOn === '' && pr.weeksLeft === 4 && pr.hasPlan, JSON.stringify(pr));
 fn.rebuildDeliveries_(NOW);
-ok('Entregas stops at the pause', Math.max(...sheets.Entregas.rows.slice(1).map((x) => Date.parse(x[0]) || 0)) === Date.parse('2026-11-16'));
+ok('Entregas stops at the pause', Math.max(...sheets.Entregas.rows.slice(1).filter((x) => x[1] === 'Ana Pérez').map((x) => Date.parse(x[0]) || 0)) === Date.parse('2026-11-16'));
 mails.length = 0; fn.sendWeeklyReminders(new Date(2026, 10, 26, 9));
-ok('no reminder e-mails while paused', mails.length === 0);
+ok('no reminder e-mails while paused', mails.filter((m) => m.to === 'a@x.com').length === 0);
 pr = pause({ mode: 'resume', week: '2026-12-07' });
 ok('resuming after an open pause: the weeks before are paused, the plan ends after the pause', pr.ok && pr.paused.join() === '2026-11-23,2026-11-30' && pr.pausedFrom === '' && pr.endsOn === '2026-12-14', JSON.stringify(pr));
 pause({ mode: 'resume', week: '2026-11-09' });

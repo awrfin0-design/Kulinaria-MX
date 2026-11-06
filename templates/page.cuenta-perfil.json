@@ -3,24 +3,23 @@
     "head": {
       "type": "page-head",
       "settings": {
+        "art": "air-bowl",
+        "heading": "Mi perfil de *alergias*",
+        "text": "Cuéntanos qué no puedes (o no quieres) comer. Es obligatorio y evita errores en la cocina.",
+        "eyebrow": "Mi perfil de alergias",
         "parent_label": "Mi cuenta",
-        "parent_link": "/pages/cuenta",
-        "eyebrow": "Alergias y gustos",
-        "heading": "Alergias *y gustos*",
-        "text": "Tu perfil para la selección automática.",
-        "art": "air-bowl"
+        "parent_link": "/pages/cuenta"
       }
     },
-    "s1": {
-      "type": "account-panel",
+    "profile": {
+      "type": "profile-form",
       "settings": {
-        "panel": "perfil"
+        "heading": "Cuéntanos qué no puedes (o *no quieres) comer*"
       }
     }
   },
   "order": [
     "head",
-    "s1"
+    "profile"
   ]
 }
-

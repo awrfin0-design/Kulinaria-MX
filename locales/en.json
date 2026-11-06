@@ -9,6 +9,23 @@
  */
 {
   "acct": {
+    "my_data": "My details",
+    "hub_week_t": "Your week",
+    "hub_week_none": "You don't have an active plan yet. Build your order and get started.",
+    "hub_week_some": "[w] of [t] weeks left · until [e]",
+    "hub_profile_t": "My details and allergies",
+    "hub_profile_none": "You haven't completed your profile yet. Tell us what you can't or don't want to eat.",
+    "hub_allergies": "Allergies",
+    "hub_dislikes": "Dislikes",
+    "hub_diets": "Diets",
+    "hub_people": "People",
+    "hub_profile_cta": "View and edit",
+    "hub_benefits_t": "Balance and referrals",
+    "hub_wallet": "Balance",
+    "hub_code": "Your code",
+    "hub_refs": "Referrals",
+    "hub_benefits_p": "Share your code: every friend who buys adds to your balance. The balance is used in the Kulinaria Store.",
+    "hub_store": "Go to the store",
     "menu": "My account and cart",
     "hello": "Hi,",
     "my_account": "My account",
@@ -381,6 +398,16 @@
     "sold_out": "Sold out"
   },
   "profile": {
+    "people_t": "My family and other people",
+    "people_p": "If you order for your partner, your kids or other people, add them here. Each one has their own allergies and tastes, and in the order you choose who each plan is for. You don't need another account.",
+    "people_name": "Name",
+    "people_allergies": "Allergies (comma separated)",
+    "people_dislikes": "Dislikes (comma separated)",
+    "people_ph": "Shellfish, peanuts…",
+    "people_ph2": "broccoli, onion…",
+    "people_add": "Add person",
+    "people_remove": "Remove",
+    "people_none": "You haven't added anyone yet.",
     "add_ingredient": "Add ingredient",
     "block1": "Block 1 · Allergies and medical restrictions",
     "block1_text": "Dishes containing these ingredients (or traces) are blocked completely in your menu.",
@@ -490,6 +517,10 @@
     "have_account": "Already have an account?"
   },
   "funnel": {
+    "para": "Who is this order for?",
+    "para_me": "For me",
+    "para_add": "+ Add someone from your family",
+    "prop_for": "For",
     "eyebrow": "Place your order",
     "steps": "Order steps",
     "s1": "Plan",

@@ -22,7 +22,7 @@
 
 var SHEETS = {
   Clientes: ['ID Shopify', 'Creado', 'Actualizado', 'Nombre', 'Apellido', 'Correo', 'Teléfono', 'Dirección', 'Ciudad', 'CP', 'Alergias', 'No me gustan', 'Dietas', 'Código de referencia', 'Plan', 'Etiquetas', 'Notas'],
-  Pedidos: ['ID Shopify', 'Pedido', 'Fecha', 'Cliente', 'Correo', 'Teléfono', 'Total', 'Moneda', 'Pago', 'Entrega', 'Plan', 'Enfoque', 'Dietas', 'Alergias', 'No me gustan', 'Dirección de entrega', 'Código de referencia', 'Contrato aceptado', 'Platillos', 'Nota', 'Días (JSON)', 'ID Cliente'],
+  Pedidos: ['ID Shopify', 'Pedido', 'Fecha', 'Cliente', 'Correo', 'Teléfono', 'Total', 'Moneda', 'Pago', 'Entrega', 'Plan', 'Enfoque', 'Dietas', 'Alergias', 'No me gustan', 'Dirección de entrega', 'Código de referencia', 'Contrato aceptado', 'Platillos', 'Nota', 'Días (JSON)', 'ID Cliente', 'Para'],
   Platillos: ['ID Pedido', 'Pedido', 'Fecha', 'Cliente', 'Platillo', 'Variante', 'Cantidad', 'Precio unitario', 'Plan de suscripción']
 };
 
@@ -70,7 +70,7 @@ function adminData_() {
   var sel = loadSelections_(), pz = loadPauses_();
   var orders = loadOrders_().filter(function (o) { return o.isPlan; }).map(function (o) {
     var byWeek = {}; resolveOrderWeeks_(o, sel, pz).forEach(function (w) { byWeek[w.week] = w.items; });
-    return { id: o.id, name: o.name, date: new Date(o.date).toISOString(), customer: o.customer, email: o.email, cid: o.cid, total: o.total, currency: o.currency, paid: o.paid,
+    return { id: o.id, name: o.name, date: new Date(o.date).toISOString(), customer: o.para ? o.customer + ' · ' + o.para : o.customer, email: o.email, cid: o.cid, total: o.total, currency: o.currency, paid: o.paid,
       plan: o.block ? 'block' : 'trial', items: countItems_(o.slots), byWeek: byWeek };
   });
   orders.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
@@ -142,6 +142,10 @@ function upsertCustomer_(c, extra) {
   ]);
 }
 
+function lineProp_(line, name) {
+  var v = ''; (line.properties || []).forEach(function (pr) { if (String(pr.name) === name) v = String(pr.value == null ? '' : pr.value); });
+  return v === '-' ? '' : v;
+}
 function handleOrder_(o) {
   var a = attrs_(o), c = o.customer || {};
   var name = a.nombre || [c.first_name, c.last_name].filter(Boolean).join(' ') || (o.billing_address && o.billing_address.name) || '';
@@ -151,30 +155,43 @@ function handleOrder_(o) {
   // 1. client profile (created/updated from the order's profile attributes)
   upsertCustomer_({ id: c.id, email: email, first_name: c.first_name || (name.split(' ')[0] || ''), last_name: c.last_name || name.split(' ').slice(1).join(' '), phone: c.phone || a.telefono,
     default_address: c.default_address || { address1: addr, city: ship.city, zip: ship.zip }, tags: c.tags, note: c.note, created_at: c.created_at, updated_at: o.updated_at }, a);
-  // 2. dishes
+  // 2. dishes. An order can hold one plan line PER PERSON (a parent ordering for the family): every plan line becomes its own row, keyed order id, order id-2, ...
   var items = (o.line_items || []);
-  var dishRows = expandDishes_(items);            // dishes chosen inside a plan line (one weekly selection, repeated every week of the plan)
-  var planLine = items.filter(function (i) { return dishRowsOf_(i).length; })[0];
-  // only an order that really contains a plan line is a plan (an upgrade-only order from "Mi semana" may still carry old cart attributes)
-  var planKey = planLine ? (a.plan || (/4/.test(String(planLine.variant_title)) ? 'block' : 'week')) : '';
-  var slots = parseSlots_(a.dias, dishRows);
-  var summary = dishRows.length
-    ? dishRows.map(function (d) { return d.qty + '× ' + d.title; }).join(' | ') + ' [' + (planLine.title || 'Plan') + ' · ' + (planLine.variant_title || '') + ']'
+  var planLines = items.filter(function (i) { return dishRowsOf_(i).length; });
+  var multi = planLines.length > 1;
+  var summaryOf = function (line, rows) { return rows.map(function (d) { return d.qty + '× ' + d.title; }).join(' | ') + ' [' + (line.title || 'Plan') + ' · ' + (line.variant_title || '') + ']'; };
+  var allRows = expandDishes_(items);
+  var summary = planLines.length
+    ? planLines.map(function (l) { var who = lineProp_(l, '_para_nombre'); return (who ? who + ': ' : '') + summaryOf(l, dishRowsOf_(l)); }).join('  ||  ')
     : items.map(function (i) { return i.quantity + '× ' + i.title + (i.variant_title ? ' (' + i.variant_title + ')' : ''); }).join(' | ');
-  // 3. order row (remember if it is a brand-new order, to alert the kitchen only once)
   var isNew = !orderExists_(o.id);
-  var pedRow = upsertRow_('Pedidos', 1, o.id, [o.id, o.name, o.created_at, name, email, c.phone || a.telefono || '', o.total_price, o.currency, o.financial_status, o.fulfillment_status || 'pendiente',
-    planKey, a.enfoque || a.nivel || '', a.dietas || '', a.alergias || '', a.no_me_gustan || '', addr, a.codigo_referencia || '', a.contrato_aceptado || '', summary, o.note || '', JSON.stringify(slots), String(c.id || '')]);
-  try { sheet_('Pedidos').getRange(pedRow, 4).setFontWeight('bold'); } catch (e0) { /* formatting never blocks an order */ }
-  // 4. dish rows (replace the order's previous rows so re-sent webhooks never duplicate)
   var sh = sheet_('Platillos'), last = sh.getLastRow();
-  if (last > 1) {
+  if (last > 1) {                       // replace the order's previous dish rows so re-sent webhooks never duplicate
     var ids = sh.getRange(2, 1, last - 1, 1).getValues();
     for (var r = ids.length - 1; r >= 0; r--) if (String(ids[r][0]) === String(o.id)) sh.deleteRow(r + 2);
   }
-  if (dishRows.length) {
-    dishRows.forEach(function (d) { sh.appendRow([o.id, o.name, o.created_at, name, d.title, a.nivel || '', d.qty, '', d.planLabel]); });
-  } else {
+  var writeRow = function (key, line, rows, idx) {
+    var para = line ? lineProp_(line, '_para_nombre') : '';
+    var planKey = line ? (multi ? (/4/.test(String(line.variant_title)) ? 'block' : 'week') : (a.plan || (/4/.test(String(line.variant_title)) ? 'block' : 'week'))) : '';
+    var slots = parseSlots_(line ? (lineProp_(line, '_dias') || (idx === 0 ? a.dias : '')) : a.dias, rows);
+    var total = o.total_price;
+    if (multi && line) {                // each person's row carries its own price (plan + that person's upgrades)
+      var pid = lineProp_(line, '_para'), t = Number(line.price) * Number(line.quantity || 1);
+      items.forEach(function (i) { if (i !== line && !dishRowsOf_(i).length && lineProp_(i, '_para') === pid) t += Number(i.price) * Number(i.quantity || 1); });
+      total = t.toFixed(2);
+    }
+    var al = line ? (lineProp_(line, '_alergias') || a.alergias || '') : (a.alergias || '');
+    var dl = line ? (lineProp_(line, '_no_me_gustan') || a.no_me_gustan || '') : (a.no_me_gustan || '');
+    var dt = line ? (lineProp_(line, '_dietas') || a.dietas || '') : (a.dietas || '');
+    var rowSummary = line ? summaryOf(line, rows) : summary;
+    var row = upsertRow_('Pedidos', 1, key, [key, o.name, o.created_at, name, email, c.phone || a.telefono || '', total, o.currency, o.financial_status, o.fulfillment_status || 'pendiente',
+      planKey, a.enfoque || a.nivel || '', dt, al, dl, addr, a.codigo_referencia || '', a.contrato_aceptado || '', rowSummary, o.note || '', JSON.stringify(slots), String(c.id || ''), para]);
+    try { sheet_('Pedidos').getRange(row, 4).setFontWeight('bold'); } catch (e0) { /* formatting never blocks an order */ }
+    rows.forEach(function (d) { sh.appendRow([o.id, o.name, o.created_at, para || name, d.title, a.nivel || '', d.qty, '', line ? String(line.variant_title || '') : '']); });
+  };
+  if (planLines.length) planLines.forEach(function (l, idx) { writeRow(idx === 0 ? o.id : o.id + '-' + (idx + 1), l, dishRowsOf_(l), idx); });
+  else {
+    writeRow(o.id, null, [], 0);
     items.forEach(function (i) {
       sh.appendRow([o.id, o.name, o.created_at, name, i.title, i.variant_title || '', i.quantity, i.price,
         (i.selling_plan_allocation && i.selling_plan_allocation.selling_plan && i.selling_plan_allocation.selling_plan.name) || '']);
@@ -294,12 +311,12 @@ function slotsFromSummary_(summary) {
 }
 function loadOrders_() {
   var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Pedidos'); if (!sh || sh.getLastRow() < 2) return [];
-  return sh.getRange(2, 1, sh.getLastRow() - 1, 22).getValues().map(function (r) {
+  return sh.getRange(2, 1, sh.getLastRow() - 1, 23).getValues().map(function (r) {
     var slots = []; try { slots = JSON.parse(r[20] || '[]'); } catch (e) {}
     slots = slots.length ? padSlots_(slots) : slotsFromSummary_(r[18]);
     var pl = String(r[10] || '').toLowerCase();
     return { id: String(r[0]), name: String(r[1]), date: r[2], customer: String(r[3]), email: String(r[4] || '').toLowerCase(), phone: String(r[5] || ''), total: Number(r[6]) || 0, currency: String(r[7]),
-      paid: String(r[8]).toLowerCase() === 'paid', isPlan: pl !== '', block: pl === 'block' || /bloque|4/.test(pl), address: String(r[15] || ''), allergies: String(r[13] || ''), dislikes: String(r[14] || ''), slots: slots, cid: String(r[21] || '') };
+      paid: String(r[8]).toLowerCase() === 'paid', isPlan: pl !== '', block: pl === 'block' || /bloque|4/.test(pl), address: String(r[15] || ''), allergies: String(r[13] || ''), dislikes: String(r[14] || ''), slots: slots, cid: String(r[21] || ''), para: String(r[22] || '') };
   });
 }
 function loadSelections_() {
@@ -323,7 +340,7 @@ function resolveOrderWeeks_(o, sel, pz) {
     if (isPaused(w)) { skipped.push(w); continue; }
     if (i === 0) { slots = o.slots.slice(); src = 'pedido'; }
     else {
-      var row = (o.cid && sel[o.cid + '|' + w]) || sel['e:' + o.email + '|' + w];
+      var row = !o.para && ((o.cid && sel[o.cid + '|' + w]) || sel['e:' + o.email + '|' + w]);
       if (row) { slots = row.slots.slice(); src = slots.some(Boolean) ? 'elegida' : 'saltada'; }
       else { slots = last.slice(); src = 'automática'; }
     }
@@ -403,12 +420,13 @@ function ordersOfCustomer_(cid) {
 function creditsFor_(cid, now) {
   now = now || new Date();
   var sel = loadSelections_(), pz = loadPauses_(), todayMon = mondayStr_(now), allowed = allowedMonday_(now), editable = {}, left = 0, total = 0, planned = 0, ends = '', had = false, kinds = {}, open = false;
-  ordersOfCustomer_(cid).filter(function (o) { return o.paid; }).forEach(function (o) {
+  var paidRows = ordersOfCustomer_(cid).filter(function (o) { return o.paid; }), selfRows = paidRows.filter(function (o) { return !o.para; });
+  (selfRows.length ? selfRows : paidRows).forEach(function (o) {
     had = true;
     var wk = resolveOrderWeeks_(o, sel, pz), live = wk.filter(function (w) { return w.week >= todayMon; });
     if (!live.length && !wk.unplaced) return;
     kinds[o.block ? 'block' : 'week'] = 1; total += wk.length + wk.unplaced; left += live.length + wk.unplaced;
-    wk.forEach(function (w) { planned += w.items.reduce(function (a, i) { return a + i.qty; }, 0); if (w.week >= allowed && w.idx >= 1) editable[w.week] = 1; });
+    wk.forEach(function (w) { planned += w.items.reduce(function (a, i) { return a + i.qty; }, 0); if (w.week >= allowed && w.idx >= 1 && !o.para) editable[w.week] = 1; });
     if (wk.unplaced) open = true; else if (wk[wk.length - 1].week > ends) ends = wk[wk.length - 1].week;
   });
   var mine = pz[String(cid)] || { weeks: {}, from: '' }, paused = Object.keys(mine.weeks).filter(function (w) { return w >= allowed; }).sort(), pausedFrom = mine.from && (mine.from >= allowed ? mine.from : allowed) || '';
@@ -484,7 +502,7 @@ function rebuildDeliveries_(now) {
     rw.forEach(function (w) {
       if (w.week < todayMon || w.week > horizon) return;
       var days = []; w.slots.forEach(function (t, i) { if (t) days.push(DAYS_ES[i]); });
-      rows.push([w.week, o.customer, o.phone, o.address, w.slots[0], w.slots[1], w.slots[2], w.slots[3], w.slots[4], days.join(', ') || '— sin entregas —', days.length, o.allergies || '', w.src, o.name]);
+      rows.push([w.week, o.para ? o.para + ' (' + o.customer + ')' : o.customer, o.phone, o.address, w.slots[0], w.slots[1], w.slots[2], w.slots[3], w.slots[4], days.join(', ') || '— sin entregas —', days.length, o.allergies || '', w.src, o.name]);
       var wk = weeks[w.week] = weeks[w.week] || { customers: 0, meals: 0, skipped: 0, auto: 0, perDay: [0, 0, 0, 0, 0] };
       wk.customers++; if (w.src === 'saltada') wk.skipped++; if (w.src === 'automática') wk.auto++;
       w.slots.forEach(function (t, i) { if (!t) return; wk.meals++; wk.perDay[i]++; var d = dishWeek[w.week] = dishWeek[w.week] || {}; (d[t] = d[t] || [0, 0, 0, 0, 0])[i]++; });

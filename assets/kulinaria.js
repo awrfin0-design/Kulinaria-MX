@@ -81,7 +81,7 @@
 
   /* ---------- profile (allergies + dislikes) ---------- */
   function loadProfile() {
-    var p = { allergies: [], dislikes: [] };
+    var p = { allergies: [], dislikes: [], people: [] };
     try { p = Object.assign(p, JSON.parse(localStorage.getItem(PROFILE_KEY) || '{}')); } catch (e) {}
     var c = $('#kulinaria-customer');
     if (c) {
@@ -142,8 +142,14 @@
   function dislikeHits(p, tags, ings) {
     return (p.dislikes || []).filter(function (raw) { var d = canon(raw); return d && (ings.some(function (i) { return i.indexOf(d) > -1 || (d.length > 3 && d.indexOf(i) > -1 && i.length > 3); }) || tags.indexOf(d) > -1); });
   }
+  // The profile that applies right now: the account holder's, or the person the order is being built for (family members have their own allergies and dislikes)
+  function effectiveProfile() {
+    var p = loadProfile(), f = readFunnel();
+    if (f && f.para && p.people) { var who = p.people.filter(function (x) { return x.id === f.para; })[0]; if (who) return { allergies: who.allergies || [], dislikes: who.dislikes || [], diets: who.diets || [], name: who.name, people: p.people }; }
+    return p;
+  }
   function applyProfile() {
-    var p = loadProfile();
+    var p = effectiveProfile();
     var al = (p.allergies || []).map(norm), dl = (p.dislikes || []).map(norm);
     $$('[data-dish]').forEach(function (card) {
       var tags = (card.getAttribute('data-allergens') || '').split('|').map(norm).filter(Boolean);
@@ -209,6 +215,31 @@
     };
     tagInput.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addTag(tagInput.value); } });
     $$('[data-suggest]', form).forEach(function (b) { b.addEventListener('click', function () { addTag(b.getAttribute('data-suggest')); }); });
+    // family members / other people the account orders for: each has their own allergies and dislikes
+    var plist = $('[data-people-list]', form), padd = $('[data-people-add]', form);
+    if (plist && padd) {
+      if (!Array.isArray(p.people)) p.people = [];
+      var split = function (v) { return String(v || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean); };
+      var persist2 = function () { saveProfile(p); pushProfile(); applyProfile(); };
+      var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+      var paintPeople = function () {
+        plist.innerHTML = '';
+        if (!p.people.length) { var li0 = document.createElement('li'); li0.className = 'text-muted'; li0.textContent = form.getAttribute('data-t-people-none') || ''; plist.appendChild(li0); return; }
+        p.people.forEach(function (x, i) {
+          var li = document.createElement('li');
+          li.innerHTML = '<div><strong>' + esc(x.name) + '</strong><span>' + esc((x.allergies || []).join(', ') || '—') + (x.dislikes && x.dislikes.length ? ' · ' + esc(x.dislikes.join(', ')) : '') + '</span></div>';
+          var b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn--ghost btn--sm'; b.textContent = padd.getAttribute('data-t-remove') || '×';
+          b.addEventListener('click', function () { p.people.splice(i, 1); persist2(); paintPeople(); });
+          li.appendChild(b); plist.appendChild(li);
+        });
+      };
+      $('[data-pp-add]', padd).addEventListener('click', function () {
+        var n = $('[data-pp-name]', padd), al = $('[data-pp-al]', padd), dl = $('[data-pp-dl]', padd); var name = n.value.trim(); if (!name) { n.focus(); return; }
+        p.people.push({ id: 'p' + Date.now().toString(36), name: name, allergies: split(al.value), dislikes: split(dl.value), diets: [] });
+        n.value = ''; al.value = ''; dl.value = ''; persist2(); paintPeople();
+      });
+      paintPeople();
+    }
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var al = $$('input[name="allergy"]:checked', form).map(function (c) { return c.value; });
@@ -546,7 +577,7 @@
     var l = $('[data-kx-onb]', a); if (l && l.getAttribute('href')) window.location.href = l.getAttribute('href');
   }
   function readFunnel() { try { return JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null') || { v: 2 }; } catch (e) { return { v: 2 }; } }
-  function profileBlob() { var f = readFunnel(), p = loadProfile(); return { info: f.info || {}, checks: f.allergies || [], allergies: p.allergies || [], dislikes: p.dislikes || [], diets: p.diets || [], at: Date.now() }; }
+  function profileBlob() { var f = readFunnel(), p = loadProfile(); return { info: f.info || {}, checks: f.allergies || [], allergies: p.allergies || [], dislikes: p.dislikes || [], diets: p.diets || [], people: p.people || [], at: Date.now() }; }
   function pushProfile() {
     var a = acct(); if (!a) return;
     try { fetch(a.url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'profile', cid: a.cid, token: a.token, profile: profileBlob() }) }); } catch (e) {}
@@ -559,7 +590,7 @@
       .then(function (d) {
         if (!d || !d.ok || !d.profile || !d.profile.info) { guardOnboarding(); return; }
         var f = readFunnel(); f.v = 2; f.info = Object.assign({}, d.profile.info, f.info || {}); f.allergies = d.profile.checks || [];
-        try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(f)); localStorage.setItem(PROFILE_KEY, JSON.stringify({ allergies: d.profile.allergies || [], dislikes: d.profile.dislikes || [], diets: d.profile.diets || [] })); localStorage.setItem(ONB_KEY, '1'); } catch (e) {}
+        try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(f)); localStorage.setItem(PROFILE_KEY, JSON.stringify({ allergies: d.profile.allergies || [], dislikes: d.profile.dislikes || [], diets: d.profile.diets || [], people: d.profile.people || [] })); localStorage.setItem(ONB_KEY, '1'); } catch (e) {}
         location.reload();
       }).catch(function () { guardOnboarding(); });
   }
@@ -573,6 +604,27 @@
       var done = function () { try { var f = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (f) { f.days = []; f.qty = {}; f.sent = false; f.step = 0; localStorage.setItem(FUNNEL_KEY, JSON.stringify(f)); } } catch (x) {} window.location.reload(); };
       try { fetch('/cart/clear.js', { method: 'POST', headers: { Accept: 'application/json' } }).then(done, done); } catch (x) { done(); }
     });
+  }
+
+  /* ---------- account hub (own page): week summary and profile summary ---------- */
+  function initAccountHub() {
+    var hw = $('[data-hub-week]'), hp = $('[data-hub-profile]'); if (!hw && !hp) return;
+    var fill = function (tpl, o) { return String(tpl).replace(/\[(\w+)\]/g, function (m, k) { return o[k] != null ? o[k] : m; }); };
+    if (hw) {
+      var main = $('[data-hub-week-main]', hw);
+      loadCredits(function (c) {
+        if (!c || !c.hasPlan) { main.textContent = main.getAttribute('data-t-none'); return; }
+        var e = ''; try { var q = String(c.endsOn).split('-'); e = new Intl.DateTimeFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { timeZone: TZ, day: 'numeric', month: 'short' }).format(new Date(+q[0], +q[1] - 1, +q[2], 12)); } catch (x) {}
+        main.textContent = c.pausedFrom ? '⏸' : fill(main.getAttribute('data-t-some'), { w: c.weeksLeft, t: c.weeksTotal, e: e || '—' });
+      });
+    }
+    if (hp) {
+      var body = $('[data-hub-profile-body]', hp), p = loadProfile(), rows = [];
+      var row = function (k, list) { if (list && list.length) rows.push('<div><b>' + hp.getAttribute('data-t-' + k) + '</b>' + list.map(function (x) { return String(x).replace(/[&<>]/g, ''); }).join(', ') + '</div>'); };
+      row('allergies', p.allergies); row('dislikes', p.dislikes); row('diets', p.diets);
+      if (p.people && p.people.length) row('people', p.people.map(function (x) { return x.name; }));
+      body.innerHTML = rows.length ? rows.join('') : '<p class="text-muted" style="margin:0">' + hp.getAttribute('data-t-none') + '</p>';
+    }
   }
 
   /* ---------- header account menu: initial in a circle, one drop-down (who is signed in, shortcuts, language, cart summary, sign out) ---------- */
@@ -1087,7 +1139,7 @@
         var guest = !ce;   // signed out: the order is built and put in the cart, then sign-in brings the visitor back to the cart
         if (!guest && ordersCount() === 0 && (!onb || !i.name || !i.email || !i.phone)) { window.location.href = lnk('[data-fn-onb]') || '/pages/bienvenida'; return; }
         i = { name: i.name || cn || '', email: i.email || ce || '', phone: i.phone || '', street: i.street, cluster: i.cluster, zip: i.zip, allergy_other: i.allergy_other, dislikes: i.dislikes };
-        var p = loadProfile(), warned = [];
+        var p = effectiveProfile(), warned = [], paraName = p.name || '', paraId = st.para || 'yo';
         st.days.forEach(function (pid) { var d = byPid(pid), t = d && d.getAttribute('data-title'); if (d && d.classList.contains('is-warned') && warned.indexOf(t) < 0) warned.push(t); });
         var list = dishes.filter(function (d) { return st.qty[d.getAttribute('data-pid')]; }).map(function (d) { return st.qty[d.getAttribute('data-pid')] + '× ' + d.getAttribute('data-title'); }).join(' | ');
         var cl = function (k) { return (i[k] || '').trim(); };
@@ -1100,19 +1152,21 @@
         var rc = ''; try { rc = localStorage.getItem('kulinaria_ref') || ''; } catch (x) {} if (rc) attrs.codigo_referencia = rc;
         var props = {}; props[T_('prop-meals')] = String(count()); props[T_('prop-tier')] = tb.getAttribute('data-name'); props[T_('prop-length')] = st.plan === 'block' ? T_('length-block') : T_('length-week');
         st.days.forEach(function (q, k) { var dd = byPid(q); if (dd) props[dayLabel(k)] = dd.getAttribute('data-title'); });
-        props['_platillos'] = list;
+        props['_platillos'] = list; props['_para'] = paraId; if (paraName) { props[T_('prop-for') || 'Para'] = paraName; props['_para_nombre'] = paraName; }
+        props['_dias'] = attrs.dias; props['_alergias'] = attrs.alergias || '-'; props['_no_me_gustan'] = attrs.no_me_gustan || '-'; props['_dietas'] = attrs.dietas || '-'; props['_alerta'] = attrs.alerta_alergias || '-';
         var line = { id: parseInt(tb.getAttribute(st.plan === 'block' ? 'data-variant-block' : 'data-variant-week'), 10), quantity: 1, properties: props };
         var sp = tb.getAttribute('data-selling-plan'); if (st.plan === 'block' && st.renew && sp) line.selling_plan = parseInt(sp, 10);
         var lines = [line];
         for (var lvl = 1; lvl <= 3; lvl++) {
           var names = []; st.days.forEach(function (q) { var dd = byPid(q); if (dd && levelOf(dd) === lvl) names.push(dd.getAttribute('data-title')); });
           var vid = parseInt(holder.getAttribute('data-upv-' + lvl), 10);
-          if (names.length && vid) { var up = {}; up[T_('prop-upgrade')] = names.join(', '); lines.push({ id: vid, quantity: names.length, properties: up }); }
+          if (names.length && vid) { var up = {}; up[T_('prop-upgrade')] = names.join(', '); up['_para'] = paraId; lines.push({ id: vid, quantity: names.length, properties: up }); }
         }
         st.sent = true; persist();
         var go2 = function () { window.location.href = guest ? (lnk('[data-fn-login]') || '/pages/bienvenida').replace(/(return_url|return_to)=[^&]*/g, '$1=' + encodeURIComponent(finish.getAttribute('href') || '/cart')) : finish.getAttribute('href'); };
-        fetch('/cart/clear.js', { method: 'POST' })
-          .then(function () { return fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ attributes: attrs }) }); })
+        // the cart can hold one plan per person: this person's earlier plan is replaced, the others stay
+        fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); })
+          .then(function (c) { var upd = {}; ((c && c.items) || []).forEach(function (it) { var pr = it.properties || {}; if (pr._para === undefined || pr._para === paraId) upd[it.key] = 0; }); return fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ updates: upd, attributes: attrs }) }); })
           .then(function () { return fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: lines }) }); })
           .then(go2, go2);
       });
@@ -1123,6 +1177,19 @@
         var ends = ''; try { var p = String(c.endsOn).split('-'); ends = new Intl.DateTimeFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { timeZone: TZ, day: 'numeric', month: 'short' }).format(new Date(+p[0], +p[1] - 1, +p[2], 12)); } catch (e) {}
         $('[data-fn-credit-text]', box).textContent = fill(T_('credit'), { w: c.weeksLeft, t: c.weeksTotal, e: ends }); box.hidden = false;
       });
+      // who the order is for: the account holder or a family member (own allergies, dislikes and diets)
+      var paraSel = $('[data-fn-para]', holder);
+      if (paraSel) {
+        var buildPara = function () {
+          var pp = loadProfile(); paraSel.innerHTML = '';
+          var o0 = document.createElement('option'); o0.value = ''; o0.textContent = T_('para-me'); paraSel.appendChild(o0);
+          (pp.people || []).forEach(function (x) { var o = document.createElement('option'); o.value = x.id; o.textContent = x.name; paraSel.appendChild(o); });
+          if (st.para && !(pp.people || []).some(function (x) { return x.id === st.para; })) st.para = '';
+          paraSel.value = st.para || ''; var wrap = paraSel.closest('[data-fn-para-wrap]'); if (wrap) wrap.hidden = false;
+        };
+        buildPara();
+        paraSel.addEventListener('change', function () { st.para = paraSel.value; st.days = blankDays(); st.qty = {}; st.active = 0; persist(); applyProfile(); render(); });
+      }
       var gridEl = $('[data-fn-grid]', holder);
       var arrows = function () { if (!gridEl) return; var pv = $('[data-fn-arrow="-1"]', holder), nx = $('[data-fn-arrow="1"]', holder); if (pv) pv.hidden = gridEl.scrollLeft < 8; if (nx) nx.hidden = gridEl.scrollLeft + gridEl.clientWidth >= gridEl.scrollWidth - 8; };
       if (gridEl) { gridEl.addEventListener('scroll', arrows, { passive: true }); window.addEventListener('resize', arrows); }
@@ -1488,7 +1555,7 @@
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initAccountHub, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
