@@ -158,6 +158,8 @@
   }
   // The profile that applies right now: the account holder's, or the person the order is being built for (family members have their own allergies and dislikes)
   function effectiveProfile() {
+    // allergy and dislike warnings belong to a signed-in, onboarded account: a visitor who is not signed in never sees them (even if the browser still holds an old profile)
+    if (!$('#kx-account')) return { allergies: [], dislikes: [], diets: [], people: [] };
     var p = loadProfile(), f = readFunnel();
     if (f && f.para && p.people) { var who = p.people.filter(function (x) { return x.id === f.para; })[0]; if (who) return { allergies: who.allergies || [], dislikes: who.dislikes || [], diets: who.diets || [], name: who.name, people: p.people }; }
     return p;
@@ -201,6 +203,7 @@
     });
   }
 
+  function initOnbBanner() { $$('[data-onb-banner]').forEach(function (b) { b.hidden = isOnboarded(); }); }
   function initProfileForm() { $$('[data-profile-form]').forEach(initOneProfileForm); }
   function initOneProfileForm(form) {
     var p = loadProfile();
@@ -1006,6 +1009,10 @@
   }
 
   function initFunnel() {
+    // the home funnel carries the phone-only "teaser" class: on larger screens it must behave as the full one-frame order builder
+    var wide = window.matchMedia ? window.matchMedia('(min-width:761px)') : null;
+    var syncTeaser = function () { $$('[data-funnel][data-phone-teaser]').forEach(function (h) { h.classList.toggle('funnel--teaser', !(wide && wide.matches)); }); };
+    syncTeaser(); if (wide && wide.addEventListener) wide.addEventListener('change', syncTeaser);
     $$('[data-funnel]').forEach(function (holder) {
       var MEALS = +holder.getAttribute('data-meals') || 5, WEEKS = +holder.getAttribute('data-weeks') || 4;
       var st = { plan: 'block', tier: 'selecto', cat: 'all', diet: 'all', qty: {}, days: [], info: {}, allergies: [], step: 0, remembered: false, renew: true };
@@ -1040,13 +1047,13 @@
       var count = function () { return st.days.filter(Boolean).length; };
       /* per-day tweaks: ingredients to leave out + a free note, saved with the order lines (kitchen sees them) */
       if (!Array.isArray(st.mods) || st.mods.length !== MEALS) st.mods = blankDays().map(function () { return { off: [], note: '' }; });
-      var modsKey = '';
+      var modsKey = '', modsOpen = -1;
       var modsOf = function (i) { return st.mods[i] || (st.mods[i] = { off: [], note: '' }); };
       var modsText = function (i) { var m = st.mods[i]; if (!m) return ''; var parts = (m.off || []).map(function (x) { return fill(T_('mods-without'), { i: x }); }); if (m.note) parts.push(m.note); return parts.join(', '); };
       var renderMods = function () {
         var box = $('[data-fn-mods]', holder); if (!box) return;
         var dish = st.days[st.active] && byPid(st.days[st.active]);
-        if (!dish) { box.hidden = true; modsKey = ''; return; }
+        if (!dish || modsOpen !== st.active) { box.hidden = true; modsKey = ''; return; }
         var key = st.active + '|' + dish.getAttribute('data-pid') + '|' + st.step; box.hidden = false;
         if (key === modsKey) return; modsKey = key;
         var m = modsOf(st.active);
@@ -1067,6 +1074,7 @@
         var inp = document.createElement('input'); inp.type = 'text'; inp.className = 'input'; inp.maxLength = 140; inp.value = m.note || ''; inp.placeholder = T_('mods-ph'); inp.setAttribute('data-fn-mods-note', '');
         inp.addEventListener('input', function () { m.note = inp.value; persist(); }); lb.appendChild(inp); box.appendChild(lb);
         var w = document.createElement('p'); w.className = 'fn-mods__w'; w.textContent = T_('mods-warn'); box.appendChild(w);
+        var dn = document.createElement('button'); dn.type = 'button'; dn.className = 'btn btn--outline btn--sm'; dn.textContent = T_('mods-done'); dn.addEventListener('click', function () { modsOpen = -1; render(); }); box.appendChild(dn);
       };
       var persist = function () { try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(Object.assign({ v: 2 }, st))); } catch (e) {} };
       var say = function (msg) { if (!err) return; err.hidden = !msg; err.textContent = msg || ''; };
@@ -1083,7 +1091,8 @@
           b.type = 'button'; b.className = 'fn-day'; b.setAttribute('data-fn-day-btn', i);
           b.innerHTML = '<i class="fn-day__thumb" aria-hidden="true"></i><span class="fn-day__d"></span><span class="fn-day__dish"></span>';
           x.className = 'fn-day__x'; x.setAttribute('data-fn-day-x', i); x.setAttribute('role', 'button'); x.tabIndex = 0; x.textContent = '×'; x.hidden = true;
-          li.appendChild(b); li.appendChild(x); weekBox.appendChild(li);
+          var ed = document.createElement('span'); ed.className = 'fn-day__e'; ed.setAttribute('data-fn-day-edit', i); ed.setAttribute('role', 'button'); ed.tabIndex = 0; ed.textContent = '✎'; ed.hidden = true;
+          li.appendChild(b); li.appendChild(x); li.appendChild(ed); weekBox.appendChild(li);
         }
       };
       var paintWeek = function () {
@@ -1098,6 +1107,7 @@
           b.setAttribute('aria-pressed', i === st.active ? 'true' : 'false');
           b.setAttribute('aria-label', dayLabel(i) + ': ' + (d ? lab(d) : T_('day-empty')));
           x.hidden = !d; x.setAttribute('aria-label', fill(T_('clear-day'), { d: dayLabel(i) }));
+          var ed = $('[data-fn-day-edit]', li); if (ed) { ed.hidden = !d; ed.classList.toggle('has-note', !!(d && modsText(i))); ed.setAttribute('aria-label', fill(T_('mods-edit'), { d: dayLabel(i) })); }
         });
       };
 
@@ -1141,7 +1151,9 @@
           list.innerHTML = '';
           st.days.forEach(function (pid, i) {
             var d = pid && byPid(pid); if (!d) return; var l = levelOf(d);
-            var li = document.createElement('li'); li.innerHTML = '<span></span><b></b>'; li.firstChild.textContent = dayLabel(i) + ' · ' + lab(d); li.lastChild.textContent = l ? '+' + money(upg(l)) : '';
+            var li = document.createElement('li'); li.innerHTML = '<span></span><b></b><em class="fn-s-ing"></em><i class="fn-s-edit" role="button" tabindex="0" data-fn-day-edit="' + i + '">✎</i>'; li.firstChild.textContent = dayLabel(i) + ' · ' + lab(d); $('b', li).textContent = l ? '+' + money(upg(l)) : '';
+            var ingS = (d.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean), mt = modsText(i);
+            $('.fn-s-ing', li).textContent = (ingS.length ? ingS.slice(0, 9).join(' · ') : '') + (mt ? '  —  ✎ ' + mt : '');
             list.appendChild(li);
           });
         }
@@ -1193,6 +1205,8 @@
       holder.addEventListener('click', function (e) {
         var xb = e.target.closest ? e.target.closest('[data-fn-day-x]') : null;
         if (xb) { var xi = +xb.getAttribute('data-fn-day-x'); st.days[xi] = ''; st.active = xi; say(''); persist(); render(); return; }
+        var eb = e.target.closest ? e.target.closest('[data-fn-day-edit]') : null;
+        if (eb) { var ei = +eb.getAttribute('data-fn-day-edit'); st.active = ei; modsOpen = modsOpen === ei ? -1 : ei; modsKey = ''; if (st.step < 1) st.step = 1; persist(); render(); return; }
         var db = e.target.closest ? e.target.closest('[data-fn-day-btn]') : null;
         if (db) { st.active = +db.getAttribute('data-fn-day-btn'); persist(); render(); return; }
         var ar = e.target.closest ? e.target.closest('[data-fn-arrow]') : null;
@@ -1200,7 +1214,7 @@
         var d = e.target.closest ? e.target.closest('[data-fn-dish]') : null; if (!d) return;
         var id = d.getAttribute('data-pid');
         if (!e.target.closest('[data-pick]')) return;
-        if (st.days[st.active] !== id) st.mods[st.active] = { off: [], note: '' };
+        if (st.days[st.active] !== id) { st.mods[st.active] = { off: [], note: '' }; modsOpen = -1; }
         st.days[st.active] = id;
         for (var o = 1; o <= MEALS; o++) { var k = (st.active + o) % MEALS; if (!st.days[k]) { st.active = k; break; } }   // move on to the next empty day
         say(''); persist(); render();
@@ -1669,7 +1683,7 @@
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

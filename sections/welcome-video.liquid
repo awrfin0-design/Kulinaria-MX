@@ -1,23 +1,23 @@
-{%- comment -%} Welcome film under the hero. Shows only when a video file/URL is set (Customize > Welcome video). {%- endcomment -%}
+{%- comment -%} Welcome film under the hero. Without an uploaded video it shows the brand film as a placeholder inside the frame. {%- endcomment -%}
 {%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
 {%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
-{%- if section.settings.video_url != blank or section.settings.video != blank -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
+{%- assign wv_src = section.settings.video_url -%}
+{%- if section.settings.video != blank -%}{%- assign wv_src = section.settings.video.sources[0].url -%}{%- endif -%}
+{%- if wv_src == blank -%}{%- assign wv_src = 'video-chef.mp4' | asset_url -%}{%- endif -%}
 <section class="section section--tight welcome-video" {{ section.shopify_attributes }}>
   <div class="container">
-    <div class="welcome-video__head">
-      {%- if tx_s_eyebrow != blank -%}<span class="eyebrow">{{ tx_s_eyebrow }}</span>{%- endif -%}
-      {%- if tx_s_heading != blank -%}<h2>{% render 'headline', text: tx_s_heading %}</h2>{%- endif -%}
-    </div>
     <div class="welcome-video__frame">
-      {%- assign wv_src = section.settings.video_url -%}
-      {%- if section.settings.video != blank -%}{%- assign wv_src = section.settings.video.sources[0].url -%}{%- endif -%}
-      <video class="welcome-video__video" controls playsinline preload="metadata" {% if section.settings.poster != blank %}poster="{{ section.settings.poster | image_url: width: 1400 }}"{% endif %} src="{{ wv_src }}"></video>
+      <img class="welcome-video__poster" src="{% if section.settings.poster != blank %}{{ section.settings.poster | image_url: width: 1600 }}{% else %}{{ 'video-chef-poster.webp' | asset_url }}{% endif %}" alt="" loading="lazy" decoding="async">
+      <video class="welcome-video__video" controls playsinline muted loop preload="none" data-video-src="{{ wv_src }}" data-ambient data-welcome-video></video>
+      <div class="welcome-video__copy">
+        {%- if tx_s_eyebrow != blank -%}<span class="eyebrow">{{ tx_s_eyebrow }}</span>{%- endif -%}
+        {%- if tx_s_heading != blank -%}<h2>{% render 'headline', text: tx_s_heading %}</h2>{%- endif -%}
+        {%- if tx_s_text != blank -%}<p>{{ tx_s_text }}</p>{%- endif -%}
+      </div>
     </div>
   </div>
 </section>
-{%- elsif request.design_mode -%}
-<section class="section section--tight welcome-video" {{ section.shopify_attributes }}><div class="container"><p class="text-muted">{{ 'Video de bienvenida: sube un video o pega su URL en la configuración de esta sección.' }}</p></div></section>
-{%- endif -%}
 
 {% schema %}
 {
@@ -25,8 +25,9 @@
   "settings": [
     { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Bienvenido" },
     { "type": "text", "id": "heading", "label": "Título", "default": "Conoce *Kulinaria*" },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Descubre quiénes somos y cómo cocinamos tu semana." },
     { "type": "video", "id": "video", "label": "Video (subido a Shopify)" },
-    { "type": "text", "id": "video_url", "label": "…o URL de un .mp4" },
+    { "type": "text", "id": "video_url", "label": "…o URL de un .mp4", "info": "Vacío = video de marca de ejemplo (video-chef.mp4)." },
     { "type": "image_picker", "id": "poster", "label": "Portada del video" }
   ],
   "presets": [{ "name": "Video de bienvenida" }]

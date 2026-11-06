@@ -30,6 +30,7 @@
     <p class="countdown" data-cutoff>{{ 'cutoff.confirm_dishes' | t }} <strong data-cutoff-value>…</strong></p>
 
     <div class="hub">
+      {%- render 'onboarding-banner' -%}
       <section class="hub__card" data-hub-week>
         <h3>{{ 'acct.hub_week_t' | t }}</h3>
         <p class="hub__big" data-hub-week-main data-t-none="{{ 'acct.hub_week_none' | t }}" data-t-some="{{ 'acct.hub_week_some' | t }}">…</p>

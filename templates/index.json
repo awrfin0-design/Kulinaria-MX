@@ -427,7 +427,8 @@
       "type": "welcome-video",
       "settings": {
         "eyebrow": "Bienvenido",
-        "heading": "Conoce *Kulinaria*"
+        "heading": "Conoce *Kulinaria*",
+        "text": "Descubre quiénes somos y cómo cocinamos tu semana."
       }
     },
     "marquee": {

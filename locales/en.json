@@ -9,6 +9,9 @@
  */
 {
   "acct": {
+    "onb_t": "Start with your questionnaire",
+    "onb_p": "3 short steps: who you are, where we deliver, and your allergies and tastes. Every dish is then checked against your profile.",
+    "onb_cta": "Take the questionnaire",
     "amb_t": "Your code and credits",
     "amb_p": "Sign in to see your personal code, your available credits and how many friends bought with it. If you are not an ambassador yet, request your code below.",
     "amb_request": "Request my code",
@@ -622,6 +625,10 @@
     "mods_without": "No {i}",
     "prop_notes": "Kitchen notes",
     "mods_open": "Remove ingredients or add a note",
+    "mods_done": "Done",
+    "mods_edit": "Leave out ingredients or add a note for {d}",
+    "how_6_t": "Personalize each dish (optional)",
+    "how_6_p": "Tap the pencil ✎ on a day to leave out ingredients (for example, the burger without onion) or write a note for the kitchen. You can also do it from the summary, where you see each dish's ingredients.",
     "rec_title": "How you are charged",
     "rec_auto": "The 4-week plan is paid upfront in a single charge and renews automatically every 4 weeks with the same payment method, until you cancel or pause it from your account (before the Saturday 10:00 cut-off).",
     "rec_manual": "The 4-week plan is paid upfront in a single charge. When your 4 weeks end we let you know to renew: nothing is charged without your confirmation.",
@@ -1578,6 +1585,7 @@
     "86c89918f8b6": "Menu of the week",
     "96b5295e5766": "Gourmet variety for your whole week. Personalize your selection before Saturday at 10 a.m.",
     "d93d49eca56d": "Welcome",
-    "648f6e55cf21": "Meet *Kulinaria*"
+    "648f6e55cf21": "Meet *Kulinaria*",
+    "03bf248a88f6": "Find out who we are and how we cook your week."
   }
 }

@@ -14,10 +14,10 @@
   --gold-foil:linear-gradient(120deg,#8A6420 0%,#E9CF85 22%,#B58A35 45%,#F3E2A6 70%,#9A7222 100%);
   --gold-soft:linear-gradient(120deg,#BC8F2F,#E2C36B 50%,#BC8F2F);
 
-  --font-display:"Kaushan Script","Brush Script MT",cursive;
-  --font-heading:"Alegreya",Georgia,serif;
-  --font-body:"Alegreya",Georgia,serif;
-  --font-label:"Alegreya Sans","Gill Sans","Trebuchet MS",sans-serif;
+  --font-display:"Playfair Display",Georgia,serif;
+  --font-heading:"Playfair Display",Georgia,serif;
+  --font-body:"Montserrat",system-ui,sans-serif;
+  --font-label:"Montserrat",system-ui,sans-serif;
 
   --space-xs:4px; --space-sm:8px; --space-md:16px; --space-lg:24px; --space-xl:40px; --space-2xl:64px; --space-3xl:104px;
   --radius-sm:12px; --radius-md:24px; --radius-lg:36px;
@@ -2476,3 +2476,55 @@ body .funnel:not(.funnel--teaser) .step.is-on::-webkit-scrollbar,body .funnel:no
   body .dc-grid .dish p,body .dc-grid .dish .dish__desc{display:none}
 }
 @media (max-width:760px){ body .hero--intro .hero__scroll{display:none} body .hero--intro .hero__poster,body .hero--intro .hero__video{object-position:50% 38%} }
+
+/* v51 — one type system for Day, Night and Fuego (Playfair Display headings + Montserrat text) */
+body{font-size:16.5px;line-height:1.7}
+h1,h2{font-weight:500;letter-spacing:-.01em}
+h3,h4{font-weight:600}
+:is(h1,h2,h3) em,.hero__copy h1 em,.page-head h1 em,.tagline{font-style:italic;font-weight:500}
+:is(.eyebrow,.btn,.chip,.tier-badge,.arrow-link,.text-link,.label){font-weight:600}
+.eyebrow{letter-spacing:.18em}
+
+/* v51 — pencil on each day (ingredients to leave out / note) + ingredients in the summary */
+.fn-day__e{position:absolute;left:4px;top:4px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;line-height:1;background:rgba(0,0,0,.55);color:#fff;cursor:pointer;z-index:2}
+.fn-day__e[hidden]{display:none}
+.fn-day__e.has-note{background:var(--accent);color:var(--on-brand,#fff)}
+.fn-week li{position:relative}
+.fn-s-ing{display:block;grid-column:1/-1;font-style:normal;font-size:.72rem;line-height:1.35;color:var(--text-muted);margin-top:2px}
+.fn-s-ing:empty{display:none}
+.fn-s-edit{font-style:normal;cursor:pointer;margin-left:6px;opacity:.8}
+.funnel__list li{flex-wrap:wrap}.funnel__list li .fn-s-ing{flex:0 0 100%;white-space:normal;overflow:visible}
+.funnel__aside .funnel__list li span{max-width:68%}
+
+.hub__card--onb{border-color:var(--accent);background:var(--accent-wash)}.hub__card--onb[hidden]{display:none}
+
+/* v51 — hero on desktop: bigger, more immersive film (text strip overlaps its faded lower edge) */
+@media (min-width:761px){
+  .hero--intro{padding-top:calc(var(--hdr) + 8px);padding-bottom:36px}
+  .hero--intro .hero__stage{width:min(100%,min(64svh,680px))}
+  .hero--intro .hero__copy{margin-top:calc(min(64svh,680px)*-.11);gap:6px}
+  .hero--intro .hero__cta .arrow-link__c{width:52px;height:52px}
+  .hero--intro .hero__scroll{display:none}
+}
+
+/* v51 — welcome film: large framed player with the welcome text over its lower edge */
+.welcome-video__frame{position:relative;max-width:1240px;margin:0 auto;aspect-ratio:16/9;max-height:calc(100svh - var(--hdr,72px) - 40px);border-radius:var(--r-card,20px);overflow:hidden;border:1px solid var(--border-accent);background:#000;box-shadow:var(--shadow-card)}
+.welcome-video__poster,.welcome-video__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.welcome-video__video{opacity:0;transition:opacity .8s}.welcome-video__video.is-on{opacity:1}
+.welcome-video__frame::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.82))}
+.welcome-video__copy{position:absolute;left:clamp(18px,3vw,44px);right:clamp(18px,3vw,44px);bottom:clamp(16px,3vw,36px);z-index:2;color:#F5F5F5;pointer-events:none}
+.welcome-video__copy .eyebrow{margin-bottom:6px;color:var(--accent-hi)}
+.welcome-video__copy h2{margin:0 0 4px;font-size:clamp(1.6rem,3.2vw,2.8rem);color:#F5F5F5}
+.welcome-video__copy p{margin:0;max-width:52ch;font-size:clamp(.85rem,1.3vw,1.05rem);color:rgba(245,245,245,.85)}
+.welcome-video__video[controls]{pointer-events:auto}
+@media (max-width:760px){
+  body .welcome-video__frame{aspect-ratio:4/5;max-height:calc(100svh - var(--app-top,56px) - var(--tabbar,64px) - 24px);margin-inline:calc(var(--pad)*-1);border-radius:0;border-inline:0}
+}
+
+/* v51 — desktop: hero film a little smaller so the whole hero (film + text strip + button) stays inside the first screen */
+@media (min-width:761px){
+  .hero--intro .hero__stage{width:min(100%,min(56svh,640px))}
+  .hero--intro .hero__copy{margin-top:calc(min(56svh,640px)*-.13)}
+  /* home: the order builder section is one screen (frame + small breathing room) */
+  body:not(.template-page-pedido) .funnel:not(.funnel--teaser).section{padding-block:10px 12px;min-height:0}
+}

@@ -6,7 +6,7 @@
   assign plan_coll = collections['planes-semanales']
 -%}
 {%- assign upg = all_products['mejora-de-platillo'] -%}
-<section class="section funnel{% if section.settings.phone_teaser %} funnel--teaser{% endif %}" id="pedido-{{ section.id }}" data-funnel data-cart-url="{{ routes.cart_url }}" data-meals="{{ meals_per_week }}" data-weeks="4"
+<section class="section funnel{% if section.settings.phone_teaser %} funnel--teaser{% endif %}" id="pedido-{{ section.id }}" data-funnel{% if section.settings.phone_teaser %} data-phone-teaser{% endif %} data-cart-url="{{ routes.cart_url }}" data-meals="{{ meals_per_week }}" data-weeks="4"
   {%- if customer %} data-customer-name="{{ customer.name | escape }}" data-customer-email="{{ customer.email | escape }}"{% endif %}
   data-t-meals="{{ 'funnel.meals_of' | t }}" data-t-meal-one="{{ 'funnel.meal_one' | t }}" data-t-empty="{{ 'funnel.summary_empty' | t }}"
   data-t-need-meals="{{ 'funnel.need_meals' | t }}" data-t-full="{{ 'funnel.meals_full' | t }}" data-t-need-info="{{ 'funnel.need_info' | t }}"
@@ -15,7 +15,7 @@
   data-t-per-week="{{ 'funnel.per_week_each' | t }}" data-t-weeks-x="{{ 'funnel.weeks_x' | t }}" data-t-per-meal="{{ 'funnel.per_meal' | t }}"
   data-t-all-lines="{{ 'funnel.all_categories' | t }}" data-t-prop-dishes="{{ 'funnel.prop_dishes' | t }}" data-t-prop-meals="{{ 'funnel.prop_meals' | t }}"
   data-t-prop-tier="{{ 'funnel.prop_tier' | t }}" data-t-prop-length="{{ 'funnel.prop_length' | t }}" data-t-length-block="{{ 'funnel.length_block' | t }}" data-t-length-week="{{ 'funnel.length_week' | t }}"
-  data-t-mods-title="{{ 'funnel.mods_title' | t }}" data-t-mods-hint="{{ 'funnel.mods_hint' | t }}" data-t-mods-note="{{ 'funnel.mods_note' | t }}" data-t-mods-ph="{{ 'funnel.mods_ph' | t }}" data-t-mods-warn="{{ 'funnel.mods_warn' | t }}" data-t-mods-without="{{ 'funnel.mods_without' | t }}" data-t-prop-notes="{{ 'funnel.prop_notes' | t }}" data-t-mods-open="{{ 'funnel.mods_open' | t }}"
+  data-t-mods-done="{{ 'funnel.mods_done' | t }}" data-t-mods-edit="{{ 'funnel.mods_edit' | t }}" data-t-mods-title="{{ 'funnel.mods_title' | t }}" data-t-mods-hint="{{ 'funnel.mods_hint' | t }}" data-t-mods-note="{{ 'funnel.mods_note' | t }}" data-t-mods-ph="{{ 'funnel.mods_ph' | t }}" data-t-mods-warn="{{ 'funnel.mods_warn' | t }}" data-t-mods-without="{{ 'funnel.mods_without' | t }}" data-t-prop-notes="{{ 'funnel.prop_notes' | t }}" data-t-mods-open="{{ 'funnel.mods_open' | t }}"
   data-t-para-me="{{ 'funnel.para_me' | t }}" data-t-prop-for="{{ 'funnel.prop_for' | t }}"
   data-t-renew="{{ 'funnel.renew' | t }}" data-t-days="{{ 'funnel.days' | t }}" data-t-finish="{{ 'funnel.finish' | t }}" data-t-finish-guest="{{ 'funnel.finish_guest' | t }}" data-t-credit="{{ 'funnel.credit' | t }}" data-t-rolled="{{ 'funnel.rolled' | t }}" data-t-pick="{{ 'funnel.pick' | t }}" data-t-picked="{{ 'funnel.picked' | t }}" data-t-pick-for="{{ 'funnel.pick_for' | t }}" data-t-all-done="{{ 'funnel.all_done' | t }}" data-t-clear-day="{{ 'funnel.clear_day' | t }}" data-t-first="{{ 'funnel.first_delivery' | t }}" data-t-day-empty="{{ 'funnel.day_empty' | t }}" data-t-up-badge="{{ 'funnel.up_badge' | t }}" data-t-up-total="{{ 'funnel.up_total' | t }}"
   data-t-prop-upgrade="{{ 'funnel.prop_upgrade' | t }}" data-t-need-contract="{{ 'funnel.need_contract' | t }}" data-t-days-missing="{{ 'funnel.days_missing' | t }}"
@@ -75,7 +75,7 @@
           <details class="fn-how" data-fn-how>
             <summary>{{ 'funnel.how_title' | t }}</summary>
             <ol class="fn-how__list">
-              {%- for n in (1..5) -%}
+              {%- for n in (1..6) -%}
                 {%- assign kt = 'funnel.how_' | append: n | append: '_t' -%}{%- assign kp = 'funnel.how_' | append: n | append: '_p' -%}
                 <li><strong>{{ kt | t }}</strong><span>{{ kp | t | replace: '[block]', hw_block | replace: '[week]', hw_week | replace: '[wk]', hw_wk }}</span></li>
               {%- endfor -%}

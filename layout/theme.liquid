@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code | default: 'es' }}" data-theme="light">
+<html lang="{{ request.locale.iso_code | default: 'es' }}" data-theme="fuego">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#EEE6DA">
     <script>
-      /* Runs before first paint: theme (light on desktop and dark on phones by default; Day / Night / Fuego; remembers the visitor's choice), loader (once per session) and the motion failsafe. */
+      /* Runs before first paint: theme (Fuego by default; Day / Night / Fuego; remembers the visitor's choice), loader (once per session) and the motion failsafe. */
       (function () {
-        var d = document.documentElement, theme = 'light', seen = false;
-        try { theme = localStorage.getItem('kx-theme') || (window.matchMedia && matchMedia('(max-width:760px)').matches ? 'dark' : 'light'); seen = !!sessionStorage.getItem('kx-seen'); } catch (e) {}
+        var d = document.documentElement, theme = 'fuego', seen = false;
+        try { theme = localStorage.getItem('kx-theme') || 'fuego'; seen = !!sessionStorage.getItem('kx-seen'); } catch (e) {}
         d.setAttribute('data-theme', theme === 'dark' || theme === 'fuego' ? theme : 'light');
         d.className += ' js' + (seen ? ' is-loaded' : ' has-loader');
         setTimeout(function () { d.classList.add('is-loaded'); }, 4500);

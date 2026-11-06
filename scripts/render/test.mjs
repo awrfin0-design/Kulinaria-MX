@@ -399,7 +399,8 @@ await page.evaluate(() => localStorage.clear());
 const themeOf = () => page.evaluate(() => document.documentElement.getAttribute('data-theme'));
 const bgOf = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
 await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(600);
-ok('light is the default theme', (await themeOf()) === 'light');
+ok('Fuego is the default theme', (await themeOf()) === 'fuego');
+await page.evaluate(() => localStorage.setItem('kx-theme', 'light')); await page.reload(); await page.waitForTimeout(600);
 const lightBg = await bgOf();
 await openMenu(); await page.click('#menu-overlay [data-theme-next]'); await page.waitForTimeout(500); await closeMenu(); await page.waitForTimeout(500);
 const darkBg = await bgOf();
@@ -480,9 +481,9 @@ const hh = await page.evaluate(async () => {
   const h1 = hero.querySelector('h1'), em = h1.querySelector('em');
   return { square: Math.abs(st.width - st.height) < 3, fit: getComputedStyle(v).objectFit, stageRightOfCopy: st.left >= cp.right - 4, within: st.top >= 0 && st.bottom <= innerHeight + 2, h1Font: getComputedStyle(h1).fontFamily, emFont: getComputedStyle(em).fontFamily, arrow: !!hero.querySelector('.arrow-link .arrow-link__c'), nav: !!document.querySelector('.site-nav'), bg: getComputedStyle(hero).backgroundColor, src: !!v.getAttribute('data-video-src') && /video-hero-intro/.test(v.getAttribute('data-video-src') || '') };
 });
-ok('hero: the brand intro video is a square shown whole (contain, never cropped) to the right of the headline, on black', hh.square && hh.fit === 'contain' && hh.stageRightOfCopy && hh.within && hh.src && hh.bg === 'rgb(0, 0, 0)', JSON.stringify(hh));
-ok('hero: serif headline with brand-script phrase, circle-arrow CTA, no inline nav', /Alegreya/.test(hh.h1Font) && /Kaushan/.test(hh.emFont) && hh.arrow && !hh.nav, JSON.stringify(hh));
-ok('hero headline never overlaps the video (text column stays left of it)', await page.evaluate(() => document.querySelector('[data-page="home"] .hero__copy').getBoundingClientRect().right <= document.querySelector('[data-page="home"] .hero__stage').getBoundingClientRect().left + 4));
+ok('hero: the brand intro video is a square shown whole (contain), centred, big, with the text strip right under it, on black', hh.square && hh.fit === 'contain' && hh.within && hh.src && hh.bg === 'rgb(0, 0, 0)' && await page.evaluate(() => { const st = document.querySelector('[data-page="home"] .hero__stage').getBoundingClientRect(), cp = document.querySelector('[data-page="home"] .hero__copy').getBoundingClientRect(); return Math.abs((st.left + st.width / 2) - innerWidth / 2) < 8 && st.height >= innerHeight * 0.55 && cp.top >= st.top + st.height * 0.7; }), JSON.stringify(hh));
+ok('hero: serif headline with brand-script phrase, circle-arrow CTA, no inline nav', /Playfair/.test(hh.h1Font) && /Playfair/.test(hh.emFont) && hh.arrow && !hh.nav, JSON.stringify(hh));
+ok('hero: headline, sub and button sit under the video and the whole hero fits the first screen', await page.evaluate(() => { const c = document.querySelector('[data-page="home"] .hero__cta').getBoundingClientRect(); return c.bottom <= innerHeight; }));
 // 3D / pointer: hero photo drifts, dish tilt, coverflow, peek
 await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(500);
 await page.mouse.move(300, 300); await page.mouse.move(1300, 700, { steps: 6 }); await page.waitForTimeout(500);
@@ -705,7 +706,7 @@ const chap = await page.evaluate(() => {
 });
 ok('phone: there is no bottom tab bar (burger-only navigation)', !chap.tabs, JSON.stringify(chap));
 const heroPhone = await page.evaluate(() => { const hero = document.querySelector('[data-page="home"] .hero'), st = hero.querySelector('.hero__stage').getBoundingClientRect(), v = hero.querySelector('.hero__video--intro'), cp = hero.querySelector('.hero__copy').getBoundingClientRect(); return { stageW: Math.round(st.width), square: Math.abs(st.width - st.height) < 3, fit: getComputedStyle(v).objectFit, copyBelow: cp.top >= st.bottom - st.height * 0.12, h: Math.round(hero.getBoundingClientRect().height), vh: innerHeight }; }); heroPhone.h1lum = chap.h1lum;
-ok('phone: the intro video is shown whole and uncropped (full width square, headline and button underneath on black, no side crop)', heroPhone.stageW === 390 && heroPhone.square && heroPhone.fit === 'contain' && heroPhone.copyBelow && heroPhone.h <= heroPhone.vh + 60 && heroPhone.h1lum > 0.8, JSON.stringify(heroPhone));
+ok('phone: the intro video is full-bleed (full width), the headline and button sit in a strip right under it and the hero fits the screen', heroPhone.stageW === 390 && heroPhone.copyBelow && heroPhone.h <= heroPhone.vh + 60 && heroPhone.h1lum > 0.8, JSON.stringify(heroPhone));
 ok('phone: chapter 2 shows one dish per screen and you swipe sideways between dishes', chap.slideW === 390 && /x/.test(chap.swipe) && chap.slides >= 5, JSON.stringify(chap));
 ok('phone: chapter 3 ("Tu bloque") is a full-screen photo with the order button over it', chap.teaserH >= chap.vh - 2 && chap.teaserBg, JSON.stringify(chap));
 ok('the preview switches the body template class page by page (like Shopify)', await page.evaluate(() => { location.hash = '#/p/pollo-a-las-hierbas'; return new Promise((r) => setTimeout(() => r(document.body.classList.contains('template-product') && !document.body.classList.contains('template-index')), 300)); }));
@@ -1229,16 +1230,36 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.evaluate(() => { location.hash = '#/pg/pedido'; }); await page.reload(); await page.waitForTimeout(800);
   const how = await page.evaluate(() => { const d = document.querySelector('[data-page="pg/pedido"] [data-fn-how]'); return d ? { open: d.open, items: d.querySelectorAll('li').length, txt: d.textContent } : null; });
-  ok('plan step has a "how it works" tutorial (5 steps + worked example) that starts closed so the step still fits', !!how && how.open === false && how.items === 5 && /\$3,600|3,600/.test(how.txt) && /\$70/.test(how.txt) && /2 × \$70/.test(how.txt), JSON.stringify(how && how.items));
+  ok('plan step has a "how it works" tutorial (6 steps + worked example) that starts closed so the step still fits', !!how && how.open === false && how.items === 6 && /\$3,600|3,600/.test(how.txt) && /\$70/.test(how.txt) && /2 × \$70/.test(how.txt), JSON.stringify(how && how.items));
   await page.click('[data-page="pg/pedido"] [data-fn-how] summary'); await page.waitForTimeout(150);
   ok('the tutorial opens on tap', await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-how]').open));
   await page.click('[data-page="pg/pedido"] [data-fn-next]'); await page.waitForTimeout(600);
   await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-dish]:not(.is-hidden) [data-pick]').click()); await page.waitForTimeout(400);
+  ok('the pencil appears on a day with a dish and the tweak panel starts closed', await page.evaluate(() => { const e = document.querySelector('[data-page="pg/pedido"] [data-fn-day-edit="0"]'); const m = document.querySelector('[data-page="pg/pedido"] [data-fn-mods]'); return !!e && !e.hidden && m.hidden; }));
+  await page.click('[data-page="pg/pedido"] .fn-week [data-fn-day-edit="0"]'); await page.waitForTimeout(250);
   const mods = await page.evaluate(() => { const m = document.querySelector('[data-page="pg/pedido"] [data-fn-mods]'); return m && !m.hidden ? { chips: m.querySelectorAll('.chip').length, inp: !!m.querySelector('[data-fn-mods-note]'), warn: /alergia|allergy/i.test(m.textContent) } : null; });
   ok('after picking a dish, the day offers its ingredients to leave out, a free note and the allergy disclaimer', !!mods && mods.chips >= 1 && mods.inp && mods.warn, JSON.stringify(mods));
   await page.click('[data-page="pg/pedido"] [data-fn-mods] .chip'); await page.fill('[data-page="pg/pedido"] [data-fn-mods-note]', 'salsa aparte'); await page.waitForTimeout(150);
+  ok('the summary lists the dish ingredients and the tweak made', await page.evaluate(() => { const t = document.querySelector('[data-page="pg/pedido"] .funnel__list li .fn-s-ing'); return !!t && /salsa aparte/.test(t.textContent) && t.textContent.length > 20; }));
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('kulinaria_funnel')).mods[0]);
   ok('tweaks are saved with the day (ingredient off + note)', saved.off.length === 1 && saved.note === 'salsa aparte', JSON.stringify(saved));
+  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.removeItem('kulinaria_onboarded'); }); await page.goto(`${URL0}#/pg/cuenta-perfil`); await page.reload(); await page.waitForTimeout(500);
+  ok('profile page starts with the questionnaire banner until the onboarding is done', await page.evaluate(() => { const b = document.querySelector('[data-page="pg/cuenta-perfil"] [data-onb-banner]'); return !!b && !b.hidden && /bienvenida/.test(b.querySelector('a').getAttribute('href')); }));
+  await page.evaluate(() => localStorage.setItem('kulinaria_onboarded', '1')); await page.reload(); await page.waitForTimeout(400);
+  ok('the questionnaire banner disappears once the profile exists', await page.evaluate(() => document.querySelector('[data-page="pg/cuenta-perfil"] [data-onb-banner]').hidden));
+  await page.evaluate(() => localStorage.clear());
+  for (const [vw, vh] of [[1440, 900], [1280, 720], [390, 844]]) {
+    await page.setViewportSize({ width: vw, height: vh }); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(700);
+    const wv = await page.evaluate(() => { const f = document.querySelector('[data-page="home"] .welcome-video__frame'); const r = f && f.getBoundingClientRect(); const funnel = document.querySelector('[data-page="home"] [data-funnel]'); const fr = funnel && funnel.closest('.shopify-section').getBoundingClientRect(); return f ? { h: Math.round(r.height), vh: innerHeight, copy: /\S/.test(f.querySelector('.welcome-video__copy').textContent), hasVideo: !!f.querySelector('video'), funnelH: fr ? Math.round(fr.height) : 0 } : null; });
+    ok(`home welcome film @${vw}x${vh}: a framed player with a welcome text that fits inside one screen`, !!wv && wv.hasVideo && wv.copy && wv.h <= wv.vh, JSON.stringify(wv));
+    ok(`home order builder section fits one screen @${vw}x${vh}`, !!wv && wv.funnelH > 0 && wv.funnelH <= vh + 2, JSON.stringify(wv));
+  }
+  await page.setViewportSize({ width: 1280, height: 800 });
+  // a visitor who is not signed in never sees allergy warnings, even with an old profile stored in the browser
+  const G3 = URL0.replace('index.html', 'guest.html');
+  await page.goto(`${G3}#/home`); await page.evaluate(() => { localStorage.setItem('kulinaria_profile', JSON.stringify({ allergies: ['Frutos secos'], dislikes: [], diets: [] })); }); await page.goto(`${G3}#/p/salmon-costra-almendras`); await page.reload(); await page.waitForTimeout(500);
+  ok('guest: no allergy alert on the salmon page (warnings are only for signed-in, onboarded accounts)', await page.evaluate(() => { const d = document.querySelector('[data-page="p/salmon-costra-almendras"]'); return !!d && d.querySelector('[data-allergen-alert]').hidden; }));
+  await page.evaluate(() => localStorage.clear());
   await page.evaluate(() => localStorage.removeItem('kulinaria_funnel'));
 }
 
