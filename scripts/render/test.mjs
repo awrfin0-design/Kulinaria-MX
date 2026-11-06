@@ -152,7 +152,7 @@ ok('gift add shows confirmation', (await page.$$('.preview-toast')).length > 0);
   ok('pause: a customer without a plan is told there is nothing to pause and gets a link to build an order', await page.evaluate((m) => { const r = document.querySelector(m); return !r.querySelector('[data-mp-none]').hidden && r.querySelector('[data-mp-main]').hidden && !!r.querySelector('[data-mp-none] a[href*="pedido"]'); }, mp));
   await openPause({ 'kx-test-orders': '1', 'kx-lang': 'en' });
   ok('pause: English page is wholly English', await page.evaluate((m) => { const r = document.querySelector(m); return /Your deliveries are active/.test(r.querySelector('[data-mp-status]').textContent) && /Pause deliveries/.test(r.textContent) && !/Pausar|semanas/.test(r.textContent); }, mp));
-  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_ob_asked', '1'); }); await page.reload(); await page.waitForTimeout(300);
+  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_ob_asked', '1'); sessionStorage.setItem('kx-seen', '1'); }); await page.reload(); await page.waitForTimeout(300);
 }
 
 // ---- forms
