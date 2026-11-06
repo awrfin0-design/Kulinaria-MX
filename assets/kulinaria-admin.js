@@ -510,7 +510,7 @@
         }
         if (j.recipes && j.recipes.length) recipes = normalizeRecipes(j.recipes);
         S.loadErr = false;
-        S.data = { orders: attachWeeklies(j.orders || [], j.selections || [], cutoff), clients: j.clients || [], finance: j.finance || null, demo: false }; render();
+        S.data = { orders: attachWeeklies(j.orders || [], j.selections || [], cutoff), clients: j.clients || [], finance: j.finance || null, leads: Array.isArray(j.leads) ? j.leads : null, demo: false }; render();
       }, fail);
     }
     var saved = ''; try { saved = sessionStorage.getItem('kx-admin-key') || ''; } catch (e) {}
