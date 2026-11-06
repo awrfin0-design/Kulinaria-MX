@@ -1249,7 +1249,9 @@
         // dots under the row on the phone
         var dotsBox = document.createElement('div'); dotsBox.className = 'fn-rules__dots'; dotsBox.setAttribute('aria-hidden', 'true');
         if (rRail) { $$('.fn-rcard', rRail).forEach(function () { dotsBox.appendChild(document.createElement('i')); }); $('.fn-rules__carousel', holder).appendChild(dotsBox);
-          var paintDots = function () { var cards = $$('.fn-rcard', rRail), w = cards[0] ? cards[0].getBoundingClientRect().width + 12 : 1, k = Math.min(cards.length - 1, Math.round(rRail.scrollLeft / Math.max(1, w))); $$('i', dotsBox).forEach(function (d, n) { d.classList.toggle('on', n === k); }); };
+          var paintDots = function () { var cards = $$('.fn-rcard', rRail), w = cards[0] ? cards[0].getBoundingClientRect().width + 12 : 1, k = Math.min(cards.length - 1, Math.round(rRail.scrollLeft / Math.max(1, w))); $$('i', dotsBox).forEach(function (d, n) { d.classList.toggle('on', n === k); });
+            var pvA = $('[data-fn-rules-arrow="-1"]', holder), nxA = $('[data-fn-rules-arrow="1"]', holder);
+            if (pvA) pvA.style.visibility = rRail.scrollLeft < 8 ? 'hidden' : 'visible'; if (nxA) nxA.style.visibility = rRail.scrollLeft + rRail.clientWidth >= rRail.scrollWidth - 8 ? 'hidden' : 'visible'; };
           rRail.addEventListener('scroll', function () { window.requestAnimationFrame(paintDots); }, { passive: true }); paintDots();
           var finalCard = $('[data-fn-rules-final]', holder);
           if (finalCard && window.IntersectionObserver) new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting && e.intersectionRatio > 0.6 && st.step === 0) { rulesSeenEnd = true; rulesState(); } }); }, { root: rRail, threshold: [0.6, 1] }).observe(finalCard);
