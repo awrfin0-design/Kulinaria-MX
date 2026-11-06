@@ -207,6 +207,7 @@
 
   var STR = {
     es: { title: 'Panel de administración', demo: 'Datos de demostración. Conecta el Google Sheet (docs/admin.md) para ver los pedidos reales.', tabs: ['Resumen', 'Lista de compras', 'Recetas', 'Pedidos', 'Descuentos', 'Finanzas', 'Entregas'],
+      oMonthTitle: 'Pedidos del mes', oSee: 'ver detalle',
       eTitle: 'Entregas', eNone: 'Sin entregas este día.', eMeals: 'comidas', eStops: 'paradas', eTotal: 'Total del día', eWho: 'Para', eHolder: 'Cuenta', ePhone: 'Teléfono', eAddr: 'Dirección', eAllergy: 'Alergias', eDislike: 'No le gusta', eCook: 'Platillos a cocinar ese día', eDemo: 'Conecta el Google Sheet para ver las entregas reales.', eDays: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'], eAuto: 'repite la selección anterior', oWho: 'Cliente', oContact: 'Contacto', oPlanTxt: 'Plan', oWeekly: 'Qué pidió, semana por semana', oPaid: 'Pagado', oUnpaid: 'Pendiente de pago', oNoDish: '—', oPaused: 'Semanas en pausa', oFor: 'Para',
       fTitle: 'Finanzas del mes', fIn: 'Ingresos (pagados)', fPlans: 'Planes', fUp: 'Mejoras de platillo', fOther: 'Otros', fPend: 'Por cobrar', fOut: 'Gastos', fNet: 'Utilidad', fOrders: 'Ingresos por pedido', fNone: 'No hay movimientos en este mes.', fExp: 'Gastos del mes', fAdd: 'Registrar un gasto', fDate: 'Fecha', fConcept: 'Concepto', fCat: 'Categoría', fAmount: 'Monto (MXN)', fSave: 'Guardar gasto', fDel: 'Borrar', fType: 'Tipo', fPaid: 'Pagado', fTest: 'PRUEBA', fTools: 'Pedido de prueba', fToolsP: 'Crea un pedido ficticio y pagado (dos personas y una mejora) para ver cómo se llenan la hoja de Google y este panel. Se puede borrar después.', fMake: 'Crear pedido de prueba', fClear: 'Borrar pedidos de prueba', fMade: 'Pedido de prueba creado: ', fCleared: 'Pedidos de prueba borrados: ', fSaved: 'Gasto guardado.', fErrC: 'Escribe el concepto del gasto.', fErrA: 'Escribe un monto mayor a cero.', fNoData: 'Conecta el Google Sheet para ver las finanzas.', fCats: ['Ingredientes', 'Empaques', 'Nómina', 'Reparto', 'Marketing', 'Servicios', 'Otros'],
       dTitle: 'Generar código de descuento', dHelp: 'Crea un código y dile cuántas veces se puede usar en total. Shopify lo aplica en el pago y deja de aceptarlo cuando se agotan los usos.', dCode: 'Código', dGen: 'Sugerir código', dKind: 'Tipo', dPercent: 'Porcentaje (%)', dAmount: 'Monto fijo (MXN)', dValue: 'Valor', dUses: 'Usos en total', dEnds: 'Vence (opcional)', dCreate: 'Crear código', dList: 'Códigos creados', dUsed: 'Usos', dStatus: 'Estado', dOff: 'Desactivar', dNone: 'Aún no hay códigos.', dDemo: 'Conecta el Google Sheet (docs/setup-checklist.md) para crear códigos reales.', dOk: 'Código creado: ', dDone: 'Código desactivado.', dErrTok: 'Falta conectar Shopify: en el Apps Script agrega las propiedades SHOPIFY_STORE y SHOPIFY_TOKEN (ver docs/setup-checklist.md).', dErrCode: 'El código debe tener de 3 a 30 letras, números, guiones o guion bajo.', dErrVal: 'Escribe un valor válido (porcentaje de 1 a 100).', dErrUses: 'Escribe cuántas veces se puede usar (1 o más).', dErr: 'No se pudo completar: ', dActive: 'Activo', dExpired: 'Agotado o vencido', dScheduled: 'Programado', dUnlimited: '—',
@@ -218,6 +219,7 @@
       key: 'Contraseña de administración', keyHelp: 'Es la clave ADMIN_KEY que configuraste en el Apps Script.', enter: 'Entrar', badKey: 'Contraseña incorrecta.', loading: 'Cargando…', error: 'No se pudieron cargar los datos', lock: 'Cerrar sesión',
       noRecipes: 'Aún no hay recetas.', cooking: 'Para cocinar', buyList: 'Ver lista de compras', thisWeek: 'Esta semana', nextWeek: 'Próxima semana' },
     en: { title: 'Admin panel', demo: 'Demo data. Connect the Google Sheet (docs/admin.md) to see real orders.', tabs: ['Summary', 'Shopping list', 'Recipes', 'Orders', 'Discounts', 'Finance', 'Deliveries'],
+      oMonthTitle: 'Orders this month', oSee: 'see detail',
       eTitle: 'Deliveries', eNone: 'No deliveries this day.', eMeals: 'meals', eStops: 'stops', eTotal: 'Day total', eWho: 'For', eHolder: 'Account', ePhone: 'Phone', eAddr: 'Address', eAllergy: 'Allergies', eDislike: 'Dislikes', eCook: 'Dishes to cook that day', eDemo: 'Connect the Google Sheet to see the real deliveries.', eDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], eAuto: 'repeats the previous selection', oWho: 'Client', oContact: 'Contact', oPlanTxt: 'Plan', oWeekly: 'What they ordered, week by week', oPaid: 'Paid', oUnpaid: 'Payment pending', oNoDish: '—', oPaused: 'Paused weeks', oFor: 'For',
       fTitle: 'Finances this month', fIn: 'Income (paid)', fPlans: 'Plans', fUp: 'Dish upgrades', fOther: 'Other', fPend: 'To collect', fOut: 'Expenses', fNet: 'Profit', fOrders: 'Income by order', fNone: 'No movements this month.', fExp: 'Expenses this month', fAdd: 'Record an expense', fDate: 'Date', fConcept: 'Concept', fCat: 'Category', fAmount: 'Amount (MXN)', fSave: 'Save expense', fDel: 'Delete', fType: 'Type', fPaid: 'Paid', fTest: 'TEST', fTools: 'Test order', fToolsP: 'Creates a fictitious paid order (two people and an upgrade) so you can see how the Google Sheet and this panel fill in. You can delete it afterwards.', fMake: 'Create test order', fClear: 'Delete test orders', fMade: 'Test order created: ', fCleared: 'Test orders deleted: ', fSaved: 'Expense saved.', fErrC: 'Enter the expense concept.', fErrA: 'Enter an amount above zero.', fNoData: 'Connect the Google Sheet to see the finances.', fCats: ['Ingredients', 'Packaging', 'Payroll', 'Delivery', 'Marketing', 'Utilities', 'Other'],
       dTitle: 'Generate a discount code', dHelp: 'Create a code and say how many times it can be used in total. Shopify applies it at checkout and stops accepting it when the uses run out.', dCode: 'Code', dGen: 'Suggest a code', dKind: 'Type', dPercent: 'Percentage (%)', dAmount: 'Fixed amount (MXN)', dValue: 'Value', dUses: 'Total uses', dEnds: 'Expires (optional)', dCreate: 'Create code', dList: 'Codes created', dUsed: 'Uses', dStatus: 'Status', dOff: 'Deactivate', dNone: 'No codes yet.', dDemo: 'Connect the Google Sheet (docs/setup-checklist.md) to create real codes.', dOk: 'Code created: ', dDone: 'Code deactivated.', dErrTok: 'Shopify is not connected: add the SHOPIFY_STORE and SHOPIFY_TOKEN properties in the Apps Script (see docs/setup-checklist.md).', dErrCode: 'The code needs 3 to 30 letters, numbers, hyphens or underscores.', dErrVal: 'Enter a valid value (percentage from 1 to 100).', dErrUses: 'Enter how many times it can be used (1 or more).', dErr: 'Could not complete: ', dActive: 'Active', dExpired: 'Used up or expired', dScheduled: 'Scheduled', dUnlimited: '—',
@@ -238,7 +240,7 @@
     var endpoint = el.getAttribute('data-endpoint') || '';
     var recipes = normalizeRecipes(window.KX_RECIPES || { dishes: {} });
     var now = new Date();
-    var adminKey = '', S = { eday: '', fmsg: '', fbad: false, disc: null, discMsg: '', discBad: false, tab: 0, year: now.getFullYear(), month: now.getMonth(), mode: 'week', week: ymd(addDays(mondayOf(now), 7)), buffer: 5, data: null };
+    var adminKey = '', S = { showOrders: false, eday: '', fmsg: '', fbad: false, disc: null, discMsg: '', discBad: false, tab: 0, year: now.getFullYear(), month: now.getMonth(), mode: 'week', week: ymd(addDays(mondayOf(now), 7)), buffer: 5, data: null };
     try { var b = parseFloat(localStorage.getItem('kx-admin-buffer')); if (b >= 0 && b <= 50) S.buffer = b; } catch (e) {}
     var checksKey = function () { return 'kx-admin-checks:' + (S.mode === 'week' ? S.week : S.year + '-' + S.month); };
     var getChecks = function () { try { return JSON.parse(localStorage.getItem(checksKey()) || '{}'); } catch (e) { return {}; } };
@@ -255,8 +257,8 @@
       var wk = Object.keys(t.perWeek).sort(), wkMax = Math.max.apply(null, wk.map(function (k) { return t.perWeek[k]; }).concat([1]));
       return '<div class="adm-nav"><button data-m="-1" aria-label="‹">‹</button><b>' + esc(MONTHS[lang][S.month] + ' ' + S.year) + '</b><button data-m="1" aria-label="›">›</button></div>' +
         '<div class="adm-kpis">' +
-        kpi(T.orders, t.orders, 'orders') + kpi(T.blocks, t.blocks, 'blocks') + kpi(T.trials, t.trials, 'trials') + kpi(T.clients, t.newClients, 'clients') +
-        kpi(T.activeNow, activeBlocks(S.data.orders, cutoff, ymd(mondayOf(now))), 'active') + kpi(T.sales, money(t.revenue, lang), 'sales') + kpi(T.avg, money(t.avg, lang), 'avg') + '</div>' +
+        '<button type="button" class="adm-kpi adm-kpi--btn' + (S.showOrders ? ' is-on' : '') + '" data-kpi="orders" data-kpi-orders aria-expanded="' + !!S.showOrders + '"><span>' + esc(T.orders) + ' · ' + T.oSee + '</span><b>' + esc(t.orders) + '</b></button>' + kpi(T.blocks, t.blocks, 'blocks') + kpi(T.trials, t.trials, 'trials') + kpi(T.clients, t.newClients, 'clients') +
+        kpi(T.activeNow, activeBlocks(S.data.orders, cutoff, ymd(mondayOf(now))), 'active') + kpi(T.sales, money(t.revenue, lang), 'sales') + kpi(T.avg, money(t.avg, lang), 'avg') + '</div>' + (S.showOrders ? monthOrders() : '') +
         '<div class="adm-grid"><section class="adm-card"><h3>' + T.mix + '</h3><div class="adm-bar"><i style="width:' + pb + '%"></i></div><p class="adm-muted">' + t.blocks + ' ' + esc(T.blocks.toLowerCase()) + ' · ' + t.trials + ' ' + esc(T.trials.toLowerCase()) + '</p>' +
         '<h3>' + T.perWeek + '</h3><div class="adm-spark">' + wk.map(function (k) { return '<span title="' + esc(weekLabel(k)) + '"><i style="height:' + Math.round((t.perWeek[k] / wkMax) * 100) + '%"></i><em>' + t.perWeek[k] + '</em></span>'; }).join('') + '</div></section>' +
         '<section class="adm-card"><h3>' + T.top + '</h3>' + (t.top.length ? t.top.slice(0, 8).map(function (d) { return '<div class="adm-row"><span>' + esc(d.title) + '</span><b>' + d.n + '</b><div class="adm-bar sm"><i style="width:' + Math.round((d.n / topMax) * 100) + '%"></i></div></div>'; }).join('') : '<p class="adm-muted">' + T.none + '</p>') + '</section>' +
@@ -292,8 +294,7 @@
         return '<section class="adm-card"><h3>' + esc(r.title) + ' <small>' + Math.round(grams) + ' g/ml ' + T.per + '</small></h3><table><tbody>' + r.ing.map(function (g) { return '<tr><td>' + esc(g.name) + '</td><td>' + esc(g.qty) + ' ' + esc(g.unit === 'u' ? 'pz' : g.unit) + '</td><td class="adm-muted">' + (g.waste ? T.waste + ' ' + g.waste + '%' : '') + '</td></tr>'; }).join('') + '</tbody></table></section>';
       }).join('') + '</div>';
     }
-    function viewOrders() {
-      var rows = S.data.orders.slice(0, 200);
+    function orderCards(rows) {
       if (!rows.length) return '<p class="adm-empty">' + T.none + '</p>';
       var dn = T.eDays;
       var weeks = function (o) {
@@ -315,6 +316,11 @@
           '<details' + (rows.indexOf(o) === 0 ? ' open' : '') + '><summary>' + T.oWeekly + '</summary>' + weeks(o) + '</details></article>';
       }).join('') + '</div>';
     }
+    function viewOrders() { return orderCards(S.data.orders.slice(0, 200)); }
+    var monthOrders = function () {
+      var key = S.year + '-' + String(S.month + 1).padStart(2, '0'), rows = S.data.orders.filter(function (o) { return String(o.date).slice(0, 7) === key; });
+      return '<section class="adm-card" data-month-orders><h3>' + T.oMonthTitle + ' · ' + esc(MONTHS[lang][S.month] + ' ' + S.year) + ' <small>' + rows.length + '</small></h3>' + orderCards(rows) + '</section>';
+    };
 
     function viewDiscounts() {
       var f = '<section class="adm-card"><h3>' + T.dTitle + '</h3><p class="adm-muted">' + T.dHelp + '</p>' +
@@ -397,6 +403,7 @@
       var t = e.target.closest('button'); if (!t) return;
       if (t.hasAttribute('data-tab')) { S.tab = +t.getAttribute('data-tab'); render(); if (S.tab === 4 && S.disc === null) dLoad(); return; }
       if (t.hasAttribute('data-dgen')) { var cf = el.querySelector('[data-discform] [name=code]'), w = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', c2 = 'KUL'; for (var gi = 0; gi < 5; gi++) c2 += w.charAt(Math.floor(Math.random() * w.length)); cf.value = c2; return; }
+      if (t.hasAttribute('data-kpi-orders')) { S.showOrders = !S.showOrders; render(); return; }
       if (t.hasAttribute('data-eday')) { S.eday = t.getAttribute('data-eday'); render(); return; }
       if (t.hasAttribute('data-expdel')) { fCall({ action: 'expense_del', id: t.getAttribute('data-expdel') }, function (j) { if (j.ok) S.data.finance.expenses = j.expenses; S.fmsg = j.ok ? '' : String(j.error); S.fbad = !j.ok; render(); }); return; }
       if (t.hasAttribute('data-sample')) {

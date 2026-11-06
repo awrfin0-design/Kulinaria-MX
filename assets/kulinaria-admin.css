@@ -84,3 +84,7 @@
 .adm-orders{display:flex;flex-direction:column;gap:12px}.adm-order header{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin-bottom:6px}.adm-order__who{font-size:1.2rem}.adm-order__meta{color:var(--text-muted);font-size:.85rem}
 .adm-order__c{margin:3px 0}.adm-order summary{cursor:pointer;margin:8px 0;font-weight:700}
 .adm-wk{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.adm-wk li{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-size:.9rem}.adm-wk em{font-style:normal;font-weight:700;min-width:54px}.adm-wk span b{color:var(--accent);margin-right:4px}
+
+.adm-kpi--btn{text-align:left;cursor:pointer;font:inherit;color:inherit;transition:border-color .2s,background .2s}
+.adm-kpi--btn:hover,.adm-kpi--btn.is-on{border-color:var(--accent);background:var(--accent-wash)}
+[data-month-orders]{margin:0 0 18px}
