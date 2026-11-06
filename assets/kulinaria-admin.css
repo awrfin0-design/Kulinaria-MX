@@ -92,3 +92,6 @@
 /* KPI tiles: labels reserve two lines so every number lines up */
 .adm-kpi{display:flex;flex-direction:column;justify-content:space-between}
 .adm-kpi span{min-height:2.5em}
+
+.adm-btn:disabled{opacity:.55;cursor:wait}
+[data-tools-msg]{margin:10px 0 0}
