@@ -977,7 +977,7 @@ ok('new account: right after signing in the customer lands on the questionnaire'
 await page.goto(`${URL0}#/menu`); await page.waitForTimeout(500);
 ok('new account: it asks only once per visit (they can look around if they skip it)', !page.url().includes('bienvenida'), page.url());
 // an existing paying customer is never interrupted
-await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-test-orders', '2'); localStorage.setItem('kulinaria_onboarded', '1'); });
+await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.removeItem('kx-test-fresh'); localStorage.setItem('kx-test-orders', '2'); localStorage.setItem('kulinaria_onboarded', '1'); });
 await page.goto(`${URL0}#/menu`); await page.reload(); await page.waitForTimeout(4200);
 ok('existing customer: no questionnaire, they browse normally', !page.url().includes('bienvenida'), page.url());
 await page.goto(`${URL0}#/pg/bienvenida`); await page.waitForTimeout(900);
