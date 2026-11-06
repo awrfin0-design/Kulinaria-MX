@@ -2,7 +2,7 @@
 import { createRequire } from 'node:module';
 const { chromium } = createRequire(import.meta.url)('playwright');
 const b = await chromium.launch();
-for (const [name, vp, mob] of [['d', { width: 1430, height: 650 }, false], ['p', { width: 390, height: 800 }, true]]) {
+for (const [name, vp, mob] of [['d', { width: 1280, height: 800 }, false]]) {
   const ctx = await b.newContext({ viewport: vp, hasTouch: mob, isMobile: mob, deviceScaleFactor: mob ? 2 : 1 });
   await ctx.addInitScript(() => { sessionStorage.setItem('kx-seen', '1'); sessionStorage.setItem('kx_newplan', '1'); sessionStorage.setItem('kx_ob_asked', '1'); try { localStorage.setItem('kx-test-orders', '0'); } catch (e) {} });
   const page = await ctx.newPage();

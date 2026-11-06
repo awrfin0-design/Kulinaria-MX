@@ -694,6 +694,7 @@
     "ret_new": "Quiero comprar un plan nuevo",
     "ret_hint": "Tu plan ya está pagado: solo eliges tus 5 platillos de la semana, con tus notas, y listo.",
     "rules_final_t": "Último paso: confírmalo",
+    "locked": "Completa el paso anterior para continuar.",
     "rec_title": "Cómo se cobra",
     "rec_auto": "El plan de 4 semanas se paga por adelantado en un solo cargo y se renueva automáticamente cada 4 semanas con el mismo método de pago, hasta que lo canceles o pauses desde tu cuenta (antes del cierre del sábado 10:00).",
     "rec_manual": "El plan de 4 semanas se paga por adelantado en un solo cargo. Al terminar tus 4 semanas te avisamos para renovar: no se hace ningún cargo sin tu confirmación.",

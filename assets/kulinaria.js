@@ -1052,10 +1052,16 @@
       try { var saved = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (saved && saved.v === 2) { st = Object.assign(st, saved); st.tier = 'selecto'; st.remembered = !!(saved.info && (saved.info.name || saved.info.email)); } } catch (e) {}
       if (st.cat && st.cat !== 'all' && st.cat !== 'seasonal' && !GROUPS[st.cat]) st.cat = 'all';
       var RULES_KEY = 'kx-rules-ok';
+      st.rulesOk = false;                                         // read from its own key only (never from the saved selection)
       try { if (localStorage.getItem(RULES_KEY)) st.rulesOk = true; } catch (e) {}
       st.sv = 4;
       var startAtPlan = false; try { startAtPlan = location.protocol === 'file:' && !!sessionStorage.getItem('kx-test-start') && !!st.rulesOk; } catch (e) {}   // local preview only (test hook)
       st.step = startAtPlan ? 1 : 0;
+      var REACH_KEY = 'kx_reach';
+      st.reach = 0; try { st.reach = parseInt(sessionStorage.getItem(REACH_KEY), 10) || 0; } catch (e) {}
+      st.planChosen = st.reach >= 2;
+      if (startAtPlan) { st.reach = 3; st.planChosen = true; }                          // local preview only (test hook)
+      var setReach = function (n) { if (n > st.reach) { st.reach = n; try { sessionStorage.setItem(REACH_KEY, String(n)); } catch (e) {} } };
       var T_ = function (k) { return holder.getAttribute('data-t-' + k) || ''; };
       var steps = $$('[data-fn-step]', holder), dots = $$('[data-fn-dot]', holder), bar = $('[data-fn-bar]', holder);
       var next = $('[data-fn-next]', holder), prev = $('[data-fn-prev]', holder), finish = $('[data-fn-finish]', holder), err = $('[data-fn-error]', holder);
@@ -1096,11 +1102,11 @@
           var ing = (d.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean), c0 = cardNote(pid);
           ing.forEach(function (name) {
             var b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = fill(T_('mods-without'), { i: name }); b.setAttribute('aria-pressed', c0.off.indexOf(name) > -1 ? 'true' : 'false');
-            b.addEventListener('click', function () { var c = cardNote(pid), k = c.off.indexOf(name); if (k > -1) c.off.splice(k, 1); else c.off.push(name); b.setAttribute('aria-pressed', k > -1 ? 'false' : 'true'); if (st.days[st.active] === pid) syncCardToDay(pid, st.active); persist(); });
+            b.addEventListener('click', function () { var c = cardNote(pid), k = c.off.indexOf(name); if (k > -1) c.off.splice(k, 1); else c.off.push(name); b.setAttribute('aria-pressed', k > -1 ? 'false' : 'true'); if (st.days[st.active] === pid) syncCardToDay(pid, st.active); persist(); render(); });
             chips.appendChild(b);
           });
           inp.value = c0.note || '';
-          inp.addEventListener('input', function () { cardNote(pid).note = inp.value; if (st.days[st.active] === pid) syncCardToDay(pid, st.active); persist(); });
+          inp.addEventListener('input', function () { cardNote(pid).note = inp.value; if (st.days[st.active] === pid) syncCardToDay(pid, st.active); persist(); render(); });
           t.addEventListener('click', function (e) { e.stopPropagation(); pane.hidden = !pane.hidden; box.classList.toggle('is-open', !pane.hidden); });
           box.addEventListener('click', function (e) { e.stopPropagation(); });
         });
@@ -1122,14 +1128,14 @@
           var chips = document.createElement('div'); chips.className = 'fn-mods__chips';
           ing.forEach(function (name) {
             var b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = name; b.setAttribute('aria-pressed', m.off.indexOf(name) > -1 ? 'true' : 'false');
-            b.addEventListener('click', function () { var k = m.off.indexOf(name); if (k > -1) m.off.splice(k, 1); else m.off.push(name); b.setAttribute('aria-pressed', k > -1 ? 'false' : 'true'); persist(); });
+            b.addEventListener('click', function () { var k = m.off.indexOf(name); if (k > -1) m.off.splice(k, 1); else m.off.push(name); b.setAttribute('aria-pressed', k > -1 ? 'false' : 'true'); persist(); render(); });
             chips.appendChild(b);
           });
           box.appendChild(chips);
         }
         var lb = document.createElement('label'); lb.className = 'fn-mods__note'; var sp = document.createElement('span'); sp.textContent = T_('mods-note'); lb.appendChild(sp);
         var inp = document.createElement('input'); inp.type = 'text'; inp.className = 'input'; inp.maxLength = 140; inp.value = m.note || ''; inp.placeholder = T_('mods-ph'); inp.setAttribute('data-fn-mods-note', '');
-        inp.addEventListener('input', function () { m.note = inp.value; persist(); }); lb.appendChild(inp); box.appendChild(lb);
+        inp.addEventListener('input', function () { m.note = inp.value; persist(); render(); }); lb.appendChild(inp); box.appendChild(lb);
         var w = document.createElement('p'); w.className = 'fn-mods__w'; w.textContent = T_('mods-warn'); box.appendChild(w);
         var dn = document.createElement('button'); dn.type = 'button'; dn.className = 'btn btn--outline btn--sm'; dn.textContent = T_('mods-done'); dn.addEventListener('click', function () { modsOpen = -1; render(); }); box.appendChild(dn);
       };
@@ -1216,6 +1222,7 @@
       var startTour = function (force) {
         if (tourEl) return;
         if (!force) { try { if (localStorage.getItem(TOUR_KEY)) return; } catch (x) {} if (navigator.webdriver) return; }
+        if (st.reach < 3) return;
         st.step = 3; persist(); render();
         tourI = 0; tourEl = document.createElement('div'); tourEl.className = 'fn-tour';
         tourEl.innerHTML = '<div class="fn-tour__spot"></div><div class="fn-tour__bubble" role="dialog" aria-live="polite"><p class="fn-tour__text"></p><div class="fn-tour__row"><span class="fn-tour__count"></span><button type="button" class="fn-tour__skip"></button><button type="button" class="btn btn--gold btn--sm fn-tour__next"></button></div></div>';
@@ -1257,7 +1264,7 @@
           if (finalCard && window.IntersectionObserver) new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting && e.intersectionRatio > 0.6 && st.step === 0) { rulesSeenEnd = true; rulesState(); } }); }, { root: rRail, threshold: [0.6, 1] }).observe(finalCard);
         }
         if (rChk) rChk.addEventListener('change', rulesState);
-        if (rBtn) rBtn.addEventListener('click', function () { st.rulesOk = true; try { localStorage.setItem(RULES_KEY, '1'); } catch (x) {} persist(); go(1); });
+        if (rBtn) rBtn.addEventListener('click', function () { st.rulesOk = true; try { localStorage.setItem(RULES_KEY, '1'); } catch (x) {} setReach(1); persist(); go(1); });
       }
       var fixTopGap = function () {
         try {
@@ -1342,11 +1349,11 @@
         if (st.step === 3 && !tourArmed) { tourArmed = true; window.setTimeout(function () { startTour(false); }, 600); }
         // stepper
         steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
-        dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); });
+        dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); d.classList.toggle('is-locked', k > st.reach); d.setAttribute('aria-disabled', k > st.reach ? 'true' : 'false'); });
         if (bar) bar.style.transform = 'scaleX(' + ((st.step + 1) / steps.length) + ')';
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
-        if (next) { next.hidden = last; next.disabled = false; }
+        if (next) { next.hidden = last; next.disabled = (st.step === 1 && !st.planChosen); }
         var phoneUi = window.matchMedia && window.matchMedia('(max-width:760px)').matches, bp = $('[data-fn-barpick]', holder), deckMode = !!(bp && phoneUi && st.step === 3 && n < MEALS);
         if (bp) { bp.hidden = !deckMode; if (deckMode) bp.textContent = fill(T_('pick-day'), { d: dayLabel(st.active) }); }
         holder.classList.toggle('is-deck', deckMode);
@@ -1357,7 +1364,7 @@
       // the page keeps scrolling normally; changing step brings the top of the funnel back into view if needed
       var top = $('.funnel__top', holder);
       var go = function (n) {
-        n = Math.max(0, Math.min(steps.length - 1, n)); if (!st.rulesOk && n > 0) n = 0; var moved = n !== st.step; st.step = n; say(''); persist(); render();
+        n = Math.max(0, Math.min(steps.length - 1, n)); if (n > st.reach) { say(T_('locked')); return; } var moved = n !== st.step; st.step = n; say(''); persist(); render();
         if (moved && top) {
           var r = top.getBoundingClientRect(), hdr = (parseFloat(getComputedStyle(root).getPropertyValue('--hdr')) || 72) + 8;
           if (r.top < hdr || r.top > window.innerHeight * 0.5) window.scrollTo({ top: r.top + window.scrollY - hdr, behavior: REDUCE ? 'auto' : 'smooth' });
@@ -1365,7 +1372,7 @@
       };
 
       // choices
-      $$('[data-plan-choice]', holder).forEach(function (b) { b.addEventListener('click', function () { st.plan = b.getAttribute('data-plan-choice'); persist(); render(); setTimeout(function () { go(2); }, REDUCE ? 0 : 280); }); });
+      $$('[data-plan-choice]', holder).forEach(function (b) { b.addEventListener('click', function () { st.plan = b.getAttribute('data-plan-choice'); st.planChosen = true; setReach(2); persist(); render(); setTimeout(function () { go(2); }, REDUCE ? 0 : 280); }); });
       tierBtns.forEach(function (b) {
         b.addEventListener('click', function () {
           var t = b.getAttribute('data-tier-choice');
@@ -1383,14 +1390,14 @@
         var xb = e.target.closest ? e.target.closest('[data-fn-day-x]') : null;
         if (xb) { var xi = +xb.getAttribute('data-fn-day-x'); st.days[xi] = ''; st.active = xi; say(''); persist(); render(); return; }
         var eb = e.target.closest ? e.target.closest('[data-fn-day-edit]') : null;
-        if (eb) { var ei = +eb.getAttribute('data-fn-day-edit'); st.active = ei; modsOpen = modsOpen === ei ? -1 : ei; modsKey = ''; st.step = 3; persist(); render(); return; }
+        if (eb) { var ei = +eb.getAttribute('data-fn-day-edit'); st.active = ei; modsOpen = modsOpen === ei ? -1 : ei; modsKey = ''; if (st.reach >= 3) st.step = 3; persist(); render(); return; }
         var db = e.target.closest ? e.target.closest('[data-fn-day-btn]') : null;
         if (db) { st.active = +db.getAttribute('data-fn-day-btn'); persist(); render(); return; }
         if (e.target.closest && e.target.closest('[data-fn-how-open]')) { go(0); return; }
         var seb = e.target.closest ? e.target.closest('[data-fn-season]') : null;
         if (seb) { var sv = seb.getAttribute('data-fn-season'); holder.setAttribute('data-season', sv); $$('[data-fn-season]', holder).forEach(function (x) { x.setAttribute('aria-pressed', String(x === seb)); x.classList.toggle('is-on', x === seb); }); var scg = $('[data-fn-sc-grid]', holder); if (scg) scg.scrollLeft = 0; return; }
         if (e.target.closest && e.target.closest('[data-fn-newplan]')) { try { sessionStorage.setItem('kx_newplan', '1'); } catch (x) {} holder.classList.remove('is-returning'); var rr = $('[data-fn-returning]', holder); if (rr) rr.hidden = true; return; }
-        if (e.target.closest && e.target.closest('[data-fn-sc-next]')) { go(3); return; }
+        if (e.target.closest && e.target.closest('[data-fn-sc-next]')) { setReach(3); go(3); return; }
         if (e.target.closest && e.target.closest('[data-fn-prev-sc]')) { go(1); return; }
         if (e.target.closest && e.target.closest('[data-fn-tour-open]')) { startTour(true); return; }
         var sa = e.target.closest ? e.target.closest('[data-fn-sc-arrow]') : null;
@@ -1425,7 +1432,8 @@
       if (ref) { var rs = ''; try { rs = localStorage.getItem('kulinaria_ref') || ''; } catch (e) {} if (rs) ref.value = rs; }
 
       if (next) next.addEventListener('click', function () {
-        go(st.step + 1);
+        if (st.step === 1 && !st.planChosen) { say(T_('locked')); return; }
+        setReach(st.step + 1); go(st.step + 1);
       });
       if (prev) prev.addEventListener('click', function () { go(st.step - 1); });
       dots.forEach(function (d, k) { d.setAttribute('role', 'button'); d.tabIndex = 0; d.addEventListener('click', function () { go(k); }); d.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(k); } }); });
@@ -1435,7 +1443,7 @@
         var q = (location.search + '&' + (location.hash.split('?')[1] || '')).match(/[?&]dish=([\w-]+)/);
         if (q) {
           var pre = dishes.filter(function (d) { return d.getAttribute('data-handle') === q[1]; })[0];
-          if (pre) { st.days = blankDays(); st.days[0] = pre.getAttribute('data-pid'); st.active = 1; if (daysBox) daysBox.removeAttribute('data-built'); st.step = 3; persist(); }
+          if (pre) { st.days = blankDays(); st.days[0] = pre.getAttribute('data-pid'); st.active = 1; if (daysBox) daysBox.removeAttribute('data-built'); if (st.reach >= 3) st.step = 3; persist(); }
         }
       } catch (e) {}
 
@@ -1524,7 +1532,7 @@
       // ?plan=block / ?plan=week (from the "Get started" buttons of the plans page): the plan is already chosen, go straight to the meals
       try {
         var qs0 = location.search || (location.hash.indexOf('?') > -1 ? location.hash.slice(location.hash.indexOf('?')) : ''), qp = new URLSearchParams(qs0).get('plan');
-        if ((qp === 'block' || qp === 'week') && !holder.classList.contains('funnel--teaser')) { var pb = $('[data-plan-choice="' + qp + '"]', holder); if (pb) pb.click(); }
+        if ((qp === 'block' || qp === 'week') && !holder.classList.contains('funnel--teaser')) { var pb = $('[data-plan-choice="' + qp + '"]', holder); if (pb) { st.plan = qp; st.planChosen = true; if (st.reach >= 1) pb.click(); else { persist(); render(); } } }
       } catch (e0) {}
       setTimeout(arrows, 60); holder.addEventListener('click', function () { setTimeout(arrows, 80); });
       var rollKey = dateOf(0);

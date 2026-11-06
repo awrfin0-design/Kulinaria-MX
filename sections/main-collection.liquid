@@ -19,7 +19,7 @@
     {%- elsif layout == 'menu' -%}
       <div class="menu-shell" data-filters>
         {%- assign seasonal_coll = collections['temporada'] -%}
-        {%- if seasonal_coll.products_count > 0 -%}
+        {%- if seasonal_coll.products.size > 0 -%}
           <div class="season-toggle" role="group" aria-label="{{ 'season.aria' | t }}">
             <button class="season-pill" type="button" data-filter="season" data-value="week" aria-pressed="true">{{ 'season.week' | t }}</button>
             <button class="season-pill season-pill--s" type="button" data-filter="season" data-value="season" aria-pressed="false">&#10022; {{ 'season.season' | t }} <small>{{ 'season.limited' | t }}</small></button>

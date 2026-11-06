@@ -3029,3 +3029,12 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
   .fn-rules__end .btn{width:100%}
   .fn-rules__hint{order:-1}
 }
+
+/* =====================================================================
+   v66 — progressive steps: later steps look locked until the one before is complete; air under the builder on a phone
+   ===================================================================== */
+.steps__nav li.is-locked{opacity:.42;cursor:not-allowed}
+@media (max-width:760px){
+  body .funnel:not(.funnel--teaser){padding-bottom:34px}
+  .fn-rules__dots{padding-bottom:10px}
+}
