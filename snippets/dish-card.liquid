@@ -21,7 +21,7 @@
 -%}
 {%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}{%- capture tx_pdesc -%}{% render 'tx', s: card_src %}{%- endcapture -%}
 {%- assign card_text = tx_pdesc | strip_html | truncate: 90 -%}
-<article class="dish" data-dish
+<article class="dish" data-dish data-has-detail
   data-category="{{ category }}" data-tier="{{ tier }}"
   data-diets="{{ diets }}" data-allergens="{{ allergens | escape }}" data-ingredients="{{ ingredients | escape }}">
   <a class="dish__media surface-walnut" data-tilt-card href="{{ product.url }}" aria-label="{{ tx_ptitle | escape }}">
@@ -50,6 +50,7 @@
       <a class="dish__go" href="{{ product.url }}" aria-label="{{ 'dish.view_of' | t }} {{ tx_ptitle | escape }}">→</a>
     </div>
   </div>
+  {% render 'dish-detail', product: product %}
   <div class="dish__blocked" role="note"><div><strong>{{ 'dish.blocked_title' | t }}</strong>{{ 'dish.blocked_text' | t }}</div></div>
 </article>
 {%- endif -%}

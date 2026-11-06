@@ -30,7 +30,7 @@
         <p class="plan-card__price gold-text">{{ 'plans.from' | t }}{% render 'plan-price', tier: 'selecto', kind: 'block', money: true %}<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> {{ 'plans.per_block' | t }}</small></p>
         <p class="text-muted">{{ tx_s_block_desc }}</p>
         <ul class="plan-list">{%- for f in block_features -%}{%- if f != blank -%}<li>{{ f }}</li>{%- endif -%}{%- endfor -%}</ul>
-        <a class="btn btn--gold btn--block" style="margin-top:auto" href="{{ section.settings.block_product.url | default: settings.plans_url | default: '/pages/planes' }}">{{ tx_s_block_cta }}</a>
+        <a class="btn btn--gold btn--block" style="margin-top:auto" href="/pages/pedido?plan=block">{{ tx_s_block_cta }}</a>
       </article>
 
       <article class="card plan-card">
@@ -38,7 +38,7 @@
         <p class="plan-card__price">{{ 'plans.from' | t }}{% render 'plan-price', tier: 'selecto', kind: 'week', money: true %}<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> {{ 'plans.per_week' | t }}</small></p>
         <p class="text-muted">{{ tx_s_trial_desc }} <strong style="color:var(--accent)">{{ 'plans.week_note' | t }}</strong></p>
         <ul class="plan-list">{%- for f in trial_features -%}{%- if f != blank -%}<li>{{ f }}</li>{%- endif -%}{%- endfor -%}</ul>
-        <a class="btn btn--outline btn--block" style="margin-top:auto" href="{{ section.settings.trial_product.url | default: settings.plans_url | default: '/pages/planes' }}">{{ tx_s_trial_cta }}</a>
+        <a class="btn btn--outline btn--block" style="margin-top:auto" href="/pages/pedido?plan=week">{{ tx_s_trial_cta }}</a>
       </article>
     </div>
   </div>

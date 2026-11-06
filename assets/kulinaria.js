@@ -553,6 +553,35 @@
         location.reload();
       }).catch(function () { guardOnboarding(); });
   }
+  /* ---------- dish detail panel: clicking a dish card opens the full breakdown (photo, description, nutrition, ingredients, allergens) in a side panel ---------- */
+  function initDishPanel() {
+    var panel = $('[data-dish-panel]'); if (!panel) return;
+    var content = $('[data-dp-content]', panel), pick = $('[data-dp-pick]', panel), full = $('[data-dp-full]', panel), sheet = $('.dish-panel__sheet', panel), last = null, current = null, timer = 0;
+    var open = function (card) {
+      var det = $('[data-dish-detail]', card); if (!det) return;
+      content.innerHTML = det.innerHTML; full.setAttribute('href', det.getAttribute('data-url') || '#'); sheet.setAttribute('aria-label', det.getAttribute('data-title') || '');
+      current = card; var btn = $('[data-pick]', card); pick.hidden = !(card.hasAttribute('data-fn-dish') && btn && !card.classList.contains('is-blocked'));
+      last = document.activeElement; clearTimeout(timer); panel.hidden = false; document.documentElement.classList.add('has-dish-panel');
+      content.scrollTop = 0; sheet.scrollTop = 0;
+      requestAnimationFrame(function () { requestAnimationFrame(function () { panel.classList.add('is-open'); }); }); sheet.focus({ preventScroll: true });
+    };
+    var close = function () {
+      if (panel.hidden) return; panel.classList.remove('is-open'); document.documentElement.classList.remove('has-dish-panel');
+      timer = setTimeout(function () { panel.hidden = true; content.innerHTML = ''; }, REDUCE ? 0 : 320);
+      if (last && last.focus) { try { last.focus({ preventScroll: true }); } catch (e) {} }
+    };
+    document.addEventListener('click', function (e) {
+      var t = e.target; if (!t || !t.closest) return;
+      if (t.closest('[data-dp-close]')) { close(); return; }
+      if (t.closest('[data-dp-pick]')) { var b = current && $('[data-pick]', current); close(); if (b) b.click(); return; }
+      if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+      var hit = t.closest('.dish__media, .dish__title a, .dish__go, .fn-dish__media, .fn-dish__title'); if (!hit || t.closest('[data-pick], button')) return;
+      var card = hit.closest('[data-has-detail]'); if (!card) return;
+      e.preventDefault(); open(card);
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) close(); });
+  }
+
   /* ---------- plan credits: weeks left, meals planned and which weeks can still be chosen (asked from the Sheet; signed-in customers only) ---------- */
   function mxIso(d) { try { return new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d); } catch (e) { return ''; } }
   function firstOpenOffset() { var n = mxNow(), d = ((1 - n.dow + 7) % 7) || 7; if (n.dow === 0 || (n.dow === 6 && n.minutes >= cutoffMin)) d += 7; return d; }
@@ -1011,8 +1040,8 @@
         var lnk = function (sel) { var a = $(sel, holder); return a && a.getAttribute('href'); };
         var onb = false; try { onb = !!localStorage.getItem(ONB_KEY); } catch (x) {}
         var i = st.info || {}, tb = tierEl();
-        if (!ce) { window.location.href = lnk('[data-fn-login]') || '/account/login'; return; }
-        if (ordersCount() === 0 && (!onb || !i.name || !i.email || !i.phone)) { window.location.href = lnk('[data-fn-onb]') || '/pages/bienvenida'; return; }
+        var guest = !ce;   // signed out: the order is built and put in the cart, then sign-in brings the visitor back to the cart
+        if (!guest && ordersCount() === 0 && (!onb || !i.name || !i.email || !i.phone)) { window.location.href = lnk('[data-fn-onb]') || '/pages/bienvenida'; return; }
         i = { name: i.name || cn || '', email: i.email || ce || '', phone: i.phone || '', street: i.street, cluster: i.cluster, zip: i.zip, allergy_other: i.allergy_other, dislikes: i.dislikes };
         var p = loadProfile(), warned = [];
         st.days.forEach(function (pid) { var d = byPid(pid), t = d && d.getAttribute('data-title'); if (d && d.classList.contains('is-warned') && warned.indexOf(t) < 0) warned.push(t); });
@@ -1036,7 +1065,7 @@
           var vid = parseInt(holder.getAttribute('data-upv-' + lvl), 10);
           if (names.length && vid) { var up = {}; up[T_('prop-upgrade')] = names.join(', '); lines.push({ id: vid, quantity: names.length, properties: up }); }
         }
-        var go2 = function () { window.location.href = finish.getAttribute('href'); };
+        var go2 = function () { window.location.href = guest ? (lnk('[data-fn-login]') || '/account/login').replace(/(return_url|return_to)=[^&]*/g, '$1=' + encodeURIComponent(finish.getAttribute('href') || '/cart')) : finish.getAttribute('href'); };
         fetch('/cart/clear.js', { method: 'POST' })
           .then(function () { return fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ attributes: attrs }) }); })
           .then(function () { return fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: lines }) }); })
@@ -1054,6 +1083,11 @@
       if (gridEl) { gridEl.addEventListener('scroll', arrows, { passive: true }); window.addEventListener('resize', arrows); }
       applyProfile();
       render();
+      // ?plan=block / ?plan=week (from the "Get started" buttons of the plans page): the plan is already chosen, go straight to the meals
+      try {
+        var qs0 = location.search || (location.hash.indexOf('?') > -1 ? location.hash.slice(location.hash.indexOf('?')) : ''), qp = new URLSearchParams(qs0).get('plan');
+        if ((qp === 'block' || qp === 'week') && !holder.classList.contains('funnel--teaser')) { var pb = $('[data-plan-choice="' + qp + '"]', holder); if (pb) pb.click(); }
+      } catch (e0) {}
       setTimeout(arrows, 60); holder.addEventListener('click', function () { setTimeout(arrows, 80); });
       var rollKey = dateOf(0);
       var roll = function () { var k = dateOf(0); if (k !== rollKey) { rollKey = k; say(fill(T_('rolled'), { d: k })); render(); } };
@@ -1407,7 +1441,7 @@
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

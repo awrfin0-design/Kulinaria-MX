@@ -1,0 +1,45 @@
+{%- comment -%}
+  Full breakdown of a dish, shown in the side panel when a dish card is clicked (the panel copies this hidden block).
+  Param: product. Reads kulinaria.* metafields: tier, allergens, ingredients, diets, calories, protein, carbs, fat, fiber.
+{%- endcomment -%}
+{%- liquid
+  assign dd_mf = product.metafields.kulinaria
+  assign dd_tier = dd_mf.tier.value | default: 'selecto'
+  capture dd_title
+    render 'tx', s: product.title
+  endcapture
+  capture dd_desc
+    render 'tx', s: product.description
+  endcapture
+  assign dd_desc_plain = dd_desc | strip_html | strip
+-%}
+<div class="dish-detail" data-dish-detail hidden data-url="{{ product.url }}" data-title="{{ dd_title | escape }}">
+  <div class="dd__media">
+    {%- if product.featured_image -%}{{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '480, 720, 900', sizes: '(min-width: 600px) 460px, 100vw', alt: dd_title }}{%- endif -%}
+  </div>
+  <div class="dd__body">
+    <div class="dd__head">{% render 'tier-badge', tier: dd_tier %}<span class="dd__price">{% render 'plan-price', tier: dd_tier, kind: 'meal', money: true %}<small> {{ 'funnel.per_meal' | t }}</small></span></div>
+    <h2 class="dd__title" data-dd-title>{{ dd_title }}</h2>
+    {%- if dd_desc_plain != blank -%}<p class="dd__desc">{{ dd_desc_plain }}</p>{%- endif -%}
+    {%- if dd_mf.calories.value or dd_mf.protein.value or dd_mf.carbs.value or dd_mf.fat.value -%}
+      <h3 class="dd__h">{{ 'dish.nutrition' | t }}</h3>
+      <dl class="dd__nutri">
+        {%- if dd_mf.calories.value != blank -%}<div class="is-main"><dt>{{ 'dish.n_calories' | t }}</dt><dd>{{ dd_mf.calories.value }}<small> kcal</small></dd></div>{%- endif -%}
+        {%- if dd_mf.protein.value != blank -%}<div><dt>{{ 'dish.n_protein' | t }}</dt><dd>{{ dd_mf.protein.value }}<small> g</small></dd></div>{%- endif -%}
+        {%- if dd_mf.carbs.value != blank -%}<div><dt>{{ 'dish.n_carbs' | t }}</dt><dd>{{ dd_mf.carbs.value }}<small> g</small></dd></div>{%- endif -%}
+        {%- if dd_mf.fat.value != blank -%}<div><dt>{{ 'dish.n_fat' | t }}</dt><dd>{{ dd_mf.fat.value }}<small> g</small></dd></div>{%- endif -%}
+        {%- if dd_mf.fiber.value != blank -%}<div><dt>{{ 'dish.n_fiber' | t }}</dt><dd>{{ dd_mf.fiber.value }}<small> g</small></dd></div>{%- endif -%}
+      </dl>
+      <p class="dd__note">{{ 'dish.n_note' | t }}</p>
+    {%- endif -%}
+    {%- if dd_mf.diets.value != blank -%}
+      <ul class="dd__chips">{%- for d in dd_mf.diets.value -%}{%- assign dd_dk = 'diet.' | append: d -%}<li>{{ dd_dk | t }}</li>{%- endfor -%}</ul>
+    {%- endif -%}
+    {%- if dd_mf.ingredients.value != blank -%}
+      <h3 class="dd__h">{{ 'dish.ingredients' | t }}</h3>
+      <p class="dd__list">{%- for i in dd_mf.ingredients.value -%}{% render 'term', prefix: 'ingredient', value: i %}{% unless forloop.last %} · {% endunless %}{%- endfor -%}</p>
+    {%- endif -%}
+    <h3 class="dd__h">{{ 'dish.allergens' | t }}</h3>
+    <p class="dd__list dd__allergens">{%- if dd_mf.allergens.value != blank -%}{%- for a in dd_mf.allergens.value -%}{% render 'term', prefix: 'allergen', value: a %}{% unless forloop.last %} · {% endunless %}{%- endfor -%}{%- else -%}{{ 'dish.no_allergens' | t }}{%- endif -%}</p>
+  </div>
+</div>

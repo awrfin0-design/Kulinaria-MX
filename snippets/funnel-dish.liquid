@@ -15,7 +15,7 @@
 -%}
 {%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}{%- capture tx_pdesc -%}{% render 'tx', s: card_src %}{%- endcapture -%}
 {%- assign card_text = tx_pdesc | strip_html | truncate: 90 -%}
-<article class="fn-dish" data-dish data-fn-dish data-pid="{{ product.id }}" data-handle="{{ product.handle }}"
+<article class="fn-dish" data-dish data-has-detail data-fn-dish data-pid="{{ product.id }}" data-handle="{{ product.handle }}"
   data-title="{{ product.title | escape }}" data-label="{{ tx_ptitle | escape }}" data-category="{{ category }}" data-tier="{{ tier }}" data-diets="{{ diets }}" data-allergens="{{ allergens | escape }}" data-ingredients="{{ ingredients | escape }}">
   <div class="fn-dish__media">
     {%- if product.featured_image -%}
@@ -27,6 +27,7 @@
     <div class="dish__blocked" role="note"><div><strong>{{ 'dish.blocked_title' | t }}</strong>{{ 'dish.blocked_text' | t }}</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
+  {% render 'dish-detail', product: product %}
   <div class="fn-dish__body">
     {% render 'tier-badge', tier: tier %}
     <h3 class="fn-dish__title">{{ tx_ptitle }}</h3>

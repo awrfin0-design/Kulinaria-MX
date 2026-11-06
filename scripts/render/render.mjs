@@ -264,7 +264,7 @@ export async function renderSite() {
   {
     const grab = (html, startRe) => { const m = startRe.exec(html); if (!m) return null; const re = /<(\/?)div\b[^>]*>/g; re.lastIndex = m.index; let depth = 0, x; while ((x = re.exec(html))) { depth += x[1] ? -1 : 1; if (depth === 0) return html.slice(m.index, re.lastIndex); } return null; };
     const homeOf = (l) => per[l].routes.find((r) => r.key === 'home').html;
-    for (const re of [/<div class="loader" id="loader"/, /<div class="sheet" id="sheet-pricing"/]) {
+    for (const re of [/<div class="loader" id="loader"/, /<div class="sheet" id="sheet-pricing"/, /<div class="dish-panel" data-dish-panel/]) {
       const frag = {}; for (const l of LANGS) frag[l] = grab(homeOf(l), re);
       if (frag.es && frag.en && doc.includes(frag.es)) doc = doc.replace(frag.es, () => LANGS.map((l) => `<template data-l="${l}">${rewrite(frag[l], 'layout ' + l)}</template>`).join(''));
     }

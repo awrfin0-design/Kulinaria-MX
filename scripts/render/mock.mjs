@@ -52,7 +52,7 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
   const IMG_OF = { 'pasta-pollo-junior': 7, 'crema-calabaza': 8, 'brownie-proteico': 9, 'batido-verde': 10 };
   const dishes = DISHES.map((d, i) => product({
     id: 7100 + i, handle: d[0], title: tr(d[1]), price: TIER_PRICE[d[2]], description: `<p>${tr(d[9])}</p>`, type: d[3], plans: true, tr, image: IMG(IMG_OF[d[0]] ?? i, tr(d[1])),
-    mf: { tier: d[2], category: d[3], diets: d[4], allergens: d[5], ingredients: d[6], calories: d[7], carbs: d[8], ...(WEEKS[d[0]] ? { weeks: WEEKS[d[0]] } : {}) },
+    mf: { tier: d[2], category: d[3], diets: d[4], allergens: d[5], ingredients: d[6], calories: d[7], carbs: d[8], protein: Math.round(d[7] * 0.28 / 4), fat: Math.round(d[7] * 0.3 / 9), fiber: 4, ...(WEEKS[d[0]] ? { weeks: WEEKS[d[0]] } : {}) },
   }));
   const TIER_NAME = { selecto: 'Selecto', exclusivo: 'Exclusivo', signature: 'Signature', reserve: 'Reserve' };
   const planProducts = Object.keys(TIER_PRICE).map((t, i) => product({ id: 7200 + i, handle: `plan-semanal-${t}`, title: tr(`Plan semanal ${TIER_NAME[t]}`), type: 'plan', plans: true, tr,

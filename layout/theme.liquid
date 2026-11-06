@@ -110,8 +110,19 @@
       </div>
     </div>
 
-    {%- if customer -%}
-      <div id="kx-account" hidden data-orders="{{ customer.orders_count | default: 0 }}" data-endpoint="{{ shop.metafields.kulinaria.sheet_url.value }}" data-cid="{{ customer.id }}" data-token="{{ customer.id | hmac_sha256: shop.metafields.kulinaria.profile_secret.value }}"><a hidden tabindex="-1" aria-hidden="true" data-kx-onb href="/pages/bienvenida"></a></div>
+    <div class="dish-panel" data-dish-panel hidden>
+      <div class="dish-panel__scrim" data-dp-close></div>
+      <aside class="dish-panel__sheet" role="dialog" aria-modal="true" aria-label="{{ 'dish.details' | t }}" tabindex="-1">
+        <button class="dish-panel__x" type="button" data-dp-close aria-label="{{ 'dish.panel_close' | t }}">×</button>
+        <div class="dish-panel__content" data-dp-content></div>
+        <div class="dish-panel__foot">
+          <button class="btn btn--gold" type="button" data-dp-pick hidden>{{ 'dish.panel_pick' | t }}</button>
+          <a class="btn btn--outline" data-dp-full href="#">{{ 'dish.panel_full' | t }}</a>
+        </div>
+      </aside>
+    </div>
+      {%- if customer -%}
+    <div id="kx-account" hidden data-orders="{{ customer.orders_count | default: 0 }}" data-endpoint="{{ shop.metafields.kulinaria.sheet_url.value }}" data-cid="{{ customer.id }}" data-token="{{ customer.id | hmac_sha256: shop.metafields.kulinaria.profile_secret.value }}"><a hidden tabindex="-1" aria-hidden="true" data-kx-onb href="/pages/bienvenida"></a></div>
       <script type="application/json" id="kulinaria-customer">
         {
           "allergies": {{ customer.metafields.kulinaria.allergies.value | json }},

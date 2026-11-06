@@ -984,7 +984,7 @@ await page.click(`${gf} [data-plan-choice="week"]`); await page.waitForTimeout(7
 await page.evaluate((f) => document.querySelector(f + ' [data-fn-dish]:not(.is-hidden) [data-pick]').click(), gf); await page.waitForTimeout(300);
 ok('signed out: the visitor can build an order, and the button says "Inicia sesión para continuar"', /inicia sesión/i.test(await page.$eval(`${gf} [data-fn-finish]`, (b) => b.textContent)) && (await page.$eval(`${gf} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled'))) === 'false');
 await page.click(`${gf} [data-fn-finish]`); await page.waitForTimeout(500);
-ok('signed out: pressing it goes to sign-in (not to the cart) and nothing is added to the cart', /#\/login/.test(page.url()), page.url());
+ok('signed out: pressing it puts the order in the cart and goes to sign-in, coming back to the cart', /#\/login/.test(page.url()) && /return_url=[^&]*(carrito|cart)/.test(page.url()), page.url());
 await page.goto(`${G}#/carrito`); await page.waitForTimeout(400);
 ok('signed out: the cart has no pay button, only "Iniciar sesión para pagar"', await page.evaluate(() => { const c = document.querySelector('[data-page="carrito"]'); return !c.querySelector('[data-checkout]') && /iniciar sesión para pagar/i.test(c.innerText); }));
 await page.goto(`${G}#/pg/cuenta-semana`); await page.waitForTimeout(400);
@@ -1025,6 +1025,24 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.unroute('https://script.example/**'); await page.evaluate(() => document.getElementById('adm-test').remove());
   await page.goto(`${URL0}#/carrito`); await page.waitForTimeout(400);
   ok('cart: a separate discount-code field named "discount" (Shopify applies it at checkout) next to the referral code', await page.evaluate(() => { const c = document.querySelector('[data-page="carrito"]'); const d = c.querySelector('input[name="discount"]'); return !!d && d.id !== c.querySelector('[data-referral]').id && !!c.querySelector('[data-referral]'); }));
+}
+
+
+// =====================================================================  v33: dish detail panel + plan links of the plans page
+{
+  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_ob_asked', '1'); sessionStorage.setItem('kx-seen', '1'); }); await page.reload(); await page.waitForTimeout(900);
+  await page.goto(`${URL0}#/menu`); await page.waitForTimeout(500);
+  await page.evaluate(() => document.querySelector('[data-page="menu"] .dish__media').click()); await page.waitForTimeout(600);
+  ok('dish panel: clicking a menu card opens the side panel (no page change) with photo, description, nutrition, ingredients and allergens', await page.evaluate(() => { const p = document.querySelector('[data-dish-panel]'); const c = p.querySelector('[data-dp-content]'); return !p.hidden && location.hash === '#/menu' && !!c.querySelector('.dd__media img') && c.querySelector('.dd__title').textContent.trim().length > 3 && c.querySelectorAll('.dd__nutri div').length >= 4 && /kcal/.test(c.querySelector('.dd__nutri').textContent) && c.querySelectorAll('.dd__h').length >= 3 && !!document.querySelector('[data-dp-full]').getAttribute('href'); }));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(500);
+  ok('dish panel: Escape closes it', await page.$eval('[data-dish-panel]', (p) => p.hidden));
+  await page.goto(`${URL0}#/pg/pedido?plan=block`); await page.reload(); await page.waitForTimeout(1500);
+  ok('plans page links: "?plan=block" arrives with the 4-week plan chosen and goes straight to the meals', await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); return f.querySelector('[data-plan-choice="block"]').getAttribute('aria-checked') === 'true' && f.querySelector('[data-fn-step="2"]').classList.contains('is-on'); }));
+  await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-dish]:not(.is-hidden) .fn-dish__media').click()); await page.waitForTimeout(600);
+  ok('dish panel in the order flow offers "Choose this dish"', await page.evaluate(() => { const p = document.querySelector('[data-dish-panel]'); return !p.hidden && !p.querySelector('[data-dp-pick]').hidden; }));
+  await page.click('[data-dp-pick]'); await page.waitForTimeout(600);
+  ok('choosing from the panel assigns the dish to the active day and closes the panel', await page.evaluate(() => document.querySelector('[data-dish-panel]').hidden && document.querySelectorAll('[data-page="pg/pedido"] .fn-day.is-set').length === 1));
+  ok('the plans page buttons go to the order flow with the plan preselected (not back to the plans page)', await page.evaluate(() => { const hs = [...document.querySelectorAll('[data-page="pg/planes"] .plan-card .btn')].map((a) => a.getAttribute('href')); return hs.length === 2 && hs.some((h) => /pedido\?plan=block/.test(h)) && hs.some((h) => /pedido\?plan=week/.test(h)); }));
 }
 
 await browser.close();
