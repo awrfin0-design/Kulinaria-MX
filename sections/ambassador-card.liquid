@@ -1,0 +1,30 @@
+{%- liquid
+  assign mf = customer.metafields.kulinaria
+  assign code = mf.referral_code.value
+  if code == blank
+    assign cid = customer.id | append: ''
+    assign code = cid | slice: -6, 6 | prepend: 'KUL'
+  endif
+  assign paid = mf.referrals_paid.value | default: 0
+  assign wallet = mf.wallet_balance.value | default: 0
+-%}
+<section class="section section--tight" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="hub">
+      {%- if customer -%}
+      <section class="hub__card" style="grid-column:1/-1">
+        <h3>{{ 'acct.hub_benefits_t' | t }}</h3>
+        <dl class="hub__kv"><div><dt>{{ 'acct.hub_wallet' | t }}</dt><dd>{{ wallet | times: 100 | money_without_trailing_zeros }}</dd></div><div><dt>{{ 'acct.hub_code' | t }}</dt><dd>{{ code }}</dd></div><div><dt>{{ 'acct.hub_refs' | t }}</dt><dd>{{ paid }}</dd></div></dl>
+        <p class="text-muted" style="font-size:.9rem">{{ 'acct.hub_benefits_p' | t }}</p>
+        <div class="btn-row"><a class="btn btn--outline btn--sm" href="#alta">{{ 'acct.amb_request' | t }}</a><a class="btn btn--ghost btn--sm" href="/pages/cuenta">{{ 'general.account' | t }}</a></div>
+      </section>
+      {%- else -%}
+      <section class="hub__card" style="grid-column:1/-1"><h3>{{ 'acct.amb_t' | t }}</h3><p class="text-muted">{{ 'acct.amb_p' | t }}</p><div class="btn-row"><a class="btn btn--gold btn--sm" href="#alta">{{ 'acct.amb_request' | t }}</a><a class="btn btn--outline btn--sm" href="{% render 'login-url', back: request.path %}">{{ 'login.title' | t }}</a></div></section>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Mi código de embajador", "settings": [], "presets": [{ "name": "Mi código de embajador" }] }
+{% endschema %}

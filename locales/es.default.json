@@ -9,6 +9,9 @@
  */
 {
   "acct": {
+    "amb_t": "Tu código y tus créditos",
+    "amb_p": "Inicia sesión para ver tu código personal, tus créditos disponibles y cuántos amigos han comprado con él. Si aún no eres embajador, solicita tu código abajo.",
+    "amb_request": "Solicitar mi código",
     "my_data": "Mis datos",
     "hub_week_t": "Tu semana",
     "hub_week_none": "Aún no tienes un plan activo. Arma tu pedido y empieza.",
@@ -307,6 +310,7 @@
     "title": "Esta página se quemó en la parrilla"
   },
   "footer": {
+    "made_by": "Hecho por",
     "terms": "Términos y condiciones",
     "privacy": "Aviso de privacidad",
     "blurb": "Servicio premium de comida saludable a domicilio, adaptada al estilo de vida de cada cliente.",

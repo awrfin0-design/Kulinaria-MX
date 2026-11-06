@@ -9,6 +9,9 @@
  */
 {
   "acct": {
+    "amb_t": "Your code and credits",
+    "amb_p": "Sign in to see your personal code, your available credits and how many friends bought with it. If you are not an ambassador yet, request your code below.",
+    "amb_request": "Request my code",
     "my_data": "My details",
     "hub_week_t": "Your week",
     "hub_week_none": "You don't have an active plan yet. Build your order and get started.",
@@ -307,6 +310,7 @@
     "title": "This page got burned on the grill"
   },
   "footer": {
+    "made_by": "Made by",
     "terms": "Terms and conditions",
     "privacy": "Privacy notice",
     "blurb": "Premium healthy meal delivery, tailored to each client's lifestyle.",

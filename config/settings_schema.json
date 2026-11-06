@@ -10,55 +10,219 @@
   {
     "name": "Marca y contacto",
     "settings": [
-      {"type": "text", "id": "brand_tagline", "label": "Lema", "default": "Arte del fuego"},
-      {"type": "text", "id": "contact_phone", "label": "Teléfono", "default": "+52 000 000 0000"},
-      {"type": "text", "id": "contact_email", "label": "Correo", "default": "correo@dominio.com"},
-      {"type": "text", "id": "whatsapp_number", "label": "WhatsApp (solo dígitos, con lada)", "default": "525650399656"},
-      {"type": "url", "id": "instagram_url", "label": "Instagram", "default": "https://www.instagram.com/kulinariamx"},
-      {"type": "url", "id": "tiktok_url", "label": "TikTok"},
-      {"type": "url", "id": "facebook_url", "label": "Facebook"}
+      {
+        "type": "text",
+        "id": "brand_tagline",
+        "label": "Lema",
+        "default": "Arte del fuego"
+      },
+      {
+        "type": "text",
+        "id": "contact_phone",
+        "label": "Teléfono",
+        "default": "+52 000 000 0000"
+      },
+      {
+        "type": "text",
+        "id": "contact_email",
+        "label": "Correo",
+        "default": "correo@dominio.com"
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_number",
+        "label": "WhatsApp (solo dígitos, con lada)",
+        "default": "525650399656"
+      },
+      {
+        "type": "url",
+        "id": "instagram_url",
+        "label": "Instagram",
+        "default": "https://www.instagram.com/kulinariamx"
+      },
+      {
+        "type": "url",
+        "id": "tiktok_url",
+        "label": "TikTok"
+      },
+      {
+        "type": "url",
+        "id": "facebook_url",
+        "label": "Facebook"
+      }
     ]
   },
   {
     "name": "Ciclo semanal",
     "settings": [
-      {"type": "header", "content": "Cierre de pedidos y pausas"},
-      {"type": "paragraph", "content": "El ciclo inicia el sábado a la hora de cierre. Las pausas se bloquean el martes 10:00 AM (entregas jueves y viernes) y el viernes 7:00 PM (entregas lunes a miércoles)."},
-      {"type": "text", "id": "timezone", "label": "Zona horaria (IANA)", "default": "America/Mexico_City"},
-      {"type": "range", "id": "cutoff_hour", "label": "Hora de cierre (sábado)", "min": 0, "max": 23, "step": 1, "default": 10},
-      {"type": "text", "id": "pause_locked_message", "label": "Mensaje de pausa bloqueada", "default": "Tiempo límite de pausa agotado para el siguiente periodo"},
-      {"type": "url", "id": "subscription_portal_url", "label": "Portal de suscripciones (pausar / reanudar)", "info": "URL del portal del cliente de tu app de suscripciones (Shopify Subscriptions, Recharge, Seal, etc.)."}
+      {
+        "type": "header",
+        "content": "Cierre de pedidos y pausas"
+      },
+      {
+        "type": "paragraph",
+        "content": "El ciclo inicia el sábado a la hora de cierre. Las pausas se bloquean el martes 10:00 AM (entregas jueves y viernes) y el viernes 7:00 PM (entregas lunes a miércoles)."
+      },
+      {
+        "type": "text",
+        "id": "timezone",
+        "label": "Zona horaria (IANA)",
+        "default": "America/Mexico_City"
+      },
+      {
+        "type": "range",
+        "id": "cutoff_hour",
+        "label": "Hora de cierre (sábado)",
+        "min": 0,
+        "max": 23,
+        "step": 1,
+        "default": 10
+      },
+      {
+        "type": "text",
+        "id": "pause_locked_message",
+        "label": "Mensaje de pausa bloqueada",
+        "default": "Tiempo límite de pausa agotado para el siguiente periodo"
+      },
+      {
+        "type": "url",
+        "id": "subscription_portal_url",
+        "label": "Portal de suscripciones (pausar / reanudar)",
+        "info": "URL del portal del cliente de tu app de suscripciones (Shopify Subscriptions, Recharge, Seal, etc.)."
+      }
     ]
   },
   {
     "name": "Niveles y precios",
     "settings": [
-      {"type": "paragraph", "content": "Precios de referencia por platillo que se muestran en el sitio. El cobro real sale del precio de cada producto."},
-      {"type": "number", "id": "price_selecto", "label": "Selecto", "default": 160},
-      {"type": "number", "id": "price_exclusivo", "label": "Exclusivo ($)", "default": 220},
-      {"type": "number", "id": "price_signature", "label": "Signature ($$)", "default": 280},
-      {"type": "number", "id": "price_reserve", "label": "Reserve ($$$)", "default": 340},
-      {"type": "number", "id": "trial_markup", "label": "Recargo de la semana de prueba (%)", "default": 15},
-      {"type": "number", "id": "glass_fee", "label": "Cargo mínimo por envase de vidrio dañado (MXN)", "default": 100}
+      {
+        "type": "paragraph",
+        "content": "Precios de referencia por platillo que se muestran en el sitio. El cobro real sale del precio de cada producto."
+      },
+      {
+        "type": "number",
+        "id": "price_selecto",
+        "label": "Selecto",
+        "default": 160
+      },
+      {
+        "type": "number",
+        "id": "price_exclusivo",
+        "label": "Exclusivo ($)",
+        "default": 220
+      },
+      {
+        "type": "number",
+        "id": "price_signature",
+        "label": "Signature ($$)",
+        "default": 280
+      },
+      {
+        "type": "number",
+        "id": "price_reserve",
+        "label": "Reserve ($$$)",
+        "default": 340
+      },
+      {
+        "type": "number",
+        "id": "trial_markup",
+        "label": "Recargo de la semana de prueba (%)",
+        "default": 15
+      },
+      {
+        "type": "number",
+        "id": "glass_fee",
+        "label": "Cargo mínimo por envase de vidrio dañado (MXN)",
+        "default": 100
+      }
     ]
   },
   {
     "name": "Suscripción y contrato",
     "settings": [
-      {"type": "url", "id": "plans_url", "label": "Página de planes"},
-      {"type": "text", "id": "cta_label", "label": "Texto del botón principal", "default": "Elegir mi plan"},
-      {"type": "page", "id": "contract_page", "label": "Página del contrato de adhesión"},
-      {"type": "collection", "id": "welcome_gift_collection", "label": "Colección de regalos de bienvenida", "info": "Playera oficial y vaso mezclador. El precio $0 lo aplica un descuento automático."},
-      {"type": "textarea", "id": "protein_note", "label": "Leyenda legal de gramaje", "default": "El peso de la proteína se establece en bruto antes de su cocción. La contracción natural durante el proceso de preparación culinaria puede dar como resultado un peso inferior al publicado, quedando sujeto a variaciones."},
-      {"type": "textarea", "id": "allergy_disclaimer", "label": "Aviso de alergias", "default": "El sitio cruza los ingredientes con el perfil que declaraste. Eres responsable de declarar con detalle tus alergias y restricciones al inscribirte."}
+      {
+        "type": "url",
+        "id": "plans_url",
+        "label": "Página de planes"
+      },
+      {
+        "type": "text",
+        "id": "cta_label",
+        "label": "Texto del botón principal",
+        "default": "Elegir mi plan"
+      },
+      {
+        "type": "page",
+        "id": "contract_page",
+        "label": "Página del contrato de adhesión"
+      },
+      {
+        "type": "collection",
+        "id": "welcome_gift_collection",
+        "label": "Colección de regalos de bienvenida",
+        "info": "Playera oficial y vaso mezclador. El precio $0 lo aplica un descuento automático."
+      },
+      {
+        "type": "textarea",
+        "id": "protein_note",
+        "label": "Leyenda legal de gramaje",
+        "default": "El peso de la proteína se establece en bruto antes de su cocción. La contracción natural durante el proceso de preparación culinaria puede dar como resultado un peso inferior al publicado, quedando sujeto a variaciones."
+      },
+      {
+        "type": "textarea",
+        "id": "allergy_disclaimer",
+        "label": "Aviso de alergias",
+        "default": "El sitio cruza los ingredientes con el perfil que declaraste. Eres responsable de declarar con detalle tus alergias y restricciones al inscribirte."
+      }
     ]
   },
   {
     "name": "Administración",
     "settings": [
-      {"type": "paragraph", "content": "Panel oculto en /pages/admin (no aparece en ningún menú). Solo entra quien inicie sesión con uno de estos correos Y conozca la contraseña ADMIN_KEY del Apps Script."},
-      {"type": "text", "id": "admin_emails", "label": "Correos con acceso (separados por comas)", "info": "Ej.: dueno@correo.com, gerente@correo.com"},
-      {"type": "url", "id": "admin_endpoint", "label": "URL del Apps Script (web app)", "info": "La URL que termina en /exec. Vacío = datos de demostración."}
+      {
+        "type": "paragraph",
+        "content": "Panel oculto en /pages/admin (no aparece en ningún menú). Solo entra quien inicie sesión con uno de estos correos Y conozca la contraseña ADMIN_KEY del Apps Script."
+      },
+      {
+        "type": "text",
+        "id": "admin_emails",
+        "label": "Correos con acceso (separados por comas)",
+        "info": "Ej.: dueno@correo.com, gerente@correo.com"
+      },
+      {
+        "type": "url",
+        "id": "admin_endpoint",
+        "label": "URL del Apps Script (web app)",
+        "info": "La URL que termina en /exec. Vacío = datos de demostración."
+      }
+    ]
+  },
+  {
+    "name": "Firma del sitio",
+    "settings": [
+      {
+        "type": "text",
+        "id": "author_name",
+        "label": "Autor",
+        "default": "Alan Waizel"
+      },
+      {
+        "type": "url",
+        "id": "author_url",
+        "label": "Enlace del autor (por ejemplo tu perfil de Upwork)"
+      },
+      {
+        "type": "text",
+        "id": "agency_name",
+        "label": "Agencia",
+        "default": "Vellum & Quill"
+      },
+      {
+        "type": "url",
+        "id": "agency_url",
+        "label": "Enlace de la agencia",
+        "default": "https://vellumandquill.com"
+      }
     ]
   }
 ]

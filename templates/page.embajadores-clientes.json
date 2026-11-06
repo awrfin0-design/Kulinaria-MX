@@ -123,12 +123,16 @@
         "button_link": "/pages/bienvenida",
         "show_countdown": false
       }
+    },
+    "card": {
+      "type": "ambassador-card",
+      "settings": {}
     }
   },
   "order": [
     "head",
+    "card",
     "s1",
     "s2"
   ]
 }
-

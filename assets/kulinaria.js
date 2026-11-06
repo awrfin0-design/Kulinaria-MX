@@ -675,6 +675,20 @@
     run();
   }
 
+  /* ---------- requests (ambassador code, events, contact): the form still e-mails the store, and a copy goes to the sheet and the admin page ("Solicitudes") ---------- */
+  function initLeads() {
+    $$('[data-lead-wrap]').forEach(function (w) {
+      var form = $('form', w), ep = w.getAttribute('data-endpoint'); if (!form || !ep) return;
+      form.addEventListener('submit', function () {
+        try {
+          var f = {};
+          $$('input[name],select[name],textarea[name]', form).forEach(function (x) { var m = /^contact\[(.+)\]$/.exec(x.name); if (!m || (x.type === 'checkbox' && !x.checked)) return; f[m[1]] = x.value; });
+          fetch(ep, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'lead', kind: w.getAttribute('data-kind') || 'general', name: f.name, email: f.email, phone: f.phone, fields: f }) });
+        } catch (e) {}
+      });
+    });
+  }
+
   /* ---------- header account menu: initial in a circle, one drop-down (who is signed in, shortcuts, language, cart summary, sign out) ---------- */
   function initAccountMenu() {
     var root = $('[data-acct]'); if (!root) return;
@@ -1607,7 +1621,7 @@
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

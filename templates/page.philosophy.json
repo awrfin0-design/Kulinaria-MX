@@ -3,13 +3,191 @@
     "head": {
       "type": "page-head",
       "settings": {
-        "eyebrow": "Filosofía",
-        "heading": "El privilegio *de pertenecer*",
-        "text": "Una interfaz limpia, un servicio directo y platillos que se sienten exclusivos. Así entendemos la comida saludable.",
-        "art": "air-steak"
-      }
+        "eyebrow": "La marca",
+        "heading": "Arte *del fuego*",
+        "text": "Servicio premium de comida saludable a domicilio, adaptada al estilo de vida del cliente. Una experiencia exclusiva, directa y elegante.",
+        "button_label": "Elegir mi plan",
+        "button_link": "/pages/planes",
+        "art": "air-chef"
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "La marca",
+            "link": "/pages/nosotros"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Historia y fundador",
+            "link": "/pages/nosotros-historia"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Equipo de cocina",
+            "link": "/pages/nosotros-equipo"
+          }
+        },
+        "n3": {
+          "type": "link",
+          "settings": {
+            "label": "Calidad y envases",
+            "link": "/pages/nosotros-calidad"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2",
+        "n3"
+      ]
     },
     "s1": {
+      "type": "feature-grid",
+      "settings": {
+        "eyebrow": "La marca",
+        "heading": "Cocina de autor, entregada *en tu puerta*",
+        "columns": "3",
+        "background": "base"
+      },
+      "blocks": {
+        "s1": {
+          "type": "item",
+          "settings": {
+            "title": "Propósito",
+            "text": "<p>Que comer saludable no signifique renunciar al placer: platillos de autor, listos para tu semana.</p>"
+          }
+        },
+        "s2": {
+          "type": "item",
+          "settings": {
+            "title": "Historia y fundador",
+            "text": "<p>Contenido por definir: relato de la marca y presentación del fundador.</p>"
+          }
+        },
+        "s3": {
+          "type": "item",
+          "settings": {
+            "title": "Equipo de cocina",
+            "text": "<p>Chefs que dominan el fuego, las cocciones lentas y las reducciones artesanales.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ]
+    },
+    "s2": {
+      "type": "showcase",
+      "settings": {
+        "eyebrow": "Calidad",
+        "heading": "Cuidamos *cada detalle*",
+        "text": "<p>Proteínas de excelente calidad, cortes premium y mariscos selectos, en contenedores de vidrio de alta calidad.</p>",
+        "art": "containers",
+        "reverse": false,
+        "button_label": "Calidad y envases",
+        "button_link": "/pages/nosotros-calidad"
+      }
+    },
+    "s3": {
+      "type": "cta-banner",
+      "settings": {}
+    },
+    "hist_s1": {
+      "type": "showcase",
+      "settings": {
+        "eyebrow": "El fundador",
+        "heading": "Cocina de autor, entregada *en tu puerta*",
+        "text": "<p>Aquí va el relato de la marca y la presentación del fundador. Reemplaza este texto y la foto desde el editor del tema.</p>",
+        "art": "hero",
+        "reverse": false,
+        "badge": "Fundador"
+      }
+    },
+    "eq_s1": {
+      "type": "showcase",
+      "settings": {
+        "eyebrow": "Equipo",
+        "heading": "El fuego, la paciencia *y el detalle*",
+        "text": "<p>Chefs que dominan el fuego, las cocciones lentas y las reducciones artesanales.</p>",
+        "art": "flames",
+        "reverse": false,
+        "video": "chef",
+        "video_main": true
+      },
+      "blocks": {
+        "p0": {
+          "type": "point",
+          "settings": {
+            "text": "Cocciones lentas"
+          }
+        },
+        "p1": {
+          "type": "point",
+          "settings": {
+            "text": "Reducciones artesanales"
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "text": "Cortes sellados al fuego"
+          }
+        }
+      },
+      "block_order": [
+        "p0",
+        "p1",
+        "p2"
+      ]
+    },
+    "cal_s1": {
+      "type": "feature-grid",
+      "settings": {
+        "eyebrow": "Calidad",
+        "heading": "Cuidamos *cada detalle*",
+        "columns": "2",
+        "background": "raised"
+      },
+      "blocks": {
+        "q1": {
+          "type": "item",
+          "settings": {
+            "title": "Ingredientes premium",
+            "text": "<p>Proteínas de excelente calidad, cortes premium y mariscos selectos acondicionados para recalentar sin perder su punto.</p>"
+          }
+        },
+        "q2": {
+          "type": "item",
+          "settings": {
+            "title": "Envases de vidrio",
+            "text": "<p>Contenedores de alta calidad que conservan el sabor y se pueden reutilizar. Te agradecemos cuidarlos.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2"
+      ]
+    },
+    "cal_s2": {
+      "type": "showcase",
+      "settings": {
+        "eyebrow": "Envases de vidrio",
+        "heading": "Hecho para tu refrigerador, pensado *para tu semana*",
+        "text": "<p>Cada platillo llega en vidrio de alta calidad que conserva el sabor y se puede reutilizar. Solo calienta y disfruta.</p>",
+        "art": "containers",
+        "reverse": true
+      }
+    },
+    "fil_s1": {
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Principios",
@@ -47,7 +225,7 @@
         "p3"
       ]
     },
-    "s2": {
+    "fil_s2": {
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Por qué así",
@@ -76,21 +254,18 @@
         "e1",
         "e2"
       ]
-    },
-    "s3": {
-      "type": "cta-banner",
-      "settings": {
-        "heading": "Conoce el menú *de la semana*",
-        "button_label": "Ver el menú",
-        "button_link": "/collections/menu-semanal"
-      }
     }
   },
   "order": [
     "head",
     "s1",
     "s2",
+    "hist_s1",
+    "eq_s1",
+    "cal_s1",
+    "cal_s2",
+    "fil_s1",
+    "fil_s2",
     "s3"
   ]
 }
-

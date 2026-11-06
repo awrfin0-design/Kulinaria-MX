@@ -3,11 +3,11 @@
     "head": {
       "type": "page-head",
       "settings": {
-        "parent_label": "Embajadores",
-        "parent_link": "/pages/embajadores",
-        "eyebrow": "Solicitar código",
-        "heading": "Solicita tu código *de embajador*",
-        "text": "Cuéntanos quién eres y te contactamos para activar tu código.",
+        "eyebrow": "Embajadores",
+        "heading": "Recomienda Kulinaria y gana *con cada cliente*",
+        "text": "Tres ramas para crecer juntos: entrenadores (ropa y efectivo), clientes (crédito interno) y gimnasios aliados (flujo de efectivo de alto volumen).",
+        "button_label": "Quiero ser embajador",
+        "button_link": "/pages/embajadores-solicitar",
         "art": "air-bowl"
       },
       "blocks": {
@@ -72,6 +72,228 @@
       ]
     },
     "s1": {
+      "type": "feature-grid",
+      "settings": {
+        "eyebrow": "Tres ramas",
+        "heading": "Elige cómo *quieres participar*",
+        "columns": "3",
+        "background": "base"
+      },
+      "blocks": {
+        "b1": {
+          "type": "item",
+          "settings": {
+            "eyebrow": "Ropa y efectivo",
+            "title": "Entrenadores",
+            "text": "<p>Afíliate con tu código y recibe bono en efectivo, kit Fit Edition, video cooperativo y estatus web premium.</p>"
+          }
+        },
+        "b2": {
+          "type": "item",
+          "settings": {
+            "eyebrow": "Crédito interno viral",
+            "title": "Clientes",
+            "text": "<p>Comparte tu código único y gana saldo a favor por cada amigo que compre su primer bloque.</p>"
+          }
+        },
+        "b3": {
+          "type": "item",
+          "settings": {
+            "eyebrow": "Alto volumen",
+            "title": "Gimnasios aliados",
+            "text": "<p>Monetización pasiva para tu establecimiento con comisiones en efectivo y bono de élite.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ]
+    },
+    "s2": {
+      "type": "feature-grid",
+      "settings": {
+        "eyebrow": "Entrenadores",
+        "heading": "De la meta inicial *al crecimiento continuo*",
+        "columns": "3",
+        "background": "raised",
+        "layout": "stack"
+      },
+      "blocks": {
+        "t1": {
+          "type": "item",
+          "settings": {
+            "title": "Meta inicial",
+            "text": "<ul><li>Mínimo 10 clientes nuevos recomendados.</li><li>Cada uno con al menos 1 bloque de 4 semanas.</li><li>Facturas completamente liquidadas.</li></ul>"
+          }
+        },
+        "t2": {
+          "type": "item",
+          "settings": {
+            "title": "Activación (primeros 10)",
+            "text": "<ul><li>Bono de bienvenida: $1,500 MXN en efectivo.</li><li>Kit Gear Kulinaria Fit Edition: ropa deportiva premium y vaso térmico.</li><li>Video promocional cooperativo.</li><li>Estatus web premium: Entrenador Personal de Alta Clase.</li></ul>"
+          }
+        },
+        "t3": {
+          "type": "item",
+          "settings": {
+            "title": "Incentivos continuos (cliente 11 en adelante)",
+            "text": "<ul><li>Vía A: $100 MXN en efectivo por cada renovación de un cliente actual.</li><li>Vía B: $1,500 MXN en efectivo cada 10 clientes nuevos pagados (20, 30, 40...).</li></ul>"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3"
+      ]
+    },
+    "s3": {
+      "type": "feature-grid",
+      "settings": {
+        "eyebrow": "Gimnasios aliados",
+        "heading": "Una alianza de *monetización pasiva*",
+        "columns": "3",
+        "background": "base"
+      },
+      "blocks": {
+        "g1": {
+          "type": "item",
+          "settings": {
+            "title": "Código institucional",
+            "text": "<p>Alta como Gimnasio Aliado con un código único (ej. GYM_ZONE) para QR, recepción y redes del club.</p>"
+          }
+        },
+        "g2": {
+          "type": "item",
+          "settings": {
+            "title": "Comisiones",
+            "text": "<ul><li>$100 MXN en efectivo por cada cliente nuevo en su primer bloque.</li><li>$100 MXN cada vez que ese cliente renueve.</li></ul>"
+          }
+        },
+        "g3": {
+          "type": "item",
+          "settings": {
+            "title": "Gimnasio Embajador",
+            "text": "<p>Al llegar a 100 clientes activos con bloques pagados: bono único de $10,000 MXN y video promocional de marketing cruzado.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "g1",
+        "g2",
+        "g3"
+      ]
+    },
+    "s4": {
+      "type": "faq",
+      "settings": {
+        "eyebrow": "Reglas claras",
+        "heading": "Primero en registrar, *primero en ganar*",
+        "background": "raised",
+        "open_first": true
+      },
+      "blocks": {
+        "r1": {
+          "type": "item",
+          "settings": {
+            "question": "Un cliente, un código",
+            "answer": "<p>Un cliente solo puede estar ligado a un código de referencia en la base de datos. Si un entrenador registra a su cliente con su código, ese cliente queda bloqueado con ese entrenador y el código del gimnasio ya no puede aplicarse; la comisión de renovación es solo del entrenador.</p>"
+          }
+        },
+        "r2": {
+          "type": "item",
+          "settings": {
+            "question": "Canales de captación",
+            "answer": "<p>Público general (canal del gimnasio): lobby, mostradores, QR generales, recepción, redes del club y tráfico orgánico de socios sin entrenador. Público privado (canal del entrenador): clientes de asesoría uno a uno, grupos cerrados, amigos y red de contactos, entrenen o no dentro del gimnasio.</p>"
+          }
+        },
+        "r3": {
+          "type": "item",
+          "settings": {
+            "question": "No interferencia",
+            "answer": "<p>El gimnasio aliado reconoce que los entrenadores independientes tienen carteras privadas y se compromete a no realizar campañas de re-padrinazgo ni migración forzada de códigos hacia clientes ya dados de alta con un entrenador. Intentarlo será motivo de rescisión inmediata de la alianza.</p>"
+          }
+        },
+        "r_r1": {
+          "type": "item",
+          "settings": {
+            "question": "Un cliente, un código",
+            "answer": "<p>Un cliente solo puede estar ligado a un código de referencia en la base de datos. Si un entrenador registra a su cliente con su código, ese cliente queda bloqueado con ese entrenador y el código del gimnasio ya no puede aplicarse; la comisión de renovación es solo del entrenador.</p>"
+          }
+        },
+        "r_r2": {
+          "type": "item",
+          "settings": {
+            "question": "Canales de captación",
+            "answer": "<p>Público general (canal del gimnasio): lobby, mostradores, QR generales, recepción, redes del club y tráfico orgánico de socios sin entrenador. Público privado (canal del entrenador): clientes de asesoría uno a uno, grupos cerrados, amigos y red de contactos, entrenen o no dentro del gimnasio.</p>"
+          }
+        },
+        "r_r3": {
+          "type": "item",
+          "settings": {
+            "question": "No interferencia",
+            "answer": "<p>El gimnasio aliado reconoce que los entrenadores independientes tienen carteras privadas y se compromete a no realizar campañas de re-padrinazgo ni migración forzada de códigos hacia clientes ya dados de alta con un entrenador. Intentarlo será motivo de rescisión inmediata de la alianza.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r_r1",
+        "r_r2",
+        "r_r3"
+      ]
+    },
+    "s5": {
+      "type": "feature-grid",
+      "settings": {
+        "eyebrow": "Directorio",
+        "heading": "Entrenadores Personales de *Alta Clase*",
+        "text": "<p>Espacio destacado para embajadores validados. Agrega aquí sus perfiles.</p>",
+        "columns": "4",
+        "background": "base"
+      },
+      "blocks": {
+        "d1": {
+          "type": "item",
+          "settings": {
+            "title": "Entrenador por definir",
+            "text": "<p>Foto, nombre y código de referencia.</p>"
+          }
+        },
+        "d2": {
+          "type": "item",
+          "settings": {
+            "title": "Entrenador por definir",
+            "text": "<p>Foto, nombre y código de referencia.</p>"
+          }
+        },
+        "d3": {
+          "type": "item",
+          "settings": {
+            "title": "Entrenador por definir",
+            "text": "<p>Foto, nombre y código de referencia.</p>"
+          }
+        },
+        "d4": {
+          "type": "item",
+          "settings": {
+            "title": "Entrenador por definir",
+            "text": "<p>Foto, nombre y código de referencia.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "d1",
+        "d2",
+        "d3",
+        "d4"
+      ]
+    },
+    "s6": {
       "type": "contact-form",
       "settings": {
         "kind": "embajador",
@@ -80,11 +302,20 @@
         "text": "Cuéntanos quién eres y te contactamos para activar tu código.",
         "button_label": "Enviar solicitud"
       }
+    },
+    "card": {
+      "type": "ambassador-card",
+      "settings": {}
     }
   },
   "order": [
     "head",
-    "s1"
+    "card",
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5",
+    "s6"
   ]
 }
-

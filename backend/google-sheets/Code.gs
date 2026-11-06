@@ -58,7 +58,7 @@ function doGet(e) {
   if (params.action === 'weekset') return out_(weekSet_(params.cid, params.token, { week: params.week, email: params.email, upgrade: params.upgrade, days: String(params.days || '').split('|') }));
   if (params.action === 'pause') return out_(pauseSet_(params.cid, params.token, { mode: params.mode, week: params.week, weeks: String(params.weeks || '').split('|').filter(Boolean), email: params.email }));
   if (/^discount/.test(String(params.action || ''))) return out_(discountApi_(params));
-  if (/^(expense|sample)_/.test(String(params.action || ''))) return out_(adminApi_(params));
+  if (/^(expense|sample|lead)_/.test(String(params.action || ''))) return out_(adminApi_(params));
   if (params.action !== 'admin') return out_({ ok: true, service: 'kulinaria-sheets' });
   var key = PropertiesService.getScriptProperties().getProperty('ADMIN_KEY');
   if (!key || params.key !== key) return out_({ ok: false, error: 'forbidden' });
@@ -78,12 +78,13 @@ function adminData_() {
   var clients = rows('Clientes').map(function (r) { return { email: String(r[5]), created: r[1] ? new Date(r[1]).toISOString() : '' }; }).filter(function (c) { return c.email && c.created; });
   var recipes = rows('Recetas').map(function (r) { return { dish: String(r[0]), name: String(r[1]), qty: Number(r[2]) || 0, unit: String(r[3] || 'g'), cat: String(r[4] || 'pantry'), waste: Number(r[5]) || 0 }; }).filter(function (r) { return r.dish && r.name; });
   var finance = { orders: loadOrders_().map(function (o) { return { id: o.id, name: o.name, date: new Date(o.date).toISOString(), customer: o.customer, para: o.para, total: o.total, paid: o.paid, kind: o.isPlan ? 'plan' : (/mejora|upgrade/i.test(o.summary) ? 'upgrade' : 'other'), test: /^#PRUEBA/.test(o.name) }; }), expenses: loadExpenses_() };
-  return { ok: true, generated: new Date().toISOString(), orders: orders, clients: clients, recipes: recipes.length ? recipes : null, finance: finance };
+  return { ok: true, generated: new Date().toISOString(), orders: orders, clients: clients, recipes: recipes.length ? recipes : null, finance: finance, leads: loadLeads_() };
 }
 
 function doPost(e) {
   var props = PropertiesService.getScriptProperties();
   var params = (e && e.parameter) || {};
+  if (e && e.postData && /"action"\s*:\s*"lead"/.test(e.postData.contents || '')) { try { return out_(leadAdd_(JSON.parse(e.postData.contents))); } catch (errL) { return out_({ ok: false, error: String(errL) }); } }
   if (e && e.postData && /"action"\s*:\s*"week"/.test(e.postData.contents || '')) { try { var wb = JSON.parse(e.postData.contents); return out_(weekSet_(wb.cid, wb.token, wb)); } catch (err2) { return out_({ ok: false, error: String(err2) }); } }
   if (e && e.postData && /"action"\s*:\s*"profile"/.test(e.postData.contents || '')) { try { var pb = JSON.parse(e.postData.contents); return out_(profileSet_(pb.cid, pb.token, pb.profile)); } catch (err) { return out_({ ok: false, error: String(err) }); } }
   if (!props.getProperty('WEBHOOK_KEY') || params.key !== props.getProperty('WEBHOOK_KEY')) return out_({ ok: false, error: 'forbidden' });
@@ -705,6 +706,12 @@ function adminApi_(p) {
     try { rebuildDeliveries_(); } catch (e2) {}
     return { ok: true, expenses: loadExpenses_() };
   }
+  if (act === 'lead_status') {
+    var st = String(p.status || ''); if (!/^(Nueva|En proceso|Atendida)$/.test(st)) return { ok: false, error: 'bad_status' };
+    lock.waitLock(20000);
+    try { var shl = leadSheet_(), ll = shl.getLastRow(); for (var rr = ll; rr >= 2; rr--) if (String(shl.getRange(rr, 8).getValue()) === String(p.id)) { shl.getRange(rr, 7).setValue(st); break; } } finally { lock.releaseLock(); }
+    return { ok: true, leads: loadLeads_() };
+  }
   if (act === 'sample_order') {            // a fictitious paid order (family: the account holder 4-week plan + a 1-week plan for "Sofía" with an upgrade) to see every sheet and the admin page fill in
     var now = new Date(), id2 = 9000000 + Math.floor(Math.random() * 999999), dishA = 'Pollo a las hierbas con puré rústico', dishB = 'Bowl de res magra y quinoa', dishC = 'Salmón gourmet en costra de almendras', dishD = 'Crema de calabaza asada';
     var dias = 'Lunes: ' + dishA + ' | Martes: ' + dishB + ' | Miércoles: ' + dishA + ' | Jueves: | Viernes: ' + dishD, diasS = 'Lunes: ' + dishB + ' | Martes: | Miércoles: ' + dishC + ' | Jueves: | Viernes: ' + dishB;
@@ -743,3 +750,30 @@ function clearSamples_() {
 
 /** number of different Shopify orders in a list of rows (an order for a family has one row per person) */
 function distinct_(rows) { var seen = {}, n = 0; rows.forEach(function (o) { if (!seen[o.name]) { seen[o.name] = 1; n++; } }); return n; }
+
+
+/* ---------- requests from the site forms (ambassador code, events, contact): tab "Solicitudes" + e-mail alert ---------- */
+function leadSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet(), sh = ss.getSheetByName('Solicitudes');
+  if (!sh) { sh = ss.insertSheet('Solicitudes'); sh.getRange(1, 1, 1, 8).setValues([['Fecha', 'Tipo', 'Nombre', 'Correo', 'Teléfono', 'Detalle', 'Estado', 'ID']]).setFontWeight('bold').setBackground('#1B2316').setFontColor('#FFFFFF'); sh.setFrozenRows(1); }
+  return sh;
+}
+function loadLeads_() {
+  var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Solicitudes'); if (!sh || sh.getLastRow() < 2) return [];
+  return sh.getRange(2, 1, sh.getLastRow() - 1, 8).getValues().map(function (r) { return { date: r[0] instanceof Date ? r[0].toISOString() : String(r[0]), kind: String(r[1]), name: String(r[2]), email: String(r[3]), phone: String(r[4]), detail: String(r[5]), status: String(r[6]) || 'Nueva', id: String(r[7]) }; }).filter(function (x) { return x.id; }).reverse();
+}
+function leadAdd_(b) {
+  var kind = /^(embajador|carta|general)$/.test(String(b.kind)) ? String(b.kind) : 'general', name = String(b.name || '').trim().slice(0, 100), email = String(b.email || '').trim().toLowerCase().slice(0, 120), phone = String(b.phone || '').trim().slice(0, 40);
+  if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { ok: false, error: 'bad_lead' };
+  var cache = CacheService.getScriptCache(), ck = 'lead:' + kind + ':' + email;
+  if (cache.get(ck)) return { ok: true, duplicate: true };           // the same person sending the same kind of request twice in a minute
+  cache.put(ck, '1', 60);
+  var f = b.fields || {}, skip = { name: 1, email: 1, phone: 1 }, detail = Object.keys(f).filter(function (k) { return !skip[k] && String(f[k] || '').trim(); }).map(function (k) { return k + ': ' + String(f[k]).trim(); }).join('\n').slice(0, 1500);
+  var lock = LockService.getScriptLock(); lock.waitLock(20000);
+  try { var sh = leadSheet_(), row = sh.getLastRow() + 1, id = 'l' + new Date().getTime().toString(36); sh.getRange(row, 1, 1, 8).setValues([[new Date(), kind, name, email, phone, detail, 'Nueva', id]]); } finally { lock.releaseLock(); }
+  try {
+    var to = PropertiesService.getScriptProperties().getProperty('ALERT_EMAILS');
+    if (to) MailApp.sendEmail(to, 'Nueva solicitud (' + kind + ') · ' + name, ['Tipo: ' + kind, 'Nombre: ' + name, 'Correo: ' + email, 'Teléfono: ' + phone, '', detail, '', 'Verla y marcarla como atendida: /pages/admin → Solicitudes'].join('\n'));
+  } catch (e) { /* never block the request */ }
+  return { ok: true };
+}

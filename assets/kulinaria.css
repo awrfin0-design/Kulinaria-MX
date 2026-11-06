@@ -2408,3 +2408,5 @@ body .funnel:not(.funnel--teaser) .step.is-on::-webkit-scrollbar,body .funnel:no
 .pchip--al{border-color:#ff6b57;color:#ff6b57}.pchip--di{border-color:var(--accent);color:var(--accent)}
 [data-pe-open][hidden]{display:none}
 @media (max-width:600px){.people li{flex-direction:column;align-items:flex-start}}
+
+.footer-credit a{text-decoration:underline;text-underline-offset:3px}

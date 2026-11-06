@@ -1201,6 +1201,27 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.keyboard.press('Escape');
 }
 
+
+// =====================================================================  v48: requests tab in the admin, ambassador page in one piece, author signature
+{
+  await page.goto(`${URL0}#/home`); await page.evaluate(() => { sessionStorage.setItem('kx-admin-key', 'adm'); }); await page.reload(); await page.waitForTimeout(900);
+  const leads = [{ id: 'l1', date: '2026-11-05T12:00:00Z', kind: 'embajador', name: 'Coach Pablo', email: 'pablo@gym.com', phone: '999 000 1111', detail: 'Código deseado: PABLOFIT\nTengo 40 alumnos', status: 'Nueva' }, { id: 'l2', date: '2026-11-04T12:00:00Z', kind: 'carta', name: 'María', email: 'maria@x.com', phone: '', detail: 'Invitados: 8', status: 'En proceso' }];
+  const lcalls = [];
+  await page.route('https://script.example/**', async (route) => { const q = Object.fromEntries(new URL(route.request().url()).searchParams); lcalls.push(q); const body = q.action === 'admin' ? { ok: true, orders: [], clients: [], recipes: null, finance: { orders: [], expenses: [] }, leads } : q.action === 'lead_status' ? { ok: true, leads } : { ok: true, discounts: [] }; await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(body) }); });
+  await page.evaluate(() => { const d = document.createElement('div'); d.id = 'adm-lead'; d.setAttribute('data-endpoint', 'https://script.example/exec'); d.setAttribute('data-lang', 'es'); document.body.appendChild(d); window.KXAdmin.mount(d); });
+  await page.waitForSelector('#adm-lead [data-tab="7"]', { timeout: 8000 }); await page.click('#adm-lead [data-tab="7"]'); await page.waitForTimeout(300);
+  ok('admin "Solicitudes": every request shows who, type, e-mail/phone/WhatsApp link, what they asked and a state selector', await page.evaluate(() => { const t = document.querySelector('#adm-lead [data-leads]').innerText; return /Coach Pablo/.test(t) && /Embajador/.test(t) && /PABLOFIT/.test(t) && /Evento/.test(t) && !!document.querySelector('#adm-lead a[href^="https://wa.me/52999"]') && document.querySelectorAll('#adm-lead [data-lead-state]').length === 2; }));
+  await page.selectOption('#adm-lead [data-lead-state="l1"]', 'Atendida'); await page.waitForTimeout(300);
+  ok('changing the state of a request is saved through the script', lcalls.some((c) => c.action === 'lead_status' && c.id === 'l1' && c.status === 'Atendida'));
+  await page.click('#adm-lead [data-lead-code]'); await page.waitForTimeout(300);
+  ok('"Crear código de descuento" on an ambassador request opens the discount form with a suggested code', await page.evaluate(() => /COACHPABLO/.test(document.querySelector('#adm-lead [data-discform] [name=code]').value)));
+  await page.unroute('https://script.example/**'); await page.evaluate(() => document.getElementById('adm-lead').remove());
+  await page.goto(`${URL0}#/pg/embajadores`); await page.waitForTimeout(400);
+  ok('ambassador page: one page with the code/credits card, the rules (FAQ) and the request form (no separate rules / request pages)', await page.evaluate(() => { const p = document.querySelector('[data-page="pg/embajadores"]'); return !!p.querySelector('.hub__card') && !!p.querySelector('.accordion') && !!p.querySelector('form') && p.querySelectorAll('.accordion details').length >= 6; }));
+  ok('every page shows the author signature (Alan Waizel · Vellum & Quill linking to vellumandquill.com)', await page.evaluate(() => { const c = document.querySelector('.footer-credit'); return !!c && /Alan Waizel/.test(c.textContent) && /Vellum/.test(c.textContent) && !!c.querySelector('a[href="https://vellumandquill.com"]'); }));
+  ok('contact forms hand a copy to the sheet (lead wrapper with the endpoint)', await page.evaluate(() => { const w = document.querySelector('[data-page="pg/embajadores"] [data-lead-wrap]'); return !!w && w.getAttribute('data-kind') === 'embajador'; }));
+}
+
 await browser.close();
 ok('no JS errors on any page', errors.length === 0, errors.slice(0, 5).join(' | '));
 const pass = results.filter((r) => r.ok).length;

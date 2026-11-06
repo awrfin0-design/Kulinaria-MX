@@ -3,11 +3,11 @@
     "head": {
       "type": "page-head",
       "settings": {
-        "parent_label": "Nosotros",
-        "parent_link": "/pages/nosotros",
-        "eyebrow": "Historia y fundador",
-        "heading": "Historia *y fundador*",
-        "text": "Relato de la marca y presentación del fundador. Contenido por definir.",
+        "eyebrow": "La marca",
+        "heading": "Arte *del fuego*",
+        "text": "Servicio premium de comida saludable a domicilio, adaptada al estilo de vida del cliente. Una experiencia exclusiva, directa y elegante.",
+        "button_label": "Elegir mi plan",
+        "button_link": "/pages/planes",
         "art": "air-chef"
       },
       "blocks": {
@@ -48,6 +48,59 @@
       ]
     },
     "s1": {
+      "type": "feature-grid",
+      "settings": {
+        "eyebrow": "La marca",
+        "heading": "Cocina de autor, entregada *en tu puerta*",
+        "columns": "3",
+        "background": "base"
+      },
+      "blocks": {
+        "s1": {
+          "type": "item",
+          "settings": {
+            "title": "Propósito",
+            "text": "<p>Que comer saludable no signifique renunciar al placer: platillos de autor, listos para tu semana.</p>"
+          }
+        },
+        "s2": {
+          "type": "item",
+          "settings": {
+            "title": "Historia y fundador",
+            "text": "<p>Contenido por definir: relato de la marca y presentación del fundador.</p>"
+          }
+        },
+        "s3": {
+          "type": "item",
+          "settings": {
+            "title": "Equipo de cocina",
+            "text": "<p>Chefs que dominan el fuego, las cocciones lentas y las reducciones artesanales.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ]
+    },
+    "s2": {
+      "type": "showcase",
+      "settings": {
+        "eyebrow": "Calidad",
+        "heading": "Cuidamos *cada detalle*",
+        "text": "<p>Proteínas de excelente calidad, cortes premium y mariscos selectos, en contenedores de vidrio de alta calidad.</p>",
+        "art": "containers",
+        "reverse": false,
+        "button_label": "Calidad y envases",
+        "button_link": "/pages/nosotros-calidad"
+      }
+    },
+    "s3": {
+      "type": "cta-banner",
+      "settings": {}
+    },
+    "hist_s1": {
       "type": "showcase",
       "settings": {
         "eyebrow": "El fundador",
@@ -58,15 +111,161 @@
         "badge": "Fundador"
       }
     },
-    "s2": {
-      "type": "cta-banner",
-      "settings": {}
+    "eq_s1": {
+      "type": "showcase",
+      "settings": {
+        "eyebrow": "Equipo",
+        "heading": "El fuego, la paciencia *y el detalle*",
+        "text": "<p>Chefs que dominan el fuego, las cocciones lentas y las reducciones artesanales.</p>",
+        "art": "flames",
+        "reverse": false,
+        "video": "chef",
+        "video_main": true
+      },
+      "blocks": {
+        "p0": {
+          "type": "point",
+          "settings": {
+            "text": "Cocciones lentas"
+          }
+        },
+        "p1": {
+          "type": "point",
+          "settings": {
+            "text": "Reducciones artesanales"
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "text": "Cortes sellados al fuego"
+          }
+        }
+      },
+      "block_order": [
+        "p0",
+        "p1",
+        "p2"
+      ]
+    },
+    "cal_s1": {
+      "type": "feature-grid",
+      "settings": {
+        "eyebrow": "Calidad",
+        "heading": "Cuidamos *cada detalle*",
+        "columns": "2",
+        "background": "raised"
+      },
+      "blocks": {
+        "q1": {
+          "type": "item",
+          "settings": {
+            "title": "Ingredientes premium",
+            "text": "<p>Proteínas de excelente calidad, cortes premium y mariscos selectos acondicionados para recalentar sin perder su punto.</p>"
+          }
+        },
+        "q2": {
+          "type": "item",
+          "settings": {
+            "title": "Envases de vidrio",
+            "text": "<p>Contenedores de alta calidad que conservan el sabor y se pueden reutilizar. Te agradecemos cuidarlos.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2"
+      ]
+    },
+    "cal_s2": {
+      "type": "showcase",
+      "settings": {
+        "eyebrow": "Envases de vidrio",
+        "heading": "Hecho para tu refrigerador, pensado *para tu semana*",
+        "text": "<p>Cada platillo llega en vidrio de alta calidad que conserva el sabor y se puede reutilizar. Solo calienta y disfruta.</p>",
+        "art": "containers",
+        "reverse": true
+      }
+    },
+    "fil_s1": {
+      "type": "feature-grid",
+      "settings": {
+        "eyebrow": "Principios",
+        "heading": "Lo que *nos guía*",
+        "columns": "3",
+        "background": "base",
+        "layout": "stack"
+      },
+      "blocks": {
+        "p1": {
+          "type": "item",
+          "settings": {
+            "title": "Exclusividad",
+            "text": "<p>Cada detalle transmite el privilegio de formar parte de la marca.</p>"
+          }
+        },
+        "p2": {
+          "type": "item",
+          "settings": {
+            "title": "Cocina de autor por niveles",
+            "text": "<p>De Selecto, el menú base diario, a Reserve, con cortes Prime y mariscos selectos.</p>"
+          }
+        },
+        "p3": {
+          "type": "item",
+          "settings": {
+            "title": "Transparencia total",
+            "text": "<p>Ingredientes declarados, alérgenos claros y peso de proteína en crudo.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3"
+      ]
+    },
+    "fil_s2": {
+      "type": "feature-grid",
+      "settings": {
+        "eyebrow": "Por qué así",
+        "heading": "Eficiencia que se nota *en el plato*",
+        "text": "<p>Compramos los alimentos en volumen para mantener costos eficientes. Por eso trabajamos con bloques de 4 semanas y planificamos cada ciclo con precisión.</p>",
+        "columns": "2",
+        "background": "raised"
+      },
+      "blocks": {
+        "e1": {
+          "type": "item",
+          "settings": {
+            "title": "Bloques de 4 semanas",
+            "text": "<p>Más estabilidad para ti y para la cocina; mejor precio por platillo.</p>"
+          }
+        },
+        "e2": {
+          "type": "item",
+          "settings": {
+            "title": "Ciclo semanal",
+            "text": "<p>Cierre los sábados a las 10:00 AM, entregas de lunes a viernes.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "e1",
+        "e2"
+      ]
     }
   },
   "order": [
     "head",
     "s1",
-    "s2"
+    "s2",
+    "hist_s1",
+    "eq_s1",
+    "cal_s1",
+    "cal_s2",
+    "fil_s1",
+    "fil_s2",
+    "s3"
   ]
 }
-

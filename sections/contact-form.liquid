@@ -15,6 +15,7 @@
       {%- if tx_s_text != blank -%}<p class="lede">{{ tx_s_text }}</p>{%- endif -%}
     </div>
 
+    <div data-lead-wrap data-kind="{{ kind }}" data-endpoint="{{ shop.metafields.kulinaria.sheet_url.value }}">
     {%- form 'contact', id: 'kulinaria-contact' -%}
       {%- if form.posted_successfully? -%}
         <p class="alert alert--ok" role="status">{{ tx_s_success }}</p>
@@ -53,6 +54,7 @@
       {%- endif -%}
       <button class="btn btn--gold" type="submit">{{ tx_s_button_label }}</button>
     {%- endform -%}
+    </div>
   </div>
 </section>
 

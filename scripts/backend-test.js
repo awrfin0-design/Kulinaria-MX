@@ -227,4 +227,17 @@ props.WHATSAPP_MODE = 'text'; const waN = fetched.length;
 fn.doPost({ parameter: { key: 'k', topic: 'orders-create' }, postData: { contents: JSON.stringify(Object.assign({}, order, { id: 5003, name: '#5003' })) } });
 const wa2 = fetched.slice(waN).find((f) => /graph\.facebook\.com/.test(f.url));
 ok('WhatsApp text mode sends a plain message with the allergy alert', !!wa2 && JSON.parse(wa2.opt.payload).type === 'text' && /#5003/.test(JSON.parse(wa2.opt.payload).text.body) && /ALERGIA: Salmón gourmet/.test(JSON.parse(wa2.opt.payload).text.body));
+// ------------------------------------------------------------ 11. requests from the site forms (ambassador code, events, contact)
+const leadPost = (o) => J(fn.doPost({ parameter: {}, postData: { contents: JSON.stringify(o) } }));
+mails.length = 0;
+let lr = leadPost({ action: 'lead', kind: 'embajador', name: 'Coach Pablo', email: 'Pablo@Gym.com', phone: '999 000 1111', fields: { name: 'Coach Pablo', email: 'pablo@gym.com', phone: '999 000 1111', Perfil: 'Entrenador', 'Código deseado': 'PABLOFIT', body: 'Tengo 40 alumnos' } });
+ok('a request from the site (no password needed) is saved in the "Solicitudes" tab and the owner gets an e-mail', lr.ok && sheets.Solicitudes && sheets.Solicitudes.rows.length === 2 && sheets.Solicitudes.rows[1][1] === 'embajador' && sheets.Solicitudes.rows[1][3] === 'pablo@gym.com' && /PABLOFIT/.test(sheets.Solicitudes.rows[1][5]) && mails.some((m) => /Nueva solicitud \(embajador\)/.test(m.sub || m.subject || '')), JSON.stringify(sheets.Solicitudes && sheets.Solicitudes.rows));
+lr = leadPost({ action: 'lead', kind: 'embajador', name: 'Coach Pablo', email: 'pablo@gym.com', fields: {} });
+ok('the same person sending the same request again within a minute is not duplicated', lr.ok && lr.duplicate && sheets.Solicitudes.rows.length === 2);
+ok('a request without a valid e-mail or name is refused', leadPost({ action: 'lead', kind: 'carta', name: '', email: 'x' }).ok === false);
+ok('an unknown request type is stored as "general"', leadPost({ action: 'lead', kind: 'hack', name: 'Ana', email: 'ana@x.com', fields: { body: 'hola' } }).ok && sheets.Solicitudes.rows[2][1] === 'general');
+const adL = aq({ action: 'admin' });
+ok('the admin export lists the requests (newest first) with their state', adL.leads.length === 2 && adL.leads[0].name === 'Ana' && adL.leads[1].status === 'Nueva' && adL.leads[1].kind === 'embajador');
+r = aq({ action: 'lead_status', id: adL.leads[1].id, status: 'Atendida' });
+ok('the admin can mark a request as attended (and only valid states are accepted)', r.ok && r.leads.find((x) => x.id === adL.leads[1].id).status === 'Atendida' && aq({ action: 'lead_status', id: adL.leads[1].id, status: 'borrar' }).error === 'bad_status');
 console.log(fails ? fails + ' FAILED' : 'all backend checks passed'); process.exit(fails ? 1 : 0);

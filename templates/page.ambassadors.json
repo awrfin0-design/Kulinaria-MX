@@ -215,12 +215,36 @@
             "question": "No interferencia",
             "answer": "<p>El gimnasio aliado reconoce que los entrenadores independientes tienen carteras privadas y se compromete a no realizar campañas de re-padrinazgo ni migración forzada de códigos hacia clientes ya dados de alta con un entrenador. Intentarlo será motivo de rescisión inmediata de la alianza.</p>"
           }
+        },
+        "r_r1": {
+          "type": "item",
+          "settings": {
+            "question": "Un cliente, un código",
+            "answer": "<p>Un cliente solo puede estar ligado a un código de referencia en la base de datos. Si un entrenador registra a su cliente con su código, ese cliente queda bloqueado con ese entrenador y el código del gimnasio ya no puede aplicarse; la comisión de renovación es solo del entrenador.</p>"
+          }
+        },
+        "r_r2": {
+          "type": "item",
+          "settings": {
+            "question": "Canales de captación",
+            "answer": "<p>Público general (canal del gimnasio): lobby, mostradores, QR generales, recepción, redes del club y tráfico orgánico de socios sin entrenador. Público privado (canal del entrenador): clientes de asesoría uno a uno, grupos cerrados, amigos y red de contactos, entrenen o no dentro del gimnasio.</p>"
+          }
+        },
+        "r_r3": {
+          "type": "item",
+          "settings": {
+            "question": "No interferencia",
+            "answer": "<p>El gimnasio aliado reconoce que los entrenadores independientes tienen carteras privadas y se compromete a no realizar campañas de re-padrinazgo ni migración forzada de códigos hacia clientes ya dados de alta con un entrenador. Intentarlo será motivo de rescisión inmediata de la alianza.</p>"
+          }
         }
       },
       "block_order": [
         "r1",
         "r2",
-        "r3"
+        "r3",
+        "r_r1",
+        "r_r2",
+        "r_r3"
       ]
     },
     "s5": {
@@ -278,10 +302,15 @@
         "text": "Cuéntanos quién eres y te contactamos para activar tu código.",
         "button_label": "Enviar solicitud"
       }
+    },
+    "card": {
+      "type": "ambassador-card",
+      "settings": {}
     }
   },
   "order": [
     "head",
+    "card",
     "s1",
     "s2",
     "s3",
@@ -290,4 +319,3 @@
     "s6"
   ]
 }
-
