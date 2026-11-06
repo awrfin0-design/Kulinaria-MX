@@ -203,6 +203,17 @@
     });
   }
 
+  /* phone home (cinematic scroll): a slim bar slides in once the hero has gone, so ordering is always one thumb away */
+  function initHomeBar() {
+    var hero = $('.hero--intro'); if (!hero || !window.IntersectionObserver || !(window.matchMedia && window.matchMedia('(max-width:760px)').matches)) return;
+    if ($('.home-bar')) return;
+    var bar = document.createElement('div'); bar.className = 'home-bar'; bar.setAttribute('hidden', '');
+    var tx = document.documentElement.getAttribute('data-home-cta') || '', lang = (document.documentElement.lang || 'es').slice(0, 2);
+    bar.innerHTML = '<span></span><a class="btn btn--gold btn--sm" href="/pages/pedido"></a>';
+    bar.firstChild.textContent = lang === 'en' ? 'Build my order' : 'Armar mi pedido'; bar.lastChild.textContent = (lang === 'en' ? 'Continue' : 'Continuar') + ' \u2192';
+    document.body.appendChild(bar);
+    new IntersectionObserver(function (en) { en.forEach(function (e) { var on = !e.isIntersecting && e.boundingClientRect.top < 0; bar.hidden = false; bar.classList.toggle('is-on', on); }); }, { threshold: 0.12 }).observe(hero);
+  }
   function initOnbBanner() { $$('[data-onb-banner]').forEach(function (b) { b.hidden = isOnboarded(); }); }
   function initProfileForm() { $$('[data-profile-form]').forEach(initOneProfileForm); }
   function initOneProfileForm(form) {
@@ -1131,6 +1142,14 @@
         });
       };
 
+      // phone planner (app deck): the bar button picks the card that is in the middle of the row for the active day
+      var barPick = $('[data-fn-barpick]', holder);
+      if (barPick) barPick.addEventListener('click', function () {
+        var rail = $('.step[data-fn-step="3"] [data-fn-grid]', holder); if (!rail) return;
+        var mid = rail.getBoundingClientRect().left + rail.clientWidth * 0.4, best = null, bd = 1e9;
+        $$('[data-fn-dish]:not(.is-hidden)', rail).forEach(function (c) { var r = c.getBoundingClientRect(), dd = Math.abs(r.left + r.width / 2 - mid); if (dd < bd && !c.classList.contains('is-blocked')) { bd = dd; best = c; } });
+        var pb = best && $('[data-pick]', best); if (pb) pb.click();
+      });
       var render = function () {
         // dishes of a lower tier or blocked by the profile cannot stay in the plan; slots are the source of truth
         st.days = st.days.map(function (p) { return p && eligible(byPid(p)) ? p : ''; });
@@ -1156,6 +1175,7 @@
           var cb = $('[data-fn-count]', d); if (cb) { cb.hidden = q === 0; cb.textContent = '×' + q; }
           var pick = $('[data-pick]', d);
           if (pick) { pick.hidden = false; pick.disabled = false; pick.textContent = st.days[st.active] === d.getAttribute('data-pid') ? T_('picked') : T_('pick'); }
+          if (pick) { pick.classList.toggle('is-on', st.days[st.active] === d.getAttribute('data-pid')); pick.setAttribute('aria-label', pick.textContent); }
         });
         var e1 = $('[data-fn-empty]', holder); if (e1) e1.hidden = shown > 0;
         // meter + summary
@@ -1204,7 +1224,10 @@
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
         if (next) { next.hidden = last; next.disabled = false; }
-        if (finish) { finish.hidden = !last; finish.classList.toggle('is-disabled', n < 1); finish.setAttribute('aria-disabled', n < 1 ? 'true' : 'false'); var fl = holder.getAttribute(ce ? 'data-t-finish' : 'data-t-finish-guest'); if (fl && finish.textContent.trim() !== fl) finish.textContent = fl; }
+        var phoneUi = window.matchMedia && window.matchMedia('(max-width:760px)').matches, bp = $('[data-fn-barpick]', holder), deckMode = !!(bp && phoneUi && st.step === 2 && n < MEALS);
+        if (bp) { bp.hidden = !deckMode; if (deckMode) bp.textContent = fill(T_('pick-day'), { d: dayLabel(st.active) }); }
+        holder.classList.toggle('is-deck', deckMode);
+        if (finish) { finish.hidden = !last || deckMode; finish.classList.toggle('is-disabled', n < 1); finish.setAttribute('aria-disabled', n < 1 ? 'true' : 'false'); var fl = holder.getAttribute(ce ? 'data-t-finish' : 'data-t-finish-guest'); if (fl && finish.textContent.trim() !== fl) finish.textContent = fl; }
         var rem = $('[data-fn-remembered]', holder); if (rem) { rem.hidden = !(st.remembered && st.step === 2); rem.textContent = T_('remembered'); }
       };
 
@@ -1720,7 +1743,7 @@
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

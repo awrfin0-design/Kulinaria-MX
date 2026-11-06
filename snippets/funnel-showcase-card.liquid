@@ -8,6 +8,7 @@
   assign mf = product.metafields.kulinaria
   assign card_src = mf.card_description.value | default: product.description
   assign tier = mf.tier.value | default: 'selecto'
+  assign sc_category = mf.category.value | default: product.type | handleize
 -%}
 {%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}{%- capture tx_pdesc -%}{% render 'tx', s: card_src %}{%- endcapture -%}
 <article class="fn-sc">
@@ -15,7 +16,7 @@
     {%- if product.featured_image -%}
       {{ product.featured_image | image_url: width: 420 | image_tag: loading: 'lazy', widths: '210, 320, 420', sizes: '(min-width: 1100px) 14vw, 60vw', alt: tx_ptitle }}
     {%- else -%}
-      <span class="dish__ph" aria-hidden="true">{% render 'dish-placeholder', category: mf.category.value | default: product.type | handleize %}</span>
+      <span class="dish__ph" aria-hidden="true">{% render 'dish-placeholder', category: sc_category %}</span>
     {%- endif -%}
   </div>
   <div class="fn-sc__body">

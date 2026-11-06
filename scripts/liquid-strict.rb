@@ -6,6 +6,7 @@ root = File.expand_path("..", __dir__)
 bad = 0
 Dir.glob("#{root}/{snippets,sections,layout}/*.liquid").sort.each do |f|
   src = File.read(f, encoding: "utf-8").sub(/\{% schema %\}.*\{% endschema %\}/m, "")
+  src.scan(/\{%-?\s*render\s+'[^']+'([^%]*)-?%\}/) { |m| if m[0] =~ /\|/ then bad += 1; puts "#{f.sub(root + '/', '')}: filter inside render arguments (Shopify rejects it): #{m[0].strip[0, 80]}" end }
   begin
     Liquid::Template.parse(src, error_mode: :strict)
   rescue => e

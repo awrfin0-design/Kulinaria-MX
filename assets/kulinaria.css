@@ -2747,3 +2747,46 @@ body .hero--intro:after{content:none !important}
   .funnel .step[data-fn-step="3"] .fn-para{padding:0}
   .funnel .step[data-fn-step="3"] .fn-dish__media{min-height:64px !important}
 }
+
+/* =====================================================================
+   v57 — phone: home = cinematic scroll (hero, welcome film, menu deck, plans, a bar that slides in) · planner = app deck (day slots, deck of cards, bar picks)
+   ===================================================================== */
+.home-bar{display:none}
+@media (max-width:760px){
+  .home-bar{display:flex;position:fixed;left:12px;right:12px;bottom:calc(var(--tabbar,64px) + var(--safe-b,0px) + 10px);z-index:45;align-items:center;gap:10px;padding:7px 7px 7px 18px;border-radius:999px;background:rgba(23,23,23,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);translate:0 220%;transition:translate .4s cubic-bezier(.2,.8,.2,1)}
+  .home-bar[hidden]{display:none}
+  .home-bar.is-on{translate:0 0}
+  .home-bar span{flex:1;font-size:.78rem;color:var(--text-muted)}
+  .home-bar .btn{min-height:44px}
+  /* home menu deck: cards a bit over half the screen so the next one shows, snap card by card */
+  body [data-page="home"] .rail__track{scroll-snap-type:x mandatory;gap:12px;padding-inline:var(--pad,20px);scroll-padding-inline:var(--pad,20px)}
+  body [data-page="home"] .rail__track>.dish{flex:0 0 64vw !important;scroll-snap-align:start}
+  /* planner app deck: the bar carries the action; cards keep price and a quiet arrow */
+  .funnel .step[data-fn-step="3"] .fn-dish .btn--sm.fn-add{display:none}
+  .funnel .step[data-fn-step="3"] .fn-dish__row::after{content:"\2192";flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--accent);color:var(--accent);display:grid;place-items:center;font-size:1rem;margin-left:auto}
+  .funnel .step[data-fn-step="3"] .fn-dish__row{justify-content:space-between}
+  body .funnel:not(.funnel--teaser) .funnel__aside .fn-cta .fn-barpick{flex:1;min-height:50px;font-size:.78rem;padding:0 12px}
+  body .funnel.is-deck .funnel__aside .fn-cta .fn-barpick{display:inline-flex}
+}
+
+/* the pick button on a planner card is just an arrow (a check once it is the dish of the active day) */
+@media (min-width:761px){
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add{font-size:0 !important;letter-spacing:0;width:34px;min-width:34px;height:34px;min-height:34px;padding:0 !important;border-radius:50%;display:grid;place-items:center;flex:none !important}
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add::after{content:"\2192";font-size:1rem;line-height:1}
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add.is-on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add.is-on::after{content:"\2713"}
+}
+.fn-up[hidden]{display:none !important}
+@media (max-width:760px){
+  .funnel .step[data-fn-step="3"] .fn-dish .dish__desc{display:none !important}
+  .funnel .step[data-fn-step="3"] .fn-dish__media{min-height:150px !important}
+  .funnel .step[data-fn-step="3"] .fn-dish>.fn-up{position:absolute;left:0;top:calc(100% - 238px);z-index:3}
+}
+@media (min-width:761px){
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add{position:relative;color:var(--accent);border-color:var(--accent)}
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add::after{position:absolute;inset:0;display:grid;place-items:center;font-size:1rem;color:currentColor}
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add.is-on{color:#fff}
+}
+@media (min-width:761px){
+  .funnel .step[data-fn-step="3"] .fn-dish .fn-add::after{max-width:none !important;opacity:1 !important;margin:0 !important;overflow:visible}
+}
