@@ -16,7 +16,7 @@
     "cart": "Carrito",
     "cart_empty": "Tu carrito está vacío.",
     "cart_one": "1 producto en tu carrito.",
-    "cart_many": "{n} productos en tu carrito.",
+    "cart_many": "[n] productos en tu carrito.",
     "view_cart": "Ver carrito y pagar",
     "todo": "Completa tu perfil de alergias",
     "guest_t": "Bienvenido a Kulinaria",

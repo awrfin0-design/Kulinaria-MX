@@ -587,7 +587,7 @@
       var n = c.item_count || 0;
       if (count) { count.hidden = !n; count.textContent = n; }
       if (total) total.textContent = n ? money0(c.total_price / 100) : '';
-      if (txt) txt.textContent = !n ? txt.getAttribute('data-t-empty') : n === 1 ? txt.getAttribute('data-t-one') : String(txt.getAttribute('data-t-many') || '').replace('{n}', n);
+      if (txt) txt.textContent = !n ? txt.getAttribute('data-t-empty') : n === 1 ? txt.getAttribute('data-t-one') : String(txt.getAttribute('data-t-many') || '').replace('[n]', n);
     };
     var money0 = function (v) { try { return new Intl.NumberFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(v); } catch (e) { return '$' + Math.round(v); } };
     var refresh = function () { try { fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(paintCart).catch(function () {}); } catch (e) {} };
@@ -846,7 +846,7 @@
     };
     var say = function (m) { err.hidden = !m; err.textContent = m || ''; };
     var val = function (k) { var x = $('[data-ob="' + k + '"]', form); return x ? x.value.trim() : ''; };
-    var hello = function () { var h = $('[data-ob-hello]', root), n = (val('name') || info.name || '').split(' ')[0]; if (h && n) h.textContent = (root.getAttribute('data-t-welcome') || 'Bienvenido, {n}').replace('{n}', n); };
+    var hello = function () { var h = $('[data-ob-hello]', root), n = (val('name') || info.name || '').split(' ')[0]; if (h && n) h.textContent = (root.getAttribute('data-t-welcome') || 'Bienvenido, {n}').replace('[n]', n); };
     var done = isOnboarded();
     var edit = /[?&]edit=1/.test(location.search + '&' + (location.hash.split('?')[1] || ''));
     var forward = function () {                       // paying customers skip the questionnaire and go straight to choosing their week

@@ -2544,7 +2544,7 @@ html.has-dish-panel{overflow:hidden}
           title="Cambiar a English">EN</button></div></form></div>
     <div class="acct__cart">
       <div class="acct__cart-h"><span>Carrito</span><b data-acct-total>$5,000</b></div>
-      <p class="acct__cart-n" data-acct-cart-text data-t-one="1 producto en tu carrito." data-t-many="{n} productos en tu carrito." data-t-empty="Tu carrito está vacío.">1 producto en tu carrito.</p>
+      <p class="acct__cart-n" data-acct-cart-text data-t-one="1 producto en tu carrito." data-t-many="[n] productos en tu carrito." data-t-empty="Tu carrito está vacío.">1 producto en tu carrito.</p>
       <a class="btn btn--gold btn--sm btn--block" href="#/carrito">Ver carrito y pagar</a>
       <button class="acct__clear" type="button" data-cart-clear data-confirm="¿Vaciar todo el carrito? Se quitarán todos los productos.">Vaciar carrito</button>
     </div><a class="acct__out" href="#/home">Cerrar sesión</a></div>
@@ -2651,7 +2651,7 @@ Fuego</span>
           title="Switch to English" aria-current="true">EN</button></div></form></div>
     <div class="acct__cart">
       <div class="acct__cart-h"><span>Cart</span><b data-acct-total>$5,000</b></div>
-      <p class="acct__cart-n" data-acct-cart-text data-t-one="1 item in your cart." data-t-many="{n} items in your cart." data-t-empty="Your cart is empty.">1 item in your cart.</p>
+      <p class="acct__cart-n" data-acct-cart-text data-t-one="1 item in your cart." data-t-many="[n] items in your cart." data-t-empty="Your cart is empty.">1 item in your cart.</p>
       <a class="btn btn--gold btn--sm btn--block" href="#/carrito">View cart and pay</a>
       <button class="acct__clear" type="button" data-cart-clear data-confirm="Clear the whole cart? All items will be removed.">Clear cart</button>
     </div><a class="acct__out" href="#/home">Sign out</a></div>
@@ -20029,7 +20029,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       e.preventDefault();
       var ask = b.getAttribute('data-confirm'); if (ask && !window.confirm(ask)) return;
       b.disabled = true;
-      var done = function () { try { localStorage.removeItem('kx-cart-note'); } catch (x) {} window.location.reload(); };
+      var done = function () { try { var f = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (f) { f.days = []; f.qty = {}; f.sent = false; f.step = 0; localStorage.setItem(FUNNEL_KEY, JSON.stringify(f)); } } catch (x) {} window.location.reload(); };
       try { fetch('/cart/clear.js', { method: 'POST', headers: { Accept: 'application/json' } }).then(done, done); } catch (x) { done(); }
     });
   }
@@ -20046,7 +20046,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       var n = c.item_count || 0;
       if (count) { count.hidden = !n; count.textContent = n; }
       if (total) total.textContent = n ? money0(c.total_price / 100) : '';
-      if (txt) txt.textContent = !n ? txt.getAttribute('data-t-empty') : n === 1 ? txt.getAttribute('data-t-one') : String(txt.getAttribute('data-t-many') || '').replace('{n}', n);
+      if (txt) txt.textContent = !n ? txt.getAttribute('data-t-empty') : n === 1 ? txt.getAttribute('data-t-one') : String(txt.getAttribute('data-t-many') || '').replace('[n]', n);
     };
     var money0 = function (v) { try { return new Intl.NumberFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(v); } catch (e) { return '$' + Math.round(v); } };
     var refresh = function () { try { fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(paintCart).catch(function () {}); } catch (e) {} };
@@ -20305,7 +20305,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     };
     var say = function (m) { err.hidden = !m; err.textContent = m || ''; };
     var val = function (k) { var x = $('[data-ob="' + k + '"]', form); return x ? x.value.trim() : ''; };
-    var hello = function () { var h = $('[data-ob-hello]', root), n = (val('name') || info.name || '').split(' ')[0]; if (h && n) h.textContent = (root.getAttribute('data-t-welcome') || 'Bienvenido, {n}').replace('{n}', n); };
+    var hello = function () { var h = $('[data-ob-hello]', root), n = (val('name') || info.name || '').split(' ')[0]; if (h && n) h.textContent = (root.getAttribute('data-t-welcome') || 'Bienvenido, {n}').replace('[n]', n); };
     var done = isOnboarded();
     var edit = /[?&]edit=1/.test(location.search + '&' + (location.hash.split('?')[1] || ''));
     var forward = function () {                       // paying customers skip the questionnaire and go straight to choosing their week
@@ -20568,6 +20568,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           var vid = parseInt(holder.getAttribute('data-upv-' + lvl), 10);
           if (names.length && vid) { var up = {}; up[T_('prop-upgrade')] = names.join(', '); lines.push({ id: vid, quantity: names.length, properties: up }); }
         }
+        st.sent = true; persist();
         var go2 = function () { window.location.href = guest ? (lnk('[data-fn-login]') || '/pages/bienvenida').replace(/(return_url|return_to)=[^&]*/g, '$1=' + encodeURIComponent(finish.getAttribute('href') || '/cart')) : finish.getAttribute('href'); };
         fetch('/cart/clear.js', { method: 'POST' })
           .then(function () { return fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ attributes: attrs }) }); })
@@ -20586,6 +20587,8 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       if (gridEl) { gridEl.addEventListener('scroll', arrows, { passive: true }); window.addEventListener('resize', arrows); }
       applyProfile();
       render();
+      // the order was sent to the cart earlier: if the cart has been emptied since (items removed, cart cleared), the next order starts from a fresh list
+      if (st.sent) { try { fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(function (c) { if (c && !c.item_count) { st.days = blankDays(); st.qty = {}; st.active = 0; st.step = 0; st.sent = false; persist(); render(); } }).catch(function () {}); } catch (e1) {} }
       // ?plan=block / ?plan=week (from the "Get started" buttons of the plans page): the plan is already chosen, go straight to the meals
       try {
         var qs0 = location.search || (location.hash.indexOf('?') > -1 ? location.hash.slice(location.hash.indexOf('?')) : ''), qp = new URLSearchParams(qs0).get('plan');

@@ -16,7 +16,7 @@
     "cart": "Cart",
     "cart_empty": "Your cart is empty.",
     "cart_one": "1 item in your cart.",
-    "cart_many": "{n} items in your cart.",
+    "cart_many": "[n] items in your cart.",
     "view_cart": "View cart and pay",
     "todo": "Complete your allergy profile",
     "guest_t": "Welcome to Kulinaria",

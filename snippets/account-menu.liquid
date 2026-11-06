@@ -38,7 +38,7 @@
     <div class="acct__cart">
       <div class="acct__cart-h"><span>{{ 'acct.cart' | t }}</span><b data-acct-total>{% if cart.item_count > 0 %}{{ cart.total_price | money_without_trailing_zeros }}{% endif %}</b></div>
       <p class="acct__cart-n" data-acct-cart-text data-t-one="{{ 'acct.cart_one' | t }}" data-t-many="{{ 'acct.cart_many' | t }}" data-t-empty="{{ 'acct.cart_empty' | t }}">
-        {%- if cart.item_count == 0 -%}{{ 'acct.cart_empty' | t }}{%- elsif cart.item_count == 1 -%}{{ 'acct.cart_one' | t }}{%- else -%}{{ 'acct.cart_many' | t | replace: '{n}', cart.item_count }}{%- endif -%}
+        {%- if cart.item_count == 0 -%}{{ 'acct.cart_empty' | t }}{%- elsif cart.item_count == 1 -%}{{ 'acct.cart_one' | t }}{%- else -%}{{ 'acct.cart_many' | t | replace: '[n]', cart.item_count }}{%- endif -%}
       </p>
       <a class="btn btn--gold btn--sm btn--block" href="{{ routes.cart_url }}">{{ 'acct.view_cart' | t }}</a>
       <button class="acct__clear" type="button" data-cart-clear data-confirm="{{ 'cart.clear_confirm' | t }}"{% if cart.item_count == 0 %} hidden{% endif %}>{{ 'cart.clear' | t }}</button>
