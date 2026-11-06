@@ -93,7 +93,8 @@ ok('category + keto -> 2 dishes', (await page.$$eval(`${scope} [data-dish]:not(.
 ok('counter matches', (await page.$eval(`${scope} [data-count]`, (e) => e.textContent.trim())) === '2');
 await page.goto(`${URL0}#/home`); await page.reload();
 await page.goto(`${URL0}#/menu?dieta=vegano`); await page.reload(); await page.waitForTimeout(700);
-ok('deep link ?dieta=vegano filters menu', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 1);
+const vgN = await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.map((x) => x.getAttribute('data-diets')));
+ok('deep link ?dieta=vegano filters menu', vgN.length === 1, JSON.stringify(vgN));
 
 // ---- home diet chip deep-links into the filtered menu without reload
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(100);
@@ -779,7 +780,7 @@ await closeMenu(); await page.waitForTimeout(500); await page.evaluate(() => loc
   ok('admin: the preview never links to /pages/admin from the public pages', await (async () => { await page.setViewportSize({ width: 1440, height: 900 }); await page.goto(`${URL0}#/home`); await page.waitForTimeout(300); return page.evaluate(() => ![...document.querySelectorAll('[data-page]:not([data-page="pg/admin"]) a')].some((a) => /admin/.test(a.getAttribute('href') || ''))); })());
   await page.goto(`${URL0}#/pg/admin`); await page.reload(); await page.waitForTimeout(1200);
   const A = '[data-page="pg/admin"]';
-  ok('admin hub: title, 4 tabs, demo-data notice, 7 KPI cards', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-tabs button').length === 4 && !!document.querySelector(a + ' .adm-demo') && document.querySelectorAll(a + ' .adm-kpi').length === 7, A));
+  ok('admin hub: title, 5 tabs, demo-data notice, 7 KPI cards', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-tabs button').length === 4 && !!document.querySelector(a + ' .adm-demo') && document.querySelectorAll(a + ' .adm-kpi').length === 7, A));
   ok('admin hub: the KPIs show orders, 4-week blocks, loose trial weeks, new clients, sales and average ticket', await page.evaluate((a) => { const t = (id) => document.querySelector(a + ' [data-kpi="' + id + '"] b').textContent; return +t('orders') === +t('blocks') + +t('trials') && /^\$/.test(t('sales')) && /^\$/.test(t('avg')) && +t('clients') >= 0; }, A));
   ok('admin summary: a weekly history table of past and coming weeks', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-hist tbody tr').length === 12 && !!document.querySelector(a + ' .adm-hist tr.now'), A));
   await page.click(`${A} [data-tab="1"]`); await page.waitForTimeout(400);
