@@ -10,17 +10,31 @@
   if tx_in == blank
     echo s
   else
-    assign tx_k = tx_in | md5 | slice: 0, 12 | prepend: 'ct.'
+    comment
+      Shopify prints "Translation missing: <lang>.<key>" (capital T) when a key does not exist, so every check is done on the lower-cased text.
+      Rich text arrives as <p>…</p> and may carry HTML entities: it is looked up first as plain text (tags and entities removed), then as the raw string.
+    endcomment
+    assign tx_dec = tx_in
+    if tx_in contains '&'
+      assign tx_ents = '&aacute;|á,&eacute;|é,&iacute;|í,&oacute;|ó,&uacute;|ú,&uuml;|ü,&ntilde;|ñ,&Aacute;|Á,&Eacute;|É,&Iacute;|Í,&Oacute;|Ó,&Uacute;|Ú,&Ntilde;|Ñ,&iquest;|¿,&iexcl;|¡,&#225;|á,&#233;|é,&#237;|í,&#243;|ó,&#250;|ú,&#241;|ñ,&#193;|Á,&#201;|É,&#205;|Í,&#211;|Ó,&#218;|Ú,&#209;|Ñ,&#191;|¿,&#161;|¡,&#xe1;|á,&#xe9;|é,&#xed;|í,&#xf3;|ó,&#xfa;|ú,&#xf1;|ñ,&#xE1;|á,&#xE9;|é,&#xED;|í,&#xF3;|ó,&#xFA;|ú,&#xF1;|ñ,&#xBF;|¿' | split: ','
+      for tx_e in tx_ents
+        assign tx_pair = tx_e | split: '|'
+        assign tx_dec = tx_dec | replace: tx_pair[0], tx_pair[1]
+      endfor
+    endif
+    assign tx_plain = tx_dec
+    if tx_dec contains '<'
+      assign tx_plain = tx_dec | strip_html | strip
+    endif
+    assign tx_k = tx_dec | md5 | slice: 0, 12 | prepend: 'ct.'
     assign tx_v = tx_k | t
-    if tx_v contains 'translation missing' and tx_in contains '<'
-      comment
-        Rich text (a product description is wrapped in <p>…</p>): try the plain text too
-      endcomment
-      assign tx_plain = tx_in | strip_html | strip
+    assign tx_low = tx_v | downcase
+    if tx_low contains 'translation missing' and tx_plain != tx_dec
       assign tx_k2 = tx_plain | md5 | slice: 0, 12 | prepend: 'ct.'
       assign tx_v = tx_k2 | t
+      assign tx_low = tx_v | downcase
     endif
-    if tx_v contains 'translation missing'
+    if tx_low contains 'translation missing'
       echo s
     else
       echo tx_v

@@ -2265,3 +2265,18 @@ body .funnel:not(.funnel--teaser) .funnel__aside{min-width:0}
 .mypause .mp-status{margin:var(--space-md) 0 4px;font-family:var(--font-heading);font-size:1.3rem;color:var(--accent)}
 .mypause .mp-status.is-paused{color:var(--text)}
 .mypause [hidden]{display:none}
+
+/* v31: every dish card has the same image size; the extra-charge banner sits right under the image (its row is always reserved);
+   the carousel uses the room it has (taller screens = bigger photos) and the step scrolls instead of cutting cards on short screens */
+body .funnel:not(.funnel--teaser) .step[data-fn-step="2"].is-on{overflow-y:auto;overflow-x:hidden;scrollbar-width:thin}
+.fn-carousel{flex:1 1 auto;min-height:400px}
+.fn-dishes{align-items:stretch}
+.fn-dish{flex:0 0 clamp(210px,22vw,270px);height:auto;min-height:100%}
+.fn-dish__media{flex:1 1 0;min-height:150px}
+.fn-up{display:block;flex:none;margin:0;padding:5px 11px;min-height:28px;font-size:.78rem;font-weight:700;line-height:1.3;background:var(--accent-wash);color:var(--accent);border-top:1px solid var(--border-accent);border-bottom:1px solid var(--border-accent)}
+.fn-up[hidden]{display:block;visibility:hidden}
+.fn-dish__title{min-height:2.3em}
+.fn-dish .dish__facts{min-height:1.2em}
+.fn-dish__row{margin-top:auto;padding-top:4px}
+.fn-dish .fn-add{white-space:nowrap}
+.fn-up{border-radius:0;border-left:0;border-right:0;display:block}

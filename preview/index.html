@@ -2296,6 +2296,21 @@ body .funnel:not(.funnel--teaser) .funnel__aside{min-width:0}
 .mypause .mp-status.is-paused{color:var(--text)}
 .mypause [hidden]{display:none}
 
+/* v31: every dish card has the same image size; the extra-charge banner sits right under the image (its row is always reserved);
+   the carousel uses the room it has (taller screens = bigger photos) and the step scrolls instead of cutting cards on short screens */
+body .funnel:not(.funnel--teaser) .step[data-fn-step="2"].is-on{overflow-y:auto;overflow-x:hidden;scrollbar-width:thin}
+.fn-carousel{flex:1 1 auto;min-height:400px}
+.fn-dishes{align-items:stretch}
+.fn-dish{flex:0 0 clamp(210px,22vw,270px);height:auto;min-height:100%}
+.fn-dish__media{flex:1 1 0;min-height:150px}
+.fn-up{display:block;flex:none;margin:0;padding:5px 11px;min-height:28px;font-size:.78rem;font-weight:700;line-height:1.3;background:var(--accent-wash);color:var(--accent);border-top:1px solid var(--border-accent);border-bottom:1px solid var(--border-accent)}
+.fn-up[hidden]{display:block;visibility:hidden}
+.fn-dish__title{min-height:2.3em}
+.fn-dish .dish__facts{min-height:1.2em}
+.fn-dish__row{margin-top:auto;padding-top:4px}
+.fn-dish .fn-add{white-space:nowrap}
+.fn-up{border-radius:0;border-left:0;border-right:0;display:block}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -2735,12 +2750,12 @@ Fuego</span>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Pollo a las hierbas con puré rústico</h3><p class="dish__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de ...</p><p class="dish__facts">480 kcal · 22 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -2751,12 +2766,12 @@ Fuego</span>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Bowl de res magra y quinoa</h3><p class="dish__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="dish__facts">560 kcal · 34 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -2767,12 +2782,12 @@ Fuego</span>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Salmón gourmet en costra de almendras</h3><p class="dish__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry ro...</p><p class="dish__facts">520 kcal · 14 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -2783,12 +2798,12 @@ Fuego</span>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Omelette de claras con espinaca</h3><p class="dish__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="dish__facts">310 kcal · 8 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -2799,12 +2814,12 @@ Fuego</span>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3 class="fn-dish__title">Arrachera al carbón con maíz y espárragos</h3><p class="dish__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="dish__facts">640 kcal · 28 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$320<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -2815,12 +2830,12 @@ Fuego</span>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 
     <h3 class="fn-dish__title">Filete Prime con verduras asadas</h3><p class="dish__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin per...</p><p class="dish__facts">710 kcal · 16 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$390<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -2831,12 +2846,12 @@ Fuego</span>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Bowl vegano de garbanzo y tahini</h3><p class="dish__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="dish__facts">450 kcal · 52 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -2847,12 +2862,12 @@ Fuego</span>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Crema de calabaza asada</h3><p class="dish__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="dish__facts">220 kcal · 18 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -2863,12 +2878,12 @@ Fuego</span>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Mini pasta de pollo para peques</h3><p class="dish__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="dish__facts">380 kcal · 44 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -8074,12 +8089,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Pollo a las hierbas con puré rústico</h3><p class="dish__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de ...</p><p class="dish__facts">480 kcal · 22 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -8090,12 +8105,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Bowl de res magra y quinoa</h3><p class="dish__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="dish__facts">560 kcal · 34 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -8106,12 +8121,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Salmón gourmet en costra de almendras</h3><p class="dish__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry ro...</p><p class="dish__facts">520 kcal · 14 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -8122,12 +8137,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Omelette de claras con espinaca</h3><p class="dish__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="dish__facts">310 kcal · 8 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -8138,12 +8153,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3 class="fn-dish__title">Arrachera al carbón con maíz y espárragos</h3><p class="dish__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="dish__facts">640 kcal · 28 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$320<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -8154,12 +8169,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 
     <h3 class="fn-dish__title">Filete Prime con verduras asadas</h3><p class="dish__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin per...</p><p class="dish__facts">710 kcal · 16 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$390<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -8170,12 +8185,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Bowl vegano de garbanzo y tahini</h3><p class="dish__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="dish__facts">450 kcal · 52 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -8186,12 +8201,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Crema de calabaza asada</h3><p class="dish__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="dish__facts">220 kcal · 18 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -8202,12 +8217,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Mini pasta de pollo para peques</h3><p class="dish__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="dish__facts">380 kcal · 44 g carbohidratos</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> por comida</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
@@ -9010,12 +9025,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Herb chicken with rustic mash</h3><p class="dish__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="dish__facts">480 kcal · 22 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -9026,12 +9041,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Lean beef and quinoa bowl</h3><p class="dish__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="dish__facts">560 kcal · 34 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -9042,12 +9057,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Gourmet salmon in an almond crust</h3><p class="dish__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="dish__facts">520 kcal · 14 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -9058,12 +9073,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Egg-white omelette with spinach</h3><p class="dish__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="dish__facts">310 kcal · 8 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -9074,12 +9089,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3 class="fn-dish__title">Charcoal-grilled skirt steak with corn and asparagus</h3><p class="dish__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="dish__facts">640 kcal · 28 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$320<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -9090,12 +9105,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 
     <h3 class="fn-dish__title">Prime filet with roasted vegetables</h3><p class="dish__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losin...</p><p class="dish__facts">710 kcal · 16 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$390<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -9106,12 +9121,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Vegan chickpea and tahini bowl</h3><p class="dish__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="dish__facts">450 kcal · 52 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -9122,12 +9137,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Roasted pumpkin cream soup</h3><p class="dish__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="dish__facts">220 kcal · 18 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -9138,12 +9153,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Mini chicken pasta for little ones</h3><p class="dish__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="dish__facts">380 kcal · 44 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -14349,12 +14364,12 @@ Digital payment, no cash</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Herb chicken with rustic mash</h3><p class="dish__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="dish__facts">480 kcal · 22 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -14365,12 +14380,12 @@ Digital payment, no cash</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Lean beef and quinoa bowl</h3><p class="dish__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="dish__facts">560 kcal · 34 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -14381,12 +14396,12 @@ Digital payment, no cash</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Gourmet salmon in an almond crust</h3><p class="dish__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="dish__facts">520 kcal · 14 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -14397,12 +14412,12 @@ Digital payment, no cash</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Egg-white omelette with spinach</h3><p class="dish__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="dish__facts">310 kcal · 8 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -14413,12 +14428,12 @@ Digital payment, no cash</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3 class="fn-dish__title">Charcoal-grilled skirt steak with corn and asparagus</h3><p class="dish__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="dish__facts">640 kcal · 28 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$320<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -14429,12 +14444,12 @@ Digital payment, no cash</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 
     <h3 class="fn-dish__title">Prime filet with roasted vegetables</h3><p class="dish__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losin...</p><p class="dish__facts">710 kcal · 16 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$390<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -14445,12 +14460,12 @@ Digital payment, no cash</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3 class="fn-dish__title">Vegan chickpea and tahini bowl</h3><p class="dish__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="dish__facts">450 kcal · 52 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$250<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -14461,12 +14476,12 @@ Digital payment, no cash</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Roasted pumpkin cream soup</h3><p class="dish__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="dish__facts">220 kcal · 18 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
@@ -14477,12 +14492,12 @@ Digital payment, no cash</li></ul>
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"><span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3 class="fn-dish__title">Mini chicken pasta for little ones</h3><p class="dish__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="dish__facts">380 kcal · 44 g carbs</p><p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">$180<small> per meal</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>

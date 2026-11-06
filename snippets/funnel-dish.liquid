@@ -26,6 +26,7 @@
     <span class="fn-count" data-fn-count hidden></span>
     <div class="dish__blocked" role="note"><div><strong>{{ 'dish.blocked_title' | t }}</strong>{{ 'dish.blocked_text' | t }}</div></div>
   </div>
+  <span class="fn-up" data-fn-up hidden></span>
   <div class="fn-dish__body">
     {% render 'tier-badge', tier: tier %}
     <h3 class="fn-dish__title">{{ tx_ptitle }}</h3>
@@ -35,7 +36,6 @@
     {%- endif -%}
     <p class="fn-warn" data-fn-warn hidden role="note"></p>
     <span class="compat" data-compat></span>
-    <span class="fn-up" data-fn-up hidden></span>
     <div class="fn-dish__row">
       <span class="dish__price">{% render 'plan-price', tier: tier, kind: 'meal', money: true %}<small> {{ 'funnel.per_meal' | t }}</small></span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>{{ 'funnel.pick' | t }}</button>

@@ -30,7 +30,7 @@ function makeEngine(state, lang) {
 
   engine.registerFilter('t', (k, ...a) => {
     const raw = String(k).split('.').reduce((o, p) => (o ? o[p] : undefined), locale);
-    if (raw === undefined || typeof raw !== 'string') return `translation missing: ${lang}.${k}`;
+    if (raw === undefined || typeof raw !== 'string') return `Translation missing: ${lang}.${k}`;
     const vars = kw(a);
     return raw.replace(/\{\{\s*(\w+)\s*\}\}/g, (m, n) => (vars[n] !== undefined ? vars[n] : m));
   });

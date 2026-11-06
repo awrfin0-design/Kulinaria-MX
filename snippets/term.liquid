@@ -7,4 +7,5 @@
 {%- assign term_slug = value | handleize -%}
 {%- assign term_key = prefix | append: '.' | append: term_slug -%}
 {%- assign term_out = term_key | t -%}
-{%- if term_out contains 'translation missing' -%}{{ value }}{%- else -%}{{ term_out }}{%- endif -%}
+{%- assign term_low = term_out | downcase -%}
+{%- if term_low contains 'translation missing' -%}{{ value }}{%- else -%}{{ term_out }}{%- endif -%}
