@@ -363,17 +363,17 @@ await page.goto(`${URL0}#/pg/embajadores-gimnasios`); await page.waitForTimeout(
 ok('subpages show the family sub-navigation with the current page marked', (await page.$$eval('[data-page="pg/embajadores-gimnasios"] .page-head__sub a', (a) => a.length)) >= 6 && (await page.$eval('[data-page="pg/embajadores-gimnasios"] .page-head__sub a[aria-current="page"]', (a) => /Gimnasios/.test(a.textContent))));
 // Miro coverage: sections that must exist
 const must = { 'home': ['.hero', '.marquee', '[data-funnel]', '[data-rail]', '.tier-ladder', '.diet-chips, .chips', '.plan-card', '.accordion', '.cta-banner'],
-  'pg/planes': ['.plan-card', '.tier-ladder', '.accordion'], 'pg/ayuda': ['form'], 'pg/terminos': ['.accordion details'], 'pg/carta-cotizacion': ['form'],
+  'pg/planes': ['.plan-card', '.tier-ladder', '.accordion'], 'pg/ayuda': ['form'], 'pg/terminos': ['.legal h3'], 'pg/carta-cotizacion': ['form'],
   'pg/embajadores-solicitar': ['form'], 'pg/checkout': ['.card'], 'pg/cuenta-semana': ['[data-cutoff]'], 'pg/cuenta-pausas': ['[data-mypause]'], 'pg/cuenta-monedero': ['.card'] };
 const lacking = [];
 for (const [k, sels] of Object.entries(must)) { await page.goto(`${URL0}#/${k}`); await page.waitForTimeout(80); for (const sel of sels) if (!(await page.$(`[data-page="${k}"] ${sel}`))) lacking.push(`${k} ${sel}`); }
 ok('key sections from the Miro board exist on their pages', lacking.length === 0, lacking.join(' | '));
-ok('terms page carries all 10 contract clauses', await (async () => { await page.goto(`${URL0}#/pg/terminos`); await page.waitForTimeout(100); return (await page.$$eval('[data-page="pg/terminos"] .accordion details', (d) => d.length)) === 10; })());
+ok('terms page carries the full terms (12 numbered sections) and the privacy page the privacy notice (9)', await (async () => { await page.goto(`${URL0}#/pg/terminos`); await page.waitForTimeout(100); const a = await page.$$eval('[data-page="pg/terminos"] .legal h3', (d) => d.length); await page.goto(`${URL0}#/pg/privacidad`); await page.waitForTimeout(100); const b = await page.$$eval('[data-page="pg/privacidad"] .legal h3', (d) => d.length); return a === 12 && b === 9; })());
 
 // account subpages: each shows its own panel inside the account shell
-for (const [k, sel] of [['semana', '#semana'], ['pausas', '#pausas'], ['monedero', '#monedero'], ['perfil', '#perfil'], ['referidos', '#referidos'], ['pedidos', '#pedidos'], ['entregas', '#entregas']]) {
+for (const [k, sel] of [['semana', '#semana'], ['pausas', '#pausas'], ['monedero', '#monedero'], ['referidos', '#referidos'], ['pedidos', '#pedidos'], ['entregas', '#entregas']]) {
   await page.goto(`${URL0}#/pg/cuenta-${k}`); await page.waitForTimeout(80);
-  ok(`account sub-page ${k} renders its panel and the account navigation`, !!(await page.$(`[data-page="pg/cuenta-${k}"] .account-block[id$="${k}"]`)) && (await page.$$eval(`[data-page="pg/cuenta-${k}"] .account-nav a`, (a) => a.length)) >= 6);
+  ok(`account sub-page ${k} renders its panel and the account navigation`, !!(await page.$(`[data-page="pg/cuenta-${k}"] .account-block[id$="${k}"]`)) && (await page.$$eval(`[data-page="pg/cuenta-${k}"] .account-nav a`, (a) => a.length)) >= 4);
 }
 ok('account overview is one summary page: week, my details and allergies, balance and referrals (cards, no empty sub-pages)', (await (async () => { await page.goto(`${URL0}#/cuenta`); await page.waitForTimeout(150); return page.$$eval('[data-page="cuenta"] .hub__card', (r) => r.length); })()) === 3);
 
@@ -610,7 +610,7 @@ ok('"Esta semana en Kulinaria" shows the logo instead of the word', wm.has && wm
 const leftover = await page.evaluate(() => { const bad = []; const w = document.createTreeWalker(document.querySelector('[data-page="home"]'), NodeFilter.SHOW_TEXT); while (w.nextNode()) { const n = w.currentNode; if (/Kulinaria/.test(n.nodeValue) && !/Kulinaria Junior/.test(n.nodeValue) && !n.parentNode.closest('.wordmark,.visually-hidden,script,style,[data-no-wordmark]')) bad.push(n.nodeValue.trim().slice(0, 40)); } return bad; });
 ok('no bare "Kulinaria" word is left in the home copy', leftover.length === 0, leftover.join(' | '));
 // header: language switch is visible
-ok('the ES/EN language switch sits in the header', await page.evaluate(() => { const b = [...document.querySelectorAll('.site-header .lang__btn')]; return b.length === 2 && b.every((x) => x.getBoundingClientRect().width > 0); }));
+ok('the ES/EN language switch sits in the header account menu', await page.evaluate(() => { document.querySelector('.site-header .acct__btn').click(); const b = [...document.querySelectorAll('.site-header .acct__pop .lang__btn')]; const okk = b.length === 2 && b.every((x) => x.getBoundingClientRect().width > 0); document.querySelector('.site-header .acct__btn').click(); return okk; }));
 // client login is visible
 ok('header offers the client login', await page.$eval('.site-header .header-login', (a) => /login|sesi|cuenta|account/i.test(a.textContent) && /login|cuenta/.test(a.getAttribute('href'))));
 // dish cards carry their own short description
@@ -1115,6 +1115,32 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.goto(`${URL0}#/cuenta-semana`); await page.waitForTimeout(300);
   await page.goto(`${URL0}#/pg/cuenta-semana`); await page.waitForTimeout(500);
   ok('account navigation is short: summary, my week, pause, my details (the empty sub-pages are cards on the summary)', await page.$$eval('[data-page="pg/cuenta-semana"] .account-nav a', (a) => a.length <= 5));
+}
+
+
+// =====================================================================  v43: admin "Finanzas" (income, expenses, profit) and the test order button
+{
+  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx_ob_asked', '1'); sessionStorage.setItem('kx-seen', '1'); sessionStorage.setItem('kx-admin-key', 'adm'); }); await page.reload(); await page.waitForTimeout(900);
+  const nowD = new Date(), iso = (d) => d.toISOString();
+  const fin = { orders: [ { id: '1', name: '#1001', date: iso(nowD), customer: 'Ana Pérez', para: '', total: 3600, paid: true, kind: 'plan', test: false }, { id: '1-2', name: '#1001', date: iso(nowD), customer: 'Ana Pérez', para: 'Sofía', total: 1000, paid: true, kind: 'plan', test: false }, { id: '2', name: '#1002', date: iso(nowD), customer: 'Ana Pérez', para: '', total: 210, paid: true, kind: 'upgrade', test: false }, { id: '3', name: '#1003', date: iso(nowD), customer: 'Luis', para: '', total: 900, paid: false, kind: 'plan', test: false } ], expenses: [] };
+  const fcalls = [];
+  await page.route('https://script.example/**', async (route) => {
+    const u = new URL(route.request().url()), q = Object.fromEntries(u.searchParams); fcalls.push(q); let body = { ok: true };
+    if (q.action === 'admin') body = { ok: true, orders: [], clients: [], recipes: null, finance: fin };
+    else if (q.action === 'expense_new') { fin.expenses = [{ date: q.date, concept: q.concept, cat: q.cat, amount: Number(q.amount), id: 'g1' }]; body = { ok: true, expenses: fin.expenses }; }
+    else if (q.action === 'expense_del') { fin.expenses = []; body = { ok: true, expenses: [] }; }
+    else if (q.action === 'sample_order') body = { ok: true, name: '#PRUEBA-1234' };
+    await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(body) });
+  });
+  await page.evaluate(() => { const d = document.createElement('div'); d.id = 'adm-fin'; d.setAttribute('data-endpoint', 'https://script.example/exec'); d.setAttribute('data-lang', 'es'); document.body.appendChild(d); window.KXAdmin.mount(d); });
+  await page.waitForSelector('#adm-fin [data-tab="5"]', { timeout: 8000 }); await page.click('#adm-fin [data-tab="5"]'); await page.waitForTimeout(300);
+  ok('finance tab: income (paid), plans, upgrades, to collect, expenses and profit for the month', await page.evaluate(() => { const k = document.querySelector('#adm-fin [data-fin-kpis]').innerText.replace(/\s+/g, ' '); return /Ingresos/.test(k) && /4,810/.test(k) && /1,?000|4,600|3,?600/.test(k) && /210/.test(k) && /900/.test(k); }), await page.evaluate(() => document.querySelector('#adm-fin [data-fin-kpis]').innerText.replace(/\s+/g, ' ')));
+  ok('finance tab: lists every order with who it is for and its type', await page.evaluate(() => { const t = document.querySelector('#adm-fin [data-fin-orders]').innerText; return /Sofía/.test(t) && /Mejoras/.test(t) && /#1003/.test(t); }));
+  await page.fill('#adm-fin [name=concept]', 'Compra de proteínas'); await page.fill('#adm-fin [name=amount]', '1500'); await page.click('#adm-fin [data-expform] button[type=submit]'); await page.waitForTimeout(400);
+  ok('finance tab: an expense is saved and the profit is income minus expenses (4,810 − 1,500 = 3,310)', await page.evaluate(() => /3,310/.test(document.querySelector('#adm-fin [data-fin-kpis]').innerText) && /Compra de proteínas/.test(document.querySelector('#adm-fin [data-fin-exp]').innerText)), JSON.stringify(fcalls.filter((c) => c.action === 'expense_new')));
+  await page.click('#adm-fin [data-sample="new"]'); await page.waitForTimeout(500);
+  ok('finance tab: the test order button creates a fictitious order and reloads the data', fcalls.some((c) => c.action === 'sample_order') && fcalls.filter((c) => c.action === 'admin').length >= 2);
+  await page.unroute('https://script.example/**'); await page.evaluate(() => document.getElementById('adm-fin').remove());
 }
 
 await browser.close();

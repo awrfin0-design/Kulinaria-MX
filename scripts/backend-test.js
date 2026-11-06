@@ -186,4 +186,23 @@ delete props.SHOPIFY_TOKEN; props.SHOPIFY_CLIENT_ID = 'cid'; props.SHOPIFY_CLIEN
 fetchReply = () => ({ data: { discountNodes: { nodes: [] } } });
 dq({ action: 'discounts' }); dq({ action: 'discounts' });
 ok('Dev Dashboard app: the token is requested with client id + secret, used for the call, and cached (one token request for two calls)', tokenCalls.length === 1 && /client_credentials/.test(tokenCalls[0].grant_type) && fetched[0].opt.headers['X-Shopify-Access-Token'] === 'shpat_dev');
+// ------------------------------------------------------------ 9. finances (income / expenses / profit) and the fictitious test order
+const aq = (o) => J(fn.doGet({ parameter: Object.assign({ key: 'adm' }, o) }));
+ok('expenses and test orders need the admin key', J(fn.doGet({ parameter: { action: 'expense_new', key: 'x' } })).error === 'forbidden' && J(fn.doGet({ parameter: { action: 'sample_order', key: 'x' } })).error === 'forbidden');
+const beforeRows = sheets.Pedidos.rows.length;
+r = aq({ action: 'sample_order' });
+ok('a fictitious paid order can be created from the admin page (two people + an upgrade)', r.ok && /^#PRUEBA/.test(r.name) && sheets.Pedidos.rows.length === beforeRows + 2, JSON.stringify(r));
+let ad = aq({ action: 'admin' });
+const fin = ad.finance;
+ok('admin export: the finance block lists every order with its kind (plan / upgrade) and marks test orders', fin.orders.some((o) => o.test && o.kind === 'plan' && o.para === 'Sofía (prueba)') && fin.orders.filter((o) => o.test).length === 2, JSON.stringify(fin.orders.filter((o) => o.test)));
+ok('admin export: the test order shows in the orders list with both people', ad.orders.some((o) => /PRUEBA/.test(o.name) && /Sofía/.test(o.customer)) && ad.orders.some((o) => /PRUEBA/.test(o.name) && o.items.length > 0));
+ok('bad expenses are refused', aq({ action: 'expense_new', concept: '', amount: 10 }).error === 'bad_concept' && aq({ action: 'expense_new', concept: 'Pollo', amount: 0 }).error === 'bad_amount');
+r = aq({ action: 'expense_new', concept: 'Compra de proteínas', cat: 'Ingredientes', amount: '1850.50', date: '2026-11-05' });
+ok('an expense is saved in its own "Gastos" tab and returned', r.ok && r.expenses.length === 1 && r.expenses[0].amount === 1850.5 && r.expenses[0].cat === 'Ingredientes' && sheets.Gastos.rows.length === 2, JSON.stringify(r));
+const resTxt = sheets.Resumen.rows.map((x) => x.join('|')).join('\n');
+ok('Resumen shows the expenses and the profit (sales − expenses)', /Gastos registrados \(MXN\)\|1850.5/.test(resTxt) && /Utilidad = ventas − gastos \(MXN\)\|/.test(resTxt), resTxt.slice(0, 500));
+r = aq({ action: 'expense_del', id: r.expenses[0].id });
+ok('an expense can be deleted', r.ok && r.expenses.length === 0);
+r = aq({ action: 'sample_clear' });
+ok('the test orders (and only those) can be cleared again', r.ok && r.removed === 2 && !sheets.Pedidos.rows.some((x) => /^#PRUEBA/.test(String(x[1]))) && sheets.Pedidos.rows.some((x) => x[1] === '#1001'), JSON.stringify(r));
 console.log(fails ? fails + ' FAILED' : 'all backend checks passed'); process.exit(fails ? 1 : 0);

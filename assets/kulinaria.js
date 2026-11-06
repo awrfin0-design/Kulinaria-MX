@@ -1178,7 +1178,7 @@
         st.sent = true; persist();
         var go2 = function () { window.location.href = guest ? (lnk('[data-fn-login]') || '/pages/bienvenida').replace(/(return_url|return_to)=[^&]*/g, '$1=' + encodeURIComponent(finish.getAttribute('href') || '/cart')) : finish.getAttribute('href'); };
         // the cart can hold one plan per person: this person's earlier plan is replaced, the others stay
-        fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); })
+        fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).catch(function () { return { items: [] }; })
           .then(function (c) { var upd = {}; ((c && c.items) || []).forEach(function (it) { var pr = it.properties || {}; if (pr._para === undefined || pr._para === paraId) upd[it.key] = 0; }); return fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ updates: upd, attributes: attrs }) }); })
           .then(function () { return fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: lines }) }); })
           .then(go2, go2);
@@ -1206,6 +1206,8 @@
       var gridEl = $('[data-fn-grid]', holder);
       var arrows = function () { if (!gridEl) return; var pv = $('[data-fn-arrow="-1"]', holder), nx = $('[data-fn-arrow="1"]', holder); if (pv) pv.hidden = gridEl.scrollLeft < 8; if (nx) nx.hidden = gridEl.scrollLeft + gridEl.clientWidth >= gridEl.scrollWidth - 8; };
       if (gridEl) { gridEl.addEventListener('scroll', arrows, { passive: true }); window.addEventListener('resize', arrows); }
+      var recPaint = function () { var tb0 = tierEl(), sp0 = tb0 && tb0.getAttribute('data-selling-plan'), kind = st.plan === 'week' ? 'week' : (sp0 && st.renew ? 'auto' : 'manual'); $$('[data-fn-rec]', holder).forEach(function (p) { p.hidden = p.getAttribute('data-fn-rec') !== kind; }); };
+      holder.addEventListener('click', function () { setTimeout(recPaint, 30); }); recPaint();
       applyProfile();
       render();
       // the order was sent to the cart earlier: if the cart has been emptied since (items removed, cart cleared), the next order starts from a fresh list

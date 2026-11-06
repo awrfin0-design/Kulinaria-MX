@@ -2395,3 +2395,8 @@ body .funnel:not(.funnel--teaser) .step.is-on::-webkit-scrollbar,body .funnel:no
 .legal h2{margin:0 0 4px}.legal__upd{margin:0 0 18px;color:var(--accent);font-size:.85rem;font-weight:700}
 .legal h3{margin:28px 0 6px;font-size:1.15rem}.legal p{line-height:1.65;margin:0 0 8px}
 .footer-legal a{text-decoration:underline;text-underline-offset:3px}.footer-bottom{flex-wrap:wrap;gap:8px 24px}
+
+/* v44: how you are charged */
+.fn-rec,.cart-rec{margin:8px 0;padding:10px 12px;border:1px solid var(--border-accent);border-radius:12px;background:var(--accent-wash);font-size:.82rem;line-height:1.4}
+.fn-rec strong,.cart-rec strong{display:block;font-family:var(--font-label);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:2px}
+.fn-rec p,.cart-rec p{margin:0 0 4px}.fn-rec p[hidden]{display:none}

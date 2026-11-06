@@ -46,6 +46,12 @@
         <p class="text-muted" style="font-size:.9rem">{{ 'acct.hub_benefits_p' | t }}</p>
         <div class="btn-row"><a class="btn btn--outline btn--sm" href="/collections/kulinaria-store">{{ 'acct.hub_store' | t }}</a></div>
       </section>
+      <section class="hub__card">
+        <h3>{{ 'account.deliveries_containers' | t }}</h3>
+        {%- if customer.default_address -%}<p style="margin:0">{{ customer.default_address | format_address }}</p>{%- else -%}<p class="text-muted" style="margin:0">{{ 'account.no_address' | t }}</p>{%- endif -%}
+        <ul class="plan-list" style="margin:0;font-size:.88rem"><li>{{ 'account.policy_wait' | t }}</li><li>{{ 'account.policy_pickup' | t }}</li></ul>
+        <div class="btn-row"><a class="btn btn--outline btn--sm" href="/pages/bienvenida?edit=1">{{ 'account.manage_addresses' | t }}</a></div>
+      </section>
     </div>
 
     <h3 style="margin-top:var(--space-2xl)">{{ 'acct.orders_title' | t }}</h3>

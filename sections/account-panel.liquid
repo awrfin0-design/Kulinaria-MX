@@ -169,7 +169,7 @@
         <div class="grid grid--2">
           <div class="card"><h3>{{ 'account.delivery_address' | t }}</h3>
             {%- if customer.default_address -%}<p class="text-muted">{{ customer.default_address | format_address }}</p>{%- else -%}<p class="text-muted">{{ 'account.no_address' | t }}</p>{%- endif -%}
-            <a class="btn btn--outline" style="margin-top:auto;align-self:flex-start" href="{{ routes.account_addresses_url }}">{{ 'account.manage_addresses' | t }}</a></div>
+            <a class="btn btn--outline" style="margin-top:auto;align-self:flex-start" href="/pages/bienvenida?edit=1">{{ 'account.manage_addresses' | t }}</a></div>
           <div class="card"><h3>{{ 'account.policies' | t }}</h3><ul class="plan-list" style="margin:0"><li>{{ 'account.policy_wait' | t }}</li><li>{{ 'account.policy_pickup' | t }}</li><li>{{ 'account.policy_glass_pre' | t }}{{ settings.glass_fee }} {{ 'account.policy_glass_post' | t }}</li></ul></div>
         </div>
           {%- endcase -%}

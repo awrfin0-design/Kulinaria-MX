@@ -58,6 +58,7 @@ function doGet(e) {
   if (params.action === 'weekset') return out_(weekSet_(params.cid, params.token, { week: params.week, email: params.email, upgrade: params.upgrade, days: String(params.days || '').split('|') }));
   if (params.action === 'pause') return out_(pauseSet_(params.cid, params.token, { mode: params.mode, week: params.week, weeks: String(params.weeks || '').split('|').filter(Boolean), email: params.email }));
   if (/^discount/.test(String(params.action || ''))) return out_(discountApi_(params));
+  if (/^(expense|sample)_/.test(String(params.action || ''))) return out_(adminApi_(params));
   if (params.action !== 'admin') return out_({ ok: true, service: 'kulinaria-sheets' });
   var key = PropertiesService.getScriptProperties().getProperty('ADMIN_KEY');
   if (!key || params.key !== key) return out_({ ok: false, error: 'forbidden' });
@@ -76,7 +77,8 @@ function adminData_() {
   orders.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
   var clients = rows('Clientes').map(function (r) { return { email: String(r[5]), created: r[1] ? new Date(r[1]).toISOString() : '' }; }).filter(function (c) { return c.email && c.created; });
   var recipes = rows('Recetas').map(function (r) { return { dish: String(r[0]), name: String(r[1]), qty: Number(r[2]) || 0, unit: String(r[3] || 'g'), cat: String(r[4] || 'pantry'), waste: Number(r[5]) || 0 }; }).filter(function (r) { return r.dish && r.name; });
-  return { ok: true, generated: new Date().toISOString(), orders: orders, clients: clients, recipes: recipes.length ? recipes : null };
+  var finance = { orders: loadOrders_().map(function (o) { return { id: o.id, name: o.name, date: new Date(o.date).toISOString(), customer: o.customer, para: o.para, total: o.total, paid: o.paid, kind: o.isPlan ? 'plan' : (/mejora|upgrade/i.test(o.summary) ? 'upgrade' : 'other'), test: /^#PRUEBA/.test(o.name) }; }), expenses: loadExpenses_() };
+  return { ok: true, generated: new Date().toISOString(), orders: orders, clients: clients, recipes: recipes.length ? recipes : null, finance: finance };
 }
 
 function doPost(e) {
@@ -316,7 +318,7 @@ function loadOrders_() {
     slots = slots.length ? padSlots_(slots) : slotsFromSummary_(r[18]);
     var pl = String(r[10] || '').toLowerCase();
     return { id: String(r[0]), name: String(r[1]), date: r[2], customer: String(r[3]), email: String(r[4] || '').toLowerCase(), phone: String(r[5] || ''), total: Number(r[6]) || 0, currency: String(r[7]),
-      paid: String(r[8]).toLowerCase() === 'paid', isPlan: pl !== '', block: pl === 'block' || /bloque|4/.test(pl), address: String(r[15] || ''), allergies: String(r[13] || ''), dislikes: String(r[14] || ''), slots: slots, cid: String(r[21] || ''), para: String(r[22] || '') };
+      paid: String(r[8]).toLowerCase() === 'paid', isPlan: pl !== '', block: pl === 'block' || /bloque|4/.test(pl), address: String(r[15] || ''), allergies: String(r[13] || ''), dislikes: String(r[14] || ''), slots: slots, cid: String(r[21] || ''), para: String(r[22] || ''), summary: String(r[18] || '') };
   });
 }
 function loadSelections_() {
@@ -530,7 +532,7 @@ function rebuildDeliveries_(now) {
   };
   var allOrders = loadOrders_(), paidOrders = allOrders.filter(function (o) { return o.paid; }), revenue = paidOrders.reduce(function (a, o) { return a + o.total; }, 0), custs = {};
   allOrders.forEach(function (o) { custs[o.cid || o.email || o.id] = 1; });
-  var totals = [['Totales generales'], ['Pedidos registrados', allOrders.length], ['Pedidos pagados', paidOrders.length], ['Pedidos pendientes de pago', allOrders.length - paidOrders.length], ['Ventas pagadas (MXN)', revenue], ['Ticket promedio (MXN)', paidOrders.length ? Math.round(revenue / paidOrders.length) : 0], ['Clientes con pedidos', Object.keys(custs).length], []];
+  var totals = [['Totales generales'], ['Pedidos registrados', allOrders.length], ['Pedidos pagados', paidOrders.length], ['Pedidos pendientes de pago', allOrders.length - paidOrders.length], ['Ventas pagadas (MXN)', revenue], ['Ticket promedio (MXN)', paidOrders.length ? Math.round(revenue / paidOrders.length) : 0], ['Gastos registrados (MXN)', loadExpenses_().reduce(function (a, x) { return a + x.amount; }, 0)], ['Utilidad = ventas − gastos (MXN)', revenue - loadExpenses_().reduce(function (a, x) { return a + x.amount; }, 0)], ['Clientes con pedidos', Object.keys(custs).length], []];
   r0 = writeBlock_(rs, r0, totals);
   r0 = writeBlock_(rs, r0, block('Esta semana', todayMon));
   if (nextMon !== todayMon) r0 = writeBlock_(rs, r0, block('Próxima semana', nextMon));
@@ -653,6 +655,64 @@ function discountApi_(p) {
     if (r.error) return { ok: false, error: r.error, detail: r.detail };
     var e = r.data.discountCodeDeactivate.userErrors; if (e && e.length) return { ok: false, error: 'shopify', detail: e[0].message };
     return { ok: true };
+  }
+  return { ok: false, error: 'unknown_action' };
+}
+
+
+/* ---------- finances: expenses ("Gastos" tab) and test orders, from the admin page (ADMIN_KEY) ---------- */
+function expenseSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet(), sh = ss.getSheetByName('Gastos');
+  if (!sh) { sh = ss.insertSheet('Gastos'); sh.getRange(1, 1, 1, 5).setValues([['Fecha', 'Concepto', 'Categoría', 'Monto (MXN)', 'ID']]).setFontWeight('bold').setBackground('#1B2316').setFontColor('#FFFFFF'); sh.setFrozenRows(1); sh.getRange('A:A').setNumberFormat('@'); }
+  return sh;
+}
+function loadExpenses_() {
+  var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Gastos'); if (!sh || sh.getLastRow() < 2) return [];
+  return sh.getRange(2, 1, sh.getLastRow() - 1, 5).getValues().map(function (r) { return { date: weekStr_(r[0]), concept: String(r[1]), cat: String(r[2]), amount: Number(r[3]) || 0, id: String(r[4]) }; }).filter(function (x) { return x.id; });
+}
+function adminApi_(p) {
+  var key = PropertiesService.getScriptProperties().getProperty('ADMIN_KEY');
+  if (!key || p.key !== key) return { ok: false, error: 'forbidden' };
+  var act = String(p.action), lock = LockService.getScriptLock();
+  if (act === 'expense_new') {
+    var date = /^\d{4}-\d{2}-\d{2}$/.test(String(p.date || '')) ? String(p.date) : ymd_(new Date()), amount = Number(p.amount), concept = String(p.concept || '').trim().slice(0, 120), cat = String(p.cat || 'Otros').slice(0, 40);
+    if (!concept) return { ok: false, error: 'bad_concept' };
+    if (!(amount > 0)) return { ok: false, error: 'bad_amount' };
+    lock.waitLock(20000);
+    try { var sh = expenseSheet_(), row = sh.getLastRow() + 1, id = 'g' + new Date().getTime().toString(36); sh.getRange(row, 1).setNumberFormat('@'); sh.getRange(row, 1, 1, 5).setValues([[date, concept, cat, amount, id]]); } finally { lock.releaseLock(); }
+    try { rebuildDeliveries_(); } catch (e) {}
+    return { ok: true, expenses: loadExpenses_() };
+  }
+  if (act === 'expense_del') {
+    lock.waitLock(20000);
+    try { var sh2 = expenseSheet_(), last = sh2.getLastRow(); for (var r = last; r >= 2; r--) if (String(sh2.getRange(r, 5).getValue()) === String(p.id)) { sh2.deleteRow(r); break; } } finally { lock.releaseLock(); }
+    try { rebuildDeliveries_(); } catch (e2) {}
+    return { ok: true, expenses: loadExpenses_() };
+  }
+  if (act === 'sample_order') {            // a fictitious paid order (family: the account holder 4-week plan + a 1-week plan for "Sofía" with an upgrade) to see every sheet and the admin page fill in
+    var now = new Date(), id2 = 9000000 + Math.floor(Math.random() * 999999), dishA = 'Pollo a las hierbas con puré rústico', dishB = 'Bowl de res magra y quinoa', dishC = 'Salmón gourmet en costra de almendras', dishD = 'Crema de calabaza asada';
+    var dias = 'Lunes: ' + dishA + ' | Martes: ' + dishB + ' | Miércoles: ' + dishA + ' | Jueves: | Viernes: ' + dishD, diasS = 'Lunes: ' + dishB + ' | Martes: | Miércoles: ' + dishC + ' | Jueves: | Viernes: ' + dishB;
+    var order = { id: id2, name: '#PRUEBA-' + (id2 % 10000), created_at: now.toISOString(), updated_at: now.toISOString(), email: 'prueba@kulinariamx.com', total_price: '5170.00', currency: 'MXN', financial_status: 'paid',
+      customer: { id: 9999001, first_name: 'Cliente', last_name: 'de Prueba', email: 'prueba@kulinariamx.com', phone: '9990000000' },
+      note_attributes: [{ name: 'plan', value: 'block' }, { name: 'nivel', value: 'selecto' }, { name: 'alergias', value: 'Mariscos' }, { name: 'no_me_gustan', value: 'brócoli' }, { name: 'dias', value: dias }, { name: 'direccion', value: 'Calle 60 #123, Centro, Mérida' }, { name: 'contrato_aceptado', value: 'sí' }],
+      line_items: [
+        { title: 'Plan semanal Selecto', variant_title: '4 semanas', quantity: 1, price: '3600.00', properties: [{ name: '_platillos', value: '3× ' + dishA + ' | 1× ' + dishB + ' | 1× ' + dishD }, { name: '_para', value: 'yo' }, { name: '_dias', value: dias }, { name: '_alergias', value: 'Mariscos' }, { name: '_no_me_gustan', value: 'brócoli' }] },
+        { title: 'Plan semanal Selecto', variant_title: '1 semana', quantity: 1, price: '1000.00', properties: [{ name: '_platillos', value: '2× ' + dishB + ' | 1× ' + dishC }, { name: '_para', value: 'p1' }, { name: '_para_nombre', value: 'Sofía (prueba)' }, { name: '_dias', value: diasS }, { name: '_alergias', value: 'Cacahuate' }] },
+        { title: 'Mejora de platillo', variant_title: '+1 nivel', quantity: 1, price: '70.00', properties: [{ name: '_para', value: 'p1' }, { name: 'Mejora', value: dishC }] }] };
+    lock.waitLock(20000);
+    try { handleOrder_(order); } finally { lock.releaseLock(); }
+    return { ok: true, name: order.name };
+  }
+  if (act === 'sample_clear') {
+    lock.waitLock(20000);
+    try {
+      var ss = SpreadsheetApp.getActiveSpreadsheet(), n = 0, ped = ss.getSheetByName('Pedidos'), ids = {};
+      if (ped && ped.getLastRow() > 1) for (var i = ped.getLastRow(); i >= 2; i--) { var nm = String(ped.getRange(i, 2).getValue()); if (/^#PRUEBA/.test(nm)) { ids[String(ped.getRange(i, 1).getValue()).split('-')[0]] = 1; ped.deleteRow(i); n++; } }
+      var pl = ss.getSheetByName('Platillos'); if (pl && pl.getLastRow() > 1) for (var j = pl.getLastRow(); j >= 2; j--) if (ids[String(pl.getRange(j, 1).getValue())]) pl.deleteRow(j);
+      var cl = ss.getSheetByName('Clientes'); if (cl && cl.getLastRow() > 1) for (var k = cl.getLastRow(); k >= 2; k--) if (String(cl.getRange(k, 6).getValue()).toLowerCase() === 'prueba@kulinariamx.com') cl.deleteRow(k);
+    } finally { lock.releaseLock(); }
+    try { rebuildDeliveries_(); } catch (e3) {}
+    return { ok: true, removed: n };
   }
   return { ok: false, error: 'unknown_action' };
 }

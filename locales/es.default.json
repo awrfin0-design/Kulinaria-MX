@@ -146,6 +146,10 @@
     "video_label": "Video: llamas sobre la parrilla"
   },
   "cart": {
+    "rec_title": "Cómo se cobra",
+    "rec_auto": "Los planes de 4 semanas se pagan por adelantado y se renuevan automáticamente cada 4 semanas hasta que los canceles o pauses desde tu cuenta.",
+    "rec_manual": "Los planes de 4 semanas se pagan por adelantado en un solo cargo. Al terminar te avisamos para renovar; no se cobra nada sin tu confirmación.",
+    "rec_extra": "Después de pagar, elige tus platillos cada semana: solo se cobra aparte la diferencia de los de nivel superior.",
     "checkout": "Continuar al pago",
     "code": "Código",
     "contract_label": "Acepto el contrato de adhesión y los términos de servicio de Kulinaria MX, incluida la selección automática de los sábados, las reglas de renovación y la política de no reembolso.",
@@ -231,7 +235,7 @@
     "terms_s1_t": "1. Cuenta y datos",
     "terms_s1_p": "Para pedir necesitas una cuenta con tus datos reales (nombre, correo, teléfono y dirección de entrega). Eres responsable de la información que captures y de mantener tu sesión segura. Si pides para otras personas, declaras que tienes su autorización para compartir sus datos de alergias y gustos con nosotros.",
     "terms_s2_t": "2. Planes, precios y pago",
-    "terms_s2_p": "Ofrecemos un plan de 4 semanas (pago anticipado, 20 comidas) y un plan de 1 semana (5 comidas). Cada plan se compone de hasta una comida por día, de lunes a viernes. Los precios están en pesos mexicanos (MXN) y se muestran antes de pagar; los platillos de nivel superior suman una diferencia por comida que se paga la semana en que se eligen. El pago se realiza en el checkout seguro de Shopify y es necesario haber iniciado sesión.",
+    "terms_s2_p": "Ofrecemos un plan de 4 semanas (pago anticipado, 20 comidas) y un plan de 1 semana (5 comidas). Cada plan se compone de hasta una comida por día, de lunes a viernes. Los precios están en pesos mexicanos (MXN) y se muestran antes de pagar; los platillos de nivel superior suman una diferencia por comida que se paga la semana en que se eligen. El pago se realiza en el checkout seguro de Shopify y es necesario haber iniciado sesión. El plan de 4 semanas se paga por adelantado en un solo cargo. Cada semana eliges tus platillos sin costo adicional dentro de tu plan; solo se cobra aparte, esa misma semana, la diferencia de los platillos de nivel superior que elijas. Renovación: cuando esté activa la renovación automática, el plan se renueva cada 4 semanas con el mismo método de pago hasta que lo canceles o lo pauses desde tu cuenta antes del cierre del sábado 10:00 a. m.; mientras no esté activa, te avisamos antes de que termine tu bloque y no se hace ningún cargo sin tu confirmación.",
     "terms_s3_t": "3. Pedidos, cierre y entregas",
     "terms_s3_p": "Los pedidos y las elecciones de cada semana cierran los sábados a las 10:00 a. m. (hora de México). Si pides antes del cierre, tu primera entrega es el lunes siguiente; si pides después, es el lunes de la semana posterior. Los días que dejes vacíos no se entregan y no se cobran. Si no eliges tus platillos de una semana ya contratada, repetimos tu selección anterior. Las entregas se hacen en la zona de cobertura y en el horario indicado al pagar; debes recibir tu pedido o dejar indicaciones para ello.",
     "terms_s4_t": "4. Pausas, cambios y cancelaciones",
@@ -575,6 +579,11 @@
     "have_account": "¿Ya tienes cuenta?"
   },
   "funnel": {
+    "rec_title": "Cómo se cobra",
+    "rec_auto": "El plan de 4 semanas se paga por adelantado en un solo cargo y se renueva automáticamente cada 4 semanas con el mismo método de pago, hasta que lo canceles o pauses desde tu cuenta (antes del cierre del sábado 10:00).",
+    "rec_manual": "El plan de 4 semanas se paga por adelantado en un solo cargo. Al terminar tus 4 semanas te avisamos para renovar: no se hace ningún cargo sin tu confirmación.",
+    "rec_week": "La semana de prueba es un pago único de 1 semana: no se renueva.",
+    "rec_extra": "Cada semana eliges tus platillos dentro de tu plan sin costo extra. Solo se cobra aparte la diferencia de los platillos de nivel superior (por comida, esa semana).",
     "para": "¿Para quién es este pedido?",
     "para_me": "Para mí",
     "para_add": "+ Agregar a alguien de tu familia",

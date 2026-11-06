@@ -3,24 +3,18 @@
     "head": {
       "type": "page-head",
       "settings": {
-        "parent_label": "Mi cuenta",
-        "parent_link": "/pages/cuenta",
-        "eyebrow": "Monedero",
-        "heading": "*Monedero*",
-        "text": "Crédito interno y saldo a favor.",
-        "art": "air-romance"
+        "art": "air-breakfast",
+        "heading": "Mi *cuenta*",
+        "text": "Tienes el control total de tu semana: elige, pausa, revisa tu saldo y comparte tu código."
       }
     },
-    "s1": {
-      "type": "account-panel",
-      "settings": {
-        "panel": "monedero"
-      }
+    "main": {
+      "type": "main-account",
+      "settings": {}
     }
   },
   "order": [
     "head",
-    "s1"
+    "main"
   ]
 }
-

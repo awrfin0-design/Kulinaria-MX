@@ -95,6 +95,8 @@
             <div class="summary__row" style="margin-top:var(--space-md)"><strong>{{ 'cart.total' | t }}</strong><span class="summary__total gold-text">{{ cart.total_price | money }}</span></div>
             <p class="text-muted" style="font-size:.85rem">{{ 'cart.digital_only' | t }}</p>
 
+            {%- assign has_sp = false -%}{%- for item in cart.items -%}{%- if item.selling_plan_allocation -%}{%- assign has_sp = true -%}{%- endif -%}{%- endfor -%}
+            <div class="cart-rec"><strong>{{ 'cart.rec_title' | t }}</strong><p>{% if has_sp %}{{ 'cart.rec_auto' | t }}{% else %}{{ 'cart.rec_manual' | t }}{% endif %} {{ 'cart.rec_extra' | t }}</p></div>
             <label class="check" style="margin:var(--space-lg) 0">
               <input type="checkbox" name="attributes[contrato_aceptado]" value="sí" data-contract {% if cart.attributes.contrato_aceptado == 'sí' %}checked{% endif %}>
               <span>

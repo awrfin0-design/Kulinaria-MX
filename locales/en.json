@@ -146,6 +146,10 @@
     "video_label": "Video: flames over the grill"
   },
   "cart": {
+    "rec_title": "How you are charged",
+    "rec_auto": "4-week plans are paid upfront and renew automatically every 4 weeks until you cancel or pause them from your account.",
+    "rec_manual": "4-week plans are paid upfront in a single charge. When they end we let you know to renew; nothing is charged without your confirmation.",
+    "rec_extra": "After paying, choose your dishes each week: only the difference for higher-tier dishes is charged separately.",
     "checkout": "Continue to payment",
     "code": "Code",
     "contract_label": "I accept the adhesion contract and the Kulinaria MX terms of service, including the automatic Saturday selection, renewal rules and the no-refund policy.",
@@ -231,7 +235,7 @@
     "terms_s1_t": "1. Account and data",
     "terms_s1_p": "To order you need an account with your real details (name, e-mail, phone and delivery address). You are responsible for the information you enter and for keeping your session secure. If you order for other people, you state that you have their permission to share their allergy and taste information with us.",
     "terms_s2_t": "2. Plans, prices and payment",
-    "terms_s2_p": "We offer a 4-week plan (prepaid, 20 meals) and a 1-week plan (5 meals). Each plan has up to one meal per day, Monday to Friday. Prices are in Mexican pesos (MXN) and are shown before you pay; higher-tier dishes add a per-meal difference that is paid in the week they are chosen. Payment is made at Shopify's secure checkout and you must be signed in.",
+    "terms_s2_p": "We offer a 4-week plan (prepaid, 20 meals) and a 1-week plan (5 meals). Each plan has up to one meal per day, Monday to Friday. Prices are in Mexican pesos (MXN) and are shown before you pay; higher-tier dishes add a per-meal difference that is paid in the week they are chosen. Payment is made at Shopify's secure checkout and you must be signed in. The 4-week plan is paid upfront in a single charge. Each week you choose your dishes at no extra cost within your plan; only the difference for the higher-tier dishes you choose is charged separately, that same week. Renewal: when automatic renewal is active, the plan renews every 4 weeks with the same payment method until you cancel or pause it from your account before the Saturday 10:00 a.m. cut-off; while it is not active, we notify you before your block ends and nothing is charged without your confirmation.",
     "terms_s3_t": "3. Orders, cut-off and deliveries",
     "terms_s3_p": "Orders and each week's choices close on Saturdays at 10:00 a.m. (Mexico time). If you order before the cut-off, your first delivery is the following Monday; if you order after it, the Monday of the week after. Days you leave empty are not delivered and not charged. If you don't choose your dishes for a week you already bought, we repeat your previous selection. Deliveries are made within the coverage area and the time window shown at payment; you must receive your order or leave instructions for it.",
     "terms_s4_t": "4. Pauses, changes and cancellations",
@@ -575,6 +579,11 @@
     "have_account": "Already have an account?"
   },
   "funnel": {
+    "rec_title": "How you are charged",
+    "rec_auto": "The 4-week plan is paid upfront in a single charge and renews automatically every 4 weeks with the same payment method, until you cancel or pause it from your account (before the Saturday 10:00 cut-off).",
+    "rec_manual": "The 4-week plan is paid upfront in a single charge. When your 4 weeks end we let you know to renew: nothing is charged without your confirmation.",
+    "rec_week": "The trial week is a one-time payment for 1 week: it does not renew.",
+    "rec_extra": "Each week you choose your dishes within your plan at no extra cost. Only the difference for higher-tier dishes is charged separately (per meal, that week).",
     "para": "Who is this order for?",
     "para_me": "For me",
     "para_add": "+ Add someone from your family",

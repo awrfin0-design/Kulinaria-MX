@@ -3,12 +3,10 @@
     "head": {
       "type": "page-head",
       "settings": {
-        "parent_label": "Planes",
-        "parent_link": "/pages/planes",
-        "eyebrow": "Ciclo y políticas",
-        "heading": "Así corre *tu semana*",
-        "text": "Cierre los sábados a las 10:00 AM, entregas de lunes a viernes, pausas los martes y los viernes.",
-        "art": "air-bowl"
+        "eyebrow": "Planes",
+        "heading": "Elige cómo *quieres empezar*",
+        "text": "La suscripción se contrata en bloques de 4 semanas. Si prefieres probar, puedes comprar una sola semana.",
+        "art": "air-fish"
       },
       "blocks": {
         "n0": {
@@ -56,6 +54,147 @@
       ]
     },
     "s1": {
+      "type": "plans-compare",
+      "settings": {
+        "heading": "Elige cómo *quieres empezar*"
+      }
+    },
+    "s3": {
+      "type": "tiers",
+      "settings": {
+        "eyebrow": "Niveles",
+        "heading": "Cuatro niveles, un *mismo estándar*",
+        "text": "Cada nivel suma $70 MXN por comida sobre el anterior."
+      },
+      "blocks": {
+        "t1": {
+          "type": "tier",
+          "settings": {
+            "tier": "selecto",
+            "text": "Menú base diario y de alta rotación."
+          }
+        },
+        "t2": {
+          "type": "tier",
+          "settings": {
+            "tier": "exclusivo",
+            "text": "Cocciones lentas y elaboraciones sofisticadas."
+          }
+        },
+        "t3": {
+          "type": "tier",
+          "settings": {
+            "tier": "signature",
+            "text": "Recetas de autor con cortes premium."
+          }
+        },
+        "t4": {
+          "type": "tier",
+          "settings": {
+            "tier": "reserve",
+            "text": "Prime y mariscos selectos."
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ]
+    },
+    "bloque": {
+      "type": "feature-grid",
+      "settings": {
+        "layout": "rows",
+        "columns": "3",
+        "background": "base",
+        "eyebrow": "Por qué el bloque",
+        "heading": "La opción lógica *para tu semana*"
+      },
+      "blocks": {
+        "b0": {
+          "type": "item",
+          "settings": {
+            "title": "Precio prorrateado más bajo",
+            "text": "<p>Compramos los insumos en volumen y esa eficiencia se refleja en cada platillo.</p>",
+            "art": "hero"
+          }
+        },
+        "b1": {
+          "type": "item",
+          "settings": {
+            "title": "Selección automática",
+            "text": "<p>Si no eliges antes del sábado a las 10:00 AM, armamos tu pedido con tu plan, historial y alergias.</p>",
+            "art": "dish-3"
+          }
+        },
+        "b2": {
+          "type": "item",
+          "settings": {
+            "title": "Pausas flexibles",
+            "text": "<p>Pausa por imprevistos o viajes; lo no preparado queda como saldo a favor.</p>",
+            "art": "dish-6"
+          }
+        },
+        "b3": {
+          "type": "item",
+          "settings": {
+            "title": "Código de referencia propio",
+            "text": "<p>Recibes tu código y tu monedero desde el primer bloque.</p>",
+            "art": "dinner"
+          }
+        }
+      },
+      "block_order": [
+        "b0",
+        "b1",
+        "b2",
+        "b3"
+      ]
+    },
+    "prueba": {
+      "type": "feature-grid",
+      "settings": {
+        "layout": "rows",
+        "columns": "3",
+        "background": "base",
+        "eyebrow": "Cómo funciona",
+        "heading": "Probar *es simple*"
+      },
+      "blocks": {
+        "b0": {
+          "type": "item",
+          "settings": {
+            "title": "Una sola semana",
+            "text": "<p>Compra hasta el sábado a las 10:00 AM y recibe esa misma semana.</p>",
+            "art": "dish-0"
+          }
+        },
+        "b1": {
+          "type": "item",
+          "settings": {
+            "title": "15% más cara que el bloque",
+            "text": "<p>Cuesta 15% más que el precio prorrateado del bloque de 4 semanas; la diferencia queda a la vista.</p>",
+            "art": "dish-7"
+          }
+        },
+        "b2": {
+          "type": "item",
+          "settings": {
+            "title": "Pago digital, sin efectivo",
+            "text": "<p>Todo se cobra en la web al hacer el pedido.</p>",
+            "art": "containers"
+          }
+        }
+      },
+      "block_order": [
+        "b0",
+        "b1",
+        "b2"
+      ]
+    },
+    "ciclo": {
       "type": "feature-grid",
       "settings": {
         "eyebrow": "Calendario del ciclo",
@@ -101,7 +240,7 @@
         "k4"
       ]
     },
-    "s2": {
+    "s5": {
       "type": "faq",
       "settings": {
         "eyebrow": "Políticas clave",
@@ -129,30 +268,149 @@
             "question": "Caducidad por inactividad",
             "answer": "<p>Tras una pausa tienes 30 días naturales para reanudar. Pasado ese plazo el contrato se cancela y se pierde el saldo acumulado.</p>"
           }
+        },
+        "c_q1": {
+          "type": "item",
+          "settings": {
+            "question": "Pago digital, cero efectivo",
+            "answer": "<p>Toda suscripción o renovación se cobra en la página web al hacer el pedido. Los repartidores no llevan efectivo ni cambio.</p>"
+          }
+        },
+        "c_q2": {
+          "type": "item",
+          "settings": {
+            "question": "Sin reembolso tras liquidar",
+            "answer": "<p>Los insumos se compran en volumen, por lo que no hay cancelación del contrato vigente ni devolución de dinero. Si pausas a tiempo, las comidas no preparadas se guardan como saldo a favor.</p>"
+          }
+        },
+        "c_q3": {
+          "type": "item",
+          "settings": {
+            "question": "Caducidad por inactividad",
+            "answer": "<p>Tras una pausa tienes 30 días naturales para reanudar. Pasado ese plazo el contrato se cancela y se pierde el saldo acumulado.</p>"
+          }
         }
       },
       "block_order": [
         "q1",
         "q2",
-        "q3"
+        "q3",
+        "c_q1",
+        "c_q2",
+        "c_q3"
       ]
     },
-    "s3": {
+    "s6": {
       "type": "cta-banner",
+      "settings": {}
+    },
+    "s2": {
+      "type": "feature-grid",
       "settings": {
-        "heading": "¿Dudas sobre *el contrato?*",
-        "text": "Lee el contrato de adhesión completo antes de pagar.",
-        "button_label": "Leer contrato",
-        "button_link": "/pages/terminos",
-        "show_countdown": false
-      }
+        "layout": "rows",
+        "columns": "3",
+        "background": "base",
+        "eyebrow": "Qué incluye",
+        "heading": "Todo lo que recibes *en cada platillo*"
+      },
+      "blocks": {
+        "b0": {
+          "type": "item",
+          "settings": {
+            "title": "Empaque óptimo",
+            "text": "<p>Cada platillo se empaca para llegar perfecto y recalentarse sin perder su punto.</p>",
+            "art": "dish-1"
+          }
+        },
+        "b1": {
+          "type": "item",
+          "settings": {
+            "title": "Preparación del chef",
+            "text": "<p>Cocina de autor con fuego, cocciones lentas y reducciones artesanales.</p>",
+            "art": "flames"
+          }
+        },
+        "b2": {
+          "type": "item",
+          "settings": {
+            "title": "Envases de vidrio",
+            "text": "<p>Vidrio de alta calidad que conserva el sabor y se puede reutilizar.</p>",
+            "art": "containers"
+          }
+        },
+        "b3": {
+          "type": "item",
+          "settings": {
+            "title": "Entrega a domicilio",
+            "text": "<p>Entregas de lunes a viernes, en la puerta de tu casa. Pago 100% digital.</p>",
+            "art": "dinner"
+          }
+        }
+      },
+      "block_order": [
+        "b0",
+        "b1",
+        "b2",
+        "b3"
+      ]
+    },
+    "s4": {
+      "type": "feature-grid",
+      "settings": {
+        "eyebrow": "Calendario del ciclo",
+        "heading": "Así corre *tu semana*",
+        "columns": "4",
+        "background": "raised",
+        "numbered": true
+      },
+      "blocks": {
+        "k1": {
+          "type": "item",
+          "settings": {
+            "title": "Sábado 10:00 AM",
+            "text": "<p>Cierre de pedidos. Si no elegiste, a las 10:01 AM se arma tu pedido automático.</p>"
+          }
+        },
+        "k2": {
+          "type": "item",
+          "settings": {
+            "title": "Lunes a miércoles",
+            "text": "<p>Entregas de la primera mitad de la semana. Pausa hasta el viernes 7:00 PM.</p>"
+          }
+        },
+        "k3": {
+          "type": "item",
+          "settings": {
+            "title": "Martes 10:00 AM",
+            "text": "<p>Último momento para pausar las entregas de jueves y viernes.</p>"
+          }
+        },
+        "k4": {
+          "type": "item",
+          "settings": {
+            "title": "Jueves y viernes",
+            "text": "<p>Entregas de la segunda mitad. Viernes 7:00 PM es el corte de renovación.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "k1",
+        "k2",
+        "k3",
+        "k4"
+      ]
     }
   },
   "order": [
     "head",
     "s1",
     "s2",
-    "s3"
+    "s3",
+    "bloque",
+    "prueba",
+    "s4",
+    "ciclo",
+    "s5",
+    "s6"
   ]
 }
-

@@ -3,24 +3,18 @@
     "head": {
       "type": "page-head",
       "settings": {
-        "parent_label": "Mi cuenta",
-        "parent_link": "/pages/cuenta",
-        "eyebrow": "Entregas y envases",
-        "heading": "Entregas *y envases*",
-        "text": "Dirección, espera de cortesía y envases.",
-        "art": "air-glass"
+        "art": "air-breakfast",
+        "heading": "Mi *cuenta*",
+        "text": "Tienes el control total de tu semana: elige, pausa, revisa tu saldo y comparte tu código."
       }
     },
-    "s1": {
-      "type": "account-panel",
-      "settings": {
-        "panel": "entregas"
-      }
+    "main": {
+      "type": "main-account",
+      "settings": {}
     }
   },
   "order": [
     "head",
-    "s1"
+    "main"
   ]
 }
-
