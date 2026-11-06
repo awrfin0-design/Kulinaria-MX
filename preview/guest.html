@@ -2613,6 +2613,65 @@ h3,h4{font-weight:600}
   .funnel .step[data-fn-step="1"] .fn-credit .btn{padding:8px 16px}
 }
 
+/* =====================================================================
+   v53 — order builder in 3 steps: 1 plan + tutorial · 2 the whole menu · 3 your week (selector, ingredients, notes).
+   No scrollbars anywhere in the builder (side-scrolling still works by swipe / arrows).
+   ===================================================================== */
+.funnel *{scrollbar-width:none;-ms-overflow-style:none}
+.funnel *::-webkit-scrollbar{display:none;width:0;height:0}
+.fn-day__ing{display:none}
+.funnel .step[data-fn-step="3"]{display:none}
+.funnel .step[data-fn-step="3"].is-on{display:flex;flex-direction:column;gap:10px}
+.funnel .step[data-fn-step="3"] legend{font-size:1.1rem;margin-bottom:4px}
+.funnel .step[data-fn-step="3"] .fn-week{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:0}
+.funnel .step[data-fn-step="3"] .fn-day{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 12px;min-height:150px;height:100%}
+.funnel .step[data-fn-step="3"] .fn-day__thumb{width:100%;height:64px;border-radius:10px;grid-row:auto}
+.funnel .step[data-fn-step="3"] .fn-day__dish{-webkit-line-clamp:2;font-size:.86rem;font-weight:600}
+.funnel .step[data-fn-step="3"] .fn-day__ing{display:block;font-size:.68rem;line-height:1.3;color:var(--text-muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@media (min-width:901px){
+  /* the menu step has the whole frame: bigger tiles, all dishes visible */
+  .funnel .step[data-fn-step="2"] .fn-dishes{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));grid-auto-rows:92px}
+  .funnel .step[data-fn-step="2"] .fn-dish{height:92px !important;grid-template-columns:92px minmax(0,1fr)}
+  .funnel .step[data-fn-step="2"] .fn-dish__media{height:92px !important;width:92px !important}
+  .funnel .step[data-fn-step="2"] .fn-dish__media img{width:92px;height:92px}
+  .funnel .step[data-fn-step="2"] .fn-dish>.fn-up{width:92px}
+  .funnel .step[data-fn-step="2"] .fn-dish__title{font-size:.9rem}
+}
+@media (max-width:900px){
+  .funnel .step[data-fn-step="3"] .fn-week{grid-template-columns:1fr;gap:8px}
+  .funnel .step[data-fn-step="3"] .fn-day{flex-direction:row;align-items:center;min-height:0;height:auto;gap:10px}
+  .funnel .step[data-fn-step="3"] .fn-day__thumb{width:54px;height:54px;flex:none}
+}
+/* hover film inside gold buttons: keep the label readable */
+.btn--gold.is-fx{color:#fff !important;text-shadow:0 1px 8px rgba(0,0,0,.75)}
+.btn--gold.is-fx .btn__fx{opacity:.5}
+
+/* v53 — phone: step 2 is a two-column menu you swipe up and down (no bars), step 3 big tap targets */
+@media (max-width:900px){
+  .funnel .step[data-fn-step="2"] .fn-carousel{display:block;overflow-y:auto;overflow-x:hidden;flex:1 1 auto;min-height:0;-webkit-mask-image:linear-gradient(#000 92%,transparent);mask-image:linear-gradient(#000 92%,transparent);overscroll-behavior:contain}
+  .funnel .fn-arrow{display:none !important}
+  .funnel .step[data-fn-step="2"] .fn-dishes{display:grid !important;grid-template-columns:1fr 1fr !important;grid-auto-rows:auto;gap:10px;overflow:visible !important;height:auto;max-height:none !important;padding:2px 0 24px;scroll-snap-type:none}
+  .funnel .step[data-fn-step="2"] .fn-dish{flex:none !important;height:auto !important;min-height:0 !important;display:flex !important;flex-direction:column;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg-raised);padding:0 !important;grid-template-columns:none}
+  .funnel .step[data-fn-step="2"] .fn-dish__media{height:96px !important;width:100% !important;min-height:0 !important;flex:none !important}
+  .funnel .step[data-fn-step="2"] .fn-dish__media img{width:100%;height:96px;object-fit:cover}
+  .funnel .step[data-fn-step="2"] .fn-dish__body{padding:8px 9px 9px !important;gap:4px !important;display:flex;flex-direction:column}
+  .funnel .step[data-fn-step="2"] .fn-dish .tier-badge,.funnel .step[data-fn-step="2"] .fn-dish .dish__facts,.funnel .step[data-fn-step="2"] .fn-dish .dish__desc,.funnel .step[data-fn-step="2"] .fn-dish .compat{display:none !important}
+  .funnel .step[data-fn-step="2"] .fn-dish__title{font-size:.84rem;line-height:1.2;min-height:2.4em;margin:0;-webkit-line-clamp:2}
+  .funnel .step[data-fn-step="2"] .fn-dish__row{display:flex;justify-content:space-between;align-items:center;gap:6px;margin:0}
+  .funnel .step[data-fn-step="2"] .fn-dish .dish__price{font-size:.95rem}.funnel .step[data-fn-step="2"] .fn-dish .dish__price small{display:none}
+  .funnel .step[data-fn-step="2"] .fn-dish .btn--sm{min-height:34px;padding:0 14px;font-size:.7rem}
+  .funnel .step[data-fn-step="2"] .fn-dish>.fn-up{position:absolute;left:0;top:70px;font-size:.62rem;background:rgba(0,0,0,.75);color:#fff;padding:1px 7px;margin:0;border-radius:0 8px 0 0}
+  .funnel .fn-day__e{width:30px;height:30px;font-size:1rem;left:auto;right:42px;top:6px}
+}
+@media (max-width:900px){
+  .funnel .step[data-fn-step="2"] .fn-pickbar{flex-wrap:nowrap;align-items:center;gap:8px;margin:0 0 6px}
+  .funnel .step[data-fn-step="2"] .fn-prompt{flex:1 1 auto;font-size:1rem;margin:0;line-height:1.2}
+  .funnel .step[data-fn-step="2"] .fn-pickbar .fn-meter{display:none}
+  .funnel .step[data-fn-step="2"] .fn-sel select{max-width:128px;min-height:38px;font-size:.78rem}
+  .funnel .step[data-fn-step="2"] .fn-para{margin:0 0 6px}
+  .funnel .step[data-fn-step="2"] .fn-para .text-link{font-size:.68rem}
+}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -3038,11 +3097,12 @@ Fuego</span>
     <div class="funnel__top container">
       <div class="funnel__title">
         <span class="eyebrow">Haz tu pedido</span>
-        <h2>Arma tu pedido en <em>2 pasos</em></h2>
+        <h2>Arma tu pedido en <em>3 pasos</em></h2>
       </div>
       <ol class="steps__nav" aria-label="Pasos del pedido">
         <li data-fn-dot class="is-on"><span>01</span>Plan</li>
-        <li data-fn-dot><span>02</span>Comidas</li>
+        <li data-fn-dot><span>02</span>Menú</li>
+        <li data-fn-dot><span>03</span>Tu semana</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -3107,8 +3167,6 @@ Fuego</span>
         <fieldset class="step" data-fn-step="2">
           <legend class="fn-sr">Elige tus 5 comidas de la semana</legend>
           <div class="fn-para" data-fn-para-wrap hidden><label for="home--fn-para-funnel">¿Para quién es este pedido?</label><select class="select" id="home--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Agregar a alguien de tu familia</a></div>
-          <ol class="fn-week" data-fn-week aria-label="Asigna cada comida a un día"></ol>
-          <div class="fn-mods" data-fn-mods hidden></div>
           <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>comidas</span><i data-fn-meter-bar></i></p>
@@ -3383,6 +3441,11 @@ Fuego</span>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-arrow="1" aria-label="Platillos siguientes">&#8250;</button>
           </div>
           <p class="alert" data-fn-empty hidden>Esta semana no hay platillos con esa combinación. Cambia de nivel o de menú.</p>
+        </fieldset>
+        <fieldset class="step" data-fn-step="3">
+          <legend>Tu semana: revisa, personaliza y confirma</legend>
+          <ol class="fn-week" data-fn-week aria-label="Asigna cada comida a un día"></ol>
+          <div class="fn-mods" data-fn-mods hidden></div>
         </fieldset>
 
 
@@ -11065,11 +11128,12 @@ Pago digital, sin efectivo</li></ul>
     <div class="funnel__top container">
       <div class="funnel__title">
         <span class="eyebrow">Haz tu pedido</span>
-        <h2>Arma tu pedido en <em>2 pasos</em></h2>
+        <h2>Arma tu pedido en <em>3 pasos</em></h2>
       </div>
       <ol class="steps__nav" aria-label="Pasos del pedido">
         <li data-fn-dot class="is-on"><span>01</span>Plan</li>
-        <li data-fn-dot><span>02</span>Comidas</li>
+        <li data-fn-dot><span>02</span>Menú</li>
+        <li data-fn-dot><span>03</span>Tu semana</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -11134,8 +11198,6 @@ Pago digital, sin efectivo</li></ul>
         <fieldset class="step" data-fn-step="2">
           <legend class="fn-sr">Elige tus 5 comidas de la semana</legend>
           <div class="fn-para" data-fn-para-wrap hidden><label for="pg-pedido--fn-para-funnel">¿Para quién es este pedido?</label><select class="select" id="pg-pedido--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Agregar a alguien de tu familia</a></div>
-          <ol class="fn-week" data-fn-week aria-label="Asigna cada comida a un día"></ol>
-          <div class="fn-mods" data-fn-mods hidden></div>
           <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>comidas</span><i data-fn-meter-bar></i></p>
@@ -11410,6 +11472,11 @@ Pago digital, sin efectivo</li></ul>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-arrow="1" aria-label="Platillos siguientes">&#8250;</button>
           </div>
           <p class="alert" data-fn-empty hidden>Esta semana no hay platillos con esa combinación. Cambia de nivel o de menú.</p>
+        </fieldset>
+        <fieldset class="step" data-fn-step="3">
+          <legend>Tu semana: revisa, personaliza y confirma</legend>
+          <ol class="fn-week" data-fn-week aria-label="Asigna cada comida a un día"></ol>
+          <div class="fn-mods" data-fn-mods hidden></div>
         </fieldset>
 
 
@@ -12087,11 +12154,12 @@ Pago digital, sin efectivo</li></ul>
     <div class="funnel__top container">
       <div class="funnel__title">
         <span class="eyebrow">Place your order</span>
-        <h2>Build your order in <em>2 steps</em></h2>
+        <h2>Build your order in <em>3 steps</em></h2>
       </div>
       <ol class="steps__nav" aria-label="Order steps">
         <li data-fn-dot class="is-on"><span>01</span>Plan</li>
-        <li data-fn-dot><span>02</span>Meals</li>
+        <li data-fn-dot><span>02</span>Menu</li>
+        <li data-fn-dot><span>03</span>Your week</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -12156,8 +12224,6 @@ Pago digital, sin efectivo</li></ul>
         <fieldset class="step" data-fn-step="2">
           <legend class="fn-sr">Choose your 5 meals for the week</legend>
           <div class="fn-para" data-fn-para-wrap hidden><label for="home--fn-para-funnel">Who is this order for?</label><select class="select" id="home--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Add someone from your family</a></div>
-          <ol class="fn-week" data-fn-week aria-label="Assign each meal to a day"></ol>
-          <div class="fn-mods" data-fn-mods hidden></div>
           <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>meals</span><i data-fn-meter-bar></i></p>
@@ -12432,6 +12498,11 @@ Pago digital, sin efectivo</li></ul>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-arrow="1" aria-label="Next dishes">&#8250;</button>
           </div>
           <p class="alert" data-fn-empty hidden>There are no dishes with that combination this week. Change the tier or the menu.</p>
+        </fieldset>
+        <fieldset class="step" data-fn-step="3">
+          <legend>Your week: review, personalize and confirm</legend>
+          <ol class="fn-week" data-fn-week aria-label="Assign each meal to a day"></ol>
+          <div class="fn-mods" data-fn-mods hidden></div>
         </fieldset>
 
 
@@ -20114,11 +20185,12 @@ Digital payment, no cash</li></ul>
     <div class="funnel__top container">
       <div class="funnel__title">
         <span class="eyebrow">Place your order</span>
-        <h2>Build your order in <em>2 steps</em></h2>
+        <h2>Build your order in <em>3 steps</em></h2>
       </div>
       <ol class="steps__nav" aria-label="Order steps">
         <li data-fn-dot class="is-on"><span>01</span>Plan</li>
-        <li data-fn-dot><span>02</span>Meals</li>
+        <li data-fn-dot><span>02</span>Menu</li>
+        <li data-fn-dot><span>03</span>Your week</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -20183,8 +20255,6 @@ Digital payment, no cash</li></ul>
         <fieldset class="step" data-fn-step="2">
           <legend class="fn-sr">Choose your 5 meals for the week</legend>
           <div class="fn-para" data-fn-para-wrap hidden><label for="pg-pedido--fn-para-funnel">Who is this order for?</label><select class="select" id="pg-pedido--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Add someone from your family</a></div>
-          <ol class="fn-week" data-fn-week aria-label="Assign each meal to a day"></ol>
-          <div class="fn-mods" data-fn-mods hidden></div>
           <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>meals</span><i data-fn-meter-bar></i></p>
@@ -20459,6 +20529,11 @@ Digital payment, no cash</li></ul>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-arrow="1" aria-label="Next dishes">&#8250;</button>
           </div>
           <p class="alert" data-fn-empty hidden>There are no dishes with that combination this week. Change the tier or the menu.</p>
+        </fieldset>
+        <fieldset class="step" data-fn-step="3">
+          <legend>Your week: review, personalize and confirm</legend>
+          <ol class="fn-week" data-fn-week aria-label="Assign each meal to a day"></ol>
+          <div class="fn-mods" data-fn-mods hidden></div>
         </fieldset>
 
 
@@ -21521,7 +21596,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     es: { title: 'Panel de administración', demo: 'Datos de demostración. Conecta el Google Sheet (docs/admin.md) para ver los pedidos reales.', tabs: ['Resumen', 'Lista de compras', 'Recetas', 'Pedidos', 'Descuentos', 'Finanzas', 'Entregas', 'Solicitudes'],
       lTitle: 'Solicitudes', lNone: 'Aún no hay solicitudes.', lKinds: { embajador: 'Embajador', carta: 'Evento / Carta', general: 'Contacto' }, lStates: ['Nueva', 'En proceso', 'Atendida'], lNew: 'nuevas', lMakeCode: 'Crear código de descuento', lWa: 'WhatsApp', lMail: 'Correo', lDemo: 'Conecta el Google Sheet para ver las solicitudes.',
       oPeople: 'personas', oMonthTitle: 'Pedidos del mes', oSee: 'ver detalle',
-      eNotes: 'Notas de cocina', eTitle: 'Entregas', eNone: 'Sin entregas este día.', eMeals: 'comidas', eStops: 'paradas', eTotal: 'Total del día', eWho: 'Para', eHolder: 'Cuenta', ePhone: 'Teléfono', eAddr: 'Dirección', eAllergy: 'Alergias', eDislike: 'No le gusta', eCook: 'Platillos a cocinar ese día', eDemo: 'Conecta el Google Sheet para ver las entregas reales.', eDays: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'], eAuto: 'repite la selección anterior', oWho: 'Cliente', oContact: 'Contacto', oPlanTxt: 'Plan', oWeekly: 'Qué pidió, semana por semana', oPaid: 'Pagado', oUnpaid: 'Pendiente de pago', oNoDish: '—', oPaused: 'Semanas en pausa', oFor: 'Para',
+      eEmpty: 'Conectado al Google Sheet. Las entregas aparecerán aquí cuando haya el primer pedido pagado de un plan.', eNotes: 'Notas de cocina', eTitle: 'Entregas', eNone: 'Sin entregas este día.', eMeals: 'comidas', eStops: 'paradas', eTotal: 'Total del día', eWho: 'Para', eHolder: 'Cuenta', ePhone: 'Teléfono', eAddr: 'Dirección', eAllergy: 'Alergias', eDislike: 'No le gusta', eCook: 'Platillos a cocinar ese día', eDemo: 'Conecta el Google Sheet para ver las entregas reales.', eDays: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'], eAuto: 'repite la selección anterior', oWho: 'Cliente', oContact: 'Contacto', oPlanTxt: 'Plan', oWeekly: 'Qué pidió, semana por semana', oPaid: 'Pagado', oUnpaid: 'Pendiente de pago', oNoDish: '—', oPaused: 'Semanas en pausa', oFor: 'Para',
       errReload: 'No se pudieron actualizar los datos (el script tardó o falló). Tu sesión sigue abierta.', retry: 'Reintentar',
       fBusy: 'Creando el pedido de prueba… puede tardar hasta 20 segundos, no cierres la página.', fBusyDel: 'Borrando…', fErrKey: 'La contraseña no coincide con ADMIN_KEY del Apps Script.', fErrNet: 'No se pudo conectar con el script. Revisa que la implementación esté publicada para «Cualquier persona».', fGoOrders: 'Ver en la pestaña Pedidos',
       fTitle: 'Finanzas del mes', fIn: 'Ingresos (pagados)', fPlans: 'Planes', fUp: 'Mejoras de platillo', fOther: 'Otros', fPend: 'Por cobrar', fOut: 'Gastos', fNet: 'Utilidad', fOrders: 'Ingresos por pedido', fNone: 'No hay movimientos en este mes.', fExp: 'Gastos del mes', fAdd: 'Registrar un gasto', fDate: 'Fecha', fConcept: 'Concepto', fCat: 'Categoría', fAmount: 'Monto (MXN)', fSave: 'Guardar gasto', fDel: 'Borrar', fType: 'Tipo', fPaid: 'Pagado', fTest: 'PRUEBA', fTools: 'Pedido de prueba', fToolsP: 'Crea un pedido ficticio y pagado (dos personas y una mejora) para ver cómo se llenan la hoja de Google y este panel. Se puede borrar después.', fMake: 'Crear pedido de prueba', fClear: 'Borrar pedidos de prueba', fMade: 'Pedido de prueba creado: ', fCleared: 'Pedidos de prueba borrados: ', fSaved: 'Gasto guardado.', fErrC: 'Escribe el concepto del gasto.', fErrA: 'Escribe un monto mayor a cero.', fNoData: 'Conecta el Google Sheet para ver las finanzas.', fCats: ['Ingredientes', 'Empaques', 'Nómina', 'Reparto', 'Marketing', 'Servicios', 'Otros'],
@@ -21536,7 +21611,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     en: { title: 'Admin panel', demo: 'Demo data. Connect the Google Sheet (docs/admin.md) to see real orders.', tabs: ['Summary', 'Shopping list', 'Recipes', 'Orders', 'Discounts', 'Finance', 'Deliveries', 'Requests'],
       lTitle: 'Requests', lNone: 'No requests yet.', lKinds: { embajador: 'Ambassador', carta: 'Event / Carta', general: 'Contact' }, lStates: ['Nueva', 'En proceso', 'Atendida'], lNew: 'new', lMakeCode: 'Create discount code', lWa: 'WhatsApp', lMail: 'E-mail', lDemo: 'Connect the Google Sheet to see the requests.',
       oPeople: 'people', oMonthTitle: 'Orders this month', oSee: 'see detail',
-      eNotes: 'Kitchen notes', eTitle: 'Deliveries', eNone: 'No deliveries this day.', eMeals: 'meals', eStops: 'stops', eTotal: 'Day total', eWho: 'For', eHolder: 'Account', ePhone: 'Phone', eAddr: 'Address', eAllergy: 'Allergies', eDislike: 'Dislikes', eCook: 'Dishes to cook that day', eDemo: 'Connect the Google Sheet to see the real deliveries.', eDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], eAuto: 'repeats the previous selection', oWho: 'Client', oContact: 'Contact', oPlanTxt: 'Plan', oWeekly: 'What they ordered, week by week', oPaid: 'Paid', oUnpaid: 'Payment pending', oNoDish: '—', oPaused: 'Paused weeks', oFor: 'For',
+      eEmpty: 'Connected to the Google Sheet. Deliveries will show up here once there is a first paid plan order.', eNotes: 'Kitchen notes', eTitle: 'Deliveries', eNone: 'No deliveries this day.', eMeals: 'meals', eStops: 'stops', eTotal: 'Day total', eWho: 'For', eHolder: 'Account', ePhone: 'Phone', eAddr: 'Address', eAllergy: 'Allergies', eDislike: 'Dislikes', eCook: 'Dishes to cook that day', eDemo: 'Connect the Google Sheet to see the real deliveries.', eDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], eAuto: 'repeats the previous selection', oWho: 'Client', oContact: 'Contact', oPlanTxt: 'Plan', oWeekly: 'What they ordered, week by week', oPaid: 'Paid', oUnpaid: 'Payment pending', oNoDish: '—', oPaused: 'Paused weeks', oFor: 'For',
       errReload: 'The data could not be refreshed (the script was slow or failed). Your session is still open.', retry: 'Retry',
       fBusy: 'Creating the test order… it can take up to 20 seconds, do not close the page.', fBusyDel: 'Deleting…', fErrKey: 'The password does not match ADMIN_KEY in the Apps Script.', fErrNet: 'Could not reach the script. Check the deployment is published for "Anyone".', fGoOrders: 'See it in the Orders tab',
       fTitle: 'Finances this month', fIn: 'Income (paid)', fPlans: 'Plans', fUp: 'Dish upgrades', fOther: 'Other', fPend: 'To collect', fOut: 'Expenses', fNet: 'Profit', fOrders: 'Income by order', fNone: 'No movements this month.', fExp: 'Expenses this month', fAdd: 'Record an expense', fDate: 'Date', fConcept: 'Concept', fCat: 'Category', fAmount: 'Amount (MXN)', fSave: 'Save expense', fDel: 'Delete', fType: 'Type', fPaid: 'Paid', fTest: 'TEST', fTools: 'Test order', fToolsP: 'Creates a fictitious paid order (two people and an upgrade) so you can see how the Google Sheet and this panel fill in. You can delete it afterwards.', fMake: 'Create test order', fClear: 'Delete test orders', fMade: 'Test order created: ', fCleared: 'Test orders deleted: ', fSaved: 'Expense saved.', fErrC: 'Enter the expense concept.', fErrA: 'Enter an amount above zero.', fNoData: 'Connect the Google Sheet to see the finances.', fCats: ['Ingredients', 'Packaging', 'Payroll', 'Delivery', 'Marketing', 'Utilities', 'Other'],
@@ -21697,7 +21772,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       return head + msg + '<h3 class="adm-cat">' + T.fOrders + '</h3>' + orders + '<h3 class="adm-cat">' + T.fExp + '</h3>' + exps + '<div class="adm-grid" style="margin-top:14px">' + form + tools + '</div>';
     }
     function viewDeliveries() {
-      if (!S.data.orders.some(function (o) { return o.weeks; })) return '<p class="adm-demo">' + T.eDemo + '</p>';
+      if (!S.data.orders.some(function (o) { return o.weeks; })) return '<p class="adm-demo">' + (S.data.demo === false ? T.eEmpty : T.eDemo) + '</p>';
       var by = deliveriesByDate(S.data.orders), key = S.year + '-' + String(S.month + 1).padStart(2, '0');
       var first = new Date(S.year, S.month, 1), lead = (first.getDay() + 6) % 7, days = new Date(S.year, S.month + 1, 0).getDate(), today = ymd(now);
       if (!S.eday || S.eday.slice(0, 7) !== key) { var cand = Object.keys(by).filter(function (k) { return k.slice(0, 7) === key; }).sort(); S.eday = (cand.indexOf(today) > -1 ? today : (cand.filter(function (k) { return k >= today; })[0] || cand[0])) || key + '-01'; }
@@ -21822,7 +21897,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         }
         if (j.recipes && j.recipes.length) recipes = normalizeRecipes(j.recipes);
         S.loadErr = false;
-        S.data = { orders: attachWeeklies(j.orders || [], j.selections || [], cutoff), clients: j.clients || [], finance: j.finance || null, demo: false }; render();
+        S.data = { orders: attachWeeklies(j.orders || [], j.selections || [], cutoff), clients: j.clients || [], finance: j.finance || null, leads: Array.isArray(j.leads) ? j.leads : null, demo: false }; render();
       }, fail);
     }
     var saved = ''; try { saved = sessionStorage.getItem('kx-admin-key') || ''; } catch (e) {}
@@ -22924,7 +22999,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         for (var i = 0; i < MEALS; i++) {
           var li = document.createElement('li'), b = document.createElement('button'), x = document.createElement('span');
           b.type = 'button'; b.className = 'fn-day'; b.setAttribute('data-fn-day-btn', i);
-          b.innerHTML = '<i class="fn-day__thumb" aria-hidden="true"></i><span class="fn-day__d"></span><span class="fn-day__dish"></span>';
+          b.innerHTML = '<i class="fn-day__thumb" aria-hidden="true"></i><span class="fn-day__d"></span><span class="fn-day__dish"></span><span class="fn-day__ing"></span>';
           x.className = 'fn-day__x'; x.setAttribute('data-fn-day-x', i); x.setAttribute('role', 'button'); x.tabIndex = 0; x.textContent = '×'; x.hidden = true;
           var ed = document.createElement('span'); ed.className = 'fn-day__e'; ed.setAttribute('data-fn-day-edit', i); ed.setAttribute('role', 'button'); ed.tabIndex = 0; ed.textContent = '✎'; ed.hidden = true;
           li.appendChild(b); li.appendChild(x); li.appendChild(ed); weekBox.appendChild(li);
@@ -22937,6 +23012,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           $('.fn-day__d', b).textContent = dayShort(i);
           var dish = $('.fn-day__dish', b), thumb = $('.fn-day__thumb', b), lv = levelOf(d);
           dish.textContent = d ? lab(d) + (lv ? ' · +' + money(upg(lv)) : '') : '—';
+          var ingEl = $('.fn-day__ing', b); if (ingEl) { var ig = d ? (d.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean) : [], mt0 = d ? modsText(i) : ''; ingEl.textContent = (ig.length ? ig.slice(0, 7).join(' · ') : '') + (mt0 ? '  ✎ ' + mt0 : ''); }
           var img = d && $('img', d); thumb.style.backgroundImage = img ? 'url("' + (img.currentSrc || img.src) + '")' : '';
           b.classList.toggle('is-set', !!d); b.classList.toggle('is-active', i === st.active); b.classList.toggle('has-warn', !!(d && d.classList.contains('is-warned')));
           b.setAttribute('aria-pressed', i === st.active ? 'true' : 'false');
@@ -23043,7 +23119,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var xb = e.target.closest ? e.target.closest('[data-fn-day-x]') : null;
         if (xb) { var xi = +xb.getAttribute('data-fn-day-x'); st.days[xi] = ''; st.active = xi; say(''); persist(); render(); return; }
         var eb = e.target.closest ? e.target.closest('[data-fn-day-edit]') : null;
-        if (eb) { var ei = +eb.getAttribute('data-fn-day-edit'); st.active = ei; modsOpen = modsOpen === ei ? -1 : ei; modsKey = ''; if (st.step < 1) st.step = 1; persist(); render(); return; }
+        if (eb) { var ei = +eb.getAttribute('data-fn-day-edit'); st.active = ei; modsOpen = modsOpen === ei ? -1 : ei; modsKey = ''; st.step = 2; persist(); render(); return; }
         var db = e.target.closest ? e.target.closest('[data-fn-day-btn]') : null;
         if (db) { st.active = +db.getAttribute('data-fn-day-btn'); persist(); render(); return; }
         var ar = e.target.closest ? e.target.closest('[data-fn-arrow]') : null;

@@ -152,6 +152,9 @@
     "video_label": "Video: flames over the grill"
   },
   "cart": {
+    "kitchen_t": "Notes for the kitchen (optional)",
+    "kitchen_h": "Last chance: ingredients to leave out, how you like a dish, or any instruction. It is a taste preference and does not replace telling us about an allergy in your profile.",
+    "kitchen_ph": "E.g. burger without onion, sauce on the side…",
     "rec_title": "How you are charged",
     "rec_auto": "4-week plans are paid upfront and renew automatically every 4 weeks until you cancel or pause them from your account.",
     "rec_manual": "4-week plans are paid upfront in a single charge. When they end we let you know to renew; nothing is charged without your confirmation.",
@@ -632,6 +635,10 @@
     "s_menu": "Menu",
     "s_week": "Your week",
     "s_week_title": "Your week: review, personalize and confirm",
+    "budget": "Your plan includes {w} per week in meals. Anything you choose above that is charged separately that week, on top of your {t} upfront payment.",
+    "budget_x": "This week: +{x} extra.",
+    "budget_ok": "This week: no extra.",
+    "how_open": "How does it work?",
     "rec_title": "How you are charged",
     "rec_auto": "The 4-week plan is paid upfront in a single charge and renews automatically every 4 weeks with the same payment method, until you cancel or pause it from your account (before the Saturday 10:00 cut-off).",
     "rec_manual": "The 4-week plan is paid upfront in a single charge. When your 4 weeks end we let you know to renew: nothing is charged without your confirmation.",

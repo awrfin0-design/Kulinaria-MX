@@ -15,7 +15,7 @@
   data-t-per-week="{{ 'funnel.per_week_each' | t }}" data-t-weeks-x="{{ 'funnel.weeks_x' | t }}" data-t-per-meal="{{ 'funnel.per_meal' | t }}"
   data-t-all-lines="{{ 'funnel.all_categories' | t }}" data-t-prop-dishes="{{ 'funnel.prop_dishes' | t }}" data-t-prop-meals="{{ 'funnel.prop_meals' | t }}"
   data-t-prop-tier="{{ 'funnel.prop_tier' | t }}" data-t-prop-length="{{ 'funnel.prop_length' | t }}" data-t-length-block="{{ 'funnel.length_block' | t }}" data-t-length-week="{{ 'funnel.length_week' | t }}"
-  data-t-mods-done="{{ 'funnel.mods_done' | t }}" data-t-mods-edit="{{ 'funnel.mods_edit' | t }}" data-t-mods-title="{{ 'funnel.mods_title' | t }}" data-t-mods-hint="{{ 'funnel.mods_hint' | t }}" data-t-mods-note="{{ 'funnel.mods_note' | t }}" data-t-mods-ph="{{ 'funnel.mods_ph' | t }}" data-t-mods-warn="{{ 'funnel.mods_warn' | t }}" data-t-mods-without="{{ 'funnel.mods_without' | t }}" data-t-prop-notes="{{ 'funnel.prop_notes' | t }}" data-t-mods-open="{{ 'funnel.mods_open' | t }}"
+  data-t-budget="{{ 'funnel.budget' | t }}" data-t-budget-x="{{ 'funnel.budget_x' | t }}" data-t-budget-ok="{{ 'funnel.budget_ok' | t }}" data-t-how-open="{{ 'funnel.how_open' | t }}" data-t-mods-done="{{ 'funnel.mods_done' | t }}" data-t-mods-edit="{{ 'funnel.mods_edit' | t }}" data-t-mods-title="{{ 'funnel.mods_title' | t }}" data-t-mods-hint="{{ 'funnel.mods_hint' | t }}" data-t-mods-note="{{ 'funnel.mods_note' | t }}" data-t-mods-ph="{{ 'funnel.mods_ph' | t }}" data-t-mods-warn="{{ 'funnel.mods_warn' | t }}" data-t-mods-without="{{ 'funnel.mods_without' | t }}" data-t-prop-notes="{{ 'funnel.prop_notes' | t }}" data-t-mods-open="{{ 'funnel.mods_open' | t }}"
   data-t-para-me="{{ 'funnel.para_me' | t }}" data-t-prop-for="{{ 'funnel.prop_for' | t }}"
   data-t-renew="{{ 'funnel.renew' | t }}" data-t-days="{{ 'funnel.days' | t }}" data-t-finish="{{ 'funnel.finish' | t }}" data-t-finish-guest="{{ 'funnel.finish_guest' | t }}" data-t-credit="{{ 'funnel.credit' | t }}" data-t-rolled="{{ 'funnel.rolled' | t }}" data-t-pick="{{ 'funnel.pick' | t }}" data-t-picked="{{ 'funnel.picked' | t }}" data-t-pick-for="{{ 'funnel.pick_for' | t }}" data-t-all-done="{{ 'funnel.all_done' | t }}" data-t-clear-day="{{ 'funnel.clear_day' | t }}" data-t-first="{{ 'funnel.first_delivery' | t }}" data-t-day-empty="{{ 'funnel.day_empty' | t }}" data-t-up-badge="{{ 'funnel.up_badge' | t }}" data-t-up-total="{{ 'funnel.up_total' | t }}"
   data-t-prop-upgrade="{{ 'funnel.prop_upgrade' | t }}" data-t-need-contract="{{ 'funnel.need_contract' | t }}" data-t-days-missing="{{ 'funnel.days_missing' | t }}"
@@ -52,21 +52,6 @@
           <legend>{{ 'funnel.s1_title' | t }}</legend>
           <p class="text-muted">{{ 'funnel.s1_text' | t }}</p>
           <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="/pages/cuenta-semana" data-fn-credit-link>{{ 'funnel.credit_cta' | t }}</a></div>
-          <div class="fn-plans" role="radiogroup" aria-label="{{ 'funnel.s1_title' | t }}">
-            <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
-              <span class="plan-card__flag">{{ 'plans.recommended' | t }}</span>
-              <strong>{{ 'funnel.plan_block' | t }}</strong>
-              <small>{{ 'funnel.plan_block_text' | t }}</small>
-              <em class="fn-plan__from">{{ 'plans.from' | t }}{% render 'plan-price', tier: 'selecto', kind: 'block', money: true %}</em>
-              <span class="fn-plan__incl">{{ 'funnel.includes_block' | t }}</span>
-            </button>
-            <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
-              <strong>{{ 'funnel.plan_week' | t }}</strong>
-              <small>{{ 'funnel.plan_week_text' | t }}</small>
-              <em class="fn-plan__from">{{ 'plans.from' | t }}{% render 'plan-price', tier: 'selecto', kind: 'week', money: true %}</em>
-              <span class="fn-plan__incl">{{ 'funnel.includes_week' | t }}</span>
-            </button>
-          </div>
           {%- capture hw_bn %}{% render 'plan-price', tier: 'selecto', kind: 'block' %}{% endcapture -%}
           {%- capture hw_wn %}{% render 'plan-price', tier: 'selecto', kind: 'week' %}{% endcapture -%}
           {%- assign hw_bn = hw_bn | strip | plus: 0 -%}{%- assign hw_wn = hw_wn | strip | plus: 0 -%}
@@ -83,6 +68,21 @@
             </ol>
             <p class="fn-how__ex">{{ 'funnel.how_ex' | t | replace: '[block]', hw_block }}</p>
           </details>
+          <div class="fn-plans" role="radiogroup" aria-label="{{ 'funnel.s1_title' | t }}">
+            <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
+              <span class="plan-card__flag">{{ 'plans.recommended' | t }}</span>
+              <strong>{{ 'funnel.plan_block' | t }}</strong>
+              <small>{{ 'funnel.plan_block_text' | t }}</small>
+              <em class="fn-plan__from">{{ 'plans.from' | t }}{% render 'plan-price', tier: 'selecto', kind: 'block', money: true %}</em>
+              <span class="fn-plan__incl">{{ 'funnel.includes_block' | t }}</span>
+            </button>
+            <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
+              <strong>{{ 'funnel.plan_week' | t }}</strong>
+              <small>{{ 'funnel.plan_week_text' | t }}</small>
+              <em class="fn-plan__from">{{ 'plans.from' | t }}{% render 'plan-price', tier: 'selecto', kind: 'week', money: true %}</em>
+              <span class="fn-plan__incl">{{ 'funnel.includes_week' | t }}</span>
+            </button>
+          </div>
           <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>{{ 'funnel.renew' | t }}</span></label>
         </fieldset>
 
@@ -151,8 +151,23 @@
 
 
         <fieldset class="step" data-fn-step="2">
+          <legend class="fn-sr">{{ 'funnel.s_menu' | t }}</legend>
+          <div class="fn-carousel fn-carousel--show">
+            <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="{{ 'funnel.prev_dishes' | t }}">&#8249;</button>
+            <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
+            <div class="fn-showcase" data-fn-sc-grid>
+              {%- for product in coll.products limit: section.settings.limit -%}{% render 'funnel-showcase-card', product: product %}{%- endfor -%}
+            </div>
+            <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="{{ 'funnel.next_dishes' | t }}">&#8250;</button>
+          </div>
+        </fieldset>
+        <fieldset class="step" data-fn-step="3">
           <legend class="fn-sr">{{ 'funnel.s3_title' | t }}</legend>
           <div class="fn-para" data-fn-para-wrap hidden><label for="fn-para-{{ section.id }}">{{ 'funnel.para' | t }}</label><select class="select" id="fn-para-{{ section.id }}" data-fn-para></select><a class="text-link" href="/pages/cuenta-perfil#familia">{{ 'funnel.para_add' | t }}</a></div>
+          <ol class="fn-week" data-fn-week aria-label="{{ 'funnel.days_title' | t }}"></ol>
+          <div class="fn-mods" data-fn-mods hidden></div>
+          <p class="fn-budget" data-fn-budget></p>
+          <p class="fn-mods__tip">✎ {{ 'funnel.mods_open' | t }}</p>
           <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / {{ meals_per_week }} <span>{{ 'funnel.meals_word' | t }}</span><i data-fn-meter-bar></i></p>
@@ -171,11 +186,6 @@
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-arrow="1" aria-label="{{ 'funnel.next_dishes' | t }}">&#8250;</button>
           </div>
           <p class="alert" data-fn-empty hidden>{{ 'funnel.s3_empty' | t }}</p>
-        </fieldset>
-        <fieldset class="step" data-fn-step="3">
-          <legend>{{ 'funnel.s_week_title' | t }}</legend>
-          <ol class="fn-week" data-fn-week aria-label="{{ 'funnel.days_title' | t }}"></ol>
-          <div class="fn-mods" data-fn-mods hidden></div>
         </fieldset>
 
 

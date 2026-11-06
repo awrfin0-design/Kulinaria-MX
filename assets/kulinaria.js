@@ -1161,6 +1161,14 @@
           });
         }
         var fst = $('[data-fn-first]', holder); if (fst) fst.textContent = fill(T_('first'), { d: dateOf(0) });
+        var bud = $('[data-fn-budget]', holder);
+        if (bud) {
+          var wk = st.plan === 'block' ? Math.round(priceOf(tierEl(), 'block') / 4) : priceOf(tierEl(), 'week'), exb = upgradeExtra();
+          bud.innerHTML = '';
+          var bt = document.createElement('span'); bt.textContent = fill(T_('budget'), { w: money(wk), t: money(planTotal() - exb) }) + ' ' + (exb ? fill(T_('budget-x'), { x: money(exb) }) : T_('budget-ok')) + ' ';
+          var bl = document.createElement('button'); bl.type = 'button'; bl.className = 'text-link'; bl.textContent = T_('how-open'); bl.setAttribute('data-fn-how-open', '');
+          bud.appendChild(bt); bud.appendChild(bl);
+        }
         var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : ''; }
         var emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
         var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? fill(T_('meals'), { n: n, t: MEALS }) : '';
@@ -1169,13 +1177,14 @@
         var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step + 1).replace('{t}', steps.length) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
         var rn = $('[data-fn-renew]', holder); if (rn) { var hasPlan = !!tierEl().getAttribute('data-selling-plan'); rn.hidden = !(hasPlan && st.plan === 'block'); var box = $('[data-fn-renew-box]', holder); if (box) box.checked = st.renew; }
         renderMods();
+        holder.setAttribute('data-step', String(st.step + 1));
         // stepper
         steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
         dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); });
         if (bar) bar.style.transform = 'scaleX(' + ((st.step + 1) / steps.length) + ')';
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
-        if (next) { next.hidden = last; next.disabled = (st.step === 1 && n < 1); }
+        if (next) { next.hidden = last; next.disabled = false; }
         if (finish) { finish.hidden = !last; finish.classList.toggle('is-disabled', n < 1); finish.setAttribute('aria-disabled', n < 1 ? 'true' : 'false'); var fl = holder.getAttribute(ce ? 'data-t-finish' : 'data-t-finish-guest'); if (fl && finish.textContent.trim() !== fl) finish.textContent = fl; }
         var rem = $('[data-fn-remembered]', holder); if (rem) { rem.hidden = !(st.remembered && st.step === 2); rem.textContent = T_('remembered'); }
       };
@@ -1212,6 +1221,9 @@
         if (eb) { var ei = +eb.getAttribute('data-fn-day-edit'); st.active = ei; modsOpen = modsOpen === ei ? -1 : ei; modsKey = ''; st.step = 2; persist(); render(); return; }
         var db = e.target.closest ? e.target.closest('[data-fn-day-btn]') : null;
         if (db) { st.active = +db.getAttribute('data-fn-day-btn'); persist(); render(); return; }
+        if (e.target.closest && e.target.closest('[data-fn-how-open]')) { st.step = 0; var hw = $('[data-fn-how]', holder); if (hw) hw.open = true; persist(); render(); return; }
+        var sa = e.target.closest ? e.target.closest('[data-fn-sc-arrow]') : null;
+        if (sa) { var sg = $('[data-fn-sc-grid]', holder); if (sg) sg.scrollBy({ left: (+sa.getAttribute('data-fn-sc-arrow')) * Math.max(220, sg.clientWidth * 0.8), behavior: REDUCE ? 'auto' : 'smooth' }); return; }
         var ar = e.target.closest ? e.target.closest('[data-fn-arrow]') : null;
         if (ar) { var gr = $('[data-fn-grid]', holder); if (gr) gr.scrollBy({ left: (+ar.getAttribute('data-fn-arrow')) * Math.max(220, gr.clientWidth * 0.8), behavior: REDUCE ? 'auto' : 'smooth' }); return; }
         var d = e.target.closest ? e.target.closest('[data-fn-dish]') : null; if (!d) return;
@@ -1241,11 +1253,10 @@
       if (ref) { var rs = ''; try { rs = localStorage.getItem('kulinaria_ref') || ''; } catch (e) {} if (rs) ref.value = rs; }
 
       if (next) next.addEventListener('click', function () {
-        if (st.step === 1 && count() < 1) { say(T_('need-meals')); return; }
         go(st.step + 1);
       });
       if (prev) prev.addEventListener('click', function () { go(st.step - 1); });
-      dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k < st.step || (k > st.step && (k <= 1 || count() >= 1))) go(k); }); });
+      dots.forEach(function (d, k) { d.addEventListener('click', function () { go(k); }); });
 
       // arriving from a dish page (…/pedido?dish=handle): that dish is already in the plan, at its tier
       try {
@@ -1320,6 +1331,9 @@
         paraSel.addEventListener('change', function () { st.para = paraSel.value; st.days = blankDays(); st.qty = {}; st.active = 0; persist(); applyProfile(); render(); });
       }
       var gridEl = $('[data-fn-grid]', holder);
+      var scGrid = $('[data-fn-sc-grid]', holder), scCount = $('[data-fn-sc-count]', holder);
+      var scUpdate = function () { if (!scGrid || !scCount) return; var cards = scGrid.children, n = cards.length; if (!n) return; var w = cards[0].getBoundingClientRect().width + 12, i = Math.min(n - 1, Math.round(scGrid.scrollLeft / Math.max(1, w))); scCount.textContent = (i + 1) + ' / ' + n; };
+      if (scGrid) { scGrid.addEventListener('scroll', function () { window.requestAnimationFrame(scUpdate); }, { passive: true }); scUpdate(); }
       var arrows = function () { if (!gridEl) return; var pv = $('[data-fn-arrow="-1"]', holder), nx = $('[data-fn-arrow="1"]', holder); if (pv) pv.hidden = gridEl.scrollLeft < 8; if (nx) nx.hidden = gridEl.scrollLeft + gridEl.clientWidth >= gridEl.scrollWidth - 8; };
       if (gridEl) { gridEl.addEventListener('scroll', arrows, { passive: true }); window.addEventListener('resize', arrows); }
       var recPaint = function () { var tb0 = tierEl(), sp0 = tb0 && tb0.getAttribute('data-selling-plan'), kind = st.plan === 'week' ? 'week' : (sp0 && st.renew ? 'auto' : 'manual'); $$('[data-fn-rec]', holder).forEach(function (p) { p.hidden = p.getAttribute('data-fn-rec') !== kind; }); };

@@ -2559,43 +2559,15 @@ h3,h4{font-weight:600}
   body:not(.template-page-pedido) .funnel:not(.funnel--teaser).section{padding-block:10px 12px;min-height:0}
 }
 
-/* =====================================================================
-   v52 — order builder, desktop: compact dish grid and slim summary, nothing scrolls
-   ===================================================================== */
+/* v52 — order builder helpers */
 .fn-more{flex:none;font-size:.78rem;line-height:1.4;border-top:1px solid var(--line);padding-top:6px}
 .fn-more summary{cursor:pointer;font-family:var(--font-label);font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:.68rem;color:var(--accent);list-style:none;display:flex;justify-content:space-between}
 .fn-more summary::-webkit-details-marker{display:none}.fn-more summary::after{content:'+'}.fn-more[open] summary::after{content:'–'}
 .fn-more .fn-rec{border:0;background:none;padding:0;margin:4px 0 0}.fn-more .fn-rec p{margin:0 0 4px}
 .fn-more .fn-weeknote{margin:6px 0 0;font-size:.74rem}
-@media (min-width:901px){
-  .funnel .fn-carousel{display:block;overflow:hidden}
-  .funnel .fn-arrow{display:none !important}
-  .funnel .fn-dishes{display:grid !important;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));grid-auto-rows:68px;gap:8px;overflow:hidden;align-content:start;scroll-snap-type:none;padding:2px 0;height:100%}
-  .funnel .fn-dish{flex:none !important;height:68px !important;display:grid !important;grid-template-columns:68px minmax(0,1fr);grid-template-rows:1fr;border-radius:12px;overflow:hidden;position:relative}
-  .funnel .fn-dish__media{grid-column:1;grid-row:1;height:68px !important;min-height:0;width:68px !important}
-  .funnel .fn-dish__media img{width:68px;height:68px;object-fit:cover}
-  .funnel .fn-dish>.fn-up{position:absolute;left:0;bottom:0;width:68px;margin:0;font-size:.6rem;text-align:center;background:rgba(0,0,0,.72);color:#fff;padding:1px 0}
-  .funnel .fn-dish__body{grid-column:2;grid-row:1;display:flex;flex-direction:column;justify-content:space-between;padding:5px 8px 5px !important;gap:0 !important;min-width:0}
-  .funnel .fn-dish .tier-badge,.funnel .fn-dish .dish__facts,.funnel .fn-dish .fn-warn:not(:empty){display:none !important}
-  .funnel .fn-dish .fn-warn:not([hidden]){display:block !important;font-size:.62rem}
-  .funnel .fn-dish__title{font-size:.8rem;line-height:1.15;-webkit-line-clamp:2;margin:0}
-  .funnel .fn-dish__row{margin:0;gap:6px;justify-content:space-between;align-items:center}
-  .funnel .fn-dish .dish__price{font-size:.9rem;white-space:nowrap}.funnel .fn-dish .dish__price small{display:none}
-  .funnel .fn-dish .btn--sm{min-height:26px;padding:0 12px;font-size:.68rem;letter-spacing:.06em}
-  .funnel .fn-dish .fn-count{top:2px;left:2px;font-size:.66rem;padding:0 7px}
-  .funnel .fn-week{gap:8px}
-  .funnel .fn-day{min-height:54px}
-  .funnel .funnel__main{overflow:hidden}
-  .funnel .funnel__aside{overflow:hidden}
-  .funnel .funnel__aside .funnel__list{scrollbar-width:none}.funnel .funnel__aside .funnel__list::-webkit-scrollbar{display:none}
-  .funnel .funnel__aside .fn-cut{font-size:.74rem;margin:0}
-  .funnel .funnel__aside .funnel__facts{font-size:.8rem}
-  .funnel .funnel__aside .funnel__facts div{padding:2px 0}
-  .funnel .funnel__aside .funnel__total strong{font-size:1.35rem}
-}
-
 .fn-s-item{cursor:pointer}.fn-s-ing{display:none}.fn-s-item.is-open .fn-s-ing{display:block}.fn-s-item.is-open .fn-s-ing:empty{display:none}
-
+.funnel__list li{flex-wrap:wrap}.funnel__list li .fn-s-ing{flex:0 0 100%;white-space:normal;overflow:visible}
+.funnel__aside .funnel__list li span{max-width:68%}
 /* v52 — step 1 on short desktop screens: compact plan cards, tutorial opens as a panel over the step (no scrolling) */
 @media (min-width:901px){
   .funnel .step[data-fn-step="1"]{position:relative}
@@ -2613,63 +2585,124 @@ h3,h4{font-weight:600}
   .funnel .step[data-fn-step="1"] .fn-credit .btn{padding:8px 16px}
 }
 
+
 /* =====================================================================
-   v53 — order builder in 3 steps: 1 plan + tutorial · 2 the whole menu · 3 your week (selector, ingredients, notes).
-   No scrollbars anywhere in the builder (side-scrolling still works by swipe / arrows).
+   v54 — order builder in 3 steps: 1 plan + tutorial · 2 the menu (cards to discover, nothing to pick) · 3 your week (the selector, as before).
+   No scrollbars anywhere in the builder (swipe / arrows still work).
    ===================================================================== */
 .funnel *{scrollbar-width:none;-ms-overflow-style:none}
 .funnel *::-webkit-scrollbar{display:none;width:0;height:0}
 .fn-day__ing{display:none}
-.funnel .step[data-fn-step="3"]{display:none}
-.funnel .step[data-fn-step="3"].is-on{display:flex;flex-direction:column;gap:10px}
-.funnel .step[data-fn-step="3"] legend{font-size:1.1rem;margin-bottom:4px}
-.funnel .step[data-fn-step="3"] .fn-week{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:0}
-.funnel .step[data-fn-step="3"] .fn-day{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 12px;min-height:150px;height:100%}
-.funnel .step[data-fn-step="3"] .fn-day__thumb{width:100%;height:64px;border-radius:10px;grid-row:auto}
-.funnel .step[data-fn-step="3"] .fn-day__dish{-webkit-line-clamp:2;font-size:.86rem;font-weight:600}
-.funnel .step[data-fn-step="3"] .fn-day__ing{display:block;font-size:.68rem;line-height:1.3;color:var(--text-muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-@media (min-width:901px){
-  /* the menu step has the whole frame: bigger tiles, all dishes visible */
-  .funnel .step[data-fn-step="2"] .fn-dishes{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));grid-auto-rows:92px}
-  .funnel .step[data-fn-step="2"] .fn-dish{height:92px !important;grid-template-columns:92px minmax(0,1fr)}
-  .funnel .step[data-fn-step="2"] .fn-dish__media{height:92px !important;width:92px !important}
-  .funnel .step[data-fn-step="2"] .fn-dish__media img{width:92px;height:92px}
-  .funnel .step[data-fn-step="2"] .fn-dish>.fn-up{width:92px}
-  .funnel .step[data-fn-step="2"] .fn-dish__title{font-size:.9rem}
-}
+/* step 2: showcase = the same vertical cards as before, nothing to pick */
+.funnel .step[data-fn-step="2"].is-on{display:flex;flex-direction:column;height:100%;min-height:0}
+.fn-carousel--show{position:relative;flex:1 1 auto;min-height:0;display:flex}
+.fn-showcase{flex:1;display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;padding:2px 2px 8px;min-height:0}
+.fn-sc{flex:0 0 clamp(178px,17vw,226px);scroll-snap-align:start;position:relative;display:flex;flex-direction:column;min-height:0;height:100%;border:1px solid var(--line);border-radius:var(--radius-sm,14px);overflow:hidden;background:var(--bg-raised)}
+.fn-sc__img{flex:1 1 auto;min-height:64px;position:relative;background:var(--bg-deep)}
+.fn-sc__img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.fn-sc__body{flex:0 0 auto;padding:9px 12px 12px;display:grid;gap:4px}
+.fn-sc__body h3{margin:0;font-size:1rem;line-height:1.15;font-family:var(--font-heading)}
+.fn-sc__body p{margin:0;font-size:.76rem;line-height:1.3;color:var(--text-muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fn-sc .tier-badge{position:absolute;top:8px;left:8px;padding:3px 9px;font-size:.62rem;background:rgba(0,0,0,.6);z-index:2}
 @media (max-width:900px){
-  .funnel .step[data-fn-step="3"] .fn-week{grid-template-columns:1fr;gap:8px}
-  .funnel .step[data-fn-step="3"] .fn-day{flex-direction:row;align-items:center;min-height:0;height:auto;gap:10px}
-  .funnel .step[data-fn-step="3"] .fn-day__thumb{width:54px;height:54px;flex:none}
+  .fn-sc{flex-basis:64vw;height:min(100%,380px)}
+  html,body{scrollbar-width:none;-ms-overflow-style:none}
+  html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0}
 }
 /* hover film inside gold buttons: keep the label readable */
 .btn--gold.is-fx{color:#fff !important;text-shadow:0 1px 8px rgba(0,0,0,.75)}
 .btn--gold.is-fx .btn__fx{opacity:.5}
 
-/* v53 — phone: step 2 is a two-column menu you swipe up and down (no bars), step 3 big tap targets */
-@media (max-width:900px){
-  .funnel .step[data-fn-step="2"] .fn-carousel{display:block;overflow-y:auto;overflow-x:hidden;flex:1 1 auto;min-height:0;-webkit-mask-image:linear-gradient(#000 92%,transparent);mask-image:linear-gradient(#000 92%,transparent);overscroll-behavior:contain}
+
+.cart-kitchen{display:grid;gap:4px;margin:12px 0;font-size:.84rem}.cart-kitchen strong{font-size:.9rem}.cart-kitchen textarea{width:100%;resize:vertical;min-height:70px}
+.fn-mods__tip{flex:none;margin:0 0 6px;font-size:.74rem;color:var(--text-muted)}
+
+/* budget line (step 3) and a tutorial that is easy to find (step 1) */
+.fn-budget{flex:none;margin:0 0 8px;padding:8px 12px;border:1px solid var(--border-accent);border-radius:12px;background:var(--accent-wash);font-size:.8rem;line-height:1.4}
+.fn-budget .text-link{font-size:.78rem;margin-left:4px;padding:0;background:none;border:0;cursor:pointer;color:var(--accent);text-decoration:underline}
+.fn-how summary{color:var(--accent);text-transform:uppercase;letter-spacing:.08em;font-size:.8rem}
+.fn-how:not([open]){border-style:solid;box-shadow:0 0 0 1px var(--accent) inset}
+
+.fn-how:not([open]){padding:0;border:1.5px solid var(--accent);border-radius:999px;background:var(--accent-wash);box-shadow:none}
+.fn-how:not([open]) summary{padding:9px 18px;justify-content:center;gap:10px}
+.fn-how:not([open]) summary::before{content:'▶';font-size:.7rem}
+.fn-how:not([open]) summary::after{content:none}
+@media (min-width:901px){.funnel .fn-how[open]{top:0;bottom:auto}}
+
+/* =====================================================================
+   v55 — PHONE order builder, redesigned: step 2 = big swipeable menu cards (read them), step 3 = pick day by day, slim bottom bar
+   ===================================================================== */
+.fn-sc__count{display:none}
+.fn-sc__desc{-webkit-line-clamp:2}
+.fn-sc__meta{margin:2px 0 0;display:flex;flex-wrap:wrap;gap:2px 10px;font-size:.74rem;color:var(--text-muted)}
+.fn-sc__meta .fn-sc__price{color:var(--accent);font-weight:700;font-size:.86rem}.fn-sc__meta .fn-sc__price small{font-weight:400;color:var(--text-muted)}
+body .hero--intro:after{content:none !important}
+@media (max-width:760px){
+  /* bottom bar: only what matters now */
+  body .funnel:not(.funnel--teaser) .funnel__aside{flex:none;flex-direction:row;flex-wrap:nowrap;align-items:center;gap:10px;padding:10px 12px;border-radius:20px}
+  body .funnel:not(.funnel--teaser) .funnel__aside :is(h3,.fn-cut,.funnel__facts,.funnel__list,[data-fn-s-empty],.funnel__upgrades,.funnel__block,[data-fn-s-count],[data-fn-reset],.fn-weeknote){display:none !important}
+  body .funnel:not(.funnel--teaser) .funnel__aside .funnel__total{display:grid;flex:0 0 auto;margin:0;padding:0;border:0;gap:0}
+  body .funnel:not(.funnel--teaser) .funnel__aside .funnel__total span{font-size:.58rem;letter-spacing:.12em}
+  body .funnel:not(.funnel--teaser) .funnel__aside .funnel__total strong{font-size:1.35rem;line-height:1.1}
+  body .funnel:not(.funnel--teaser) .funnel__aside .fn-more{display:none}
+  body .funnel:not(.funnel--teaser) .funnel__aside .fn-cta{flex:1 1 auto;display:flex;align-items:center;gap:8px;margin:0}
+  body .funnel:not(.funnel--teaser) .funnel__aside .fn-links{flex:none}
+  body .funnel:not(.funnel--teaser) .funnel__aside .fn-cta .btn{flex:1;min-height:50px;font-size:.78rem;padding:0 12px}
+  body .funnel[data-step="2"] .funnel__aside .funnel__total{display:none}
+  body .funnel[data-step="1"] .funnel__aside .fn-more{display:block;flex:1 1 100%}
+  body .funnel[data-step="1"] .funnel__aside{flex-wrap:wrap}
+
+  /* step 2: the menu as large cards, one and a bit at a time */
+  .fn-carousel--show{display:block;position:relative}
+  .fn-showcase{height:100%;gap:12px;padding:0 0 4px;scroll-padding-inline:0}
+  .fn-sc{flex:0 0 84vw !important;height:100% !important;max-height:none;border-radius:22px}
+  .fn-sc__img{flex:1 1 auto;min-height:150px}
+  .fn-sc__body{padding:12px 14px 14px;gap:6px}
+  .fn-sc__body h3{font-size:1.25rem;line-height:1.15}
+  .fn-sc__desc{font-size:.84rem;line-height:1.4;-webkit-line-clamp:4;color:var(--text)}
+  .fn-sc__meta{font-size:.78rem}.fn-sc__meta .fn-sc__price{font-size:1rem}
+  .fn-sc .tier-badge{top:12px;left:12px;font-size:.66rem;padding:5px 12px}
+  .fn-sc__count{display:block;position:absolute;right:14px;top:14px;z-index:3;padding:4px 11px;border-radius:999px;background:rgba(0,0,0,.62);color:#fff;font:700 .72rem var(--font-label);letter-spacing:.08em}
   .funnel .fn-arrow{display:none !important}
-  .funnel .step[data-fn-step="2"] .fn-dishes{display:grid !important;grid-template-columns:1fr 1fr !important;grid-auto-rows:auto;gap:10px;overflow:visible !important;height:auto;max-height:none !important;padding:2px 0 24px;scroll-snap-type:none}
-  .funnel .step[data-fn-step="2"] .fn-dish{flex:none !important;height:auto !important;min-height:0 !important;display:flex !important;flex-direction:column;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg-raised);padding:0 !important;grid-template-columns:none}
-  .funnel .step[data-fn-step="2"] .fn-dish__media{height:96px !important;width:100% !important;min-height:0 !important;flex:none !important}
-  .funnel .step[data-fn-step="2"] .fn-dish__media img{width:100%;height:96px;object-fit:cover}
-  .funnel .step[data-fn-step="2"] .fn-dish__body{padding:8px 9px 9px !important;gap:4px !important;display:flex;flex-direction:column}
-  .funnel .step[data-fn-step="2"] .fn-dish .tier-badge,.funnel .step[data-fn-step="2"] .fn-dish .dish__facts,.funnel .step[data-fn-step="2"] .fn-dish .dish__desc,.funnel .step[data-fn-step="2"] .fn-dish .compat{display:none !important}
-  .funnel .step[data-fn-step="2"] .fn-dish__title{font-size:.84rem;line-height:1.2;min-height:2.4em;margin:0;-webkit-line-clamp:2}
-  .funnel .step[data-fn-step="2"] .fn-dish__row{display:flex;justify-content:space-between;align-items:center;gap:6px;margin:0}
-  .funnel .step[data-fn-step="2"] .fn-dish .dish__price{font-size:.95rem}.funnel .step[data-fn-step="2"] .fn-dish .dish__price small{display:none}
-  .funnel .step[data-fn-step="2"] .fn-dish .btn--sm{min-height:34px;padding:0 14px;font-size:.7rem}
-  .funnel .step[data-fn-step="2"] .fn-dish>.fn-up{position:absolute;left:0;top:70px;font-size:.62rem;background:rgba(0,0,0,.75);color:#fff;padding:1px 7px;margin:0;border-radius:0 8px 0 0}
-  .funnel .fn-day__e{width:30px;height:30px;font-size:1rem;left:auto;right:42px;top:6px}
+
+  /* step 3: day pills, one big card at a time, a real button */
+  .funnel .step[data-fn-step="3"].is-on{display:flex;flex-direction:column;gap:6px;height:100%;min-height:0}
+  .funnel .step[data-fn-step="3"] .fn-para{margin:0;display:flex;align-items:center;gap:8px;flex-wrap:nowrap;font-size:.8rem}
+  .funnel .step[data-fn-step="3"] .fn-para label{display:none}
+  .funnel .step[data-fn-step="3"] .fn-para .select{min-height:36px;font-size:.8rem;flex:1}
+  .funnel .step[data-fn-step="3"] .fn-para .text-link{font-size:.64rem;letter-spacing:.06em}
+  .funnel .step[data-fn-step="3"] .fn-week{display:flex;gap:6px;overflow-x:auto;margin:0;padding:2px 0;scroll-snap-type:x proximity}
+  .funnel .step[data-fn-step="3"] .fn-week li{flex:1 0 62px}
+  .funnel .step[data-fn-step="3"] .fn-day{min-height:66px;border-radius:14px}
+  .funnel .step[data-fn-step="3"] .fn-day__thumb{width:34px;height:34px}
+  .funnel .step[data-fn-step="3"] .fn-day__e{left:auto;right:2px;top:2px;width:22px;height:22px;font-size:.74rem}
+  .funnel .step[data-fn-step="3"] .fn-budget{margin:0;padding:6px 10px;font-size:.66rem;line-height:1.35}
+  .funnel .step[data-fn-step="3"] .fn-mods__tip{display:none}
+  .funnel .step[data-fn-step="3"] .fn-pickbar{flex-wrap:nowrap;margin:0;gap:8px}
+  .funnel .step[data-fn-step="3"] .fn-prompt{flex:1;font-size:.95rem;margin:0;line-height:1.2}
+  .funnel .step[data-fn-step="3"] .fn-sel select{max-width:122px;min-height:36px;font-size:.74rem}
+  .funnel .step[data-fn-step="3"] .fn-carousel{display:flex;flex:1 1 auto;min-height:0;overflow:visible}
+  .funnel .step[data-fn-step="3"] .fn-dishes{display:flex !important;flex:1;gap:12px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;grid-template-columns:none;padding:0 0 2px;height:100%;max-height:none !important}
+  .funnel .step[data-fn-step="3"] .fn-dish{flex:0 0 80vw !important;height:100% !important;min-height:0 !important;display:flex !important;flex-direction:column;scroll-snap-align:start;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--bg-raised);padding:0 !important;grid-template-columns:none}
+  .funnel .step[data-fn-step="3"] .fn-dish__media{flex:1 1 auto !important;height:auto !important;width:100% !important;min-height:90px !important}
+  .funnel .step[data-fn-step="3"] .fn-dish__media img{width:100%;height:100%;object-fit:cover}
+  .funnel .step[data-fn-step="3"] .fn-dish__body{flex:none;padding:10px 13px 12px !important;gap:5px !important}
+  .funnel .step[data-fn-step="3"] .fn-dish .dish__desc{display:-webkit-box !important;font-size:.78rem;line-height:1.35;-webkit-line-clamp:2;color:var(--text-muted)}
+  .funnel .step[data-fn-step="3"] .fn-dish .dish__facts,.funnel .step[data-fn-step="3"] .fn-dish .compat{display:none !important}
+  .funnel .step[data-fn-step="3"] .fn-dish .tier-badge{display:inline-flex !important}
+  .funnel .step[data-fn-step="3"] .fn-dish__title{font-size:1.05rem;min-height:0;margin:0}
+  .funnel .step[data-fn-step="3"] .fn-dish__row{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .funnel .step[data-fn-step="3"] .fn-dish .dish__price{font-size:1.05rem}
+  .funnel .step[data-fn-step="3"] .fn-dish .btn--sm{min-height:44px;padding:0 20px;font-size:.78rem;flex:1}
 }
-@media (max-width:900px){
-  .funnel .step[data-fn-step="2"] .fn-pickbar{flex-wrap:nowrap;align-items:center;gap:8px;margin:0 0 6px}
-  .funnel .step[data-fn-step="2"] .fn-prompt{flex:1 1 auto;font-size:1rem;margin:0;line-height:1.2}
-  .funnel .step[data-fn-step="2"] .fn-pickbar .fn-meter{display:none}
-  .funnel .step[data-fn-step="2"] .fn-sel select{max-width:128px;min-height:38px;font-size:.78rem}
-  .funnel .step[data-fn-step="2"] .fn-para{margin:0 0 6px}
-  .funnel .step[data-fn-step="2"] .fn-para .text-link{font-size:.68rem}
+.fn-sc__meta span+span::before{content:'·';margin-right:10px;color:var(--text-muted)}
+@media (max-width:760px){
+  body .funnel:not(.funnel--teaser) .funnel__aside .fn-cta{border-top:0;padding-top:0}
+  body .funnel:not(.funnel--teaser) .funnel__aside .funnel__total{border:0}
+  .funnel .step[data-fn-step="3"] .fn-para .text-link{max-width:46%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .funnel .step[data-fn-step="3"] .fn-dish__media{position:relative;flex:1 1 0 !important}
+  .funnel .step[data-fn-step="3"] .fn-dish__media img{position:absolute;inset:0}
+  .funnel .step[data-fn-step="3"] .fn-budget .text-link{font-size:.66rem}
 }
 
 
@@ -3091,7 +3124,7 @@ Fuego</span>
   data-t-per-week="{p} por semana" data-t-weeks-x="{p} por semana × {w} semanas" data-t-per-meal="por comida"
   data-t-all-lines="Todas" data-t-prop-dishes="Platillos" data-t-prop-meals="Comidas por semana"
   data-t-prop-tier="Nivel" data-t-prop-length="Duración" data-t-length-block="4 semanas" data-t-length-week="1 semana"
-  data-t-mods-done="Listo" data-t-mods-edit="Quitar ingredientes o añadir nota a {d}" data-t-mods-title="Ajustes para {d}: {p}" data-t-mods-hint="¿Algo que quitar? Toca un ingrediente para pedirlo sin él." data-t-mods-note="Nota para la cocina (opcional)" data-t-mods-ph="Ej. sin cebolla, salsa aparte…" data-t-mods-warn="Es una preferencia de gusto: no sustituye avisar de una alergia (tu perfil). Haremos lo posible por respetarla." data-t-mods-without="Sin {i}" data-t-prop-notes="Notas de cocina" data-t-mods-open="Quitar ingredientes o añadir nota"
+  data-t-budget="Tu plan incluye {w} por semana en comidas. Lo que elijas por encima se cobra aparte esa semana, además de tu pago inicial de {t}." data-t-budget-x="Esta semana: +{x} extra." data-t-budget-ok="Esta semana: sin extra." data-t-how-open="¿Cómo funciona?" data-t-mods-done="Listo" data-t-mods-edit="Quitar ingredientes o añadir nota a {d}" data-t-mods-title="Ajustes para {d}: {p}" data-t-mods-hint="¿Algo que quitar? Toca un ingrediente para pedirlo sin él." data-t-mods-note="Nota para la cocina (opcional)" data-t-mods-ph="Ej. sin cebolla, salsa aparte…" data-t-mods-warn="Es una preferencia de gusto: no sustituye avisar de una alergia (tu perfil). Haremos lo posible por respetarla." data-t-mods-without="Sin {i}" data-t-prop-notes="Notas de cocina" data-t-mods-open="Quitar ingredientes o añadir nota"
   data-t-para-me="Para mí" data-t-prop-for="Para"
   data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-finish="Confirmar y continuar" data-t-finish-guest="Inicia sesión para continuar" data-t-credit="Tienes un plan activo: te quedan {w} de {t} semanas (hasta el {e}). Elige las comidas de cada semana en Mi semana. ¿Quieres más créditos? Elige un plan aquí abajo." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-pick="Elegir" data-t-picked="Elegido" data-t-pick-for="Elige el platillo del {d}" data-t-all-done="¡Semana completa! Revisa y continúa." data-t-clear-day="Quitar el platillo de {d}" data-t-first="Primera entrega: lunes {d}." data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
   data-t-prop-upgrade="Mejora" data-t-need-contract="Acepta el contrato para continuar." data-t-days-missing="Asigna un platillo a cada día."
@@ -3125,7 +3158,11 @@ Fuego</span>
         <fieldset class="step is-on" data-fn-step="1">
           <legend>¿Cuánto tiempo quieres comer bien?</legend>
           <p class="text-muted">Eliges tu plan una vez. Recibes 5 comidas por semana, de lunes a viernes.</p>
-          <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="#/pg/cuenta-semana" data-fn-credit-link>Ir a Mi semana</a></div>
+          <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="#/pg/cuenta-semana" data-fn-credit-link>Ir a Mi semana</a></div><details class="fn-how" data-fn-how>
+            <summary>Cómo funciona, paso a paso</summary>
+            <ol class="fn-how__list"><li><strong>Eliges tu plan y tu nivel</strong><span>Plan de 4 semanas: pagas $3,600 hoy, por adelantado (20 comidas, $900 por semana). Plan de 1 semana: pagas $1,000 una sola vez (5 comidas). Esos montos son del nivel Selecto; los demás niveles se muestran al elegirlos.</span></li><li><strong>Tienes un presupuesto semanal incluido</strong><span>Tu plan cubre hasta 5 comidas por semana del nivel que elegiste. Mientras tus platillos sean de ese nivel, no pagas nada más.</span></li><li><strong>Lo que excede se cobra aparte, cada semana</strong><span>Si en una semana eliges platillos de un nivel superior, solo pagas la diferencia por cada uno: +$70 (Exclusivo), +$140 (Signature) o +$210 (Reserve) sobre Selecto. Se cobra esa semana, no antes.</span></li><li><strong>Cuándo se hace cada cargo</strong><span>Primer cargo: hoy, el total del plan. Semanas 2, 3 y 4: solo si agregaste platillos de nivel superior, el extra de esa semana. Al terminar las 4 semanas el plan se renueva o te pedimos confirmar, según elijas.</span></li><li><strong>Eliges cada semana antes del sábado 10:00</strong><span>Si no eliges, repetimos tu semana anterior. Cocinamos y entregamos personalmente en el día y la dirección que indiques.</span></li><li><strong>Personaliza cada platillo (opcional)</strong><span>Toca el lápiz ✎ de un día para quitar ingredientes (por ejemplo, la hamburguesa sin cebolla) o escribir una nota para la cocina. También puedes hacerlo desde el resumen, donde ves los ingredientes de cada platillo.</span></li></ol>
+            <p class="fn-how__ex">Ejemplo: plan de 4 semanas Selecto ($3,600). En la semana 2 cambias 2 comidas a Exclusivo: ese día solo pagas 2 × $70 = $140 extra. Las demás semanas no se cobra nada más.</p>
+          </details>
           <div class="fn-plans" role="radiogroup" aria-label="¿Cuánto tiempo quieres comer bien?">
             <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
               <span class="plan-card__flag">Recomendado</span>
@@ -3140,11 +3177,7 @@ Fuego</span>
               <em class="fn-plan__from">Desde $1,000</em>
               <span class="fn-plan__incl">Por semana · incluye 5 comidas</span>
             </button>
-          </div><details class="fn-how" data-fn-how>
-            <summary>Cómo funciona, paso a paso</summary>
-            <ol class="fn-how__list"><li><strong>Eliges tu plan y tu nivel</strong><span>Plan de 4 semanas: pagas $3,600 hoy, por adelantado (20 comidas, $900 por semana). Plan de 1 semana: pagas $1,000 una sola vez (5 comidas). Esos montos son del nivel Selecto; los demás niveles se muestran al elegirlos.</span></li><li><strong>Tienes un presupuesto semanal incluido</strong><span>Tu plan cubre hasta 5 comidas por semana del nivel que elegiste. Mientras tus platillos sean de ese nivel, no pagas nada más.</span></li><li><strong>Lo que excede se cobra aparte, cada semana</strong><span>Si en una semana eliges platillos de un nivel superior, solo pagas la diferencia por cada uno: +$70 (Exclusivo), +$140 (Signature) o +$210 (Reserve) sobre Selecto. Se cobra esa semana, no antes.</span></li><li><strong>Cuándo se hace cada cargo</strong><span>Primer cargo: hoy, el total del plan. Semanas 2, 3 y 4: solo si agregaste platillos de nivel superior, el extra de esa semana. Al terminar las 4 semanas el plan se renueva o te pedimos confirmar, según elijas.</span></li><li><strong>Eliges cada semana antes del sábado 10:00</strong><span>Si no eliges, repetimos tu semana anterior. Cocinamos y entregamos personalmente en el día y la dirección que indiques.</span></li><li><strong>Personaliza cada platillo (opcional)</strong><span>Toca el lápiz ✎ de un día para quitar ingredientes (por ejemplo, la hamburguesa sin cebolla) o escribir una nota para la cocina. También puedes hacerlo desde el resumen, donde ves los ingredientes de cada platillo.</span></li></ol>
-            <p class="fn-how__ex">Ejemplo: plan de 4 semanas Selecto ($3,600). En la semana 2 cambias 2 comidas a Exclusivo: ese día solo pagas 2 × $70 = $140 extra. Las demás semanas no se cobra nada más.</p>
-          </details>
+          </div>
           <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renovar automáticamente cada 4 semanas</span></label>
         </fieldset>
 
@@ -3177,8 +3210,93 @@ Fuego</span>
 
 
         <fieldset class="step" data-fn-step="2">
+          <legend class="fn-sr">Menú</legend>
+          <div class="fn-carousel fn-carousel--show">
+            <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Platillos anteriores">&#8249;</button>
+            <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
+            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Pollo a las hierbas con puré rústico</h3><p class="fn-sc__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de papa.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> por comida</small></span><span>480 kcal</span><span>34 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Bowl de res magra y quinoa</h3><p class="fn-sc__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> por comida</small></span><span>560 kcal</span><span>39 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Salmón gourmet en costra de almendras</h3><p class="fn-sc__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry rostizado.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$250<small> por comida</small></span><span>520 kcal</span><span>36 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Omelette de claras con espinaca</h3><p class="fn-sc__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> por comida</small></span><span>310 kcal</span><span>22 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"><span class="tier-badge tier-badge--signature">Signature $$</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Arrachera al carbón con maíz y espárragos</h3><p class="fn-sc__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$320<small> por comida</small></span><span>640 kcal</span><span>45 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Filete Prime con verduras asadas</h3><p class="fn-sc__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin perder su punto.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$390<small> por comida</small></span><span>710 kcal</span><span>50 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Bowl vegano de garbanzo y tahini</h3><p class="fn-sc__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$250<small> por comida</small></span><span>450 kcal</span><span>32 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Crema de calabaza asada</h3><p class="fn-sc__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> por comida</small></span><span>220 kcal</span><span>15 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Mini pasta de pollo para peques</h3><p class="fn-sc__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> por comida</small></span><span>380 kcal</span><span>27 g proteína</span></p>
+  </div>
+</article></div>
+            <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Platillos siguientes">&#8250;</button>
+          </div>
+        </fieldset>
+        <fieldset class="step" data-fn-step="3">
           <legend class="fn-sr">Elige tus 5 comidas de la semana</legend>
           <div class="fn-para" data-fn-para-wrap hidden><label for="home--fn-para-funnel">¿Para quién es este pedido?</label><select class="select" id="home--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Agregar a alguien de tu familia</a></div>
+          <ol class="fn-week" data-fn-week aria-label="Asigna cada comida a un día"></ol>
+          <div class="fn-mods" data-fn-mods hidden></div>
+          <p class="fn-budget" data-fn-budget></p>
+          <p class="fn-mods__tip">✎ Quitar ingredientes o añadir nota</p>
           <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>comidas</span><i data-fn-meter-bar></i></p>
@@ -3453,11 +3571,6 @@ Fuego</span>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-arrow="1" aria-label="Platillos siguientes">&#8250;</button>
           </div>
           <p class="alert" data-fn-empty hidden>Esta semana no hay platillos con esa combinación. Cambia de nivel o de menú.</p>
-        </fieldset>
-        <fieldset class="step" data-fn-step="3">
-          <legend>Tu semana: revisa, personaliza y confirma</legend>
-          <ol class="fn-week" data-fn-week aria-label="Asigna cada comida a un día"></ol>
-          <div class="fn-mods" data-fn-mods hidden></div>
         </fieldset>
 
 
@@ -11385,7 +11498,7 @@ Pago digital, sin efectivo</li></ul>
   data-t-per-week="{p} por semana" data-t-weeks-x="{p} por semana × {w} semanas" data-t-per-meal="por comida"
   data-t-all-lines="Todas" data-t-prop-dishes="Platillos" data-t-prop-meals="Comidas por semana"
   data-t-prop-tier="Nivel" data-t-prop-length="Duración" data-t-length-block="4 semanas" data-t-length-week="1 semana"
-  data-t-mods-done="Listo" data-t-mods-edit="Quitar ingredientes o añadir nota a {d}" data-t-mods-title="Ajustes para {d}: {p}" data-t-mods-hint="¿Algo que quitar? Toca un ingrediente para pedirlo sin él." data-t-mods-note="Nota para la cocina (opcional)" data-t-mods-ph="Ej. sin cebolla, salsa aparte…" data-t-mods-warn="Es una preferencia de gusto: no sustituye avisar de una alergia (tu perfil). Haremos lo posible por respetarla." data-t-mods-without="Sin {i}" data-t-prop-notes="Notas de cocina" data-t-mods-open="Quitar ingredientes o añadir nota"
+  data-t-budget="Tu plan incluye {w} por semana en comidas. Lo que elijas por encima se cobra aparte esa semana, además de tu pago inicial de {t}." data-t-budget-x="Esta semana: +{x} extra." data-t-budget-ok="Esta semana: sin extra." data-t-how-open="¿Cómo funciona?" data-t-mods-done="Listo" data-t-mods-edit="Quitar ingredientes o añadir nota a {d}" data-t-mods-title="Ajustes para {d}: {p}" data-t-mods-hint="¿Algo que quitar? Toca un ingrediente para pedirlo sin él." data-t-mods-note="Nota para la cocina (opcional)" data-t-mods-ph="Ej. sin cebolla, salsa aparte…" data-t-mods-warn="Es una preferencia de gusto: no sustituye avisar de una alergia (tu perfil). Haremos lo posible por respetarla." data-t-mods-without="Sin {i}" data-t-prop-notes="Notas de cocina" data-t-mods-open="Quitar ingredientes o añadir nota"
   data-t-para-me="Para mí" data-t-prop-for="Para"
   data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-finish="Confirmar y continuar" data-t-finish-guest="Inicia sesión para continuar" data-t-credit="Tienes un plan activo: te quedan {w} de {t} semanas (hasta el {e}). Elige las comidas de cada semana en Mi semana. ¿Quieres más créditos? Elige un plan aquí abajo." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-pick="Elegir" data-t-picked="Elegido" data-t-pick-for="Elige el platillo del {d}" data-t-all-done="¡Semana completa! Revisa y continúa." data-t-clear-day="Quitar el platillo de {d}" data-t-first="Primera entrega: lunes {d}." data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
   data-t-prop-upgrade="Mejora" data-t-need-contract="Acepta el contrato para continuar." data-t-days-missing="Asigna un platillo a cada día."
@@ -11419,7 +11532,11 @@ Pago digital, sin efectivo</li></ul>
         <fieldset class="step is-on" data-fn-step="1">
           <legend>¿Cuánto tiempo quieres comer bien?</legend>
           <p class="text-muted">Eliges tu plan una vez. Recibes 5 comidas por semana, de lunes a viernes.</p>
-          <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="#/pg/cuenta-semana" data-fn-credit-link>Ir a Mi semana</a></div>
+          <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="#/pg/cuenta-semana" data-fn-credit-link>Ir a Mi semana</a></div><details class="fn-how" data-fn-how>
+            <summary>Cómo funciona, paso a paso</summary>
+            <ol class="fn-how__list"><li><strong>Eliges tu plan y tu nivel</strong><span>Plan de 4 semanas: pagas $3,600 hoy, por adelantado (20 comidas, $900 por semana). Plan de 1 semana: pagas $1,000 una sola vez (5 comidas). Esos montos son del nivel Selecto; los demás niveles se muestran al elegirlos.</span></li><li><strong>Tienes un presupuesto semanal incluido</strong><span>Tu plan cubre hasta 5 comidas por semana del nivel que elegiste. Mientras tus platillos sean de ese nivel, no pagas nada más.</span></li><li><strong>Lo que excede se cobra aparte, cada semana</strong><span>Si en una semana eliges platillos de un nivel superior, solo pagas la diferencia por cada uno: +$70 (Exclusivo), +$140 (Signature) o +$210 (Reserve) sobre Selecto. Se cobra esa semana, no antes.</span></li><li><strong>Cuándo se hace cada cargo</strong><span>Primer cargo: hoy, el total del plan. Semanas 2, 3 y 4: solo si agregaste platillos de nivel superior, el extra de esa semana. Al terminar las 4 semanas el plan se renueva o te pedimos confirmar, según elijas.</span></li><li><strong>Eliges cada semana antes del sábado 10:00</strong><span>Si no eliges, repetimos tu semana anterior. Cocinamos y entregamos personalmente en el día y la dirección que indiques.</span></li><li><strong>Personaliza cada platillo (opcional)</strong><span>Toca el lápiz ✎ de un día para quitar ingredientes (por ejemplo, la hamburguesa sin cebolla) o escribir una nota para la cocina. También puedes hacerlo desde el resumen, donde ves los ingredientes de cada platillo.</span></li></ol>
+            <p class="fn-how__ex">Ejemplo: plan de 4 semanas Selecto ($3,600). En la semana 2 cambias 2 comidas a Exclusivo: ese día solo pagas 2 × $70 = $140 extra. Las demás semanas no se cobra nada más.</p>
+          </details>
           <div class="fn-plans" role="radiogroup" aria-label="¿Cuánto tiempo quieres comer bien?">
             <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
               <span class="plan-card__flag">Recomendado</span>
@@ -11434,11 +11551,7 @@ Pago digital, sin efectivo</li></ul>
               <em class="fn-plan__from">Desde $1,000</em>
               <span class="fn-plan__incl">Por semana · incluye 5 comidas</span>
             </button>
-          </div><details class="fn-how" data-fn-how>
-            <summary>Cómo funciona, paso a paso</summary>
-            <ol class="fn-how__list"><li><strong>Eliges tu plan y tu nivel</strong><span>Plan de 4 semanas: pagas $3,600 hoy, por adelantado (20 comidas, $900 por semana). Plan de 1 semana: pagas $1,000 una sola vez (5 comidas). Esos montos son del nivel Selecto; los demás niveles se muestran al elegirlos.</span></li><li><strong>Tienes un presupuesto semanal incluido</strong><span>Tu plan cubre hasta 5 comidas por semana del nivel que elegiste. Mientras tus platillos sean de ese nivel, no pagas nada más.</span></li><li><strong>Lo que excede se cobra aparte, cada semana</strong><span>Si en una semana eliges platillos de un nivel superior, solo pagas la diferencia por cada uno: +$70 (Exclusivo), +$140 (Signature) o +$210 (Reserve) sobre Selecto. Se cobra esa semana, no antes.</span></li><li><strong>Cuándo se hace cada cargo</strong><span>Primer cargo: hoy, el total del plan. Semanas 2, 3 y 4: solo si agregaste platillos de nivel superior, el extra de esa semana. Al terminar las 4 semanas el plan se renueva o te pedimos confirmar, según elijas.</span></li><li><strong>Eliges cada semana antes del sábado 10:00</strong><span>Si no eliges, repetimos tu semana anterior. Cocinamos y entregamos personalmente en el día y la dirección que indiques.</span></li><li><strong>Personaliza cada platillo (opcional)</strong><span>Toca el lápiz ✎ de un día para quitar ingredientes (por ejemplo, la hamburguesa sin cebolla) o escribir una nota para la cocina. También puedes hacerlo desde el resumen, donde ves los ingredientes de cada platillo.</span></li></ol>
-            <p class="fn-how__ex">Ejemplo: plan de 4 semanas Selecto ($3,600). En la semana 2 cambias 2 comidas a Exclusivo: ese día solo pagas 2 × $70 = $140 extra. Las demás semanas no se cobra nada más.</p>
-          </details>
+          </div>
           <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renovar automáticamente cada 4 semanas</span></label>
         </fieldset>
 
@@ -11471,8 +11584,93 @@ Pago digital, sin efectivo</li></ul>
 
 
         <fieldset class="step" data-fn-step="2">
+          <legend class="fn-sr">Menú</legend>
+          <div class="fn-carousel fn-carousel--show">
+            <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Platillos anteriores">&#8249;</button>
+            <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
+            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Pollo a las hierbas con puré rústico</h3><p class="fn-sc__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de papa.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> por comida</small></span><span>480 kcal</span><span>34 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Bowl de res magra y quinoa</h3><p class="fn-sc__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> por comida</small></span><span>560 kcal</span><span>39 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Salmón gourmet en costra de almendras</h3><p class="fn-sc__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry rostizado.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$250<small> por comida</small></span><span>520 kcal</span><span>36 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Omelette de claras con espinaca</h3><p class="fn-sc__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> por comida</small></span><span>310 kcal</span><span>22 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"><span class="tier-badge tier-badge--signature">Signature $$</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Arrachera al carbón con maíz y espárragos</h3><p class="fn-sc__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$320<small> por comida</small></span><span>640 kcal</span><span>45 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Filete Prime con verduras asadas</h3><p class="fn-sc__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin perder su punto.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$390<small> por comida</small></span><span>710 kcal</span><span>50 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Bowl vegano de garbanzo y tahini</h3><p class="fn-sc__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$250<small> por comida</small></span><span>450 kcal</span><span>32 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Crema de calabaza asada</h3><p class="fn-sc__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> por comida</small></span><span>220 kcal</span><span>15 g proteína</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Mini pasta de pollo para peques</h3><p class="fn-sc__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> por comida</small></span><span>380 kcal</span><span>27 g proteína</span></p>
+  </div>
+</article></div>
+            <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Platillos siguientes">&#8250;</button>
+          </div>
+        </fieldset>
+        <fieldset class="step" data-fn-step="3">
           <legend class="fn-sr">Elige tus 5 comidas de la semana</legend>
           <div class="fn-para" data-fn-para-wrap hidden><label for="pg-pedido--fn-para-funnel">¿Para quién es este pedido?</label><select class="select" id="pg-pedido--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Agregar a alguien de tu familia</a></div>
+          <ol class="fn-week" data-fn-week aria-label="Asigna cada comida a un día"></ol>
+          <div class="fn-mods" data-fn-mods hidden></div>
+          <p class="fn-budget" data-fn-budget></p>
+          <p class="fn-mods__tip">✎ Quitar ingredientes o añadir nota</p>
           <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>comidas</span><i data-fn-meter-bar></i></p>
@@ -11747,11 +11945,6 @@ Pago digital, sin efectivo</li></ul>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-arrow="1" aria-label="Platillos siguientes">&#8250;</button>
           </div>
           <p class="alert" data-fn-empty hidden>Esta semana no hay platillos con esa combinación. Cambia de nivel o de menú.</p>
-        </fieldset>
-        <fieldset class="step" data-fn-step="3">
-          <legend>Tu semana: revisa, personaliza y confirma</legend>
-          <ol class="fn-week" data-fn-week aria-label="Asigna cada comida a un día"></ol>
-          <div class="fn-mods" data-fn-mods hidden></div>
         </fieldset>
 
 
@@ -12055,7 +12248,9 @@ Pago digital, sin efectivo</li></ul>
               <input type="checkbox" name="attributes[contrato_aceptado]" value="sí" data-contract >
               <span>
                 Acepto el contrato de adhesión y los términos de servicio de Kulinaria MX, incluida la selección automática de los sábados, las reglas de renovación y la política de no reembolso. <a href="#/pg/ayuda" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline">Leer contrato</a></span>
-            </label><div class="alert alert--warn" data-cart-profile hidden><p style="margin:0 0 8px">Antes de pagar, completa tu perfil de alergias y gustos. Así revisamos cada platillo contra lo que no puedes o no quieres comer.</p><a class="btn btn--gold btn--sm" href="#/pg/bienvenida">Completar mi perfil</a></div>
+            </label>
+
+            <label class="cart-kitchen"><strong>Notas para la cocina (opcional)</strong><span class="text-muted">Última oportunidad: ingredientes que quieres quitar, cómo prefieres un platillo o cualquier indicación. Es una preferencia de gusto, no sustituye avisar de una alergia en tu perfil.</span><textarea name="note" class="input" rows="3" maxlength="400" data-cart-note placeholder="Ej. hamburguesa sin cebolla, salsa aparte…"></textarea></label><div class="alert alert--warn" data-cart-profile hidden><p style="margin:0 0 8px">Antes de pagar, completa tu perfil de alergias y gustos. Así revisamos cada platillo contra lo que no puedes o no quieres comer.</p><a class="btn btn--gold btn--sm" href="#/pg/bienvenida">Completar mi perfil</a></div>
               <button class="btn btn--gold btn--block" type="submit" name="checkout" data-checkout disabled>Continuar al pago</button></div>
         </aside>
       </form></div>
@@ -12481,7 +12676,7 @@ Pago digital, sin efectivo</li></ul>
   data-t-per-week="{p} per week" data-t-weeks-x="{p} per week × {w} weeks" data-t-per-meal="per meal"
   data-t-all-lines="All" data-t-prop-dishes="Dishes" data-t-prop-meals="Meals per week"
   data-t-prop-tier="Tier" data-t-prop-length="Length" data-t-length-block="4 weeks" data-t-length-week="1 week"
-  data-t-mods-done="Done" data-t-mods-edit="Leave out ingredients or add a note for {d}" data-t-mods-title="Tweaks for {d}: {p}" data-t-mods-hint="Anything to leave out? Tap an ingredient to ask for it without." data-t-mods-note="Note for the kitchen (optional)" data-t-mods-ph="E.g. no onion, sauce on the side…" data-t-mods-warn="This is a taste preference: it does not replace telling us about an allergy (your profile). We will do our best to respect it." data-t-mods-without="No {i}" data-t-prop-notes="Kitchen notes" data-t-mods-open="Remove ingredients or add a note"
+  data-t-budget="Your plan includes {w} per week in meals. Anything you choose above that is charged separately that week, on top of your {t} upfront payment." data-t-budget-x="This week: +{x} extra." data-t-budget-ok="This week: no extra." data-t-how-open="How does it work?" data-t-mods-done="Done" data-t-mods-edit="Leave out ingredients or add a note for {d}" data-t-mods-title="Tweaks for {d}: {p}" data-t-mods-hint="Anything to leave out? Tap an ingredient to ask for it without." data-t-mods-note="Note for the kitchen (optional)" data-t-mods-ph="E.g. no onion, sauce on the side…" data-t-mods-warn="This is a taste preference: it does not replace telling us about an allergy (your profile). We will do our best to respect it." data-t-mods-without="No {i}" data-t-prop-notes="Kitchen notes" data-t-mods-open="Remove ingredients or add a note"
   data-t-para-me="For me" data-t-prop-for="For"
   data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-finish="Confirm and continue" data-t-finish-guest="Sign in to continue" data-t-credit="You have an active plan: {w} of {t} weeks left (until {e}). Choose each week's meals in My week. Want more credits? Pick a plan below." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-pick="Choose" data-t-picked="Chosen" data-t-pick-for="Choose the dish for {d}" data-t-all-done="Week complete! Review and continue." data-t-clear-day="Remove the dish for {d}" data-t-first="First delivery: Monday {d}." data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
   data-t-prop-upgrade="Upgrade" data-t-need-contract="Accept the contract to continue." data-t-days-missing="Assign a dish to every day."
@@ -12515,7 +12710,11 @@ Pago digital, sin efectivo</li></ul>
         <fieldset class="step is-on" data-fn-step="1">
           <legend>How long do you want to eat well?</legend>
           <p class="text-muted">You pick your plan once. You get 5 meals a week, Monday to Friday.</p>
-          <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="#/pg/cuenta-semana" data-fn-credit-link>Go to My week</a></div>
+          <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="#/pg/cuenta-semana" data-fn-credit-link>Go to My week</a></div><details class="fn-how" data-fn-how>
+            <summary>How it works, step by step</summary>
+            <ol class="fn-how__list"><li><strong>You choose your plan and tier</strong><span>4-week plan: you pay $3,600 today, upfront (20 meals, $900 per week). 1-week plan: you pay $1,000 once (5 meals). These amounts are for the Selecto tier; the other tiers show their price when you pick them.</span></li><li><strong>You get a weekly budget included</strong><span>Your plan covers up to 5 meals per week from the tier you chose. As long as your dishes are from that tier, you pay nothing more.</span></li><li><strong>Anything above it is charged separately, each week</strong><span>If one week you pick dishes from a higher tier, you only pay the difference for each one: +$70 (Exclusivo), +$140 (Signature) or +$210 (Reserve) over Selecto. It is charged that week, not before.</span></li><li><strong>When each charge happens</strong><span>First charge: today, the full plan. Weeks 2, 3 and 4: only if you added higher-tier dishes, that week's extra. When the 4 weeks end the plan renews or we ask you to confirm, as you choose.</span></li><li><strong>You choose every week before Saturday 10:00</strong><span>If you don't choose, we repeat your previous week. We cook and deliver personally on the day and to the address you give us.</span></li><li><strong>Personalize each dish (optional)</strong><span>Tap the pencil ✎ on a day to leave out ingredients (for example, the burger without onion) or write a note for the kitchen. You can also do it from the summary, where you see each dish's ingredients.</span></li></ol>
+            <p class="fn-how__ex">Example: Selecto 4-week plan ($3,600). In week 2 you switch 2 meals to Exclusivo: that week you only pay 2 × $70 = $140 extra. No other charge in the other weeks.</p>
+          </details>
           <div class="fn-plans" role="radiogroup" aria-label="How long do you want to eat well?">
             <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
               <span class="plan-card__flag">Recommended</span>
@@ -12530,11 +12729,7 @@ Pago digital, sin efectivo</li></ul>
               <em class="fn-plan__from">From $1,000</em>
               <span class="fn-plan__incl">Per week · includes 5 meals</span>
             </button>
-          </div><details class="fn-how" data-fn-how>
-            <summary>How it works, step by step</summary>
-            <ol class="fn-how__list"><li><strong>You choose your plan and tier</strong><span>4-week plan: you pay $3,600 today, upfront (20 meals, $900 per week). 1-week plan: you pay $1,000 once (5 meals). These amounts are for the Selecto tier; the other tiers show their price when you pick them.</span></li><li><strong>You get a weekly budget included</strong><span>Your plan covers up to 5 meals per week from the tier you chose. As long as your dishes are from that tier, you pay nothing more.</span></li><li><strong>Anything above it is charged separately, each week</strong><span>If one week you pick dishes from a higher tier, you only pay the difference for each one: +$70 (Exclusivo), +$140 (Signature) or +$210 (Reserve) over Selecto. It is charged that week, not before.</span></li><li><strong>When each charge happens</strong><span>First charge: today, the full plan. Weeks 2, 3 and 4: only if you added higher-tier dishes, that week's extra. When the 4 weeks end the plan renews or we ask you to confirm, as you choose.</span></li><li><strong>You choose every week before Saturday 10:00</strong><span>If you don't choose, we repeat your previous week. We cook and deliver personally on the day and to the address you give us.</span></li><li><strong>Personalize each dish (optional)</strong><span>Tap the pencil ✎ on a day to leave out ingredients (for example, the burger without onion) or write a note for the kitchen. You can also do it from the summary, where you see each dish's ingredients.</span></li></ol>
-            <p class="fn-how__ex">Example: Selecto 4-week plan ($3,600). In week 2 you switch 2 meals to Exclusivo: that week you only pay 2 × $70 = $140 extra. No other charge in the other weeks.</p>
-          </details>
+          </div>
           <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renew automatically every 4 weeks</span></label>
         </fieldset>
 
@@ -12567,8 +12762,93 @@ Pago digital, sin efectivo</li></ul>
 
 
         <fieldset class="step" data-fn-step="2">
+          <legend class="fn-sr">Menu</legend>
+          <div class="fn-carousel fn-carousel--show">
+            <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Previous dishes">&#8249;</button>
+            <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
+            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Herb chicken with rustic mash</h3><p class="fn-sc__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> per meal</small></span><span>480 kcal</span><span>34 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Lean beef and quinoa bowl</h3><p class="fn-sc__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> per meal</small></span><span>560 kcal</span><span>39 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Gourmet salmon in an almond crust</h3><p class="fn-sc__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$250<small> per meal</small></span><span>520 kcal</span><span>36 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Egg-white omelette with spinach</h3><p class="fn-sc__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> per meal</small></span><span>310 kcal</span><span>22 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"><span class="tier-badge tier-badge--signature">Signature $$</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Charcoal-grilled skirt steak with corn and asparagus</h3><p class="fn-sc__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$320<small> per meal</small></span><span>640 kcal</span><span>45 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Prime filet with roasted vegetables</h3><p class="fn-sc__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losing its doneness.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$390<small> per meal</small></span><span>710 kcal</span><span>50 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Vegan chickpea and tahini bowl</h3><p class="fn-sc__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$250<small> per meal</small></span><span>450 kcal</span><span>32 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Roasted pumpkin cream soup</h3><p class="fn-sc__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> per meal</small></span><span>220 kcal</span><span>15 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Mini chicken pasta for little ones</h3><p class="fn-sc__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> per meal</small></span><span>380 kcal</span><span>27 g protein</span></p>
+  </div>
+</article></div>
+            <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Next dishes">&#8250;</button>
+          </div>
+        </fieldset>
+        <fieldset class="step" data-fn-step="3">
           <legend class="fn-sr">Choose your 5 meals for the week</legend>
           <div class="fn-para" data-fn-para-wrap hidden><label for="home--fn-para-funnel">Who is this order for?</label><select class="select" id="home--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Add someone from your family</a></div>
+          <ol class="fn-week" data-fn-week aria-label="Assign each meal to a day"></ol>
+          <div class="fn-mods" data-fn-mods hidden></div>
+          <p class="fn-budget" data-fn-budget></p>
+          <p class="fn-mods__tip">✎ Remove ingredients or add a note</p>
           <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>meals</span><i data-fn-meter-bar></i></p>
@@ -12843,11 +13123,6 @@ Pago digital, sin efectivo</li></ul>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-arrow="1" aria-label="Next dishes">&#8250;</button>
           </div>
           <p class="alert" data-fn-empty hidden>There are no dishes with that combination this week. Change the tier or the menu.</p>
-        </fieldset>
-        <fieldset class="step" data-fn-step="3">
-          <legend>Your week: review, personalize and confirm</legend>
-          <ol class="fn-week" data-fn-week aria-label="Assign each meal to a day"></ol>
-          <div class="fn-mods" data-fn-mods hidden></div>
         </fieldset>
 
 
@@ -20775,7 +21050,7 @@ Digital payment, no cash</li></ul>
   data-t-per-week="{p} per week" data-t-weeks-x="{p} per week × {w} weeks" data-t-per-meal="per meal"
   data-t-all-lines="All" data-t-prop-dishes="Dishes" data-t-prop-meals="Meals per week"
   data-t-prop-tier="Tier" data-t-prop-length="Length" data-t-length-block="4 weeks" data-t-length-week="1 week"
-  data-t-mods-done="Done" data-t-mods-edit="Leave out ingredients or add a note for {d}" data-t-mods-title="Tweaks for {d}: {p}" data-t-mods-hint="Anything to leave out? Tap an ingredient to ask for it without." data-t-mods-note="Note for the kitchen (optional)" data-t-mods-ph="E.g. no onion, sauce on the side…" data-t-mods-warn="This is a taste preference: it does not replace telling us about an allergy (your profile). We will do our best to respect it." data-t-mods-without="No {i}" data-t-prop-notes="Kitchen notes" data-t-mods-open="Remove ingredients or add a note"
+  data-t-budget="Your plan includes {w} per week in meals. Anything you choose above that is charged separately that week, on top of your {t} upfront payment." data-t-budget-x="This week: +{x} extra." data-t-budget-ok="This week: no extra." data-t-how-open="How does it work?" data-t-mods-done="Done" data-t-mods-edit="Leave out ingredients or add a note for {d}" data-t-mods-title="Tweaks for {d}: {p}" data-t-mods-hint="Anything to leave out? Tap an ingredient to ask for it without." data-t-mods-note="Note for the kitchen (optional)" data-t-mods-ph="E.g. no onion, sauce on the side…" data-t-mods-warn="This is a taste preference: it does not replace telling us about an allergy (your profile). We will do our best to respect it." data-t-mods-without="No {i}" data-t-prop-notes="Kitchen notes" data-t-mods-open="Remove ingredients or add a note"
   data-t-para-me="For me" data-t-prop-for="For"
   data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-finish="Confirm and continue" data-t-finish-guest="Sign in to continue" data-t-credit="You have an active plan: {w} of {t} weeks left (until {e}). Choose each week's meals in My week. Want more credits? Pick a plan below." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-pick="Choose" data-t-picked="Chosen" data-t-pick-for="Choose the dish for {d}" data-t-all-done="Week complete! Review and continue." data-t-clear-day="Remove the dish for {d}" data-t-first="First delivery: Monday {d}." data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
   data-t-prop-upgrade="Upgrade" data-t-need-contract="Accept the contract to continue." data-t-days-missing="Assign a dish to every day."
@@ -20809,7 +21084,11 @@ Digital payment, no cash</li></ul>
         <fieldset class="step is-on" data-fn-step="1">
           <legend>How long do you want to eat well?</legend>
           <p class="text-muted">You pick your plan once. You get 5 meals a week, Monday to Friday.</p>
-          <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="#/pg/cuenta-semana" data-fn-credit-link>Go to My week</a></div>
+          <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="#/pg/cuenta-semana" data-fn-credit-link>Go to My week</a></div><details class="fn-how" data-fn-how>
+            <summary>How it works, step by step</summary>
+            <ol class="fn-how__list"><li><strong>You choose your plan and tier</strong><span>4-week plan: you pay $3,600 today, upfront (20 meals, $900 per week). 1-week plan: you pay $1,000 once (5 meals). These amounts are for the Selecto tier; the other tiers show their price when you pick them.</span></li><li><strong>You get a weekly budget included</strong><span>Your plan covers up to 5 meals per week from the tier you chose. As long as your dishes are from that tier, you pay nothing more.</span></li><li><strong>Anything above it is charged separately, each week</strong><span>If one week you pick dishes from a higher tier, you only pay the difference for each one: +$70 (Exclusivo), +$140 (Signature) or +$210 (Reserve) over Selecto. It is charged that week, not before.</span></li><li><strong>When each charge happens</strong><span>First charge: today, the full plan. Weeks 2, 3 and 4: only if you added higher-tier dishes, that week's extra. When the 4 weeks end the plan renews or we ask you to confirm, as you choose.</span></li><li><strong>You choose every week before Saturday 10:00</strong><span>If you don't choose, we repeat your previous week. We cook and deliver personally on the day and to the address you give us.</span></li><li><strong>Personalize each dish (optional)</strong><span>Tap the pencil ✎ on a day to leave out ingredients (for example, the burger without onion) or write a note for the kitchen. You can also do it from the summary, where you see each dish's ingredients.</span></li></ol>
+            <p class="fn-how__ex">Example: Selecto 4-week plan ($3,600). In week 2 you switch 2 meals to Exclusivo: that week you only pay 2 × $70 = $140 extra. No other charge in the other weeks.</p>
+          </details>
           <div class="fn-plans" role="radiogroup" aria-label="How long do you want to eat well?">
             <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
               <span class="plan-card__flag">Recommended</span>
@@ -20824,11 +21103,7 @@ Digital payment, no cash</li></ul>
               <em class="fn-plan__from">From $1,000</em>
               <span class="fn-plan__incl">Per week · includes 5 meals</span>
             </button>
-          </div><details class="fn-how" data-fn-how>
-            <summary>How it works, step by step</summary>
-            <ol class="fn-how__list"><li><strong>You choose your plan and tier</strong><span>4-week plan: you pay $3,600 today, upfront (20 meals, $900 per week). 1-week plan: you pay $1,000 once (5 meals). These amounts are for the Selecto tier; the other tiers show their price when you pick them.</span></li><li><strong>You get a weekly budget included</strong><span>Your plan covers up to 5 meals per week from the tier you chose. As long as your dishes are from that tier, you pay nothing more.</span></li><li><strong>Anything above it is charged separately, each week</strong><span>If one week you pick dishes from a higher tier, you only pay the difference for each one: +$70 (Exclusivo), +$140 (Signature) or +$210 (Reserve) over Selecto. It is charged that week, not before.</span></li><li><strong>When each charge happens</strong><span>First charge: today, the full plan. Weeks 2, 3 and 4: only if you added higher-tier dishes, that week's extra. When the 4 weeks end the plan renews or we ask you to confirm, as you choose.</span></li><li><strong>You choose every week before Saturday 10:00</strong><span>If you don't choose, we repeat your previous week. We cook and deliver personally on the day and to the address you give us.</span></li><li><strong>Personalize each dish (optional)</strong><span>Tap the pencil ✎ on a day to leave out ingredients (for example, the burger without onion) or write a note for the kitchen. You can also do it from the summary, where you see each dish's ingredients.</span></li></ol>
-            <p class="fn-how__ex">Example: Selecto 4-week plan ($3,600). In week 2 you switch 2 meals to Exclusivo: that week you only pay 2 × $70 = $140 extra. No other charge in the other weeks.</p>
-          </details>
+          </div>
           <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>Renew automatically every 4 weeks</span></label>
         </fieldset>
 
@@ -20861,8 +21136,93 @@ Digital payment, no cash</li></ul>
 
 
         <fieldset class="step" data-fn-step="2">
+          <legend class="fn-sr">Menu</legend>
+          <div class="fn-carousel fn-carousel--show">
+            <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Previous dishes">&#8249;</button>
+            <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
+            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Herb chicken with rustic mash</h3><p class="fn-sc__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> per meal</small></span><span>480 kcal</span><span>34 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Lean beef and quinoa bowl</h3><p class="fn-sc__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> per meal</small></span><span>560 kcal</span><span>39 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Gourmet salmon in an almond crust</h3><p class="fn-sc__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$250<small> per meal</small></span><span>520 kcal</span><span>36 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Egg-white omelette with spinach</h3><p class="fn-sc__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> per meal</small></span><span>310 kcal</span><span>22 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"><span class="tier-badge tier-badge--signature">Signature $$</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Charcoal-grilled skirt steak with corn and asparagus</h3><p class="fn-sc__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$320<small> per meal</small></span><span>640 kcal</span><span>45 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Prime filet with roasted vegetables</h3><p class="fn-sc__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losing its doneness.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$390<small> per meal</small></span><span>710 kcal</span><span>50 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Vegan chickpea and tahini bowl</h3><p class="fn-sc__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$250<small> per meal</small></span><span>450 kcal</span><span>32 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Roasted pumpkin cream soup</h3><p class="fn-sc__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> per meal</small></span><span>220 kcal</span><span>15 g protein</span></p>
+  </div>
+</article><article class="fn-sc">
+  <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"><span class="tier-badge tier-badge--selecto">Selecto</span>
+
+  </div>
+  <div class="fn-sc__body">
+    <h3>Mini chicken pasta for little ones</h3><p class="fn-sc__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="fn-sc__meta">
+      <span class="fn-sc__price">$180<small> per meal</small></span><span>380 kcal</span><span>27 g protein</span></p>
+  </div>
+</article></div>
+            <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Next dishes">&#8250;</button>
+          </div>
+        </fieldset>
+        <fieldset class="step" data-fn-step="3">
           <legend class="fn-sr">Choose your 5 meals for the week</legend>
           <div class="fn-para" data-fn-para-wrap hidden><label for="pg-pedido--fn-para-funnel">Who is this order for?</label><select class="select" id="pg-pedido--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Add someone from your family</a></div>
+          <ol class="fn-week" data-fn-week aria-label="Assign each meal to a day"></ol>
+          <div class="fn-mods" data-fn-mods hidden></div>
+          <p class="fn-budget" data-fn-budget></p>
+          <p class="fn-mods__tip">✎ Remove ingredients or add a note</p>
           <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>meals</span><i data-fn-meter-bar></i></p>
@@ -21137,11 +21497,6 @@ Digital payment, no cash</li></ul>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-arrow="1" aria-label="Next dishes">&#8250;</button>
           </div>
           <p class="alert" data-fn-empty hidden>There are no dishes with that combination this week. Change the tier or the menu.</p>
-        </fieldset>
-        <fieldset class="step" data-fn-step="3">
-          <legend>Your week: review, personalize and confirm</legend>
-          <ol class="fn-week" data-fn-week aria-label="Assign each meal to a day"></ol>
-          <div class="fn-mods" data-fn-mods hidden></div>
         </fieldset>
 
 
@@ -21445,7 +21800,9 @@ Digital payment, no cash</li></ul>
               <input type="checkbox" name="attributes[contrato_aceptado]" value="sí" data-contract >
               <span>
                 I accept the adhesion contract and the Kulinaria MX terms of service, including the automatic Saturday selection, renewal rules and the no-refund policy. <a href="#/pg/ayuda" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline">Read contract</a></span>
-            </label><div class="alert alert--warn" data-cart-profile hidden><p style="margin:0 0 8px">Before paying, complete your allergy and taste profile. That's how we check every dish against what you can't or don't want to eat.</p><a class="btn btn--gold btn--sm" href="#/pg/bienvenida">Complete my profile</a></div>
+            </label>
+
+            <label class="cart-kitchen"><strong>Notes for the kitchen (optional)</strong><span class="text-muted">Last chance: ingredients to leave out, how you like a dish, or any instruction. It is a taste preference and does not replace telling us about an allergy in your profile.</span><textarea name="note" class="input" rows="3" maxlength="400" data-cart-note placeholder="E.g. burger without onion, sauce on the side…"></textarea></label><div class="alert alert--warn" data-cart-profile hidden><p style="margin:0 0 8px">Before paying, complete your allergy and taste profile. That's how we check every dish against what you can't or don't want to eat.</p><a class="btn btn--gold btn--sm" href="#/pg/bienvenida">Complete my profile</a></div>
               <button class="btn btn--gold btn--block" type="submit" name="checkout" data-checkout disabled>Continue to payment</button></div>
         </aside>
       </form></div>
@@ -23755,6 +24112,14 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           });
         }
         var fst = $('[data-fn-first]', holder); if (fst) fst.textContent = fill(T_('first'), { d: dateOf(0) });
+        var bud = $('[data-fn-budget]', holder);
+        if (bud) {
+          var wk = st.plan === 'block' ? Math.round(priceOf(tierEl(), 'block') / 4) : priceOf(tierEl(), 'week'), exb = upgradeExtra();
+          bud.innerHTML = '';
+          var bt = document.createElement('span'); bt.textContent = fill(T_('budget'), { w: money(wk), t: money(planTotal() - exb) }) + ' ' + (exb ? fill(T_('budget-x'), { x: money(exb) }) : T_('budget-ok')) + ' ';
+          var bl = document.createElement('button'); bl.type = 'button'; bl.className = 'text-link'; bl.textContent = T_('how-open'); bl.setAttribute('data-fn-how-open', '');
+          bud.appendChild(bt); bud.appendChild(bl);
+        }
         var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : ''; }
         var emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
         var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? fill(T_('meals'), { n: n, t: MEALS }) : '';
@@ -23763,13 +24128,14 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step + 1).replace('{t}', steps.length) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
         var rn = $('[data-fn-renew]', holder); if (rn) { var hasPlan = !!tierEl().getAttribute('data-selling-plan'); rn.hidden = !(hasPlan && st.plan === 'block'); var box = $('[data-fn-renew-box]', holder); if (box) box.checked = st.renew; }
         renderMods();
+        holder.setAttribute('data-step', String(st.step + 1));
         // stepper
         steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
         dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); });
         if (bar) bar.style.transform = 'scaleX(' + ((st.step + 1) / steps.length) + ')';
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
-        if (next) { next.hidden = last; next.disabled = (st.step === 1 && n < 1); }
+        if (next) { next.hidden = last; next.disabled = false; }
         if (finish) { finish.hidden = !last; finish.classList.toggle('is-disabled', n < 1); finish.setAttribute('aria-disabled', n < 1 ? 'true' : 'false'); var fl = holder.getAttribute(ce ? 'data-t-finish' : 'data-t-finish-guest'); if (fl && finish.textContent.trim() !== fl) finish.textContent = fl; }
         var rem = $('[data-fn-remembered]', holder); if (rem) { rem.hidden = !(st.remembered && st.step === 2); rem.textContent = T_('remembered'); }
       };
@@ -23806,6 +24172,9 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         if (eb) { var ei = +eb.getAttribute('data-fn-day-edit'); st.active = ei; modsOpen = modsOpen === ei ? -1 : ei; modsKey = ''; st.step = 2; persist(); render(); return; }
         var db = e.target.closest ? e.target.closest('[data-fn-day-btn]') : null;
         if (db) { st.active = +db.getAttribute('data-fn-day-btn'); persist(); render(); return; }
+        if (e.target.closest && e.target.closest('[data-fn-how-open]')) { st.step = 0; var hw = $('[data-fn-how]', holder); if (hw) hw.open = true; persist(); render(); return; }
+        var sa = e.target.closest ? e.target.closest('[data-fn-sc-arrow]') : null;
+        if (sa) { var sg = $('[data-fn-sc-grid]', holder); if (sg) sg.scrollBy({ left: (+sa.getAttribute('data-fn-sc-arrow')) * Math.max(220, sg.clientWidth * 0.8), behavior: REDUCE ? 'auto' : 'smooth' }); return; }
         var ar = e.target.closest ? e.target.closest('[data-fn-arrow]') : null;
         if (ar) { var gr = $('[data-fn-grid]', holder); if (gr) gr.scrollBy({ left: (+ar.getAttribute('data-fn-arrow')) * Math.max(220, gr.clientWidth * 0.8), behavior: REDUCE ? 'auto' : 'smooth' }); return; }
         var d = e.target.closest ? e.target.closest('[data-fn-dish]') : null; if (!d) return;
@@ -23835,11 +24204,10 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       if (ref) { var rs = ''; try { rs = localStorage.getItem('kulinaria_ref') || ''; } catch (e) {} if (rs) ref.value = rs; }
 
       if (next) next.addEventListener('click', function () {
-        if (st.step === 1 && count() < 1) { say(T_('need-meals')); return; }
         go(st.step + 1);
       });
       if (prev) prev.addEventListener('click', function () { go(st.step - 1); });
-      dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k < st.step || (k > st.step && (k <= 1 || count() >= 1))) go(k); }); });
+      dots.forEach(function (d, k) { d.addEventListener('click', function () { go(k); }); });
 
       // arriving from a dish page (…/pedido?dish=handle): that dish is already in the plan, at its tier
       try {
@@ -23914,6 +24282,9 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         paraSel.addEventListener('change', function () { st.para = paraSel.value; st.days = blankDays(); st.qty = {}; st.active = 0; persist(); applyProfile(); render(); });
       }
       var gridEl = $('[data-fn-grid]', holder);
+      var scGrid = $('[data-fn-sc-grid]', holder), scCount = $('[data-fn-sc-count]', holder);
+      var scUpdate = function () { if (!scGrid || !scCount) return; var cards = scGrid.children, n = cards.length; if (!n) return; var w = cards[0].getBoundingClientRect().width + 12, i = Math.min(n - 1, Math.round(scGrid.scrollLeft / Math.max(1, w))); scCount.textContent = (i + 1) + ' / ' + n; };
+      if (scGrid) { scGrid.addEventListener('scroll', function () { window.requestAnimationFrame(scUpdate); }, { passive: true }); scUpdate(); }
       var arrows = function () { if (!gridEl) return; var pv = $('[data-fn-arrow="-1"]', holder), nx = $('[data-fn-arrow="1"]', holder); if (pv) pv.hidden = gridEl.scrollLeft < 8; if (nx) nx.hidden = gridEl.scrollLeft + gridEl.clientWidth >= gridEl.scrollWidth - 8; };
       if (gridEl) { gridEl.addEventListener('scroll', arrows, { passive: true }); window.addEventListener('resize', arrows); }
       var recPaint = function () { var tb0 = tierEl(), sp0 = tb0 && tb0.getAttribute('data-selling-plan'), kind = st.plan === 'week' ? 'week' : (sp0 && st.renew ? 'auto' : 'manual'); $$('[data-fn-rec]', holder).forEach(function (p) { p.hidden = p.getAttribute('data-fn-rec') !== kind; }); };

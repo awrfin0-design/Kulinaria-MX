@@ -152,6 +152,9 @@
     "video_label": "Video: llamas sobre la parrilla"
   },
   "cart": {
+    "kitchen_t": "Notas para la cocina (opcional)",
+    "kitchen_h": "Última oportunidad: ingredientes que quieres quitar, cómo prefieres un platillo o cualquier indicación. Es una preferencia de gusto, no sustituye avisar de una alergia en tu perfil.",
+    "kitchen_ph": "Ej. hamburguesa sin cebolla, salsa aparte…",
     "rec_title": "Cómo se cobra",
     "rec_auto": "Los planes de 4 semanas se pagan por adelantado y se renuevan automáticamente cada 4 semanas hasta que los canceles o pauses desde tu cuenta.",
     "rec_manual": "Los planes de 4 semanas se pagan por adelantado en un solo cargo. Al terminar te avisamos para renovar; no se cobra nada sin tu confirmación.",
@@ -632,6 +635,10 @@
     "s_menu": "Menú",
     "s_week": "Tu semana",
     "s_week_title": "Tu semana: revisa, personaliza y confirma",
+    "budget": "Tu plan incluye {w} por semana en comidas. Lo que elijas por encima se cobra aparte esa semana, además de tu pago inicial de {t}.",
+    "budget_x": "Esta semana: +{x} extra.",
+    "budget_ok": "Esta semana: sin extra.",
+    "how_open": "¿Cómo funciona?",
     "rec_title": "Cómo se cobra",
     "rec_auto": "El plan de 4 semanas se paga por adelantado en un solo cargo y se renueva automáticamente cada 4 semanas con el mismo método de pago, hasta que lo canceles o pauses desde tu cuenta (antes del cierre del sábado 10:00).",
     "rec_manual": "El plan de 4 semanas se paga por adelantado en un solo cargo. Al terminar tus 4 semanas te avisamos para renovar: no se hace ningún cargo sin tu confirmación.",

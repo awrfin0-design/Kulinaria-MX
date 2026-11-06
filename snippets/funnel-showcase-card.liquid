@@ -1,0 +1,32 @@
+{%- comment -%}
+  Read-only dish card for step 2 of the order funnel ("discover the menu"): photo, tier, name and a short line. Nothing to pick here.
+  Param: product
+{%- endcomment -%}
+{%- capture mw_state -%}{% render 'menu-week', product: product %}{%- endcapture -%}
+{%- if show_all or mw_state == 'on' -%}
+{%- liquid
+  assign mf = product.metafields.kulinaria
+  assign card_src = mf.card_description.value | default: product.description
+  assign tier = mf.tier.value | default: 'selecto'
+-%}
+{%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}{%- capture tx_pdesc -%}{% render 'tx', s: card_src %}{%- endcapture -%}
+<article class="fn-sc">
+  <div class="fn-sc__img">
+    {%- if product.featured_image -%}
+      {{ product.featured_image | image_url: width: 420 | image_tag: loading: 'lazy', widths: '210, 320, 420', sizes: '(min-width: 1100px) 20vw, 46vw', alt: tx_ptitle }}
+    {%- else -%}
+      <span class="dish__ph" aria-hidden="true">{% render 'dish-placeholder', category: mf.category.value | default: product.type | handleize %}</span>
+    {%- endif -%}
+    {% render 'tier-badge', tier: tier %}
+  </div>
+  <div class="fn-sc__body">
+    <h3>{{ tx_ptitle }}</h3>
+    {%- if tx_pdesc != blank -%}<p class="fn-sc__desc">{{ tx_pdesc | strip_html | truncate: 170 }}</p>{%- endif -%}
+    <p class="fn-sc__meta">
+      <span class="fn-sc__price">{% render 'plan-price', tier: tier, kind: 'meal', money: true %}<small> {{ 'funnel.per_meal' | t }}</small></span>
+      {%- if mf.calories.value %}<span>{{ mf.calories.value }} kcal</span>{% endif -%}
+      {%- if mf.protein.value %}<span>{{ mf.protein.value }} g {{ 'dish.n_protein' | t | downcase }}</span>{% endif -%}
+    </p>
+  </div>
+</article>
+{%- endif -%}

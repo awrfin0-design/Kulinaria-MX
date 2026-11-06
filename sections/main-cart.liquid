@@ -105,6 +105,8 @@
               </span>
             </label>
 
+            <label class="cart-kitchen"><strong>{{ 'cart.kitchen_t' | t }}</strong><span class="text-muted">{{ 'cart.kitchen_h' | t }}</span><textarea name="note" class="input" rows="3" maxlength="400" data-cart-note placeholder="{{ 'cart.kitchen_ph' | t }}">{{ cart.note | escape }}</textarea></label>
+
             {%- if customer -%}
               <div class="alert alert--warn" data-cart-profile hidden><p style="margin:0 0 8px">{{ 'cart.profile_needed' | t }}</p><a class="btn btn--gold btn--sm" href="/pages/bienvenida">{{ 'cart.profile_cta' | t }}</a></div>
               <button class="btn btn--gold btn--block" type="submit" name="checkout" data-checkout disabled>{{ 'cart.checkout' | t }}</button>
