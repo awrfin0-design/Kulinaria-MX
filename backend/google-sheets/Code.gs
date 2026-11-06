@@ -572,9 +572,20 @@ function allowedMonday_(now) {
 /* ---------- discount codes (admin page) ----------
  * The admin generates a code on /pages/admin ("Descuentos"): percent or fixed amount, and how many times it can be used in total.
  * Shopify counts the uses and stops accepting it afterwards. Needs two script properties: SHOPIFY_STORE (xxxx.myshopify.com) and SHOPIFY_TOKEN
- * (Admin API access token of a custom app with the scopes read_discounts + write_discounts), and the ADMIN_KEY password. */
+ * (Admin API access token with the scopes read_discounts + write_discounts) OR, for apps made in the Shopify Dev Dashboard, SHOPIFY_CLIENT_ID + SHOPIFY_CLIENT_SECRET; and the ADMIN_KEY password. */
+/** Admin API token: either a fixed SHOPIFY_TOKEN (old custom apps) or SHOPIFY_CLIENT_ID + SHOPIFY_CLIENT_SECRET of an app made in the Dev Dashboard (the token is requested and cached ~23 h) */
+function shopifyToken_(store) {
+  var pr = PropertiesService.getScriptProperties(), fixed = pr.getProperty('SHOPIFY_TOKEN'); if (fixed) return fixed;
+  var id = pr.getProperty('SHOPIFY_CLIENT_ID'), secret = pr.getProperty('SHOPIFY_CLIENT_SECRET'); if (!id || !secret) return '';
+  var cache = CacheService.getScriptCache(), hit = cache.get('shopify_token'); if (hit) return hit;
+  var res = UrlFetchApp.fetch('https://' + store + '/admin/oauth/access_token', { method: 'post', contentType: 'application/x-www-form-urlencoded', payload: { grant_type: 'client_credentials', client_id: id, client_secret: secret }, muteHttpExceptions: true });
+  var body; try { body = JSON.parse(res.getContentText()); } catch (e) { return ''; }
+  if (!body || !body.access_token) return '';
+  cache.put('shopify_token', body.access_token, 82800);
+  return body.access_token;
+}
 function shopifyGql_(query, variables) {
-  var pr = PropertiesService.getScriptProperties(), store = pr.getProperty('SHOPIFY_STORE'), tok = pr.getProperty('SHOPIFY_TOKEN');
+  var pr = PropertiesService.getScriptProperties(), store = pr.getProperty('SHOPIFY_STORE'), tok = store ? shopifyToken_(store) : '';
   if (!store || !tok) return { error: 'no_token' };
   var res = UrlFetchApp.fetch('https://' + store + '/admin/api/2025-01/graphql.json', { method: 'post', contentType: 'application/json', headers: { 'X-Shopify-Access-Token': tok }, payload: JSON.stringify({ query: query, variables: variables || {} }), muteHttpExceptions: true });
   var body; try { body = JSON.parse(res.getContentText()); } catch (e) { return { error: 'bad_response' }; }

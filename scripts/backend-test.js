@@ -1,7 +1,7 @@
 // Offline test of backend/google-sheets/Code.gs with stubs of the Apps Script services.   node scripts/backend-test.js
 const fs = require('fs'), crypto = require('crypto');
 const code = fs.readFileSync(require('path').join(__dirname, '../backend/google-sheets/Code.gs'), 'utf8');
-const sheets = {}, mails = [], fetched = []; let fetchReply = () => ({ data: {} });
+const sheets = {}, mails = [], fetched = [], tokenCalls = [], cache = {}; let fetchReply = () => ({ data: {} });
 const mkSheet = (n) => { const rows = []; const sh = { name: n, rows,
   getLastRow: () => rows.length, getLastColumn: () => Math.max(1, ...rows.map((r) => r.length)),
   getRange: (r, c, nr, nc) => {
@@ -24,7 +24,8 @@ const env = { SpreadsheetApp: { getActiveSpreadsheet: () => ss }, PropertiesServ
   MailApp: { sendEmail: (to, sub, body) => mails.push({ to, sub, body }) }, Session: { getScriptTimeZone: () => 'America/Mexico_City' },
   Utilities: { computeHmacSha256Signature: (v, k) => [...crypto.createHmac('sha256', k).update(String(v)).digest()].map((b) => (b > 127 ? b - 256 : b)),
     formatDate: (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0') },
-  UrlFetchApp: { fetch: (url, opt) => { fetched.push({ url, opt }); return { getResponseCode: () => 200, getContentText: () => JSON.stringify(fetchReply(JSON.parse(opt.payload))) }; } },
+  CacheService: { getScriptCache: () => ({ get: (k) => cache[k] || null, put: (k, v) => { cache[k] = v; } }) },
+  UrlFetchApp: { fetch: (url, opt) => { if (/oauth\/access_token/.test(url)) { tokenCalls.push(opt.payload); return { getResponseCode: () => 200, getContentText: () => JSON.stringify({ access_token: 'shpat_dev', expires_in: 86399 }) }; } fetched.push({ url, opt }); return { getResponseCode: () => 200, getContentText: () => JSON.stringify(fetchReply(JSON.parse(opt.payload))) }; } },
   ScriptApp: { getProjectTriggers: () => [], deleteTrigger() {}, newTrigger: () => ({ timeBased: () => ({ everyDays: () => ({ atHour: () => ({ create() {} }) }) }) }) } };
 const fn = new Function(...Object.keys(env), code + ';return {doPost,doGet,sendWeeklyReminders,weekSet_,creditsFor_,rebuildDeliveries_,resolveOrderWeeks_,loadOrders_,loadSelections_,allowedMonday_,parseSlots_,pauseSet_,loadPauses_};')(...Object.values(env));
 let fails = 0; const ok = (name, c, extra) => { console.log((c ? 'ok   ' : 'FAIL ') + name + (c ? '' : ' :: ' + (extra || ''))); if (!c) fails++; };
@@ -161,4 +162,8 @@ fetchReply = () => ({ data: { discountCodeDeactivate: { userErrors: [] } } });
 ok('a code can be switched off', dq({ action: 'discount_off', id: 'gid://shopify/DiscountCodeNode/9' }).ok && dq({ action: 'discount_off', id: 'x' }).error === 'bad_id');
 fetchReply = () => ({ data: { discountCodeBasicCreate: { codeDiscountNode: null, userErrors: [{ message: 'Code must be unique' }] } } });
 ok('Shopify errors (duplicate code) reach the admin', /unique/.test(dq({ action: 'discount_new', code: 'HOLA10', kind: 'percent', value: 10, uses: 5 }).detail));
+delete props.SHOPIFY_TOKEN; props.SHOPIFY_CLIENT_ID = 'cid'; props.SHOPIFY_CLIENT_SECRET = 'sec'; fetched.length = 0;
+fetchReply = () => ({ data: { discountNodes: { nodes: [] } } });
+dq({ action: 'discounts' }); dq({ action: 'discounts' });
+ok('Dev Dashboard app: the token is requested with client id + secret, used for the call, and cached (one token request for two calls)', tokenCalls.length === 1 && /client_credentials/.test(tokenCalls[0].grant_type) && fetched[0].opt.headers['X-Shopify-Access-Token'] === 'shpat_dev');
 console.log(fails ? fails + ' FAILED' : 'all backend checks passed'); process.exit(fails ? 1 : 0);
