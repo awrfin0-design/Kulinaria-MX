@@ -569,6 +569,7 @@ ok('details are never asked in the order flow: without onboarding, confirm sends
 await page.evaluate(() => { localStorage.setItem('kulinaria_onboarded', '1'); const f = JSON.parse(localStorage.getItem('kulinaria_funnel')); f.info = { name: 'Ana Pérez', email: 'ana@ejemplo.com', phone: '+52 999 000 0000', street: 'Calle Lago 24', cluster: 'Clúster Las Lomas', zip: '97000' }; localStorage.setItem('kulinaria_funnel', JSON.stringify(f)); localStorage.setItem('kulinaria_profile', JSON.stringify({ allergies: ['Mariscos'], dislikes: [], diets: ['Keto'] })); });
 await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
 await page.evaluate(() => { const f = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push(String(u).split('/').pop() + ' ' + ((o && o.body) || '').slice(0, 3000)); return f.apply(this, arguments); }; });
+await page.evaluate((sel) => document.querySelector(sel + ' .steps__nav li:nth-child(4)').click(), fnS); await page.waitForTimeout(400);   // the builder always opens on step 1: go to the planner where the saved week is
 await page.locator(`${fnS} [data-fn-finish]`).scrollIntoViewIfNeeded();
 await page.click(`${fnS} [data-fn-finish]`); await page.waitForTimeout(1000);
 const reqs = await page.evaluate(() => window.__calls);
