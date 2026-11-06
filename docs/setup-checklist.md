@@ -29,6 +29,17 @@ Correo `equipo@kulinariamx.com` y teléfono/WhatsApp `525650399656` (el archivo 
 ## 4b. Cuentas obligatorias (Shopify no permite activarlo por API)
 Shopify → Configuración → Pago (Checkout) → **Cuentas de cliente → Obligatorias** (requerir inicio de sesión). Así nadie paga sin haber iniciado sesión; el tema ya bloquea el botón de pago en el carrito para visitantes.
 
+## 4c. Pedidos: del pago a la hoja y al panel (probar con un pedido de prueba)
+Para que cada pedido llegue a la hoja de Google y al panel `/pages/admin` hacen falta estas piezas; ninguna se puede crear desde el tema:
+1. **Webhooks de Shopify** (Configuración → Notificaciones → Webhooks → Crear webhook, formato JSON). Crea tres, todos con la URL de la hoja (la que termina en `/exec`) más `?key=TU_WEBHOOK_KEY&topic=…`:
+   - Creación de pedido → `…/exec?key=TU_WEBHOOK_KEY&topic=orders-create`
+   - Pago de pedido → `…/exec?key=TU_WEBHOOK_KEY&topic=orders-paid`
+   - Creación de cliente → `…/exec?key=TU_WEBHOOK_KEY&topic=customers-create`
+   `TU_WEBHOOK_KEY` es la propiedad `WEBHOOK_KEY` del Apps Script.
+2. **Pasarela de pago** en modo de prueba (Shopify Payments o Bogus Gateway) y **zona de envío** que incluya Mérida.
+3. **Cuentas obligatorias** (sección 4b).
+4. **Prueba de punta a punta:** inicia sesión con una cuenta de prueba, arma un plan en `/pages/pedido`, paga con la tarjeta de prueba y revisa: (a) llega el correo de alerta, (b) aparece una fila en `Pedidos` con el nombre del cliente en negritas, (c) `Entregas` muestra la semana con los días que se entregan, (d) `Resumen` muestra los totales generales arriba (pedidos, ventas, ticket promedio), (e) el pedido aparece en `/pages/admin` → Pedidos, (f) en `/pages/cuenta-semana` el cliente ve su plan y sus créditos. Después borra el pedido de prueba (y la fila `#TEST-1`).
+
 ## 5. Pagos (pendiente)
 Activar Shopify Payments en modo de prueba (o la pasarela Bogus) y luego crear el plan prepagado en Recharge (precios por entrega: 900 / 1,250 / 1,600 / 1,950 × 4).
 

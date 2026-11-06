@@ -102,6 +102,7 @@ ok('Entregas: the skipped week says there is nothing to deliver', /sin entregas/
 ok('Entregas: shows address, phone and allergies for the courier and the kitchen', byWeek['2026-11-16'][3] === 'Calle Lago 24' && byWeek['2026-11-16'][11] === 'Mariscos');
 const res = sheets.Resumen.rows.map((x) => x.join('|')).join('\n');
 ok('Resumen: has a block for next week with deliveries and meals per weekday', /Próxima semana · lunes 2026-11-09/.test(res) && /Lunes\|1\|1/.test(res) && /Martes\|0\|0/.test(res) && /Miércoles\|1\|1/.test(res) && /Total de comidas\|\|3/.test(res), res.slice(0, 400));
+ok('Resumen: starts with the general totals (orders, paid, sales, average ticket, clients)', /^Totales generales/.test(String(sheets.Resumen.rows[0][0])) && /Pedidos registrados\|2/.test(res) && /Ventas pagadas \(MXN\)\|7200/.test(res) && /Clientes con pedidos\|1/.test(res), res.slice(0, 300));
 ok('Resumen: lists the dishes to cook per weekday with totals', new RegExp('^' + P + '\\|1\\|0\\|0\\|0\\|0\\|1$', 'm').test(res));
 ok('Resumen: totals for all weeks and active plans', /Planes activos \(clientes\)\|1/.test(res) && /2026-11-23\|1\|0\|1\|0/.test(res), res.slice(-300));
 const adm = J(fn.doGet({ parameter: { action: 'admin', key: 'adm' } }));

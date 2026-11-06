@@ -32,6 +32,8 @@ function setupSheets() {
     var sh = ss.getSheetByName(name) || ss.insertSheet(name);
     sh.getRange(1, 1, 1, SHEETS[name].length).setValues([SHEETS[name]]).setFontWeight('bold').setBackground('#1B2316').setFontColor('#FFFFFF');
     sh.setFrozenRows(1);
+    var boldCol = { Clientes: 4, Pedidos: 4, Platillos: 4 }[name];
+    if (boldCol && sh.getLastRow() > 1) sh.getRange(2, boldCol, sh.getLastRow() - 1, 1).setFontWeight('bold');   // the client's name in bold
   });
   var wk = ss.getSheetByName('Semana') || ss.insertSheet('Semana');
   wk.clear();
@@ -161,8 +163,9 @@ function handleOrder_(o) {
     : items.map(function (i) { return i.quantity + '× ' + i.title + (i.variant_title ? ' (' + i.variant_title + ')' : ''); }).join(' | ');
   // 3. order row (remember if it is a brand-new order, to alert the kitchen only once)
   var isNew = !orderExists_(o.id);
-  upsertRow_('Pedidos', 1, o.id, [o.id, o.name, o.created_at, name, email, c.phone || a.telefono || '', o.total_price, o.currency, o.financial_status, o.fulfillment_status || 'pendiente',
+  var pedRow = upsertRow_('Pedidos', 1, o.id, [o.id, o.name, o.created_at, name, email, c.phone || a.telefono || '', o.total_price, o.currency, o.financial_status, o.fulfillment_status || 'pendiente',
     planKey, a.enfoque || a.nivel || '', a.dietas || '', a.alergias || '', a.no_me_gustan || '', addr, a.codigo_referencia || '', a.contrato_aceptado || '', summary, o.note || '', JSON.stringify(slots), String(c.id || '')]);
+  try { sheet_('Pedidos').getRange(pedRow, 4).setFontWeight('bold'); } catch (e0) { /* formatting never blocks an order */ }
   // 4. dish rows (replace the order's previous rows so re-sent webhooks never duplicate)
   var sh = sheet_('Platillos'), last = sh.getLastRow();
   if (last > 1) {
@@ -494,6 +497,7 @@ function rebuildDeliveries_(now) {
   var head = ['Semana (lunes)', 'Cliente', 'Teléfono', 'Dirección', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Días con entrega', 'Comidas', 'Alergias', 'Origen', 'Pedido'];
   writeBlock_(en, 1, [head].concat(rows.map(function (r) { var c = r.slice(); c[10] = [r[4], r[5], r[6], r[7], r[8]].filter(Boolean).length; return c; })));
   en.getRange(1, 1, 1, head.length).setFontWeight('bold').setBackground('#1B2316').setFontColor('#FFFFFF'); en.setFrozenRows(1);
+  if (rows.length) en.getRange(2, 2, rows.length, 1).setFontWeight('bold');   // client name in bold
   // Resumen
   var rs = reportSheet_('Resumen'); rs.clearContents(); var r0 = 1;
   var block = function (title, week) {
@@ -506,6 +510,10 @@ function rebuildDeliveries_(now) {
     out.push([]);
     return out;
   };
+  var allOrders = loadOrders_(), paidOrders = allOrders.filter(function (o) { return o.paid; }), revenue = paidOrders.reduce(function (a, o) { return a + o.total; }, 0), custs = {};
+  allOrders.forEach(function (o) { custs[o.cid || o.email || o.id] = 1; });
+  var totals = [['Totales generales'], ['Pedidos registrados', allOrders.length], ['Pedidos pagados', paidOrders.length], ['Pedidos pendientes de pago', allOrders.length - paidOrders.length], ['Ventas pagadas (MXN)', revenue], ['Ticket promedio (MXN)', paidOrders.length ? Math.round(revenue / paidOrders.length) : 0], ['Clientes con pedidos', Object.keys(custs).length], []];
+  r0 = writeBlock_(rs, r0, totals);
   r0 = writeBlock_(rs, r0, block('Esta semana', todayMon));
   if (nextMon !== todayMon) r0 = writeBlock_(rs, r0, block('Próxima semana', nextMon));
   var all = [['Todas las semanas'], ['Semana (lunes)', 'Clientes', 'Comidas', 'Saltadas', 'Automáticas']];
