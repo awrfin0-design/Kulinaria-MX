@@ -1,5 +1,5 @@
 {%- comment -%}
-  Menu links that point to the old classic-account addresses (/account/login, /account/register) 404 with the new customer accounts.
+  Menu links that point to the old classic-account addresses (/account/login, /account/register, /account/addresses) 404 with the new customer accounts.
   They are swapped for Shopify's real sign-in / create-account address (which comes back to our welcome page). Any other link is printed unchanged.
   Param: u (the link address)
 {%- endcomment -%}
@@ -8,6 +8,8 @@
     render 'login-url', back: '/pages/bienvenida'
   elsif u contains '/account/register'
     render 'login-url', kind: 'register', back: '/pages/bienvenida'
+  elsif u contains '/account/addresses'
+    echo routes.account_url
   else
     echo u
   endif

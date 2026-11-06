@@ -1065,7 +1065,7 @@
           var vid = parseInt(holder.getAttribute('data-upv-' + lvl), 10);
           if (names.length && vid) { var up = {}; up[T_('prop-upgrade')] = names.join(', '); lines.push({ id: vid, quantity: names.length, properties: up }); }
         }
-        var go2 = function () { window.location.href = guest ? (lnk('[data-fn-login]') || '/account/login').replace(/(return_url|return_to)=[^&]*/g, '$1=' + encodeURIComponent(finish.getAttribute('href') || '/cart')) : finish.getAttribute('href'); };
+        var go2 = function () { window.location.href = guest ? (lnk('[data-fn-login]') || '/pages/bienvenida').replace(/(return_url|return_to)=[^&]*/g, '$1=' + encodeURIComponent(finish.getAttribute('href') || '/cart')) : finish.getAttribute('href'); };
         fetch('/cart/clear.js', { method: 'POST' })
           .then(function () { return fetch('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ attributes: attrs }) }); })
           .then(function () { return fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: lines }) }); })

@@ -120,7 +120,7 @@
         "heading": "Empieza *a compartir*",
         "text": "Tu código se genera automáticamente al registrarte.",
         "button_label": "Crear cuenta",
-        "button_link": "/account/register",
+        "button_link": "/pages/bienvenida",
         "show_countdown": false
       }
     }

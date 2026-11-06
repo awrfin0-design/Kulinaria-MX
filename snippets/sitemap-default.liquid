@@ -36,7 +36,7 @@
     <li><a href="/pages/cuenta-referidos">{{ 'sitemap.c_referidos' | t }}</a></li>
     <li><a href="/pages/cuenta-pedidos">{{ 'sitemap.c_pedidos' | t }}</a></li>
     <li><a href="/pages/cuenta-entregas">{{ 'sitemap.c_entregas' | t }}</a></li>
-    <li><a href="/account/addresses">{{ 'sitemap.c_direcciones' | t }}</a></li>
+    <li><a href="{% render 'menu-url', u: '/account/addresses' %}">{{ 'sitemap.c_direcciones' | t }}</a></li>
   </ul>
 </div>
 <div class="sitemap__group" style="--i:4">
