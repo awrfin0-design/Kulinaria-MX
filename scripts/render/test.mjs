@@ -612,7 +612,7 @@ ok('no bare "Kulinaria" word is left in the home copy', leftover.length === 0, l
 // header: language switch is visible
 ok('the ES/EN language switch sits in the header account menu', await page.evaluate(() => { document.querySelector('.site-header .acct__btn').click(); const b = [...document.querySelectorAll('.site-header .acct__pop .lang__btn')]; const okk = b.length === 2 && b.every((x) => x.getBoundingClientRect().width > 0); document.querySelector('.site-header .acct__btn').click(); return okk; }));
 // client login is visible
-ok('header offers the client login', await page.$eval('.site-header .header-login', (a) => /login|sesi|cuenta|account/i.test(a.textContent) && /login|cuenta/.test(a.getAttribute('href'))));
+ok('header offers the account circle with the account link inside', await page.$eval('.site-header .acct', (a) => !!a.querySelector('.acct__btn') && !!a.querySelector('.acct__pop a[href*="cuenta"]')));
 // dish cards carry their own short description
 ok('dish cards show a short description', (await page.$$eval('[data-page="home"] .rail .dish .dish__desc', (d) => d.length)) >= 4);
 // loader: ready quickly and animated
@@ -1184,6 +1184,21 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.click('#adm-del [data-eday="2026-11-09"]'); await page.waitForTimeout(250);
   ok('deliveries tab: a day lists each stop with the person, address, phone, dishes and allergies, plus what to cook that day', await page.evaluate(() => { const t = document.querySelector('#adm-del [data-eday-detail]').innerText; return /Sofía/.test(t) && /Ana Pérez/.test(t) && /Calle Lago 24/.test(t) && /999 111/.test(t) && /Cacahuate/.test(t) && /Mariscos/.test(t) && /2 comidas/.test(t) && /Pollo ×1/.test(t) && /Bowl ×1/.test(t); }));
   await page.unroute('https://script.example/**'); await page.evaluate(() => document.getElementById('adm-del').remove());
+}
+
+
+// =====================================================================  v47: per-meal prices follow the chosen plan (5 meals add up to the plan price)
+{
+  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); localStorage.setItem('kx-test-orders', '0'); localStorage.setItem('kulinaria_onboarded', '1'); sessionStorage.setItem('kx_ob_asked', '1'); sessionStorage.setItem('kx-seen', '1'); }); await page.reload(); await page.waitForTimeout(900);
+  await page.goto(`${URL0}#/pg/pedido?plan=week`); await page.reload(); await page.waitForTimeout(1500);
+  const fp = '[data-page="pg/pedido"] [data-funnel]';
+  const price = (title) => page.evaluate(([f, t]) => { const d = [...document.querySelectorAll(f + ' [data-fn-dish]')].find((x) => x.getAttribute('data-title') === t); return d.querySelector('[data-fn-price]').textContent.replace(/[^0-9]/g, ''); }, [fp, title]);
+  ok('1-week plan ($1,000): a Selecto dish shows $200 per meal, so 5 meals add up to $1,000 (not $180 x 5 = $900)', (await price('Pollo a las hierbas con puré rústico')) === '200', await price('Pollo a las hierbas con puré rústico'));
+  await page.goto(`${URL0}#/pg/pedido?plan=block`); await page.reload(); await page.waitForTimeout(1500);
+  ok('4-week plan ($3,600): the same dish shows $180 per meal (20 meals = $3,600)', (await price('Pollo a las hierbas con puré rústico')) === '180', await price('Pollo a las hierbas con puré rústico'));
+  await page.evaluate((f) => document.querySelector(f + ' [data-fn-dish] .fn-dish__media').click(), fp); await page.waitForTimeout(500);
+  ok('the dish panel shows the same per-meal price as the card it came from', await page.evaluate(() => /180/.test(document.querySelector('[data-dp-content] .dd__price').textContent)));
+  await page.keyboard.press('Escape');
 }
 
 await browser.close();

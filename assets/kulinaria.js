@@ -703,7 +703,7 @@
     var content = $('[data-dp-content]', panel), pick = $('[data-dp-pick]', panel), full = $('[data-dp-full]', panel), sheet = $('.dish-panel__sheet', panel), last = null, current = null, timer = 0;
     var open = function (card) {
       var det = $('[data-dish-detail]', card); if (!det) return;
-      content.innerHTML = det.innerHTML; full.setAttribute('href', det.getAttribute('data-url') || '#'); sheet.setAttribute('aria-label', det.getAttribute('data-title') || '');
+      content.innerHTML = det.innerHTML; var cp = $('[data-fn-price]', card), dp = $('.dd__price', content); if (cp && dp && dp.firstChild) dp.firstChild.textContent = cp.textContent; full.setAttribute('href', det.getAttribute('data-url') || '#'); sheet.setAttribute('aria-label', det.getAttribute('data-title') || '');
       current = card; var btn = $('[data-pick]', card); pick.hidden = !(card.hasAttribute('data-fn-dish') && btn && !card.classList.contains('is-blocked'));
       last = document.activeElement; clearTimeout(timer); panel.hidden = false; document.documentElement.classList.add('has-dish-panel');
       content.scrollTop = 0; sheet.scrollTop = 0;
@@ -1060,6 +1060,8 @@
           var show = rank(d.getAttribute('data-tier')) >= rank(st.tier) && (st.cat === 'all' || d.getAttribute('data-category') === st.cat) && (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1);
           d.classList.toggle('is-hidden', !show); if (show) shown++;
           var q = st.qty[d.getAttribute('data-pid')] || 0;
+          // the per-meal price follows the chosen plan: 4-week block = block price / 20 meals, 1-week plan = week price / 5 meals (so 5 meals add up to the plan price)
+          var prEl = $('[data-fn-price]', d), pmv = +d.getAttribute(st.plan === 'week' ? 'data-pm-week' : 'data-pm-block'); if (prEl && pmv) prEl.textContent = money(pmv);
           var upEl = $('[data-fn-up]', d), lv = levelOf(d); if (upEl) { upEl.hidden = !lv; upEl.textContent = lv ? fill(T_('up-badge'), { p: money(upg(lv)) }) : ''; }
           d.classList.toggle('is-picked', q > 0);
           var cb = $('[data-fn-count]', d); if (cb) { cb.hidden = q === 0; cb.textContent = '×' + q; }
