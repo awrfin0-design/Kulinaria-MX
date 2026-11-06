@@ -2964,3 +2964,20 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
   body.template-index .shopify-section:has(.rail) .container{padding-inline:0 !important;max-width:none !important}
   body.template-index .rail{margin-inline:0}
 }
+
+/* =====================================================================
+   v64 — phone: a stepper you can tap to move freely between the four steps · the welcome film sits in a frame
+   ===================================================================== */
+@media (max-width:760px){
+  body .funnel:not(.funnel--teaser) .funnel__top{display:block;padding:0;margin:0}
+  body .funnel:not(.funnel--teaser) .funnel__top .steps__nav{display:flex !important;gap:6px;margin:2px var(--pad) 6px;width:auto}
+  body .funnel:not(.funnel--teaser) .funnel__top .steps__nav li{flex:1;display:flex;justify-content:center;align-items:center;min-height:40px;padding:0;border:1px solid var(--line);border-radius:999px;font-size:0;gap:0;cursor:pointer;color:var(--text-muted);background:var(--panel)}
+  body .funnel:not(.funnel--teaser) .funnel__top .steps__nav li span{font:700 .78rem var(--font-label);letter-spacing:.04em;color:var(--text)}
+  body .funnel:not(.funnel--teaser) .funnel__top .steps__nav li.is-done{border-color:var(--accent)}
+  body .funnel:not(.funnel--teaser) .funnel__top .steps__nav li.is-on{background:var(--accent);border-color:var(--accent)}
+  body .funnel:not(.funnel--teaser) .funnel__top .steps__nav li.is-on span{color:#fff}
+  body .funnel:not(.funnel--teaser) .funnel__top .steps__nav li:focus-visible{outline:2px solid var(--accent-hi);outline-offset:2px}
+  body .funnel__stepcount{margin-top:0}
+  /* section 2 (welcome film): contained in a frame, with the page margins, not edge to edge */
+  body .welcome-video__frame{margin-inline:0;border-radius:22px;border:1px solid var(--border-accent);aspect-ratio:4/5;max-height:72svh}
+}

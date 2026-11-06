@@ -1050,8 +1050,9 @@
       if (st.cat && st.cat !== 'all' && st.cat !== 'seasonal' && !GROUPS[st.cat]) st.cat = 'all';
       var RULES_KEY = 'kx-rules-ok';
       try { if (localStorage.getItem(RULES_KEY)) st.rulesOk = true; } catch (e) {}
-      if (st.sv !== 4) { st.sv = 4; st.step = 0; }
-      if (!st.rulesOk) st.step = 0; else if (st.step === 0) st.step = 1;
+      st.sv = 4;
+      var startAtPlan = false; try { startAtPlan = location.protocol === 'file:' && !!sessionStorage.getItem('kx-test-start') && !!st.rulesOk; } catch (e) {}   // local preview only (test hook)
+      st.step = startAtPlan ? 1 : 0;
       var T_ = function (k) { return holder.getAttribute('data-t-' + k) || ''; };
       var steps = $$('[data-fn-step]', holder), dots = $$('[data-fn-dot]', holder), bar = $('[data-fn-bar]', holder);
       var next = $('[data-fn-next]', holder), prev = $('[data-fn-prev]', holder), finish = $('[data-fn-finish]', holder), err = $('[data-fn-error]', holder);
@@ -1410,7 +1411,7 @@
         go(st.step + 1);
       });
       if (prev) prev.addEventListener('click', function () { go(st.step - 1); });
-      dots.forEach(function (d, k) { d.addEventListener('click', function () { go(k); }); });
+      dots.forEach(function (d, k) { d.setAttribute('role', 'button'); d.tabIndex = 0; d.addEventListener('click', function () { go(k); }); d.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(k); } }); });
 
       // arriving from a dish page (…/pedido?dish=handle): that dish is already in the plan, at its tier
       try {

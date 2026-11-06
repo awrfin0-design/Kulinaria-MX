@@ -30,7 +30,7 @@ const ok = (name, cond, extra = '') => { results.push({ name, ok: !!cond }); if 
 ok('no dead internal links in rendered templates', dead.length === 0, JSON.stringify(dead));
 
 const browser = await chromium.launch();
-const SKIP_LOADER = () => { try { sessionStorage.setItem('kx-seen', '1'); if (!sessionStorage.getItem('kx-test-norules')) localStorage.setItem('kx-rules-ok', '1'); } catch (e) {} };
+const SKIP_LOADER = () => { try { sessionStorage.setItem('kx-seen', '1'); if (!sessionStorage.getItem('kx-test-norules')) { localStorage.setItem('kx-rules-ok', '1'); sessionStorage.setItem('kx-test-start', '1'); } } catch (e) {} };
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 await ctx.addInitScript(SKIP_LOADER);
 const page = await ctx.newPage();
@@ -1314,6 +1314,29 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('rules step on desktop: all 7 rules and the example fit the frame with no scrolling, on a 650px-high screen', rf.fits && rf.stage && rf.step === '0', JSON.stringify(rf));
   ok('rules step on desktop: seeing the whole list unlocks the tick box; the button waits for the tick', rf.chk === false && rf.btn === true, JSON.stringify(rf));
   await page.evaluate(() => { sessionStorage.removeItem('kx-test-norules'); localStorage.setItem('kx-rules-ok', '1'); });
+}
+
+
+// =====================================================================  v51: the builder always starts on step 1; phone stepper moves freely
+{
+  await page.setViewportSize({ width: 390, height: 800 });
+  await page.evaluate(() => { sessionStorage.removeItem('kx-test-norules'); sessionStorage.removeItem('kx-test-start'); localStorage.setItem('kx-rules-ok', '1'); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_newplan', '1'); localStorage.removeItem('kulinaria_funnel'); });
+  await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(900);
+  const PS = '[data-page="pg/pedido"] ';
+  const st0 = await page.evaluate((ps) => { const f = document.querySelector(ps + '[data-funnel]'); return { step: f.getAttribute('data-step'), chk: f.querySelector('[data-fn-rules-check]').checked, btn: f.querySelector('[data-fn-rules-next]').disabled }; }, PS);
+  ok('the builder always opens on step 1 (how it works), also for someone who has read it before; their tick and button are ready', st0.step === '0' && st0.chk === true && st0.btn === false, JSON.stringify(st0));
+  ok('phone: a row of four step pills is visible and tappable', await page.evaluate((ps) => { const n = document.querySelector(ps + '.funnel__top .steps__nav'); const li = [...n.querySelectorAll('li')]; return getComputedStyle(n).display !== 'none' && li.length === 4 && li.every((x) => x.getBoundingClientRect().height >= 36); }, PS));
+  await page.click(`${PS}.steps__nav li:nth-child(3)`); await page.waitForTimeout(400);
+  ok('phone: tapping step 3 jumps straight to the menu', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '2', PS));
+  await page.click(`${PS}.steps__nav li:nth-child(4)`); await page.waitForTimeout(400);
+  ok('phone: step 4 (the planner) is one tap away', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '3', PS));
+  await page.click(`${PS}.steps__nav li:nth-child(2)`); await page.waitForTimeout(400);
+  ok('phone: and back to the plan', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '1', PS));
+  await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
+  ok('home on a phone: the welcome film is contained in a rounded frame with side margins (not edge to edge)', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] .welcome-video__frame'); const r = f.getBoundingClientRect(); return r.left >= 12 && innerWidth - r.right >= 12 && parseFloat(getComputedStyle(f).borderTopLeftRadius) >= 16; }));
+  ok('home on a phone: the order builder starts on step 1', await page.evaluate(() => document.querySelector('[data-page="home"] [data-funnel]').getAttribute('data-step') === '0'));
+  await page.evaluate(() => { sessionStorage.setItem('kx-test-start', '1'); sessionStorage.removeItem('kx_newplan'); });
+  await page.setViewportSize({ width: 1280, height: 800 });
 }
 
 await browser.close();
