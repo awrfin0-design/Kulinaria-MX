@@ -1,0 +1,37 @@
+{%- comment -%}
+  Long legal text (terms / privacy). The text lives in the locale files (legal.<doc>_*), numbered sections s1..s14, in both languages.
+  Setting "doc": terms | privacy
+{%- endcomment -%}
+{%- assign ld = section.settings.doc | default: 'terms' -%}
+{%- assign k_title = 'legal.' | append: ld | append: '_title' -%}
+{%- assign k_upd = 'legal.' | append: ld | append: '_updated' -%}
+{%- assign k_intro = 'legal.' | append: ld | append: '_intro' -%}
+<section class="section" {{ section.shopify_attributes }}>
+  <div class="container" style="max-width:820px">
+    <div class="legal">
+      <h2>{{ k_title | t }}</h2>
+      <p class="legal__upd">{{ k_upd | t }}</p>
+      <p class="lede">{{ k_intro | t }}</p>
+      {%- for i in (1..14) -%}
+        {%- assign kt = 'legal.' | append: ld | append: '_s' | append: i | append: '_t' -%}
+        {%- assign kp = 'legal.' | append: ld | append: '_s' | append: i | append: '_p' -%}
+        {%- assign vt = kt | t -%}
+        {%- assign vt_low = vt | downcase -%}
+        {%- unless vt_low contains 'translation missing' -%}
+          <h3>{{ vt }}</h3>
+          <p>{{ kp | t }}</p>
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Texto legal",
+  "settings": [
+    { "type": "select", "id": "doc", "label": "Documento", "default": "terms", "options": [ { "value": "terms", "label": "Términos y condiciones" }, { "value": "privacy", "label": "Aviso de privacidad" } ] }
+  ],
+  "presets": [ { "name": "Texto legal" } ]
+}
+{% endschema %}

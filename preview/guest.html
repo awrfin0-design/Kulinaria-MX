@@ -2406,6 +2406,26 @@ html.has-dish-panel{overflow:hidden}
 .fn-para{flex:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 8px;font-size:.9rem}
 .fn-para[hidden]{display:none}.fn-para .select{min-height:38px;max-width:220px;padding:0 30px 0 10px;font-size:.9rem}
 
+/* v40: order flow without visible scroll bars, nothing clipped; nutrition labels stay inside their boxes */
+.fn-week{padding-top:10px}
+body .funnel:not(.funnel--teaser) .step.is-on,body .funnel:not(.funnel--teaser) .funnel__aside,.fn-dishes{scrollbar-width:none;-ms-overflow-style:none}
+body .funnel:not(.funnel--teaser) .step.is-on::-webkit-scrollbar,body .funnel:not(.funnel--teaser) .funnel__aside::-webkit-scrollbar,.fn-dishes::-webkit-scrollbar{display:none;width:0;height:0}
+.dd__nutri{grid-template-columns:repeat(auto-fit,minmax(96px,1fr))}
+.dd__nutri dt{font-size:.62rem;letter-spacing:.05em;overflow-wrap:anywhere}
+.dd__nutri .is-main{grid-column:1/-1}
+
+/* v41: dishes under the nutritional-focus chips */
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--on-brand);border-color:var(--accent)}
+.dc-count{margin:18px 0 8px;color:var(--text-muted);font-size:.9rem}
+.dc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:clamp(14px,2vw,24px)}
+.dc-grid .dish.is-hidden{display:none}
+.dc-empty{color:var(--text-muted)}.dc-empty[hidden]{display:none}
+
+/* v42: legal documents */
+.legal h2{margin:0 0 4px}.legal__upd{margin:0 0 18px;color:var(--accent);font-size:.85rem;font-weight:700}
+.legal h3{margin:28px 0 6px;font-size:1.15rem}.legal p{line-height:1.65;margin:0 0 8px}
+.footer-legal a{text-decoration:underline;text-underline-offset:3px}.footer-bottom{flex-wrap:wrap;gap:8px 24px}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -3427,7 +3447,273 @@ Fuego</span>
   <div class="container">
     <div class="section__head"><span class="eyebrow">Enfoque nutricional</span><h2>Filtra el menú según tu <em>estilo de vida</em></h2>
     </div>
-    <div class="chips"><a class="chip" href="#/menu?dieta=keto" >Keto</a><a class="chip" href="#/menu?dieta=sin-gluten" >Libre de gluten</a><a class="chip" href="#/menu?dieta=vegetariano" >Vegetariano</a><a class="chip" href="#/menu?dieta=vegano" >Basado en plantas / Vegano</a><a class="chip" href="#/menu?dieta=bajo-calorias" >Bajas calorías</a><a class="chip" href="#/menu?dieta=bajo-carbos" >Bajos carbohidratos</a><a class="chip" href="#/menu?dieta=alto-proteina" >Alta proteína / Rendimiento</a></div>
+    <div class="chips" data-dchips><button class="chip" type="button" data-dchip="keto" aria-pressed="false" >Keto</button><button class="chip" type="button" data-dchip="sin-gluten" aria-pressed="false" >Libre de gluten</button><button class="chip" type="button" data-dchip="vegetariano" aria-pressed="false" >Vegetariano</button><button class="chip" type="button" data-dchip="vegano" aria-pressed="false" >Basado en plantas / Vegano</button><button class="chip" type="button" data-dchip="bajo-calorias" aria-pressed="false" >Bajas calorías</button><button class="chip" type="button" data-dchip="bajo-carbos" aria-pressed="false" >Bajos carbohidratos</button><button class="chip" type="button" data-dchip="alto-proteina" aria-pressed="false" >Alta proteína / Rendimiento</button></div>
+    <p class="dc-count" data-dc-count data-t="[n] platillos" aria-live="polite"></p>
+    <div class="dc-grid" data-dc-grid><article class="dish" data-dish data-has-detail
+  data-category="diario-premium" data-tier="selecto"
+  data-diets="keto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/pollo-a-las-hierbas" aria-label="Pollo a las hierbas con puré rústico"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"><span class="dish__pill" aria-hidden="true">Ver ficha</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--selecto">Selecto</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/pollo-a-las-hierbas">Pollo a las hierbas con puré rústico</a></h3><p class="dish__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de ...</p><p class="dish__facts">480 kcal · 22 g carbohidratos</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$180<small> por comida</small></span>
+      <a class="dish__go" href="#/p/pollo-a-las-hierbas" aria-label="Ver ficha de Pollo a las hierbas con puré rústico">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pollo-a-las-hierbas" data-title="Pollo a las hierbas con puré rústico">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Pollo a las hierbas con puré rústico</h2><p class="dd__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de papa.</p><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>480<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>34<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>22<small> g</small></dd></div><div><dt>Grasas</dt><dd>16<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Keto</li></ul><h3 class="dd__h">Ingredientes</h3>
+      <p class="dd__list">Pollo · Papa · Mantequilla · Hierbas finas</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Lácteos</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="bowls-de-la-semana" data-tier="selecto"
+  data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/bowl-res-quinoa" aria-label="Bowl de res magra y quinoa"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"><span class="dish__pill" aria-hidden="true">Ver ficha</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--selecto">Selecto</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/bowl-res-quinoa">Bowl de res magra y quinoa</a></h3><p class="dish__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="dish__facts">560 kcal · 34 g carbohidratos</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$180<small> por comida</small></span>
+      <a class="dish__go" href="#/p/bowl-res-quinoa" aria-label="Ver ficha de Bowl de res magra y quinoa">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/bowl-res-quinoa" data-title="Bowl de res magra y quinoa">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Bowl de res magra y quinoa</h2><p class="dd__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>560<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>39<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>34<small> g</small></dd></div><div><dt>Grasas</dt><dd>19<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Alta proteína</li><li>Libre de gluten</li></ul><h3 class="dd__h">Ingredientes</h3>
+      <p class="dd__list">Res magra · Quinoa · Aguacate · Cilantro</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Sin alérgenos declarados</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="al-fuego-y-mar" data-tier="exclusivo"
+  data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/salmon-costra-almendras" aria-label="Salmón gourmet en costra de almendras"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"><span class="dish__pill" aria-hidden="true">Ver ficha</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/salmon-costra-almendras">Salmón gourmet en costra de almendras</a></h3><p class="dish__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry ro...</p><p class="dish__facts">520 kcal · 14 g carbohidratos</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$250<small> por comida</small></span>
+      <a class="dish__go" href="#/p/salmon-costra-almendras" aria-label="Ver ficha de Salmón gourmet en costra de almendras">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/salmon-costra-almendras" data-title="Salmón gourmet en costra de almendras">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Salmón gourmet en costra de almendras</h2><p class="dd__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry rostizado.</p><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>520<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>36<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>14<small> g</small></dd></div><div><dt>Grasas</dt><dd>17<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Keto</li><li>Bajos carbohidratos</li></ul><h3 class="dd__h">Ingredientes</h3>
+      <p class="dd__list">Salmón · Almendra · Eneldo · Espárragos · Jitomate cherry · Limón</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Frutos secos · Pescado</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="desayunos-premium" data-tier="selecto"
+  data-diets="vegetariano|bajo-calorias" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/omelette-claras-espinaca" aria-label="Omelette de claras con espinaca"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"><span class="dish__pill" aria-hidden="true">Ver ficha</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--selecto">Selecto</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/omelette-claras-espinaca">Omelette de claras con espinaca</a></h3><p class="dish__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="dish__facts">310 kcal · 8 g carbohidratos</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$180<small> por comida</small></span>
+      <a class="dish__go" href="#/p/omelette-claras-espinaca" aria-label="Ver ficha de Omelette de claras con espinaca">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/omelette-claras-espinaca" data-title="Omelette de claras con espinaca">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Omelette de claras con espinaca</h2><p class="dd__desc">Claras esponjosas con espinaca salteada y champiñones.</p><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>310<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>22<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>8<small> g</small></dd></div><div><dt>Grasas</dt><dd>10<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Vegetariano</li><li>Bajas calorías</li></ul><h3 class="dd__h">Ingredientes</h3>
+      <p class="dd__list">Claras · Espinaca · Champiñones</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Huevo</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="al-fuego-y-mar" data-tier="signature"
+  data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/arrachera-carbon" aria-label="Arrachera al carbón con maíz y espárragos"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"><span class="dish__pill" aria-hidden="true">Ver ficha</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--signature">Signature $$</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/arrachera-carbon">Arrachera al carbón con maíz y espárragos</a></h3><p class="dish__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="dish__facts">640 kcal · 28 g carbohidratos</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$320<small> por comida</small></span>
+      <a class="dish__go" href="#/p/arrachera-carbon" aria-label="Ver ficha de Arrachera al carbón con maíz y espárragos">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/arrachera-carbon" data-title="Arrachera al carbón con maíz y espárragos">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--signature">Signature $$</span>
+<span class="dd__price">$320<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Arrachera al carbón con maíz y espárragos</h2><p class="dd__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>640<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>45<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>28<small> g</small></dd></div><div><dt>Grasas</dt><dd>21<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Alta proteína</li><li>Libre de gluten</li></ul><h3 class="dd__h">Ingredientes</h3>
+      <p class="dd__list">Arrachera · Maíz · Espárragos · Micro hierbas</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Sin alérgenos declarados</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="al-fuego-y-mar" data-tier="reserve"
+  data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/filete-prime" aria-label="Filete Prime con verduras asadas"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"><span class="dish__pill" aria-hidden="true">Ver ficha</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/filete-prime">Filete Prime con verduras asadas</a></h3><p class="dish__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin per...</p><p class="dish__facts">710 kcal · 16 g carbohidratos</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$390<small> por comida</small></span>
+      <a class="dish__go" href="#/p/filete-prime" aria-label="Ver ficha de Filete Prime con verduras asadas">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/filete-prime" data-title="Filete Prime con verduras asadas">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+<span class="dd__price">$390<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Filete Prime con verduras asadas</h2><p class="dd__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin perder su punto.</p><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>710<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>50<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>16<small> g</small></dd></div><div><dt>Grasas</dt><dd>24<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Keto</li><li>Alta proteína</li><li>Libre de gluten</li></ul><h3 class="dd__h">Ingredientes</h3>
+      <p class="dd__list">Res Prime · Brócoli · Zanahoria · Mantequilla</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Sin alérgenos declarados</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="bowls-de-la-semana" data-tier="exclusivo"
+  data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/bowl-vegano-garbanzo" aria-label="Bowl vegano de garbanzo y tahini"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"><span class="dish__pill" aria-hidden="true">Ver ficha</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/bowl-vegano-garbanzo">Bowl vegano de garbanzo y tahini</a></h3><p class="dish__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="dish__facts">450 kcal · 52 g carbohidratos</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$250<small> por comida</small></span>
+      <a class="dish__go" href="#/p/bowl-vegano-garbanzo" aria-label="Ver ficha de Bowl vegano de garbanzo y tahini">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/bowl-vegano-garbanzo" data-title="Bowl vegano de garbanzo y tahini">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Bowl vegano de garbanzo y tahini</h2><p class="dd__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>450<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>32<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>52<small> g</small></dd></div><div><dt>Grasas</dt><dd>15<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Vegano</li><li>Vegetariano</li><li>Libre de gluten</li></ul><h3 class="dd__h">Ingredientes</h3>
+      <p class="dd__list">Garbanzo · Tahini · Pepino · Cebolla</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Ajonjolí</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="sopas-y-entradas" data-tier="selecto"
+  data-diets="vegetariano|sin-gluten|bajo-calorias" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/crema-calabaza" aria-label="Crema de calabaza asada"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"><span class="dish__pill" aria-hidden="true">Ver ficha</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--selecto">Selecto</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/crema-calabaza">Crema de calabaza asada</a></h3><p class="dish__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="dish__facts">220 kcal · 18 g carbohidratos</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$180<small> por comida</small></span>
+      <a class="dish__go" href="#/p/crema-calabaza" aria-label="Ver ficha de Crema de calabaza asada">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/crema-calabaza" data-title="Crema de calabaza asada">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Crema de calabaza asada</h2><p class="dd__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>220<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>15<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>18<small> g</small></dd></div><div><dt>Grasas</dt><dd>7<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Vegetariano</li><li>Libre de gluten</li><li>Bajas calorías</li></ul><h3 class="dd__h">Ingredientes</h3>
+      <p class="dd__list">Calabaza · Crema · Semillas de calabaza · Tomillo</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Lácteos</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="kulinaria-junior" data-tier="selecto"
+  data-diets="" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/pasta-pollo-junior" aria-label="Mini pasta de pollo para peques"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"><span class="dish__pill" aria-hidden="true">Ver ficha</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--selecto">Selecto</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/pasta-pollo-junior">Mini pasta de pollo para peques</a></h3><p class="dish__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="dish__facts">380 kcal · 44 g carbohidratos</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$180<small> por comida</small></span>
+      <a class="dish__go" href="#/p/pasta-pollo-junior" aria-label="Ver ficha de Mini pasta de pollo para peques">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pasta-pollo-junior" data-title="Mini pasta de pollo para peques">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Mini pasta de pollo para peques</h2><p class="dd__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>380<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>27<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>44<small> g</small></dd></div><div><dt>Grasas</dt><dd>13<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><h3 class="dd__h">Ingredientes</h3>
+      <p class="dd__list">Pasta · Pollo · Queso · Jitomate</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Gluten · Lácteos</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
+</article></div>
+    <p class="dc-empty" data-dc-empty hidden>Ningún platillo de esta semana cumple con todos esos filtros. Quita alguno.</p>
+    <p class="btn-row"><a class="arrow-link" href="#/menu"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+</span>Ver todo el menú</a></p>
   </div>
 </section>
 
@@ -9253,67 +9539,34 @@ Pago digital, sin efectivo</li></ul>
 <div data-page="pg/terminos" data-template="page" data-title="Contrato y términos" hidden>
       <div id="pg-terminos--shopify-section-head" class="shopify-section"><header class="page-head" >
   <div class="page-head__photo">
-    <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-glass.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
+    <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-breakfast.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
     <div class="container">
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Ruta de navegación">
-          <a href="#/home">Inicio</a><i aria-hidden="true">/</i><a href="#/pg/ayuda">Ayuda y legales</a><i aria-hidden="true">/</i><span>Contrato y términos</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Contrato de adhesión y <em>términos de servicio</em></h1><p class="hero__sub">Resumen de las cláusulas principales. La versión completa se acepta durante el registro, antes del pago.</p></div>
+          <a href="#/home">Inicio</a><i aria-hidden="true">/</i><a href="#/pg/ayuda">Ayuda y legales</a><i aria-hidden="true">/</i><span>Legal</span></nav>
+        <span class="hero__rule" aria-hidden="true"></span><h1>Términos y condiciones</h1></div>
     </div>
-  </div><div class="container">
-      <nav class="page-head__sub" aria-label="Contrato de adhesión y términos de servicio"><a href="#/pg/ayuda"  >Ayuda</a><a href="#/pg/terminos" aria-current="page" >Contrato y términos</a><a href="#/pg/privacidad"  >Aviso de privacidad</a></nav>
-    </div></header>
+  </div></header>
 
 
-</div><div id="pg-terminos--shopify-section-s1" class="shopify-section"><section class="section " >
-  <div class="container">
-    <div class="section__head"><span class="eyebrow">Ayuda y legales</span><h2>Contrato de adhesión y <em>términos de servicio</em></h2>
-      <div class="divider-gold"><i></i></div><p class="lede">Resumen de las cláusulas principales. La versión completa se acepta durante el registro, antes del pago.</p></div>
-    <div class="accordion"><details open >
-          <summary>1. Registro del perfil y datos de envío</summary>
-          <div class="richtext"><p>Nombre completo del titular, dirección exacta (clúster, calle, lote, casa y referencias de acceso), teléfono principal y un suscriptor secundario: si el titular no está disponible, el pedido puede entregarse a esa segunda persona.</p></div>
-        </details><details  >
-          <summary>2. Políticas, tiempos de espera y logística de reparto</summary>
-          <div class="richtext"><p>El repartidor otorga 5 minutos de cortesía fuera del domicilio. Pasado ese tiempo continúa su ruta y puedes pasar a recoger tu pedido sin costo adicional, acordando antes el horario con atención al cliente.</p></div>
-        </details><details  >
-          <summary>3. Métodos de pago digitales</summary>
-          <div class="richtext"><p>Toda suscripción o renovación (bloques de 4 semanas o semana de prueba) se procesa digitalmente en la página web al hacer el pedido. No se acepta dinero en efectivo bajo ninguna circunstancia.</p></div>
-        </details><details  >
-          <summary>4. Envases de vidrio y responsabilidad</summary>
-          <div class="richtext"><p>Cualquier problema, rotura o extravío de un recipiente bajo el cuidado del cliente genera un cobro mínimo de $100 MXN por envase. No es necesario lavarlos, aunque agradecemos que los enjuagues.</p></div>
-        </details><details  >
-          <summary>5. Política de no reembolso y compras en volumen</summary>
-          <div class="richtext"><p>Los insumos se compran en volumen, por lo que una vez liquidada la suscripción no hay cancelación de contrato vigente ni devolución de dinero. Lo invertido no se pierde al pausar en tiempo: las comidas no preparadas quedan como saldo a favor.</p></div>
-        </details><details  >
-          <summary>6. Ventanas de pausa operativa</summary>
-          <div class="richtext"><ul><li>Pausa de jueves y viernes: a más tardar el martes a las 10:00 AM.</li><li>Pausa de lunes a miércoles: a más tardar el viernes a las 7:00 PM.</li><li>Si no pausas antes del viernes 7:00 PM, tu nuevo pedido se asigna el sábado a las 10:00 AM con cargo al plan vigente.</li></ul></div>
-        </details><details  >
-          <summary>7. Caducidad del contrato por inactividad</summary>
-          <div class="richtext"><p>Tras una pausa debes reanudar en un máximo de 30 días naturales. En su defecto el contrato se cancela de forma definitiva, se pierde el saldo acumulado y deberás pagar un nuevo contrato para volver.</p></div>
-        </details><details  >
-          <summary>8. Especificación de gramajes (peso en crudo)</summary>
-          <div class="richtext"><p>Las cantidades de proteína corresponden al peso bruto en crudo antes de la preparación. La cocción, el sellado al fuego o la reducción provocan una merma natural, por lo que el peso neto servido será inferior al publicado.</p></div>
-        </details><details  >
-          <summary>9. Exclusión de responsabilidad por alergias y alérgenos</summary>
-          <div class="richtext"><p>El usuario es el único responsable de declarar con detalle sus alergias y restricciones al inscribirse. El sitio genera alertas y bloqueos con base en los datos ingresados; Kulinaria queda exenta de responsabilidad por omisiones o errores del usuario al registrar su historial médico o alimentario.</p></div>
-        </details><details  >
-          <summary>10. Selección automática de los sábados</summary>
-          <div class="richtext"><p>Si no registras tus platillos antes del sábado a las 10:00 AM, el sistema genera un pedido automático con tu plan, historial y, de forma obligatoria, tus alergias registradas.</p></div>
-        </details></div>
-  </div>
-</section>
-
-
-</div><div id="pg-terminos--shopify-section-s2" class="shopify-section"><section class="cta-banner" data-scroll >
-  <div class="cta-banner__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-fish.webp" width="1200" height="800" alt="" class="" loading="lazy" decoding="async"></div>
-  <div class="container">
-    <div class="cta-banner__copy">
-      <span class="hero__rule" aria-hidden="true"></span>
-      <h2>Empieza tu bloque <em>de 4 semanas</em></h2>
-      <p class="hero__sub">Elige tu plan, cuéntanos tus alergias y nosotros nos encargamos del resto.</p><div class="hero__cta">
-        <a class="arrow-link" data-magnetic href="#/pg/planes"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
-</span>Elegir mi plan</a></div>
-    </div>
+</div><div id="pg-terminos--shopify-section-main" class="shopify-section"><section class="section" >
+  <div class="container" style="max-width:820px">
+    <div class="legal">
+      <h2>Términos y condiciones del servicio</h2>
+      <p class="legal__upd">Borrador · pendiente de revisión legal</p>
+      <p class="lede">Estos términos regulan el uso del sitio kulinariamx.com y la contratación de los planes de comidas de Kulinaria MX («Kulinaria», «nosotros»). Al crear una cuenta o pagar un pedido aceptas estos términos.</p><h3>1. Cuenta y datos</h3>
+          <p>Para pedir necesitas una cuenta con tus datos reales (nombre, correo, teléfono y dirección de entrega). Eres responsable de la información que captures y de mantener tu sesión segura. Si pides para otras personas, declaras que tienes su autorización para compartir sus datos de alergias y gustos con nosotros.</p><h3>2. Planes, precios y pago</h3>
+          <p>Ofrecemos un plan de 4 semanas (pago anticipado, 20 comidas) y un plan de 1 semana (5 comidas). Cada plan se compone de hasta una comida por día, de lunes a viernes. Los precios están en pesos mexicanos (MXN) y se muestran antes de pagar; los platillos de nivel superior suman una diferencia por comida que se paga la semana en que se eligen. El pago se realiza en el checkout seguro de Shopify y es necesario haber iniciado sesión.</p><h3>3. Pedidos, cierre y entregas</h3>
+          <p>Los pedidos y las elecciones de cada semana cierran los sábados a las 10:00 a. m. (hora de México). Si pides antes del cierre, tu primera entrega es el lunes siguiente; si pides después, es el lunes de la semana posterior. Los días que dejes vacíos no se entregan y no se cobran. Si no eliges tus platillos de una semana ya contratada, repetimos tu selección anterior. Las entregas se hacen en la zona de cobertura y en el horario indicado al pagar; debes recibir tu pedido o dejar indicaciones para ello.</p><h3>4. Pausas, cambios y cancelaciones</h3>
+          <p>Puedes pausar tus entregas desde tu cuenta, por semanas específicas o hasta que las reanudes, antes del cierre del sábado 10:00 a. m. de la semana anterior. Una semana pausada no se consume: tu plan termina una semana después por cada semana pausada. Las semanas cuyo cierre ya pasó se preparan y no son reembolsables. Los planes de 4 semanas son de pago anticipado; la cancelación anticipada se resuelve caso por caso escribiéndonos a nuestro correo de contacto, descontando las semanas ya preparadas o entregadas.</p><h3>5. Alergias, dietas y seguridad alimentaria</h3>
+          <p>Tu perfil de alergias y gustos es obligatorio y nos ayuda a avisarte cuando un platillo contiene o puede contener algo que declaraste. Nuestras alertas se basan en los ingredientes y alérgenos que registramos para cada platillo; son una ayuda, no una garantía. Cocinamos en una cocina donde se manejan varios alérgenos (por ejemplo frutos secos, gluten, lácteos, huevo, pescado y mariscos), por lo que no podemos garantizar la ausencia absoluta de trazas. Si tu alergia es severa, consulta a tu médico y escríbenos antes de pedir.</p><h3>6. Conservación y envases</h3>
+          <p>Los platillos se entregan refrigerados en envases reutilizables o reciclables. Consérvalos en refrigeración y consúmelos dentro del plazo indicado en la etiqueta. Cuando se indique, devuelve los envases retornables en la siguiente entrega.</p><h3>7. Códigos de descuento y referidos</h3>
+          <p>Los códigos de descuento tienen un número limitado de usos y pueden tener vigencia; no son canjeables por dinero. El programa de referidos y los saldos se rigen por las reglas publicadas en tu cuenta y pueden cambiar con aviso.</p><h3>8. Pedidos para otras personas</h3>
+          <p>Puedes pedir para tu pareja, hijos u otras personas desde una sola cuenta. Eres responsable de capturar correctamente sus alergias y de contar con su autorización (o la de su tutor, si es menor de edad).</p><h3>9. Propiedad intelectual</h3>
+          <p>Las marcas, fotografías, textos y recetas de este sitio son de Kulinaria MX o de sus licenciantes. No puedes reproducirlos sin autorización por escrito.</p><h3>10. Limitación de responsabilidad</h3>
+          <p>En la medida permitida por la ley, Kulinaria MX no será responsable por daños indirectos o por información incorrecta que el cliente haya capturado, ni por retrasos causados por eventos fuera de nuestro control. Nada de lo anterior limita los derechos que la Ley Federal de Protección al Consumidor te reconoce.</p><h3>11. Cambios a estos términos</h3>
+          <p>Podemos actualizar estos términos. La versión vigente es la publicada en esta página con su fecha de actualización; los cambios no afectan los pedidos ya pagados.</p><h3>12. Ley aplicable y contacto</h3>
+          <p>Estos términos se rigen por las leyes de los Estados Unidos Mexicanos. Para cualquier controversia, las partes se someten a los tribunales competentes de Mérida, Yucatán, sin perjuicio de los derechos del consumidor. Dudas o aclaraciones: [CORREO DE CONTACTO] · [TELÉFONO].</p></div>
   </div>
 </section>
 
@@ -9323,23 +9576,32 @@ Pago digital, sin efectivo</li></ul>
 <div data-page="pg/privacidad" data-template="page" data-title="Aviso de privacidad" hidden>
       <div id="pg-privacidad--shopify-section-head" class="shopify-section"><header class="page-head" >
   <div class="page-head__photo">
-    <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-glass.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
+    <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-breakfast.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
     <div class="container">
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Ruta de navegación">
-          <a href="#/home">Inicio</a><i aria-hidden="true">/</i><a href="#/pg/ayuda">Ayuda y legales</a><i aria-hidden="true">/</i><span>Aviso de privacidad</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Aviso <em>de privacidad</em></h1><p class="hero__sub">Cómo cuidamos tus datos personales, de entrega y de salud alimentaria.</p></div>
+          <a href="#/home">Inicio</a><i aria-hidden="true">/</i><a href="#/pg/ayuda">Ayuda y legales</a><i aria-hidden="true">/</i><span>Legal</span></nav>
+        <span class="hero__rule" aria-hidden="true"></span><h1>Aviso de privacidad</h1></div>
     </div>
-  </div><div class="container">
-      <nav class="page-head__sub" aria-label="Aviso de privacidad"><a href="#/pg/ayuda"  >Ayuda</a><a href="#/pg/terminos"  >Contrato y términos</a><a href="#/pg/privacidad" aria-current="page" >Aviso de privacidad</a></nav>
-    </div></header>
+  </div></header>
 
 
-</div><div id="pg-privacidad--shopify-section-s1" class="shopify-section"><section class="section fg fg--rows " >
-  <div class="container"><div class="fg__list"><div class="card" style="--i:0"  ><span class="card__num">01</span><h3>Qué datos recopilamos</h3>
-            <div class="richtext text-muted"><p>Nombre, dirección de entrega, teléfono, alergias, gustos y preferencias dietéticas.</p></div></div><div class="card" style="--i:1"  ><span class="card__num">02</span><h3>Para qué los usamos</h3>
-            <div class="richtext text-muted"><p>Preparar y entregar tu pedido, bloquear platillos no aptos y armar tu selección automática.</p></div></div><div class="card" style="--i:2"  ><span class="card__num">03</span><h3>Tus derechos</h3>
-            <div class="richtext text-muted"><p>Puedes acceder, corregir o eliminar tus datos escribiéndonos por correo o WhatsApp. Texto legal por definir.</p></div></div></div></div>
+</div><div id="pg-privacidad--shopify-section-main" class="shopify-section"><section class="section" >
+  <div class="container" style="max-width:820px">
+    <div class="legal">
+      <h2>Aviso de privacidad</h2>
+      <p class="legal__upd">Borrador · pendiente de revisión legal</p>
+      <p class="lede">En cumplimiento de la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP), este aviso explica cómo Kulinaria MX trata tus datos personales.</p><h3>1. Responsable</h3>
+          <p>[RAZÓN SOCIAL], con nombre comercial Kulinaria MX, domicilio en [DOMICILIO], Mérida, Yucatán, México, es responsable del tratamiento de tus datos personales. Contacto: [CORREO DE CONTACTO].</p><h3>2. Datos que recabamos</h3>
+          <p>Datos de identificación y contacto (nombre, correo, teléfono), de entrega (dirección, referencias), de tu cuenta y pedidos, y de pago (procesados por Shopify y la pasarela de pago; no almacenamos tu tarjeta). También recabamos datos sensibles sobre tu salud alimentaria: alergias, dietas y alimentos que no puedes o no quieres comer, tuyos y, si pides para otras personas, de ellas.</p><h3>3. Consentimiento para datos sensibles</h3>
+          <p>Al capturar tu perfil de alergias y gustos, consientes expresamente que tratemos esos datos para preparar tus platillos de forma segura, avisarte de ingredientes o alérgenos y alertar a nuestra cocina. Si capturas datos de otra persona, declaras contar con su autorización o la de su tutor.</p><h3>4. Para qué usamos tus datos</h3>
+          <p>Finalidades necesarias: crear y administrar tu cuenta, procesar pagos, preparar y entregar tus pedidos, gestionar pausas y tu semana, atender dudas y cumplir obligaciones legales y fiscales. Finalidades adicionales (puedes oponerte): enviarte recordatorios, promociones y novedades, y mejorar nuestro servicio.</p><h3>5. Con quién compartimos tus datos</h3>
+          <p>Solo con proveedores que nos ayudan a operar: Shopify (tienda, cuentas y pagos), Google (hojas de cálculo y correo para administrar pedidos y recordatorios), servicios de mensajería o reparto y autoridades cuando la ley lo exija. No vendemos tus datos.</p><h3>6. Derechos ARCO y revocación</h3>
+          <p>Puedes acceder, rectificar, cancelar u oponerte al tratamiento de tus datos (derechos ARCO), y revocar tu consentimiento, escribiendo a [CORREO DE CONTACTO] con tu nombre, correo de la cuenta y la solicitud. Responderemos en los plazos que marca la ley. Muchos datos puedes corregirlos directamente en «Mis datos» de tu cuenta.</p><h3>7. Cookies y tecnologías similares</h3>
+          <p>Usamos cookies y almacenamiento del navegador para mantener tu sesión, recordar tu carrito, idioma y selección, y medir el uso del sitio. Puedes desactivarlas en tu navegador, aunque algunas funciones podrían dejar de operar.</p><h3>8. Conservación y seguridad</h3>
+          <p>Conservamos tus datos mientras tengas una cuenta o lo requieran obligaciones legales, y aplicamos medidas de seguridad razonables, incluido el acceso protegido a nuestras hojas de pedidos.</p><h3>9. Cambios a este aviso</h3>
+          <p>Cualquier cambio se publicará en esta página con su fecha de actualización.</p></div>
+  </div>
 </section>
 
 
@@ -11249,7 +11511,273 @@ Pago digital, sin efectivo</li></ul>
   <div class="container">
     <div class="section__head"><span class="eyebrow">Nutritional focus</span><h2>Filter the menu to <em>fit your lifestyle</em></h2>
     </div>
-    <div class="chips"><a class="chip" href="#/menu?dieta=keto" >Keto</a><a class="chip" href="#/menu?dieta=sin-gluten" >Gluten-free</a><a class="chip" href="#/menu?dieta=vegetariano" >Vegetarian</a><a class="chip" href="#/menu?dieta=vegano" >Plant-based / Vegan</a><a class="chip" href="#/menu?dieta=bajo-calorias" >Low calorie</a><a class="chip" href="#/menu?dieta=bajo-carbos" >Low carb</a><a class="chip" href="#/menu?dieta=alto-proteina" >High protein / Performance</a></div>
+    <div class="chips" data-dchips><button class="chip" type="button" data-dchip="keto" aria-pressed="false" >Keto</button><button class="chip" type="button" data-dchip="sin-gluten" aria-pressed="false" >Gluten-free</button><button class="chip" type="button" data-dchip="vegetariano" aria-pressed="false" >Vegetarian</button><button class="chip" type="button" data-dchip="vegano" aria-pressed="false" >Plant-based / Vegan</button><button class="chip" type="button" data-dchip="bajo-calorias" aria-pressed="false" >Low calorie</button><button class="chip" type="button" data-dchip="bajo-carbos" aria-pressed="false" >Low carb</button><button class="chip" type="button" data-dchip="alto-proteina" aria-pressed="false" >High protein / Performance</button></div>
+    <p class="dc-count" data-dc-count data-t="[n] dishes" aria-live="polite"></p>
+    <div class="dc-grid" data-dc-grid><article class="dish" data-dish data-has-detail
+  data-category="diario-premium" data-tier="selecto"
+  data-diets="keto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/pollo-a-las-hierbas" aria-label="Herb chicken with rustic mash"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"><span class="dish__pill" aria-hidden="true">View dish</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--selecto">Selecto</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/pollo-a-las-hierbas">Herb chicken with rustic mash</a></h3><p class="dish__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="dish__facts">480 kcal · 22 g carbs</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$180<small> per meal</small></span>
+      <a class="dish__go" href="#/p/pollo-a-las-hierbas" aria-label="View dish: Herb chicken with rustic mash">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pollo-a-las-hierbas" data-title="Herb chicken with rustic mash">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Herb chicken with rustic mash</h2><p class="dd__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>480<small> kcal</small></dd></div><div><dt>Protein</dt><dd>34<small> g</small></dd></div><div><dt>Carbs</dt><dd>22<small> g</small></dd></div><div><dt>Fat</dt><dd>16<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Keto</li></ul><h3 class="dd__h">Ingredients</h3>
+      <p class="dd__list">Chicken · Potato · Butter · Fine herbs</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Dairy</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="bowls-de-la-semana" data-tier="selecto"
+  data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/bowl-res-quinoa" aria-label="Lean beef and quinoa bowl"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"><span class="dish__pill" aria-hidden="true">View dish</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--selecto">Selecto</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/bowl-res-quinoa">Lean beef and quinoa bowl</a></h3><p class="dish__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="dish__facts">560 kcal · 34 g carbs</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$180<small> per meal</small></span>
+      <a class="dish__go" href="#/p/bowl-res-quinoa" aria-label="View dish: Lean beef and quinoa bowl">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/bowl-res-quinoa" data-title="Lean beef and quinoa bowl">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Lean beef and quinoa bowl</h2><p class="dd__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>560<small> kcal</small></dd></div><div><dt>Protein</dt><dd>39<small> g</small></dd></div><div><dt>Carbs</dt><dd>34<small> g</small></dd></div><div><dt>Fat</dt><dd>19<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>High protein</li><li>Gluten-free</li></ul><h3 class="dd__h">Ingredients</h3>
+      <p class="dd__list">Lean beef · Quinoa · Avocado · Cilantro</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">No declared allergens</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="al-fuego-y-mar" data-tier="exclusivo"
+  data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/salmon-costra-almendras" aria-label="Gourmet salmon in an almond crust"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"><span class="dish__pill" aria-hidden="true">View dish</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/salmon-costra-almendras">Gourmet salmon in an almond crust</a></h3><p class="dish__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="dish__facts">520 kcal · 14 g carbs</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$250<small> per meal</small></span>
+      <a class="dish__go" href="#/p/salmon-costra-almendras" aria-label="View dish: Gourmet salmon in an almond crust">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/salmon-costra-almendras" data-title="Gourmet salmon in an almond crust">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Gourmet salmon in an almond crust</h2><p class="dd__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>520<small> kcal</small></dd></div><div><dt>Protein</dt><dd>36<small> g</small></dd></div><div><dt>Carbs</dt><dd>14<small> g</small></dd></div><div><dt>Fat</dt><dd>17<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Keto</li><li>Low carb</li></ul><h3 class="dd__h">Ingredients</h3>
+      <p class="dd__list">Salmon · Almond · Dill · Asparagus · Cherry tomato · Lime</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Tree nuts · Fish</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="desayunos-premium" data-tier="selecto"
+  data-diets="vegetariano|bajo-calorias" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/omelette-claras-espinaca" aria-label="Egg-white omelette with spinach"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"><span class="dish__pill" aria-hidden="true">View dish</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--selecto">Selecto</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/omelette-claras-espinaca">Egg-white omelette with spinach</a></h3><p class="dish__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="dish__facts">310 kcal · 8 g carbs</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$180<small> per meal</small></span>
+      <a class="dish__go" href="#/p/omelette-claras-espinaca" aria-label="View dish: Egg-white omelette with spinach">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/omelette-claras-espinaca" data-title="Egg-white omelette with spinach">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Egg-white omelette with spinach</h2><p class="dd__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>310<small> kcal</small></dd></div><div><dt>Protein</dt><dd>22<small> g</small></dd></div><div><dt>Carbs</dt><dd>8<small> g</small></dd></div><div><dt>Fat</dt><dd>10<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Vegetarian</li><li>Low calorie</li></ul><h3 class="dd__h">Ingredients</h3>
+      <p class="dd__list">Egg whites · Spinach · Mushrooms</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Egg</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="al-fuego-y-mar" data-tier="signature"
+  data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/arrachera-carbon" aria-label="Charcoal-grilled skirt steak with corn and asparagus"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"><span class="dish__pill" aria-hidden="true">View dish</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--signature">Signature $$</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/arrachera-carbon">Charcoal-grilled skirt steak with corn and asparagus</a></h3><p class="dish__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="dish__facts">640 kcal · 28 g carbs</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$320<small> per meal</small></span>
+      <a class="dish__go" href="#/p/arrachera-carbon" aria-label="View dish: Charcoal-grilled skirt steak with corn and asparagus">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/arrachera-carbon" data-title="Charcoal-grilled skirt steak with corn and asparagus">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--signature">Signature $$</span>
+<span class="dd__price">$320<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Charcoal-grilled skirt steak with corn and asparagus</h2><p class="dd__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>640<small> kcal</small></dd></div><div><dt>Protein</dt><dd>45<small> g</small></dd></div><div><dt>Carbs</dt><dd>28<small> g</small></dd></div><div><dt>Fat</dt><dd>21<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>High protein</li><li>Gluten-free</li></ul><h3 class="dd__h">Ingredients</h3>
+      <p class="dd__list">Skirt steak · Corn · Asparagus · Micro herbs</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">No declared allergens</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="al-fuego-y-mar" data-tier="reserve"
+  data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/filete-prime" aria-label="Prime filet with roasted vegetables"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"><span class="dish__pill" aria-hidden="true">View dish</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/filete-prime">Prime filet with roasted vegetables</a></h3><p class="dish__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losin...</p><p class="dish__facts">710 kcal · 16 g carbs</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$390<small> per meal</small></span>
+      <a class="dish__go" href="#/p/filete-prime" aria-label="View dish: Prime filet with roasted vegetables">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/filete-prime" data-title="Prime filet with roasted vegetables">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+<span class="dd__price">$390<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Prime filet with roasted vegetables</h2><p class="dd__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losing its doneness.</p><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>710<small> kcal</small></dd></div><div><dt>Protein</dt><dd>50<small> g</small></dd></div><div><dt>Carbs</dt><dd>16<small> g</small></dd></div><div><dt>Fat</dt><dd>24<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Keto</li><li>High protein</li><li>Gluten-free</li></ul><h3 class="dd__h">Ingredients</h3>
+      <p class="dd__list">Prime beef · Broccoli · Carrot · Butter</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">No declared allergens</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="bowls-de-la-semana" data-tier="exclusivo"
+  data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/bowl-vegano-garbanzo" aria-label="Vegan chickpea and tahini bowl"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"><span class="dish__pill" aria-hidden="true">View dish</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/bowl-vegano-garbanzo">Vegan chickpea and tahini bowl</a></h3><p class="dish__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="dish__facts">450 kcal · 52 g carbs</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$250<small> per meal</small></span>
+      <a class="dish__go" href="#/p/bowl-vegano-garbanzo" aria-label="View dish: Vegan chickpea and tahini bowl">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/bowl-vegano-garbanzo" data-title="Vegan chickpea and tahini bowl">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Vegan chickpea and tahini bowl</h2><p class="dd__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>450<small> kcal</small></dd></div><div><dt>Protein</dt><dd>32<small> g</small></dd></div><div><dt>Carbs</dt><dd>52<small> g</small></dd></div><div><dt>Fat</dt><dd>15<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Vegan</li><li>Vegetarian</li><li>Gluten-free</li></ul><h3 class="dd__h">Ingredients</h3>
+      <p class="dd__list">Chickpeas · Tahini · Cucumber · Onion</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Sesame</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="sopas-y-entradas" data-tier="selecto"
+  data-diets="vegetariano|sin-gluten|bajo-calorias" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/crema-calabaza" aria-label="Roasted pumpkin cream soup"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"><span class="dish__pill" aria-hidden="true">View dish</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--selecto">Selecto</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/crema-calabaza">Roasted pumpkin cream soup</a></h3><p class="dish__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="dish__facts">220 kcal · 18 g carbs</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$180<small> per meal</small></span>
+      <a class="dish__go" href="#/p/crema-calabaza" aria-label="View dish: Roasted pumpkin cream soup">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/crema-calabaza" data-title="Roasted pumpkin cream soup">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Roasted pumpkin cream soup</h2><p class="dd__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>220<small> kcal</small></dd></div><div><dt>Protein</dt><dd>15<small> g</small></dd></div><div><dt>Carbs</dt><dd>18<small> g</small></dd></div><div><dt>Fat</dt><dd>7<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Vegetarian</li><li>Gluten-free</li><li>Low calorie</li></ul><h3 class="dd__h">Ingredients</h3>
+      <p class="dd__list">Pumpkin · Cream · Pumpkin seeds · Thyme</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Dairy</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
+</article><article class="dish" data-dish data-has-detail
+  data-category="kulinaria-junior" data-tier="selecto"
+  data-diets="" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+  <a class="dish__media surface-walnut" data-tilt-card href="#/p/pasta-pollo-junior" aria-label="Mini chicken pasta for little ones"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"><span class="dish__pill" aria-hidden="true">View dish</span>
+  </a>
+  <div class="dish__body">
+    <div><span class="tier-badge tier-badge--selecto">Selecto</span>
+</div>
+    <h3 class="dish__title"><a href="#/p/pasta-pollo-junior">Mini chicken pasta for little ones</a></h3><p class="dish__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="dish__facts">380 kcal · 44 g carbs</p><span class="compat" data-compat></span>
+    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="dish__meta">
+      <span class="dish__price">$180<small> per meal</small></span>
+      <a class="dish__go" href="#/p/pasta-pollo-junior" aria-label="View dish: Mini chicken pasta for little ones">→</a>
+    </div>
+  </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pasta-pollo-junior" data-title="Mini chicken pasta for little ones">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Mini chicken pasta for little ones</h2><p class="dd__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>380<small> kcal</small></dd></div><div><dt>Protein</dt><dd>27<small> g</small></dd></div><div><dt>Carbs</dt><dd>44<small> g</small></dd></div><div><dt>Fat</dt><dd>13<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><h3 class="dd__h">Ingredients</h3>
+      <p class="dd__list">Pasta · Chicken · Cheese · Tomato</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Gluten · Dairy</p>
+  </div>
+</div>
+
+  <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
+</article></div>
+    <p class="dc-empty" data-dc-empty hidden>No dish this week matches all those filters. Remove one.</p>
+    <p class="btn-row"><a class="arrow-link" href="#/menu"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+</span>See the full menu</a></p>
   </div>
 </section>
 
@@ -17075,67 +17603,34 @@ Digital payment, no cash</li></ul>
 <div data-page="pg/terminos" data-template="page" data-title="Contrato y términos" hidden>
       <div id="pg-terminos--shopify-section-head" class="shopify-section"><header class="page-head" >
   <div class="page-head__photo">
-    <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-glass.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
+    <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-breakfast.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
     <div class="container">
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Breadcrumb">
-          <a href="#/home">Home</a><i aria-hidden="true">/</i><a href="#/pg/ayuda">Help & legal</a><i aria-hidden="true">/</i><span>Contract and terms</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Adhesion contract and <em>terms of service</em></h1><p class="hero__sub">Summary of the main clauses. The full version is accepted during sign-up, before payment.</p></div>
+          <a href="#/home">Home</a><i aria-hidden="true">/</i><a href="#/pg/ayuda">Help & legal</a><i aria-hidden="true">/</i><span>Legal</span></nav>
+        <span class="hero__rule" aria-hidden="true"></span><h1>Términos y condiciones</h1></div>
     </div>
-  </div><div class="container">
-      <nav class="page-head__sub" aria-label="Adhesion contract and terms of service"><a href="#/pg/ayuda"  >Help</a><a href="#/pg/terminos" aria-current="page" >Contract and terms</a><a href="#/pg/privacidad"  >Privacy notice</a></nav>
-    </div></header>
+  </div></header>
 
 
-</div><div id="pg-terminos--shopify-section-s1" class="shopify-section"><section class="section " >
-  <div class="container">
-    <div class="section__head"><span class="eyebrow">Help & legal</span><h2>Adhesion contract and <em>terms of service</em></h2>
-      <div class="divider-gold"><i></i></div><p class="lede">Summary of the main clauses. The full version is accepted during sign-up, before payment.</p></div>
-    <div class="accordion"><details open >
-          <summary>1. Profile registration and delivery details</summary>
-          <div class="richtext"><p>Account holder's full name, exact address (cluster, street, lot, house and access references), main phone and a secondary subscriber: if the holder isn't available, the order may be delivered to that second person.</p></div>
-        </details><details  >
-          <summary>2. Policies, waiting times and delivery logistics</summary>
-          <div class="richtext"><p>The courier gives 5 courtesy minutes outside the home. After that they continue their route and you can pick up your order at no extra cost, agreeing a time with customer support first.</p></div>
-        </details><details  >
-          <summary>3. Digital payment methods</summary>
-          <div class="richtext"><p>Every subscription or renewal (4-week blocks or trial week) is processed digitally on the website when you place the order. Cash is not accepted under any circumstances.</p></div>
-        </details><details  >
-          <summary>4. Glass containers and responsibility</summary>
-          <div class="richtext"><p>Any problem, breakage or loss of a container in the client's care carries a minimum charge of $100 MXN per container. Washing them isn't necessary, though we appreciate a rinse.</p></div>
-        </details><details  >
-          <summary>5. No-refund policy and bulk purchasing</summary>
-          <div class="richtext"><p>Ingredients are bought in bulk, so once the subscription is paid there is no cancellation of the current contract or refund. What you've invested isn't lost if you pause in time: meals not prepared remain as credit balance.</p></div>
-        </details><details  >
-          <summary>6. Operational pause windows</summary>
-          <div class="richtext"><ul><li>Thursday and Friday pause: by Tuesday 10:00 AM at the latest.</li><li>Monday to Wednesday pause: by Friday 7:00 PM at the latest.</li><li>If you don't pause before Friday 7:00 PM, your new order is assigned on Saturday at 10:00 AM and charged to your current plan.</li></ul></div>
-        </details><details  >
-          <summary>7. Contract expiry through inactivity</summary>
-          <div class="richtext"><p>After a pause you must resume within a maximum of 30 calendar days. Otherwise the contract is cancelled permanently, the accumulated balance is lost and you'll need to pay for a new contract to return.</p></div>
-        </details><details  >
-          <summary>8. Weight specification (raw weight)</summary>
-          <div class="richtext"><p>Protein quantities correspond to gross raw weight before preparation. Cooking, fire-searing or reduction cause natural shrinkage, so the net weight served will be lower than published.</p></div>
-        </details><details  >
-          <summary>9. Disclaimer for allergies and allergens</summary>
-          <div class="richtext"><p>The user is solely responsible for declaring their allergies and restrictions in detail when signing up. The site generates alerts and blocks based on the data entered; Kulinaria is exempt from liability for omissions or errors by the user when recording their medical or dietary history.</p></div>
-        </details><details  >
-          <summary>10. Automatic Saturday selection</summary>
-          <div class="richtext"><p>If you don't register your dishes before Saturday at 10:00 AM, the system generates an automatic order with your plan, history and, always, your registered allergies.</p></div>
-        </details></div>
-  </div>
-</section>
-
-
-</div><div id="pg-terminos--shopify-section-s2" class="shopify-section"><section class="cta-banner" data-scroll >
-  <div class="cta-banner__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-fish.webp" width="1200" height="800" alt="" class="" loading="lazy" decoding="async"></div>
-  <div class="container">
-    <div class="cta-banner__copy">
-      <span class="hero__rule" aria-hidden="true"></span>
-      <h2>Start your <em>4-week block</em></h2>
-      <p class="hero__sub">Choose your plan, tell us about your allergies and we'll take care of the rest.</p><div class="hero__cta">
-        <a class="arrow-link" data-magnetic href="#/pg/planes"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
-</span>Choose my plan</a></div>
-    </div>
+</div><div id="pg-terminos--shopify-section-main" class="shopify-section"><section class="section" >
+  <div class="container" style="max-width:820px">
+    <div class="legal">
+      <h2>Terms and conditions of service</h2>
+      <p class="legal__upd">Draft · pending legal review</p>
+      <p class="lede">These terms govern the use of kulinariamx.com and the purchase of Kulinaria MX meal plans ("Kulinaria", "we"). By creating an account or paying an order you accept these terms.</p><h3>1. Account and data</h3>
+          <p>To order you need an account with your real details (name, e-mail, phone and delivery address). You are responsible for the information you enter and for keeping your session secure. If you order for other people, you state that you have their permission to share their allergy and taste information with us.</p><h3>2. Plans, prices and payment</h3>
+          <p>We offer a 4-week plan (prepaid, 20 meals) and a 1-week plan (5 meals). Each plan has up to one meal per day, Monday to Friday. Prices are in Mexican pesos (MXN) and are shown before you pay; higher-tier dishes add a per-meal difference that is paid in the week they are chosen. Payment is made at Shopify's secure checkout and you must be signed in.</p><h3>3. Orders, cut-off and deliveries</h3>
+          <p>Orders and each week's choices close on Saturdays at 10:00 a.m. (Mexico time). If you order before the cut-off, your first delivery is the following Monday; if you order after it, the Monday of the week after. Days you leave empty are not delivered and not charged. If you don't choose your dishes for a week you already bought, we repeat your previous selection. Deliveries are made within the coverage area and the time window shown at payment; you must receive your order or leave instructions for it.</p><h3>4. Pauses, changes and cancellations</h3>
+          <p>You can pause your deliveries from your account, for specific weeks or until you resume, before the Saturday 10:00 a.m. cut-off of the previous week. A paused week is not used up: your plan ends one week later for every week paused. Weeks whose cut-off has passed are prepared and are not refundable. 4-week plans are prepaid; early cancellation is handled case by case by writing to our contact e-mail, deducting the weeks already prepared or delivered.</p><h3>5. Allergies, diets and food safety</h3>
+          <p>Your allergy and taste profile is mandatory and helps us warn you when a dish contains or may contain something you declared. Our alerts are based on the ingredients and allergens we record for each dish; they are an aid, not a guarantee. We cook in a kitchen that handles several allergens (for example tree nuts, gluten, dairy, egg, fish and shellfish), so we cannot guarantee the absolute absence of traces. If your allergy is severe, consult your doctor and write to us before ordering.</p><h3>6. Storage and containers</h3>
+          <p>Dishes are delivered chilled in reusable or recyclable containers. Keep them refrigerated and eat them within the period shown on the label. When indicated, return returnable containers with the next delivery.</p><h3>7. Discount codes and referrals</h3>
+          <p>Discount codes have a limited number of uses and may expire; they cannot be exchanged for cash. The referral program and balances follow the rules published in your account and may change with notice.</p><h3>8. Orders for other people</h3>
+          <p>You can order for your partner, children or other people from a single account. You are responsible for entering their allergies correctly and for having their permission (or their guardian's, if they are a minor).</p><h3>9. Intellectual property</h3>
+          <p>The brands, photographs, texts and recipes on this site belong to Kulinaria MX or its licensors. You may not reproduce them without written permission.</p><h3>10. Limitation of liability</h3>
+          <p>To the extent permitted by law, Kulinaria MX is not liable for indirect damages, for incorrect information entered by the customer, or for delays caused by events beyond our control. Nothing above limits the rights that Mexico's Federal Consumer Protection Law gives you.</p><h3>11. Changes to these terms</h3>
+          <p>We may update these terms. The current version is the one published on this page with its update date; changes do not affect orders already paid.</p><h3>12. Governing law and contact</h3>
+          <p>These terms are governed by the laws of the United Mexican States. For any dispute, the parties submit to the competent courts of Mérida, Yucatán, without prejudice to consumer rights. Questions: [CONTACT E-MAIL] · [PHONE].</p></div>
   </div>
 </section>
 
@@ -17145,23 +17640,32 @@ Digital payment, no cash</li></ul>
 <div data-page="pg/privacidad" data-template="page" data-title="Aviso de privacidad" hidden>
       <div id="pg-privacidad--shopify-section-head" class="shopify-section"><header class="page-head" >
   <div class="page-head__photo">
-    <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-glass.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
+    <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-breakfast.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
     <div class="container">
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Breadcrumb">
-          <a href="#/home">Home</a><i aria-hidden="true">/</i><a href="#/pg/ayuda">Help & legal</a><i aria-hidden="true">/</i><span>Privacy notice</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Privacy <em>notice</em></h1><p class="hero__sub">How we protect your personal, delivery and dietary-health data.</p></div>
+          <a href="#/home">Home</a><i aria-hidden="true">/</i><a href="#/pg/ayuda">Help & legal</a><i aria-hidden="true">/</i><span>Legal</span></nav>
+        <span class="hero__rule" aria-hidden="true"></span><h1>Privacy notice</h1></div>
     </div>
-  </div><div class="container">
-      <nav class="page-head__sub" aria-label="Privacy notice"><a href="#/pg/ayuda"  >Help</a><a href="#/pg/terminos"  >Contract and terms</a><a href="#/pg/privacidad" aria-current="page" >Privacy notice</a></nav>
-    </div></header>
+  </div></header>
 
 
-</div><div id="pg-privacidad--shopify-section-s1" class="shopify-section"><section class="section fg fg--rows " >
-  <div class="container"><div class="fg__list"><div class="card" style="--i:0"  ><span class="card__num">01</span><h3>What data we collect</h3>
-            <div class="richtext text-muted"><p>Name, delivery address, phone, allergies, tastes and dietary preferences.</p></div></div><div class="card" style="--i:1"  ><span class="card__num">02</span><h3>What we use them for</h3>
-            <div class="richtext text-muted"><p>To prepare and deliver your order, block unsuitable dishes and build your automatic selection.</p></div></div><div class="card" style="--i:2"  ><span class="card__num">03</span><h3>Your rights</h3>
-            <div class="richtext text-muted"><p>You can access, correct or delete your data by writing to us by email or WhatsApp. Legal text to be defined.</p></div></div></div></div>
+</div><div id="pg-privacidad--shopify-section-main" class="shopify-section"><section class="section" >
+  <div class="container" style="max-width:820px">
+    <div class="legal">
+      <h2>Privacy notice</h2>
+      <p class="legal__upd">Draft · pending legal review</p>
+      <p class="lede">In compliance with Mexico's Federal Law on the Protection of Personal Data Held by Private Parties (LFPDPPP), this notice explains how Kulinaria MX processes your personal data.</p><h3>1. Data controller</h3>
+          <p>[COMPANY NAME], trading as Kulinaria MX, address [ADDRESS], Mérida, Yucatán, Mexico, is responsible for processing your personal data. Contact: [CONTACT E-MAIL].</p><h3>2. Data we collect</h3>
+          <p>Identification and contact data (name, e-mail, phone), delivery data (address, references), account and order data, and payment data (processed by Shopify and the payment gateway; we do not store your card). We also collect sensitive data about your dietary health: allergies, diets and foods you cannot or do not want to eat, yours and, if you order for other people, theirs.</p><h3>3. Consent for sensitive data</h3>
+          <p>By entering your allergy and taste profile you expressly consent to our processing that data to prepare your dishes safely, warn you about ingredients or allergens and alert our kitchen. If you enter another person's data, you state that you have their permission or their guardian's.</p><h3>4. What we use your data for</h3>
+          <p>Necessary purposes: creating and managing your account, processing payments, preparing and delivering your orders, managing pauses and your week, answering questions and meeting legal and tax obligations. Additional purposes (you can object): sending reminders, promotions and news, and improving our service.</p><h3>5. Who we share your data with</h3>
+          <p>Only with providers that help us operate: Shopify (store, accounts and payments), Google (spreadsheets and e-mail to manage orders and reminders), delivery or messaging services and authorities when the law requires it. We do not sell your data.</p><h3>6. ARCO rights and revocation</h3>
+          <p>You may access, rectify, cancel or object to the processing of your data (ARCO rights), and revoke your consent, by writing to [CONTACT E-MAIL] with your name, account e-mail and request. We will answer within the legal time limits. You can correct much of your data yourself under "My details" in your account.</p><h3>7. Cookies and similar technologies</h3>
+          <p>We use cookies and browser storage to keep your session, remember your cart, language and selection, and measure site use. You can disable them in your browser, although some features may stop working.</p><h3>8. Retention and security</h3>
+          <p>We keep your data while you have an account or as legal obligations require, and apply reasonable security measures, including protected access to our order sheets.</p><h3>9. Changes to this notice</h3>
+          <p>Any change will be published on this page with its update date.</p></div>
+  </div>
 </section>
 
 
@@ -18417,6 +18921,7 @@ Digital payment, no cash</li></ul>
 
     <div class="footer-bottom">
       <span>© 2026 Kulinaria MX. Todos los derechos reservados.</span>
+      <span class="footer-legal"><a href="#/pg/terminos">Términos y condiciones</a> · <a href="#/pg/privacidad">Aviso de privacidad</a></span>
       <span>Pago 100% digital · No se acepta efectivo</span>
     </div>
   </div>
@@ -18459,6 +18964,7 @@ Digital payment, no cash</li></ul>
 
     <div class="footer-bottom">
       <span>© 2026 Kulinaria MX. All rights reserved.</span>
+      <span class="footer-legal"><a href="#/pg/terminos">Terms and conditions</a> · <a href="#/pg/privacidad">Privacy notice</a></span>
       <span>100% digital payment · no cash accepted</span>
     </div>
   </div>
@@ -19171,9 +19677,8 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     });
   }
 
-  function initProfileForm() {
-    var form = $('[data-profile-form]');
-    if (!form) return;
+  function initProfileForm() { $$('[data-profile-form]').forEach(initOneProfileForm); }
+  function initOneProfileForm(form) {
     var p = loadProfile();
     var tagsBox = $('[data-tags]', form), tagInput = $('[data-tag-input]', form);
     var renderTags = function () {
@@ -19609,6 +20114,20 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       if (p.people && p.people.length) row('people', p.people.map(function (x) { return x.name; }));
       body.innerHTML = rows.length ? rows.join('') : '<p class="text-muted" style="margin:0">' + hp.getAttribute('data-t-none') + '</p>';
     }
+  }
+
+  /* ---------- home: nutritional-focus chips filter the dishes shown right below them ---------- */
+  function initDietChips() {
+    var root = $('[data-dchips]'); if (!root) return;
+    var scope = root.closest('section'), grid = $('[data-dc-grid]', scope), cnt = $('[data-dc-count]', scope), empty = $('[data-dc-empty]', scope);
+    var run = function () {
+      var on = $$('[data-dchip][aria-pressed="true"]', root).map(function (b) { return b.getAttribute('data-dchip'); }), n = 0;
+      $$('[data-dish]', grid).forEach(function (c) { var d = (c.getAttribute('data-diets') || '').split('|'), ok = on.every(function (x) { return d.indexOf(x) > -1; }); c.classList.toggle('is-hidden', !ok); if (ok) n++; });
+      if (cnt) cnt.textContent = String(cnt.getAttribute('data-t') || '').replace('[n]', n);
+      if (empty) empty.hidden = n > 0;
+    };
+    root.addEventListener('click', function (e) { var b = e.target.closest('[data-dchip]'); if (!b) return; b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); run(); });
+    run();
   }
 
   /* ---------- header account menu: initial in a circle, one drop-down (who is signed in, shortcuts, language, cart summary, sign out) ---------- */
@@ -20539,7 +21058,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initAccountHub, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

@@ -37,7 +37,10 @@
     if tx_low contains 'translation missing'
       echo s
     else
-      echo tx_v
+      comment
+        Shopify HTML-escapes everything a translation key returns (unless the key ends in _html), which would show <p> tags as text: our own texts are put back.
+      endcomment
+      echo tx_v | replace: '&lt;', '<' | replace: '&gt;', '>' | replace: '&quot;', '"' | replace: '&#39;', "'" | replace: '&amp;', '&'
     endif
   endif
 -%}

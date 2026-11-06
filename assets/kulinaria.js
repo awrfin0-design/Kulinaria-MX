@@ -187,9 +187,8 @@
     });
   }
 
-  function initProfileForm() {
-    var form = $('[data-profile-form]');
-    if (!form) return;
+  function initProfileForm() { $$('[data-profile-form]').forEach(initOneProfileForm); }
+  function initOneProfileForm(form) {
     var p = loadProfile();
     var tagsBox = $('[data-tags]', form), tagInput = $('[data-tag-input]', form);
     var renderTags = function () {
@@ -625,6 +624,20 @@
       if (p.people && p.people.length) row('people', p.people.map(function (x) { return x.name; }));
       body.innerHTML = rows.length ? rows.join('') : '<p class="text-muted" style="margin:0">' + hp.getAttribute('data-t-none') + '</p>';
     }
+  }
+
+  /* ---------- home: nutritional-focus chips filter the dishes shown right below them ---------- */
+  function initDietChips() {
+    var root = $('[data-dchips]'); if (!root) return;
+    var scope = root.closest('section'), grid = $('[data-dc-grid]', scope), cnt = $('[data-dc-count]', scope), empty = $('[data-dc-empty]', scope);
+    var run = function () {
+      var on = $$('[data-dchip][aria-pressed="true"]', root).map(function (b) { return b.getAttribute('data-dchip'); }), n = 0;
+      $$('[data-dish]', grid).forEach(function (c) { var d = (c.getAttribute('data-diets') || '').split('|'), ok = on.every(function (x) { return d.indexOf(x) > -1; }); c.classList.toggle('is-hidden', !ok); if (ok) n++; });
+      if (cnt) cnt.textContent = String(cnt.getAttribute('data-t') || '').replace('[n]', n);
+      if (empty) empty.hidden = n > 0;
+    };
+    root.addEventListener('click', function (e) { var b = e.target.closest('[data-dchip]'); if (!b) return; b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); run(); });
+    run();
   }
 
   /* ---------- header account menu: initial in a circle, one drop-down (who is signed in, shortcuts, language, cart summary, sign out) ---------- */
@@ -1555,7 +1568,7 @@
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initAccountHub, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

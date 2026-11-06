@@ -98,8 +98,11 @@ ok('deep link ?dieta=vegano filters menu', vgN.length === 1, JSON.stringify(vgN)
 
 // ---- home diet chip deep-links into the filtered menu without reload
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(100);
-await page.click('[data-page="home"] a.chip[href*="dieta=sin-gluten"]'); await page.waitForTimeout(150);
-{ const n = await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.map((x) => x.dataset.diets)); ok('chip from home -> menu filtered by sin-gluten (5 gluten-free dishes this week, previous filters cleared)', n.length === 5 && n.every((d) => d.split('|').includes('sin-gluten')), n.length + ' shown'); }
+await page.evaluate(() => document.querySelector('[data-page="home"] [data-dchip="sin-gluten"]').click()); await page.waitForTimeout(250);
+{ const n = await page.$$eval('[data-page="home"] [data-dc-grid] [data-dish]:not(.is-hidden)', (e) => e.map((x) => x.dataset.diets)); ok('home chips filter the dishes listed right below them (5 gluten-free dishes this week)', n.length === 5 && n.every((d) => d.split('|').includes('sin-gluten')), n.length + ' shown');
+  await page.evaluate(() => document.querySelector('[data-page="home"] [data-dchip="vegano"]').click()); await page.waitForTimeout(200);
+  const n2 = await page.$$eval('[data-page="home"] [data-dc-grid] [data-dish]:not(.is-hidden)', (e) => e.length);
+  ok('a second chip narrows the list (gluten-free AND vegan) and the count line follows', n2 > 0 && n2 < 5 && /\d/.test(await page.$eval('[data-page="home"] [data-dc-count]', (e) => e.textContent)), String(n2)); }
 
 // ---- allergy profile blocks dishes + product page alert
 await page.goto(`${URL0}#/pg/perfil`); await page.waitForTimeout(100);

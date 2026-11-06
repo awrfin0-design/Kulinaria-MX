@@ -2375,3 +2375,23 @@ html.has-dish-panel{overflow:hidden}
 .people__add{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;align-items:end}
 .fn-para{flex:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 8px;font-size:.9rem}
 .fn-para[hidden]{display:none}.fn-para .select{min-height:38px;max-width:220px;padding:0 30px 0 10px;font-size:.9rem}
+
+/* v40: order flow without visible scroll bars, nothing clipped; nutrition labels stay inside their boxes */
+.fn-week{padding-top:10px}
+body .funnel:not(.funnel--teaser) .step.is-on,body .funnel:not(.funnel--teaser) .funnel__aside,.fn-dishes{scrollbar-width:none;-ms-overflow-style:none}
+body .funnel:not(.funnel--teaser) .step.is-on::-webkit-scrollbar,body .funnel:not(.funnel--teaser) .funnel__aside::-webkit-scrollbar,.fn-dishes::-webkit-scrollbar{display:none;width:0;height:0}
+.dd__nutri{grid-template-columns:repeat(auto-fit,minmax(96px,1fr))}
+.dd__nutri dt{font-size:.62rem;letter-spacing:.05em;overflow-wrap:anywhere}
+.dd__nutri .is-main{grid-column:1/-1}
+
+/* v41: dishes under the nutritional-focus chips */
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--on-brand);border-color:var(--accent)}
+.dc-count{margin:18px 0 8px;color:var(--text-muted);font-size:.9rem}
+.dc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:clamp(14px,2vw,24px)}
+.dc-grid .dish.is-hidden{display:none}
+.dc-empty{color:var(--text-muted)}.dc-empty[hidden]{display:none}
+
+/* v42: legal documents */
+.legal h2{margin:0 0 4px}.legal__upd{margin:0 0 18px;color:var(--accent);font-size:.85rem;font-weight:700}
+.legal h3{margin:28px 0 6px;font-size:1.15rem}.legal p{line-height:1.65;margin:0 0 8px}
+.footer-legal a{text-decoration:underline;text-underline-offset:3px}.footer-bottom{flex-wrap:wrap;gap:8px 24px}

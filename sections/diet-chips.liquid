@@ -6,11 +6,17 @@
       {%- if tx_s_eyebrow != blank -%}<span class="eyebrow">{{ tx_s_eyebrow }}</span>{%- endif -%}
       <h2>{% render 'headline', text: tx_s_heading %}</h2>
     </div>
-    <div class="chips">
+    <div class="chips" data-dchips>
       {%- for block in section.blocks -%}{%- capture tx_b_label -%}{% render 'tx', s: block.settings.label %}{%- endcapture -%}
-        <a class="chip" href="{{ section.settings.target | default: '/collections/menu-semanal' }}?dieta={{ block.settings.slug }}" {{ block.shopify_attributes }}>{{ tx_b_label }}</a>
+        <button class="chip" type="button" data-dchip="{{ block.settings.slug }}" aria-pressed="false" {{ block.shopify_attributes }}>{{ tx_b_label }}</button>
       {%- endfor -%}
     </div>
+    <p class="dc-count" data-dc-count data-t="{{ 'dietchips.count' | t }}" aria-live="polite"></p>
+    <div class="dc-grid" data-dc-grid>
+      {%- for product in collections['menu-semanal'].products limit: 12 -%}{% render 'dish-card', product: product %}{%- endfor -%}
+    </div>
+    <p class="dc-empty" data-dc-empty hidden>{{ 'dietchips.empty' | t }}</p>
+    <p class="btn-row"><a class="arrow-link" href="{{ section.settings.target | default: '/collections/menu-semanal' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ 'dietchips.all' | t }}</a></p>
   </div>
 </section>
 

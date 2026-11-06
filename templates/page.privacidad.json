@@ -3,83 +3,23 @@
     "head": {
       "type": "page-head",
       "settings": {
+        "art": "air-breakfast",
+        "heading": "Aviso de privacidad",
+        "text": "",
         "parent_label": "Ayuda y legales",
         "parent_link": "/pages/ayuda",
-        "eyebrow": "Aviso de privacidad",
-        "heading": "Aviso *de privacidad*",
-        "text": "Cómo cuidamos tus datos personales, de entrega y de salud alimentaria.",
-        "art": "air-glass"
-      },
-      "blocks": {
-        "n0": {
-          "type": "link",
-          "settings": {
-            "label": "Ayuda",
-            "link": "/pages/ayuda"
-          }
-        },
-        "n1": {
-          "type": "link",
-          "settings": {
-            "label": "Contrato y términos",
-            "link": "/pages/terminos"
-          }
-        },
-        "n2": {
-          "type": "link",
-          "settings": {
-            "label": "Aviso de privacidad",
-            "link": "/pages/privacidad"
-          }
-        }
-      },
-      "block_order": [
-        "n0",
-        "n1",
-        "n2"
-      ]
+        "eyebrow": "Legal"
+      }
     },
-    "s1": {
-      "type": "feature-grid",
+    "main": {
+      "type": "legal-doc",
       "settings": {
-        "layout": "rows",
-        "columns": "3",
-        "background": "base",
-        "heading": ""
-      },
-      "blocks": {
-        "b0": {
-          "type": "item",
-          "settings": {
-            "title": "Qué datos recopilamos",
-            "text": "<p>Nombre, dirección de entrega, teléfono, alergias, gustos y preferencias dietéticas.</p>"
-          }
-        },
-        "b1": {
-          "type": "item",
-          "settings": {
-            "title": "Para qué los usamos",
-            "text": "<p>Preparar y entregar tu pedido, bloquear platillos no aptos y armar tu selección automática.</p>"
-          }
-        },
-        "b2": {
-          "type": "item",
-          "settings": {
-            "title": "Tus derechos",
-            "text": "<p>Puedes acceder, corregir o eliminar tus datos escribiéndonos por correo o WhatsApp. Texto legal por definir.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "b0",
-        "b1",
-        "b2"
-      ]
+        "doc": "privacy"
+      }
     }
   },
   "order": [
     "head",
-    "s1"
+    "main"
   ]
 }
-

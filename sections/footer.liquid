@@ -33,7 +33,6 @@
             <li><a href="/pages/nosotros">{{ 'nav.about' | t }}</a></li>
             <li><a href="/pages/filosofia">{{ 'nav.philosophy' | t }}</a></li>
             <li><a href="/pages/ayuda">{{ 'nav.help_legal' | t }}</a></li>
-            <li><a href="/pages/perfil">{{ 'nav.allergy_profile' | t }}</a></li>
           {%- endif -%}
         </ul>
       </div>
@@ -52,6 +51,7 @@
 
     <div class="footer-bottom">
       <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}{{ 'footer.rights' | t }}</span>
+      <span class="footer-legal"><a href="/pages/terminos">{{ 'footer.terms' | t }}</a> · <a href="/pages/privacidad">{{ 'footer.privacy' | t }}</a></span>
       <span>{{ 'footer.digital_only' | t }}</span>
     </div>
   </div>
