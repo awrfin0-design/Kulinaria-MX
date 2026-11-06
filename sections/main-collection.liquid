@@ -18,6 +18,14 @@
       <p class="alert">{{ 'collection.empty' | t }}</p>
     {%- elsif layout == 'menu' -%}
       <div class="menu-shell" data-filters>
+        {%- assign seasonal_coll = collections['temporada'] -%}
+        {%- if seasonal_coll.products_count > 0 -%}
+          <div class="season-toggle" role="group" aria-label="{{ 'season.aria' | t }}">
+            <button class="season-pill" type="button" data-filter="season" data-value="week" aria-pressed="true">{{ 'season.week' | t }}</button>
+            <button class="season-pill season-pill--s" type="button" data-filter="season" data-value="season" aria-pressed="false">&#10022; {{ 'season.season' | t }} <small>{{ 'season.limited' | t }}</small></button>
+          </div>
+          <p class="season-note" data-season-note hidden>{{ 'season.note' | t }}</p>
+        {%- endif -%}
         <div class="filter-sticky">
           <div class="chips" role="group" aria-label="{{ 'collection.category' | t }}">
             <button class="chip" type="button" data-filter="category" data-value="all" aria-pressed="true">{{ 'menu_group.all' | t }}</button>
@@ -45,6 +53,7 @@
 
         <div class="dish-grid">
           {%- for product in collection.products -%}{%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}{% render 'dish-card', product: product %}{%- endfor -%}
+          {%- for product in seasonal_coll.products -%}{% render 'dish-card', product: product, seasonal: true, show_all: true %}{%- endfor -%}
         </div>
         <p class="alert" data-empty hidden>{{ 'collection.no_match' | t }}</p>
       </div>

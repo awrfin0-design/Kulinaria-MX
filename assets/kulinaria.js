@@ -39,6 +39,7 @@
   };
   function inGroup(card, gid) {
     if (!gid || gid === 'all') return true;
+    if (gid === 'seasonal') return card.getAttribute('data-seasonal') === 'true';
     var g = GROUPS[gid]; if (!g) return card.getAttribute('data-category') === gid;
     if (g.cat) return g.cat.indexOf(card.getAttribute('data-category')) > -1;
     var d = (card.getAttribute('data-diets') || '').split('|'); return g.diet.some(function (x) { return d.indexOf(x) > -1; });
@@ -203,15 +204,31 @@
     });
   }
 
+  /* a signed-in customer with weeks left on a plan does not buy again: every order button leads to "Mi semana" */
+  function setReturning(on) {
+    if (!on) return;
+    document.documentElement.setAttribute('data-returning', '1');
+    $$('[data-order-cta]').forEach(function (el) {
+      el.setAttribute('href', '/pages/cuenta-semana');
+      var label = el.getAttribute('data-returning-label') || ''; if (!label) return;
+      var tn = [].slice.call(el.childNodes).filter(function (n) { return n.nodeType === 3 && n.textContent.trim(); }).pop();
+      if (tn) tn.textContent = label + (el.classList.contains('btn') ? ' \u2192' : ''); else el.textContent = label;
+    });
+  }
+  function initReturning() {
+    if (!$('#kx-account')) return;
+    loadCredits(function (c) { if (c && c.hasPlan && c.weeksLeft > 0) setReturning(true); });
+  }
   /* phone home (cinematic scroll): a slim bar slides in once the hero has gone, so ordering is always one thumb away */
   function initHomeBar() {
     var hero = $('.hero--intro'); if (!hero || !window.IntersectionObserver || !(window.matchMedia && window.matchMedia('(max-width:760px)').matches)) return;
     if ($('.home-bar')) return;
     var bar = document.createElement('div'); bar.className = 'home-bar'; bar.setAttribute('hidden', '');
     var tx = document.documentElement.getAttribute('data-home-cta') || '', lang = (document.documentElement.lang || 'es').slice(0, 2);
-    bar.innerHTML = '<span></span><a class="btn btn--gold btn--sm" href="/pages/pedido"></a>';
+    bar.innerHTML = '<span></span><a class="btn btn--gold btn--sm" href="/pages/pedido" data-order-cta></a>';
     bar.firstChild.textContent = lang === 'en' ? 'Build my order' : 'Armar mi pedido'; bar.lastChild.textContent = (lang === 'en' ? 'Continue' : 'Continuar') + ' \u2192';
     document.body.appendChild(bar);
+    if (document.documentElement.getAttribute('data-returning')) { var ob = $('[data-order-cta]', bar); ob.setAttribute('href', '/pages/cuenta-semana'); ob.textContent = (lang === 'en' ? 'Choose my week' : 'Elegir mi semana') + ' \u2192'; bar.firstChild.textContent = lang === 'en' ? 'Your week is paid' : 'Tu semana está pagada'; }
     new IntersectionObserver(function (en) { en.forEach(function (e) { var on = !e.isIntersecting && e.boundingClientRect.top < 0; bar.hidden = false; bar.classList.toggle('is-on', on); }); }, { threshold: 0.12 }).observe(hero);
   }
   function initOnbBanner() { $$('[data-onb-banner]').forEach(function (b) { b.hidden = isOnboarded(); }); }
@@ -318,7 +335,7 @@
   function initFilters() {
     var bar = $('[data-filters]');
     if (!bar) return;
-    var state = { category: 'all', diets: [], tier: 'all' };
+    var state = { category: 'all', diets: [], tier: 'all', season: 'week' };
     var scope = bar.closest('section') || document;
     var run = function () {
       $$('[data-dish]', scope).forEach(function (c) {
@@ -326,10 +343,12 @@
         var diets = (c.getAttribute('data-diets') || '').split('|');
         var okDiet = state.diets.every(function (d) { return diets.indexOf(d) > -1; });
         var okTier = state.tier === 'all' || c.getAttribute('data-tier') === state.tier;
-        c.classList.toggle('is-hidden', !(okCat && okDiet && okTier));
+        var okSeason = (c.getAttribute('data-seasonal') === 'true') === (state.season === 'season');
+        c.classList.toggle('is-hidden', !(okCat && okDiet && okTier && okSeason));
       });
       var vis = $$('[data-dish]:not(.is-hidden)', scope).length;
       var empty = $('[data-empty]', scope); if (empty) empty.hidden = vis > 0;
+      var snote = $('[data-season-note]', scope); if (snote) snote.hidden = state.season !== 'season';
       var count = $('[data-count]', scope); if (count) count.textContent = vis;
     };
     $$('[data-filter]', bar).forEach(function (b) {
@@ -1028,7 +1047,7 @@
       var MEALS = +holder.getAttribute('data-meals') || 5, WEEKS = +holder.getAttribute('data-weeks') || 4;
       var st = { plan: 'block', tier: 'selecto', cat: 'all', diet: 'all', qty: {}, days: [], info: {}, allergies: [], step: 0, remembered: false, renew: true };
       try { var saved = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null'); if (saved && saved.v === 2) { st = Object.assign(st, saved); st.tier = 'selecto'; st.remembered = !!(saved.info && (saved.info.name || saved.info.email)); } } catch (e) {}
-      if (st.cat && st.cat !== 'all' && !GROUPS[st.cat]) st.cat = 'all';
+      if (st.cat && st.cat !== 'all' && st.cat !== 'seasonal' && !GROUPS[st.cat]) st.cat = 'all';
       var RULES_KEY = 'kx-rules-ok';
       try { if (localStorage.getItem(RULES_KEY)) st.rulesOk = true; } catch (e) {}
       if (st.sv !== 4) { st.sv = 4; st.step = 0; }
@@ -1205,16 +1224,19 @@
       var tourArmed = false;
       /* rules step: the button unlocks only after reading to the end and ticking "I understand" */
       var rulesBox = $('[data-fn-rules]', holder), rChk = $('[data-fn-rules-check]', holder), rBtn = $('[data-fn-rules-next]', holder), rHint = $('[data-fn-rules-hint]', holder), rulesRead = !!st.rulesOk;
+      var rulesSeenEnd = false;
       var rulesState = function () {
         if (!rulesBox) return;
-        if (st.rulesOk) rulesRead = true;
-        if (!rulesRead) { var atEnd = rulesBox.scrollTop + rulesBox.clientHeight >= rulesBox.scrollHeight - 12, noScroll = rulesBox.scrollHeight <= rulesBox.clientHeight + 4; if (atEnd || (noScroll && rulesBox.clientHeight > 0)) rulesRead = true; }
+        if (st.rulesOk || rulesSeenEnd) rulesRead = true;
+        if (!rulesRead) { var atEnd = rulesBox.scrollHeight > rulesBox.clientHeight + 4 && rulesBox.scrollTop + rulesBox.clientHeight >= rulesBox.scrollHeight - 12; if (atEnd) rulesRead = true; }
         if (rChk) { rChk.disabled = !rulesRead; if (st.rulesOk) rChk.checked = true; }
         if (rBtn) rBtn.disabled = !(rulesRead && rChk && rChk.checked);
         if (rHint) rHint.hidden = rulesRead;
         rulesBox.classList.toggle('is-read', rulesRead);
       };
       if (rulesBox) {
+        var endEl = $('[data-fn-rules-end]', holder);
+        if (endEl && window.IntersectionObserver) new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting && e.intersectionRatio > 0.6 && st.step === 0) { rulesSeenEnd = true; rulesState(); } }); }, { threshold: [0.6, 1] }).observe(endEl);
         rulesBox.addEventListener('scroll', function () { window.requestAnimationFrame(rulesState); }, { passive: true });
         if (rChk) rChk.addEventListener('change', rulesState);
         if (rBtn) rBtn.addEventListener('click', function () { st.rulesOk = true; try { localStorage.setItem(RULES_KEY, '1'); } catch (x) {} persist(); go(1); });
@@ -1347,6 +1369,9 @@
         var db = e.target.closest ? e.target.closest('[data-fn-day-btn]') : null;
         if (db) { st.active = +db.getAttribute('data-fn-day-btn'); persist(); render(); return; }
         if (e.target.closest && e.target.closest('[data-fn-how-open]')) { go(0); return; }
+        var seb = e.target.closest ? e.target.closest('[data-fn-season]') : null;
+        if (seb) { var sv = seb.getAttribute('data-fn-season'); holder.setAttribute('data-season', sv); $$('[data-fn-season]', holder).forEach(function (x) { x.setAttribute('aria-pressed', String(x === seb)); x.classList.toggle('is-on', x === seb); }); var scg = $('[data-fn-sc-grid]', holder); if (scg) scg.scrollLeft = 0; return; }
+        if (e.target.closest && e.target.closest('[data-fn-newplan]')) { try { sessionStorage.setItem('kx_newplan', '1'); } catch (x) {} holder.classList.remove('is-returning'); var rr = $('[data-fn-returning]', holder); if (rr) rr.hidden = true; return; }
         if (e.target.closest && e.target.closest('[data-fn-sc-next]')) { go(3); return; }
         if (e.target.closest && e.target.closest('[data-fn-prev-sc]')) { go(1); return; }
         if (e.target.closest && e.target.closest('[data-fn-tour-open]')) { startTour(true); return; }
@@ -1442,6 +1467,13 @@
 
       // customers who already have a plan see their balance here; everyone else just sees the plans (the plan cards ARE the purchase of credits)
       if (ce) loadCredits(function (c) {
+        var ret = $('[data-fn-returning]', holder);
+        if (ret && c && c.hasPlan && c.weeksLeft > 0) {
+          var endsR = ''; try { var pr = String(c.endsOn).split('-'); endsR = new Intl.DateTimeFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { timeZone: TZ, day: 'numeric', month: 'short' }).format(new Date(+pr[0], +pr[1] - 1, +pr[2], 12)); } catch (e) {}
+          var rtxt = $('[data-fn-returning-text]', ret); if (rtxt) rtxt.textContent = fill(T_('credit'), { w: c.weeksLeft, t: c.weeksTotal, e: endsR }).split('. ')[0] + '.';
+          var asked = false; try { asked = !!sessionStorage.getItem('kx_newplan'); } catch (e) {}
+          if (!asked) { ret.hidden = false; holder.classList.add('is-returning'); }
+        }
         var box = $('[data-fn-credit]', holder); if (!box || !c || !c.hasPlan) return;
         var ends = ''; try { var p = String(c.endsOn).split('-'); ends = new Intl.DateTimeFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { timeZone: TZ, day: 'numeric', month: 'short' }).format(new Date(+p[0], +p[1] - 1, +p[2], 12)); } catch (e) {}
         $('[data-fn-credit-text]', box).textContent = fill(T_('credit'), { w: c.weeksLeft, t: c.weeksTotal, e: ends }); box.hidden = false;
@@ -1829,7 +1861,7 @@
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

@@ -1273,6 +1273,49 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.evaluate(() => localStorage.removeItem('kulinaria_funnel'));
 }
 
+
+// =====================================================================  v50: seasonal staples, returning customers, rules step fits the desktop frame
+{
+  await page.setViewportSize({ width: 1430, height: 650 });
+  await page.goto(`${URL0}#/menu`); await page.evaluate(() => { localStorage.setItem('kx-test-orders', '0'); }); await page.reload(); await page.waitForTimeout(700);
+  const SM = '[data-page="menu"] ';
+  const cnt = () => page.evaluate((sm) => ({ week: document.querySelectorAll(sm + '[data-dish]:not(.is-hidden):not([data-seasonal])').length, season: document.querySelectorAll(sm + '[data-dish]:not(.is-hidden)[data-seasonal]').length, note: !document.querySelector(sm + '[data-season-note]').hidden }), SM);
+  const c0 = await cnt();
+  ok('menu page: by default only the weekly dishes show (the seasonal ones wait behind the toggle)', c0.week === 9 && c0.season === 0 && !c0.note, JSON.stringify(c0));
+  await page.click(`${SM}[data-filter="season"][data-value="season"]`); await page.waitForTimeout(300);
+  const c1 = await cnt();
+  ok('menu page: "De temporada" shows the limited-edition dishes with the explanation, and hides the weekly ones', c1.week === 0 && c1.season === 2 && c1.note, JSON.stringify(c1));
+  ok('seasonal cards carry a "limited edition" ribbon with the season', await page.evaluate((sm) => [...document.querySelectorAll(sm + '[data-seasonal] .dish__ribbon')].every((r) => /limitada/i.test(r.textContent)) && document.querySelectorAll(sm + '[data-seasonal] .dish__ribbon').length === 2, SM));
+  await page.click(`${SM}[data-filter="season"][data-value="week"]`); await page.waitForTimeout(300);
+  ok('and back to the weekly menu', (await cnt()).week === 9);
+
+  // order funnel: the toggle sits on the menu step
+  await page.evaluate(() => { sessionStorage.setItem('kx_newplan', '1'); localStorage.removeItem('kulinaria_funnel'); }); await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(800);
+  const PF = '[data-page="pg/pedido"] ';
+  await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-plan-choice="block"]').click()); await page.waitForTimeout(700);
+  const sc0 = await page.evaluate((pf) => [...document.querySelectorAll(pf + '.fn-sc')].filter((c) => getComputedStyle(c).display !== 'none').length, PF);
+  await page.click(`${PF}[data-fn-season="season"]`); await page.waitForTimeout(300);
+  const sc1 = await page.evaluate((pf) => [...document.querySelectorAll(pf + '.fn-sc')].filter((c) => getComputedStyle(c).display !== 'none').length, PF);
+  ok('order builder, menu step: the seasonal toggle swaps the weekly cards for the 2 limited-edition ones', sc0 === 9 && sc1 === 2, `${sc0} -> ${sc1}`);
+
+  // returning customer: every order button leads to Mi semana and the builder offers it first
+  await page.evaluate(() => { localStorage.setItem('kx-test-orders', '1'); sessionStorage.removeItem('kx_newplan'); sessionStorage.removeItem('kx_credits'); }); await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(1200);
+  ok('returning customer: the order builder opens with "Ya tienes un plan activo" and a button to Mi semana (the steps are hidden)', await page.evaluate((pf) => { const r = document.querySelector(pf + '[data-fn-returning]'); return !!r && !r.hidden && !!r.querySelector('a[href="/pages/cuenta-semana"]') && getComputedStyle(document.querySelector(pf + '.funnel__panel')).display === 'none'; }, PF));
+  await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1200);
+  ok('returning customer: the hero order button leads to Mi semana', await page.evaluate(() => { const a = document.querySelector('[data-page="home"] .hero [data-order-cta]'); return !!a && a.getAttribute('href') === '/pages/cuenta-semana' && /semana/i.test(a.textContent); }));
+  await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(1000);
+  await page.click(`${PF}[data-fn-newplan]`); await page.waitForTimeout(300);
+  ok('"I want to buy a new plan" brings the four steps back', await page.evaluate((pf) => getComputedStyle(document.querySelector(pf + '.funnel__panel')).display !== 'none' && document.querySelectorAll(pf + '[data-fn-dot]').length === 4, PF));
+  await page.evaluate(() => { localStorage.setItem('kx-test-orders', '0'); sessionStorage.removeItem('kx_newplan'); sessionStorage.removeItem('kx_credits'); localStorage.removeItem('kulinaria_funnel'); });
+
+  // the rules fit the desktop frame (no scrolling to read them) and the tick still gates the next button
+  await page.evaluate(() => { sessionStorage.setItem('kx-test-norules', '1'); localStorage.removeItem('kx-rules-ok'); }); await page.reload(); await page.waitForTimeout(1000);
+  const rf = await page.evaluate((pf) => { const r = document.querySelector(pf + '[data-fn-rules]'), f = document.querySelector(pf + '[data-funnel]'); return { fits: r.scrollHeight <= r.clientHeight + 4, stage: f.querySelector('.funnel__stage').getBoundingClientRect().bottom <= innerHeight + 2, step: f.getAttribute('data-step'), chk: f.querySelector('[data-fn-rules-check]').disabled, btn: f.querySelector('[data-fn-rules-next]').disabled }; }, PF);
+  ok('rules step on desktop: all 7 rules and the example fit the frame with no scrolling, on a 650px-high screen', rf.fits && rf.stage && rf.step === '0', JSON.stringify(rf));
+  ok('rules step on desktop: seeing the whole list unlocks the tick box; the button waits for the tick', rf.chk === false && rf.btn === true, JSON.stringify(rf));
+  await page.evaluate(() => { sessionStorage.removeItem('kx-test-norules'); localStorage.setItem('kx-rules-ok', '1'); });
+}
+
 await browser.close();
 ok('no JS errors on any page', errors.length === 0, errors.slice(0, 5).join(' | '));
 const pass = results.filter((r) => r.ok).length;

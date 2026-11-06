@@ -2898,3 +2898,69 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
   .funnel .step[data-fn-step="3"] .fn-dish{height:auto !important;min-height:0 !important}
   .funnel .step[data-fn-step="3"] .fn-dish__media{flex:none !important;height:clamp(120px,24svh,190px) !important;min-height:0 !important}
 }
+
+/* =====================================================================
+   v61 — returning customers go to "Mi semana" · the rules fit the desktop frame without scrolling
+   ===================================================================== */
+.fn-returning{display:grid;gap:10px;justify-items:start;align-content:center;padding:clamp(18px,3vw,36px);border:1px solid var(--border-accent);border-radius:22px;background:var(--accent-wash);margin-block:12px}
+.fn-returning[hidden]{display:none}
+.fn-returning h3{margin:0;font-size:clamp(1.3rem,2.6vw,2rem)}
+.fn-returning p{margin:0;font-size:.95rem;max-width:56ch}
+.fn-returning__hint{color:var(--text-muted);font-size:.84rem !important}
+.fn-returning__row{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;margin-top:6px}
+.fn-returning .text-link{background:none;border:0;cursor:pointer;color:var(--text-muted);text-decoration:underline;padding:0;font-size:.8rem}
+.funnel.is-returning :is(.funnel__top,.funnel__bar,.funnel__stepcount,.funnel__panel){display:none !important}
+@media (min-width:901px){
+  .fn-rules{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;overflow:visible;-webkit-mask-image:none;mask-image:none;align-content:start;padding:0}
+  .fn-rules__title,.fn-rules__lede,.fn-rules__end{grid-column:1/-1}
+  .fn-rules__title{font-size:1.25rem}
+  .fn-rules__lede{font-size:.8rem}
+  .fn-rules__list{display:contents}
+  .fn-rules__list li{grid-template-columns:24px minmax(0,1fr);gap:8px;padding:10px 12px;border-radius:14px}
+  .fn-rules__n{width:24px;height:24px;font-size:.72rem}
+  .fn-rules__list h4{font-size:.86rem;margin-bottom:3px}
+  .fn-rules__list p{font-size:.7rem;line-height:1.38}
+  .fn-rules__ex{padding:10px 12px;gap:6px;border-radius:14px}
+  .fn-rules__ex h4{font-size:.86rem}
+  .fn-rules__ex p{font-size:.7rem}
+  .fn-rules__bar{height:30px;border-radius:9px}.fn-rules__bar i{font-size:.74rem}
+  .fn-rules__legend{font-size:.6rem !important;gap:10px}
+  .fn-rules__end{display:flex;align-items:center;gap:20px;padding:0}
+  .fn-rules__hint{display:none}
+}
+
+/* =====================================================================
+   v62 — seasonal staples: a toggle next to the weekly menu, limited-edition ribbon
+   ===================================================================== */
+.season-toggle{display:inline-flex;gap:6px;padding:5px;border:1px solid var(--line);border-radius:999px;background:var(--panel);margin:0 0 14px}
+.season-pill{border:0;background:none;color:var(--text);font:600 .72rem var(--font-label);letter-spacing:.08em;text-transform:uppercase;padding:10px 18px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:baseline;gap:8px;white-space:nowrap}
+.season-pill small{font:500 .58rem var(--font-label);letter-spacing:.1em;opacity:.8}
+.season-pill[aria-pressed="true"]{background:var(--accent);color:#fff}
+.season-pill--s[aria-pressed="false"]{color:var(--accent)}
+.season-note{margin:0 0 14px;max-width:70ch;font-size:.86rem;color:var(--text-muted);padding:10px 14px;border-left:3px solid var(--accent);background:var(--accent-wash);border-radius:0 12px 12px 0}
+.season-note[hidden]{display:none}
+.dish__ribbon,.fn-ribbon{position:absolute;left:0;bottom:12px;z-index:3;padding:5px 12px 5px 10px;border-radius:0 999px 999px 0;background:var(--accent);color:#fff;font:700 .58rem var(--font-label);letter-spacing:.12em;text-transform:uppercase;box-shadow:0 6px 16px rgba(0,0,0,.35)}
+.fn-sc__img,.fn-dish__media{position:relative}
+.season-toggle--fn{margin:0 0 8px;align-self:flex-start;padding:3px}
+.season-toggle--fn .season-pill{padding:7px 14px;font-size:.66rem}
+.fn-showcase .fn-sc[data-seasonal]{display:none}
+.funnel[data-season="season"] .fn-showcase .fn-sc:not([data-seasonal]){display:none}
+.funnel[data-season="season"] .fn-showcase .fn-sc[data-seasonal]{display:flex}
+@media (max-width:760px){
+  .season-toggle{display:flex;width:100%}.season-pill{flex:1;justify-content:center;padding:11px 8px;font-size:.66rem}
+  .season-pill small{display:none}
+}
+
+/* =====================================================================
+   v63 — phone home: the real step 1 sits in the scroll; the dish chapter is full bleed (no side margin)
+   ===================================================================== */
+@media (max-width:760px){
+  /* step 1 (how it works) flows with the page: no inner scroll area; the end of the list on screen counts as read */
+  body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__stage{height:auto !important;min-height:0;overflow:visible}
+  body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel,body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__main{flex:none;overflow:visible}
+  .funnel .step[data-fn-step="0"].is-on{height:auto;overflow:visible}
+  .funnel[data-step="0"] .fn-rules{overflow:visible;-webkit-mask-image:none;mask-image:none;padding-bottom:8px}
+  /* the dish chapter: photo edge to edge */
+  body.template-index .shopify-section:has(.rail) .container{padding-inline:0 !important;max-width:none !important}
+  body.template-index .rail{margin-inline:0}
+}

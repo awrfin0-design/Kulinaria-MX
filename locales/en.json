@@ -304,6 +304,14 @@
     "entradas": "Starters",
     "snacks-postres": "Snacks & desserts"
   },
+  "season": {
+    "week": "Menu of the week",
+    "season": "Seasonal",
+    "limited": "Limited edition",
+    "note": "Limited-edition dishes: they appear when the season and the weather allow (chiles en nogada, autumn pumpkin, December turkey…) and they are gone when the ingredient is gone.",
+    "aria": "Menu of the week or seasonal",
+    "tag": "Seasonal"
+  },
   "dish": {
     "nutrition": "Nutrition facts",
     "n_calories": "Calories",
@@ -681,6 +689,10 @@
     "tour_skip": "Skip",
     "tour_guide": "Step-by-step guide",
     "budget_short": "Includes {w} a week; anything more is charged separately that week.",
+    "ret_t": "You already have an active plan",
+    "ret_go": "Choose my week",
+    "ret_new": "I want to buy a new plan",
+    "ret_hint": "Your plan is already paid: you only pick your 5 dishes for the week, with your notes, and you are done.",
     "rec_title": "How you are charged",
     "rec_auto": "The 4-week plan is paid upfront in a single charge and renews automatically every 4 weeks with the same payment method, until you cancel or pause it from your account (before the Saturday 10:00 cut-off).",
     "rec_manual": "The 4-week plan is paid upfront in a single charge. When your 4 weeks end we let you know to renew: nothing is charged without your confirmation.",
@@ -1638,6 +1650,13 @@
     "d93d49eca56d": "Welcome",
     "648f6e55cf21": "Meet *Kulinaria*",
     "03bf248a88f6": "Find out who we are and how we cook your week.",
-    "81842f0e2006": "4-week plan"
+    "81842f0e2006": "4-week plan",
+    "dd07209b9921": "Seasonal chiles en nogada",
+    "a525d798c854": "Poblano pepper stuffed with picadillo, covered in walnut sauce and pomegranate. Only in season.",
+    "8f6cfd99a2b1": "Spiced pumpkin bread",
+    "314f703d4682": "Moist autumn pumpkin bread with cinnamon and nutmeg.",
+    "6decc7a13941": "September",
+    "87ad485f96bb": "Autumn",
+    "0b7a197bef0d": "Seasonal"
   }
 }

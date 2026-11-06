@@ -29,7 +29,7 @@
         "text": "Del enfoque al contrato: elige, guardamos tus datos y listo. La próxima vez es un clic.",
         "collection": "menu-semanal",
         "limit": 12,
-        "phone_teaser": true
+        "phone_teaser": false
       },
       "blocks": {
         "d0": {

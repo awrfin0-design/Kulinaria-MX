@@ -21,7 +21,7 @@
 -%}
 {%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}{%- capture tx_pdesc -%}{% render 'tx', s: card_src %}{%- endcapture -%}
 {%- assign card_text = tx_pdesc | strip_html | truncate: 90 -%}
-<article class="dish" data-dish data-has-detail
+<article class="dish{% if seasonal %} is-hidden is-seasonal{% endif %}" data-dish data-has-detail{% if seasonal %} data-seasonal="true"{% endif %}
   data-category="{{ category }}" data-tier="{{ tier }}"
   data-diets="{{ diets }}" data-allergens="{{ allergens | escape }}" data-ingredients="{{ ingredients | escape }}">
   <a class="dish__media surface-walnut" data-tilt-card href="{{ product.url }}" aria-label="{{ tx_ptitle | escape }}">
@@ -31,6 +31,7 @@
       <span class="dish__ph surface-slate" aria-hidden="true">{% render 'dish-placeholder', category: category %}</span>
     {%- endif -%}
     <span class="dish__pill" aria-hidden="true">{{ 'dish.view' | t }}</span>
+    {%- if seasonal -%}<span class="dish__ribbon">{{ 'season.limited' | t }}{% if mf.season.value != blank %} · {{ mf.season.value }}{% endif %}</span>{%- endif -%}
   </a>
   <div class="dish__body">
     <div>{% render 'tier-badge', tier: tier %}</div>

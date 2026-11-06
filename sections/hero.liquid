@@ -27,7 +27,7 @@
 
       <div class="hero__cta">
         {%- if tx_s_button_label != blank -%}
-          <a class="arrow-link" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ tx_s_button_label }}</a>
+          <a class="arrow-link" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}" data-order-cta data-returning-label="{{ 'funnel.ret_go' | t }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ tx_s_button_label }}</a>
         {%- endif -%}
         {%- if tx_s_button2_label != blank -%}
           <a class="text-link" href="{{ section.settings.button2_link | default: '/collections/menu-semanal' }}">{{ tx_s_button2_label }}</a>

@@ -1,0 +1,24 @@
+// Seasonal toggle on the menu page and in the funnel menu step. Output: /tmp/season-*.png
+import { createRequire } from 'node:module';
+const { chromium } = createRequire(import.meta.url)('playwright');
+const b = await chromium.launch();
+const ctx = await b.newContext({ viewport: { width: 1430, height: 800 } });
+await ctx.addInitScript(() => { sessionStorage.setItem('kx-seen', '1'); sessionStorage.setItem('kx_newplan', '1'); try { localStorage.setItem('kx-rules-ok', '1'); } catch (e) {} });
+const page = await ctx.newPage();
+const errs = []; page.on('pageerror', (e) => errs.push(e.message));
+await page.goto('file:///home/user/Kulinaria-MX/preview/index.html#/menu'); await page.reload(); await page.waitForTimeout(900);
+const M = '[data-page="menu"] ';
+const vis = () => page.evaluate(() => [...document.querySelectorAll('[data-page="menu"] [data-dish]:not(.is-hidden)')].map((d) => d.getAttribute('data-seasonal') || 'week'));
+console.log('menu week mode', JSON.stringify((await vis()).reduce((a, x) => (a[x] = (a[x] || 0) + 1, a), {})));
+await page.click(M + '[data-filter="season"][data-value="season"]'); await page.waitForTimeout(400);
+console.log('menu season mode', JSON.stringify((await vis()).reduce((a, x) => (a[x] = (a[x] || 0) + 1, a), {})), 'count', await page.$eval(M + '[data-count]', (e) => e.textContent));
+await page.evaluate(() => { const t = document.querySelector('[data-page="menu"] .season-toggle'); window.scrollTo(0, t.getBoundingClientRect().top + scrollY - 120); }); await page.waitForTimeout(300);
+await page.screenshot({ path: '/tmp/season-menu.png' });
+await page.goto('file:///home/user/Kulinaria-MX/preview/index.html#/pg/pedido'); await page.evaluate(() => { localStorage.removeItem('kulinaria_funnel'); }); await page.reload(); await page.waitForTimeout(900);
+const F = '[data-page="pg/pedido"] ';
+await page.evaluate(() => { document.querySelector('[data-page="pg/pedido"] [data-plan-choice="block"]').click(); }); await page.waitForTimeout(800);
+await page.screenshot({ path: '/tmp/season-fn1.png' });
+console.log('step', await page.$eval(F + '[data-funnel]', (f) => f.getAttribute('data-step'))); await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-season="season"]').click()); await page.waitForTimeout(400);
+await page.screenshot({ path: '/tmp/season-fn2.png' });
+console.log(errs.join('|') || 'no page errors');
+await b.close();

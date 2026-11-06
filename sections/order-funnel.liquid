@@ -27,11 +27,17 @@
     <h2>{{ 'funnel.teaser_t' | t }} <button class="info-dot" type="button" data-sheet="pricing" aria-label="{{ 'sheet.info' | t }}"><i aria-hidden="true">i</i></button></h2>
     <p class="funnel__teaser-text">{{ 'funnel.teaser_p' | t }}</p>
     <ul class="funnel__teaser-facts"><li>{{ 'funnel.teaser_a' | t }}</li><li>{{ 'funnel.teaser_b' | t }}</li><li>{{ 'funnel.teaser_c' | t }}</li></ul>
-    <a class="btn btn--gold btn--block" href="/pages/pedido">{{ 'funnel.teaser_cta' | t }}</a>
+    <a class="btn btn--gold btn--block" href="/pages/pedido" data-order-cta data-returning-label="{{ 'funnel.ret_go' | t }}">{{ 'funnel.teaser_cta' | t }}</a>
   </div>
   {%- unless section.settings.phone_teaser -%}<div class="funnel__bgphoto" aria-hidden="true">{% render 'photo', art: 'air-steak-dark', alt: '' %}</div>{%- endunless -%}
   <div class="funnel__track" data-fn-track>
    <div class="funnel__stage" data-fn-stage>
+    <div class="fn-returning container" data-fn-returning hidden>
+      <h3>{{ 'funnel.ret_t' | t }}</h3>
+      <p data-fn-returning-text></p>
+      <p class="fn-returning__hint">{{ 'funnel.ret_hint' | t }}</p>
+      <div class="fn-returning__row"><a class="btn btn--gold" href="/pages/cuenta-semana">{{ 'funnel.ret_go' | t }} &rarr;</a><button class="text-link" type="button" data-fn-newplan>{{ 'funnel.ret_new' | t }}</button></div>
+    </div>
     <div class="funnel__top container">
       <div class="funnel__title">
         <span class="eyebrow">{{ tx_s_eyebrow }}</span>
@@ -175,12 +181,20 @@
 
         <fieldset class="step" data-fn-step="2">
           <legend class="fn-sr">{{ 'funnel.s_menu' | t }}</legend>
+          {%- assign seasonal_f = collections['temporada'] -%}
+          {%- if seasonal_f.products_count > 0 -%}
+            <div class="season-toggle season-toggle--fn" role="group" aria-label="{{ 'season.aria' | t }}">
+              <button class="season-pill is-on" type="button" data-fn-season="week" aria-pressed="true">{{ 'season.week' | t }}</button>
+              <button class="season-pill season-pill--s" type="button" data-fn-season="season" aria-pressed="false">&#10022; {{ 'season.season' | t }} <small>{{ 'season.limited' | t }}</small></button>
+            </div>
+          {%- endif -%}
           <div class="fn-menunote"><button class="text-link" type="button" data-fn-prev-sc>&lsaquo; {{ 'funnel.menu_back' | t }}</button><p>{{ 'funnel.menu_note' | t }}</p></div>
           <div class="fn-carousel fn-carousel--show">
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="{{ 'funnel.prev_dishes' | t }}">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
             <div class="fn-showcase" data-fn-sc-grid>
               {%- for product in coll.products limit: section.settings.limit -%}{% render 'funnel-showcase-card', product: product %}{%- endfor -%}
+              {%- for product in seasonal_f.products limit: 8 -%}{% render 'funnel-showcase-card', product: product, seasonal: true, show_all: true %}{%- endfor -%}
             </div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="{{ 'funnel.next_dishes' | t }}">&#8250;</button>
             <button class="fn-gonext" type="button" data-fn-sc-next><span>{{ 'funnel.menu_go' | t }}</span><i aria-hidden="true">&rarr;</i></button>
@@ -199,6 +213,7 @@
             <label class="fn-sel"><span class="fn-sr">{{ 'collection.category' | t }}</span>
               <select class="select" data-fn-cat>
                 <option value="all">{{ 'menu_group.all' | t }}</option>
+                {%- if seasonal_f.products_count > 0 -%}<option value="seasonal">&#10022; {{ 'season.season' | t }}</option>{%- endif -%}
                 {%- assign cats = 'al-fuego,desayunos,bowls,diario,keto-low-carb,fit-proteina,veggie,sin-gluten,junior,entradas,snacks-postres' | split: ',' -%}
                 {%- for c in cats -%}{%- assign ck = 'menu_group.' | append: c -%}<option value="{{ c }}">{{ ck | t }}</option>{%- endfor -%}
               </select></label>
@@ -207,6 +222,7 @@
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-arrow="-1" aria-label="{{ 'funnel.prev_dishes' | t }}">&#8249;</button>
             <div class="fn-dishes" data-fn-grid>
               {%- for product in coll.products limit: section.settings.limit -%}{% render 'funnel-dish', product: product %}{%- endfor -%}
+              {%- for product in seasonal_f.products limit: 8 -%}{% render 'funnel-dish', product: product, seasonal: true, show_all: true %}{%- endfor -%}
             </div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-arrow="1" aria-label="{{ 'funnel.next_dishes' | t }}">&#8250;</button>
           </div>

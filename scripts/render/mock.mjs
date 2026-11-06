@@ -54,6 +54,13 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
     id: 7100 + i, handle: d[0], title: tr(d[1]), price: TIER_PRICE[d[2]], description: `<p>${tr(d[9])}</p>`, type: d[3], plans: true, tr, image: IMG(IMG_OF[d[0]] ?? i, tr(d[1])),
     mf: { tier: d[2], category: d[3], diets: d[4], allergens: d[5], ingredients: d[6], calories: d[7], carbs: d[8], protein: Math.round(d[7] * 0.28 / 4), fat: Math.round(d[7] * 0.3 / 9), fiber: 4, ...(WEEKS[d[0]] ? { weeks: WEEKS[d[0]] } : {}) },
   }));
+  // seasonal staples (collection "temporada"): limited-edition dishes that the season allows
+  const SEASONAL = [
+    ['chiles-en-nogada', 'Chiles en nogada de temporada', 'signature', ['Nuez', 'Lácteos'], ['Chile poblano', 'Res', 'Nuez de Castilla', 'Granada'], 690, 48, 'Chile poblano relleno de picadillo, bañado en nogada y granada. Solo en temporada.', 'Septiembre', 6],
+    ['pan-calabaza-especias', 'Pan de calabaza con especias', 'exclusivo', ['Gluten', 'Huevo'], ['Calabaza', 'Canela', 'Nuez moscada', 'Avena'], 320, 38, 'Pan húmedo de calabaza de otoño con canela y nuez moscada.', 'Otoño', 10],
+  ];
+  const seasonal = SEASONAL.map((d, i) => product({ id: 7600 + i, handle: d[0], title: tr(d[1]), price: TIER_PRICE[d[2]], description: `<p>${tr(d[7])}</p>`, type: 'temporada', plans: true, tr, image: IMG(d[9], tr(d[1])),
+    mf: { tier: d[2], category: 'temporada', diets: [], allergens: d[3], ingredients: d[4], calories: d[5], carbs: d[6], protein: Math.round(d[5] * 0.28 / 4), fat: Math.round(d[5] * 0.3 / 9), fiber: 4, season: tr(d[8]) } }));
   const TIER_NAME = { selecto: 'Selecto', exclusivo: 'Exclusivo', signature: 'Signature', reserve: 'Reserve' };
   const planProducts = Object.keys(TIER_PRICE).map((t, i) => product({ id: 7200 + i, handle: `plan-semanal-${t}`, title: tr(`Plan semanal ${TIER_NAME[t]}`), type: 'plan', plans: true, tr,
     price: WEEK_PRICE[t], description: tr('<p>5 comidas por semana, de lunes a viernes. Disponible por 1 semana o por 4 semanas.</p>'), image: { src: 'assets/photo-containers.webp', alt: '' },
@@ -66,12 +73,13 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
     description: tr('<p>Shaker oficial para tus batidos.</p>') });
   const mejora = product({ id: 7400, handle: 'mejora-de-platillo', title: tr('Mejora de platillo'), type: 'mejora', price: 7000,
     variants: [1, 2, 3].map((n) => ({ id: 74000 + n, title: `+${n}`, price: 7000 * n, available: true })) });
-  const products = [...dishes, ...planProducts, playera, shaker];
+  const products = [...dishes, ...seasonal, ...planProducts, playera, shaker];
   const all_products = Object.fromEntries([...products, mejora].map((p) => [p.handle, p]));
 
   const collections = {
     'menu-semanal': { title: tr('Especiales de la semana'), handle: 'menu-semanal', url: '/collections/menu-semanal',
       description: tr('<p>Un menú rotativo de 8 a 10 platillos. Confirma antes del sábado a las 10:00 AM.</p>'), products: dishes, products_count: dishes.length },
+    'temporada': { title: tr('De temporada'), handle: 'temporada', url: '/collections/temporada', description: '', products: seasonal, products_count: seasonal.length },
     'planes-semanales': { title: tr('Planes semanales'), handle: 'planes-semanales', url: '/collections/planes-semanales', description: '', products: planProducts, products_count: 4 },
     'kulinaria-store': { title: 'Kulinaria Store', handle: 'kulinaria-store', url: '/collections/kulinaria-store',
       description: tr('<p>Línea Fit Apparel: playera oficial y vaso mezclador premium.</p>'), products: [playera, shaker], products_count: 2 },

@@ -17,7 +17,7 @@
 {%- assign card_text = tx_pdesc | strip_html | truncate: 90 -%}
 {%- capture pm_block -%}{% render 'plan-price', tier: tier, kind: 'meal' %}{%- endcapture -%}{%- capture pm_week_total -%}{% render 'plan-price', tier: tier, kind: 'week' %}{%- endcapture -%}{%- assign pm_week = pm_week_total | plus: 0 | divided_by: 5 -%}
 <article class="fn-dish" data-dish data-has-detail data-fn-dish data-pm-block="{{ pm_block | strip }}" data-pm-week="{{ pm_week }}" data-pid="{{ product.id }}" data-handle="{{ product.handle }}"
-  data-title="{{ product.title | escape }}" data-label="{{ tx_ptitle | escape }}" data-category="{{ category }}" data-tier="{{ tier }}" data-diets="{{ diets }}" data-allergens="{{ allergens | escape }}" data-ingredients="{{ ingredients | escape }}">
+  {% if seasonal %}data-seasonal="true" {% endif %}data-title="{{ product.title | escape }}" data-label="{{ tx_ptitle | escape }}" data-category="{{ category }}" data-tier="{{ tier }}" data-diets="{{ diets }}" data-allergens="{{ allergens | escape }}" data-ingredients="{{ ingredients | escape }}">
   <div class="fn-dish__media">
     {%- if product.featured_image -%}
       {{ product.featured_image | image_url: width: 480 | image_tag: loading: 'lazy', widths: '240, 360, 480', sizes: '(min-width: 1100px) 22vw, 46vw', alt: tx_ptitle }}
@@ -25,6 +25,7 @@
       <span class="dish__ph" aria-hidden="true">{% render 'dish-placeholder', category: category %}</span>
     {%- endif -%}
     <span class="fn-count" data-fn-count hidden></span>
+    {%- if seasonal -%}<span class="fn-ribbon">{{ 'season.limited' | t }}</span>{%- endif -%}
     <div class="dish__blocked" role="note"><div><strong>{{ 'dish.blocked_title' | t }}</strong>{{ 'dish.blocked_text' | t }}</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
