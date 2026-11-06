@@ -196,6 +196,8 @@ let ad = aq({ action: 'admin' });
 const fin = ad.finance;
 ok('admin export: the finance block lists every order with its kind (plan / upgrade) and marks test orders', fin.orders.some((o) => o.test && o.kind === 'plan' && o.para === 'Sofía (prueba)') && fin.orders.filter((o) => o.test).length === 2, JSON.stringify(fin.orders.filter((o) => o.test)));
 ok('admin export: the test order shows in the orders list with both people', ad.orders.some((o) => /PRUEBA/.test(o.name) && /Sofía/.test(o.customer)) && ad.orders.some((o) => /PRUEBA/.test(o.name) && o.items.length > 0));
+const po = ad.orders.find((o) => /PRUEBA/.test(o.name) && /Sofía/.test(o.customer));
+ok('admin export: each order carries who it is for, phone, address, allergies and the dish of every weekday (to plan deliveries)', !!po && po.para === 'Sofía (prueba)' && po.holder === 'Cliente de Prueba' && po.phone === '9990000000' && /Calle 60/.test(po.address) && po.allergies === 'Cacahuate' && po.weeks.length >= 1 && po.weeks[0].slots.length === 5 && po.weeks[0].slots[0] !== '', JSON.stringify(po && { w: po.weeks, a: po.address }).slice(0, 300));
 ok('bad expenses are refused', aq({ action: 'expense_new', concept: '', amount: 10 }).error === 'bad_concept' && aq({ action: 'expense_new', concept: 'Pollo', amount: 0 }).error === 'bad_amount');
 r = aq({ action: 'expense_new', concept: 'Compra de proteínas', cat: 'Ingredientes', amount: '1850.50', date: '2026-11-05' });
 ok('an expense is saved in its own "Gastos" tab and returned', r.ok && r.expenses.length === 1 && r.expenses[0].amount === 1850.5 && r.expenses[0].cat === 'Ingredientes' && sheets.Gastos.rows.length === 2, JSON.stringify(r));

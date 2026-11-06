@@ -70,8 +70,8 @@ function adminData_() {
   var rows = function (name) { var sh = ss.getSheetByName(name); if (!sh || sh.getLastRow() < 2) return []; return sh.getRange(2, 1, sh.getLastRow() - 1, sh.getLastColumn()).getValues(); };
   var sel = loadSelections_(), pz = loadPauses_();
   var orders = loadOrders_().filter(function (o) { return o.isPlan; }).map(function (o) {
-    var byWeek = {}; resolveOrderWeeks_(o, sel, pz).forEach(function (w) { byWeek[w.week] = w.items; });
-    return { id: o.id, name: o.name, date: new Date(o.date).toISOString(), customer: o.para ? o.customer + ' · ' + o.para : o.customer, email: o.email, cid: o.cid, total: o.total, currency: o.currency, paid: o.paid,
+    var byWeek = {}, rw = resolveOrderWeeks_(o, sel, pz); rw.forEach(function (w) { byWeek[w.week] = w.items; });
+    return { holder: o.customer, para: o.para, phone: o.phone, address: o.address, allergies: o.allergies, dislikes: o.dislikes, weeks: rw.map(function (w) { return { week: w.week, slots: w.slots, src: w.src }; }), paused: rw.paused, id: o.id, name: o.name, date: new Date(o.date).toISOString(), customer: o.para ? o.customer + ' · ' + o.para : o.customer, email: o.email, cid: o.cid, total: o.total, currency: o.currency, paid: o.paid,
       plan: o.block ? 'block' : 'trial', items: countItems_(o.slots), byWeek: byWeek };
   });
   orders.sort(function (a, b) { return a.date < b.date ? 1 : -1; });

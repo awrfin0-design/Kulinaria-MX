@@ -71,3 +71,16 @@
 .adm-gate{max-width:480px;margin:3vh auto;padding:26px;overflow:hidden}
 .adm-gate h1{font-size:clamp(1.6rem,4.2vw,2.2rem);line-height:1.15;margin:0 0 10px;overflow-wrap:anywhere}
 .adm-gate p{margin:0 0 6px}.adm-gate label{margin:12px 0}
+
+/* deliveries calendar and explicit orders */
+.adm-cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-bottom:14px}
+.adm-cal>b{font-family:var(--font-label);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);text-align:center;padding:4px 0}
+.adm-day{position:relative;min-height:62px;border:1px solid var(--line);border-radius:14px;background:var(--bg-raised);color:var(--text);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:inherit}
+.adm-day span{font-size:.95rem}.adm-day.is-today{border-color:var(--accent)}.adm-day.is-sel{background:var(--accent-wash);border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.adm-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:block}.adm-day em{font-style:normal;font-size:.68rem;color:var(--text-muted)}
+.adm-stops{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.adm-stop{padding:12px 14px;border:1px solid var(--line);border-radius:14px}.adm-stop p{margin:4px 0}.adm-stop span,.adm-order__c span{font-family:var(--font-label);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-right:6px}
+.adm-stop__dish{font-weight:700;color:var(--accent)}
+.adm-orders{display:flex;flex-direction:column;gap:12px}.adm-order header{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin-bottom:6px}.adm-order__who{font-size:1.2rem}.adm-order__meta{color:var(--text-muted);font-size:.85rem}
+.adm-order__c{margin:3px 0}.adm-order summary{cursor:pointer;margin:8px 0;font-weight:700}
+.adm-wk{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}.adm-wk li{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-size:.9rem}.adm-wk em{font-style:normal;font-weight:700;min-width:54px}.adm-wk span b{color:var(--accent);margin-right:4px}

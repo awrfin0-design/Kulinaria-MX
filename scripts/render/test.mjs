@@ -1143,6 +1143,36 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.unroute('https://script.example/**'); await page.evaluate(() => document.getElementById('adm-fin').remove());
 }
 
+
+// =====================================================================  v45: admin "Entregas" (calendar with a dot per delivery day) and the explicit order list
+{
+  const K2 = require(path.join(ROOT, 'assets/kulinaria-admin.js'));
+  const ords = [{ id: '1', name: '#1001', date: '2026-11-04T12:00:00Z', holder: 'Ana Pérez', customer: 'Ana Pérez', para: '', phone: '999 111', address: 'Calle Lago 24, Mérida', allergies: 'Mariscos', dislikes: 'brócoli', paid: true, plan: 'block', total: 3600, items: [{ title: 'Pollo', qty: 2 }],
+      weeks: [{ week: '2026-11-09', slots: ['Pollo', '', 'Bowl', '', ''], src: 'pedido' }, { week: '2026-11-16', slots: ['Pollo', '', 'Bowl', '', ''], src: 'automática' }], paused: [] },
+    { id: '1-2', name: '#1001', date: '2026-11-04T12:00:00Z', holder: 'Ana Pérez', customer: 'Ana Pérez · Sofía', para: 'Sofía', phone: '999 111', address: 'Calle Lago 24, Mérida', allergies: 'Cacahuate', dislikes: '', paid: true, plan: 'trial', total: 1000, items: [{ title: 'Bowl', qty: 1 }], weeks: [{ week: '2026-11-09', slots: ['Bowl', '', '', '', ''], src: 'pedido' }], paused: [] },
+    { id: '9', name: '#9', date: '2026-11-04T12:00:00Z', holder: 'Luis', customer: 'Luis', para: '', phone: '', address: 'X', allergies: '', dislikes: '', paid: false, plan: 'trial', total: 1000, items: [], weeks: [{ week: '2026-11-09', slots: ['Pollo', '', '', '', ''], src: 'pedido' }], paused: [] }];
+  const by = K2.deliveriesByDate(ords);
+  ok('deliveries by day: a meal on each ordered weekday, per person (Monday 9 has two: Ana and Sofía), empty days and unpaid orders excluded', Object.keys(by).sort().join() === '2026-11-09,2026-11-11,2026-11-16,2026-11-18' && by['2026-11-09'].length === 2 && by['2026-11-09'].some((x) => x.who === 'Sofía' && x.allergies === 'Cacahuate') && by['2026-11-11'][0].dish === 'Bowl', JSON.stringify(Object.keys(by)));
+  await page.goto(`${URL0}#/home`); await page.evaluate(() => { sessionStorage.setItem('kx-admin-key', 'adm'); }); await page.reload(); await page.waitForTimeout(900);
+  await page.route('https://script.example/**', async (route) => { const q = Object.fromEntries(new URL(route.request().url()).searchParams); const body = q.action === 'admin' ? { ok: true, orders: ords, clients: [], recipes: null, finance: { orders: [], expenses: [] } } : { ok: true }; await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(body) }); });
+  await page.evaluate(() => { const d = document.createElement('div'); d.id = 'adm-del'; d.setAttribute('data-endpoint', 'https://script.example/exec'); d.setAttribute('data-lang', 'es'); document.body.appendChild(d); window.KXAdmin.mount(d); });
+  await page.waitForSelector('#adm-del [data-tab="6"]', { timeout: 8000 });
+  await page.click('#adm-del [data-tab="3"]'); await page.waitForTimeout(300);
+  ok('orders tab: the person (bold), who the account is, contact, address, allergies, what was ordered and the dish of each weekday, week by week', await page.evaluate(() => { const t = document.querySelector('#adm-del [data-orders-list]').innerText; return /Ana Pérez/.test(t) && /Sofía/.test(t) && /999 111/.test(t) && /Calle Lago 24/.test(t) && /Mariscos/.test(t) && /Lun/.test(t) && /Mié/.test(t) && /Bowl/.test(t) && !!document.querySelector('#adm-del .adm-order__who'); }));
+  await page.click('#adm-del [data-tab="6"]'); await page.waitForTimeout(300);
+  const calOk = await page.evaluate(() => ({ cal: !!document.querySelector('#adm-del [data-cal]'), dots: document.querySelectorAll('#adm-del .adm-day[data-has]').length }));
+  ok('deliveries tab: a calendar with a dot under every day that has deliveries', calOk.cal);
+  await page.evaluate(() => { const d = new Date(); });
+  // go to November 2026 (the data) whatever today is
+  const nowM = await page.evaluate(() => document.querySelector('#adm-del .adm-nav b').textContent);
+  for (let i = 0; i < 24 && !/noviembre 2026/i.test(await page.$eval('#adm-del .adm-nav b', (e) => e.textContent)); i++) { const cur = await page.$eval('#adm-del .adm-nav b', (e) => e.textContent); const yr = parseInt(cur.slice(-4), 10); await page.click(`#adm-del [data-m="${yr < 2026 ? 1 : -1}"]`); await page.waitForTimeout(80); }
+  await page.waitForTimeout(200);
+  ok('deliveries tab: November shows dots on 9, 11, 16 and 18 only', await page.evaluate(() => [...document.querySelectorAll('#adm-del .adm-day[data-has]')].map((b) => b.getAttribute('data-eday').slice(-2)).join() === '09,11,16,18'));
+  await page.click('#adm-del [data-eday="2026-11-09"]'); await page.waitForTimeout(250);
+  ok('deliveries tab: a day lists each stop with the person, address, phone, dishes and allergies, plus what to cook that day', await page.evaluate(() => { const t = document.querySelector('#adm-del [data-eday-detail]').innerText; return /Sofía/.test(t) && /Ana Pérez/.test(t) && /Calle Lago 24/.test(t) && /999 111/.test(t) && /Cacahuate/.test(t) && /Mariscos/.test(t) && /2 comidas/.test(t) && /Pollo ×1/.test(t) && /Bowl ×1/.test(t); }));
+  await page.unroute('https://script.example/**'); await page.evaluate(() => document.getElementById('adm-del').remove());
+}
+
 await browser.close();
 ok('no JS errors on any page', errors.length === 0, errors.slice(0, 5).join(' | '));
 const pass = results.filter((r) => r.ok).length;
