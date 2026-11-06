@@ -192,6 +192,9 @@ ok('expenses and test orders need the admin key', J(fn.doGet({ parameter: { acti
 const beforeRows = sheets.Pedidos.rows.length;
 r = aq({ action: 'sample_order' });
 ok('a fictitious paid order can be created from the admin page (two people + an upgrade)', r.ok && /^#PRUEBA/.test(r.name) && sheets.Pedidos.rows.length === beforeRows + 2, JSON.stringify(r));
+const afterOne = sheets.Pedidos.rows.length; aq({ action: 'sample_order' }); aq({ action: 'sample_order' });
+ok('clicking the test-order button again replaces the previous test order instead of piling up duplicates', sheets.Pedidos.rows.length === afterOne, afterOne + ' -> ' + sheets.Pedidos.rows.length);
+ok('Resumen counts ORDERS, not person rows (the family test order is one order)', (function () { const t = sheets.Resumen.rows.map((x) => x.join('|')).join('\n'); const m = /Pedidos registrados\|(\d+)/.exec(t); return m && Number(m[1]) === new Set(sheets.Pedidos.rows.slice(1).map((x) => x[1])).size; })());
 let ad = aq({ action: 'admin' });
 const fin = ad.finance;
 ok('admin export: the finance block lists every order with its kind (plan / upgrade) and marks test orders', fin.orders.some((o) => o.test && o.kind === 'plan' && o.para === 'Sofía (prueba)') && fin.orders.filter((o) => o.test).length === 2, JSON.stringify(fin.orders.filter((o) => o.test)));

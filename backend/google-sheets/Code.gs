@@ -548,7 +548,7 @@ function rebuildDeliveries_(now) {
   };
   var allOrders = loadOrders_(), paidOrders = allOrders.filter(function (o) { return o.paid; }), revenue = paidOrders.reduce(function (a, o) { return a + o.total; }, 0), custs = {};
   allOrders.forEach(function (o) { custs[o.cid || o.email || o.id] = 1; });
-  var totals = [['Totales generales'], ['Pedidos registrados', allOrders.length], ['Pedidos pagados', paidOrders.length], ['Pedidos pendientes de pago', allOrders.length - paidOrders.length], ['Ventas pagadas (MXN)', revenue], ['Ticket promedio (MXN)', paidOrders.length ? Math.round(revenue / paidOrders.length) : 0], ['Gastos registrados (MXN)', loadExpenses_().reduce(function (a, x) { return a + x.amount; }, 0)], ['Utilidad = ventas − gastos (MXN)', revenue - loadExpenses_().reduce(function (a, x) { return a + x.amount; }, 0)], ['Clientes con pedidos', Object.keys(custs).length], []];
+  var totals = [['Totales generales'], ['Pedidos registrados', distinct_(allOrders)], ['Pedidos pagados', distinct_(paidOrders)], ['Pedidos pendientes de pago', distinct_(allOrders) - distinct_(paidOrders)], ['Ventas pagadas (MXN)', revenue], ['Ticket promedio (MXN)', distinct_(paidOrders) ? Math.round(revenue / distinct_(paidOrders)) : 0], ['Gastos registrados (MXN)', loadExpenses_().reduce(function (a, x) { return a + x.amount; }, 0)], ['Utilidad = ventas − gastos (MXN)', revenue - loadExpenses_().reduce(function (a, x) { return a + x.amount; }, 0)], ['Clientes con pedidos', Object.keys(custs).length], []];
   r0 = writeBlock_(rs, r0, totals);
   r0 = writeBlock_(rs, r0, block('Esta semana', todayMon));
   if (nextMon !== todayMon) r0 = writeBlock_(rs, r0, block('Próxima semana', nextMon));
@@ -715,20 +715,31 @@ function adminApi_(p) {
         { title: 'Plan semanal Selecto', variant_title: '4 semanas', quantity: 1, price: '3600.00', properties: [{ name: '_platillos', value: '3× ' + dishA + ' | 1× ' + dishB + ' | 1× ' + dishD }, { name: '_para', value: 'yo' }, { name: '_dias', value: dias }, { name: '_alergias', value: 'Mariscos' }, { name: '_no_me_gustan', value: 'brócoli' }] },
         { title: 'Plan semanal Selecto', variant_title: '1 semana', quantity: 1, price: '1000.00', properties: [{ name: '_platillos', value: '2× ' + dishB + ' | 1× ' + dishC }, { name: '_para', value: 'p1' }, { name: '_para_nombre', value: 'Sofía (prueba)' }, { name: '_dias', value: diasS }, { name: '_alergias', value: 'Cacahuate' }] },
         { title: 'Mejora de platillo', variant_title: '+1 nivel', quantity: 1, price: '70.00', properties: [{ name: '_para', value: 'p1' }, { name: 'Mejora', value: dishC }] }] };
+    clearSamples_();                      // one test order at a time: a new one replaces the previous one
     lock.waitLock(20000);
     try { handleOrder_(order); } finally { lock.releaseLock(); }
     return { ok: true, name: order.name };
   }
   if (act === 'sample_clear') {
-    lock.waitLock(20000);
-    try {
-      var ss = SpreadsheetApp.getActiveSpreadsheet(), n = 0, ped = ss.getSheetByName('Pedidos'), ids = {};
-      if (ped && ped.getLastRow() > 1) for (var i = ped.getLastRow(); i >= 2; i--) { var nm = String(ped.getRange(i, 2).getValue()); if (/^#PRUEBA/.test(nm)) { ids[String(ped.getRange(i, 1).getValue()).split('-')[0]] = 1; ped.deleteRow(i); n++; } }
-      var pl = ss.getSheetByName('Platillos'); if (pl && pl.getLastRow() > 1) for (var j = pl.getLastRow(); j >= 2; j--) if (ids[String(pl.getRange(j, 1).getValue())]) pl.deleteRow(j);
-      var cl = ss.getSheetByName('Clientes'); if (cl && cl.getLastRow() > 1) for (var k = cl.getLastRow(); k >= 2; k--) if (String(cl.getRange(k, 6).getValue()).toLowerCase() === 'prueba@kulinariamx.com') cl.deleteRow(k);
-    } finally { lock.releaseLock(); }
-    try { rebuildDeliveries_(); } catch (e3) {}
-    return { ok: true, removed: n };
+    var removed = clearSamples_();
+    return { ok: true, removed: removed };
   }
   return { ok: false, error: 'unknown_action' };
 }
+
+/** removes every test order (#PRUEBA-…) with its dish rows and the test client; returns how many rows of Pedidos were removed */
+function clearSamples_() {
+  var lock = LockService.getScriptLock(); lock.waitLock(20000);
+  var n = 0;
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet(), ped = ss.getSheetByName('Pedidos'), ids = {};
+    if (ped && ped.getLastRow() > 1) for (var i = ped.getLastRow(); i >= 2; i--) { var nm = String(ped.getRange(i, 2).getValue()); if (/^#PRUEBA/.test(nm)) { ids[String(ped.getRange(i, 1).getValue()).split('-')[0]] = 1; ped.deleteRow(i); n++; } }
+    var pl = ss.getSheetByName('Platillos'); if (pl && pl.getLastRow() > 1) for (var j = pl.getLastRow(); j >= 2; j--) if (ids[String(pl.getRange(j, 1).getValue())]) pl.deleteRow(j);
+    var cl = ss.getSheetByName('Clientes'); if (cl && cl.getLastRow() > 1) for (var k = cl.getLastRow(); k >= 2; k--) if (String(cl.getRange(k, 6).getValue()).toLowerCase() === 'prueba@kulinariamx.com') cl.deleteRow(k);
+  } finally { lock.releaseLock(); }
+  try { rebuildDeliveries_(); } catch (e3) {}
+  return n;
+}
+
+/** number of different Shopify orders in a list of rows (an order for a family has one row per person) */
+function distinct_(rows) { var seen = {}, n = 0; rows.forEach(function (o) { if (!seen[o.name]) { seen[o.name] = 1; n++; } }); return n; }

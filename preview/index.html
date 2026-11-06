@@ -2550,6 +2550,10 @@ body .funnel:not(.funnel--teaser) .step.is-on::-webkit-scrollbar,body .funnel:no
 
 .adm-btn:disabled{opacity:.55;cursor:wait}
 [data-tools-msg]{margin:10px 0 0}
+
+.adm-ordergroup{border:1px solid var(--border-accent);border-radius:22px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.adm-ordergroup>h4{margin:2px 6px 0;font-size:1.05rem}.adm-ordergroup>h4 small{color:var(--text-muted);font-weight:400;margin-left:8px}
+.adm-ordergroup .adm-card{background:var(--bg-base)}
 </style></head>
 
   <body class="template-index">
@@ -20892,7 +20896,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
 
   var STR = {
     es: { title: 'Panel de administración', demo: 'Datos de demostración. Conecta el Google Sheet (docs/admin.md) para ver los pedidos reales.', tabs: ['Resumen', 'Lista de compras', 'Recetas', 'Pedidos', 'Descuentos', 'Finanzas', 'Entregas'],
-      oMonthTitle: 'Pedidos del mes', oSee: 'ver detalle',
+      oPeople: 'personas', oMonthTitle: 'Pedidos del mes', oSee: 'ver detalle',
       eTitle: 'Entregas', eNone: 'Sin entregas este día.', eMeals: 'comidas', eStops: 'paradas', eTotal: 'Total del día', eWho: 'Para', eHolder: 'Cuenta', ePhone: 'Teléfono', eAddr: 'Dirección', eAllergy: 'Alergias', eDislike: 'No le gusta', eCook: 'Platillos a cocinar ese día', eDemo: 'Conecta el Google Sheet para ver las entregas reales.', eDays: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'], eAuto: 'repite la selección anterior', oWho: 'Cliente', oContact: 'Contacto', oPlanTxt: 'Plan', oWeekly: 'Qué pidió, semana por semana', oPaid: 'Pagado', oUnpaid: 'Pendiente de pago', oNoDish: '—', oPaused: 'Semanas en pausa', oFor: 'Para',
       errReload: 'No se pudieron actualizar los datos (el script tardó o falló). Tu sesión sigue abierta.', retry: 'Reintentar',
       fBusy: 'Creando el pedido de prueba… puede tardar hasta 20 segundos, no cierres la página.', fBusyDel: 'Borrando…', fErrKey: 'La contraseña no coincide con ADMIN_KEY del Apps Script.', fErrNet: 'No se pudo conectar con el script. Revisa que la implementación esté publicada para «Cualquier persona».', fGoOrders: 'Ver en la pestaña Pedidos',
@@ -20906,7 +20910,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       key: 'Contraseña de administración', keyHelp: 'Es la clave ADMIN_KEY que configuraste en el Apps Script.', enter: 'Entrar', badKey: 'Contraseña incorrecta.', loading: 'Cargando…', error: 'No se pudieron cargar los datos', lock: 'Cerrar sesión',
       noRecipes: 'Aún no hay recetas.', cooking: 'Para cocinar', buyList: 'Ver lista de compras', thisWeek: 'Esta semana', nextWeek: 'Próxima semana' },
     en: { title: 'Admin panel', demo: 'Demo data. Connect the Google Sheet (docs/admin.md) to see real orders.', tabs: ['Summary', 'Shopping list', 'Recipes', 'Orders', 'Discounts', 'Finance', 'Deliveries'],
-      oMonthTitle: 'Orders this month', oSee: 'see detail',
+      oPeople: 'people', oMonthTitle: 'Orders this month', oSee: 'see detail',
       eTitle: 'Deliveries', eNone: 'No deliveries this day.', eMeals: 'meals', eStops: 'stops', eTotal: 'Day total', eWho: 'For', eHolder: 'Account', ePhone: 'Phone', eAddr: 'Address', eAllergy: 'Allergies', eDislike: 'Dislikes', eCook: 'Dishes to cook that day', eDemo: 'Connect the Google Sheet to see the real deliveries.', eDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], eAuto: 'repeats the previous selection', oWho: 'Client', oContact: 'Contact', oPlanTxt: 'Plan', oWeekly: 'What they ordered, week by week', oPaid: 'Paid', oUnpaid: 'Payment pending', oNoDish: '—', oPaused: 'Paused weeks', oFor: 'For',
       errReload: 'The data could not be refreshed (the script was slow or failed). Your session is still open.', retry: 'Retry',
       fBusy: 'Creating the test order… it can take up to 20 seconds, do not close the page.', fBusyDel: 'Deleting…', fErrKey: 'The password does not match ADMIN_KEY in the Apps Script.', fErrNet: 'Could not reach the script. Check the deployment is published for "Anyone".', fGoOrders: 'See it in the Orders tab',
@@ -20946,7 +20950,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       var wk = Object.keys(t.perWeek).sort(), wkMax = Math.max.apply(null, wk.map(function (k) { return t.perWeek[k]; }).concat([1]));
       return '<div class="adm-nav"><button data-m="-1" aria-label="‹">‹</button><b>' + esc(MONTHS[lang][S.month] + ' ' + S.year) + '</b><button data-m="1" aria-label="›">›</button></div>' +
         '<div class="adm-kpis">' +
-        '<button type="button" class="adm-kpi adm-kpi--btn' + (S.showOrders ? ' is-on' : '') + '" data-kpi="orders" data-kpi-orders aria-expanded="' + !!S.showOrders + '"><span>' + esc(T.orders) + ' · ' + T.oSee + '</span><b>' + esc(t.orders) + '</b></button>' + kpi(T.blocks, t.blocks, 'blocks') + kpi(T.trials, t.trials, 'trials') + kpi(T.clients, t.newClients, 'clients') +
+        '<button type="button" class="adm-kpi adm-kpi--btn' + (S.showOrders ? ' is-on' : '') + '" data-kpi="orders" data-kpi-orders aria-expanded="' + !!S.showOrders + '"><span>' + esc(T.orders) + ' · ' + T.oSee + '</span><b>' + esc(monthOrderCount()) + '</b></button>' + kpi(T.blocks, t.blocks, 'blocks') + kpi(T.trials, t.trials, 'trials') + kpi(T.clients, t.newClients, 'clients') +
         kpi(T.activeNow, activeBlocks(S.data.orders, cutoff, ymd(mondayOf(now))), 'active') + kpi(T.sales, money(t.revenue, lang), 'sales') + kpi(T.avg, money(t.avg, lang), 'avg') + '</div>' + (S.showOrders ? monthOrders() : '') +
         '<div class="adm-grid"><section class="adm-card"><h3>' + T.mix + '</h3><div class="adm-bar"><i style="width:' + pb + '%"></i></div><p class="adm-muted">' + t.blocks + ' ' + esc(T.blocks.toLowerCase()) + ' · ' + t.trials + ' ' + esc(T.trials.toLowerCase()) + '</p>' +
         '<h3>' + T.perWeek + '</h3><div class="adm-spark">' + wk.map(function (k) { return '<span title="' + esc(weekLabel(k)) + '"><i style="height:' + Math.round((t.perWeek[k] / wkMax) * 100) + '%"></i><em>' + t.perWeek[k] + '</em></span>'; }).join('') + '</div></section>' +
@@ -20994,7 +20998,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           return '<li><em>' + lab + '</em> ' + (parts.length ? parts.join('') : '<span class="adm-muted">' + T.oNoDish + '</span>') + (w.src === 'automática' ? ' <small class="adm-muted">(' + T.eAuto + ')</small>' : '') + '</li>';
         }).join('') + '</ul>' + (o.paused && o.paused.length ? '<p class="adm-muted">' + T.oPaused + ': ' + o.paused.join(', ') + '</p>' : '');
       };
-      return '<div class="adm-orders" data-orders-list>' + rows.map(function (o) {
+      var cards = function (o, openIt) {
         var d = new Date(o.date), who = o.para || o.holder || o.customer;
         return '<article class="adm-card adm-order">' +
           '<header><b class="adm-order__who">' + esc(who) + '</b>' + (o.para ? ' <small>(' + T.eHolder + ': ' + esc(o.holder || '') + ')</small>' : '') + '<span class="adm-order__meta">' + esc(o.name || o.id) + ' · ' + d.getDate() + ' ' + MONTHS[lang][d.getMonth()].slice(0, 3) + ' · ' + (o.plan === 'block' ? T.block : T.trial) + ' · ' + money(o.total, lang) + ' · ' + (o.paid ? T.oPaid : T.oUnpaid) + '</span></header>' +
@@ -21002,13 +21006,25 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           '<p class="adm-order__c"><span>' + T.eAddr + '</span> ' + esc(o.address || '—') + '</p>' +
           (o.allergies ? '<p class="adm-warn adm-order__c"><span>' + T.eAllergy + '</span> ' + esc(o.allergies) + '</p>' : '') +
           '<p class="adm-order__c"><span>' + T.items + '</span> ' + esc((o.items || []).map(function (x) { return x.qty + '× ' + x.title; }).join(' · ') || '—') + '</p>' +
-          '<details' + (rows.indexOf(o) === 0 ? ' open' : '') + '><summary>' + T.oWeekly + '</summary>' + weeks(o) + '</details></article>';
+          '<details' + (openIt ? ' open' : '') + '><summary>' + T.oWeekly + '</summary>' + weeks(o) + '</details></article>';
+      };
+      var groups = [], idx = {};
+      rows.forEach(function (o) { var k = o.name || o.id; if (idx[k] === undefined) { idx[k] = groups.length; groups.push([]); } groups[idx[k]].push(o); });
+      return '<div class="adm-orders" data-orders-list>' + groups.map(function (g, gi) {
+        if (g.length === 1) return cards(g[0], gi === 0);
+        var tot = g.reduce(function (a, x) { return a + (x.total || 0); }, 0);
+        return '<section class="adm-ordergroup"><h4>' + esc(g[0].name || g[0].id) + ' <small>' + g.length + ' ' + T.oPeople + ' · ' + money(tot, lang) + '</small></h4>' + g.map(function (o) { return cards(o, gi === 0); }).join('') + '</section>';
       }).join('') + '</div>';
     }
     function viewOrders() { return orderCards(S.data.orders.slice(0, 200)); }
+    var monthOrderCount = function () {
+      var key = S.year + '-' + String(S.month + 1).padStart(2, '0'), seen = {};
+      S.data.orders.forEach(function (o) { if (String(o.date).slice(0, 7) === key) seen[o.name || o.id] = 1; });
+      return Object.keys(seen).length;
+    };
     var monthOrders = function () {
       var key = S.year + '-' + String(S.month + 1).padStart(2, '0'), rows = S.data.orders.filter(function (o) { return String(o.date).slice(0, 7) === key; });
-      return '<section class="adm-card" data-month-orders><h3>' + T.oMonthTitle + ' · ' + esc(MONTHS[lang][S.month] + ' ' + S.year) + ' <small>' + rows.length + '</small></h3>' + orderCards(rows) + '</section>';
+      return '<section class="adm-card" data-month-orders><h3>' + T.oMonthTitle + ' · ' + esc(MONTHS[lang][S.month] + ' ' + S.year) + ' <small>' + monthOrderCount() + '</small></h3>' + orderCards(rows) + '</section>';
     };
 
     function viewDiscounts() {

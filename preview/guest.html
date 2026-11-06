@@ -2543,6 +2543,17 @@ body .funnel:not(.funnel--teaser) .step.is-on::-webkit-scrollbar,body .funnel:no
 .adm-kpi--btn{text-align:left;cursor:pointer;font:inherit;color:inherit;transition:border-color .2s,background .2s}
 .adm-kpi--btn:hover,.adm-kpi--btn.is-on{border-color:var(--accent);background:var(--accent-wash)}
 [data-month-orders]{margin:0 0 18px}
+
+/* KPI tiles: labels reserve two lines so every number lines up */
+.adm-kpi{display:flex;flex-direction:column;justify-content:space-between}
+.adm-kpi span{min-height:2.5em}
+
+.adm-btn:disabled{opacity:.55;cursor:wait}
+[data-tools-msg]{margin:10px 0 0}
+
+.adm-ordergroup{border:1px solid var(--border-accent);border-radius:22px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.adm-ordergroup>h4{margin:2px 6px 0;font-size:1.05rem}.adm-ordergroup>h4 small{color:var(--text-muted);font-weight:400;margin-left:8px}
+.adm-ordergroup .adm-card{background:var(--bg-base)}
 </style></head>
 
   <body class="template-index">
@@ -20313,8 +20324,10 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
 
   var STR = {
     es: { title: 'Panel de administración', demo: 'Datos de demostración. Conecta el Google Sheet (docs/admin.md) para ver los pedidos reales.', tabs: ['Resumen', 'Lista de compras', 'Recetas', 'Pedidos', 'Descuentos', 'Finanzas', 'Entregas'],
-      oMonthTitle: 'Pedidos del mes', oSee: 'ver detalle',
+      oPeople: 'personas', oMonthTitle: 'Pedidos del mes', oSee: 'ver detalle',
       eTitle: 'Entregas', eNone: 'Sin entregas este día.', eMeals: 'comidas', eStops: 'paradas', eTotal: 'Total del día', eWho: 'Para', eHolder: 'Cuenta', ePhone: 'Teléfono', eAddr: 'Dirección', eAllergy: 'Alergias', eDislike: 'No le gusta', eCook: 'Platillos a cocinar ese día', eDemo: 'Conecta el Google Sheet para ver las entregas reales.', eDays: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'], eAuto: 'repite la selección anterior', oWho: 'Cliente', oContact: 'Contacto', oPlanTxt: 'Plan', oWeekly: 'Qué pidió, semana por semana', oPaid: 'Pagado', oUnpaid: 'Pendiente de pago', oNoDish: '—', oPaused: 'Semanas en pausa', oFor: 'Para',
+      errReload: 'No se pudieron actualizar los datos (el script tardó o falló). Tu sesión sigue abierta.', retry: 'Reintentar',
+      fBusy: 'Creando el pedido de prueba… puede tardar hasta 20 segundos, no cierres la página.', fBusyDel: 'Borrando…', fErrKey: 'La contraseña no coincide con ADMIN_KEY del Apps Script.', fErrNet: 'No se pudo conectar con el script. Revisa que la implementación esté publicada para «Cualquier persona».', fGoOrders: 'Ver en la pestaña Pedidos',
       fTitle: 'Finanzas del mes', fIn: 'Ingresos (pagados)', fPlans: 'Planes', fUp: 'Mejoras de platillo', fOther: 'Otros', fPend: 'Por cobrar', fOut: 'Gastos', fNet: 'Utilidad', fOrders: 'Ingresos por pedido', fNone: 'No hay movimientos en este mes.', fExp: 'Gastos del mes', fAdd: 'Registrar un gasto', fDate: 'Fecha', fConcept: 'Concepto', fCat: 'Categoría', fAmount: 'Monto (MXN)', fSave: 'Guardar gasto', fDel: 'Borrar', fType: 'Tipo', fPaid: 'Pagado', fTest: 'PRUEBA', fTools: 'Pedido de prueba', fToolsP: 'Crea un pedido ficticio y pagado (dos personas y una mejora) para ver cómo se llenan la hoja de Google y este panel. Se puede borrar después.', fMake: 'Crear pedido de prueba', fClear: 'Borrar pedidos de prueba', fMade: 'Pedido de prueba creado: ', fCleared: 'Pedidos de prueba borrados: ', fSaved: 'Gasto guardado.', fErrC: 'Escribe el concepto del gasto.', fErrA: 'Escribe un monto mayor a cero.', fNoData: 'Conecta el Google Sheet para ver las finanzas.', fCats: ['Ingredientes', 'Empaques', 'Nómina', 'Reparto', 'Marketing', 'Servicios', 'Otros'],
       dTitle: 'Generar código de descuento', dHelp: 'Crea un código y dile cuántas veces se puede usar en total. Shopify lo aplica en el pago y deja de aceptarlo cuando se agotan los usos.', dCode: 'Código', dGen: 'Sugerir código', dKind: 'Tipo', dPercent: 'Porcentaje (%)', dAmount: 'Monto fijo (MXN)', dValue: 'Valor', dUses: 'Usos en total', dEnds: 'Vence (opcional)', dCreate: 'Crear código', dList: 'Códigos creados', dUsed: 'Usos', dStatus: 'Estado', dOff: 'Desactivar', dNone: 'Aún no hay códigos.', dDemo: 'Conecta el Google Sheet (docs/setup-checklist.md) para crear códigos reales.', dOk: 'Código creado: ', dDone: 'Código desactivado.', dErrTok: 'Falta conectar Shopify: en el Apps Script agrega las propiedades SHOPIFY_STORE y SHOPIFY_TOKEN (ver docs/setup-checklist.md).', dErrCode: 'El código debe tener de 3 a 30 letras, números, guiones o guion bajo.', dErrVal: 'Escribe un valor válido (porcentaje de 1 a 100).', dErrUses: 'Escribe cuántas veces se puede usar (1 o más).', dErr: 'No se pudo completar: ', dActive: 'Activo', dExpired: 'Agotado o vencido', dScheduled: 'Programado', dUnlimited: '—',
       orders: 'Pedidos del mes', blocks: 'Planes de 4 semanas', trials: 'Planes de 1 semana', clients: 'Clientes nuevos', sales: 'Ventas', avg: 'Ticket promedio', plates: 'Platillos a cocinar', top: 'Platillos más pedidos', mix: 'Bloque vs. suelto',
@@ -20325,8 +20338,10 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       key: 'Contraseña de administración', keyHelp: 'Es la clave ADMIN_KEY que configuraste en el Apps Script.', enter: 'Entrar', badKey: 'Contraseña incorrecta.', loading: 'Cargando…', error: 'No se pudieron cargar los datos', lock: 'Cerrar sesión',
       noRecipes: 'Aún no hay recetas.', cooking: 'Para cocinar', buyList: 'Ver lista de compras', thisWeek: 'Esta semana', nextWeek: 'Próxima semana' },
     en: { title: 'Admin panel', demo: 'Demo data. Connect the Google Sheet (docs/admin.md) to see real orders.', tabs: ['Summary', 'Shopping list', 'Recipes', 'Orders', 'Discounts', 'Finance', 'Deliveries'],
-      oMonthTitle: 'Orders this month', oSee: 'see detail',
+      oPeople: 'people', oMonthTitle: 'Orders this month', oSee: 'see detail',
       eTitle: 'Deliveries', eNone: 'No deliveries this day.', eMeals: 'meals', eStops: 'stops', eTotal: 'Day total', eWho: 'For', eHolder: 'Account', ePhone: 'Phone', eAddr: 'Address', eAllergy: 'Allergies', eDislike: 'Dislikes', eCook: 'Dishes to cook that day', eDemo: 'Connect the Google Sheet to see the real deliveries.', eDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], eAuto: 'repeats the previous selection', oWho: 'Client', oContact: 'Contact', oPlanTxt: 'Plan', oWeekly: 'What they ordered, week by week', oPaid: 'Paid', oUnpaid: 'Payment pending', oNoDish: '—', oPaused: 'Paused weeks', oFor: 'For',
+      errReload: 'The data could not be refreshed (the script was slow or failed). Your session is still open.', retry: 'Retry',
+      fBusy: 'Creating the test order… it can take up to 20 seconds, do not close the page.', fBusyDel: 'Deleting…', fErrKey: 'The password does not match ADMIN_KEY in the Apps Script.', fErrNet: 'Could not reach the script. Check the deployment is published for "Anyone".', fGoOrders: 'See it in the Orders tab',
       fTitle: 'Finances this month', fIn: 'Income (paid)', fPlans: 'Plans', fUp: 'Dish upgrades', fOther: 'Other', fPend: 'To collect', fOut: 'Expenses', fNet: 'Profit', fOrders: 'Income by order', fNone: 'No movements this month.', fExp: 'Expenses this month', fAdd: 'Record an expense', fDate: 'Date', fConcept: 'Concept', fCat: 'Category', fAmount: 'Amount (MXN)', fSave: 'Save expense', fDel: 'Delete', fType: 'Type', fPaid: 'Paid', fTest: 'TEST', fTools: 'Test order', fToolsP: 'Creates a fictitious paid order (two people and an upgrade) so you can see how the Google Sheet and this panel fill in. You can delete it afterwards.', fMake: 'Create test order', fClear: 'Delete test orders', fMade: 'Test order created: ', fCleared: 'Test orders deleted: ', fSaved: 'Expense saved.', fErrC: 'Enter the expense concept.', fErrA: 'Enter an amount above zero.', fNoData: 'Connect the Google Sheet to see the finances.', fCats: ['Ingredients', 'Packaging', 'Payroll', 'Delivery', 'Marketing', 'Utilities', 'Other'],
       dTitle: 'Generate a discount code', dHelp: 'Create a code and say how many times it can be used in total. Shopify applies it at checkout and stops accepting it when the uses run out.', dCode: 'Code', dGen: 'Suggest a code', dKind: 'Type', dPercent: 'Percentage (%)', dAmount: 'Fixed amount (MXN)', dValue: 'Value', dUses: 'Total uses', dEnds: 'Expires (optional)', dCreate: 'Create code', dList: 'Codes created', dUsed: 'Uses', dStatus: 'Status', dOff: 'Deactivate', dNone: 'No codes yet.', dDemo: 'Connect the Google Sheet (docs/setup-checklist.md) to create real codes.', dOk: 'Code created: ', dDone: 'Code deactivated.', dErrTok: 'Shopify is not connected: add the SHOPIFY_STORE and SHOPIFY_TOKEN properties in the Apps Script (see docs/setup-checklist.md).', dErrCode: 'The code needs 3 to 30 letters, numbers, hyphens or underscores.', dErrVal: 'Enter a valid value (percentage from 1 to 100).', dErrUses: 'Enter how many times it can be used (1 or more).', dErr: 'Could not complete: ', dActive: 'Active', dExpired: 'Used up or expired', dScheduled: 'Scheduled', dUnlimited: '—',
       orders: 'Orders this month', blocks: '4-week blocks', trials: 'Trial weeks (loose)', clients: 'New clients', sales: 'Sales', avg: 'Average ticket', plates: 'Dishes to cook', top: 'Most ordered dishes', mix: 'Block vs loose',
@@ -20363,7 +20378,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       var wk = Object.keys(t.perWeek).sort(), wkMax = Math.max.apply(null, wk.map(function (k) { return t.perWeek[k]; }).concat([1]));
       return '<div class="adm-nav"><button data-m="-1" aria-label="‹">‹</button><b>' + esc(MONTHS[lang][S.month] + ' ' + S.year) + '</b><button data-m="1" aria-label="›">›</button></div>' +
         '<div class="adm-kpis">' +
-        '<button type="button" class="adm-kpi adm-kpi--btn' + (S.showOrders ? ' is-on' : '') + '" data-kpi="orders" data-kpi-orders aria-expanded="' + !!S.showOrders + '"><span>' + esc(T.orders) + ' · ' + T.oSee + '</span><b>' + esc(t.orders) + '</b></button>' + kpi(T.blocks, t.blocks, 'blocks') + kpi(T.trials, t.trials, 'trials') + kpi(T.clients, t.newClients, 'clients') +
+        '<button type="button" class="adm-kpi adm-kpi--btn' + (S.showOrders ? ' is-on' : '') + '" data-kpi="orders" data-kpi-orders aria-expanded="' + !!S.showOrders + '"><span>' + esc(T.orders) + ' · ' + T.oSee + '</span><b>' + esc(monthOrderCount()) + '</b></button>' + kpi(T.blocks, t.blocks, 'blocks') + kpi(T.trials, t.trials, 'trials') + kpi(T.clients, t.newClients, 'clients') +
         kpi(T.activeNow, activeBlocks(S.data.orders, cutoff, ymd(mondayOf(now))), 'active') + kpi(T.sales, money(t.revenue, lang), 'sales') + kpi(T.avg, money(t.avg, lang), 'avg') + '</div>' + (S.showOrders ? monthOrders() : '') +
         '<div class="adm-grid"><section class="adm-card"><h3>' + T.mix + '</h3><div class="adm-bar"><i style="width:' + pb + '%"></i></div><p class="adm-muted">' + t.blocks + ' ' + esc(T.blocks.toLowerCase()) + ' · ' + t.trials + ' ' + esc(T.trials.toLowerCase()) + '</p>' +
         '<h3>' + T.perWeek + '</h3><div class="adm-spark">' + wk.map(function (k) { return '<span title="' + esc(weekLabel(k)) + '"><i style="height:' + Math.round((t.perWeek[k] / wkMax) * 100) + '%"></i><em>' + t.perWeek[k] + '</em></span>'; }).join('') + '</div></section>' +
@@ -20411,7 +20426,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           return '<li><em>' + lab + '</em> ' + (parts.length ? parts.join('') : '<span class="adm-muted">' + T.oNoDish + '</span>') + (w.src === 'automática' ? ' <small class="adm-muted">(' + T.eAuto + ')</small>' : '') + '</li>';
         }).join('') + '</ul>' + (o.paused && o.paused.length ? '<p class="adm-muted">' + T.oPaused + ': ' + o.paused.join(', ') + '</p>' : '');
       };
-      return '<div class="adm-orders" data-orders-list>' + rows.map(function (o) {
+      var cards = function (o, openIt) {
         var d = new Date(o.date), who = o.para || o.holder || o.customer;
         return '<article class="adm-card adm-order">' +
           '<header><b class="adm-order__who">' + esc(who) + '</b>' + (o.para ? ' <small>(' + T.eHolder + ': ' + esc(o.holder || '') + ')</small>' : '') + '<span class="adm-order__meta">' + esc(o.name || o.id) + ' · ' + d.getDate() + ' ' + MONTHS[lang][d.getMonth()].slice(0, 3) + ' · ' + (o.plan === 'block' ? T.block : T.trial) + ' · ' + money(o.total, lang) + ' · ' + (o.paid ? T.oPaid : T.oUnpaid) + '</span></header>' +
@@ -20419,13 +20434,25 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           '<p class="adm-order__c"><span>' + T.eAddr + '</span> ' + esc(o.address || '—') + '</p>' +
           (o.allergies ? '<p class="adm-warn adm-order__c"><span>' + T.eAllergy + '</span> ' + esc(o.allergies) + '</p>' : '') +
           '<p class="adm-order__c"><span>' + T.items + '</span> ' + esc((o.items || []).map(function (x) { return x.qty + '× ' + x.title; }).join(' · ') || '—') + '</p>' +
-          '<details' + (rows.indexOf(o) === 0 ? ' open' : '') + '><summary>' + T.oWeekly + '</summary>' + weeks(o) + '</details></article>';
+          '<details' + (openIt ? ' open' : '') + '><summary>' + T.oWeekly + '</summary>' + weeks(o) + '</details></article>';
+      };
+      var groups = [], idx = {};
+      rows.forEach(function (o) { var k = o.name || o.id; if (idx[k] === undefined) { idx[k] = groups.length; groups.push([]); } groups[idx[k]].push(o); });
+      return '<div class="adm-orders" data-orders-list>' + groups.map(function (g, gi) {
+        if (g.length === 1) return cards(g[0], gi === 0);
+        var tot = g.reduce(function (a, x) { return a + (x.total || 0); }, 0);
+        return '<section class="adm-ordergroup"><h4>' + esc(g[0].name || g[0].id) + ' <small>' + g.length + ' ' + T.oPeople + ' · ' + money(tot, lang) + '</small></h4>' + g.map(function (o) { return cards(o, gi === 0); }).join('') + '</section>';
       }).join('') + '</div>';
     }
     function viewOrders() { return orderCards(S.data.orders.slice(0, 200)); }
+    var monthOrderCount = function () {
+      var key = S.year + '-' + String(S.month + 1).padStart(2, '0'), seen = {};
+      S.data.orders.forEach(function (o) { if (String(o.date).slice(0, 7) === key) seen[o.name || o.id] = 1; });
+      return Object.keys(seen).length;
+    };
     var monthOrders = function () {
       var key = S.year + '-' + String(S.month + 1).padStart(2, '0'), rows = S.data.orders.filter(function (o) { return String(o.date).slice(0, 7) === key; });
-      return '<section class="adm-card" data-month-orders><h3>' + T.oMonthTitle + ' · ' + esc(MONTHS[lang][S.month] + ' ' + S.year) + ' <small>' + rows.length + '</small></h3>' + orderCards(rows) + '</section>';
+      return '<section class="adm-card" data-month-orders><h3>' + T.oMonthTitle + ' · ' + esc(MONTHS[lang][S.month] + ' ' + S.year) + ' <small>' + monthOrderCount() + '</small></h3>' + orderCards(rows) + '</section>';
     };
 
     function viewDiscounts() {
@@ -20468,7 +20495,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         return '<tr><td>' + esc(x.date) + '</td><td>' + esc(x.concept) + '</td><td>' + esc(x.cat) + '</td><td>' + money(x.amount, lang) + '</td><td><button class="adm-btn ghost" data-expdel="' + esc(x.id) + '">' + T.fDel + '</button></td></tr>'; }).join('') + '</tbody></table></div>' : '<p class="adm-empty">' + T.fNone + '</p>';
       var form = '<section class="adm-card"><h3>' + T.fAdd + '</h3><form class="adm-form" data-expform><label>' + T.fDate + '<input name="date" type="date" value="' + ymd(now) + '"></label><label>' + T.fConcept + '<input name="concept" maxlength="120" required></label>' +
         '<label>' + T.fCat + '<select name="cat">' + T.fCats.map(function (c) { return '<option>' + esc(c) + '</option>'; }).join('') + '</select></label><label>' + T.fAmount + '<input name="amount" type="number" min="1" step="0.01" required></label><button class="adm-btn" type="submit">' + T.fSave + '</button></form></section>';
-      var tools = endpoint ? '<section class="adm-card"><h3>' + T.fTools + '</h3><p class="adm-muted">' + T.fToolsP + '</p><div class="adm-inline"><button class="adm-btn" data-sample="new">' + T.fMake + '</button><button class="adm-btn ghost" data-sample="clear">' + T.fClear + '</button></div></section>' : '';
+      var tools = endpoint ? '<section class="adm-card"><h3>' + T.fTools + '</h3><p class="adm-muted">' + T.fToolsP + '</p><div class="adm-inline"><button class="adm-btn" data-sample="new">' + T.fMake + '</button><button class="adm-btn ghost" data-sample="clear">' + T.fClear + '</button></div><p class="' + (S.fbad ? 'adm-warn' : 'adm-muted') + '" data-tools-msg role="status"' + (S.fmsg ? '' : ' hidden') + '>' + esc(S.fmsg) + '</p></section>' : '';
       return head + msg + '<h3 class="adm-cat">' + T.fOrders + '</h3>' + orders + '<h3 class="adm-cat">' + T.fExp + '</h3>' + exps + '<div class="adm-grid" style="margin-top:14px">' + form + tools + '</div>';
     }
     function viewDeliveries() {
@@ -20500,7 +20527,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     }
     var fCall = function (params, cb) { dCall(params, cb); };
     function render() {
-      var banner = S.data.demo ? '<p class="adm-demo">' + T.demo + '</p>' : '';
+      var banner = (S.data.demo ? '<p class="adm-demo">' + T.demo + '</p>' : '') + (S.loadErr ? '<p class="adm-warn" data-load-err>' + T.errReload + ' <button class="adm-btn ghost" type="button" data-retry>' + T.retry + '</button></p>' : '');
       var body = [viewSummary, viewShopping, viewRecipes, viewOrders, viewDiscounts, viewFinance, viewDeliveries][S.tab]();
       el.innerHTML = '<header class="adm-head"><h1>' + T.title + '</h1><div class="adm-tabs" role="tablist">' + T.tabs.map(function (n, i) { return '<button role="tab" aria-selected="' + (S.tab === i) + '" data-tab="' + i + '">' + n + '</button>'; }).join('') + '</div></header>' + banner + '<div class="adm-body">' + body + '</div>';
     }
@@ -20509,12 +20536,15 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       var t = e.target.closest('button'); if (!t) return;
       if (t.hasAttribute('data-tab')) { S.tab = +t.getAttribute('data-tab'); render(); if (S.tab === 4 && S.disc === null) dLoad(); return; }
       if (t.hasAttribute('data-dgen')) { var cf = el.querySelector('[data-discform] [name=code]'), w = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', c2 = 'KUL'; for (var gi = 0; gi < 5; gi++) c2 += w.charAt(Math.floor(Math.random() * w.length)); cf.value = c2; return; }
+      if (t.hasAttribute('data-retry')) { load(adminKey, true); return; }
       if (t.hasAttribute('data-kpi-orders')) { S.showOrders = !S.showOrders; render(); return; }
       if (t.hasAttribute('data-eday')) { S.eday = t.getAttribute('data-eday'); render(); return; }
       if (t.hasAttribute('data-expdel')) { fCall({ action: 'expense_del', id: t.getAttribute('data-expdel') }, function (j) { if (j.ok) S.data.finance.expenses = j.expenses; S.fmsg = j.ok ? '' : String(j.error); S.fbad = !j.ok; render(); }); return; }
       if (t.hasAttribute('data-sample')) {
-        var mk = t.getAttribute('data-sample') === 'new';
-        fCall({ action: mk ? 'sample_order' : 'sample_clear' }, function (j) { S.fmsg = j.ok ? (mk ? T.fMade + j.name : T.fCleared + j.removed) : String(j.error); S.fbad = !j.ok; if (j.ok) { load(adminKey); } else render(); });
+        var mk = t.getAttribute('data-sample') === 'new', tm = el.querySelector('[data-tools-msg]');
+        el.querySelectorAll('[data-sample]').forEach(function (b) { b.disabled = true; });
+        if (tm) { tm.hidden = false; tm.className = 'adm-muted'; tm.textContent = mk ? T.fBusy : T.fBusyDel; }
+        fCall({ action: mk ? 'sample_order' : 'sample_clear' }, function (j) { S.fmsg = j.ok ? (mk ? T.fMade + j.name : T.fCleared + j.removed) : (j.error === 'forbidden' ? T.fErrKey : j.error === 'net' ? T.fErrNet : String(j.error)); S.fbad = !j.ok; if (j.ok) { load(adminKey, true); } else render(); });
         return;
       }
       if (t.hasAttribute('data-doff')) { dCall({ action: 'discount_off', id: t.getAttribute('data-doff') }, function (j) { S.discMsg = j.ok ? T.dDone : dErr(j); S.discBad = !j.ok; S.disc = null; render(); dLoad(); }); return; }
@@ -20563,16 +20593,24 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       el.innerHTML = '<div class="adm-gate"><h1>' + T.title + '</h1><p>' + T.keyHelp + '</p><form data-keyform><label>' + T.key + '<input type="password" autocomplete="current-password" required></label><button class="adm-btn" type="submit">' + T.enter + '</button></form>' + (msg ? '<p class="adm-warn" role="alert">' + msg + '</p>' : '') + '</div>';
       el.querySelector('[data-keyform]').addEventListener('submit', function (ev) { ev.preventDefault(); var k = el.querySelector('input').value; try { sessionStorage.setItem('kx-admin-key', k); } catch (x) {} load(k); });
     }
-    function load(key) {
+    function load(key, silent, tries) {
       adminKey = key || '';
       if (!endpoint) { S.data = demoData(now, recipes); render(); return; }
-      el.innerHTML = '<p class="adm-empty">' + T.loading + '</p>';
+      if (!silent || !S.data) el.innerHTML = '<p class="adm-empty">' + T.loading + '</p>';
       var url = endpoint + (endpoint.indexOf('?') > -1 ? '&' : '?') + 'action=admin&key=' + encodeURIComponent(key || '');
+      var fail = function () {                 // network error, timeout or an error page from the script: keep the session and the data on screen
+        if (!(tries > 0)) { setTimeout(function () { load(key, true, 1); }, 2500); return; }
+        if (S.data) { S.loadErr = true; render(); } else gate(T.error);
+      };
       fetch(url).then(function (r) { return r.json(); }).then(function (j) {
-        if (!j.ok) { try { sessionStorage.removeItem('kx-admin-key'); } catch (x) {} gate(j.error === 'forbidden' ? T.badKey : T.error); return; }
+        if (!j.ok) {
+          if (j.error === 'forbidden') { try { sessionStorage.removeItem('kx-admin-key'); } catch (x) {} gate(T.badKey); return; }
+          fail(); return;
+        }
         if (j.recipes && j.recipes.length) recipes = normalizeRecipes(j.recipes);
+        S.loadErr = false;
         S.data = { orders: attachWeeklies(j.orders || [], j.selections || [], cutoff), clients: j.clients || [], finance: j.finance || null, demo: false }; render();
-      }).catch(function () { gate(T.error); });
+      }, fail);
     }
     var saved = ''; try { saved = sessionStorage.getItem('kx-admin-key') || ''; } catch (e) {}
     if (!endpoint) load(''); else if (saved) load(saved); else gate('');
