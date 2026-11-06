@@ -1089,7 +1089,7 @@
         for (var i = 0; i < MEALS; i++) {
           var li = document.createElement('li'), b = document.createElement('button'), x = document.createElement('span');
           b.type = 'button'; b.className = 'fn-day'; b.setAttribute('data-fn-day-btn', i);
-          b.innerHTML = '<i class="fn-day__thumb" aria-hidden="true"></i><span class="fn-day__d"></span><span class="fn-day__dish"></span>';
+          b.innerHTML = '<i class="fn-day__thumb" aria-hidden="true"></i><span class="fn-day__d"></span><span class="fn-day__dish"></span><span class="fn-day__ing"></span>';
           x.className = 'fn-day__x'; x.setAttribute('data-fn-day-x', i); x.setAttribute('role', 'button'); x.tabIndex = 0; x.textContent = '×'; x.hidden = true;
           var ed = document.createElement('span'); ed.className = 'fn-day__e'; ed.setAttribute('data-fn-day-edit', i); ed.setAttribute('role', 'button'); ed.tabIndex = 0; ed.textContent = '✎'; ed.hidden = true;
           li.appendChild(b); li.appendChild(x); li.appendChild(ed); weekBox.appendChild(li);
@@ -1102,6 +1102,7 @@
           $('.fn-day__d', b).textContent = dayShort(i);
           var dish = $('.fn-day__dish', b), thumb = $('.fn-day__thumb', b), lv = levelOf(d);
           dish.textContent = d ? lab(d) + (lv ? ' · +' + money(upg(lv)) : '') : '—';
+          var ingEl = $('.fn-day__ing', b); if (ingEl) { var ig = d ? (d.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean) : [], mt0 = d ? modsText(i) : ''; ingEl.textContent = (ig.length ? ig.slice(0, 7).join(' · ') : '') + (mt0 ? '  ✎ ' + mt0 : ''); }
           var img = d && $('img', d); thumb.style.backgroundImage = img ? 'url("' + (img.currentSrc || img.src) + '")' : '';
           b.classList.toggle('is-set', !!d); b.classList.toggle('is-active', i === st.active); b.classList.toggle('has-warn', !!(d && d.classList.contains('is-warned')));
           b.setAttribute('aria-pressed', i === st.active ? 'true' : 'false');
@@ -1208,7 +1209,7 @@
         var xb = e.target.closest ? e.target.closest('[data-fn-day-x]') : null;
         if (xb) { var xi = +xb.getAttribute('data-fn-day-x'); st.days[xi] = ''; st.active = xi; say(''); persist(); render(); return; }
         var eb = e.target.closest ? e.target.closest('[data-fn-day-edit]') : null;
-        if (eb) { var ei = +eb.getAttribute('data-fn-day-edit'); st.active = ei; modsOpen = modsOpen === ei ? -1 : ei; modsKey = ''; if (st.step < 1) st.step = 1; persist(); render(); return; }
+        if (eb) { var ei = +eb.getAttribute('data-fn-day-edit'); st.active = ei; modsOpen = modsOpen === ei ? -1 : ei; modsKey = ''; st.step = 2; persist(); render(); return; }
         var db = e.target.closest ? e.target.closest('[data-fn-day-btn]') : null;
         if (db) { st.active = +db.getAttribute('data-fn-day-btn'); persist(); render(); return; }
         var ar = e.target.closest ? e.target.closest('[data-fn-arrow]') : null;

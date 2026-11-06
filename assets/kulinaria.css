@@ -2582,3 +2582,62 @@ h3,h4{font-weight:600}
   .funnel .step[data-fn-step="1"] .fn-credit{padding:8px 12px;font-size:.82rem}
   .funnel .step[data-fn-step="1"] .fn-credit .btn{padding:8px 16px}
 }
+
+/* =====================================================================
+   v53 — order builder in 3 steps: 1 plan + tutorial · 2 the whole menu · 3 your week (selector, ingredients, notes).
+   No scrollbars anywhere in the builder (side-scrolling still works by swipe / arrows).
+   ===================================================================== */
+.funnel *{scrollbar-width:none;-ms-overflow-style:none}
+.funnel *::-webkit-scrollbar{display:none;width:0;height:0}
+.fn-day__ing{display:none}
+.funnel .step[data-fn-step="3"]{display:none}
+.funnel .step[data-fn-step="3"].is-on{display:flex;flex-direction:column;gap:10px}
+.funnel .step[data-fn-step="3"] legend{font-size:1.1rem;margin-bottom:4px}
+.funnel .step[data-fn-step="3"] .fn-week{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:0}
+.funnel .step[data-fn-step="3"] .fn-day{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 12px;min-height:150px;height:100%}
+.funnel .step[data-fn-step="3"] .fn-day__thumb{width:100%;height:64px;border-radius:10px;grid-row:auto}
+.funnel .step[data-fn-step="3"] .fn-day__dish{-webkit-line-clamp:2;font-size:.86rem;font-weight:600}
+.funnel .step[data-fn-step="3"] .fn-day__ing{display:block;font-size:.68rem;line-height:1.3;color:var(--text-muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@media (min-width:901px){
+  /* the menu step has the whole frame: bigger tiles, all dishes visible */
+  .funnel .step[data-fn-step="2"] .fn-dishes{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));grid-auto-rows:92px}
+  .funnel .step[data-fn-step="2"] .fn-dish{height:92px !important;grid-template-columns:92px minmax(0,1fr)}
+  .funnel .step[data-fn-step="2"] .fn-dish__media{height:92px !important;width:92px !important}
+  .funnel .step[data-fn-step="2"] .fn-dish__media img{width:92px;height:92px}
+  .funnel .step[data-fn-step="2"] .fn-dish>.fn-up{width:92px}
+  .funnel .step[data-fn-step="2"] .fn-dish__title{font-size:.9rem}
+}
+@media (max-width:900px){
+  .funnel .step[data-fn-step="3"] .fn-week{grid-template-columns:1fr;gap:8px}
+  .funnel .step[data-fn-step="3"] .fn-day{flex-direction:row;align-items:center;min-height:0;height:auto;gap:10px}
+  .funnel .step[data-fn-step="3"] .fn-day__thumb{width:54px;height:54px;flex:none}
+}
+/* hover film inside gold buttons: keep the label readable */
+.btn--gold.is-fx{color:#fff !important;text-shadow:0 1px 8px rgba(0,0,0,.75)}
+.btn--gold.is-fx .btn__fx{opacity:.5}
+
+/* v53 — phone: step 2 is a two-column menu you swipe up and down (no bars), step 3 big tap targets */
+@media (max-width:900px){
+  .funnel .step[data-fn-step="2"] .fn-carousel{display:block;overflow-y:auto;overflow-x:hidden;flex:1 1 auto;min-height:0;-webkit-mask-image:linear-gradient(#000 92%,transparent);mask-image:linear-gradient(#000 92%,transparent);overscroll-behavior:contain}
+  .funnel .fn-arrow{display:none !important}
+  .funnel .step[data-fn-step="2"] .fn-dishes{display:grid !important;grid-template-columns:1fr 1fr !important;grid-auto-rows:auto;gap:10px;overflow:visible !important;height:auto;max-height:none !important;padding:2px 0 24px;scroll-snap-type:none}
+  .funnel .step[data-fn-step="2"] .fn-dish{flex:none !important;height:auto !important;min-height:0 !important;display:flex !important;flex-direction:column;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg-raised);padding:0 !important;grid-template-columns:none}
+  .funnel .step[data-fn-step="2"] .fn-dish__media{height:96px !important;width:100% !important;min-height:0 !important;flex:none !important}
+  .funnel .step[data-fn-step="2"] .fn-dish__media img{width:100%;height:96px;object-fit:cover}
+  .funnel .step[data-fn-step="2"] .fn-dish__body{padding:8px 9px 9px !important;gap:4px !important;display:flex;flex-direction:column}
+  .funnel .step[data-fn-step="2"] .fn-dish .tier-badge,.funnel .step[data-fn-step="2"] .fn-dish .dish__facts,.funnel .step[data-fn-step="2"] .fn-dish .dish__desc,.funnel .step[data-fn-step="2"] .fn-dish .compat{display:none !important}
+  .funnel .step[data-fn-step="2"] .fn-dish__title{font-size:.84rem;line-height:1.2;min-height:2.4em;margin:0;-webkit-line-clamp:2}
+  .funnel .step[data-fn-step="2"] .fn-dish__row{display:flex;justify-content:space-between;align-items:center;gap:6px;margin:0}
+  .funnel .step[data-fn-step="2"] .fn-dish .dish__price{font-size:.95rem}.funnel .step[data-fn-step="2"] .fn-dish .dish__price small{display:none}
+  .funnel .step[data-fn-step="2"] .fn-dish .btn--sm{min-height:34px;padding:0 14px;font-size:.7rem}
+  .funnel .step[data-fn-step="2"] .fn-dish>.fn-up{position:absolute;left:0;top:70px;font-size:.62rem;background:rgba(0,0,0,.75);color:#fff;padding:1px 7px;margin:0;border-radius:0 8px 0 0}
+  .funnel .fn-day__e{width:30px;height:30px;font-size:1rem;left:auto;right:42px;top:6px}
+}
+@media (max-width:900px){
+  .funnel .step[data-fn-step="2"] .fn-pickbar{flex-wrap:nowrap;align-items:center;gap:8px;margin:0 0 6px}
+  .funnel .step[data-fn-step="2"] .fn-prompt{flex:1 1 auto;font-size:1rem;margin:0;line-height:1.2}
+  .funnel .step[data-fn-step="2"] .fn-pickbar .fn-meter{display:none}
+  .funnel .step[data-fn-step="2"] .fn-sel select{max-width:128px;min-height:38px;font-size:.78rem}
+  .funnel .step[data-fn-step="2"] .fn-para{margin:0 0 6px}
+  .funnel .step[data-fn-step="2"] .fn-para .text-link{font-size:.68rem}
+}

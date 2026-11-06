@@ -39,7 +39,8 @@
       </div>
       <ol class="steps__nav" aria-label="{{ 'funnel.steps' | t }}">
         <li data-fn-dot class="is-on"><span>01</span>{{ 'funnel.s1' | t }}</li>
-        <li data-fn-dot><span>02</span>{{ 'funnel.s3' | t }}</li>
+        <li data-fn-dot><span>02</span>{{ 'funnel.s_menu' | t }}</li>
+        <li data-fn-dot><span>03</span>{{ 'funnel.s_week' | t }}</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -152,8 +153,6 @@
         <fieldset class="step" data-fn-step="2">
           <legend class="fn-sr">{{ 'funnel.s3_title' | t }}</legend>
           <div class="fn-para" data-fn-para-wrap hidden><label for="fn-para-{{ section.id }}">{{ 'funnel.para' | t }}</label><select class="select" id="fn-para-{{ section.id }}" data-fn-para></select><a class="text-link" href="/pages/cuenta-perfil#familia">{{ 'funnel.para_add' | t }}</a></div>
-          <ol class="fn-week" data-fn-week aria-label="{{ 'funnel.days_title' | t }}"></ol>
-          <div class="fn-mods" data-fn-mods hidden></div>
           <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / {{ meals_per_week }} <span>{{ 'funnel.meals_word' | t }}</span><i data-fn-meter-bar></i></p>
@@ -172,6 +171,11 @@
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-arrow="1" aria-label="{{ 'funnel.next_dishes' | t }}">&#8250;</button>
           </div>
           <p class="alert" data-fn-empty hidden>{{ 'funnel.s3_empty' | t }}</p>
+        </fieldset>
+        <fieldset class="step" data-fn-step="3">
+          <legend>{{ 'funnel.s_week_title' | t }}</legend>
+          <ol class="fn-week" data-fn-week aria-label="{{ 'funnel.days_title' | t }}"></ol>
+          <div class="fn-mods" data-fn-mods hidden></div>
         </fieldset>
 
 

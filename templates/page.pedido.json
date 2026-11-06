@@ -13,7 +13,7 @@
       "type": "order-funnel",
       "settings": {
         "eyebrow": "Haz tu pedido",
-        "heading": "Arma tu pedido en *2 pasos*",
+        "heading": "Arma tu pedido en *3 pasos*",
         "text": "",
         "collection": "menu-semanal",
         "limit": 12
