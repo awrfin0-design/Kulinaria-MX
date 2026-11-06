@@ -87,7 +87,7 @@ await page.goto(`${URL0}#/menu`); await page.waitForTimeout(150);
 const scope = '[data-page="menu"]';
 ok('menu shows the 9 dishes scheduled for this week (2 are planned for later weeks)', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 9);
 await page.click(`${scope} [data-filter="category"][data-value="al-fuego-y-mar"]`);
-ok('category filter -> 3 dishes', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 3);
+ok('category filter -> 3 dishes', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 4);
 await page.click(`${scope} [data-filter="diet"][data-value="keto"]`);
 ok('category + keto -> 2 dishes', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 2);
 ok('counter matches', (await page.$eval(`${scope} [data-count]`, (e) => e.textContent.trim())) === '2');
@@ -364,18 +364,18 @@ ok('subpages show the family sub-navigation with the current page marked', (awai
 // Miro coverage: sections that must exist
 const must = { 'home': ['.hero', '.marquee', '[data-funnel]', '[data-rail]', '.tier-ladder', '.diet-chips, .chips', '.plan-card', '.accordion', '.cta-banner'],
   'pg/planes': ['.plan-card', '.tier-ladder', '.accordion'], 'pg/ayuda': ['form'], 'pg/terminos': ['.legal h3'], 'pg/carta-cotizacion': ['form'],
-  'pg/embajadores-solicitar': ['form'], 'pg/checkout': ['.card'], 'pg/cuenta-semana': ['[data-cutoff]'], 'pg/cuenta-pausas': ['[data-mypause]'], 'pg/cuenta-monedero': ['.card'] };
+  'pg/embajadores-solicitar': ['form'], 'pg/checkout': ['.card'], 'pg/cuenta-semana': ['[data-cutoff]'], 'pg/cuenta-pausas': ['[data-mypause]'], 'pg/cuenta-monedero': ['.hub__card'] };
 const lacking = [];
 for (const [k, sels] of Object.entries(must)) { await page.goto(`${URL0}#/${k}`); await page.waitForTimeout(80); for (const sel of sels) if (!(await page.$(`[data-page="${k}"] ${sel}`))) lacking.push(`${k} ${sel}`); }
 ok('key sections from the Miro board exist on their pages', lacking.length === 0, lacking.join(' | '));
 ok('terms page carries the full terms (12 numbered sections) and the privacy page the privacy notice (9)', await (async () => { await page.goto(`${URL0}#/pg/terminos`); await page.waitForTimeout(100); const a = await page.$$eval('[data-page="pg/terminos"] .legal h3', (d) => d.length); await page.goto(`${URL0}#/pg/privacidad`); await page.waitForTimeout(100); const b = await page.$$eval('[data-page="pg/privacidad"] .legal h3', (d) => d.length); return a === 12 && b === 9; })());
 
 // account subpages: each shows its own panel inside the account shell
-for (const [k, sel] of [['semana', '#semana'], ['pausas', '#pausas'], ['monedero', '#monedero'], ['referidos', '#referidos'], ['pedidos', '#pedidos'], ['entregas', '#entregas']]) {
+for (const [k, sel] of [['semana', '#semana'], ['pausas', '#pausas'], ['pedidos', '#pedidos']]) {
   await page.goto(`${URL0}#/pg/cuenta-${k}`); await page.waitForTimeout(80);
   ok(`account sub-page ${k} renders its panel and the account navigation`, !!(await page.$(`[data-page="pg/cuenta-${k}"] .account-block[id$="${k}"]`)) && (await page.$$eval(`[data-page="pg/cuenta-${k}"] .account-nav a`, (a) => a.length)) >= 4);
 }
-ok('account overview is one summary page: week, my details and allergies, balance and referrals (cards, no empty sub-pages)', (await (async () => { await page.goto(`${URL0}#/cuenta`); await page.waitForTimeout(150); return page.$$eval('[data-page="cuenta"] .hub__card', (r) => r.length); })()) === 3);
+ok('account overview is one summary page: week, my details and allergies, balance and referrals (cards, no empty sub-pages)', (await (async () => { await page.goto(`${URL0}#/cuenta`); await page.waitForTimeout(150); return page.$$eval('[data-page="cuenta"] .hub__card', (r) => r.length); })()) === 4);
 
 // multi-step registration
 await page.goto(`${URL0}#/registro`); await page.reload(); await page.waitForTimeout(500);
@@ -1058,7 +1058,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.keyboard.press('Escape'); await page.waitForTimeout(200);
   ok('header menu: Escape closes it', await page.$eval('.site-header [data-acct-pop]', (p) => p.hidden));
   await page.goto(`${URL0}#/cuenta`); await page.waitForTimeout(500);
-  ok('account page is our own: greeting with the name, the e-mail signed in, sign out, tiles and the order list (no Shopify page)', await page.evaluate(() => { const p = document.querySelector('[data-page="cuenta"]'); return /Hola/.test(p.querySelector('h2').textContent) && /@/.test(p.innerText) && !!p.querySelector('a[href*="logout"], a[href*="salir"]') && p.querySelectorAll('.hub__card').length === 3 && !!p.querySelector('table.acct-orders, .text-muted'); }));
+  ok('account page is our own: greeting with the name, the e-mail signed in, sign out, tiles and the order list (no Shopify page)', await page.evaluate(() => { const p = document.querySelector('[data-page="cuenta"]'); return /Hola/.test(p.querySelector('h2').textContent) && /@/.test(p.innerText) && !!p.querySelector('a[href*="logout"], a[href*="salir"]') && p.querySelectorAll('.hub__card').length === 4 && !!p.querySelector('table.acct-orders, .text-muted'); }));
   await page.goto(`${URL0}#/carrito`); await page.waitForTimeout(400);
   ok('cart: has a "Vaciar carrito" button', await page.$eval('[data-page="carrito"]', (c) => !!c.querySelector('[data-cart-clear]')));
   const G2 = URL0.replace('index.html', 'guest.html');

@@ -239,14 +239,30 @@ function orderExists_(id) {
  */
 function alertNewOrder_(o, name, email, addr, a, summary) {
   try {
-    var to = PropertiesService.getScriptProperties().getProperty('ALERT_EMAILS');
-    if (!to) return;
     var plan = (a.plan === 'block' || /4 semanas/.test(summary)) ? 'Plan de 4 semanas (20 comidas)' : 'Plan de 1 semana (5 comidas)';
-    var body = ['Nuevo pedido ' + o.name, '', 'Cliente: ' + name, 'Correo: ' + email, 'Teléfono: ' + ((o.customer && o.customer.phone) || a.telefono || ''), 'Dirección: ' + addr, '',
-      'Plan: ' + plan, 'Total: $' + o.total_price + ' ' + o.currency, 'Platillos: ' + summary, 'Días: ' + (a.dias || '-'), '',
-      'ALERGIAS: ' + (a.alergias || 'ninguna declarada'), (a.alerta_alergias ? 'ATENCIÓN: eligió platillos que PUEDEN contener sus alergias: ' + a.alerta_alergias : ''), 'No le gustan: ' + (a.no_me_gustan || '-'), 'Dietas: ' + (a.dietas || '-'), '', 'Panel: abre /pages/admin en tu sitio.'].join('\n');
-    MailApp.sendEmail(to, 'Nuevo pedido ' + o.name + ' · ' + name, body);
+    var to = PropertiesService.getScriptProperties().getProperty('ALERT_EMAILS');
+    if (to) {
+      var body = ['Nuevo pedido ' + o.name, '', 'Cliente: ' + name, 'Correo: ' + email, 'Teléfono: ' + ((o.customer && o.customer.phone) || a.telefono || ''), 'Dirección: ' + addr, '',
+        'Plan: ' + plan, 'Total: $' + o.total_price + ' ' + o.currency, 'Platillos: ' + summary, 'Días: ' + (a.dias || '-'), '',
+        'ALERGIAS: ' + (a.alergias || 'ninguna declarada'), (a.alerta_alergias ? 'ATENCIÓN: eligió platillos que PUEDEN contener sus alergias: ' + a.alerta_alergias : ''), 'No le gustan: ' + (a.no_me_gustan || '-'), 'Dietas: ' + (a.dietas || '-'), '', 'Panel: abre /pages/admin en tu sitio.'].join('\n');
+      MailApp.sendEmail(to, 'Nuevo pedido ' + o.name + ' · ' + name, body);
+    }
   } catch (err) { /* never block the order */ }
+  try { whatsappAlert_(o, name, a, summary); } catch (err2) { /* never block the order */ }
+}
+
+/** WhatsApp alert to the owner (WhatsApp Business Cloud API from Meta). Script properties: WHATSAPP_TOKEN (permanent token), WHATSAPP_PHONE_ID (sender number id), WHATSAPP_TO (owner number, digits with country code, e.g. 5219991234567).
+ *  Optional WHATSAPP_TEMPLATE (default "nuevo_pedido", language es_MX): an approved template with 4 body variables {{1}} order, {{2}} client, {{3}} total, {{4}} dishes.
+ *  WHATSAPP_MODE=text sends a free-text message instead (only delivered if the owner wrote to that number in the last 24 h). Without the properties nothing is sent. */
+function whatsappAlert_(o, name, a, summary) {
+  var pr = PropertiesService.getScriptProperties(), tok = pr.getProperty('WHATSAPP_TOKEN'), pid = pr.getProperty('WHATSAPP_PHONE_ID'), to = String(pr.getProperty('WHATSAPP_TO') || '').replace(/\D/g, '');
+  if (!tok || !pid || !to) return false;
+  var short = String(summary || '').replace(/\s+/g, ' ').slice(0, 280), total = '$' + o.total_price + ' ' + o.currency, alert = a && a.alerta_alergias ? ' · ALERGIA: ' + a.alerta_alergias : '';
+  var payload = pr.getProperty('WHATSAPP_MODE') === 'text'
+    ? { messaging_product: 'whatsapp', to: to, type: 'text', text: { body: 'Nuevo pedido ' + o.name + ' · ' + name + ' · ' + total + '\n' + short + alert } }
+    : { messaging_product: 'whatsapp', to: to, type: 'template', template: { name: pr.getProperty('WHATSAPP_TEMPLATE') || 'nuevo_pedido', language: { code: 'es_MX' }, components: [{ type: 'body', parameters: [o.name, name, total, short + alert].map(function (t) { return { type: 'text', text: String(t || '-') }; }) }] } };
+  var res = UrlFetchApp.fetch('https://graph.facebook.com/v20.0/' + pid + '/messages', { method: 'post', contentType: 'application/json', headers: { Authorization: 'Bearer ' + tok }, payload: JSON.stringify(payload), muteHttpExceptions: true });
+  return res.getResponseCode() < 300;
 }
 
 
