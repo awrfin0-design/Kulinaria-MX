@@ -665,6 +665,10 @@
     "have_account": "¿Ya tienes cuenta?"
   },
   "funnel": {
+    "s_week2": "Tu semana",
+    "gate_eye2": "Un último paso",
+    "gate_t2": "Cuéntanos de ti, una sola vez",
+    "gate_p2": "Ya iniciaste sesión. Con tus datos, alergias y gustos revisamos cada platillo y armamos tu semana; después todo queda guardado y lo puedes editar cuando quieras.",
     "rules_si_t": "Para armar tu semana, entras a tu cuenta",
     "rules_si_p": "Entras con tu correo: te llega un código y, si es tu primera vez, tu cuenta se crea sola. Después te hacemos unas preguntas (2 minutos), una sola vez.",
     "s_week": "Entra y arma",

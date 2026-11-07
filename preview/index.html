@@ -3415,6 +3415,13 @@ body .funnel.is-gated[data-step="3"]:not(.funnel--teaser) .funnel__panel{grid-te
 body .funnel.is-gated[data-step="3"] .funnel__main{max-width:none;width:100%}
 body .funnel.is-gated[data-step="3"] .fn-gate{max-width:none;width:100%}
 
+/* v79 — balance / code / referrals: two small tiles on top, the code gets a full row so it never breaks in two */
+.hub__kv{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:10px !important}
+.hub__kv div{padding:12px 14px !important;min-width:0}
+.hub__kv div:nth-child(2){grid-column:1/-1;order:3;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hub__kv div:nth-child(2) dd{white-space:nowrap;letter-spacing:.04em;font-size:clamp(1.1rem,3.2vw,1.5rem)}
+.hub__kv dt{white-space:normal}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -3864,7 +3871,7 @@ Fuego</span>
         <li data-fn-dot class="is-on"><span>01</span>Cómo funciona</li>
         <li data-fn-dot><span>02</span>Plan</li>
         <li data-fn-dot><span>03</span>Menú</li>
-        <li data-fn-dot><span>04</span>Entra y arma</li>
+        <li data-fn-dot><span>04</span>Tu semana</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -4039,20 +4046,13 @@ Fuego</span>
       <div class="fn-gate__frame">
         <div class="fn-gate__intro">
           <span class="fn-flame" aria-hidden="true"></span>
-          <p class="eyebrow">Paso 4 · Tu cuenta</p>
-          <h3>Entra y arma tu semana</h3>
-          <p class="fn-gate__p">Ya viste cómo funciona. Para armar tu semana entras con tu correo y nos cuentas de ti una sola vez; después todo queda guardado.</p>
+          <p class="eyebrow">Un último paso</p>
+          <h3>Cuéntanos de ti, una sola vez</h3>
+          <p class="fn-gate__p">Ya iniciaste sesión. Con tus datos, alergias y gustos revisamos cada platillo y armamos tu semana; después todo queda guardado y lo puedes editar cuando quieras.</p>
           <ul class="fn-gate__perks"><li>Cada platillo revisado contra tus alergias</li><li>Dirección y horario guardados una sola vez</li><li>Tu semana a tu gusto, sin repetir datos</li></ul>
         </div>
         <div class="fn-gate__flow">
-        <ol class="fn-gate__steps">
-          <li data-fn-gate-s1>
-            <span class="fn-gate__no" aria-hidden="true">01</span>
-            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>Pendiente</span><h4>Entra o crea tu cuenta</h4>
-              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Entrar o crear cuenta</a></div>
-              <p class="fn-gate__hintline" data-fn-gate-note>Con tu correo recibes un código. Si es tu primera vez, tu cuenta se crea sola.</p><p class="fn-gate__ok">Listo</p></div>
-          </li>
-          <li data-fn-gate-s2>
+        <ol class="fn-gate__steps"><li data-fn-gate-s2>
             <span class="fn-gate__no" aria-hidden="true">02</span>
             <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>En espera</span><h4>Cuéntanos de ti: datos, entrega, alergias y gustos</h4>
               <p class="fn-gate__d">Lo llenas una sola vez: así cada platillo se revisa contra tus alergias.</p>
@@ -12759,7 +12759,7 @@ Pago digital, sin efectivo</li></ul>
         <li data-fn-dot class="is-on"><span>01</span>Cómo funciona</li>
         <li data-fn-dot><span>02</span>Plan</li>
         <li data-fn-dot><span>03</span>Menú</li>
-        <li data-fn-dot><span>04</span>Entra y arma</li>
+        <li data-fn-dot><span>04</span>Tu semana</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -12934,20 +12934,13 @@ Pago digital, sin efectivo</li></ul>
       <div class="fn-gate__frame">
         <div class="fn-gate__intro">
           <span class="fn-flame" aria-hidden="true"></span>
-          <p class="eyebrow">Paso 4 · Tu cuenta</p>
-          <h3>Entra y arma tu semana</h3>
-          <p class="fn-gate__p">Ya viste cómo funciona. Para armar tu semana entras con tu correo y nos cuentas de ti una sola vez; después todo queda guardado.</p>
+          <p class="eyebrow">Un último paso</p>
+          <h3>Cuéntanos de ti, una sola vez</h3>
+          <p class="fn-gate__p">Ya iniciaste sesión. Con tus datos, alergias y gustos revisamos cada platillo y armamos tu semana; después todo queda guardado y lo puedes editar cuando quieras.</p>
           <ul class="fn-gate__perks"><li>Cada platillo revisado contra tus alergias</li><li>Dirección y horario guardados una sola vez</li><li>Tu semana a tu gusto, sin repetir datos</li></ul>
         </div>
         <div class="fn-gate__flow">
-        <ol class="fn-gate__steps">
-          <li data-fn-gate-s1>
-            <span class="fn-gate__no" aria-hidden="true">01</span>
-            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>Pendiente</span><h4>Entra o crea tu cuenta</h4>
-              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Entrar o crear cuenta</a></div>
-              <p class="fn-gate__hintline" data-fn-gate-note>Con tu correo recibes un código. Si es tu primera vez, tu cuenta se crea sola.</p><p class="fn-gate__ok">Listo</p></div>
-          </li>
-          <li data-fn-gate-s2>
+        <ol class="fn-gate__steps"><li data-fn-gate-s2>
             <span class="fn-gate__no" aria-hidden="true">02</span>
             <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>En espera</span><h4>Cuéntanos de ti: datos, entrega, alergias y gustos</h4>
               <p class="fn-gate__d">Lo llenas una sola vez: así cada platillo se revisa contra tus alergias.</p>
@@ -14108,7 +14101,7 @@ Pago digital, sin efectivo</li></ul>
         <li data-fn-dot class="is-on"><span>01</span>How it works</li>
         <li data-fn-dot><span>02</span>Plan</li>
         <li data-fn-dot><span>03</span>Menu</li>
-        <li data-fn-dot><span>04</span>Sign in & build</li>
+        <li data-fn-dot><span>04</span>Your week</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -14283,20 +14276,13 @@ Pago digital, sin efectivo</li></ul>
       <div class="fn-gate__frame">
         <div class="fn-gate__intro">
           <span class="fn-flame" aria-hidden="true"></span>
-          <p class="eyebrow">Step 4 · Your account</p>
-          <h3>Sign in and build your week</h3>
-          <p class="fn-gate__p">You have seen how it works. To build your week you sign in with your e-mail and tell us about you once; after that everything is saved.</p>
+          <p class="eyebrow">One last step</p>
+          <h3>Tell us about you, just once</h3>
+          <p class="fn-gate__p">You are signed in. With your details, allergies and tastes we check every dish and build your week; after that everything is saved and you can edit it whenever you like.</p>
           <ul class="fn-gate__perks"><li>Every dish checked against your allergies</li><li>Address and delivery time saved once</li><li>Your week your way, no repeating details</li></ul>
         </div>
         <div class="fn-gate__flow">
-        <ol class="fn-gate__steps">
-          <li data-fn-gate-s1>
-            <span class="fn-gate__no" aria-hidden="true">01</span>
-            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>To do</span><h4>Sign in or create your account</h4>
-              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in or create account</a></div>
-              <p class="fn-gate__hintline" data-fn-gate-note>You get a code by e-mail. If it is your first time, your account is created automatically.</p><p class="fn-gate__ok">Done</p></div>
-          </li>
-          <li data-fn-gate-s2>
+        <ol class="fn-gate__steps"><li data-fn-gate-s2>
             <span class="fn-gate__no" aria-hidden="true">02</span>
             <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>Waiting</span><h4>Tell us about you: details, delivery, allergies and tastes</h4>
               <p class="fn-gate__d">You fill it in once, so every dish is checked against your allergies.</p>
@@ -23003,7 +22989,7 @@ Digital payment, no cash</li></ul>
         <li data-fn-dot class="is-on"><span>01</span>How it works</li>
         <li data-fn-dot><span>02</span>Plan</li>
         <li data-fn-dot><span>03</span>Menu</li>
-        <li data-fn-dot><span>04</span>Sign in & build</li>
+        <li data-fn-dot><span>04</span>Your week</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -23178,20 +23164,13 @@ Digital payment, no cash</li></ul>
       <div class="fn-gate__frame">
         <div class="fn-gate__intro">
           <span class="fn-flame" aria-hidden="true"></span>
-          <p class="eyebrow">Step 4 · Your account</p>
-          <h3>Sign in and build your week</h3>
-          <p class="fn-gate__p">You have seen how it works. To build your week you sign in with your e-mail and tell us about you once; after that everything is saved.</p>
+          <p class="eyebrow">One last step</p>
+          <h3>Tell us about you, just once</h3>
+          <p class="fn-gate__p">You are signed in. With your details, allergies and tastes we check every dish and build your week; after that everything is saved and you can edit it whenever you like.</p>
           <ul class="fn-gate__perks"><li>Every dish checked against your allergies</li><li>Address and delivery time saved once</li><li>Your week your way, no repeating details</li></ul>
         </div>
         <div class="fn-gate__flow">
-        <ol class="fn-gate__steps">
-          <li data-fn-gate-s1>
-            <span class="fn-gate__no" aria-hidden="true">01</span>
-            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>To do</span><h4>Sign in or create your account</h4>
-              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in or create account</a></div>
-              <p class="fn-gate__hintline" data-fn-gate-note>You get a code by e-mail. If it is your first time, your account is created automatically.</p><p class="fn-gate__ok">Done</p></div>
-          </li>
-          <li data-fn-gate-s2>
+        <ol class="fn-gate__steps"><li data-fn-gate-s2>
             <span class="fn-gate__no" aria-hidden="true">02</span>
             <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>Waiting</span><h4>Tell us about you: details, delivery, allergies and tastes</h4>
               <p class="fn-gate__d">You fill it in once, so every dish is checked against your allergies.</p>
@@ -26210,9 +26189,9 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       if (gate && !skipGate && (!signedIn || !onbDone)) {
         gate.hidden = false; holder.classList.add('is-gated');
         var g1 = $('[data-fn-gate-s1]', gate), g2 = $('[data-fn-gate-s2]', gate);
-        g1.classList.toggle('is-done', signedIn); g2.classList.toggle('is-done', signedIn && onbDone); g2.classList.toggle('is-wait', !signedIn);
+        if (g1) g1.classList.toggle('is-done', signedIn); g2.classList.toggle('is-done', signedIn && onbDone); g2.classList.toggle('is-wait', !signedIn);
         var a1 = $('[data-fn-gate-a1]', gate), a2 = $('[data-fn-gate-a2]', gate); if (a1) a1.hidden = signedIn; var gn = $('[data-fn-gate-note]', gate); if (gn) gn.hidden = signedIn; if (a2) a2.hidden = !signedIn || onbDone;
-        var c1 = $('[data-fn-chip]', g1), c2 = $('[data-fn-chip]', g2); if (c1) c1.textContent = signedIn ? gate.getAttribute('data-t-done') : gate.getAttribute('data-t-todo'); if (c2) c2.textContent = !signedIn ? gate.getAttribute('data-t-wait') : (onbDone ? gate.getAttribute('data-t-done') : gate.getAttribute('data-t-todo'));
+        var c1 = g1 ? $('[data-fn-chip]', g1) : null, c2 = $('[data-fn-chip]', g2); if (c1) c1.textContent = signedIn ? gate.getAttribute('data-t-done') : gate.getAttribute('data-t-todo'); if (c2) c2.textContent = !signedIn ? gate.getAttribute('data-t-wait') : (onbDone ? gate.getAttribute('data-t-done') : gate.getAttribute('data-t-todo'));
       }
       var startAtPlan = false; try { startAtPlan = location.protocol === 'file:' && !!sessionStorage.getItem('kx-test-start') && !!st.rulesOk; } catch (e) {}   // local preview only (test hook)
       st.step = startAtPlan ? 1 : 0;

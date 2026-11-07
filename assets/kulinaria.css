@@ -3384,3 +3384,10 @@ body .auth-sec{padding-top:calc(var(--hdr,76px) + clamp(24px,3vw,44px)) !importa
 body .funnel.is-gated[data-step="3"]:not(.funnel--teaser) .funnel__panel{grid-template-columns:minmax(0,1fr) !important}
 body .funnel.is-gated[data-step="3"] .funnel__main{max-width:none;width:100%}
 body .funnel.is-gated[data-step="3"] .fn-gate{max-width:none;width:100%}
+
+/* v79 — balance / code / referrals: two small tiles on top, the code gets a full row so it never breaks in two */
+.hub__kv{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:10px !important}
+.hub__kv div{padding:12px 14px !important;min-width:0}
+.hub__kv div:nth-child(2){grid-column:1/-1;order:3;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hub__kv div:nth-child(2) dd{white-space:nowrap;letter-spacing:.04em;font-size:clamp(1.1rem,3.2vw,1.5rem)}
+.hub__kv dt{white-space:normal}

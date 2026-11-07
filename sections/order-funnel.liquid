@@ -47,7 +47,7 @@
         <li data-fn-dot class="is-on"><span>01</span>{{ 'funnel.s_rules' | t }}</li>
         <li data-fn-dot><span>02</span>{{ 'funnel.s1' | t }}</li>
         <li data-fn-dot><span>03</span>{{ 'funnel.s_menu' | t }}</li>
-        <li data-fn-dot><span>04</span>{{ 'funnel.s_week' | t }}</li>
+        <li data-fn-dot><span>04</span>{%- if customer -%}{{ 'funnel.s_week2' | t }}{%- else -%}{{ 'funnel.s_week' | t }}{%- endif -%}</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -217,19 +217,21 @@
       <div class="fn-gate__frame">
         <div class="fn-gate__intro">
           <span class="fn-flame" aria-hidden="true"></span>
-          <p class="eyebrow">{{ 'funnel.gate_eye' | t }}</p>
-          <h3>{{ 'funnel.gate_t' | t }}</h3>
-          <p class="fn-gate__p">{{ 'funnel.gate_p' | t }}</p>
+          <p class="eyebrow">{% if customer %}{{ 'funnel.gate_eye2' | t }}{% else %}{{ 'funnel.gate_eye' | t }}{% endif %}</p>
+          <h3>{% if customer %}{{ 'funnel.gate_t2' | t }}{% else %}{{ 'funnel.gate_t' | t }}{% endif %}</h3>
+          <p class="fn-gate__p">{% if customer %}{{ 'funnel.gate_p2' | t }}{% else %}{{ 'funnel.gate_p' | t }}{% endif %}</p>
           <ul class="fn-gate__perks"><li>{{ 'funnel.gate_b1' | t }}</li><li>{{ 'funnel.gate_b2' | t }}</li><li>{{ 'funnel.gate_b3' | t }}</li></ul>
         </div>
         <div class="fn-gate__flow">
         <ol class="fn-gate__steps">
+          {%- unless customer -%}
           <li data-fn-gate-s1>
             <span class="fn-gate__no" aria-hidden="true">01</span>
             <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>{{ 'funnel.gate_todo' | t }}</span><h4>{{ 'funnel.gate_1' | t }}</h4>
               <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="{% render 'login-url', back: '/pages/bienvenida' %}">{{ 'login.enter' | t }}</a></div>
               <p class="fn-gate__hintline" data-fn-gate-note>{{ 'login.enter_note' | t }}</p><p class="fn-gate__ok">{{ 'funnel.gate_done' | t }}</p></div>
           </li>
+          {%- endunless -%}
           <li data-fn-gate-s2>
             <span class="fn-gate__no" aria-hidden="true">02</span>
             <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>{{ 'funnel.gate_wait' | t }}</span><h4>{{ 'funnel.gate_2' | t }}</h4>

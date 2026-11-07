@@ -665,6 +665,10 @@
     "have_account": "Already have an account?"
   },
   "funnel": {
+    "s_week2": "Your week",
+    "gate_eye2": "One last step",
+    "gate_t2": "Tell us about you, just once",
+    "gate_p2": "You are signed in. With your details, allergies and tastes we check every dish and build your week; after that everything is saved and you can edit it whenever you like.",
     "rules_si_t": "To build your week, you sign in",
     "rules_si_p": "You sign in with your e-mail: you get a code and, if it is your first time, your account is created automatically. Then we ask a few questions (2 minutes), only once.",
     "s_week": "Sign in & build",
