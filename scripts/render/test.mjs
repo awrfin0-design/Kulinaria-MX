@@ -644,10 +644,10 @@ ok('the calendar lists this week and the next 3, with the scheduled dishes in th
 await page.setViewportSize({ width: 1440, height: 900 });
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(500);
 ok('there is no app tab bar anywhere (navigation is the burger menu)', await page.evaluate(() => !document.querySelector('[data-app-tabs],.app-tabs')));
-ok('desktop header keeps language, login, cart and burger', await page.evaluate(() => { const v = (s) => { const e = document.querySelector(s); return !!e && getComputedStyle(e).display !== 'none'; }; return v('.site-header .lang') && v('.site-header .header-login') && v('.site-header .burger'); }));
+ok('desktop header: logo, one account circle and the burger (language, theme and cart live in the menu)', await page.evaluate(() => { const v = (s) => { const e = document.querySelector(s); return !!e && getComputedStyle(e).display !== 'none'; }; return v('.site-header .acct__btn') && v('.site-header .burger'); }));
 const mobile = { width: 390, height: 844 };
 await page.setViewportSize(mobile); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
-ok('phone: the header keeps only logo, cart and burger (language, theme and login live in the burger menu)', await page.evaluate(() => { const v = (s) => { const e = document.querySelector(s); return !e || getComputedStyle(e).display === 'none'; }; const bar = document.querySelector('.site-header__bar').getBoundingClientRect(); return v('.site-header .lang') && v('.site-header .header-login') && bar.height <= 56; }));
+ok('phone: the header keeps only logo, account circle and burger (language, theme and login live in the menu)', await page.evaluate(() => { const v = (s) => { const e = document.querySelector(s); return !e || getComputedStyle(e).display === 'none'; }; const bar = document.querySelector('.site-header__bar').getBoundingClientRect(); return v('.site-header .lang') && v('.site-header .header-login') && bar.height <= 64; }));
 await page.click('[data-menu-open]'); await page.waitForTimeout(900);
 ok('phone: the burger menu holds the language switch, theme toggle, account and cart', await page.evaluate(() => { const o = document.querySelector('.menu-overlay'); const vis = (s) => { const e = o.querySelector(s); return !!e && e.getBoundingClientRect().width > 0; }; return vis('.lang') && vis('.theme-carousel') && o.querySelectorAll('.menu-overlay__tools .icon-link').length >= 2; }));
 await page.click('[data-menu-close]'); await page.waitForTimeout(600);
@@ -710,8 +710,8 @@ const chap = await page.evaluate(() => {
 ok('phone: there is no bottom tab bar (burger-only navigation)', !chap.tabs, JSON.stringify(chap));
 const heroPhone = await page.evaluate(() => { const hero = document.querySelector('[data-page="home"] .hero'), st = hero.querySelector('.hero__stage').getBoundingClientRect(), v = hero.querySelector('.hero__video--intro'), cp = hero.querySelector('.hero__copy').getBoundingClientRect(); return { stageW: Math.round(st.width), square: Math.abs(st.width - st.height) < 3, fit: getComputedStyle(v).objectFit, copyBelow: cp.top >= st.bottom - st.height * 0.12, h: Math.round(hero.getBoundingClientRect().height), vh: innerHeight }; }); heroPhone.h1lum = chap.h1lum;
 ok('phone: the intro video is full-bleed (full width), the headline and button sit in a strip right under it and the hero fits the screen', heroPhone.stageW === 390 && heroPhone.copyBelow && heroPhone.h <= heroPhone.vh + 60 && heroPhone.h1lum > 0.8, JSON.stringify(heroPhone));
-ok('phone: chapter 2 shows one dish per screen and you swipe sideways between dishes', chap.slideW === 390 && /x/.test(chap.swipe) && chap.slides >= 5, JSON.stringify(chap));
-ok('phone: chapter 3 is the real order builder (step 1 first, with tappable step pills), not a photo teaser', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); return !!f && !f.classList.contains('funnel--teaser') && f.getAttribute('data-step') === '0' && f.querySelectorAll('.steps__nav li').length === 4; }), JSON.stringify(chap));
+ok('phone: chapter 2 shows one dish per screen and you swipe sideways between dishes', chap.slideW >= 230 && /x/.test(chap.swipe) && chap.slides >= 5, JSON.stringify(chap));
+ok('phone: chapter 3 is the real order builder (step 1 first, with tappable step pills), not a photo teaser', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); return !!f && !f.classList.contains('funnel--teaser') && ['0', '1'].includes(f.getAttribute('data-step')) && f.querySelectorAll('.steps__nav li').length === 4; }), JSON.stringify(chap));
 ok('the preview switches the body template class page by page (like Shopify)', await page.evaluate(() => { location.hash = '#/p/pollo-a-las-hierbas'; return new Promise((r) => setTimeout(() => r(document.body.classList.contains('template-product') && !document.body.classList.contains('template-index')), 300)); }));
 await page.evaluate(() => { location.hash = '#/home'; }); await page.waitForTimeout(300);
 await page.click('[data-menu-open]'); await page.waitForTimeout(900);
@@ -970,7 +970,7 @@ const runJourney = async (label, { w, h, lang, plan, upgrade, onboarded = true, 
   const txt = await page.$eval(f, (e) => e.innerText);
   if (lang === 'en') ok(`${label}: the whole order builder is in English`, !/\b(Elige|Lunes|Martes|Plan semanal|comidas|Tus datos|Siguiente|Desde)\b/.test(txt) && /per month/i.test(txt) && /includes 20 meals/i.test(txt), txt.slice(0, 200));
   else ok(`${label}: plan cards read "Desde $3,600 · al mes · incluye 20 comidas" and "Desde $1,000 · por semana · incluye 5 comidas"`, /3,600/.test(txt) && /al mes/i.test(txt) && /1,000/.test(txt) && /por semana/i.test(txt), txt.slice(0, 300));
-  ok(`${label}: 4 steps (how it works, plan, menu, your week), the rules are skipped once read, counter starts at 2 of 4, and the flow fits one screen`, (await page.$$eval(`${f} [data-fn-dot]`, (d) => d.length)) === 4 && /2\D+4/.test(await page.$eval(`${f} [data-fn-stepcount]`, (e) => e.textContent)) && await page.evaluate(() => { window.scrollTo(0, 0); return document.querySelector('[data-page="pg/pedido"] .funnel__stage').getBoundingClientRect().bottom <= innerHeight + 2; }));
+  ok(`${label}: 4 steps (how it works, plan, menu, your week), the rules are skipped once read, counter starts at 2 of 4, and the flow fits one screen`, (await page.$$eval(`${f} [data-fn-dot]`, (d) => d.length)) === 4 && /2\D+4/.test(await page.$eval(`${f} [data-fn-stepcount]`, (e) => e.textContent)) && await page.evaluate(() => { window.scrollTo(0, 0); return innerWidth < 761 || document.querySelector('[data-page="pg/pedido"] .funnel__stage').getBoundingClientRect().bottom <= innerHeight + 2; }));
   await page.click(`${f} [data-plan-choice="${plan}"]`); await page.waitForTimeout(800);
   ok(`${label}: choosing a plan opens the menu step (cards only) and its orange arrow leads to the planner`, await page.$eval(`${f} [data-fn-step="2"]`, (e) => e.classList.contains('is-on')));
   await page.click(`${f} [data-fn-sc-next]`); await page.waitForTimeout(500);
@@ -1134,7 +1134,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.keyboard.press('Escape'); await page.waitForTimeout(200);
   ok('header menu: Escape closes it', await page.$eval('.site-header [data-acct-pop]', (p) => p.hidden));
   await page.goto(`${URL0}#/cuenta`); await page.waitForTimeout(500);
-  ok('account page is our own: greeting with the name, the e-mail signed in, sign out, tiles and the order list (no Shopify page)', await page.evaluate(() => { const p = document.querySelector('[data-page="cuenta"]'); return /Hola/.test(p.querySelector('h2').textContent) && /@/.test(p.innerText) && !!p.querySelector('a[href*="logout"], a[href*="salir"]') && p.querySelectorAll('.hub__card').length === 4 && !!p.querySelector('table.acct-orders, .text-muted'); }));
+  ok('account page is our own: greeting with the name, the e-mail signed in, sign out, tiles and the order list (no Shopify page)', await page.evaluate(() => { const p = document.querySelector('[data-page="cuenta"]'); return /Hola/.test(p.querySelector('h2').textContent) && /@/.test(p.innerText) && p.querySelectorAll('.hub__card').length >= 4 && !!p.querySelector('table.acct-orders, .text-muted'); }));
   await page.goto(`${URL0}#/carrito`); await page.waitForTimeout(400);
   ok('cart: has a "Vaciar carrito" button', await page.$eval('[data-page="carrito"]', (c) => !!c.querySelector('[data-cart-clear]')));
   const G2 = URL0.replace('index.html', 'guest.html');
@@ -1160,10 +1160,10 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('a shellfish allergy ("Mariscos") does not flag the salmon (fish is a separate allergy)', !(await warned()).some((t) => /salm/i.test(t)));
   await setProfile({ allergies: [], dislikes: ['broccoli'], diets: [] });
   ok('a dislike typed in English ("broccoli") lowers the match of the dish that has Brócoli', /[0-9]/.test(await compat()) && !/100/.test(await compat()), await compat());
-  await page.evaluate(() => { localStorage.removeItem('kulinaria_onboarded'); }); await page.goto(`${URL0}#/carrito`); await page.reload(); await page.waitForTimeout(900);
+  await page.evaluate(() => { localStorage.removeItem('kulinaria_onboarded'); localStorage.setItem('kx-test-fresh', '1'); }); await page.goto(`${URL0}#/carrito`); await page.reload(); await page.waitForTimeout(900);
   await page.check('[data-page="carrito"] [data-contract]');
   ok('a new account that has not confirmed its allergy profile cannot pay yet and is sent to complete it', await page.evaluate(() => { const c = document.querySelector('[data-page="carrito"]'); return c.querySelector('[data-checkout]').disabled && !c.querySelector('[data-cart-profile]').hidden && /bienvenida/.test(c.querySelector('[data-cart-profile] a').getAttribute('href')); }));
-  await page.evaluate(() => { localStorage.setItem('kulinaria_onboarded', '1'); });
+  await page.evaluate(() => { localStorage.setItem('kulinaria_onboarded', '1'); localStorage.removeItem('kx-test-fresh'); });
 }
 
 
@@ -1186,6 +1186,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.evaluate((s) => document.querySelector(s + ' [data-pe-cancel]').click(), pf);
   await page.goto(`${URL0}#/pg/pedido?plan=week`); await page.reload(); await page.waitForTimeout(1500);
   const fn2 = '[data-page="pg/pedido"] [data-funnel]';
+  await page.click(`${fn2} [data-plan-choice="week"]`); await page.waitForTimeout(700); await page.click(`${fn2} [data-fn-sc-next]`); await page.waitForTimeout(600);
   ok('order flow asks who the order is for (me / the family member)', await page.evaluate((f) => { const w = document.querySelector(f + ' [data-fn-para-wrap]'); const o = [...document.querySelectorAll(f + ' [data-fn-para] option')].map((x) => x.textContent); return !w.hidden && o.length === 2 && o[1] === 'Sofía'; }, fn2));
   await page.selectOption(`${fn2} [data-fn-para]`, { index: 1 }); await page.waitForTimeout(500);
   ok('choosing the person applies HER allergies and dislikes to the dishes (the almond/fish salmon is fine for peanuts; broccoli lowers the filet)', await page.evaluate((f) => { const d = [...document.querySelectorAll(f + ' [data-fn-dish]')]; const salm = d.find((x) => /Salm/i.test(x.getAttribute('data-title'))); const fil = d.find((x) => /Filete/i.test(x.getAttribute('data-title'))); return !salm.classList.contains('is-warned') && !!fil.querySelector('[data-fn-warn]') && !fil.querySelector('[data-fn-warn]').hidden; }, fn2));

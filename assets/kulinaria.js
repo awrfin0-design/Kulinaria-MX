@@ -1575,6 +1575,9 @@
           alergias: (p.allergies || []).join(', '), no_me_gustan: (p.dislikes || []).join(', '), dietas: (p.diets || []).join(', '), alerta_alergias: warned.join(' | '),
           plan: st.plan, nivel: st.tier, pedido_embudo: list
         };
+        // what the kitchen must know beyond the allergen list (from the questionnaire): severity, traces, health conditions, spice, portion, household, delivery window
+        var ficha = [i.severity && 'Severidad: ' + i.severity, i.cross && 'Trazas: ' + i.cross, i.conditions && 'Condiciones: ' + i.conditions, i.spice && 'Picante: ' + i.spice, i.portion && 'Porción: ' + i.portion, (i.adults || i.kids) && 'Personas: ' + (i.adults || 1) + ' adultos + ' + (i.kids || 0) + ' niños', i.window && 'Horario: ' + i.window, i.goal && 'Objetivo: ' + i.goal + (i.kcal ? ' ' + i.kcal + ' kcal' : '')].filter(Boolean).join(' · ');
+        if (ficha) attrs.ficha_cocina = ficha;
         var rc = ''; try { rc = localStorage.getItem('kulinaria_ref') || ''; } catch (x) {} if (rc) attrs.codigo_referencia = rc;
         var props = {}; props[T_('prop-meals')] = String(count()); props[T_('prop-tier')] = tb.getAttribute('data-name'); props[T_('prop-length')] = st.plan === 'block' ? T_('length-block') : T_('length-week');
         st.days.forEach(function (q, k) { var dd = byPid(q); if (dd) props[dayLabel(k)] = dd.getAttribute('data-title'); });

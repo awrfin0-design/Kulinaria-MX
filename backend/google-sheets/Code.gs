@@ -188,7 +188,7 @@ function handleOrder_(o) {
     var dt = line ? (lineProp_(line, '_dietas') || a.dietas || '') : (a.dietas || '');
     var rowSummary = line ? summaryOf(line, rows) : summary;
     var row = upsertRow_('Pedidos', 1, key, [key, o.name, o.created_at, name, email, c.phone || a.telefono || '', total, o.currency, o.financial_status, o.fulfillment_status || 'pendiente',
-      planKey, a.enfoque || a.nivel || '', dt, al, dl, addr, a.codigo_referencia || '', a.contrato_aceptado || '', rowSummary, o.note || '', JSON.stringify(slots), String(c.id || ''), para, line ? lineProp_(line, '_notas') : '']);
+      planKey, a.enfoque || a.nivel || '', dt, al, dl, addr, a.codigo_referencia || '', a.contrato_aceptado || '', rowSummary, o.note || '', JSON.stringify(slots), String(c.id || ''), para, [a.ficha_cocina, line ? lineProp_(line, '_notas') : ''].filter(Boolean).join(' || ')]);
     try { sheet_('Pedidos').getRange(row, 4).setFontWeight('bold'); } catch (e0) { /* formatting never blocks an order */ }
     rows.forEach(function (d) { sh.appendRow([o.id, o.name, o.created_at, para || name, d.title, a.nivel || '', d.qty, '', line ? String(line.variant_title || '') : '']); });
   };

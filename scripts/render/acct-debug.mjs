@@ -1,0 +1,10 @@
+import { createRequire } from 'node:module';
+const { chromium } = createRequire(import.meta.url)('playwright');
+const U = 'file:///home/user/Kulinaria-MX/preview/index.html';
+const b = await chromium.launch(); const page = await (await b.newContext({ viewport: { width: 1360, height: 900 } })).newPage();
+await page.addInitScript(() => { try { sessionStorage.setItem('kx-seen', '1'); localStorage.setItem('kx-rules-ok', '1'); localStorage.setItem('kulinaria_onboarded', '1'); } catch (e) {} });
+await page.goto(U + '#/cuenta'); await page.reload(); await page.waitForTimeout(900);
+console.log(await page.evaluate(() => { const p = document.querySelector('[data-page="cuenta"]'); return JSON.stringify({ h2: (p.querySelector('h2') || {}).textContent, mail: /@/.test(p.innerText), logout: !!p.querySelector('a[href*="logout"], a[href*="salir"]'), cards: p.querySelectorAll('.hub__card').length, tbl: !!p.querySelector('table.acct-orders, .text-muted'), url: location.href }); }));
+await page.goto(U + '#/pg/cuenta'); await page.waitForTimeout(500);
+console.log(await page.evaluate(() => { const p = document.querySelector('[data-page="pg/cuenta"]'); return p ? JSON.stringify({ cards: p.querySelectorAll('.hub__card').length, h2: (p.querySelector('h2') || {}).textContent }) : 'nopage'; }));
+await b.close();
