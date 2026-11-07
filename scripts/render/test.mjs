@@ -743,13 +743,14 @@ for (let i = 0; i < 3; i++) {
   modes.push(st);
   await page.click('#menu-overlay [data-theme-next]'); await page.waitForTimeout(700); await closeMenu(); await page.waitForTimeout(500);
 }
-ok('the carousel goes Day -> Night -> Fuego -> Day', modes.map((m) => m.theme).join() === 'light,dark,fuego', JSON.stringify(modes.map((m) => m.theme)));
-ok('Day is white + olive, Night is black + gold, Fuego is black + orange-red #FF6200', modes[0].accent === '#cad89b' || modes[0].accent !== '#ff6200', JSON.stringify(modes[0])) ;
-ok('Night keeps its gold accent', modes[1].accent === '#e2c36b' && modes[1].bg === '#0d0c0a', JSON.stringify(modes[1]));
-ok('Fuego uses the brand colours (accent #FF6200, background #0E0E0E)', modes[2].accent === '#ff6200' && modes[2].bg === '#0e0e0e', JSON.stringify(modes[2]));
+const byTheme = {}; modes.forEach((m) => { byTheme[m.theme] = m; }); const mDay = byTheme.light || {}, mNight = byTheme.dark || {}, mFuego = byTheme.fuego || {};
+ok('the carousel cycles Day -> Night -> Fuego -> Day (starting wherever the visitor is; Fuego is the default)', ['light,dark,fuego', 'dark,fuego,light', 'fuego,light,dark'].includes(modes.map((m) => m.theme).join()), JSON.stringify(modes.map((m) => m.theme)));
+ok('Day is white + olive, Night is black + gold, Fuego is black + orange-red #FF6200', mDay.accent === '#4b5e2b' && mDay.bg === '#f5f4ec', JSON.stringify(mDay)) ;
+ok('Night keeps its gold accent', mNight.accent === '#e2c36b' && mNight.bg === '#0d0c0a', JSON.stringify(mNight));
+ok('Fuego uses the brand colours (accent #FF6200, background #0E0E0E)', mFuego.accent === '#ff6200' && mFuego.bg === '#0e0e0e', JSON.stringify(mFuego));
 ok('all three modes share one type system (Playfair Display titles, Montserrat text)', modes.every((m) => m.font === 'Playfair Display'), JSON.stringify(modes.map((m) => m.font)));
-ok('each mode shows its own logo (ink / gold / orange-and-white Fuego logo)', modes[0].ink !== 'none' && modes[0].fuego === 'none' && modes[1].gold !== 'none' && modes[1].fuego === 'none' && modes[2].fuego !== 'none' && modes[2].gold === 'none', JSON.stringify(modes.map((m) => [m.ink, m.gold, m.fuego])));
-ok('the carousel label names the mode (Día / Noche / Fuego)', modes.map((m) => m.label).join() === 'Día,Noche,Fuego', JSON.stringify(modes.map((m) => m.label)));
+ok('each mode shows its own logo (ink / gold / orange-and-white Fuego logo)', mDay.ink !== 'none' && mDay.fuego === 'none' && mNight.gold !== 'none' && mNight.fuego === 'none' && mFuego.fuego !== 'none' && mFuego.gold === 'none', JSON.stringify(modes.map((m) => [m.ink, m.gold, m.fuego])));
+ok('the carousel label names the mode (Día / Noche / Fuego)', mDay.label === 'Día' && mNight.label === 'Noche' && mFuego.label === 'Fuego', JSON.stringify(modes.map((m) => m.label)));
 await page.evaluate(() => localStorage.setItem('kx-theme', 'fuego')); await page.reload(); await page.waitForTimeout(800);
 ok('the chosen mode is remembered (Fuego survives a reload, before first paint)', await page.evaluate(() => document.documentElement.getAttribute('data-theme')) === 'fuego');
 await openMenu(); await page.click('#menu-overlay [data-theme-pick="light"]'); await page.waitForTimeout(600);
@@ -831,6 +832,7 @@ if (shotDir) {
   await page.reload(); await page.waitForTimeout(900);
   const gs = '[data-page="home"] [data-fn-gate]', hf = '[data-page="home"] [data-funnel]';
   ok('a signed-in customer without the questionnaire still sees the whole builder: the four steps, the rules, the plans and the menu', await page.evaluate((f) => { const h = document.querySelector(f); const r = h.querySelector('.funnel__stage').getBoundingClientRect(); return h.querySelectorAll('.steps__nav li').length === 4 && r.height > 200 && getComputedStyle(h.querySelector('.steps__nav')).display !== 'none'; }, hf));
+  console.log('DBG5', JSON.stringify(await page.evaluate((f) => { const h = document.querySelector(f); const r = h.querySelector('.funnel__stage').getBoundingClientRect(); return { n: h.querySelectorAll('.steps__nav li').length, h: r.height, nav: getComputedStyle(h.querySelector('.steps__nav')).display, cls: h.className, vw: innerWidth }; }, hf)));
   ok('the gate sits INSIDE step 4 (not in front of the builder) and the builder is marked as waiting for the account', await page.evaluate(([g, f]) => { const e = document.querySelector(g); return !!e.closest('[data-fn-step="3"]') && !e.hidden && document.querySelector(f).classList.contains('is-gated'); }, [gs, hf]));
   ok('gate step 1 (account) is done and step 2 (questionnaire) links to it', await page.evaluate((g) => { const e = document.querySelector(g); return e.querySelector('[data-fn-gate-s1]').classList.contains('is-done') && !e.querySelector('[data-fn-gate-s2]').classList.contains('is-done') && /bienvenida/.test(e.querySelector('[data-fn-gate-a2] a').getAttribute('href')); }, gs));
   ok('steps 1-3 can be opened and read without an account (rules card, plan cards, menu step)', await page.evaluate(async (f) => { const h = document.querySelector(f); const seen = []; for (const k of [1, 2, 3]) { h.querySelectorAll('.steps__nav li')[k - 1].click(); await new Promise((r) => setTimeout(r, 250)); const st = h.querySelector('[data-fn-step="' + (k - 1) + '"]'); seen.push(getComputedStyle(st).display !== 'none'); } return seen.filter(Boolean).length >= 1; }, hf));
