@@ -3329,3 +3329,17 @@ body .auth-sec{padding-top:calc(var(--hdr,76px) + clamp(24px,3vw,44px)) !importa
 .fn-gate__steps li.is-later h4{font-size:1.05rem;color:var(--text)}
 .fn-gate__steps li.is-later .fn-gate__chip{color:var(--text-muted);border-color:var(--line)}
 @media (max-width:860px){.fn-gate__steps li.is-later .fn-gate__no{width:34px;height:34px;margin-left:9px}}
+
+/* v75 — gate on phones: nothing wider than its card, buttons fill the text column and stay centered */
+.fn-gate__body,.fn-gate__flow,.fn-gate__intro{min-width:0}
+.fn-gate__row .btn{max-width:100%;box-sizing:border-box;white-space:normal;text-align:center;justify-content:center;line-height:1.25}
+@media (max-width:860px){
+  .fn-gate{padding-inline:0}
+  .fn-gate__frame{padding:24px 16px}
+  .fn-gate__steps li{grid-template-columns:44px minmax(0,1fr);gap:10px;padding:16px 14px 16px 8px}
+  .fn-gate__no{margin-left:4px}
+  .fn-gate__steps li.is-later .fn-gate__no{margin-left:7px}
+  .fn-gate__row{width:100%}
+  .fn-gate__row .btn{flex:1 1 100%;width:100%;padding-inline:16px}
+  .fn-gate__steps::before{left:26px}
+}
