@@ -13693,7 +13693,7 @@ Pago digital, sin efectivo</li></ul>
       <div class="auth__card">
         <nav class="auth__tabs" aria-label="Mi cuenta"><a class="is-on" href="#/login" aria-current="page">Entrar</a><a href="#/registro">Crear cuenta</a></nav>
         <div class="auth__panes">
-          <div class="auth__login">
+          <div class="auth__login" id="login--login">
             <h1 class="auth__h">Bienvenido de vuelta</h1>
             <p class="auth__sub">Entra para elegir tu semana, pausar entregas y ver tu monedero.</p><form method="post" action="/account/login" data-shopify-form="customer_login" accept-charset="UTF-8"><div class="field"><label for="login--login-email">Correo</label><input class="input" id="login--login-email" type="email" name="customer[email]" autocomplete="email" required></div>
               <div class="field field--pw"><label for="login--login-pass">Contraseña</label>
@@ -13704,7 +13704,7 @@ Pago digital, sin efectivo</li></ul>
           <div id="login--recover" class="auth__recover">
             <h2 class="auth__h">Recuperar contraseña</h2>
             <p class="auth__sub">Te enviamos un enlace para crear una nueva contraseña.</p><form method="post" action="/account/recover" data-shopify-form="recover_customer_password" accept-charset="UTF-8"><div class="field"><label for="login--rec-email">Correo</label><input class="input" id="login--rec-email" type="email" name="email" required></div>
-              <button class="btn btn--gold btn--block" type="submit">Enviar enlace</button></form><p class="auth__alt"><a href="#login">Volver a entrar</a></p>
+              <button class="btn btn--gold btn--block" type="submit">Enviar enlace</button></form><p class="auth__alt"><a href="#login--login">Volver a entrar</a></p>
           </div>
         </div>
       </div>
@@ -23929,7 +23929,7 @@ Digital payment, no cash</li></ul>
       <div class="auth__card">
         <nav class="auth__tabs" aria-label="My account"><a class="is-on" href="#/login" aria-current="page">Sign in</a><a href="#/registro">Create account</a></nav>
         <div class="auth__panes">
-          <div class="auth__login">
+          <div class="auth__login" id="login--login">
             <h1 class="auth__h">Welcome back</h1>
             <p class="auth__sub">Sign in to pick your week, pause deliveries and see your wallet.</p><form method="post" action="/account/login" data-shopify-form="customer_login" accept-charset="UTF-8"><div class="field"><label for="login--login-email">Email</label><input class="input" id="login--login-email" type="email" name="customer[email]" autocomplete="email" required></div>
               <div class="field field--pw"><label for="login--login-pass">Password</label>
@@ -23940,7 +23940,7 @@ Digital payment, no cash</li></ul>
           <div id="login--recover" class="auth__recover">
             <h2 class="auth__h">Recover password</h2>
             <p class="auth__sub">We will send you a link to set a new password.</p><form method="post" action="/account/recover" data-shopify-form="recover_customer_password" accept-charset="UTF-8"><div class="field"><label for="login--rec-email">Email</label><input class="input" id="login--rec-email" type="email" name="email" required></div>
-              <button class="btn btn--gold btn--block" type="submit">Send link</button></form><p class="auth__alt"><a href="#login">Back to sign in</a></p>
+              <button class="btn btn--gold btn--block" type="submit">Send link</button></form><p class="auth__alt"><a href="#login--login">Back to sign in</a></p>
           </div>
         </div>
       </div>
