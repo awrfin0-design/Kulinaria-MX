@@ -1160,7 +1160,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('a shellfish allergy ("Mariscos") does not flag the salmon (fish is a separate allergy)', !(await warned()).some((t) => /salm/i.test(t)));
   await setProfile({ allergies: [], dislikes: ['broccoli'], diets: [] });
   ok('a dislike typed in English ("broccoli") lowers the match of the dish that has Brócoli', /[0-9]/.test(await compat()) && !/100/.test(await compat()), await compat());
-  await page.evaluate(() => { localStorage.removeItem('kulinaria_onboarded'); localStorage.setItem('kx-test-fresh', '1'); }); await page.goto(`${URL0}#/carrito`); await page.reload(); await page.waitForTimeout(900);
+  await page.evaluate(() => { localStorage.removeItem('kulinaria_onboarded'); localStorage.setItem('kx-test-fresh', '1'); sessionStorage.setItem('kx_ob_asked', '1'); }); await page.goto(`${URL0}#/carrito`); await page.reload(); await page.waitForTimeout(900);
   await page.check('[data-page="carrito"] [data-contract]');
   ok('a new account that has not confirmed its allergy profile cannot pay yet and is sent to complete it', await page.evaluate(() => { const c = document.querySelector('[data-page="carrito"]'); return c.querySelector('[data-checkout]').disabled && !c.querySelector('[data-cart-profile]').hidden && /bienvenida/.test(c.querySelector('[data-cart-profile] a').getAttribute('href')); }));
   await page.evaluate(() => { localStorage.setItem('kulinaria_onboarded', '1'); localStorage.removeItem('kx-test-fresh'); });

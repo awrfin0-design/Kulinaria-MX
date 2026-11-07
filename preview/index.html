@@ -13401,7 +13401,7 @@ Pago digital, sin efectivo</li></ul>
 
 
 </div><div id="pg-bienvenida--shopify-section-ob" class="shopify-section"><section class="section onboarding" data-onboarding data-next-url="/pages/pedido" data-customer-name="" data-customer-email="ramon@ejemplo.com"
-  data-t-welcome="Bienvenido, {n}" data-t-need-addr="Escribe tu calle, colonia o clúster, ciudad y código postal para poder entregarte." data-t-need-consent="Marca las tres confirmaciones para guardar tu perfil." data-t-need="Completa tu nombre, correo y teléfono."
+  data-t-welcome="Bienvenido, {n}" data-t-need-addr="Escribe tu calle, colonia o clúster, ciudad y código postal de 5 dígitos para poder entregarte." data-t-need-consent="Marca las tres confirmaciones para guardar tu perfil." data-t-need="Completa tu nombre, correo y teléfono."
   data-t-stepof="Paso [n] de [t]" data-t-edit="Editar" data-t-empty="Sin responder" >
   <div class="container ob-wrap">
     <a hidden tabindex="-1" aria-hidden="true" data-ob-week href="#/pg/cuenta-semana"></a><div class="ob-welcome" data-ob-welcome hidden>
@@ -22348,7 +22348,7 @@ Digital payment, no cash</li></ul>
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Breadcrumb">
           <a href="#/home">Home</a><i aria-hidden="true">/</i><a href="#/pg/ayuda">Help & legal</a><i aria-hidden="true">/</i><span>Legal</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Términos y <em>condiciones</em></h1></div>
+        <span class="hero__rule" aria-hidden="true"></span><h1>Terms and <em>conditions</em></h1></div>
     </div>
   </div></header>
 
@@ -22385,7 +22385,7 @@ Digital payment, no cash</li></ul>
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Breadcrumb">
           <a href="#/home">Home</a><i aria-hidden="true">/</i><a href="#/pg/ayuda">Help & legal</a><i aria-hidden="true">/</i><span>Legal</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Aviso de <em>privacidad</em></h1></div>
+        <span class="hero__rule" aria-hidden="true"></span><h1>Privacy <em>notice</em></h1></div>
     </div>
   </div></header>
 
@@ -23637,7 +23637,7 @@ Digital payment, no cash</li></ul>
 
 
 </div><div id="pg-bienvenida--shopify-section-ob" class="shopify-section"><section class="section onboarding" data-onboarding data-next-url="/pages/pedido" data-customer-name="" data-customer-email="ramon@ejemplo.com"
-  data-t-welcome="Welcome, {n}" data-t-need-addr="Write your street, neighborhood or cluster, city and postal code so we can deliver." data-t-need-consent="Tick the three confirmations to save your profile." data-t-need="Please complete your name, e-mail and phone."
+  data-t-welcome="Welcome, {n}" data-t-need-addr="Write your street, neighborhood or cluster, city and a 5-digit postal code so we can deliver." data-t-need-consent="Tick the three confirmations to save your profile." data-t-need="Please complete your name, e-mail and phone."
   data-t-stepof="Step [n] of [t]" data-t-edit="Edit" data-t-empty="Not answered" >
   <div class="container ob-wrap">
     <a hidden tabindex="-1" aria-hidden="true" data-ob-week href="#/pg/cuenta-semana"></a><div class="ob-welcome" data-ob-welcome hidden>
@@ -25969,7 +25969,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     grps.forEach(function (c) { c.checked = String(info[c.getAttribute('data-ob-group')] || '').split(', ').indexOf(c.value) > -1; });
     var show = function () {
       steps.forEach(function (s, k) { s.classList.toggle('is-on', k === step); }); dots.forEach(function (d, k) { d.classList.toggle('is-on', k === step); d.classList.toggle('is-done', k < step); });
-      maxStep = Math.max(maxStep, step);
+      maxStep = Math.max(maxStep, step); if (typeof syncDots === 'function') syncDots();
       prevB.hidden = step === 0; nextB.hidden = step === steps.length - 1; saveB.hidden = step !== steps.length - 1;
       var cnt = $('[data-ob-count]', form), bar = $('[data-ob-bar]', form), tt = dots[step] ? $('.ob-dots__t', dots[step]) : null;
       if (cnt) cnt.textContent = (root.getAttribute('data-t-stepof') || '[n] / [t]').replace('[n]', step + 1).replace('[t]', steps.length) + (tt ? '  ·  ' + tt.textContent : '');
@@ -26057,10 +26057,11 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         if (rows.length) sec.appendChild(dl); box.appendChild(sec);
       });
     };
-    dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k <= maxStep && k !== step) { say(''); step = k; show(); } }); });
+    dots.forEach(function (d, k) { var go = function () { if (k <= maxStep && k !== step) { say(''); step = k; show(); } }; d.setAttribute('role', 'button'); d.addEventListener('click', go); d.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }); });
+    var syncDots = function () { dots.forEach(function (d, k) { d.tabIndex = k <= maxStep ? 0 : -1; d.setAttribute('aria-current', k === step ? 'step' : 'false'); }); };
     var stepOk = function (k) {
-      if (k === 0 && !(val('name') && /.+@.+/.test(val('email')) && val('phone'))) { say(root.getAttribute('data-t-need')); return false; }
-      if (k === 1 && !(val('street') && val('cluster') && val('city') && val('zip'))) { say(root.getAttribute('data-t-need-addr')); return false; }
+      if (k === 0 && !(val('name') && /.+@.+\..+/.test(val('email')) && val('phone').replace(/\D/g, '').length >= 8)) { say(root.getAttribute('data-t-need')); return false; }
+      if (k === 1 && !(val('street') && val('cluster') && val('city') && /^\d{5}$/.test(val('zip').replace(/\s/g, '')))) { say(root.getAttribute('data-t-need-addr')); return false; }
       return true;
     };
     nextB.addEventListener('click', function () {
