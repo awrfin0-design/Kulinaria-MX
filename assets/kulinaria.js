@@ -658,6 +658,21 @@
     try { if (location.protocol === 'file:' && localStorage.getItem('kx-test-orders') != null) n = parseInt(localStorage.getItem('kx-test-orders'), 10) || 0; } catch (e) {}   // local preview only
     return n;
   }
+  // The questionnaire answers (profile, onboarded flag, saved details) are tied to the account that gave them. A guest, a first-time account or a different person
+  // on the same browser always starts blank; a returning customer gets their answers back from the server (pullProfile).
+  function bindIdentity() {
+    try {
+      if (location.protocol === 'file:' && !localStorage.getItem('kx-test-identity')) return;       // local preview keeps its test fixtures
+      var a = $('#kx-account'), cid = a ? String(a.getAttribute('data-cid') || '') : '', stored = localStorage.getItem('kx_cid') || '';
+      var wipe = function () {
+        localStorage.removeItem(PROFILE_KEY); localStorage.removeItem(ONB_KEY); sessionStorage.removeItem('kx_pulled');
+        var f = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null');
+        if (f) { f.info = {}; f.allergies = []; f.para = ''; f.mods = f.mods || []; localStorage.setItem(FUNNEL_KEY, JSON.stringify(f)); }
+      };
+      if (!cid) { if (stored || localStorage.getItem(ONB_KEY) || localStorage.getItem(PROFILE_KEY)) { wipe(); localStorage.removeItem('kx_cid'); } return; }
+      if (stored !== cid) { wipe(); localStorage.setItem('kx_cid', cid); }
+    } catch (e) {}
+  }
   function isOnboarded() { try { return !!localStorage.getItem(ONB_KEY); } catch (e) { return false; } }
   // A brand-new account (no orders, no saved profile) is taken to the questionnaire right after signing in, once per visit.
   // Existing paying customers are never interrupted: they go straight to choosing their week.
@@ -1230,6 +1245,7 @@
         var m = modsOf(st.active);
         var ing = (dish.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean);
         box.innerHTML = '';
+        var xb = document.createElement('button'); xb.type = 'button'; xb.className = 'fn-mods__x'; xb.setAttribute('aria-label', T_('mods-done')); xb.textContent = '\u00d7'; xb.addEventListener('click', function () { modsOpen = -1; render(); }); box.appendChild(xb);
         var h = document.createElement('p'); h.className = 'fn-mods__t'; h.textContent = fill(T_('mods-title'), { d: dayLabel(st.active), p: lab(dish) }); box.appendChild(h);
         if (ing.length) {
           var hint = document.createElement('p'); hint.className = 'fn-mods__h'; hint.textContent = T_('mods-hint'); box.appendChild(hint);
@@ -1247,6 +1263,7 @@
         var w = document.createElement('p'); w.className = 'fn-mods__w'; w.textContent = T_('mods-warn'); box.appendChild(w);
         var dn = document.createElement('button'); dn.type = 'button'; dn.className = 'btn btn--outline btn--sm'; dn.textContent = T_('mods-done'); dn.addEventListener('click', function () { modsOpen = -1; render(); }); box.appendChild(dn);
       };
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modsOpen > -1) { modsOpen = -1; render(); } });
       var persist = function () { try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(Object.assign({ v: 2 }, st))); } catch (e) {} };
       var say = function (msg) { if (!err) return; err.hidden = !msg; err.textContent = msg || ''; };
       var fill = function (tpl, o) { return String(tpl).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; }); };
@@ -1998,7 +2015,7 @@
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
