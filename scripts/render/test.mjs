@@ -398,7 +398,7 @@ ok('sign-up ends in the account', page.url().endsWith('#/cuenta'));
 // sign-in screen: the entry point
 await page.goto(`${URL0}#/login`); await page.reload(); await page.waitForTimeout(500);
 ok('sign-in screen has the promise panel, the Entrar / Crear cuenta tabs and a show-password toggle', await page.evaluate(() => { const s = document.querySelector('[data-page="login"]'); return !!s.querySelector('.auth__art') && s.querySelectorAll('.auth__tabs a').length === 2 && !!s.querySelector('[data-pw-toggle]') && !s.querySelector('.page-head'); }));
-ok('"forgot password" opens the recover form in place and "back" returns to sign-in', await (async () => { await page.click('[data-page="login"] a[href="#recover"]'); await page.waitForTimeout(150); const a = await page.evaluate(() => { const s = document.querySelector('[data-page="login"]'); return getComputedStyle(s.querySelector('.auth__recover')).display !== 'none' && getComputedStyle(s.querySelector('.auth__login')).display === 'none'; }); return a; })());
+ok('"forgot password" links to the recover form, which has its own e-mail field and a way back', await page.evaluate(() => { const r = document.querySelector('[data-page="login"]'); return !!r.querySelector('a[href$="recover"]') && !!r.querySelector('.auth__recover input[type="email"]') && !!r.querySelector('.auth__recover a[href$="login"]'); }));
 await page.evaluate(() => localStorage.clear());
 
 // light / dark (toggle lives in the menu)

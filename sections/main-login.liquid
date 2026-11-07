@@ -10,7 +10,7 @@
       <div class="auth__card">
         <nav class="auth__tabs" aria-label="{{ 'general.account' | t }}"><a class="is-on" href="{{ routes.account_login_url }}" aria-current="page">{{ 'login.tab_in' | t }}</a><a href="{{ routes.account_register_url }}">{{ 'login.tab_new' | t }}</a></nav>
         <div class="auth__panes">
-          <div class="auth__login">
+          <div class="auth__login" id="login">
             <h1 class="auth__h">{{ 'login.welcome' | t }}</h1>
             <p class="auth__sub">{{ 'login.sub' | t }}</p>
             {%- form 'customer_login', novalidate: 'novalidate' -%}
