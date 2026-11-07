@@ -32,48 +32,6 @@
   {%- unless section.settings.phone_teaser -%}<div class="funnel__bgphoto" aria-hidden="true">{% render 'photo', art: 'air-steak-dark', alt: '' %}</div>{%- endunless -%}
   <div class="funnel__track" data-fn-track>
    <div class="funnel__stage" data-fn-stage>
-    <div class="fn-gate container" data-fn-gate data-t-done="{{ 'funnel.gate_done' | t }}" data-t-todo="{{ 'funnel.gate_todo' | t }}" data-t-wait="{{ 'funnel.gate_wait' | t }}" hidden>
-      <div class="fn-gate__frame">
-        <div class="fn-gate__intro">
-          <span class="fn-flame" aria-hidden="true"></span>
-          <p class="eyebrow">{{ 'funnel.gate_eye' | t }}</p>
-          <h3>{{ 'funnel.gate_t' | t }}</h3>
-          <p class="fn-gate__p">{{ 'funnel.gate_p' | t }}</p>
-          <ul class="fn-gate__perks"><li>{{ 'funnel.gate_b1' | t }}</li><li>{{ 'funnel.gate_b2' | t }}</li><li>{{ 'funnel.gate_b3' | t }}</li></ul>
-        </div>
-        <div class="fn-gate__flow">
-        <p class="fn-gate__how">{{ 'funnel.gate_how' | t }}</p>
-        <ol class="fn-gate__steps">
-          <li data-fn-gate-s1>
-            <span class="fn-gate__no" aria-hidden="true">01</span>
-            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>{{ 'funnel.gate_todo' | t }}</span><h4>{{ 'funnel.gate_1' | t }}</h4>
-              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="{% render 'login-url', back: '/pages/bienvenida' %}">{{ 'login.enter' | t }}</a></div>
-              <p class="fn-gate__hintline" data-fn-gate-note>{{ 'login.enter_note' | t }}</p><p class="fn-gate__ok">{{ 'funnel.gate_done' | t }}</p></div>
-          </li>
-          <li data-fn-gate-s2>
-            <span class="fn-gate__no" aria-hidden="true">02</span>
-            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>{{ 'funnel.gate_wait' | t }}</span><h4>{{ 'funnel.gate_2' | t }}</h4>
-              <p class="fn-gate__d">{{ 'funnel.gate_2d' | t }}</p>
-              <ul class="fn-gate__cover" aria-label="{{ 'funnel.gate_cover' | t }}"><li>{{ 'onboarding.n1' | t }}</li><li>{{ 'onboarding.n2' | t }}</li><li>{{ 'onboarding.n3' | t }}</li><li>{{ 'onboarding.n4' | t }}</li><li>{{ 'onboarding.n5' | t }}</li></ul>
-              <div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="/pages/bienvenida">{{ 'funnel.gate_go' | t }} &rarr;</a><span class="fn-gate__time">{{ 'funnel.gate_time' | t }}</span></div>
-              <p class="fn-gate__ok">{{ 'funnel.gate_done' | t }}</p></div>
-          </li>
-          <li class="is-later">
-            <span class="fn-gate__no" aria-hidden="true">03</span>
-            <div class="fn-gate__body"><span class="fn-gate__chip">{{ 'funnel.gate_later' | t }}</span><h4>{{ 'funnel.gate_s3' | t }}</h4><p class="fn-gate__d">{{ 'funnel.gate_s3d' | t }}</p></div>
-          </li>
-          <li class="is-later">
-            <span class="fn-gate__no" aria-hidden="true">04</span>
-            <div class="fn-gate__body"><span class="fn-gate__chip">{{ 'funnel.gate_later' | t }}</span><h4>{{ 'funnel.gate_s4' | t }}</h4><p class="fn-gate__d">{{ 'funnel.gate_s4d' | t }}</p></div>
-          </li>
-          <li class="is-later">
-            <span class="fn-gate__no" aria-hidden="true">05</span>
-            <div class="fn-gate__body"><span class="fn-gate__chip">{{ 'funnel.gate_later' | t }}</span><h4>{{ 'funnel.gate_s5' | t }}</h4><p class="fn-gate__d">{{ 'funnel.gate_s5d' | t }}</p></div>
-          </li>
-        </ol>
-        </div>
-      </div>
-    </div>
     <div class="fn-returning container" data-fn-returning hidden>
       <h3>{{ 'funnel.ret_t' | t }}</h3>
       <p data-fn-returning-text></p>
@@ -246,6 +204,35 @@
         </fieldset>
         <fieldset class="step" data-fn-step="3">
           <legend class="fn-sr">{{ 'funnel.s3_title' | t }}</legend>
+    <div class="fn-gate" data-fn-gate data-t-done="{{ 'funnel.gate_done' | t }}" data-t-todo="{{ 'funnel.gate_todo' | t }}" data-t-wait="{{ 'funnel.gate_wait' | t }}" hidden>
+      <div class="fn-gate__frame">
+        <div class="fn-gate__intro">
+          <span class="fn-flame" aria-hidden="true"></span>
+          <p class="eyebrow">{{ 'funnel.gate_eye' | t }}</p>
+          <h3>{{ 'funnel.gate_t' | t }}</h3>
+          <p class="fn-gate__p">{{ 'funnel.gate_p' | t }}</p>
+          <ul class="fn-gate__perks"><li>{{ 'funnel.gate_b1' | t }}</li><li>{{ 'funnel.gate_b2' | t }}</li><li>{{ 'funnel.gate_b3' | t }}</li></ul>
+        </div>
+        <div class="fn-gate__flow">
+        <ol class="fn-gate__steps">
+          <li data-fn-gate-s1>
+            <span class="fn-gate__no" aria-hidden="true">01</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>{{ 'funnel.gate_todo' | t }}</span><h4>{{ 'funnel.gate_1' | t }}</h4>
+              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="{% render 'login-url', back: '/pages/bienvenida' %}">{{ 'login.enter' | t }}</a></div>
+              <p class="fn-gate__hintline" data-fn-gate-note>{{ 'login.enter_note' | t }}</p><p class="fn-gate__ok">{{ 'funnel.gate_done' | t }}</p></div>
+          </li>
+          <li data-fn-gate-s2>
+            <span class="fn-gate__no" aria-hidden="true">02</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>{{ 'funnel.gate_wait' | t }}</span><h4>{{ 'funnel.gate_2' | t }}</h4>
+              <p class="fn-gate__d">{{ 'funnel.gate_2d' | t }}</p>
+              <ul class="fn-gate__cover" aria-label="{{ 'funnel.gate_cover' | t }}"><li>{{ 'onboarding.n1' | t }}</li><li>{{ 'onboarding.n2' | t }}</li><li>{{ 'onboarding.n3' | t }}</li><li>{{ 'onboarding.n4' | t }}</li><li>{{ 'onboarding.n5' | t }}</li></ul>
+              <div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="/pages/bienvenida">{{ 'funnel.gate_go' | t }} &rarr;</a><span class="fn-gate__time">{{ 'funnel.gate_time' | t }}</span></div>
+              <p class="fn-gate__ok">{{ 'funnel.gate_done' | t }}</p></div>
+          </li>
+        </ol>
+        </div>
+      </div>
+    </div>
           <div class="fn-para" data-fn-para-wrap hidden><label for="fn-para-{{ section.id }}">{{ 'funnel.para' | t }}</label><select class="select" id="fn-para-{{ section.id }}" data-fn-para></select><a class="text-link" href="/pages/cuenta-perfil#familia">{{ 'funnel.para_add' | t }}</a></div>
           <ol class="fn-week" data-fn-week aria-label="{{ 'funnel.days_title' | t }}"></ol>
           <div class="fn-mods" data-fn-mods hidden></div>

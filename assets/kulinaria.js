@@ -1454,7 +1454,7 @@
         renderMods();
         holder.setAttribute('data-step', steps[st.step].getAttribute('data-fn-step'));
         if (typeof rulesState === 'function') window.setTimeout(rulesState, 60);
-        if (st.step === 3 && !tourArmed) { tourArmed = true; window.setTimeout(function () { startTour(false); }, 600); }
+        if (st.step === 3 && !tourArmed && !holder.classList.contains('is-gated')) { tourArmed = true; window.setTimeout(function () { startTour(false); }, 600); }
         // stepper
         steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
         dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); d.classList.toggle('is-locked', k > st.reach); d.setAttribute('aria-disabled', k > st.reach ? 'true' : 'false'); });

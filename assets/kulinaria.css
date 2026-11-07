@@ -3109,7 +3109,6 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
 .fn-gate__steps li.is-wait{opacity:.6}
 .fn-gate__steps li.is-wait .fn-gate__no{border-style:dashed;color:var(--text-muted);border-color:var(--line)}
 .fn-gate__steps li.is-wait .fn-gate__chip{color:var(--text-muted);border-color:var(--line)}
-.funnel.is-gated :is(.funnel__top,.funnel__bar,.funnel__stepcount,.funnel__panel,.fn-returning){display:none !important}
 @media (max-width:860px){
   .fn-gate__frame{grid-template-columns:1fr;gap:26px;padding:26px 20px;border-radius:22px}
   .fn-gate__frame::before{inset:7px;border-radius:16px}
@@ -3343,3 +3342,10 @@ body .auth-sec{padding-top:calc(var(--hdr,76px) + clamp(24px,3vw,44px)) !importa
   .fn-gate__row .btn{flex:1 1 100%;width:100%;padding-inline:16px}
   .fn-gate__steps::before{left:26px}
 }
+.fn-gate__steps .fn-gate__cover li{display:block;grid-template-columns:none;padding:4px 11px;gap:0;background:none;border:1px solid var(--line);border-radius:999px;font-size:.74rem;color:var(--text-muted);transform:none;opacity:1}
+
+/* v76 — the sign-in is step 4: steps 1-3 stay fully readable for everyone; only the planner waits for the account */
+.funnel.is-gated [data-fn-step="3"] > :not(legend):not([data-fn-gate]){display:none !important}
+.funnel.is-gated[data-step="3"] .funnel__aside,.funnel.is-gated[data-step="3"] .funnel__bar{display:none !important}
+[data-fn-step="3"] > .fn-gate{margin:0}
+.fn-gate__flow{align-content:start}

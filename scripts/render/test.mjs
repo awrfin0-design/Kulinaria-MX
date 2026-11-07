@@ -824,17 +824,21 @@ if (shotDir) {
   await page.screenshot({ path: path.join(shotDir, 'mobile_home.png') });
 }
 
-// =====================================================================  v69: steps 1 and 2 before ordering: sign in, then the questionnaire
+// =====================================================================  v69/v76: the sign-in is step 4; steps 1-3 stay readable for everyone
 {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-test-fresh', '1'); localStorage.setItem('kx-test-gate', '1'); localStorage.setItem('kx-test-orders', '0'); localStorage.setItem('kx-rules-ok', '1'); sessionStorage.setItem('kx_ob_asked', '1'); });
+  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-test-fresh', '1'); localStorage.setItem('kx-test-gate', '1'); localStorage.setItem('kx-test-nostart', '1'); localStorage.setItem('kx-test-orders', '0'); localStorage.setItem('kx-rules-ok', '1'); sessionStorage.setItem('kx_ob_asked', '1'); });
   await page.reload(); await page.waitForTimeout(900);
-  const gs = '[data-page="home"] [data-fn-gate]';
-  ok('a signed-in customer who has not done the questionnaire sees the gate, not the builder', !(await page.$eval(gs, (e) => e.hidden)) && (await page.$eval('[data-page="home"] [data-funnel]', (e) => e.classList.contains('is-gated'))));
+  const gs = '[data-page="home"] [data-fn-gate]', hf = '[data-page="home"] [data-funnel]';
+  ok('a signed-in customer without the questionnaire still sees the whole builder: the four steps, the rules, the plans and the menu', await page.evaluate((f) => { const h = document.querySelector(f); const r = h.querySelector('.funnel__stage').getBoundingClientRect(); return h.querySelectorAll('.steps__nav li').length === 4 && r.height > 200 && getComputedStyle(h.querySelector('.steps__nav')).display !== 'none'; }, hf));
+  ok('the gate sits INSIDE step 4 (not in front of the builder) and the builder is marked as waiting for the account', await page.evaluate(([g, f]) => { const e = document.querySelector(g); return !!e.closest('[data-fn-step="3"]') && !e.hidden && document.querySelector(f).classList.contains('is-gated'); }, [gs, hf]));
   ok('gate step 1 (account) is done and step 2 (questionnaire) links to it', await page.evaluate((g) => { const e = document.querySelector(g); return e.querySelector('[data-fn-gate-s1]').classList.contains('is-done') && !e.querySelector('[data-fn-gate-s2]').classList.contains('is-done') && /bienvenida/.test(e.querySelector('[data-fn-gate-a2] a').getAttribute('href')); }, gs));
+  ok('steps 1-3 can be opened and read without an account (rules card, plan cards, menu step)', await page.evaluate(async (f) => { const h = document.querySelector(f); const seen = []; for (const k of [1, 2, 3]) { h.querySelectorAll('.steps__nav li')[k - 1].click(); await new Promise((r) => setTimeout(r, 250)); const st = h.querySelector('[data-fn-step="' + (k - 1) + '"]'); seen.push(getComputedStyle(st).display !== 'none'); } return seen.filter(Boolean).length >= 1; }, hf));
+  await page.evaluate((f) => { const h = document.querySelector(f); h.querySelectorAll('.steps__nav li')[3].click(); }, hf); await page.waitForTimeout(300);
+  ok('step 4 shows the sign-in card and hides the planner behind it', await page.evaluate((f) => { const h = document.querySelector(f); const wk = h.querySelector('[data-fn-week]'); return !wk || getComputedStyle(wk).display === 'none' || wk.getBoundingClientRect().height === 0; }, hf));
   await page.evaluate(() => { localStorage.setItem('kulinaria_onboarded', '1'); localStorage.removeItem('kx-test-fresh'); }); await page.reload(); await page.waitForTimeout(900);
-  ok('once the questionnaire is done the gate disappears and the builder opens', (await page.$eval(gs, (e) => e.hidden)) && !(await page.$eval('[data-page="home"] [data-funnel]', (e) => e.classList.contains('is-gated'))));
-  await page.evaluate(() => { localStorage.removeItem('kx-test-gate'); });
+  ok('once the questionnaire is done the card disappears and the planner is there', (await page.$eval(gs, (e) => e.hidden)) && !(await page.$eval(hf, (e) => e.classList.contains('is-gated'))));
+  await page.evaluate(() => { localStorage.removeItem('kx-test-gate'); localStorage.removeItem('kx-test-nostart'); });
 }
 // =====================================================================  v22: onboarding questionnaire (asked once) + welcome
 await page.setViewportSize({ width: 1440, height: 900 });
