@@ -3255,6 +3255,95 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
 .ob-dots li,.ob-dots__t{text-align:left}
 @media (max-width:860px){.ob-dots li{text-align:center}}
 
+/* =====================================================================
+   v71 — sign-in / create account: the entry point
+   ===================================================================== */
+.auth-sec{padding-block:calc(var(--hdr,76px) + clamp(70px,8vw,110px)) clamp(36px,6vw,90px);min-height:calc(100svh - 120px);display:grid;align-items:center}
+.auth-wrap{max-width:1080px}
+.auth{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);border:1px solid var(--border-accent);border-radius:30px;overflow:hidden;background:var(--bg-raised);box-shadow:0 40px 90px -40px rgba(0,0,0,.6)}
+.auth__art{position:relative;display:flex;flex-direction:column;justify-content:flex-end;gap:14px;padding:clamp(28px,4vw,56px);min-height:520px;
+  background:radial-gradient(70% 55% at 30% 105%,var(--accent-wash),transparent 70%),radial-gradient(60% 40% at 90% 0%,var(--accent-wash),transparent 70%),linear-gradient(170deg,var(--bg-deep),var(--bg-base));border-right:1px solid var(--line);overflow:hidden}
+.auth__art::after{content:"";position:absolute;inset:10px;border:1px solid var(--line);border-radius:22px;pointer-events:none}
+.auth__art .fn-flame{width:44px;height:62px;margin-bottom:auto;clip-path:path("M22 0C25 16 41 24 41 41C41 53 32 62 22 62C12 62 3 53 3 41C3 32 8 27 12 21C14 28 18 31 20 31C18 21 18 10 22 0Z")}
+.auth__art .eyebrow{margin:0}
+.auth__art h2{margin:0;font-family:var(--font-display,var(--font-heading));font-size:clamp(1.9rem,3.2vw,2.8rem);line-height:1.06;font-weight:500;letter-spacing:-.015em;max-width:14ch}
+.auth__list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:12px;counter-reset:a;position:relative;z-index:1}
+.auth__list li{counter-increment:a;position:relative;padding-left:40px;font-size:.92rem;color:var(--text-muted);line-height:1.5}
+.auth__list li::before{content:"0" counter(a);position:absolute;left:0;top:-1px;font:600 1.05rem var(--font-display,var(--font-heading));color:var(--accent)}
+.auth__card{padding:clamp(28px,4vw,60px);display:flex;flex-direction:column;min-width:0}
+.auth__tabs{display:inline-flex;align-self:flex-start;border:1.5px solid var(--line);border-radius:999px;padding:4px;margin-bottom:clamp(20px,3vw,32px)}
+.auth__tabs a{padding:9px 20px;border-radius:999px;font:700 .68rem var(--font-label);letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:background .2s,color .2s}
+.auth__tabs a.is-on{background:var(--accent);color:var(--bg-base)}
+.auth__tabs a:not(.is-on):hover{color:var(--text)}
+.auth__h{margin:0 0 8px;font-family:var(--font-display,var(--font-heading));font-size:clamp(1.9rem,3.2vw,2.7rem);line-height:1.08;font-weight:500;letter-spacing:-.015em}
+.auth__sub{margin:0 0 clamp(18px,2.6vw,28px);color:var(--text-muted);font-size:.95rem;max-width:46ch}
+.auth .input{background:color-mix(in srgb,var(--bg-base) 70%,var(--bg-raised));transition:border-color .2s,box-shadow .2s}
+.auth .input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-wash);outline:none}
+.pw{position:relative}.pw .input{padding-right:84px}
+.pw__t{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--accent);font:700 .66rem var(--font-label);letter-spacing:.12em;text-transform:uppercase;padding:10px 12px;cursor:pointer}
+.auth__alt{margin:18px 0 0;font-size:.85rem}.auth__alt a{color:var(--text-muted);text-decoration:underline;text-underline-offset:3px}.auth__alt a:hover{color:var(--accent)}
+.auth__switch{margin:auto 0 0;padding-top:24px;font-size:.88rem;color:var(--text-muted)}
+.auth__switch a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;font-weight:600}
+.auth__note{margin:6px 0 18px;padding:12px 14px;border-left:2px solid var(--accent);background:var(--accent-wash);font-size:.85rem;color:var(--text);border-radius:0 12px 12px 0}
+.auth__recover{display:none}
+.auth__panes:has(#recover:target) .auth__login{display:none}
+.auth__panes:has(#recover:target) .auth__recover{display:block}
+.auth .signup__form .steps__nav{margin:0 0 6px}
+.auth .steps__actions{margin-top:18px;display:flex;justify-content:space-between;align-items:center}
+.auth .steps__actions .btn{margin-left:auto}
+.auth .step legend{font-family:var(--font-display,var(--font-heading));font-size:1.3rem;font-weight:500;margin-bottom:var(--space-md)}
+@media (max-width:860px){
+  .auth-sec{padding-top:calc(var(--hdr,64px) + 10px);min-height:0;align-items:start}
+  .auth{grid-template-columns:1fr;border-radius:22px}
+  .auth__art{min-height:0;flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:18px 18px 16px;border-right:0;border-bottom:1px solid var(--line)}
+  .auth__art::after{display:none}
+  .auth__art .fn-flame{width:26px;height:38px;margin:0;clip-path:path("M13 0C15 9 24 14 24 24C24 31 19 38 13 38C7 38 2 31 2 24C2 19 5 16 7 12C8 17 11 19 12 19C11 12 11 6 13 0Z")}
+  .auth__art .eyebrow{flex:1}
+  .auth__art h2{flex-basis:100%;font-size:1.35rem;max-width:none}
+  .auth__list{display:none}
+  .auth__card{padding:22px 18px 26px}
+  .auth .form-grid{grid-template-columns:1fr}
+}
+
+/* v72 — search: never an empty page; site sections are searchable too */
+.search-form{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px}
+.search-form .input{flex:1 1 280px;max-width:520px}
+.search-hint{margin:0 0 clamp(24px,3vw,40px);font-size:.84rem;color:var(--text-muted)}
+.search-h{margin:clamp(22px,3vw,36px) 0 14px;font:700 .72rem var(--font-label);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.sitelinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.sitelink{position:relative;display:grid;gap:6px;padding:18px 52px 18px 20px;border:1px solid var(--line);border-radius:18px;background:color-mix(in srgb,var(--bg-base) 50%,var(--bg-raised));text-decoration:none;color:var(--text);transition:border-color .25s,transform .25s,background .25s}
+.sitelink:hover{border-color:var(--accent);transform:translateY(-2px);background:var(--accent-wash)}
+.sitelink__t{font-family:var(--font-display,var(--font-heading));font-size:1.2rem;font-weight:500}
+.sitelink__d{font-size:.85rem;color:var(--text-muted);line-height:1.5}
+.sitelink__go{position:absolute;right:18px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:1px solid var(--border-accent);display:grid;place-items:center;color:var(--accent);transition:background .25s,color .25s}
+.sitelink:hover .sitelink__go{background:var(--accent);color:var(--bg-base)}
+
+/* =====================================================================
+   v73 — landing polish: framed returning card, tidier hero CTAs, steady countdown, calmer rhythm
+   ===================================================================== */
+.fn-returning{position:relative;gap:12px;padding:clamp(24px,4vw,48px);border-radius:26px;overflow:hidden;
+  background:radial-gradient(110% 90% at 0% 0%,var(--accent-wash),transparent 62%),radial-gradient(70% 60% at 100% 100%,var(--accent-wash),transparent 65%),var(--bg-raised)}
+.fn-returning::before{content:"";position:absolute;inset:9px;border:1px solid var(--line);border-radius:19px;pointer-events:none}
+.fn-returning>*{position:relative}
+.fn-returning h3{font-family:var(--font-display,var(--font-heading));font-weight:500;letter-spacing:-.015em;font-size:clamp(1.7rem,3.2vw,2.6rem);line-height:1.08}
+.countdown{white-space:normal}.countdown strong,[data-cutoff-value]{white-space:nowrap}
+.hero__cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px clamp(22px,3vw,44px)}
+.hero__cta .arrow-link,.hero__cta .text-link{display:inline-flex;align-items:center;min-height:52px;line-height:1}
+.hero__cta .text-link{border-bottom:1px solid var(--border-accent);padding-bottom:3px;min-height:0;transition:border-color .25s,color .25s}
+.hero__cta .text-link:hover{border-color:var(--accent);color:var(--accent)}
+@media (max-width:760px){
+  .hero__cta{flex-direction:column;align-items:stretch;gap:12px}
+  .hero__cta .text-link{justify-content:center;border-bottom:0;min-height:44px;text-decoration:underline;text-underline-offset:4px}
+}
+/* section rhythm: eyebrow rules and headings read as one family across the page */
+.section__head .eyebrow{display:inline-flex;align-items:center;gap:14px}
+.section__head h2{letter-spacing:-.015em;line-height:1.06}
+/* cards: one lift + one glow on hover, nothing else moves */
+.dish,.card,.plan-card{transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,border-color .35s}
+@media (hover:hover){.dish:hover,.plan-card:hover{transform:translateY(-4px);box-shadow:0 26px 50px -28px rgba(0,0,0,.65),0 0 0 1px var(--border-accent)}}
+body .auth-sec{padding-top:calc(var(--hdr,76px) + clamp(24px,3vw,44px)) !important;padding-bottom:clamp(36px,6vw,90px) !important;align-items:start}
+@media (max-width:860px){body .auth-sec{padding-top:calc(var(--hdr,64px) + 8px) !important}}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -13592,38 +13681,34 @@ Pago digital, sin efectivo</li></ul>
 </div>
     </div>
 <div data-page="login" data-template="customers-login" data-title="Iniciar sesión" hidden>
-      <div id="login--shopify-section-head" class="shopify-section"><header class="page-head" >
-  <div class="page-head__photo">
-    <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-bowl.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
-    <div class="container">
-      <div class="page-head__copy">
-        <nav class="page-head__crumbs" aria-label="Ruta de navegación">
-          <a href="#/home">Inicio</a><i aria-hidden="true">/</i><span>Iniciar sesión</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Tu cuenta <em><span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-black.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-cream.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true"></span></em></h1><p class="hero__sub">Entra para elegir tus platillos, pausar entregas y ver tu monedero.</p></div>
-    </div>
-  </div></header>
-
-
-</div><div id="login--shopify-section-main" class="shopify-section"><section class="section" >
-  <div class="container" style="max-width:980px">
-    <div class="grid grid--2">
-      <div class="panel panel--gold">
-        <span class="eyebrow">Mi cuenta</span>
-        <h2 style="font-size:2.4rem">Iniciar sesión</h2><form method="post" action="/account/login" data-shopify-form="customer_login" accept-charset="UTF-8"><div class="field"><label for="login--login-email">Correo</label><input class="input" id="login--login-email" type="email" name="customer[email]" autocomplete="email" required></div>
-          <div class="field"><label for="login--login-pass">Contraseña</label><input class="input" id="login--login-pass" type="password" name="customer[password]" autocomplete="current-password" required></div>
-          <button class="btn btn--gold btn--block" type="submit">Entrar</button>
-          <p style="margin-top:var(--space-md)"><a href="#login--recover" class="btn btn--ghost">¿Olvidaste tu contraseña?</a></p></form></div>
-      <div class="panel">
-        <span class="eyebrow">Nuevo en Kulinaria</span>
-        <h2 style="font-size:2rem">Crea tu cuenta</h2>
-        <p class="text-muted">Al inscribirte llenas tu perfil de alergias y aceptas el contrato de adhesión antes de pagar.</p>
-        <a class="btn btn--outline" href="#/registro">Crear cuenta</a>
+      <div id="login--shopify-section-main" class="shopify-section"><section class="section auth-sec" >
+  <div class="container auth-wrap">
+    <div class="auth">
+      <aside class="auth__art" aria-hidden="false">
+        <span class="fn-flame"></span>
+        <p class="eyebrow">Arte del fuego</p>
+        <h2>Cada platillo, revisado para ti</h2>
+        <ol class="auth__list"><li>Tus alergias se revisan en cada platillo.</li><li>Tu semana se arma con tus gustos, sin repetir datos.</li><li>Entregas pausables y un monedero para tus créditos.</li></ol>
+      </aside>
+      <div class="auth__card">
+        <nav class="auth__tabs" aria-label="Mi cuenta"><a class="is-on" href="#/login" aria-current="page">Entrar</a><a href="#/registro">Crear cuenta</a></nav>
+        <div class="auth__panes">
+          <div class="auth__login">
+            <h1 class="auth__h">Bienvenido de vuelta</h1>
+            <p class="auth__sub">Entra para elegir tu semana, pausar entregas y ver tu monedero.</p><form method="post" action="/account/login" data-shopify-form="customer_login" accept-charset="UTF-8"><div class="field"><label for="login--login-email">Correo</label><input class="input" id="login--login-email" type="email" name="customer[email]" autocomplete="email" required></div>
+              <div class="field field--pw"><label for="login--login-pass">Contraseña</label>
+                <div class="pw"><input class="input" id="login--login-pass" type="password" name="customer[password]" autocomplete="current-password" required><button class="pw__t" type="button" data-pw-toggle data-t-show="Mostrar" data-t-hide="Ocultar">Mostrar</button></div></div>
+              <button class="btn btn--gold btn--block" type="submit">Entrar</button>
+              <p class="auth__alt"><a href="#login--recover">¿Olvidaste tu contraseña?</a></p></form><p class="auth__switch">Nuevo en Kulinaria <a href="#/registro">Crear cuenta</a></p>
+          </div>
+          <div id="login--recover" class="auth__recover">
+            <h2 class="auth__h">Recuperar contraseña</h2>
+            <p class="auth__sub">Te enviamos un enlace para crear una nueva contraseña.</p><form method="post" action="/account/recover" data-shopify-form="recover_customer_password" accept-charset="UTF-8"><div class="field"><label for="login--rec-email">Correo</label><input class="input" id="login--rec-email" type="email" name="email" required></div>
+              <button class="btn btn--gold btn--block" type="submit">Enviar enlace</button></form><p class="auth__alt"><a href="#login">Volver a entrar</a></p>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div id="login--recover" class="panel" style="margin-top:var(--space-xl)">
-      <h2 style="font-size:1.6rem">Recuperar contraseña</h2><form method="post" action="/account/recover" data-shopify-form="recover_customer_password" accept-charset="UTF-8"><div class="field"><label for="login--rec-email">Correo</label><input class="input" id="login--rec-email" type="email" name="email" required></div>
-        <button class="btn btn--outline" type="submit">Enviar enlace</button></form></div>
   </div>
 </section>
 
@@ -13631,92 +13716,54 @@ Pago digital, sin efectivo</li></ul>
 </div>
     </div>
 <div data-page="registro" data-template="customers-register" data-title="Crear cuenta" hidden>
-      <div id="registro--shopify-section-head" class="shopify-section"><header class="page-head" >
-  <div class="page-head__photo">
-    <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-fish.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
-    <div class="container">
-      <div class="page-head__copy">
-        <nav class="page-head__crumbs" aria-label="Ruta de navegación">
-          <a href="#/home">Inicio</a><i aria-hidden="true">/</i><span>Crear cuenta</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Crea tu <em>cuenta</em></h1></div>
+      <div id="registro--shopify-section-main" class="shopify-section"><section class="section auth-sec signup" >
+  <div class="container auth-wrap">
+    <div class="auth">
+      <aside class="auth__art" aria-hidden="false">
+        <span class="fn-flame"></span>
+        <p class="eyebrow">Arte del fuego</p>
+        <h2>Cada platillo, revisado para ti</h2>
+        <ol class="auth__list"><li>Tus alergias se revisan en cada platillo.</li><li>Tu semana se arma con tus gustos, sin repetir datos.</li><li>Entregas pausables y un monedero para tus créditos.</li></ol>
+      </aside>
+      <div class="auth__card">
+        <nav class="auth__tabs" aria-label="Mi cuenta"><a href="#/login">Entrar</a><a class="is-on" href="#/registro" aria-current="page">Crear cuenta</a></nav>
+        <h1 class="auth__h">Crea tu cuenta</h1>
+        <p class="auth__sub">Dos pasos cortos. Después te haremos unas preguntas para conocerte mejor.</p><form method="post" action="/account" data-shopify-form="create_customer" accept-charset="UTF-8" class="signup__form"><div class="steps" data-steps>
+            <ol class="steps__nav" aria-label="Pasos del registro">
+              <li data-step-dot class="is-on"><span>01</span>Cuenta</li>
+              <li data-step-dot><span>02</span>Contrato</li>
+            </ol>
+            <div class="steps__bar" aria-hidden="true"><i data-steps-bar></i></div>
+
+            <fieldset class="step is-on" data-step>
+              <legend>Tus datos de acceso</legend>
+              <div class="form-grid">
+                <div class="field"><label for="registro--reg-first">Nombre</label><input class="input" id="registro--reg-first" name="customer[first_name]" autocomplete="given-name" required></div>
+                <div class="field"><label for="registro--reg-last">Apellido</label><input class="input" id="registro--reg-last" name="customer[last_name]" autocomplete="family-name" required></div>
+                <div class="field"><label for="registro--reg-email">Correo</label><input class="input" id="registro--reg-email" type="email" name="customer[email]" autocomplete="email" required></div>
+                <div class="field field--pw"><label for="registro--reg-pass">Contraseña</label>
+                  <div class="pw"><input class="input" id="registro--reg-pass" type="password" name="customer[password]" autocomplete="new-password" required><button class="pw__t" type="button" data-pw-toggle data-t-show="Mostrar" data-t-hide="Ocultar">Mostrar</button></div></div>
+                <div class="field"><label for="registro--reg-phone">Teléfono</label><input class="input" id="registro--reg-phone" type="tel" name="customer[phone]" autocomplete="tel"></div>
+                <div class="field"><label for="registro--reg-ref">Código de referencia (opcional)</label><input class="input" id="registro--reg-ref" data-ref-save placeholder="JUANFIT" autocomplete="off" style="text-transform:uppercase"></div>
+              </div>
+            </fieldset>
+
+            <fieldset class="step" data-step>
+              <legend>Un último paso</legend>
+              <p class="text-muted">Acepta el contrato antes de pagar. Incluye renovaciones, penalizaciones y la selección automática de los sábados.</p>
+              <label class="check check--box"><input type="checkbox" name="contract" data-signup-contract required> <span>Acepto el contrato de adhesión y los términos de servicio de Kulinaria MX, incluida la selección automática de los sábados, las reglas de renovación y la política de no reembolso. <a href="#/pg/terminos" target="_blank" rel="noopener" style="text-decoration:underline">Términos y condiciones</a></span></label>
+              <p class="auth__note">Al entrar te haremos unas preguntas (unos 2 minutos): entrega, alergias y gustos.</p>
+              <input type="hidden" name="customer[tags]" value="suscriptor">
+              <button class="btn btn--gold btn--block" type="submit" data-signup-submit disabled>Crear cuenta</button>
+            </fieldset>
+
+            <div class="steps__actions">
+              <button class="text-link" type="button" data-step-prev hidden>Atrás</button>
+              <button class="btn btn--gold" type="button" data-step-next>Continuar</button>
+            </div>
+          </div></form><p class="auth__switch">¿Ya tienes cuenta? <a href="#/login">Iniciar sesión</a></p>
+      </div>
     </div>
-  </div></header>
-
-
-</div><div id="registro--shopify-section-main" class="shopify-section"><section class="section signup" >
-  <div class="container" style="max-width:860px">
-    <div class="section__head">
-      <p class="lede">Cinco pasos: tu cuenta, un contacto de respaldo, tus alergias, tu plan y el contrato.</p>
-    </div><form method="post" action="/account" data-shopify-form="create_customer" accept-charset="UTF-8" class="signup__form"><div class="steps" data-steps>
-        <ol class="steps__nav" aria-label="Pasos del registro">
-          <li data-step-dot class="is-on"><span>01</span>Cuenta</li>
-          <li data-step-dot><span>02</span>Respaldo</li>
-          <li data-step-dot><span>03</span>Alergias</li>
-          <li data-step-dot><span>04</span>Plan</li>
-          <li data-step-dot><span>05</span>Contrato</li>
-        </ol>
-        <div class="steps__bar" aria-hidden="true"><i data-steps-bar></i></div>
-
-        <fieldset class="step is-on" data-step>
-          <legend>Cuenta y datos de envío</legend>
-          <div class="form-grid">
-            <div class="field"><label for="registro--reg-first">Nombre</label><input class="input" id="registro--reg-first" name="customer[first_name]" autocomplete="given-name" required></div>
-            <div class="field"><label for="registro--reg-last">Apellido</label><input class="input" id="registro--reg-last" name="customer[last_name]" autocomplete="family-name" required></div>
-            <div class="field"><label for="registro--reg-email">Correo</label><input class="input" id="registro--reg-email" type="email" name="customer[email]" autocomplete="email" required></div>
-            <div class="field"><label for="registro--reg-pass">Contraseña</label><input class="input" id="registro--reg-pass" type="password" name="customer[password]" autocomplete="new-password" required></div>
-            <div class="field"><label for="registro--reg-phone">Teléfono</label><input class="input" id="registro--reg-phone" type="tel" name="customer[phone]" autocomplete="tel"></div>
-            <div class="field"><label for="registro--reg-zip">Código postal</label><input class="input" id="registro--reg-zip" name="address[zip]" autocomplete="postal-code"></div>
-          </div>
-          <div class="field"><label for="registro--reg-street">Calle y número de lote / casa</label><input class="input" id="registro--reg-street" name="address[address1]" autocomplete="address-line1"></div>
-          <div class="field"><label for="registro--reg-cluster">Clúster y referencias de acceso</label><input class="input" id="registro--reg-cluster" name="address[address2]"></div>
-          <p class="text-muted">Incluye clúster, calle, número de lote o casa y referencias de acceso.</p>
-        </fieldset>
-
-        <fieldset class="step" data-step>
-          <legend>Suscriptor secundario</legend>
-          <p class="text-muted">Un segundo número de respaldo: recibe el pedido si el titular no está disponible. Es opcional.</p>
-          <div class="form-grid">
-            <div class="field"><label for="registro--reg-sec-name">Nombre completo</label><input class="input" id="registro--reg-sec-name" name="customer[note][secundario_nombre]"></div>
-            <div class="field"><label for="registro--reg-sec-phone">Teléfono</label><input class="input" id="registro--reg-sec-phone" type="tel" name="customer[note][secundario_telefono]"></div>
-          </div>
-        </fieldset>
-
-        <fieldset class="step" data-step>
-          <legend>Alergias, gustos y dieta <span class="tier-badge tier-badge--exclusivo" style="margin-left:8px">Crítico</span></legend>
-          <p class="text-muted">Los platillos que contengan estos ingredientes (o trazas) se bloquean por completo en tu menú.</p>
-          <div class="check-grid"><label class="check"><input type="checkbox" name="allergy" value="Gluten"> <span>Gluten</span></label><label class="check"><input type="checkbox" name="allergy" value="Lácteos"> <span>Lácteos</span></label><label class="check"><input type="checkbox" name="allergy" value="Frutos secos"> <span>Frutos secos</span></label><label class="check"><input type="checkbox" name="allergy" value="Mariscos"> <span>Mariscos</span></label></div>
-          <div class="field"><label for="registro--reg-allergy-other">Otras alergias</label><input class="input" id="registro--reg-allergy-other" name="allergy_other" placeholder="Separa con comas: soya, huevo, ajonjolí"></div>
-          <div class="field"><label for="registro--reg-dislikes">Bloque 2 · Ingredientes que no me gustan</label><input class="input" id="registro--reg-dislikes" name="dislikes" placeholder="Ej. jitomate"></div>
-          <p class="label" style="margin-top:var(--space-lg)">Preferencias dietéticas</p>
-          <div class="check-grid"><label class="check"><input type="checkbox" name="diet" value="Keto"> <span>Keto</span></label><label class="check"><input type="checkbox" name="diet" value="Libre de gluten"> <span>Libre de gluten</span></label><label class="check"><input type="checkbox" name="diet" value="Vegetariano"> <span>Vegetariano</span></label><label class="check"><input type="checkbox" name="diet" value="Vegano"> <span>Vegano</span></label></div>
-        </fieldset>
-
-        <fieldset class="step" data-step>
-          <legend>Elige tu plan</legend>
-          <div class="plan-picker">
-            <label><input type="radio" name="plan" value="block" checked><span><strong>Bloque de 4 semanas</strong><br><small class="text-muted">Suscripción renovable con entrega semanal. La opción recomendada.</small></span></label>
-            <label><input type="radio" name="plan" value="trial"><span><strong>Semana de prueba</strong><br><small class="text-muted">Una sola semana, 15% más cara que el prorrateo del bloque.</small></span></label>
-          </div>
-          <div class="field" style="margin-top:var(--space-lg)">
-            <label for="registro--reg-ref">Código de referencia (opcional)</label>
-            <input class="input" id="registro--reg-ref" data-ref-save placeholder="JUANFIT" autocomplete="off" style="text-transform:uppercase">
-          </div>
-          <p class="text-muted">Con un código válido y tu primer bloque pagado recibes un regalo de bienvenida a $0: playera o vaso mezclador.</p>
-        </fieldset>
-
-        <fieldset class="step" data-step>
-          <legend>Contrato de adhesión</legend>
-          <p class="text-muted">Acepta el contrato antes de pagar. Incluye renovaciones, penalizaciones y la selección automática de los sábados.</p>
-          <label class="check" style="margin:var(--space-lg) 0"><input type="checkbox" name="contract" data-signup-contract required> <span>Acepto el contrato de adhesión y los términos de servicio de Kulinaria MX, incluida la selección automática de los sábados, las reglas de renovación y la política de no reembolso. <a href="#/pg/terminos" target="_blank" rel="noopener" style="text-decoration:underline">Leer contrato</a></span></label>
-          <input type="hidden" name="customer[tags]" value="suscriptor">
-          <button class="btn btn--gold" type="submit" data-signup-submit disabled>Crear cuenta</button>
-        </fieldset>
-
-        <div class="steps__actions">
-          <button class="text-link" type="button" data-step-prev hidden>Atrás</button>
-          <button class="btn btn--outline" type="button" data-step-next>Continuar</button>
-        </div>
-      </div></form><p class="text-muted" style="margin-top:var(--space-xl)">¿Ya tienes cuenta? <a href="#/login" style="text-decoration:underline">Iniciar sesión</a></p>
   </div>
 </section>
 
@@ -13838,17 +13885,18 @@ Pago digital, sin efectivo</li></ul>
   </div></header>
 
 
-</div><div id="buscar--shopify-section-main" class="shopify-section"><section class="section" >
+</div><div id="buscar--shopify-section-main" class="shopify-section"><section class="section search-sec" >
   <div class="container">
     <div class="section__head">
       <span class="eyebrow">Buscar</span>
       <h2 style="font-size:clamp(2.2rem,4vw,3.4rem)">Resultados para "salmón"</h2>
     </div>
-    <form action="/search" method="get" role="search" class="btn-row" style="margin-bottom:var(--space-xl)">
-      <input class="input" style="max-width:420px" type="search" name="q" value="salmón" placeholder="Busca un platillo" aria-label="Buscar">
-      <input type="hidden" name="type" value="product">
+    <form action="/search" method="get" role="search" class="search-form">
+      <input class="input" type="search" name="q" value="salmón" placeholder="Busca un platillo" aria-label="Buscar">
+      <input type="hidden" name="type" value="product,page,article">
       <button class="btn btn--gold" type="submit">Buscar</button>
-    </form><div class="dish-grid"><article class="dish" data-dish data-has-detail
+    </form>
+    <p class="search-hint">Prueba con "nosotros", "planes", "ayuda" o el nombre de un platillo.</p><h3 class="search-h">Platillos</h3><div class="dish-grid"><article class="dish" data-dish data-has-detail
   data-category="al-fuego-y-mar" data-tier="exclusivo"
   data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <a class="dish__media surface-walnut" data-tilt-card href="#/p/salmon-costra-almendras" aria-label="Salmón gourmet en costra de almendras"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"><span class="dish__pill" aria-hidden="true">Ver ficha</span></a>
@@ -23869,38 +23917,34 @@ Digital payment, no cash</li></ul>
 </div>
     </div>
 <div data-page="login" data-template="customers-login" data-title="Iniciar sesión" hidden>
-      <div id="login--shopify-section-head" class="shopify-section"><header class="page-head" >
-  <div class="page-head__photo">
-    <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-bowl.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
-    <div class="container">
-      <div class="page-head__copy">
-        <nav class="page-head__crumbs" aria-label="Breadcrumb">
-          <a href="#/home">Home</a><i aria-hidden="true">/</i><span>Sign in</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Your <em><span class="wordmark"><span class="visually-hidden">Kulinaria</span><img class="wm-ink" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-black.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-cream" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-cream.webp" width="700" height="342" alt="" aria-hidden="true"><img class="wm-gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true"></span></em> account</h1><p class="hero__sub">Sign in to choose your dishes, pause deliveries and see your wallet.</p></div>
-    </div>
-  </div></header>
-
-
-</div><div id="login--shopify-section-main" class="shopify-section"><section class="section" >
-  <div class="container" style="max-width:980px">
-    <div class="grid grid--2">
-      <div class="panel panel--gold">
-        <span class="eyebrow">My account</span>
-        <h2 style="font-size:2.4rem">Sign in</h2><form method="post" action="/account/login" data-shopify-form="customer_login" accept-charset="UTF-8"><div class="field"><label for="login--login-email">Email</label><input class="input" id="login--login-email" type="email" name="customer[email]" autocomplete="email" required></div>
-          <div class="field"><label for="login--login-pass">Password</label><input class="input" id="login--login-pass" type="password" name="customer[password]" autocomplete="current-password" required></div>
-          <button class="btn btn--gold btn--block" type="submit">Sign in</button>
-          <p style="margin-top:var(--space-md)"><a href="#login--recover" class="btn btn--ghost">Forgot your password?</a></p></form></div>
-      <div class="panel">
-        <span class="eyebrow">New to Kulinaria</span>
-        <h2 style="font-size:2rem">Create your account</h2>
-        <p class="text-muted">When you sign up you fill in your allergy profile and accept the adhesion contract before paying.</p>
-        <a class="btn btn--outline" href="#/registro">Create account</a>
+      <div id="login--shopify-section-main" class="shopify-section"><section class="section auth-sec" >
+  <div class="container auth-wrap">
+    <div class="auth">
+      <aside class="auth__art" aria-hidden="false">
+        <span class="fn-flame"></span>
+        <p class="eyebrow">The art of fire</p>
+        <h2>Every dish, checked for you</h2>
+        <ol class="auth__list"><li>Your allergies are checked on every dish.</li><li>Your week is built from your tastes, with no repeated details.</li><li>Pausable deliveries and a wallet for your credits.</li></ol>
+      </aside>
+      <div class="auth__card">
+        <nav class="auth__tabs" aria-label="My account"><a class="is-on" href="#/login" aria-current="page">Sign in</a><a href="#/registro">Create account</a></nav>
+        <div class="auth__panes">
+          <div class="auth__login">
+            <h1 class="auth__h">Welcome back</h1>
+            <p class="auth__sub">Sign in to pick your week, pause deliveries and see your wallet.</p><form method="post" action="/account/login" data-shopify-form="customer_login" accept-charset="UTF-8"><div class="field"><label for="login--login-email">Email</label><input class="input" id="login--login-email" type="email" name="customer[email]" autocomplete="email" required></div>
+              <div class="field field--pw"><label for="login--login-pass">Password</label>
+                <div class="pw"><input class="input" id="login--login-pass" type="password" name="customer[password]" autocomplete="current-password" required><button class="pw__t" type="button" data-pw-toggle data-t-show="Show" data-t-hide="Hide">Show</button></div></div>
+              <button class="btn btn--gold btn--block" type="submit">Sign in</button>
+              <p class="auth__alt"><a href="#login--recover">Forgot your password?</a></p></form><p class="auth__switch">New to Kulinaria <a href="#/registro">Create account</a></p>
+          </div>
+          <div id="login--recover" class="auth__recover">
+            <h2 class="auth__h">Recover password</h2>
+            <p class="auth__sub">We will send you a link to set a new password.</p><form method="post" action="/account/recover" data-shopify-form="recover_customer_password" accept-charset="UTF-8"><div class="field"><label for="login--rec-email">Email</label><input class="input" id="login--rec-email" type="email" name="email" required></div>
+              <button class="btn btn--gold btn--block" type="submit">Send link</button></form><p class="auth__alt"><a href="#login">Back to sign in</a></p>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div id="login--recover" class="panel" style="margin-top:var(--space-xl)">
-      <h2 style="font-size:1.6rem">Recover password</h2><form method="post" action="/account/recover" data-shopify-form="recover_customer_password" accept-charset="UTF-8"><div class="field"><label for="login--rec-email">Email</label><input class="input" id="login--rec-email" type="email" name="email" required></div>
-        <button class="btn btn--outline" type="submit">Send link</button></form></div>
   </div>
 </section>
 
@@ -23908,92 +23952,54 @@ Digital payment, no cash</li></ul>
 </div>
     </div>
 <div data-page="registro" data-template="customers-register" data-title="Crear cuenta" hidden>
-      <div id="registro--shopify-section-head" class="shopify-section"><header class="page-head" >
-  <div class="page-head__photo">
-    <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-fish.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
-    <div class="container">
-      <div class="page-head__copy">
-        <nav class="page-head__crumbs" aria-label="Breadcrumb">
-          <a href="#/home">Home</a><i aria-hidden="true">/</i><span>Create account</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Create your <em>account</em></h1></div>
+      <div id="registro--shopify-section-main" class="shopify-section"><section class="section auth-sec signup" >
+  <div class="container auth-wrap">
+    <div class="auth">
+      <aside class="auth__art" aria-hidden="false">
+        <span class="fn-flame"></span>
+        <p class="eyebrow">The art of fire</p>
+        <h2>Every dish, checked for you</h2>
+        <ol class="auth__list"><li>Your allergies are checked on every dish.</li><li>Your week is built from your tastes, with no repeated details.</li><li>Pausable deliveries and a wallet for your credits.</li></ol>
+      </aside>
+      <div class="auth__card">
+        <nav class="auth__tabs" aria-label="My account"><a href="#/login">Sign in</a><a class="is-on" href="#/registro" aria-current="page">Create account</a></nav>
+        <h1 class="auth__h">Create your account</h1>
+        <p class="auth__sub">Two short steps. Afterwards we will ask a few questions to get to know you.</p><form method="post" action="/account" data-shopify-form="create_customer" accept-charset="UTF-8" class="signup__form"><div class="steps" data-steps>
+            <ol class="steps__nav" aria-label="Sign-up steps">
+              <li data-step-dot class="is-on"><span>01</span>Account</li>
+              <li data-step-dot><span>02</span>Contract</li>
+            </ol>
+            <div class="steps__bar" aria-hidden="true"><i data-steps-bar></i></div>
+
+            <fieldset class="step is-on" data-step>
+              <legend>Your sign-in details</legend>
+              <div class="form-grid">
+                <div class="field"><label for="registro--reg-first">First name</label><input class="input" id="registro--reg-first" name="customer[first_name]" autocomplete="given-name" required></div>
+                <div class="field"><label for="registro--reg-last">Last name</label><input class="input" id="registro--reg-last" name="customer[last_name]" autocomplete="family-name" required></div>
+                <div class="field"><label for="registro--reg-email">Email</label><input class="input" id="registro--reg-email" type="email" name="customer[email]" autocomplete="email" required></div>
+                <div class="field field--pw"><label for="registro--reg-pass">Password</label>
+                  <div class="pw"><input class="input" id="registro--reg-pass" type="password" name="customer[password]" autocomplete="new-password" required><button class="pw__t" type="button" data-pw-toggle data-t-show="Show" data-t-hide="Hide">Show</button></div></div>
+                <div class="field"><label for="registro--reg-phone">Phone</label><input class="input" id="registro--reg-phone" type="tel" name="customer[phone]" autocomplete="tel"></div>
+                <div class="field"><label for="registro--reg-ref">Referral code (optional)</label><input class="input" id="registro--reg-ref" data-ref-save placeholder="JUANFIT" autocomplete="off" style="text-transform:uppercase"></div>
+              </div>
+            </fieldset>
+
+            <fieldset class="step" data-step>
+              <legend>One last step</legend>
+              <p class="text-muted">Accept the contract before paying. It covers renewals, penalties and the automatic Saturday selection.</p>
+              <label class="check check--box"><input type="checkbox" name="contract" data-signup-contract required> <span>I accept the adhesion contract and the Kulinaria MX terms of service, including the automatic Saturday selection, renewal rules and the no-refund policy. <a href="#/pg/terminos" target="_blank" rel="noopener" style="text-decoration:underline">Terms and conditions</a></span></label>
+              <p class="auth__note">Once inside we will ask a few questions (about 2 minutes): delivery, allergies and tastes.</p>
+              <input type="hidden" name="customer[tags]" value="suscriptor">
+              <button class="btn btn--gold btn--block" type="submit" data-signup-submit disabled>Create account</button>
+            </fieldset>
+
+            <div class="steps__actions">
+              <button class="text-link" type="button" data-step-prev hidden>Back</button>
+              <button class="btn btn--gold" type="button" data-step-next>Continue</button>
+            </div>
+          </div></form><p class="auth__switch">Already have an account? <a href="#/login">Sign in</a></p>
+      </div>
     </div>
-  </div></header>
-
-
-</div><div id="registro--shopify-section-main" class="shopify-section"><section class="section signup" >
-  <div class="container" style="max-width:860px">
-    <div class="section__head">
-      <p class="lede">Five steps: your account, a backup contact, your allergies, your plan and the contract.</p>
-    </div><form method="post" action="/account" data-shopify-form="create_customer" accept-charset="UTF-8" class="signup__form"><div class="steps" data-steps>
-        <ol class="steps__nav" aria-label="Sign-up steps">
-          <li data-step-dot class="is-on"><span>01</span>Account</li>
-          <li data-step-dot><span>02</span>Backup</li>
-          <li data-step-dot><span>03</span>Allergies</li>
-          <li data-step-dot><span>04</span>Plan</li>
-          <li data-step-dot><span>05</span>Contract</li>
-        </ol>
-        <div class="steps__bar" aria-hidden="true"><i data-steps-bar></i></div>
-
-        <fieldset class="step is-on" data-step>
-          <legend>Account and delivery details</legend>
-          <div class="form-grid">
-            <div class="field"><label for="registro--reg-first">First name</label><input class="input" id="registro--reg-first" name="customer[first_name]" autocomplete="given-name" required></div>
-            <div class="field"><label for="registro--reg-last">Last name</label><input class="input" id="registro--reg-last" name="customer[last_name]" autocomplete="family-name" required></div>
-            <div class="field"><label for="registro--reg-email">Email</label><input class="input" id="registro--reg-email" type="email" name="customer[email]" autocomplete="email" required></div>
-            <div class="field"><label for="registro--reg-pass">Password</label><input class="input" id="registro--reg-pass" type="password" name="customer[password]" autocomplete="new-password" required></div>
-            <div class="field"><label for="registro--reg-phone">Phone</label><input class="input" id="registro--reg-phone" type="tel" name="customer[phone]" autocomplete="tel"></div>
-            <div class="field"><label for="registro--reg-zip">Postal code</label><input class="input" id="registro--reg-zip" name="address[zip]" autocomplete="postal-code"></div>
-          </div>
-          <div class="field"><label for="registro--reg-street">Street and lot / house number</label><input class="input" id="registro--reg-street" name="address[address1]" autocomplete="address-line1"></div>
-          <div class="field"><label for="registro--reg-cluster">Cluster and access references</label><input class="input" id="registro--reg-cluster" name="address[address2]"></div>
-          <p class="text-muted">Include cluster, street, lot or house number and access references.</p>
-        </fieldset>
-
-        <fieldset class="step" data-step>
-          <legend>Secondary subscriber</legend>
-          <p class="text-muted">A backup contact: they receive the order if the account holder isn't available. Optional.</p>
-          <div class="form-grid">
-            <div class="field"><label for="registro--reg-sec-name">Full name</label><input class="input" id="registro--reg-sec-name" name="customer[note][secundario_nombre]"></div>
-            <div class="field"><label for="registro--reg-sec-phone">Phone</label><input class="input" id="registro--reg-sec-phone" type="tel" name="customer[note][secundario_telefono]"></div>
-          </div>
-        </fieldset>
-
-        <fieldset class="step" data-step>
-          <legend>Allergies, tastes and diet <span class="tier-badge tier-badge--exclusivo" style="margin-left:8px">Critical</span></legend>
-          <p class="text-muted">Dishes containing these ingredients (or traces) are blocked completely in your menu.</p>
-          <div class="check-grid"><label class="check"><input type="checkbox" name="allergy" value="Gluten"> <span>Gluten</span></label><label class="check"><input type="checkbox" name="allergy" value="Lácteos"> <span>Dairy</span></label><label class="check"><input type="checkbox" name="allergy" value="Frutos secos"> <span>Tree nuts</span></label><label class="check"><input type="checkbox" name="allergy" value="Mariscos"> <span>Shellfish</span></label></div>
-          <div class="field"><label for="registro--reg-allergy-other">Other allergies</label><input class="input" id="registro--reg-allergy-other" name="allergy_other" placeholder="Separate with commas: soy, egg, sesame"></div>
-          <div class="field"><label for="registro--reg-dislikes">Block 2 · Ingredients I don't like</label><input class="input" id="registro--reg-dislikes" name="dislikes" placeholder="E.g. tomato"></div>
-          <p class="label" style="margin-top:var(--space-lg)">Dietary preferences</p>
-          <div class="check-grid"><label class="check"><input type="checkbox" name="diet" value="Keto"> <span>Keto</span></label><label class="check"><input type="checkbox" name="diet" value="Libre de gluten"> <span>Gluten-free</span></label><label class="check"><input type="checkbox" name="diet" value="Vegetariano"> <span>Vegetarian</span></label><label class="check"><input type="checkbox" name="diet" value="Vegano"> <span>Vegan</span></label></div>
-        </fieldset>
-
-        <fieldset class="step" data-step>
-          <legend>Choose your plan</legend>
-          <div class="plan-picker">
-            <label><input type="radio" name="plan" value="block" checked><span><strong>4-week block</strong><br><small class="text-muted">Renewable subscription with weekly delivery. The recommended option.</small></span></label>
-            <label><input type="radio" name="plan" value="trial"><span><strong>Trial week</strong><br><small class="text-muted">A single week, 15% more expensive than the prorated block price.</small></span></label>
-          </div>
-          <div class="field" style="margin-top:var(--space-lg)">
-            <label for="registro--reg-ref">Referral code (optional)</label>
-            <input class="input" id="registro--reg-ref" data-ref-save placeholder="JUANFIT" autocomplete="off" style="text-transform:uppercase">
-          </div>
-          <p class="text-muted">With a valid code and your first paid block you get a $0 welcome gift: tee or shaker cup.</p>
-        </fieldset>
-
-        <fieldset class="step" data-step>
-          <legend>Adhesion contract</legend>
-          <p class="text-muted">Accept the contract before paying. It covers renewals, penalties and the automatic Saturday selection.</p>
-          <label class="check" style="margin:var(--space-lg) 0"><input type="checkbox" name="contract" data-signup-contract required> <span>I accept the adhesion contract and the Kulinaria MX terms of service, including the automatic Saturday selection, renewal rules and the no-refund policy. <a href="#/pg/terminos" target="_blank" rel="noopener" style="text-decoration:underline">Read contract</a></span></label>
-          <input type="hidden" name="customer[tags]" value="suscriptor">
-          <button class="btn btn--gold" type="submit" data-signup-submit disabled>Create account</button>
-        </fieldset>
-
-        <div class="steps__actions">
-          <button class="text-link" type="button" data-step-prev hidden>Back</button>
-          <button class="btn btn--outline" type="button" data-step-next>Continue</button>
-        </div>
-      </div></form><p class="text-muted" style="margin-top:var(--space-xl)">Already have an account? <a href="#/login" style="text-decoration:underline">Sign in</a></p>
   </div>
 </section>
 
@@ -24115,17 +24121,18 @@ Digital payment, no cash</li></ul>
   </div></header>
 
 
-</div><div id="buscar--shopify-section-main" class="shopify-section"><section class="section" >
+</div><div id="buscar--shopify-section-main" class="shopify-section"><section class="section search-sec" >
   <div class="container">
     <div class="section__head">
       <span class="eyebrow">Search</span>
       <h2 style="font-size:clamp(2.2rem,4vw,3.4rem)">Results for "salmón"</h2>
     </div>
-    <form action="/search" method="get" role="search" class="btn-row" style="margin-bottom:var(--space-xl)">
-      <input class="input" style="max-width:420px" type="search" name="q" value="salmón" placeholder="Search for a dish" aria-label="Search">
-      <input type="hidden" name="type" value="product">
+    <form action="/search" method="get" role="search" class="search-form">
+      <input class="input" type="search" name="q" value="salmón" placeholder="Search for a dish" aria-label="Search">
+      <input type="hidden" name="type" value="product,page,article">
       <button class="btn btn--gold" type="submit">Search</button>
-    </form><div class="dish-grid"><article class="dish" data-dish data-has-detail
+    </form>
+    <p class="search-hint">Try "about us", "plans", "help" or the name of a dish.</p><h3 class="search-h">Dishes</h3><div class="dish-grid"><article class="dish" data-dish data-has-detail
   data-category="al-fuego-y-mar" data-tier="exclusivo"
   data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <a class="dish__media surface-walnut" data-tilt-card href="#/p/salmon-costra-almendras" aria-label="Gourmet salmon in an almond crust"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"><span class="dish__pill" aria-hidden="true">View dish</span></a>
@@ -25182,6 +25189,12 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     if (builder) new IntersectionObserver(function (en) { en.forEach(function (e) { builderOn = e.isIntersecting; paint(); }); }, { threshold: 0.02 }).observe(builder);
   }
   function initOnbBanner() { $$('[data-onb-banner]').forEach(function (b) { b.hidden = isOnboarded(); }); }
+  function initPw() {
+    $$('[data-pw-toggle]').forEach(function (b) {
+      var inp = b.parentNode.querySelector('input'); if (!inp) return;
+      b.addEventListener('click', function () { var show = inp.type === 'password'; inp.type = show ? 'text' : 'password'; b.textContent = b.getAttribute(show ? 'data-t-hide' : 'data-t-show'); b.setAttribute('aria-pressed', show ? 'true' : 'false'); });
+    });
+  }
   function initProfileForm() { $$('[data-profile-form]').forEach(initOneProfileForm); }
   function initOneProfileForm(form) {
     var p = loadProfile();
@@ -26935,7 +26948,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

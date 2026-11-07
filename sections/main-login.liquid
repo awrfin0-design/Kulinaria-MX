@@ -1,32 +1,40 @@
-<section class="section" {{ section.shopify_attributes }}>
-  <div class="container" style="max-width:980px">
-    <div class="grid grid--2">
-      <div class="panel panel--gold">
-        <span class="eyebrow">{{ 'general.account' | t }}</span>
-        <h2 style="font-size:2.4rem">{{ 'login.title' | t }}</h2>
-        {%- form 'customer_login', novalidate: 'novalidate' -%}
-          {%- if form.errors -%}<div class="alert alert--warn" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
-          <div class="field"><label for="login-email">{{ 'form.email' | t }}</label><input class="input" id="login-email" type="email" name="customer[email]" autocomplete="email" required></div>
-          <div class="field"><label for="login-pass">{{ 'form.password' | t }}</label><input class="input" id="login-pass" type="password" name="customer[password]" autocomplete="current-password" required></div>
-          <button class="btn btn--gold btn--block" type="submit">{{ 'login.submit' | t }}</button>
-          <p style="margin-top:var(--space-md)"><a href="#recover" class="btn btn--ghost">{{ 'login.forgot' | t }}</a></p>
-        {%- endform -%}
+<section class="section auth-sec" {{ section.shopify_attributes }}>
+  <div class="container auth-wrap">
+    <div class="auth">
+      <aside class="auth__art" aria-hidden="false">
+        <span class="fn-flame"></span>
+        <p class="eyebrow">{{ 'login.art_eye' | t }}</p>
+        <h2>{{ 'login.art_t' | t }}</h2>
+        <ol class="auth__list"><li>{{ 'login.art_1' | t }}</li><li>{{ 'login.art_2' | t }}</li><li>{{ 'login.art_3' | t }}</li></ol>
+      </aside>
+      <div class="auth__card">
+        <nav class="auth__tabs" aria-label="{{ 'general.account' | t }}"><a class="is-on" href="{{ routes.account_login_url }}" aria-current="page">{{ 'login.tab_in' | t }}</a><a href="{{ routes.account_register_url }}">{{ 'login.tab_new' | t }}</a></nav>
+        <div class="auth__panes">
+          <div class="auth__login">
+            <h1 class="auth__h">{{ 'login.welcome' | t }}</h1>
+            <p class="auth__sub">{{ 'login.sub' | t }}</p>
+            {%- form 'customer_login', novalidate: 'novalidate' -%}
+              {%- if form.errors -%}<div class="alert alert--warn" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+              <div class="field"><label for="login-email">{{ 'form.email' | t }}</label><input class="input" id="login-email" type="email" name="customer[email]" autocomplete="email" required></div>
+              <div class="field field--pw"><label for="login-pass">{{ 'form.password' | t }}</label>
+                <div class="pw"><input class="input" id="login-pass" type="password" name="customer[password]" autocomplete="current-password" required><button class="pw__t" type="button" data-pw-toggle data-t-show="{{ 'login.show' | t }}" data-t-hide="{{ 'login.hide' | t }}">{{ 'login.show' | t }}</button></div></div>
+              <button class="btn btn--gold btn--block" type="submit">{{ 'login.submit' | t }}</button>
+              <p class="auth__alt"><a href="#recover">{{ 'login.forgot' | t }}</a></p>
+            {%- endform -%}
+            <p class="auth__switch">{{ 'login.new' | t }} <a href="{{ routes.account_register_url }}">{{ 'register.title' | t }}</a></p>
+          </div>
+          <div id="recover" class="auth__recover">
+            <h2 class="auth__h">{{ 'login.recover' | t }}</h2>
+            <p class="auth__sub">{{ 'login.recover_sub' | t }}</p>
+            {%- form 'recover_customer_password' -%}
+              {%- if form.posted_successfully? -%}<p class="alert alert--ok" role="status">{{ 'login.recover_text' | t }}</p>{%- endif -%}
+              <div class="field"><label for="rec-email">{{ 'form.email' | t }}</label><input class="input" id="rec-email" type="email" name="email" required></div>
+              <button class="btn btn--gold btn--block" type="submit">{{ 'login.send_link' | t }}</button>
+            {%- endform -%}
+            <p class="auth__alt"><a href="#login">{{ 'login.back' | t }}</a></p>
+          </div>
+        </div>
       </div>
-      <div class="panel">
-        <span class="eyebrow">{{ 'login.new' | t }}</span>
-        <h2 style="font-size:2rem">{{ 'login.create' | t }}</h2>
-        <p class="text-muted">{{ 'login.create_text' | t }}</p>
-        <a class="btn btn--outline" href="{{ routes.account_register_url }}">{{ 'register.title' | t }}</a>
-      </div>
-    </div>
-
-    <div id="recover" class="panel" style="margin-top:var(--space-xl)">
-      <h2 style="font-size:1.6rem">{{ 'login.recover' | t }}</h2>
-      {%- form 'recover_customer_password' -%}
-        {%- if form.posted_successfully? -%}<p class="alert alert--ok" role="status">{{ 'login.recover_text' | t }}</p>{%- endif -%}
-        <div class="field"><label for="rec-email">{{ 'form.email' | t }}</label><input class="input" id="rec-email" type="email" name="email" required></div>
-        <button class="btn btn--outline" type="submit">{{ 'login.send_link' | t }}</button>
-      {%- endform -%}
     </div>
   </div>
 </section>

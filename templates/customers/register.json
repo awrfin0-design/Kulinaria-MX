@@ -1,21 +1,11 @@
 {
   "sections": {
-    "head": {
-      "type": "page-head",
-      "settings": {
-        "art": "air-fish",
-        "heading": "Crea tu *cuenta*",
-        "eyebrow": "Crear cuenta"
-      }
-    },
     "main": {
       "type": "main-register",
       "settings": {}
     }
   },
   "order": [
-    "head",
     "main"
   ]
 }
-

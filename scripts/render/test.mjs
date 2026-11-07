@@ -383,18 +383,22 @@ ok('account overview is one summary page: week, my details and allergies, balanc
 // multi-step registration
 await page.goto(`${URL0}#/registro`); await page.reload(); await page.waitForTimeout(500);
 const rg = '[data-page="registro"]';
-ok('registration is a 5-step flow starting at step 1', (await page.$$eval(`${rg} [data-step]`, (s) => s.length)) === 5 && (await page.$$eval(`${rg} [data-step].is-on`, (s) => s.length)) === 1);
+ok('registration is a short 2-step flow starting at step 1 (the questionnaire comes after signing in)', (await page.$$eval(`${rg} [data-step]`, (s) => s.length)) === 2 && (await page.$$eval(`${rg} [data-step].is-on`, (s) => s.length)) === 1);
+ok('registration no longer repeats the allergy / address questions (they live in the questionnaire)', (await page.$$eval(`${rg} input[name="allergy"], ${rg} [name="address[address1]"]`, (s) => s.length)) === 0);
 await page.click(`${rg} [data-step-next]`); await page.waitForTimeout(150);
 ok('required fields block moving to the next step', await page.$eval(`${rg} [data-step]:nth-of-type(1)`, (s) => s.classList.contains('is-on')) || (await page.$$eval(`${rg} [data-step].is-on`, (s) => s[0] === document.querySelectorAll('[data-page="registro"] [data-step]')[0])));
 await page.fill(`${rg} #registro--reg-first`, 'Ana'); await page.fill(`${rg} #registro--reg-last`, 'P'); await page.fill(`${rg} #registro--reg-email`, 'a@b.co'); await page.fill(`${rg} #registro--reg-pass`, 'secret1');
-await page.click(`${rg} [data-step-next]`); await page.waitForTimeout(150); await page.click(`${rg} [data-step-next]`); await page.waitForTimeout(150);
-await page.check(`${rg} input[name="allergy"][value="Mariscos"]`); await page.fill(`${rg} [name="dislikes"]`, 'cilantro, pasas');
-await page.click(`${rg} [data-step-next]`); await page.waitForTimeout(150); await page.click(`${rg} [data-step-next]`); await page.waitForTimeout(150);
-ok('step 5 shows the contract and keeps submit disabled until accepted', await page.$eval(`${rg} [data-signup-submit]`, (b) => b.disabled));
+ok('the password can be shown and hidden', await (async () => { await page.click(`${rg} [data-pw-toggle]`); const a = await page.$eval(`${rg} #registro--reg-pass`, (e) => e.type); await page.click(`${rg} [data-pw-toggle]`); const b = await page.$eval(`${rg} #registro--reg-pass`, (e) => e.type); return a === 'text' && b === 'password'; })());
+await page.click(`${rg} [data-step-next]`); await page.waitForTimeout(150);
+ok('step 2 shows the contract and keeps submit disabled until accepted', await page.$eval(`${rg} [data-signup-submit]`, (b) => b.disabled));
 await page.check(`${rg} [data-signup-contract]`);
 ok('accepting the contract enables sign-up', !(await page.$eval(`${rg} [data-signup-submit]`, (b) => b.disabled)));
 await page.click(`${rg} [data-signup-submit]`); await page.waitForTimeout(250);
-ok('sign-up ends in the account and stores the allergy profile', page.url().endsWith('#/cuenta') && JSON.parse(await page.evaluate(() => localStorage.getItem('kulinaria_profile') || '{}')).allergies.includes('Mariscos'));
+ok('sign-up ends in the account', page.url().endsWith('#/cuenta'));
+// sign-in screen: the entry point
+await page.goto(`${URL0}#/login`); await page.reload(); await page.waitForTimeout(500);
+ok('sign-in screen has the promise panel, the Entrar / Crear cuenta tabs and a show-password toggle', await page.evaluate(() => { const s = document.querySelector('[data-page="login"]'); return !!s.querySelector('.auth__art') && s.querySelectorAll('.auth__tabs a').length === 2 && !!s.querySelector('[data-pw-toggle]') && !s.querySelector('.page-head'); }));
+ok('"forgot password" opens the recover form in place and "back" returns to sign-in', await (async () => { await page.click('[data-page="login"] a[href="#recover"]'); await page.waitForTimeout(150); const a = await page.evaluate(() => { const s = document.querySelector('[data-page="login"]'); return getComputedStyle(s.querySelector('.auth__recover')).display !== 'none' && getComputedStyle(s.querySelector('.auth__login')).display === 'none'; }); return a; })());
 await page.evaluate(() => localStorage.clear());
 
 // light / dark (toggle lives in the menu)

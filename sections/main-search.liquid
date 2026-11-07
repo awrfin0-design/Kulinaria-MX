@@ -1,24 +1,71 @@
+{%- liquid
+  assign q = search.terms | downcase | strip
+  assign qwords = q | split: ' '
+  assign links = 'about|/pages/about|nosotros about us quienes somos marca arte del fuego brand,historia|/pages/nosotros-historia|historia story nosotros about origen origin,equipo|/pages/nosotros-equipo|equipo team chefs cocineros nosotros about,calidad|/pages/nosotros-calidad|calidad quality ingredientes ingredients nosotros about alergias,planes|/pages/niveles-y-precios|planes precios niveles plans pricing prices tiers costo,pedido|/pages/pedido|pedido pedir ordenar order plan semana week comprar,ayuda|/pages/help|ayuda help faq preguntas questions contacto contact soporte,politicas|/pages/ciclo-y-politicas|politicas policies ciclo cycle cierre cutoff entrega delivery pausas pausar pause,calendario|/pages/calendario|calendario calendar fechas dates entregas,embajadores|/pages/embajadores-reglas|embajadores ambassadors referidos referral gimnasio gym entrenador trainer' | split: ','
+  assign matched = 0
+-%}
+{%- capture link_cards -%}
+  {%- for l in links -%}
+    {%- assign lp = l | split: '|' -%}
+    {%- assign hit = false -%}
+    {%- if search.performed -%}
+      {%- for w in qwords -%}{%- if w.size > 2 and lp[2] contains w -%}{%- assign hit = true -%}{%- endif -%}{%- endfor -%}
+      {%- if q.size > 2 and lp[2] contains q -%}{%- assign hit = true -%}{%- endif -%}
+    {%- else -%}{%- assign hit = true -%}{%- endif -%}
+    {%- if hit -%}
+      {%- assign tk = 'search.l_' | append: lp[0] -%}{%- assign dk = 'search.l_' | append: lp[0] | append: '_d' -%}
+      <a class="sitelink" href="{{ lp[1] }}"><span class="sitelink__t">{{ tk | t }}</span><span class="sitelink__d">{{ dk | t }}</span><span class="sitelink__go" aria-hidden="true">&rarr;</span></a>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
 {%- paginate search.results by 24 -%}
-<section class="section" {{ section.shopify_attributes }}>
+<section class="section search-sec" {{ section.shopify_attributes }}>
   <div class="container">
     <div class="section__head">
       <span class="eyebrow">{{ 'general.search' | t }}</span>
       <h2 style="font-size:clamp(2.2rem,4vw,3.4rem)">{% if search.performed %}{{ 'search.results_for' | t }}{{ search.terms | escape }}"{% else %}{{ 'general.search' | t }}{% endif %}</h2>
     </div>
-    <form action="{{ routes.search_url }}" method="get" role="search" class="btn-row" style="margin-bottom:var(--space-xl)">
-      <input class="input" style="max-width:420px" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t }}" aria-label="{{ 'general.search' | t }}">
-      <input type="hidden" name="type" value="product">
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+      <input class="input" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t }}" aria-label="{{ 'general.search' | t }}">
+      <input type="hidden" name="type" value="product,page,article">
       <button class="btn btn--gold" type="submit">{{ 'general.search' | t }}</button>
     </form>
+    <p class="search-hint">{{ 'search.hint' | t }}</p>
+
+    {%- assign link_html = link_cards | strip -%}
+    {%- if link_html != blank -%}
+      <h3 class="search-h">{% if search.performed %}{{ 'search.sections_t' | t }}{% else %}{{ 'search.explore_t' | t }}{% endif %}</h3>
+      <div class="sitelinks">{{ link_html }}</div>
+    {%- endif -%}
+
     {%- if search.performed -%}
-      {%- if search.results.size == 0 -%}
+      {%- if search.results.size == 0 and link_html == blank -%}
         <p class="alert">{{ 'search.none' | t }}</p>
-      {%- else -%}
+        <h3 class="search-h">{{ 'search.explore_t' | t }}</h3>
+        <div class="sitelinks">
+          {%- for l in links -%}{%- assign lp = l | split: '|' -%}{%- assign tk = 'search.l_' | append: lp[0] -%}{%- assign dk = 'search.l_' | append: lp[0] | append: '_d' -%}
+            <a class="sitelink" href="{{ lp[1] }}"><span class="sitelink__t">{{ tk | t }}</span><span class="sitelink__d">{{ dk | t }}</span><span class="sitelink__go" aria-hidden="true">&rarr;</span></a>
+          {%- endfor -%}
+        </div>
+      {%- elsif search.results.size > 0 -%}
+        {%- assign has_prod = false -%}{%- for item in search.results -%}{%- if item.object_type == 'product' -%}{%- assign has_prod = true -%}{%- endif -%}{%- endfor -%}
+        {%- if has_prod -%}<h3 class="search-h">{{ 'search.dishes_t' | t }}</h3>{%- endif -%}
         <div class="dish-grid">
           {%- for item in search.results -%}
             {%- if item.object_type == 'product' -%}{% render 'dish-card', product: item %}{%- endif -%}
           {%- endfor -%}
         </div>
+        {%- assign has_page = false -%}{%- for item in search.results -%}{%- if item.object_type != 'product' -%}{%- assign has_page = true -%}{%- endif -%}{%- endfor -%}
+        {%- if has_page -%}
+          <h3 class="search-h">{{ 'search.pages_t' | t }}</h3>
+          <div class="sitelinks">
+            {%- for item in search.results -%}
+              {%- if item.object_type != 'product' -%}
+                <a class="sitelink" href="{{ item.url }}"><span class="sitelink__t">{{ item.title | escape }}</span><span class="sitelink__d">{{ item.content | strip_html | truncate: 110 }}</span><span class="sitelink__go" aria-hidden="true">&rarr;</span></a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
       {%- endif -%}
     {%- endif -%}
   </div>
