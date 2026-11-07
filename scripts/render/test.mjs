@@ -1193,8 +1193,9 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.evaluate(() => { localStorage.removeItem('kx-test-nostart'); localStorage.removeItem('kx-test-norules'); localStorage.setItem('kx-rules-ok', '1'); sessionStorage.setItem('kx-test-start', '1'); });
   await page.goto(`${URL0}#/pg/pedido?plan=week`); await page.reload(); await page.waitForTimeout(1500);
   const fn2 = '[data-page="pg/pedido"] [data-funnel]';
-  console.log('DBG3', await page.$eval(fn2, (e) => e.getAttribute('data-step')));
-  await page.click(`${fn2} [data-plan-choice="week"]`); await page.waitForTimeout(700); await page.click(`${fn2} [data-fn-sc-next]`); await page.waitForTimeout(600);
+  const stepNow = async () => await page.$eval(fn2, (e) => e.getAttribute('data-step'));
+  if ((await stepNow()) === '1') { await page.click(`${fn2} [data-plan-choice="week"]`); await page.waitForTimeout(700); }
+  if ((await stepNow()) === '2') { await page.click(`${fn2} [data-fn-sc-next]`); await page.waitForTimeout(600); }
   ok('order flow asks who the order is for (me / the family member)', await page.evaluate((f) => { const w = document.querySelector(f + ' [data-fn-para-wrap]'); const o = [...document.querySelectorAll(f + ' [data-fn-para] option')].map((x) => x.textContent); return !w.hidden && o.length === 2 && o[1] === 'Sofía'; }, fn2));
   await page.selectOption(`${fn2} [data-fn-para]`, { index: 1 }); await page.waitForTimeout(500);
   ok('choosing the person applies HER allergies and dislikes to the dishes (the almond/fish salmon is fine for peanuts; broccoli lowers the filet)', await page.evaluate((f) => { const d = [...document.querySelectorAll(f + ' [data-fn-dish]')]; const salm = d.find((x) => /Salm/i.test(x.getAttribute('data-title'))); const fil = d.find((x) => /Filete/i.test(x.getAttribute('data-title'))); return !salm.classList.contains('is-warned') && !!fil.querySelector('[data-fn-warn]') && !fil.querySelector('[data-fn-warn]').hidden; }, fn2));
