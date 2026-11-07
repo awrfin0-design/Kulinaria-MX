@@ -1013,7 +1013,7 @@
     grps.forEach(function (c) { c.checked = String(info[c.getAttribute('data-ob-group')] || '').split(', ').indexOf(c.value) > -1; });
     var show = function () {
       steps.forEach(function (s, k) { s.classList.toggle('is-on', k === step); }); dots.forEach(function (d, k) { d.classList.toggle('is-on', k === step); d.classList.toggle('is-done', k < step); });
-      maxStep = Math.max(maxStep, step);
+      maxStep = Math.max(maxStep, step); if (typeof syncDots === 'function') syncDots();
       prevB.hidden = step === 0; nextB.hidden = step === steps.length - 1; saveB.hidden = step !== steps.length - 1;
       var cnt = $('[data-ob-count]', form), bar = $('[data-ob-bar]', form), tt = dots[step] ? $('.ob-dots__t', dots[step]) : null;
       if (cnt) cnt.textContent = (root.getAttribute('data-t-stepof') || '[n] / [t]').replace('[n]', step + 1).replace('[t]', steps.length) + (tt ? '  ·  ' + tt.textContent : '');
@@ -1101,10 +1101,11 @@
         if (rows.length) sec.appendChild(dl); box.appendChild(sec);
       });
     };
-    dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k <= maxStep && k !== step) { say(''); step = k; show(); } }); });
+    dots.forEach(function (d, k) { var go = function () { if (k <= maxStep && k !== step) { say(''); step = k; show(); } }; d.setAttribute('role', 'button'); d.addEventListener('click', go); d.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }); });
+    var syncDots = function () { dots.forEach(function (d, k) { d.tabIndex = k <= maxStep ? 0 : -1; d.setAttribute('aria-current', k === step ? 'step' : 'false'); }); };
     var stepOk = function (k) {
-      if (k === 0 && !(val('name') && /.+@.+/.test(val('email')) && val('phone'))) { say(root.getAttribute('data-t-need')); return false; }
-      if (k === 1 && !(val('street') && val('cluster') && val('city') && val('zip'))) { say(root.getAttribute('data-t-need-addr')); return false; }
+      if (k === 0 && !(val('name') && /.+@.+\..+/.test(val('email')) && val('phone').replace(/\D/g, '').length >= 8)) { say(root.getAttribute('data-t-need')); return false; }
+      if (k === 1 && !(val('street') && val('cluster') && val('city') && /^\d{5}$/.test(val('zip').replace(/\s/g, '')))) { say(root.getAttribute('data-t-need-addr')); return false; }
       return true;
     };
     nextB.addEventListener('click', function () {

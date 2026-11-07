@@ -21984,7 +21984,7 @@ Digital payment, no cash</li></ul>
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Breadcrumb">
           <a href="#/home">Home</a><i aria-hidden="true">/</i><a href="#/pg/ayuda">Help & legal</a><i aria-hidden="true">/</i><span>Legal</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Términos y <em>condiciones</em></h1></div>
+        <span class="hero__rule" aria-hidden="true"></span><h1>Terms and <em>conditions</em></h1></div>
     </div>
   </div></header>
 
@@ -22021,7 +22021,7 @@ Digital payment, no cash</li></ul>
       <div class="page-head__copy">
         <nav class="page-head__crumbs" aria-label="Breadcrumb">
           <a href="#/home">Home</a><i aria-hidden="true">/</i><a href="#/pg/ayuda">Help & legal</a><i aria-hidden="true">/</i><span>Legal</span></nav>
-        <span class="hero__rule" aria-hidden="true"></span><h1>Aviso de <em>privacidad</em></h1></div>
+        <span class="hero__rule" aria-hidden="true"></span><h1>Privacy <em>notice</em></h1></div>
     </div>
   </div></header>
 
@@ -25287,7 +25287,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     grps.forEach(function (c) { c.checked = String(info[c.getAttribute('data-ob-group')] || '').split(', ').indexOf(c.value) > -1; });
     var show = function () {
       steps.forEach(function (s, k) { s.classList.toggle('is-on', k === step); }); dots.forEach(function (d, k) { d.classList.toggle('is-on', k === step); d.classList.toggle('is-done', k < step); });
-      maxStep = Math.max(maxStep, step);
+      maxStep = Math.max(maxStep, step); if (typeof syncDots === 'function') syncDots();
       prevB.hidden = step === 0; nextB.hidden = step === steps.length - 1; saveB.hidden = step !== steps.length - 1;
       var cnt = $('[data-ob-count]', form), bar = $('[data-ob-bar]', form), tt = dots[step] ? $('.ob-dots__t', dots[step]) : null;
       if (cnt) cnt.textContent = (root.getAttribute('data-t-stepof') || '[n] / [t]').replace('[n]', step + 1).replace('[t]', steps.length) + (tt ? '  ·  ' + tt.textContent : '');
@@ -25375,10 +25375,11 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         if (rows.length) sec.appendChild(dl); box.appendChild(sec);
       });
     };
-    dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k <= maxStep && k !== step) { say(''); step = k; show(); } }); });
+    dots.forEach(function (d, k) { var go = function () { if (k <= maxStep && k !== step) { say(''); step = k; show(); } }; d.setAttribute('role', 'button'); d.addEventListener('click', go); d.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }); });
+    var syncDots = function () { dots.forEach(function (d, k) { d.tabIndex = k <= maxStep ? 0 : -1; d.setAttribute('aria-current', k === step ? 'step' : 'false'); }); };
     var stepOk = function (k) {
-      if (k === 0 && !(val('name') && /.+@.+/.test(val('email')) && val('phone'))) { say(root.getAttribute('data-t-need')); return false; }
-      if (k === 1 && !(val('street') && val('cluster') && val('city') && val('zip'))) { say(root.getAttribute('data-t-need-addr')); return false; }
+      if (k === 0 && !(val('name') && /.+@.+\..+/.test(val('email')) && val('phone').replace(/\D/g, '').length >= 8)) { say(root.getAttribute('data-t-need')); return false; }
+      if (k === 1 && !(val('street') && val('cluster') && val('city') && /^\d{5}$/.test(val('zip').replace(/\s/g, '')))) { say(root.getAttribute('data-t-need-addr')); return false; }
       return true;
     };
     nextB.addEventListener('click', function () {
@@ -25849,6 +25850,9 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           alergias: (p.allergies || []).join(', '), no_me_gustan: (p.dislikes || []).join(', '), dietas: (p.diets || []).join(', '), alerta_alergias: warned.join(' | '),
           plan: st.plan, nivel: st.tier, pedido_embudo: list
         };
+        // what the kitchen must know beyond the allergen list (from the questionnaire): severity, traces, health conditions, spice, portion, household, delivery window
+        var ficha = [i.severity && 'Severidad: ' + i.severity, i.cross && 'Trazas: ' + i.cross, i.conditions && 'Condiciones: ' + i.conditions, i.spice && 'Picante: ' + i.spice, i.portion && 'Porción: ' + i.portion, (i.adults || i.kids) && 'Personas: ' + (i.adults || 1) + ' adultos + ' + (i.kids || 0) + ' niños', i.window && 'Horario: ' + i.window, i.goal && 'Objetivo: ' + i.goal + (i.kcal ? ' ' + i.kcal + ' kcal' : '')].filter(Boolean).join(' · ');
+        if (ficha) attrs.ficha_cocina = ficha;
         var rc = ''; try { rc = localStorage.getItem('kulinaria_ref') || ''; } catch (x) {} if (rc) attrs.codigo_referencia = rc;
         var props = {}; props[T_('prop-meals')] = String(count()); props[T_('prop-tier')] = tb.getAttribute('data-name'); props[T_('prop-length')] = st.plan === 'block' ? T_('length-block') : T_('length-week');
         st.days.forEach(function (q, k) { var dd = byPid(q); if (dd) props[dayLabel(k)] = dd.getAttribute('data-title'); });

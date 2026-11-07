@@ -1077,7 +1077,7 @@
     "ob_c1": "I accept the terms and the privacy notice.",
     "ob_c2": "I allow my data to be used to deliver my order and look after my allergies.",
     "ob_c3": "I understand the kitchen handles common ingredients and cannot guarantee the total absence of traces.",
-    "ob_need_addr": "Write your street, neighborhood or cluster, city and postal code so we can deliver.",
+    "ob_need_addr": "Write your street, neighborhood or cluster, city and a 5-digit postal code so we can deliver.",
     "ob_need_consent": "Tick the three confirmations to save your profile.",
     "ob_pick": "Choose an option",
     "eyebrow": "Your profile",
@@ -1834,6 +1834,10 @@
     "314f703d4682": "Moist autumn pumpkin bread with cinnamon and nutmeg.",
     "6decc7a13941": "September",
     "87ad485f96bb": "Autumn",
-    "0b7a197bef0d": "Seasonal"
+    "0b7a197bef0d": "Seasonal",
+    "b01ea9e55476": "My details and allergies",
+    "25da768ce493": "Terms and conditions",
+    "810bf8832931": "Privacy *notice*",
+    "a51217602faa": "Terms and *conditions*"
   }
 }

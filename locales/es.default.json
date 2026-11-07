@@ -1077,7 +1077,7 @@
     "ob_c1": "Acepto los términos y el aviso de privacidad.",
     "ob_c2": "Autorizo que usen mis datos para entregar mi pedido y cuidar mis alergias.",
     "ob_c3": "Entiendo que la cocina maneja ingredientes comunes y no puede garantizar la ausencia total de trazas.",
-    "ob_need_addr": "Escribe tu calle, colonia o clúster, ciudad y código postal para poder entregarte.",
+    "ob_need_addr": "Escribe tu calle, colonia o clúster, ciudad y código postal de 5 dígitos para poder entregarte.",
     "ob_need_consent": "Marca las tres confirmaciones para guardar tu perfil.",
     "ob_pick": "Elige una opción",
     "eyebrow": "Tu perfil",
@@ -1834,6 +1834,10 @@
     "314f703d4682": "Pan húmedo de calabaza de otoño con canela y nuez moscada.",
     "6decc7a13941": "Septiembre",
     "87ad485f96bb": "Otoño",
-    "0b7a197bef0d": "De temporada"
+    "0b7a197bef0d": "De temporada",
+    "b01ea9e55476": "Mis datos y alergias",
+    "25da768ce493": "Términos y condiciones",
+    "810bf8832931": "Aviso de *privacidad*",
+    "a51217602faa": "Términos y *condiciones*"
   }
 }
