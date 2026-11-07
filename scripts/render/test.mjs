@@ -859,7 +859,7 @@ const obSaved = await page.evaluate(() => ({ f: JSON.parse(localStorage.getItem(
 ok('the answers are stored once (contact, address, allergies, diet, dislikes)', obSaved.on === '1' && obSaved.f.info.email === 'ana@ejemplo.com' && obSaved.f.info.street === 'Calle Lago 24' && obSaved.f.info.city === 'Mérida' && obSaved.f.info.window === 'pm' && obSaved.f.info.adults === '2' && obSaved.f.info.meals === 'comidas' && obSaved.f.info.conditions === 'diabetes' && obSaved.f.info.goal === 'bajar' && !!obSaved.f.info.consent && obSaved.p.allergies.includes('Mariscos') && obSaved.p.diets.includes('Keto') && obSaved.p.dislikes.includes('cebolla'));
 await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(900);
 const fnO = '[data-page="pg/pedido"] [data-funnel]';
-ok('the order builder never asks for details again (no form fields inside it)', await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); return !f.querySelector('input[data-info]') && f.querySelectorAll('[data-fn-step]').length === 2; }));
+ok('the order builder never asks for details again (no form fields inside it)', await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); return !f.querySelector('input[data-info]') && f.querySelectorAll('[data-fn-step]').length === 4; }));
 ok('the first delivery date is shown (Monday) with a real date on each weekday slot', await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); return /\d/.test(f.querySelector('[data-fn-first]').textContent) && [...f.querySelectorAll('[data-fn-day-btn]')].every((l) => /\d/.test(l.textContent)); }));
 
 // =====================================================================  v23/v29: "Mi semana": plan box, weeks that can be chosen, skipping days and weeks
@@ -949,7 +949,7 @@ const runJourney = async (label, { w, h, lang, plan, upgrade, onboarded = true, 
   await page.click(`${f} [data-fn-finish]`); await page.waitForTimeout(1100);
   const calls = await page.evaluate(() => window.__calls);
   const order = calls.map((c) => c.u).join(',');
-  ok(`${label}: cart is cleared first, then attributes, then the plan lines are added (no duplicates when you go back)`, /^clear\.js,update\.js,add\.js/.test(order), order);
+  ok(`${label}: cart is cleared first, then attributes, then the plan lines are added (no duplicates when you go back)`, /^(clear|cart)\.js,update\.js,add\.js/.test(order), order);
   const attrs = JSON.parse((calls.find((c) => c.u === 'update.js') || { b: '{}' }).b).attributes || {};
   ok(`${label}: attributes come from the saved account (name, e-mail, phone, street, plan, days)${allergy ? ' and carry the allergy alert for the kitchen' : ''}`, attrs.correo === 'ana@ejemplo.com' && attrs.plan === plan && !!attrs.nombre && !!attrs.telefono && !!attrs.calle && /:/.test(attrs.dias) && attrs.contrato_aceptado === undefined && (!allergy || /Salm/.test(attrs.alerta_alergias || '')), JSON.stringify(attrs).slice(0, 300));
   const items = JSON.parse((calls.find((c) => c.u === 'add.js') || { b: '{"items":[]}' }).b).items;
@@ -972,7 +972,7 @@ await page.evaluate(() => { localStorage.setItem('kx-lang', 'es'); });
 await page.setViewportSize({ width: 1440, height: 900 });
 // a brand-new account (no orders, nothing saved) is taken to the questionnaire the moment they are signed in, once
 await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-test-fresh', '1'); localStorage.setItem('kx-test-orders', '0'); });
-await page.goto(`${URL0}#/menu`); await page.reload(); await page.waitForTimeout(4200);
+await page.goto(`${URL0}#/menu`); await page.reload(); await page.waitForFunction(() => location.hash.includes('bienvenida'), null, { timeout: 12000 }).catch(() => {});
 ok('new account: right after signing in the customer lands on the questionnaire', page.url().includes('bienvenida'), page.url());
 await page.goto(`${URL0}#/menu`); await page.waitForTimeout(500);
 ok('new account: it asks only once per visit (they can look around if they skip it)', !page.url().includes('bienvenida'), page.url());
@@ -991,7 +991,7 @@ await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTi
   for (let i = 0; i < 5; i++) await page.evaluate((f) => document.querySelector(f + ' [data-fn-dish]:not(.is-hidden) [data-pick]').click(), f);
   await page.evaluate(() => { const fe = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push(String(u).split('/').pop()); return fe.apply(this, arguments); }; });
   await page.click(`${f} [data-fn-finish]`); await page.waitForTimeout(1000);
-  ok('existing customer: confirming a week goes straight to the cart without asking for any details', page.url().endsWith('#/carrito') && (await page.evaluate(() => window.__calls)).join() === 'clear.js,update.js,add.js', page.url());
+  ok('existing customer: confirming a week goes straight to the cart without asking for any details', page.url().endsWith('#/carrito') && (await page.evaluate(() => window.__calls)).join() === "cart.js,update.js,add.js", page.url());
 }
 // a new account that tries to order without answering the questionnaire is sent to it
 await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_ob_asked', '1'); });

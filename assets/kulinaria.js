@@ -1011,7 +1011,7 @@
     };
     var say = function (m) { err.hidden = !m; err.textContent = m || ''; };
     var val = function (k) { var x = $('[data-ob="' + k + '"]', form); return x ? x.value.trim() : ''; };
-    var hello = function () { var h = $('[data-ob-hello]', root), n = (val('name') || info.name || '').split(' ')[0]; if (h && n) h.textContent = (root.getAttribute('data-t-welcome') || 'Bienvenido, {n}').replace('[n]', n); };
+    var hello = function () { var h = $('[data-ob-hello]', root), n = (val('name') || info.name || '').split(' ')[0]; if (h && n) h.textContent = (root.getAttribute('data-t-welcome') || 'Bienvenido, {n}').replace('[n]', n).replace('{n}', n); };
     var done = isOnboarded();
     var edit = /[?&]edit=1/.test(location.search + '&' + (location.hash.split('?')[1] || ''));
     var forward = function () {                       // paying customers skip the questionnaire and go straight to choosing their week
