@@ -1098,7 +1098,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.click('#adm-test [data-tab="4"]', { timeout: 3000 }).catch(() => {}); await page.waitForTimeout(400);
   ok('admin: the Descuentos tab shows the form (code, type, value, uses, expiry) and "no codes yet"', await page.evaluate(() => { const r = document.querySelector('#adm-test'); const f = r.querySelector('[data-discform]'); return !!f && ['code', 'kind', 'value', 'uses', 'ends'].every((n) => f.elements[n]) && /Aún no hay códigos/.test(r.innerText); }));
   await page.click('#adm-test [data-dgen]', { timeout: 3000 }).catch(() => {});
-  ok('admin: "Sugerir código" fills a valid code', /^KUL[A-Z2-9]{5}$/.test(await page.$eval('#adm-test [name=code]', (e) => e.value)));
+  ok('admin: "Sugerir código" fills a valid code', /^KUL[A-Z2-9]{5}$/.test(await page.$eval('#adm-test [name=code]', (e) => e.value).catch(() => '')));
   await page.fill('#adm-test [name=code]', 'hola10'); await page.fill('#adm-test [name=value]', '10'); await page.fill('#adm-test [name=uses]', '0'); await page.click('#adm-test [data-discform] button[type=submit]'); await page.waitForTimeout(200);
   ok('admin: 0 uses is refused in the page and never reaches the server', !calls.some((c) => c.action === 'discount_new') && /cuántas veces/.test(await page.$eval('#adm-test', (e) => e.innerText)));
   await page.fill('#adm-test [name=code]', 'hola10'); await page.fill('#adm-test [name=value]', '10'); await page.fill('#adm-test [name=uses]', '25'); await page.click('#adm-test [data-discform] button[type=submit]'); await page.waitForTimeout(500);
