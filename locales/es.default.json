@@ -665,6 +665,8 @@
     "have_account": "¿Ya tienes cuenta?"
   },
   "funnel": {
+    "rules_si_t": "Para armar tu semana, entras a tu cuenta",
+    "rules_si_p": "Entras con tu correo: te llega un código y, si es tu primera vez, tu cuenta se crea sola. Después te hacemos unas preguntas (2 minutos), una sola vez.",
     "s_week": "Entra y arma",
     "gate_eye": "Paso 4 · Tu cuenta",
     "gate_t": "Entra y arma tu semana",

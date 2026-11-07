@@ -665,6 +665,8 @@
     "have_account": "Already have an account?"
   },
   "funnel": {
+    "rules_si_t": "To build your week, you sign in",
+    "rules_si_p": "You sign in with your e-mail: you get a code and, if it is your first time, your account is created automatically. Then we ask a few questions (2 minutes), only once.",
     "s_week": "Sign in & build",
     "gate_eye": "Step 4 · Your account",
     "gate_t": "Sign in and build your week",

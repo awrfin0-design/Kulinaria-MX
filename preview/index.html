@@ -3380,6 +3380,11 @@ body .auth-sec{padding-top:calc(var(--hdr,76px) + clamp(24px,3vw,44px)) !importa
 [data-fn-step="3"] > .fn-gate{margin:0}
 .fn-gate__flow{align-content:start}
 
+/* v77 — the sign-in lives inside the "how it works" cards (guests only) */
+.fn-rcard--signin{border-color:var(--border-accent);background:radial-gradient(120% 90% at 0% 0%,var(--accent-wash),transparent 65%),var(--bg-raised)}
+.fn-rcard--signin .btn{margin-top:auto;align-self:stretch;justify-content:center;text-align:center;white-space:normal;line-height:1.25}
+.fn-rcard--signin{display:flex;flex-direction:column;gap:10px}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}

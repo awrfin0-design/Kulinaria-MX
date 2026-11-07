@@ -70,9 +70,18 @@
             <div class="fn-rules__carousel">
               <button class="fn-arrow fn-arrow--prev" type="button" data-fn-rules-arrow="-1" aria-label="{{ 'funnel.prev_dishes' | t }}">&#8249;</button>
               <div class="fn-rules__rail" data-fn-rules-rail>
-                {%- for n in (1..3) -%}
+                {%- assign rshift = 0 -%}{%- unless customer -%}{%- assign rshift = 1 -%}{%- endunless -%}
+                {%- for n in (1..1) -%}
                   {%- assign kt = 'funnel.rules_' | append: n | append: '_t' -%}{%- assign kp = 'funnel.rules_' | append: n | append: '_p' -%}
                   <article class="fn-rcard"><b class="fn-rules__n">{{ n }}</b><h4>{{ kt | t }}</h4><p>{{ kp | t | replace: '[block]', r_block | replace: '[week]', r_week | replace: '[wk]', r_wk | replace: '[meal]', r_meal }}</p></article>
+                {%- endfor -%}
+                {%- unless customer -%}
+                  <article class="fn-rcard fn-rcard--signin" data-fn-rules-signin><b class="fn-rules__n">2</b><h4>{{ 'funnel.rules_si_t' | t }}</h4><p>{{ 'funnel.rules_si_p' | t }}</p>
+                    <a class="btn btn--gold" href="{% render 'login-url', back: '/pages/bienvenida' %}">{{ 'login.enter' | t }}</a></article>
+                {%- endunless -%}
+                {%- for n in (2..3) -%}
+                  {%- assign kt = 'funnel.rules_' | append: n | append: '_t' -%}{%- assign kp = 'funnel.rules_' | append: n | append: '_p' -%}
+                  <article class="fn-rcard"><b class="fn-rules__n">{{ n | plus: rshift }}</b><h4>{{ kt | t }}</h4><p>{{ kp | t | replace: '[block]', r_block | replace: '[week]', r_week | replace: '[wk]', r_wk | replace: '[meal]', r_meal }}</p></article>
                 {%- endfor -%}
                 <article class="fn-rcard fn-rcard--ex" role="group" aria-label="{{ 'funnel.rules_ex_t' | t }}">
                   <h4>{{ 'funnel.rules_ex_t' | t }}</h4>
@@ -82,7 +91,7 @@
                 </article>
                 {%- for n in (4..7) -%}
                   {%- assign kt = 'funnel.rules_' | append: n | append: '_t' -%}{%- assign kp = 'funnel.rules_' | append: n | append: '_p' -%}
-                  <article class="fn-rcard"{% if n == 7 %} data-fn-rules-last{% endif %}><b class="fn-rules__n">{{ n }}</b><h4>{{ kt | t }}</h4><p>{{ kp | t | replace: '[block]', r_block | replace: '[week]', r_week | replace: '[wk]', r_wk | replace: '[meal]', r_meal }}</p></article>
+                  <article class="fn-rcard"{% if n == 7 %} data-fn-rules-last{% endif %}><b class="fn-rules__n">{{ n | plus: rshift }}</b><h4>{{ kt | t }}</h4><p>{{ kp | t | replace: '[block]', r_block | replace: '[week]', r_week | replace: '[wk]', r_wk | replace: '[meal]', r_meal }}</p></article>
                 {%- endfor -%}
                 <article class="fn-rcard fn-rcard--final" data-fn-rules-final><b class="fn-rules__n">&#10003;</b><h4>{{ 'funnel.rules_final_t' | t }}</h4><div data-fn-rules-slot></div></article>
               </div>
