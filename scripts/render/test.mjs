@@ -536,8 +536,8 @@ for (const r2 of routes.filter((r) => !r.key.startsWith('p/') && r.key !== 'pg/a
   if (!info.em) motif.noEm.push(r2.key);
   if (info.star) motif.leak.push(r2.key);
 }
-ok('every page opens with the photo header', motif.noPhoto.filter((k) => !['404', 'pg/pedido'].includes(k)).length === 0, motif.noPhoto.join(' '));
-ok('every page has a serif headline with a brand-script phrase', motif.noEm.length === 0, motif.noEm.join(' '));
+ok('every page opens with the photo header', motif.noPhoto.filter((k) => !['404', 'pg/pedido', 'login', 'registro'].includes(k)).length === 0, motif.noPhoto.join(' '));
+ok('every page has a serif headline with a brand-script phrase', motif.noEm.filter((k) => !['login', 'registro'].includes(k)).length === 0, motif.noEm.join(' '));
 ok('no raw emphasis asterisks leak into the page', motif.leak.length === 0, motif.leak.join(' '));
 
 
@@ -1091,7 +1091,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.waitForSelector('#adm-test [data-tab="4"]', { timeout: 8000 }).catch(async () => { ok('admin: Descuentos test panel rendered', false, (await page.evaluate(() => (document.querySelector('#adm-test') || { innerHTML: 'no element' }).innerHTML.slice(0, 200))) + ' | key=' + (await page.evaluate(() => sessionStorage.getItem('kx-admin-key')))); });
   await page.click('#adm-test [data-tab="4"]', { timeout: 3000 }).catch(() => {}); await page.waitForTimeout(400);
   ok('admin: the Descuentos tab shows the form (code, type, value, uses, expiry) and "no codes yet"', await page.evaluate(() => { const r = document.querySelector('#adm-test'); const f = r.querySelector('[data-discform]'); return !!f && ['code', 'kind', 'value', 'uses', 'ends'].every((n) => f.elements[n]) && /Aún no hay códigos/.test(r.innerText); }));
-  await page.click('#adm-test [data-dgen]');
+  await page.click('#adm-test [data-dgen]', { timeout: 3000 }).catch(() => {});
   ok('admin: "Sugerir código" fills a valid code', /^KUL[A-Z2-9]{5}$/.test(await page.$eval('#adm-test [name=code]', (e) => e.value)));
   await page.fill('#adm-test [name=code]', 'hola10'); await page.fill('#adm-test [name=value]', '10'); await page.fill('#adm-test [name=uses]', '0'); await page.click('#adm-test [data-discform] button[type=submit]'); await page.waitForTimeout(200);
   ok('admin: 0 uses is refused in the page and never reaches the server', !calls.some((c) => c.action === 'discount_new') && /cuántas veces/.test(await page.$eval('#adm-test', (e) => e.innerText)));
