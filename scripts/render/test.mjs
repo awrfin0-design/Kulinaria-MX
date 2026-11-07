@@ -1093,7 +1093,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
     else if (q.action === 'admin') body = { ok: true, orders: [], clients: [], recipes: null };
     await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(body) });
   });
-  await page.evaluate(() => { const d = document.createElement('div'); d.id = 'adm-test'; d.setAttribute('data-endpoint', 'https://script.example/exec'); d.setAttribute('data-lang', 'es'); document.body.appendChild(d); window.KXAdmin.mount(d); });
+  await page.evaluate(() => { try { sessionStorage.setItem('kx-admin-key', 'adm'); } catch (e) {} const d = document.createElement('div'); d.id = 'adm-test'; d.setAttribute('data-endpoint', 'https://script.example/exec'); d.setAttribute('data-lang', 'es'); document.body.appendChild(d); window.KXAdmin.mount(d); });
   await page.waitForSelector('#adm-test [data-tab="4"]', { timeout: 8000 }).catch(async () => { ok('admin: Descuentos test panel rendered', false, (await page.evaluate(() => (document.querySelector('#adm-test') || { innerHTML: 'no element' }).innerHTML.slice(0, 200))) + ' | key=' + (await page.evaluate(() => sessionStorage.getItem('kx-admin-key')))); });
   await page.click('#adm-test [data-tab="4"]', { timeout: 3000 }).catch(() => {}); await page.waitForTimeout(400);
   ok('admin: the Descuentos tab shows the form (code, type, value, uses, expiry) and "no codes yet"', await page.evaluate(() => { const r = document.querySelector('#adm-test'); const f = r.querySelector('[data-discform]'); return !!f && ['code', 'kind', 'value', 'uses', 'ends'].every((n) => f.elements[n]) && /Aún no hay códigos/.test(r.innerText); }));
