@@ -416,6 +416,8 @@
     "tagline": "Arte del fuego"
   },
   "login": {
+    "enter": "Entrar o crear cuenta",
+    "enter_note": "Con tu correo recibes un código. Si es tu primera vez, tu cuenta se crea sola.",
     "tab_in": "Entrar",
     "tab_new": "Crear cuenta",
     "welcome": "Bienvenido de vuelta",

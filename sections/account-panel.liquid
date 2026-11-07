@@ -17,7 +17,7 @@
       <div class="section__head">
         <span class="eyebrow">{{ 'general.account' | t }}</span>
         <h2>{{ 'account.login_needed' | t }}</h2>
-        <div class="btn-row"><a class="btn btn--gold" href="{{ routes.account_login_url }}">{{ 'login.title' | t }}</a><a class="btn btn--outline" href="{{ routes.account_register_url | default: routes.account_login_url }}">{{ 'register.title' | t }}</a></div>
+        <div class="btn-row"><a class="btn btn--gold" href="{{ routes.account_login_url }}">{{ 'login.enter' | t }}</a></div>
       </div>
     {%- else -%}
     <div class="acct-hero">
@@ -50,7 +50,7 @@
           {%- unless customer -%}
             <h3>{{ 'myweek.guest_title' | t }}</h3>
             <p class="text-muted">{{ 'myweek.guest' | t }}</p>
-            <div class="btn-row"><a class="btn btn--gold" href="{% render 'login-url', back: '/pages/cuenta-semana' %}">{{ 'login.title' | t }}</a><a class="btn btn--outline" href="{% render 'login-url', kind: 'register', back: '/pages/bienvenida' %}">{{ 'funnel.create_account' | t }}</a></div>
+            <div class="btn-row"><a class="btn btn--gold" href="{% render 'login-url', back: '/pages/cuenta-semana' %}">{{ 'login.enter' | t }}</a></div>
           {%- endunless -%}
           <div data-mw-body {% unless customer %}hidden{% endunless %}>
             <div class="mw-buy" data-mw-buy hidden>

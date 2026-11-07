@@ -45,8 +45,8 @@
           <li data-fn-gate-s1>
             <span class="fn-gate__no" aria-hidden="true">01</span>
             <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>{{ 'funnel.gate_todo' | t }}</span><h4>{{ 'funnel.gate_1' | t }}</h4>
-              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="{% render 'login-url', back: '/pages/bienvenida' %}">{{ 'funnel.gate_login' | t }}</a><a class="btn btn--outline" href="{% render 'login-url', kind: 'register', back: '/pages/bienvenida' %}">{{ 'funnel.gate_register' | t }}</a></div>
-              <p class="fn-gate__ok">{{ 'funnel.gate_done' | t }}</p></div>
+              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="{% render 'login-url', back: '/pages/bienvenida' %}">{{ 'login.enter' | t }}</a></div>
+              <p class="fn-gate__hintline" data-fn-gate-note>{{ 'login.enter_note' | t }}</p><p class="fn-gate__ok">{{ 'funnel.gate_done' | t }}</p></div>
           </li>
           <li data-fn-gate-s2>
             <span class="fn-gate__no" aria-hidden="true">02</span>

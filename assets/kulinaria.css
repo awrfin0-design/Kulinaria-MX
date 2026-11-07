@@ -3313,3 +3313,5 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
 @media (hover:hover){.dish:hover,.plan-card:hover{transform:translateY(-4px);box-shadow:0 26px 50px -28px rgba(0,0,0,.65),0 0 0 1px var(--border-accent)}}
 body .auth-sec{padding-top:calc(var(--hdr,76px) + clamp(24px,3vw,44px)) !important;padding-bottom:clamp(36px,6vw,90px) !important;align-items:start}
 @media (max-width:860px){body .auth-sec{padding-top:calc(var(--hdr,64px) + 8px) !important}}
+
+.fn-gate__hintline{margin:0;font-size:.82rem;color:var(--text-muted);max-width:44ch}.fn-gate__hintline[hidden]{display:none}

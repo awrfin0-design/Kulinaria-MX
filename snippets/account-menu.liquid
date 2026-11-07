@@ -31,7 +31,7 @@
       <div class="acct__guest">
         <strong>{{ 'acct.guest_t' | t }}</strong>
         <p>{{ 'acct.guest_p' | t }}</p>
-        <div class="acct__btns"><a class="btn btn--gold btn--sm" href="{% render 'login-url', back: am_back %}">{{ 'login.title' | t }}</a><a class="btn btn--outline btn--sm" href="{% render 'login-url', kind: 'register', back: am_back %}">{{ 'acct.create' | t }}</a></div>
+        <div class="acct__btns"><a class="btn btn--gold btn--sm" href="{% render 'login-url', back: am_back %}">{{ 'login.enter' | t }}</a></div>
       </div>
     {%- endif -%}
     <div class="acct__row"><span>{{ 'acct.language' | t }}</span>{% render 'lang-switcher' %}</div>

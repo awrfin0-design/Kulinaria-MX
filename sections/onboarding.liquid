@@ -28,8 +28,8 @@
         <h2>{{ 'onboarding.guest_title' | t }}</h2>
         <p class="text-muted">{{ 'onboarding.guest_text' | t }}</p>
         <div class="btn-row">
-          <a class="btn btn--gold" href="{% render 'login-url', back: '/pages/bienvenida' %}">{{ 'login.title' | t }}</a>
-          <a class="btn btn--outline" href="{% render 'login-url', kind: 'register', back: '/pages/bienvenida' %}">{{ 'funnel.create_account' | t }}</a>
+          <a class="btn btn--gold" href="{% render 'login-url', back: '/pages/bienvenida' %}">{{ 'login.enter' | t }}</a>
+          
         </div>
       </div>
     {%- endunless -%}

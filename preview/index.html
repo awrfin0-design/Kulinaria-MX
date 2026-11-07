@@ -3344,6 +3344,8 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
 body .auth-sec{padding-top:calc(var(--hdr,76px) + clamp(24px,3vw,44px)) !important;padding-bottom:clamp(36px,6vw,90px) !important;align-items:start}
 @media (max-width:860px){body .auth-sec{padding-top:calc(var(--hdr,64px) + 8px) !important}}
 
+.fn-gate__hintline{margin:0;font-size:.82rem;color:var(--text-muted);max-width:44ch}.fn-gate__hintline[hidden]{display:none}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -3791,8 +3793,8 @@ Fuego</span>
           <li data-fn-gate-s1>
             <span class="fn-gate__no" aria-hidden="true">01</span>
             <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>Pendiente</span><h4>Inicia sesión o crea tu cuenta</h4>
-              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Iniciar sesión</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Crear cuenta</a></div>
-              <p class="fn-gate__ok">Listo</p></div>
+              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Entrar o crear cuenta</a></div>
+              <p class="fn-gate__hintline" data-fn-gate-note>Con tu correo recibes un código. Si es tu primera vez, tu cuenta se crea sola.</p><p class="fn-gate__ok">Listo</p></div>
           </li>
           <li data-fn-gate-s2>
             <span class="fn-gate__no" aria-hidden="true">02</span>
@@ -12682,8 +12684,8 @@ Pago digital, sin efectivo</li></ul>
           <li data-fn-gate-s1>
             <span class="fn-gate__no" aria-hidden="true">01</span>
             <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>Pendiente</span><h4>Inicia sesión o crea tu cuenta</h4>
-              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Iniciar sesión</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Crear cuenta</a></div>
-              <p class="fn-gate__ok">Listo</p></div>
+              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Entrar o crear cuenta</a></div>
+              <p class="fn-gate__hintline" data-fn-gate-note>Con tu correo recibes un código. Si es tu primera vez, tu cuenta se crea sola.</p><p class="fn-gate__ok">Listo</p></div>
           </li>
           <li data-fn-gate-s2>
             <span class="fn-gate__no" aria-hidden="true">02</span>
@@ -14027,8 +14029,8 @@ Pago digital, sin efectivo</li></ul>
           <li data-fn-gate-s1>
             <span class="fn-gate__no" aria-hidden="true">01</span>
             <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>To do</span><h4>Sign in or create your account</h4>
-              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Create account</a></div>
-              <p class="fn-gate__ok">Done</p></div>
+              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in or create account</a></div>
+              <p class="fn-gate__hintline" data-fn-gate-note>You get a code by e-mail. If it is your first time, your account is created automatically.</p><p class="fn-gate__ok">Done</p></div>
           </li>
           <li data-fn-gate-s2>
             <span class="fn-gate__no" aria-hidden="true">02</span>
@@ -22918,8 +22920,8 @@ Digital payment, no cash</li></ul>
           <li data-fn-gate-s1>
             <span class="fn-gate__no" aria-hidden="true">01</span>
             <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>To do</span><h4>Sign in or create your account</h4>
-              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Create account</a></div>
-              <p class="fn-gate__ok">Done</p></div>
+              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in or create account</a></div>
+              <p class="fn-gate__hintline" data-fn-gate-note>You get a code by e-mail. If it is your first time, your account is created automatically.</p><p class="fn-gate__ok">Done</p></div>
           </li>
           <li data-fn-gate-s2>
             <span class="fn-gate__no" aria-hidden="true">02</span>
@@ -26108,7 +26110,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         gate.hidden = false; holder.classList.add('is-gated');
         var g1 = $('[data-fn-gate-s1]', gate), g2 = $('[data-fn-gate-s2]', gate);
         g1.classList.toggle('is-done', signedIn); g2.classList.toggle('is-done', signedIn && onbDone); g2.classList.toggle('is-wait', !signedIn);
-        var a1 = $('[data-fn-gate-a1]', gate), a2 = $('[data-fn-gate-a2]', gate); if (a1) a1.hidden = signedIn; if (a2) a2.hidden = !signedIn || onbDone;
+        var a1 = $('[data-fn-gate-a1]', gate), a2 = $('[data-fn-gate-a2]', gate); if (a1) a1.hidden = signedIn; var gn = $('[data-fn-gate-note]', gate); if (gn) gn.hidden = signedIn; if (a2) a2.hidden = !signedIn || onbDone;
         var c1 = $('[data-fn-chip]', g1), c2 = $('[data-fn-chip]', g2); if (c1) c1.textContent = signedIn ? gate.getAttribute('data-t-done') : gate.getAttribute('data-t-todo'); if (c2) c2.textContent = !signedIn ? gate.getAttribute('data-t-wait') : (onbDone ? gate.getAttribute('data-t-done') : gate.getAttribute('data-t-todo'));
       }
       var startAtPlan = false; try { startAtPlan = location.protocol === 'file:' && !!sessionStorage.getItem('kx-test-start') && !!st.rulesOk; } catch (e) {}   // local preview only (test hook)

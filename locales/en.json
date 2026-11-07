@@ -416,6 +416,8 @@
     "tagline": "Arte del fuego"
   },
   "login": {
+    "enter": "Sign in or create account",
+    "enter_note": "You get a code by e-mail. If it is your first time, your account is created automatically.",
     "tab_in": "Sign in",
     "tab_new": "Create account",
     "welcome": "Welcome back",
