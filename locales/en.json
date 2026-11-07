@@ -665,6 +665,16 @@
     "have_account": "Already have an account?"
   },
   "funnel": {
+    "gate_how": "How it works, start to finish",
+    "gate_2d": "You fill it in once, so every dish is checked against your allergies.",
+    "gate_later": "Later",
+    "gate_s3": "Choose your plan",
+    "gate_s3d": "A 4-week block (best price) or a trial week. No surprises: you see the total before paying.",
+    "gate_s4": "Build your week",
+    "gate_s4d": "One dish for each day, with notes for the chef. Dishes that clash with your allergies are flagged for you.",
+    "gate_s5": "Pay and receive",
+    "gate_s5d": "Order until Saturday at 10:00 AM. Weekly delivery in glass containers; pause whenever you need.",
+    "gate_cover": "What we ask",
     "gate_eye": "Before you order",
     "gate_t": "Your account, your table",
     "gate_p": "Two short steps, and you never repeat them. With them every dish is checked against your allergies and tastes.",

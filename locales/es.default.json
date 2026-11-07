@@ -665,6 +665,16 @@
     "have_account": "¿Ya tienes cuenta?"
   },
   "funnel": {
+    "gate_how": "Así funciona, de principio a fin",
+    "gate_2d": "Lo llenas una sola vez: así cada platillo se revisa contra tus alergias.",
+    "gate_later": "Después",
+    "gate_s3": "Elige tu plan",
+    "gate_s3d": "Bloque de 4 semanas (mejor precio) o una semana de prueba. Sin sorpresas: ves el total antes de pagar.",
+    "gate_s4": "Arma tu semana",
+    "gate_s4d": "Un platillo para cada día, con notas para el chef. Los que chocan con tus alergias se marcan solos.",
+    "gate_s5": "Paga y recibe",
+    "gate_s5d": "Pides hasta el sábado a las 10:00 AM. Entrega semanal en envases de vidrio; pausas cuando las necesites.",
+    "gate_cover": "Qué te preguntamos",
     "gate_eye": "Antes de pedir",
     "gate_t": "Tu cuenta, tu mesa",
     "gate_p": "Dos pasos cortos y nunca los repites. Con ellos cada platillo se revisa contra tus alergias y tus gustos.",

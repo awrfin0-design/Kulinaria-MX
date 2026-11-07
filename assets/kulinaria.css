@@ -3315,3 +3315,17 @@ body .auth-sec{padding-top:calc(var(--hdr,76px) + clamp(24px,3vw,44px)) !importa
 @media (max-width:860px){body .auth-sec{padding-top:calc(var(--hdr,64px) + 8px) !important}}
 
 .fn-gate__hintline{margin:0;font-size:.82rem;color:var(--text-muted);max-width:44ch}.fn-gate__hintline[hidden]{display:none}
+
+/* v74 — the gate explains the whole journey, not just the sign-in */
+.fn-gate__flow{display:grid;gap:14px;align-content:center;min-width:0}
+.fn-gate__how{margin:0;font:700 .68rem var(--font-label);letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted)}
+.fn-gate__steps{gap:12px}
+.fn-gate__steps::before{top:40px;bottom:40px}
+.fn-gate__d{margin:0;font-size:.88rem;color:var(--text-muted);line-height:1.55;max-width:52ch}
+.fn-gate__cover{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.fn-gate__cover li{padding:4px 11px;border:1px solid var(--line);border-radius:999px;font-size:.74rem;color:var(--text-muted)}
+.fn-gate__steps li.is-later{padding-block:14px;background:transparent;border-style:dashed}
+.fn-gate__steps li.is-later .fn-gate__no{border-style:dashed;color:var(--text-muted);border-color:var(--line);width:38px;height:38px;margin-left:15px;font-size:.9rem}
+.fn-gate__steps li.is-later h4{font-size:1.05rem;color:var(--text)}
+.fn-gate__steps li.is-later .fn-gate__chip{color:var(--text-muted);border-color:var(--line)}
+@media (max-width:860px){.fn-gate__steps li.is-later .fn-gate__no{width:34px;height:34px;margin-left:9px}}

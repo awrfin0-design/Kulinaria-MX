@@ -41,6 +41,8 @@
           <p class="fn-gate__p">{{ 'funnel.gate_p' | t }}</p>
           <ul class="fn-gate__perks"><li>{{ 'funnel.gate_b1' | t }}</li><li>{{ 'funnel.gate_b2' | t }}</li><li>{{ 'funnel.gate_b3' | t }}</li></ul>
         </div>
+        <div class="fn-gate__flow">
+        <p class="fn-gate__how">{{ 'funnel.gate_how' | t }}</p>
         <ol class="fn-gate__steps">
           <li data-fn-gate-s1>
             <span class="fn-gate__no" aria-hidden="true">01</span>
@@ -51,10 +53,25 @@
           <li data-fn-gate-s2>
             <span class="fn-gate__no" aria-hidden="true">02</span>
             <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>{{ 'funnel.gate_wait' | t }}</span><h4>{{ 'funnel.gate_2' | t }}</h4>
+              <p class="fn-gate__d">{{ 'funnel.gate_2d' | t }}</p>
+              <ul class="fn-gate__cover" aria-label="{{ 'funnel.gate_cover' | t }}"><li>{{ 'onboarding.n1' | t }}</li><li>{{ 'onboarding.n2' | t }}</li><li>{{ 'onboarding.n3' | t }}</li><li>{{ 'onboarding.n4' | t }}</li><li>{{ 'onboarding.n5' | t }}</li></ul>
               <div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="/pages/bienvenida">{{ 'funnel.gate_go' | t }} &rarr;</a><span class="fn-gate__time">{{ 'funnel.gate_time' | t }}</span></div>
               <p class="fn-gate__ok">{{ 'funnel.gate_done' | t }}</p></div>
           </li>
+          <li class="is-later">
+            <span class="fn-gate__no" aria-hidden="true">03</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip">{{ 'funnel.gate_later' | t }}</span><h4>{{ 'funnel.gate_s3' | t }}</h4><p class="fn-gate__d">{{ 'funnel.gate_s3d' | t }}</p></div>
+          </li>
+          <li class="is-later">
+            <span class="fn-gate__no" aria-hidden="true">04</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip">{{ 'funnel.gate_later' | t }}</span><h4>{{ 'funnel.gate_s4' | t }}</h4><p class="fn-gate__d">{{ 'funnel.gate_s4d' | t }}</p></div>
+          </li>
+          <li class="is-later">
+            <span class="fn-gate__no" aria-hidden="true">05</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip">{{ 'funnel.gate_later' | t }}</span><h4>{{ 'funnel.gate_s5' | t }}</h4><p class="fn-gate__d">{{ 'funnel.gate_s5d' | t }}</p></div>
+          </li>
         </ol>
+        </div>
       </div>
     </div>
     <div class="fn-returning container" data-fn-returning hidden>
