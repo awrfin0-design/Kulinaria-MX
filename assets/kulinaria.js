@@ -999,15 +999,20 @@
     var steps = $$('[data-ob-step]', form), dots = $$('.ob-dots li', form), nextB = $('[data-ob-next]', form), prevB = $('[data-ob-prev]', form), saveB = $('[data-ob-save]', form);
     var fields = $$('[data-ob]', form), acs = $$('[data-ob-allergy]', form), dts = $$('[data-ob-diet]', form), grps = $$('[data-ob-group]', form), cons = $$('[data-ob-consent]', form);
     var cn = root.getAttribute('data-customer-name'), ce = root.getAttribute('data-customer-email');
-    var f0 = readFunnel(), info = f0.info || {}, prof = loadProfile(), step = 0;
+    var f0 = readFunnel(), info = f0.info || {}, prof = loadProfile(), step = 0, maxStep = 0;
     if (ce && !info.email) info.email = ce; if (cn && !info.name) info.name = cn;
-    fields.forEach(function (x) { x.value = info[x.getAttribute('data-ob')] || ''; });
+    fields.forEach(function (x) { var iv = info[x.getAttribute('data-ob')]; x.value = iv != null && iv !== '' ? iv : (x.defaultValue || ''); });
     acs.forEach(function (c) { c.checked = (f0.allergies || prof.allergies || []).map(norm).indexOf(norm(c.value)) > -1; });
     dts.forEach(function (c) { c.checked = (prof.diets || []).map(norm).indexOf(norm(c.value)) > -1; });
     grps.forEach(function (c) { c.checked = String(info[c.getAttribute('data-ob-group')] || '').split(', ').indexOf(c.value) > -1; });
     var show = function () {
-      steps.forEach(function (s, k) { s.classList.toggle('is-on', k === step); }); dots.forEach(function (d, k) { d.classList.toggle('is-on', k <= step); });
+      steps.forEach(function (s, k) { s.classList.toggle('is-on', k === step); }); dots.forEach(function (d, k) { d.classList.toggle('is-on', k === step); d.classList.toggle('is-done', k < step); });
+      maxStep = Math.max(maxStep, step);
       prevB.hidden = step === 0; nextB.hidden = step === steps.length - 1; saveB.hidden = step !== steps.length - 1;
+      var cnt = $('[data-ob-count]', form), bar = $('[data-ob-bar]', form), tt = dots[step] ? $('.ob-dots__t', dots[step]) : null;
+      if (cnt) cnt.textContent = (root.getAttribute('data-t-stepof') || '[n] / [t]').replace('[n]', step + 1).replace('[t]', steps.length) + (tt ? '  ·  ' + tt.textContent : '');
+      if (bar) bar.style.width = ((step + 1) / steps.length * 100) + '%';
+      if (step === steps.length - 1) renderReview();
     };
     var say = function (m) { err.hidden = !m; err.textContent = m || ''; };
     var val = function (k) { var x = $('[data-ob="' + k + '"]', form); return x ? x.value.trim() : ''; };
@@ -1021,6 +1026,76 @@
     window.addEventListener('hashchange', function () { setTimeout(forward, 60); });
     if (forward()) return;
     if (done && !edit && ce) { form.hidden = true; welcome.hidden = false; hello(); }
+    // ---- segmented radios (one answer), counters, removable tag boxes
+    var segs = $$('[data-ob-seg]', form);
+    segs.forEach(function (g) { var v = info[g.getAttribute('data-ob-seg')]; $$('input', g).forEach(function (r) { r.checked = !!v && r.value === v; }); });
+    $$('[data-ob-count-btn]', form).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var inp = $('[data-ob="' + b.getAttribute('data-ob-count-btn') + '"]', form); if (!inp) return;
+        var mn = +inp.min || 0, mx = +inp.max || 99, v = (parseInt(inp.value, 10) || 0) + (+b.getAttribute('data-d'));
+        inp.value = Math.max(mn, Math.min(mx, v));
+      });
+    });
+    if (!val('dislikes') && prof.dislikes && prof.dislikes.length) { var hd = $('[data-ob="dislikes"]', form); if (hd) hd.value = prof.dislikes.join(', '); }
+    var tagBoxes = $$('[data-ob-tags]', form).map(function (box) {
+      var hid = $('[data-ob="' + box.getAttribute('data-ob-tags') + '"]', box), wrap = $('.tag-input', box), inp = $('[data-ob-tag-input]', box);
+      var list = function () { return hid.value.split(',').map(function (v) { return v.trim(); }).filter(Boolean); };
+      var paint = function () {
+        $$('.tag', wrap).forEach(function (t) { t.remove(); });
+        list().forEach(function (d) {
+          var t = document.createElement('span'); t.className = 'tag'; t.textContent = d;
+          var x = document.createElement('button'); x.type = 'button'; x.setAttribute('aria-label', T('remove', { name: d })); x.textContent = '×';
+          x.addEventListener('click', function () { hid.value = list().filter(function (v) { return norm(v) !== norm(d); }).join(', '); paint(); });
+          t.appendChild(x); wrap.insertBefore(t, inp);
+        });
+        $$('[data-ob-suggest]', box).forEach(function (b) { b.classList.toggle('is-active', list().map(norm).indexOf(norm(b.getAttribute('data-ob-suggest'))) > -1); });
+      };
+      var add = function (v) { v = String(v || '').replace(/\s*,\s*/g, ' ').trim(); if (!v) return; if (list().map(norm).indexOf(norm(v)) < 0) hid.value = list().concat(v).join(', '); inp.value = ''; paint(); };
+      inp.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); add(inp.value); } else if (e.key === 'Backspace' && !inp.value) { var l = list(); l.pop(); hid.value = l.join(', '); paint(); } });
+      inp.addEventListener('blur', function () { add(inp.value); });
+      $$('[data-ob-suggest]', box).forEach(function (b) { b.addEventListener('click', function () { var v = b.getAttribute('data-ob-suggest'); if (list().map(norm).indexOf(norm(v)) > -1) { hid.value = list().filter(function (x) { return norm(x) !== norm(v); }).join(', '); paint(); } else add(v); }); });
+      paint(); return paint;
+    });
+    $$('input[type="text"],input[type="email"],input[type="tel"],input[type="number"],input[type="date"]', form).forEach(function (i) {
+      if (i.hasAttribute('data-ob-tag-input')) return;
+      i.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); if (!nextB.hidden) nextB.click(); } });
+    });
+    // review: every answer, section by section, each with an Edit button that jumps back
+    var textOf = function (n) { return (n.textContent || '').trim(); };
+    var reviewRows = function (st) {
+      var rows = [], cur = '';
+      Array.prototype.forEach.call(st.children, function (n) {
+        if (n.tagName === 'LEGEND') return;
+        if (n.classList.contains('label')) { cur = textOf(n); return; }
+        var take = function (label, vals) { vals = vals.filter(Boolean); if (vals.length) rows.push([label, vals.join(', ')]); };
+        var fieldRow = function (fd) {
+          var lb = $('label', fd), inp = $('[data-ob]', fd); if (!lb || !inp) return;
+          take(textOf(lb), [inp.tagName === 'SELECT' ? (inp.value ? textOf(inp.options[inp.selectedIndex]) : '') : inp.value.trim()]);
+        };
+        if (n.classList.contains('pills')) take(cur, $$('input:checked', n).map(function (i) { return textOf(i.nextElementSibling); }));
+        else if (n.hasAttribute('data-ob-seg')) take(cur, $$('input:checked', n).map(function (i) { return textOf(i.nextElementSibling); }));
+        else if (n.hasAttribute('data-ob-tags')) take(cur, $('[data-ob]', n).value.split(',').map(function (v) { return v.trim(); }));
+        else if (n.classList.contains('ob-people')) take(cur, $$('.counter', n).map(function (c) { return textOf($('span', c)) + ' ' + $('input', c).value; }));
+        else if (n.classList.contains('field')) fieldRow(n);
+        else if (n.classList.contains('form-grid')) $$('.field', n).forEach(fieldRow);
+      });
+      return rows;
+    };
+    var renderReview = function () {
+      var box = $('[data-ob-review]', form); if (!box) return; box.innerHTML = '';
+      steps.slice(0, steps.length - 1).forEach(function (st, k) {
+        var sec = document.createElement('section'); sec.className = 'review__sec';
+        var head = document.createElement('div'); head.className = 'review__h';
+        var h = document.createElement('h4'); h.textContent = textOf($('legend', st)); head.appendChild(h);
+        var eb = document.createElement('button'); eb.type = 'button'; eb.className = 'text-link'; eb.textContent = root.getAttribute('data-t-edit') || 'Edit';
+        eb.addEventListener('click', function () { step = k; say(''); show(); }); head.appendChild(eb); sec.appendChild(head);
+        var rows = reviewRows(st), dl = document.createElement('dl');
+        if (!rows.length) { var e = document.createElement('p'); e.className = 'text-muted'; e.textContent = root.getAttribute('data-t-empty') || ''; sec.appendChild(e); }
+        rows.forEach(function (r) { var dt = document.createElement('dt'); dt.textContent = r[0]; var dd = document.createElement('dd'); dd.textContent = r[1]; dl.appendChild(dt); dl.appendChild(dd); });
+        if (rows.length) sec.appendChild(dl); box.appendChild(sec);
+      });
+    };
+    dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k <= maxStep && k !== step) { say(''); step = k; show(); } }); });
     var stepOk = function (k) {
       if (k === 0 && !(val('name') && /.+@.+/.test(val('email')) && val('phone'))) { say(root.getAttribute('data-t-need')); return false; }
       if (k === 1 && !(val('street') && val('cluster') && val('city') && val('zip'))) { say(root.getAttribute('data-t-need-addr')); return false; }
@@ -1031,13 +1106,14 @@
       say(''); step = Math.min(steps.length - 1, step + 1); show();
     });
     prevB.addEventListener('click', function () { step = Math.max(0, step - 1); show(); });
-    var editB = $('[data-ob-edit]', root); if (editB) editB.addEventListener('click', function () { welcome.hidden = true; form.hidden = false; step = 0; show(); });
+    var editB = $('[data-ob-edit]', root); if (editB) editB.addEventListener('click', function () { welcome.hidden = true; form.hidden = false; step = 0; tagBoxes.forEach(function (f2) { f2(); }); show(); });
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       for (var sk = 0; sk < 2; sk++) { if (!stepOk(sk)) { step = sk; show(); return; } }
       if (cons.length && !cons.every(function (c) { return c.checked; })) { step = steps.length - 1; show(); say(root.getAttribute('data-t-need-consent')); return; }
       var f = readFunnel(); f.v = 2; f.info = f.info || {}; fields.forEach(function (x) { f.info[x.getAttribute('data-ob')] = x.value.trim(); });
       var gnames = {}; grps.forEach(function (c) { var g = c.getAttribute('data-ob-group'); gnames[g] = gnames[g] || []; if (c.checked) gnames[g].push(c.value); }); Object.keys(gnames).forEach(function (g) { f.info[g] = gnames[g].join(', '); });
+      segs.forEach(function (g) { var c = $('input:checked', g); f.info[g.getAttribute('data-ob-seg')] = c ? c.value : ''; });
       f.info.consent = new Date().toISOString().slice(0, 10);
       if (f.info.ref) { try { localStorage.setItem('kulinaria_ref', f.info.ref); } catch (x) {} }
       f.allergies = acs.filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
@@ -1073,6 +1149,7 @@
         var g1 = $('[data-fn-gate-s1]', gate), g2 = $('[data-fn-gate-s2]', gate);
         g1.classList.toggle('is-done', signedIn); g2.classList.toggle('is-done', signedIn && onbDone); g2.classList.toggle('is-wait', !signedIn);
         var a1 = $('[data-fn-gate-a1]', gate), a2 = $('[data-fn-gate-a2]', gate); if (a1) a1.hidden = signedIn; if (a2) a2.hidden = !signedIn || onbDone;
+        var c1 = $('[data-fn-chip]', g1), c2 = $('[data-fn-chip]', g2); if (c1) c1.textContent = signedIn ? gate.getAttribute('data-t-done') : gate.getAttribute('data-t-todo'); if (c2) c2.textContent = !signedIn ? gate.getAttribute('data-t-wait') : (onbDone ? gate.getAttribute('data-t-done') : gate.getAttribute('data-t-todo'));
       }
       var startAtPlan = false; try { startAtPlan = location.protocol === 'file:' && !!sessionStorage.getItem('kx-test-start') && !!st.rulesOk; } catch (e) {}   // local preview only (test hook)
       st.step = startAtPlan ? 1 : 0;

@@ -3101,25 +3101,159 @@ body .funnel[data-step="0"]:not(.funnel--teaser) .funnel__panel{grid-template-co
 @media (max-width:760px){.fn-note__done{padding:11px 20px;font-size:.74rem}}
 
 /* =====================================================================
-   v69 — steps 1 and 2 before the builder: account + questionnaire
+   v70 — the account gate before ordering + the "flavor passport" questionnaire
    ===================================================================== */
-.fn-gate{display:grid;gap:12px;padding:clamp(18px,3vw,34px);border:1px solid var(--border-accent);border-radius:22px;background:var(--accent-wash);margin-block:12px}
+.fn-flame,.ob-flame{display:block;width:30px;height:42px;background:linear-gradient(to top,var(--accent-lo,var(--accent)),var(--accent) 55%,var(--accent-hi,#fff));clip-path:path("M15 0C17 11 28 16 28 28C28 36 22 42 15 42C8 42 2 36 2 28C2 22 5 18 8 14C9 19 12 21 13 21C12 14 12 7 15 0Z");filter:drop-shadow(0 0 10px var(--ring));transform-origin:50% 90%}
+@media (prefers-reduced-motion:no-preference){.fn-flame,.ob-flame{animation:kxFlame 3.4s ease-in-out infinite}}
+@keyframes kxFlame{0%,100%{transform:scale(1,1) rotate(-1deg)}35%{transform:scale(.96,1.06) rotate(1.5deg)}70%{transform:scale(1.03,.97) rotate(-.5deg)}}
+
+/* ---- the gate */
+.fn-gate{margin-block:14px}
 .fn-gate[hidden]{display:none}
-.fn-gate h3{margin:0;font-size:clamp(1.3rem,2.6vw,1.9rem)}
-.fn-gate__p{margin:0;color:var(--text-muted);font-size:.9rem;max-width:60ch}
-.fn-gate__steps{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:12px}
-.fn-gate__steps li{display:grid;grid-template-columns:38px minmax(0,1fr);gap:14px;align-items:start;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:var(--bg-raised)}
-.fn-gate__steps li>b{width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:700 1rem var(--font-label)}
-.fn-gate__steps h4{margin:0 0 8px;font-size:1.05rem}
-.fn-gate__row{display:flex;flex-wrap:wrap;gap:10px}
+.fn-gate__frame{position:relative;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(24px,4vw,64px);padding:clamp(26px,4vw,60px);border:1px solid var(--border-accent);border-radius:26px;overflow:hidden;
+  background:radial-gradient(120% 90% at 0% 0%,var(--accent-wash),transparent 60%),radial-gradient(80% 70% at 100% 100%,var(--accent-wash),transparent 65%),var(--bg-raised)}
+.fn-gate__frame::before{content:"";position:absolute;inset:9px;border:1px solid var(--line);border-radius:19px;pointer-events:none}
+.fn-gate__intro{position:relative;display:grid;align-content:center;gap:12px}
+.fn-gate__intro .eyebrow{margin:0}
+.fn-gate__intro h3{margin:0;font-family:var(--font-display,var(--font-heading));font-size:clamp(1.9rem,3.6vw,3rem);line-height:1.05;font-weight:500;letter-spacing:-.015em}
+.fn-gate__p{margin:0;color:var(--text-muted);font-size:.95rem;max-width:44ch}
+.fn-gate__perks{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:10px}
+.fn-gate__perks li{position:relative;padding-left:26px;font-size:.9rem;color:var(--text)}
+.fn-gate__perks li::before{content:"";position:absolute;left:3px;top:.55em;width:8px;height:8px;background:var(--accent);transform:rotate(45deg);box-shadow:0 0 0 4px var(--accent-wash)}
+.fn-gate__steps{position:relative;list-style:none;margin:0;padding:0;display:grid;gap:18px;align-content:center}
+.fn-gate__steps::before{content:"";position:absolute;left:34px;top:46px;bottom:46px;width:0;border-left:1.5px dashed var(--border-accent)}
+.fn-gate__steps li{position:relative;display:grid;grid-template-columns:70px minmax(0,1fr);align-items:start;gap:16px;padding:20px 22px 22px 14px;border:1px solid var(--line);border-radius:20px;background:color-mix(in srgb,var(--bg-base) 55%,var(--bg-raised));transition:border-color .3s,opacity .3s,transform .3s}
+.fn-gate__no{display:grid;place-items:center;width:44px;height:44px;margin-left:12px;border-radius:50%;background:var(--bg-base);border:1.5px solid var(--accent);color:var(--accent);font:600 1.05rem var(--font-display,var(--font-heading));letter-spacing:.02em;position:relative;z-index:1}
+.fn-gate__body{display:grid;gap:10px;min-width:0}
+.fn-gate__body h4{margin:0;font-family:var(--font-display,var(--font-heading));font-size:clamp(1.15rem,1.7vw,1.4rem);font-weight:500;line-height:1.25}
+.fn-gate__chip{justify-self:start;font:700 .62rem var(--font-label);letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border:1px solid var(--border-accent);border-radius:999px;padding:4px 11px}
+.fn-gate__row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
 .fn-gate__row[hidden]{display:none}
-.fn-gate__ok{display:none;margin:0;color:var(--accent);font-weight:700;font-size:.85rem}
+.fn-gate__time{font-size:.8rem;color:var(--text-muted)}
+.fn-gate__ok{display:none;margin:0;font-size:.9rem;color:var(--text-muted)}
+.fn-gate__steps li.is-done{border-color:var(--border-accent)}
+.fn-gate__steps li.is-done .fn-gate__no{background:var(--accent);color:var(--bg-base);font-size:0}
+.fn-gate__steps li.is-done .fn-gate__no::after{content:"";width:9px;height:17px;border:solid currentColor;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-2px)}
 .fn-gate__steps li.is-done .fn-gate__ok{display:block}
-.fn-gate__steps li.is-done>b{background:var(--ok,#3fa66b)}
-.fn-gate__steps li.is-wait{opacity:.55}
+.fn-gate__steps li.is-done .fn-gate__chip{background:var(--accent);color:var(--bg-base)}
+.fn-gate__steps li.is-wait{opacity:.6}
+.fn-gate__steps li.is-wait .fn-gate__no{border-style:dashed;color:var(--text-muted);border-color:var(--line)}
+.fn-gate__steps li.is-wait .fn-gate__chip{color:var(--text-muted);border-color:var(--line)}
 .funnel.is-gated :is(.funnel__top,.funnel__bar,.funnel__stepcount,.funnel__panel,.fn-returning){display:none !important}
-.ob-dots li{min-width:26px}
-@media (max-width:760px){.fn-gate__steps li{grid-template-columns:32px minmax(0,1fr);gap:10px;padding:14px}.fn-gate__row .btn{flex:1}}
+@media (max-width:860px){
+  .fn-gate__frame{grid-template-columns:1fr;gap:26px;padding:26px 20px;border-radius:22px}
+  .fn-gate__frame::before{inset:7px;border-radius:16px}
+  .fn-gate__steps::before{left:28px}
+  .fn-gate__steps li{grid-template-columns:52px minmax(0,1fr);gap:10px;padding:16px 14px 18px 8px}
+  .fn-gate__no{width:40px;height:40px;margin-left:6px}
+  .fn-gate__row .btn{flex:1 1 auto;justify-content:center}
+}
+
+/* ---- the passport (questionnaire) */
+.ob-wrap{max-width:1120px}
+.ob-guest,.ob-welcome{position:relative;display:grid;gap:12px;justify-items:start;max-width:760px;margin-inline:auto;padding:clamp(28px,4vw,54px);border:1px solid var(--border-accent);border-radius:24px;background:radial-gradient(110% 90% at 0% 0%,var(--accent-wash),transparent 62%),var(--bg-raised)}
+.ob-guest::before,.ob-welcome::before{content:"";position:absolute;inset:8px;border:1px solid var(--line);border-radius:17px;pointer-events:none}
+.ob-guest h2,.ob-welcome h2{margin:0;font-size:clamp(1.8rem,3.4vw,2.7rem);line-height:1.08}
+.ob-guest .btn-row,.ob-welcome .btn-row{margin-top:10px}
+.ob-welcome .ob-next{margin:6px 0 4px;padding:0;list-style:none;counter-reset:n;display:grid;gap:10px}
+.ob-welcome .ob-next li{counter-increment:n;position:relative;padding-left:44px;color:var(--text)}
+.ob-welcome .ob-next li::before{content:"0" counter(n);position:absolute;left:0;top:-2px;font:600 1.15rem var(--font-display,var(--font-heading));color:var(--accent)}
+.ob{display:grid;grid-template-columns:minmax(260px,330px) minmax(0,1fr);border:1px solid var(--border-accent);border-radius:28px;overflow:hidden;background:var(--bg-raised);margin-top:0}
+.ob-side{position:relative;padding:clamp(26px,3vw,44px);display:flex;flex-direction:column;gap:14px;background:radial-gradient(90% 55% at 0% 100%,var(--accent-wash),transparent 70%),linear-gradient(180deg,var(--bg-deep),var(--bg-base));border-right:1px solid var(--line)}
+.ob-side .eyebrow{margin:0}
+.ob-side h2{margin:0;font-size:clamp(1.55rem,2.3vw,2.1rem);line-height:1.1;font-weight:500}
+.ob-side__text{margin:0;color:var(--text-muted);font-size:.9rem}
+.ob-side__secure{margin:auto 0 0;padding-top:16px;border-top:1px solid var(--line);font-size:.76rem;color:var(--text-muted);line-height:1.5}
+.ob-dots{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:0}
+.ob-dots li{position:relative;display:grid;grid-template-columns:46px minmax(0,1fr);column-gap:10px;padding:10px 0 12px;cursor:default;color:var(--text-muted);width:auto;height:auto;border:0;border-radius:0;font-size:inherit;min-width:0;background:none}
+.ob-dots li::before{content:"";position:absolute;left:19px;top:44px;bottom:-6px;border-left:1.5px solid var(--line)}
+.ob-dots li:last-child::before{display:none}
+.ob-dots li b{grid-row:1/span 2;display:grid;place-items:center;align-self:start;width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line);background:var(--bg-base);font:600 .9rem var(--font-display,var(--font-heading));letter-spacing:.03em;transition:all .3s}
+.ob-dots__t{align-self:center;font:600 1rem var(--font-display,var(--font-heading));color:inherit;transition:color .3s}
+.ob-dots__why{grid-column:2;max-height:0;overflow:hidden;opacity:0;font-size:.8rem;line-height:1.45;color:var(--text-muted);transition:max-height .35s,opacity .35s,margin .35s}
+.ob-dots li.is-on{color:var(--text);background:none;border-color:transparent}
+.ob-dots li.is-on b{background:var(--accent);color:var(--bg-base);border-color:var(--accent);box-shadow:0 0 0 5px var(--accent-wash),0 0 22px var(--ring)}
+.ob-dots li.is-on .ob-dots__why{max-height:70px;opacity:1;margin-top:4px}
+.ob-dots li.is-done{color:var(--text);cursor:pointer}
+.ob-dots li.is-done b{border-color:var(--accent);color:var(--accent)}
+.ob-dots li.is-done::before{border-left-color:var(--accent)}
+.ob-card{position:relative;padding:clamp(24px,3.4vw,52px);min-width:0}
+.ob-bar{position:absolute;left:0;right:0;top:0;height:3px;background:var(--line)}
+.ob-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent-lo,var(--accent)),var(--accent-hi,var(--accent)));transition:width .45s cubic-bezier(.2,.7,.2,1);box-shadow:0 0 12px var(--ring)}
+.ob-count{margin:0 0 6px;font:700 .68rem var(--font-label);letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.ob-title{display:none}
+.ob .step{display:none;border:0;padding:0;margin:0;min-width:0}
+.ob .step.is-on{display:block;animation:kxObIn .45s cubic-bezier(.2,.7,.2,1)}
+@keyframes kxObIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ob legend{float:left;width:100%;margin:0 0 clamp(18px,2.4vw,28px);padding:0;font-family:var(--font-display,var(--font-heading));font-weight:500;font-size:clamp(1.7rem,2.9vw,2.4rem);line-height:1.1;letter-spacing:-.012em}
+.ob legend+*{clear:both}
+.ob .label{margin:clamp(18px,2.2vw,26px) 0 10px}
+.ob .field{margin-bottom:var(--space-md)}
+.ob .input,.ob .select{background:color-mix(in srgb,var(--bg-base) 70%,var(--bg-raised));transition:border-color .2s,box-shadow .2s}
+.ob .input:focus,.ob .select:focus,.ob .tag-input:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-wash);outline:none}
+.pills,.seg,.ob-people{display:flex;flex-wrap:wrap;gap:10px}
+.pill{position:relative;cursor:pointer}
+.pill input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.pill span{display:inline-flex;align-items:center;gap:8px;padding:10px 18px 10px 16px;border:1.5px solid var(--line);border-radius:999px;font-size:.92rem;background:transparent;transition:background .2s,border-color .2s,color .2s,transform .15s}
+.pill span::before{content:"";width:9px;height:9px;border-radius:50%;border:1.5px solid var(--text-muted);transition:all .2s}
+.pill:hover span{border-color:var(--accent)}
+.pill input:checked+span{background:var(--accent-wash);border-color:var(--accent);color:var(--text)}
+.pill input:checked+span::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-wash)}
+.pill input:focus-visible+span,.seg__o input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+.pills--al .pill span{border-color:var(--border-accent)}
+.seg{gap:0;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;display:inline-flex;max-width:100%}
+.seg__o{position:relative;cursor:pointer;flex:1 1 auto}
+.seg__o+.seg__o{border-left:1px solid var(--line)}
+.seg__o input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.seg__o span{display:block;text-align:center;padding:11px 18px;font-size:.9rem;transition:background .2s,color .2s}
+.seg__o:hover span{background:var(--accent-wash)}
+.seg__o input:checked+span{background:var(--accent);color:var(--bg-base);font-weight:600}
+.counter{display:inline-flex;align-items:center;gap:6px;padding:6px 8px 6px 18px;border:1.5px solid var(--line);border-radius:999px}
+.counter>span{font-size:.9rem;margin-right:8px;color:var(--text-muted)}
+.counter__b{width:34px;height:34px;border-radius:50%;border:1px solid var(--border-accent);background:var(--accent-wash);color:var(--accent);font-size:1.2rem;line-height:1;cursor:pointer;transition:background .2s,color .2s}
+.counter__b:hover{background:var(--accent);color:var(--bg-base)}
+.counter__v{width:44px;text-align:center;border:0;background:none;color:var(--text);font:600 1.1rem var(--font-display,var(--font-heading));-moz-appearance:textfield;padding:0}
+.counter__v::-webkit-outer-spin-button,.counter__v::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.ob .tag-input{border-radius:18px;background:color-mix(in srgb,var(--bg-base) 70%,var(--bg-raised));padding:8px 10px;min-height:54px;align-items:center}
+.ob .tag-input input{border:0;box-shadow:none;background:none;padding:6px 8px;min-width:150px}
+.ob .tag{padding:6px 8px 6px 14px;font-size:.88rem}
+.ob .tag button{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--accent-wash);transition:background .2s,color .2s}
+.ob .tag button:hover{background:var(--accent);color:var(--bg-base)}
+.chips--sug{margin-top:10px;gap:8px}
+.chips--sug .chip{padding:6px 13px;font-size:.78rem;min-height:0;border-style:dashed}
+.chips--sug .chip.is-active{border-style:solid;background:var(--accent-wash);color:var(--text);border-color:var(--accent)}
+.check--box{padding:14px 16px;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;align-items:center;cursor:pointer;transition:border-color .2s,background .2s}
+.check--box:hover,.check--box:has(input:checked){border-color:var(--accent);background:var(--accent-wash)}
+.ob .legal-note{font-size:.78rem;margin:12px 0 0}
+.review{display:grid;gap:12px;margin:14px 0 4px}
+.review__sec{padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:color-mix(in srgb,var(--bg-base) 55%,var(--bg-raised))}
+.review__h{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.review__h h4{margin:0;font-family:var(--font-display,var(--font-heading));font-size:1.15rem;font-weight:500}
+.review dl{display:grid;grid-template-columns:minmax(120px,38%) minmax(0,1fr);gap:6px 14px;margin:10px 0 0}
+.review dt{font-size:.78rem;color:var(--text-muted)}
+.review dd{margin:0;font-size:.9rem;overflow-wrap:anywhere}
+.ob .steps__actions{margin-top:clamp(22px,3vw,34px);padding-top:18px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:14px}
+.ob .steps__actions .btn{margin-left:auto}
+@media (max-width:860px){
+  .ob{grid-template-columns:1fr;border-radius:22px}
+  .ob-side{padding:20px 18px 16px;gap:8px;border-right:0;border-bottom:1px solid var(--line)}
+  .ob-side h2{font-size:1.35rem}.ob-side__text,.ob-side__secure,.ob-dots__why{display:none}
+  .ob-dots{display:flex;gap:0;margin:8px 0 0;justify-content:space-between}
+  .ob-dots li{display:block;padding:0;flex:1;text-align:center}
+  .ob-dots li::before{left:calc(50% + 22px);right:calc(-50% + 22px);top:18px;bottom:auto;border-left:0;border-top:1.5px solid var(--line)}
+  .ob-dots li b{width:34px;height:34px;margin:0 auto;font-size:.78rem}
+  .ob-dots__t{display:none}
+  .ob-dots li.is-done::before{border-top-color:var(--accent)}
+  .ob-card{padding:22px 18px 26px}
+  .ob legend{font-size:1.6rem}
+  .seg{display:flex;flex-wrap:wrap}.seg__o{flex:1 1 40%}.seg__o:nth-child(n+3){border-top:1px solid var(--line)}.seg__o:nth-child(2n+1){border-left:0}
+  .review dl{grid-template-columns:1fr;gap:2px}.review dt{margin-top:8px}
+  .ob .steps__actions .btn{flex:1;justify-content:center}
+}
+.ob[hidden],.ob-guest[hidden],.ob-welcome[hidden]{display:none !important}
+.fn-gate__ok{display:none !important}
+.ob-dots li,.ob-dots__t{text-align:left}
+@media (max-width:860px){.ob-dots li{text-align:center}}
 
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
@@ -3543,13 +3677,30 @@ Fuego</span>
     <a class="btn btn--gold btn--block" href="#/pg/pedido" data-order-cta data-returning-label="Elegir mi semana">Armar mi pedido</a>
   </div><div class="funnel__bgphoto" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-steak-dark.webp" width="1200" height="800" alt="" class="" loading="lazy" decoding="async"></div><div class="funnel__track" data-fn-track>
    <div class="funnel__stage" data-fn-stage>
-    <div class="fn-gate container" data-fn-gate hidden>
-      <h3>Antes de pedir: tu cuenta</h3>
-      <p class="fn-gate__p">Son dos pasos cortos y no vuelves a llenarlos. Así cada platillo se revisa contra tus alergias y gustos.</p>
-      <ol class="fn-gate__steps">
-        <li data-fn-gate-s1><b>1</b><div><h4>Inicia sesión o crea tu cuenta</h4><div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Iniciar sesión</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Crear cuenta</a></div><p class="fn-gate__ok">&#10003; Listo</p></div></li>
-        <li data-fn-gate-s2><b>2</b><div><h4>Cuéntanos de ti: datos, entrega, alergias y gustos</h4><div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="#/pg/bienvenida">Hacer el cuestionario &rarr;</a></div><p class="fn-gate__ok">&#10003; Listo</p></div></li>
-      </ol>
+    <div class="fn-gate container" data-fn-gate data-t-done="Listo" data-t-todo="Pendiente" data-t-wait="En espera" hidden>
+      <div class="fn-gate__frame">
+        <div class="fn-gate__intro">
+          <span class="fn-flame" aria-hidden="true"></span>
+          <p class="eyebrow">Antes de pedir</p>
+          <h3>Tu cuenta, tu mesa</h3>
+          <p class="fn-gate__p">Dos pasos cortos y nunca los repites. Con ellos cada platillo se revisa contra tus alergias y tus gustos.</p>
+          <ul class="fn-gate__perks"><li>Cada platillo revisado contra tus alergias</li><li>Dirección y horario guardados una sola vez</li><li>Tu semana a tu gusto, sin repetir datos</li></ul>
+        </div>
+        <ol class="fn-gate__steps">
+          <li data-fn-gate-s1>
+            <span class="fn-gate__no" aria-hidden="true">01</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>Pendiente</span><h4>Inicia sesión o crea tu cuenta</h4>
+              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Iniciar sesión</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Crear cuenta</a></div>
+              <p class="fn-gate__ok">Listo</p></div>
+          </li>
+          <li data-fn-gate-s2>
+            <span class="fn-gate__no" aria-hidden="true">02</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>En espera</span><h4>Cuéntanos de ti: datos, entrega, alergias y gustos</h4>
+              <div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="#/pg/bienvenida">Hacer el cuestionario &rarr;</a><span class="fn-gate__time">2 minutos</span></div>
+              <p class="fn-gate__ok">Listo</p></div>
+          </li>
+        </ol>
+      </div>
     </div>
     <div class="fn-returning container" data-fn-returning hidden>
       <h3>Ya tienes un plan activo</h3>
@@ -12154,13 +12305,30 @@ Pago digital, sin efectivo</li></ul>
     <a class="btn btn--gold btn--block" href="#/pg/pedido" data-order-cta data-returning-label="Elegir mi semana">Armar mi pedido</a>
   </div><div class="funnel__bgphoto" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-steak-dark.webp" width="1200" height="800" alt="" class="" loading="lazy" decoding="async"></div><div class="funnel__track" data-fn-track>
    <div class="funnel__stage" data-fn-stage>
-    <div class="fn-gate container" data-fn-gate hidden>
-      <h3>Antes de pedir: tu cuenta</h3>
-      <p class="fn-gate__p">Son dos pasos cortos y no vuelves a llenarlos. Así cada platillo se revisa contra tus alergias y gustos.</p>
-      <ol class="fn-gate__steps">
-        <li data-fn-gate-s1><b>1</b><div><h4>Inicia sesión o crea tu cuenta</h4><div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Iniciar sesión</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Crear cuenta</a></div><p class="fn-gate__ok">&#10003; Listo</p></div></li>
-        <li data-fn-gate-s2><b>2</b><div><h4>Cuéntanos de ti: datos, entrega, alergias y gustos</h4><div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="#/pg/bienvenida">Hacer el cuestionario &rarr;</a></div><p class="fn-gate__ok">&#10003; Listo</p></div></li>
-      </ol>
+    <div class="fn-gate container" data-fn-gate data-t-done="Listo" data-t-todo="Pendiente" data-t-wait="En espera" hidden>
+      <div class="fn-gate__frame">
+        <div class="fn-gate__intro">
+          <span class="fn-flame" aria-hidden="true"></span>
+          <p class="eyebrow">Antes de pedir</p>
+          <h3>Tu cuenta, tu mesa</h3>
+          <p class="fn-gate__p">Dos pasos cortos y nunca los repites. Con ellos cada platillo se revisa contra tus alergias y tus gustos.</p>
+          <ul class="fn-gate__perks"><li>Cada platillo revisado contra tus alergias</li><li>Dirección y horario guardados una sola vez</li><li>Tu semana a tu gusto, sin repetir datos</li></ul>
+        </div>
+        <ol class="fn-gate__steps">
+          <li data-fn-gate-s1>
+            <span class="fn-gate__no" aria-hidden="true">01</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>Pendiente</span><h4>Inicia sesión o crea tu cuenta</h4>
+              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Iniciar sesión</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Crear cuenta</a></div>
+              <p class="fn-gate__ok">Listo</p></div>
+          </li>
+          <li data-fn-gate-s2>
+            <span class="fn-gate__no" aria-hidden="true">02</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>En espera</span><h4>Cuéntanos de ti: datos, entrega, alergias y gustos</h4>
+              <div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="#/pg/bienvenida">Hacer el cuestionario &rarr;</a><span class="fn-gate__time">2 minutos</span></div>
+              <p class="fn-gate__ok">Listo</p></div>
+          </li>
+        </ol>
+      </div>
     </div>
     <div class="fn-returning container" data-fn-returning hidden>
       <h3>Ya tienes un plan activo</h3>
@@ -12823,16 +12991,19 @@ Pago digital, sin efectivo</li></ul>
 
 
 </div><div id="pg-bienvenida--shopify-section-ob" class="shopify-section"><section class="section onboarding" data-onboarding data-next-url="/pages/pedido"
-  data-t-welcome="Bienvenido, {n}" data-t-need-addr="Escribe tu calle, colonia o clúster, ciudad y código postal para poder entregarte." data-t-need-consent="Marca las tres confirmaciones para guardar tu perfil." data-t-need="Completa tu nombre, correo y teléfono." >
-  <div class="container" style="max-width:820px">
-    <a hidden tabindex="-1" aria-hidden="true" data-ob-week href="#/pg/cuenta-semana"></a><div class="panel panel--gold" data-ob-guest>
+  data-t-welcome="Bienvenido, {n}" data-t-need-addr="Escribe tu calle, colonia o clúster, ciudad y código postal para poder entregarte." data-t-need-consent="Marca las tres confirmaciones para guardar tu perfil." data-t-need="Completa tu nombre, correo y teléfono."
+  data-t-stepof="Paso [n] de [t]" data-t-edit="Editar" data-t-empty="Sin responder" >
+  <div class="container ob-wrap">
+    <a hidden tabindex="-1" aria-hidden="true" data-ob-week href="#/pg/cuenta-semana"></a><div class="ob-guest" data-ob-guest>
+        <span class="ob-flame" aria-hidden="true"></span>
         <h2>Primero inicia sesión</h2>
         <p class="text-muted">Entra o crea tu cuenta y te haremos unas preguntas rápidas para personalizar tu menú.</p>
         <div class="btn-row">
           <a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Iniciar sesión</a>
           <a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Crear mi cuenta</a>
         </div>
-      </div><div class="panel panel--gold ob-welcome" data-ob-welcome hidden>
+      </div><div class="ob-welcome" data-ob-welcome hidden>
+      <span class="ob-flame" aria-hidden="true"></span>
       <p class="eyebrow">Todo listo</p>
       <h2 data-ob-hello>Bienvenido a Kulinaria</h2>
       <p class="lede">Guardamos tus datos. Ya no tendrás que escribirlos otra vez.</p>
@@ -12842,92 +13013,137 @@ Pago digital, sin efectivo</li></ul>
       <div class="btn-row"><a class="btn btn--gold" href="#/pg/pedido">Elegir mi plan</a><button class="btn btn--outline" type="button" data-ob-edit>Editar mis datos</button></div>
     </div>
 
-    <form class="panel ob-form" data-ob-form novalidate hidden>
-      <p class="eyebrow">Tu perfil</p>
-      <h2>Cuéntanos de ti, una sola vez</h2>
-      <p class="text-muted">Con esto armamos tu menú y bloqueamos lo que no puedes comer. No tendrás que volver a llenarlo; puedes cambiarlo cuando quieras en Mi cuenta.</p>
-      <ol class="ob-dots" aria-hidden="true"><li class="is-on">1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li></ol>
+    <form class="ob" data-ob-form novalidate hidden>
+      <aside class="ob-side">
+        <p class="eyebrow">Tu perfil</p>
+        <h2>Tu pasaporte de sabor</h2>
+        <p class="ob-side__text">Seis pausas cortas. Nos dicen qué cocinar, qué evitar y adónde llevarlo.</p>
+        <ol class="ob-dots"><li class="is-on" data-ob-nav="1"><b>01</b><span class="ob-dots__t">Tú</span><span class="ob-dots__why">Para reconocerte y avisarte cuando tu pedido salga.</span></li><li data-ob-nav="2"><b>02</b><span class="ob-dots__t">Entrega</span><span class="ob-dots__why">Para que el repartidor llegue a la puerta correcta.</span></li><li data-ob-nav="3"><b>03</b><span class="ob-dots__t">Tu mesa</span><span class="ob-dots__why">Para calcular porciones y qué comidas armamos.</span></li><li data-ob-nav="4"><b>04</b><span class="ob-dots__t">Alergias</span><span class="ob-dots__why">Es lo más importante: cada platillo se revisa contra esto.</span></li><li data-ob-nav="5"><b>05</b><span class="ob-dots__t">Gustos</span><span class="ob-dots__why">Para que tu semana se sienta tuya y no genérica.</span></li><li data-ob-nav="6"><b>06</b><span class="ob-dots__t">Revisión</span><span class="ob-dots__why">Un último vistazo antes de guardar.</span></li></ol>
+        <p class="ob-side__secure">Tus datos se guardan en tu cuenta y solo se usan para tu pedido.</p>
+      </aside>
 
-      <fieldset class="step is-on" data-ob-step="1">
-        <legend>¿Quién eres?</legend>
-        <div class="form-grid">
-          <div class="field"><label for="pg-bienvenida--ob-name">Nombre completo</label><input class="input" id="pg-bienvenida--ob-name" data-ob="name" autocomplete="name"></div>
-          <div class="field"><label for="pg-bienvenida--ob-email">Correo</label><input class="input" id="pg-bienvenida--ob-email" type="email" data-ob="email" autocomplete="email"></div>
-          <div class="field"><label for="pg-bienvenida--ob-phone">Teléfono / WhatsApp</label><input class="input" id="pg-bienvenida--ob-phone" type="tel" data-ob="phone" autocomplete="tel"></div>
-          <div class="field"><label for="pg-bienvenida--ob-birth">Fecha de nacimiento (opcional)</label><input class="input" id="pg-bienvenida--ob-birth" type="date" data-ob="birth" autocomplete="bday"></div>
+      <div class="ob-card">
+        <div class="ob-bar" aria-hidden="true"><i data-ob-bar></i></div>
+        <p class="ob-count" data-ob-count></p>
+        <h2 class="ob-title">Cuéntanos de ti, una sola vez</h2>
+
+        <fieldset class="step is-on" data-ob-step="1">
+          <legend>¿Quién eres?</legend>
+          <div class="form-grid">
+            <div class="field"><label for="pg-bienvenida--ob-name">Nombre completo</label><input class="input" id="pg-bienvenida--ob-name" data-ob="name" autocomplete="name"></div>
+            <div class="field"><label for="pg-bienvenida--ob-email">Correo</label><input class="input" id="pg-bienvenida--ob-email" type="email" data-ob="email" autocomplete="email"></div>
+            <div class="field"><label for="pg-bienvenida--ob-phone">Teléfono / WhatsApp</label><input class="input" id="pg-bienvenida--ob-phone" type="tel" data-ob="phone" autocomplete="tel"></div>
+            <div class="field"><label for="pg-bienvenida--ob-birth">Fecha de nacimiento (opcional)</label><input class="input" id="pg-bienvenida--ob-birth" type="date" data-ob="birth" autocomplete="bday"></div>
+          </div>
+        </fieldset>
+
+        <fieldset class="step" data-ob-step="2">
+          <legend>¿Dónde te entregamos?</legend>
+          <div class="form-grid">
+            <div class="field"><label for="pg-bienvenida--ob-street">Calle y número de lote / casa</label><input class="input" id="pg-bienvenida--ob-street" data-ob="street" autocomplete="address-line1"></div>
+            <div class="field"><label for="pg-bienvenida--ob-num">Número exterior e interior</label><input class="input" id="pg-bienvenida--ob-num" data-ob="num" autocomplete="address-line2"></div>
+            <div class="field"><label for="pg-bienvenida--ob-cluster">Clúster y referencias de acceso</label><input class="input" id="pg-bienvenida--ob-cluster" data-ob="cluster"></div>
+            <div class="field"><label for="pg-bienvenida--ob-city">Ciudad</label><input class="input" id="pg-bienvenida--ob-city" data-ob="city" autocomplete="address-level2"></div>
+            <div class="field"><label for="pg-bienvenida--ob-zip">Código postal</label><input class="input" id="pg-bienvenida--ob-zip" data-ob="zip" autocomplete="postal-code" inputmode="numeric"></div>
+            <div class="field"><label for="pg-bienvenida--ob-refs">Referencias para llegar</label><input class="input" id="pg-bienvenida--ob-refs" data-ob="refs"></div>
+          </div>
+          <div class="field"><label for="pg-bienvenida--ob-access">Indicaciones de acceso (caseta, piso, timbre)</label><input class="input" id="pg-bienvenida--ob-access" data-ob="access"></div>
+          <p class="label">Horario preferido de entrega</p>
+          <div class="seg" data-ob-seg="window"><label class="seg__o"><input type="radio" name="ob-window" value="any"><span>Cualquiera</span></label><label class="seg__o"><input type="radio" name="ob-window" value="am"><span>Mañana (8 a 12)</span></label><label class="seg__o"><input type="radio" name="ob-window" value="pm"><span>Tarde (12 a 17)</span></label><label class="seg__o"><input type="radio" name="ob-window" value="eve"><span>Noche (17 a 21)</span></label></div>
+        </fieldset>
+
+        <fieldset class="step" data-ob-step="3">
+          <legend>Tu casa y tu mesa</legend>
+          <p class="label">¿Cuántas personas comerán de tu pedido?</p>
+          <div class="ob-people">
+            <div class="counter"><span>Adultos</span>
+              <button type="button" class="counter__b" data-ob-count-btn="adults" data-d="-1" aria-label="-">&minus;</button>
+              <input class="counter__v" id="pg-bienvenida--ob-adults" type="number" min="1" max="12" inputmode="numeric" data-ob="adults" value="1" aria-label="Adultos">
+              <button type="button" class="counter__b" data-ob-count-btn="adults" data-d="1" aria-label="+">+</button></div>
+            <div class="counter"><span>Niños</span>
+              <button type="button" class="counter__b" data-ob-count-btn="kids" data-d="-1" aria-label="-">&minus;</button>
+              <input class="counter__v" id="pg-bienvenida--ob-kids" type="number" min="0" max="12" inputmode="numeric" data-ob="kids" value="0" aria-label="Niños">
+              <button type="button" class="counter__b" data-ob-count-btn="kids" data-d="1" aria-label="+">+</button></div>
+          </div>
+          <p class="legal-note">Si cocinamos para más de una persona, después agregas a cada una con sus propias alergias en Mi cuenta, Familia.</p>
+          <p class="label">¿Qué comidas te interesan más?</p>
+          <div class="pills"><label class="pill"><input type="checkbox" data-ob-group="meals" value="desayunos"><span>Desayunos</span></label><label class="pill"><input type="checkbox" data-ob-group="meals" value="comidas"><span>Comidas</span></label><label class="pill"><input type="checkbox" data-ob-group="meals" value="cenas"><span>Cenas</span></label><label class="pill"><input type="checkbox" data-ob-group="meals" value="snacks"><span>Snacks</span></label><label class="pill"><input type="checkbox" data-ob-group="meals" value="postres"><span>Postres</span></label></div>
+          <p class="label">Tamaño de porción</p>
+          <div class="seg" data-ob-seg="portion"><label class="seg__o"><input type="radio" name="ob-portion" value="ligera"><span>Ligera</span></label><label class="seg__o"><input type="radio" name="ob-portion" value="normal"><span>Normal</span></label><label class="seg__o"><input type="radio" name="ob-portion" value="abundante"><span>Abundante</span></label></div>
+          <p class="label">Actividad física</p>
+          <div class="seg" data-ob-seg="activity"><label class="seg__o"><input type="radio" name="ob-activity" value="poca"><span>Poca</span></label><label class="seg__o"><input type="radio" name="ob-activity" value="moderada"><span>Moderada</span></label><label class="seg__o"><input type="radio" name="ob-activity" value="alta"><span>Alta</span></label></div>
+        </fieldset>
+
+        <fieldset class="step" data-ob-step="4">
+          <legend>Alergias y salud</legend>
+          <p class="label">Bloque 1 · Alergias y restricciones médicas</p>
+          <div class="pills pills--al"><label class="pill"><input type="checkbox" data-ob-allergy value="Gluten"><span>Gluten</span></label><label class="pill"><input type="checkbox" data-ob-allergy value="Lácteos"><span>Lácteos</span></label><label class="pill"><input type="checkbox" data-ob-allergy value="Frutos secos"><span>Frutos secos</span></label><label class="pill"><input type="checkbox" data-ob-allergy value="Mariscos"><span>Mariscos</span></label></div>
+          <p class="label">Otras alergias</p>
+          <div class="tags" data-ob-tags="allergy_other">
+            <div class="tag-input"><input type="text" data-ob-tag-input placeholder="Escribe y presiona Enter" aria-label="Otras alergias"></div>
+            <input type="hidden" data-ob="allergy_other">
+            <div class="chips chips--sug"><button class="chip" type="button" data-ob-suggest="Soya">+ Soya</button><button class="chip" type="button" data-ob-suggest="Huevo">+ Huevo</button><button class="chip" type="button" data-ob-suggest="Ajonjolí">+ Ajonjolí</button><button class="chip" type="button" data-ob-suggest="Pescado">+ Pescado</button><button class="chip" type="button" data-ob-suggest="Cacahuate">+ Cacahuate</button><button class="chip" type="button" data-ob-suggest="Almendra">+ Almendra</button><button class="chip" type="button" data-ob-suggest="Mostaza">+ Mostaza</button><button class="chip" type="button" data-ob-suggest="Apio">+ Apio</button><button class="chip" type="button" data-ob-suggest="Sulfitos">+ Sulfitos</button></div>
+          </div>
+          <p class="label">¿Qué tan seria es tu alergia?</p>
+          <div class="seg" data-ob-seg="severity"><label class="seg__o"><input type="radio" name="ob-severity" value="leve"><span>Intolerancia leve</span></label><label class="seg__o"><input type="radio" name="ob-severity" value="fuerte"><span>Reacción fuerte</span></label><label class="seg__o"><input type="radio" name="ob-severity" value="anafilaxia"><span>Riesgo de anafilaxia</span></label></div>
+          <p class="label">¿Qué tan estricto con el contacto cruzado?</p>
+          <div class="seg" data-ob-seg="cross"><label class="seg__o"><input type="radio" name="ob-cross" value="tolera"><span>Puedo tolerar trazas</span></label><label class="seg__o"><input type="radio" name="ob-cross" value="estricto"><span>Cero trazas, por favor</span></label></div>
+          <p class="label">Condiciones de salud que debemos considerar</p>
+          <div class="pills"><label class="pill"><input type="checkbox" data-ob-group="conditions" value="diabetes"><span>Diabetes</span></label><label class="pill"><input type="checkbox" data-ob-group="conditions" value="hipertension"><span>Hipertensión</span></label><label class="pill"><input type="checkbox" data-ob-group="conditions" value="celiaquia"><span>Celiaquía</span></label><label class="pill"><input type="checkbox" data-ob-group="conditions" value="embarazo"><span>Embarazo o lactancia</span></label><label class="pill"><input type="checkbox" data-ob-group="conditions" value="colesterol"><span>Colesterol alto</span></label><label class="pill"><input type="checkbox" data-ob-group="conditions" value="ninguna"><span>Ninguna</span></label></div>
+          <p class="legal-note">El sitio cruza los ingredientes con el perfil que declaraste. Eres responsable de declarar con detalle tus alergias y restricciones al inscribirte.</p>
+        </fieldset>
+
+        <fieldset class="step" data-ob-step="5">
+          <legend>Gustos y objetivos</legend>
+          <p class="label">Preferencias dietéticas</p>
+          <div class="pills"><label class="pill"><input type="checkbox" data-ob-diet value="Keto"><span>Keto</span></label><label class="pill"><input type="checkbox" data-ob-diet value="Libre de gluten"><span>Libre de gluten</span></label><label class="pill"><input type="checkbox" data-ob-diet value="Vegetariano"><span>Vegetariano</span></label><label class="pill"><input type="checkbox" data-ob-diet value="Vegano"><span>Vegano</span></label><label class="pill"><input type="checkbox" data-ob-diet value="Bajo en carbohidratos"><span>Bajo en carbohidratos</span></label>
+            <label class="pill"><input type="checkbox" data-ob-diet value="Alto en proteína"><span>Alto en proteína</span></label>
+          </div>
+          <p class="label">Lo que no te gusta (te lo evitamos)</p>
+          <div class="tags" data-ob-tags="dislikes">
+            <div class="tag-input"><input type="text" data-ob-tag-input placeholder="Escribe y presiona Enter" aria-label="Lo que no te gusta (te lo evitamos)"></div>
+            <input type="hidden" data-ob="dislikes">
+            <div class="chips chips--sug"><button class="chip" type="button" data-ob-suggest="Cebolla">+ Cebolla</button><button class="chip" type="button" data-ob-suggest="Cilantro">+ Cilantro</button><button class="chip" type="button" data-ob-suggest="Hongos">+ Hongos</button><button class="chip" type="button" data-ob-suggest="Picante">+ Picante</button><button class="chip" type="button" data-ob-suggest="Coco">+ Coco</button><button class="chip" type="button" data-ob-suggest="Betabel">+ Betabel</button><button class="chip" type="button" data-ob-suggest="Aceitunas">+ Aceitunas</button><button class="chip" type="button" data-ob-suggest="Pasas">+ Pasas</button></div>
+          </div>
+          <p class="label">Ingredientes que te encantan</p>
+          <div class="tags" data-ob-tags="loves">
+            <div class="tag-input"><input type="text" data-ob-tag-input placeholder="Escribe y presiona Enter" aria-label="Ingredientes que te encantan"></div>
+            <input type="hidden" data-ob="loves">
+            <div class="chips chips--sug"><button class="chip" type="button" data-ob-suggest="Aguacate">+ Aguacate</button><button class="chip" type="button" data-ob-suggest="Chile poblano">+ Chile poblano</button><button class="chip" type="button" data-ob-suggest="Limón">+ Limón</button><button class="chip" type="button" data-ob-suggest="Salmón">+ Salmón</button><button class="chip" type="button" data-ob-suggest="Elote">+ Elote</button><button class="chip" type="button" data-ob-suggest="Frijol">+ Frijol</button><button class="chip" type="button" data-ob-suggest="Albahaca">+ Albahaca</button></div>
+          </div>
+          <p class="label">Cocinas que te gustan</p>
+          <div class="pills"><label class="pill"><input type="checkbox" data-ob-group="cuisines" value="mexicana"><span>Mexicana</span></label><label class="pill"><input type="checkbox" data-ob-group="cuisines" value="mediterranea"><span>Mediterránea</span></label><label class="pill"><input type="checkbox" data-ob-group="cuisines" value="asiatica"><span>Asiática</span></label><label class="pill"><input type="checkbox" data-ob-group="cuisines" value="italiana"><span>Italiana</span></label><label class="pill"><input type="checkbox" data-ob-group="cuisines" value="brasa"><span>Parrilla y brasa</span></label><label class="pill"><input type="checkbox" data-ob-group="cuisines" value="huerto"><span>Del huerto</span></label></div>
+          <p class="label">Nivel de picante</p>
+          <div class="seg" data-ob-seg="spice"><label class="seg__o"><input type="radio" name="ob-spice" value="0"><span>Nada</span></label><label class="seg__o"><input type="radio" name="ob-spice" value="1"><span>Suave</span></label><label class="seg__o"><input type="radio" name="ob-spice" value="2"><span>Medio</span></label><label class="seg__o"><input type="radio" name="ob-spice" value="3"><span>Fuerte</span></label></div>
+          <div class="form-grid">
+            <div class="field"><label for="pg-bienvenida--ob-goal">Tu objetivo</label><select class="select" id="pg-bienvenida--ob-goal" data-ob="goal"><option value="">Elige una opción</option><option value="mejor">Comer mejor</option><option value="bajar">Bajar de peso</option><option value="musculo">Ganar músculo</option><option value="mantener">Mantener mi peso</option><option value="deporte">Rendimiento deportivo</option></select></div>
+            <div class="field"><label for="pg-bienvenida--ob-kcal">Calorías al día (si las conoces)</label><input class="input" id="pg-bienvenida--ob-kcal" type="number" min="800" max="6000" inputmode="numeric" data-ob="kcal"></div>
+          </div>
+        </fieldset>
+
+        <fieldset class="step" data-ob-step="6">
+          <legend>Último paso</legend>
+          <p class="text-muted">Revisa tus respuestas. Puedes cambiar cualquiera con Editar.</p>
+          <div class="review" data-ob-review></div>
+          <p class="label">Un par de cosas más</p>
+          <div class="form-grid">
+            <div class="field"><label for="pg-bienvenida--ob-ref">Código de referencia (si tienes)</label><input class="input" id="pg-bienvenida--ob-ref" data-ob="ref" autocapitalize="characters"></div>
+            <div class="field"><label for="pg-bienvenida--ob-heard">¿Cómo nos conociste?</label><select class="select" id="pg-bienvenida--ob-heard" data-ob="heard"><option value="">Elige una opción</option><option value="instagram">Instagram</option><option value="amigos">Amigos o familia</option><option value="gym">Entrenador o gimnasio</option><option value="web">Búsqueda en internet</option><option value="otro">Otro</option></select></div>
+          </div>
+          <p class="label">¿Cómo prefieres que te avisemos?</p>
+          <div class="seg" data-ob-seg="contact"><label class="seg__o"><input type="radio" name="ob-contact" value="correo"><span>Correo</span></label><label class="seg__o"><input type="radio" name="ob-contact" value="whatsapp"><span>WhatsApp</span></label><label class="seg__o"><input type="radio" name="ob-contact" value="ambos"><span>Los dos</span></label></div>
+          <p class="label">Confirmaciones</p>
+          <label class="check check--box"><input type="checkbox" data-ob-consent> <span>Acepto los términos y el aviso de privacidad.</span></label>
+          <label class="check check--box"><input type="checkbox" data-ob-consent> <span>Autorizo que usen mis datos para entregar mi pedido y cuidar mis alergias.</span></label>
+          <label class="check check--box"><input type="checkbox" data-ob-consent> <span>Entiendo que la cocina maneja ingredientes comunes y no puede garantizar la ausencia total de trazas.</span></label>
+        </fieldset>
+
+        <p class="alert alert--warn" data-ob-error hidden role="alert"></p>
+        <div class="steps__actions">
+          <button class="text-link" type="button" data-ob-prev hidden>Atrás</button>
+          <button class="btn btn--gold" type="button" data-ob-next>Continuar</button>
+          <button class="btn btn--gold" type="submit" data-ob-save hidden>Guardar y entrar</button>
         </div>
-      </fieldset>
-
-      <fieldset class="step" data-ob-step="2">
-        <legend>¿Dónde te entregamos?</legend>
-        <div class="form-grid">
-          <div class="field"><label for="pg-bienvenida--ob-street">Calle y número de lote / casa</label><input class="input" id="pg-bienvenida--ob-street" data-ob="street" autocomplete="address-line1"></div>
-          <div class="field"><label for="pg-bienvenida--ob-num">Número exterior e interior</label><input class="input" id="pg-bienvenida--ob-num" data-ob="num" autocomplete="address-line2"></div>
-          <div class="field"><label for="pg-bienvenida--ob-cluster">Clúster y referencias de acceso</label><input class="input" id="pg-bienvenida--ob-cluster" data-ob="cluster"></div>
-          <div class="field"><label for="pg-bienvenida--ob-city">Ciudad</label><input class="input" id="pg-bienvenida--ob-city" data-ob="city" autocomplete="address-level2"></div>
-          <div class="field"><label for="pg-bienvenida--ob-zip">Código postal</label><input class="input" id="pg-bienvenida--ob-zip" data-ob="zip" autocomplete="postal-code" inputmode="numeric"></div>
-          <div class="field"><label for="pg-bienvenida--ob-window">Horario preferido de entrega</label><select class="select" id="pg-bienvenida--ob-window" data-ob="window"><option value="">Elige una opción</option><option value="any">Cualquiera</option><option value="am">Mañana (8 a 12)</option><option value="pm">Tarde (12 a 17)</option><option value="eve">Noche (17 a 21)</option></select></div>
-        </div>
-        <div class="field"><label for="pg-bienvenida--ob-refs">Referencias para llegar</label><input class="input" id="pg-bienvenida--ob-refs" data-ob="refs"></div>
-        <div class="field"><label for="pg-bienvenida--ob-access">Indicaciones de acceso (caseta, piso, timbre)</label><input class="input" id="pg-bienvenida--ob-access" data-ob="access"></div>
-      </fieldset>
-
-      <fieldset class="step" data-ob-step="3">
-        <legend>Tu casa y tu mesa</legend>
-        <p class="label">¿Cuántas personas comerán de tu pedido?</p>
-        <div class="form-grid">
-          <div class="field"><label for="pg-bienvenida--ob-adults">Adultos</label><input class="input" id="pg-bienvenida--ob-adults" type="number" min="1" max="12" inputmode="numeric" data-ob="adults" value="1"></div>
-          <div class="field"><label for="pg-bienvenida--ob-kids">Niños</label><input class="input" id="pg-bienvenida--ob-kids" type="number" min="0" max="12" inputmode="numeric" data-ob="kids" value="0"></div>
-        </div>
-        <p class="legal-note">Si cocinamos para más de una persona, después agregas a cada una con sus propias alergias en Mi cuenta, Familia.</p>
-        <p class="label">¿Qué comidas te interesan más?</p>
-        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-group="meals" value="desayunos"> <span>Desayunos</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="comidas"> <span>Comidas</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="cenas"> <span>Cenas</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="snacks"> <span>Snacks</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="postres"> <span>Postres</span></label></div>
-      </fieldset>
-
-      <fieldset class="step" data-ob-step="4">
-        <legend>Alergias y salud</legend>
-        <p class="label">Bloque 1 · Alergias y restricciones médicas</p>
-        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-allergy value="Gluten"> <span>Gluten</span></label><label class="check"><input type="checkbox" data-ob-allergy value="Lácteos"> <span>Lácteos</span></label><label class="check"><input type="checkbox" data-ob-allergy value="Frutos secos"> <span>Frutos secos</span></label><label class="check"><input type="checkbox" data-ob-allergy value="Mariscos"> <span>Mariscos</span></label></div>
-        <div class="field"><label for="pg-bienvenida--ob-other">Otras alergias</label>
-          <input class="input" id="pg-bienvenida--ob-other" data-ob="allergy_other" list="pg-bienvenida--ob-allergy-list" placeholder="Separa con comas: soya, huevo, ajonjolí">
-          <datalist id="pg-bienvenida--ob-allergy-list"><option value="Soya"></option><option value="Huevo"></option><option value="Ajonjolí"></option><option value="Pescado"></option><option value="Cacahuate"></option><option value="Nuez"></option><option value="Almendra"></option><option value="Mostaza"></option><option value="Apio"></option><option value="Sulfitos"></option><option value="Maíz"></option><option value="Fresa"></option><option value="Aguacate"></option></datalist></div>
-        <div class="field"><label for="pg-bienvenida--ob-severity">¿Qué tan seria es tu alergia?</label><select class="select" id="pg-bienvenida--ob-severity" data-ob="severity"><option value="">Elige una opción</option><option value="leve">Intolerancia leve</option><option value="fuerte">Reacción fuerte</option><option value="anafilaxia">Riesgo de anafilaxia</option></select></div>
-        <p class="label">Condiciones de salud que debemos considerar</p>
-        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-group="conditions" value="diabetes"> <span>Diabetes</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="hipertension"> <span>Hipertensión</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="celiaquia"> <span>Celiaquía</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="embarazo"> <span>Embarazo o lactancia</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="colesterol"> <span>Colesterol alto</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="ninguna"> <span>Ninguna</span></label></div>
-        <p class="legal-note">El sitio cruza los ingredientes con el perfil que declaraste. Eres responsable de declarar con detalle tus alergias y restricciones al inscribirte.</p>
-      </fieldset>
-
-      <fieldset class="step" data-ob-step="5">
-        <legend>Gustos y objetivos</legend>
-        <p class="label">Preferencias dietéticas</p>
-        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-diet value="Keto"> <span>Keto</span></label><label class="check"><input type="checkbox" data-ob-diet value="Libre de gluten"> <span>Libre de gluten</span></label><label class="check"><input type="checkbox" data-ob-diet value="Vegetariano"> <span>Vegetariano</span></label><label class="check"><input type="checkbox" data-ob-diet value="Vegano"> <span>Vegano</span></label><label class="check"><input type="checkbox" data-ob-diet value="Bajo en carbohidratos"> <span>Bajo en carbohidratos</span></label>
-          <label class="check"><input type="checkbox" data-ob-diet value="Alto en proteína"> <span>Alto en proteína</span></label>
-        </div>
-        <div class="field"><label for="pg-bienvenida--ob-dis">Bloque 2 · Ingredientes que no me gustan</label><input class="input" id="pg-bienvenida--ob-dis" data-ob="dislikes" placeholder="Ej. jitomate"></div>
-        <div class="form-grid">
-          <div class="field"><label for="pg-bienvenida--ob-goal">Tu objetivo</label><select class="select" id="pg-bienvenida--ob-goal" data-ob="goal"><option value="">Elige una opción</option><option value="mejor">Comer mejor</option><option value="bajar">Bajar de peso</option><option value="musculo">Ganar músculo</option><option value="mantener">Mantener mi peso</option><option value="deporte">Rendimiento deportivo</option></select></div>
-          <div class="field"><label for="pg-bienvenida--ob-kcal">Calorías al día (si las conoces)</label><input class="input" id="pg-bienvenida--ob-kcal" type="number" min="800" max="6000" inputmode="numeric" data-ob="kcal"></div>
-          <div class="field"><label for="pg-bienvenida--ob-spice">Nivel de picante</label><select class="select" id="pg-bienvenida--ob-spice" data-ob="spice"><option value="">Elige una opción</option><option value="0">Nada</option><option value="1">Suave</option><option value="2">Medio</option><option value="3">Fuerte</option></select></div>
-        </div>
-      </fieldset>
-
-      <fieldset class="step" data-ob-step="6">
-        <legend>Último paso</legend>
-        <div class="form-grid">
-          <div class="field"><label for="pg-bienvenida--ob-ref">Código de referencia (si tienes)</label><input class="input" id="pg-bienvenida--ob-ref" data-ob="ref" autocapitalize="characters"></div>
-          <div class="field"><label for="pg-bienvenida--ob-heard">¿Cómo nos conociste?</label><select class="select" id="pg-bienvenida--ob-heard" data-ob="heard"><option value="">Elige una opción</option><option value="instagram">Instagram</option><option value="amigos">Amigos o familia</option><option value="gym">Entrenador o gimnasio</option><option value="web">Búsqueda en internet</option><option value="otro">Otro</option></select></div>
-          <div class="field"><label for="pg-bienvenida--ob-contact">¿Cómo prefieres que te avisemos?</label><select class="select" id="pg-bienvenida--ob-contact" data-ob="contact"><option value="">Elige una opción</option><option value="correo">Correo</option><option value="whatsapp">WhatsApp</option><option value="ambos">Los dos</option></select></div>
-        </div>
-        <label class="check"><input type="checkbox" data-ob-consent> <span>Acepto los términos y el aviso de privacidad.</span></label>
-        <label class="check"><input type="checkbox" data-ob-consent> <span>Autorizo que usen mis datos para entregar mi pedido y cuidar mis alergias.</span></label>
-        <label class="check"><input type="checkbox" data-ob-consent> <span>Entiendo que la cocina maneja ingredientes comunes y no puede garantizar la ausencia total de trazas.</span></label>
-      </fieldset>
-
-      <p class="alert alert--warn" data-ob-error hidden role="alert"></p>
-      <div class="steps__actions">
-        <button class="text-link" type="button" data-ob-prev hidden>Atrás</button>
-        <button class="btn btn--gold" type="button" data-ob-next>Continuar</button>
-        <button class="btn btn--gold" type="submit" data-ob-save hidden>Guardar y entrar</button>
       </div>
     </form>
   </div>
@@ -13406,13 +13622,30 @@ Pago digital, sin efectivo</li></ul>
     <a class="btn btn--gold btn--block" href="#/pg/pedido" data-order-cta data-returning-label="Choose my week">Build my order</a>
   </div><div class="funnel__bgphoto" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-steak-dark.webp" width="1200" height="800" alt="" class="" loading="lazy" decoding="async"></div><div class="funnel__track" data-fn-track>
    <div class="funnel__stage" data-fn-stage>
-    <div class="fn-gate container" data-fn-gate hidden>
-      <h3>Before you order: your account</h3>
-      <p class="fn-gate__p">Two short steps, and you never fill them in again. Every dish is then checked against your allergies and tastes.</p>
-      <ol class="fn-gate__steps">
-        <li data-fn-gate-s1><b>1</b><div><h4>Sign in or create your account</h4><div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Create account</a></div><p class="fn-gate__ok">&#10003; Done</p></div></li>
-        <li data-fn-gate-s2><b>2</b><div><h4>Tell us about you: details, delivery, allergies and tastes</h4><div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="#/pg/bienvenida">Take the questionnaire &rarr;</a></div><p class="fn-gate__ok">&#10003; Done</p></div></li>
-      </ol>
+    <div class="fn-gate container" data-fn-gate data-t-done="Done" data-t-todo="To do" data-t-wait="Waiting" hidden>
+      <div class="fn-gate__frame">
+        <div class="fn-gate__intro">
+          <span class="fn-flame" aria-hidden="true"></span>
+          <p class="eyebrow">Before you order</p>
+          <h3>Your account, your table</h3>
+          <p class="fn-gate__p">Two short steps, and you never repeat them. With them every dish is checked against your allergies and tastes.</p>
+          <ul class="fn-gate__perks"><li>Every dish checked against your allergies</li><li>Address and delivery time saved once</li><li>Your week your way, no repeating details</li></ul>
+        </div>
+        <ol class="fn-gate__steps">
+          <li data-fn-gate-s1>
+            <span class="fn-gate__no" aria-hidden="true">01</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>To do</span><h4>Sign in or create your account</h4>
+              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Create account</a></div>
+              <p class="fn-gate__ok">Done</p></div>
+          </li>
+          <li data-fn-gate-s2>
+            <span class="fn-gate__no" aria-hidden="true">02</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>Waiting</span><h4>Tell us about you: details, delivery, allergies and tastes</h4>
+              <div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="#/pg/bienvenida">Take the questionnaire &rarr;</a><span class="fn-gate__time">2 minutes</span></div>
+              <p class="fn-gate__ok">Done</p></div>
+          </li>
+        </ol>
+      </div>
     </div>
     <div class="fn-returning container" data-fn-returning hidden>
       <h3>You already have an active plan</h3>
@@ -22017,13 +22250,30 @@ Digital payment, no cash</li></ul>
     <a class="btn btn--gold btn--block" href="#/pg/pedido" data-order-cta data-returning-label="Choose my week">Build my order</a>
   </div><div class="funnel__bgphoto" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-steak-dark.webp" width="1200" height="800" alt="" class="" loading="lazy" decoding="async"></div><div class="funnel__track" data-fn-track>
    <div class="funnel__stage" data-fn-stage>
-    <div class="fn-gate container" data-fn-gate hidden>
-      <h3>Before you order: your account</h3>
-      <p class="fn-gate__p">Two short steps, and you never fill them in again. Every dish is then checked against your allergies and tastes.</p>
-      <ol class="fn-gate__steps">
-        <li data-fn-gate-s1><b>1</b><div><h4>Sign in or create your account</h4><div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Create account</a></div><p class="fn-gate__ok">&#10003; Done</p></div></li>
-        <li data-fn-gate-s2><b>2</b><div><h4>Tell us about you: details, delivery, allergies and tastes</h4><div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="#/pg/bienvenida">Take the questionnaire &rarr;</a></div><p class="fn-gate__ok">&#10003; Done</p></div></li>
-      </ol>
+    <div class="fn-gate container" data-fn-gate data-t-done="Done" data-t-todo="To do" data-t-wait="Waiting" hidden>
+      <div class="fn-gate__frame">
+        <div class="fn-gate__intro">
+          <span class="fn-flame" aria-hidden="true"></span>
+          <p class="eyebrow">Before you order</p>
+          <h3>Your account, your table</h3>
+          <p class="fn-gate__p">Two short steps, and you never repeat them. With them every dish is checked against your allergies and tastes.</p>
+          <ul class="fn-gate__perks"><li>Every dish checked against your allergies</li><li>Address and delivery time saved once</li><li>Your week your way, no repeating details</li></ul>
+        </div>
+        <ol class="fn-gate__steps">
+          <li data-fn-gate-s1>
+            <span class="fn-gate__no" aria-hidden="true">01</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>To do</span><h4>Sign in or create your account</h4>
+              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in</a><a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Create account</a></div>
+              <p class="fn-gate__ok">Done</p></div>
+          </li>
+          <li data-fn-gate-s2>
+            <span class="fn-gate__no" aria-hidden="true">02</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>Waiting</span><h4>Tell us about you: details, delivery, allergies and tastes</h4>
+              <div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="#/pg/bienvenida">Take the questionnaire &rarr;</a><span class="fn-gate__time">2 minutes</span></div>
+              <p class="fn-gate__ok">Done</p></div>
+          </li>
+        </ol>
+      </div>
     </div>
     <div class="fn-returning container" data-fn-returning hidden>
       <h3>You already have an active plan</h3>
@@ -22686,16 +22936,19 @@ Digital payment, no cash</li></ul>
 
 
 </div><div id="pg-bienvenida--shopify-section-ob" class="shopify-section"><section class="section onboarding" data-onboarding data-next-url="/pages/pedido"
-  data-t-welcome="Welcome, {n}" data-t-need-addr="Write your street, neighborhood or cluster, city and postal code so we can deliver." data-t-need-consent="Tick the three confirmations to save your profile." data-t-need="Please complete your name, e-mail and phone." >
-  <div class="container" style="max-width:820px">
-    <a hidden tabindex="-1" aria-hidden="true" data-ob-week href="#/pg/cuenta-semana"></a><div class="panel panel--gold" data-ob-guest>
+  data-t-welcome="Welcome, {n}" data-t-need-addr="Write your street, neighborhood or cluster, city and postal code so we can deliver." data-t-need-consent="Tick the three confirmations to save your profile." data-t-need="Please complete your name, e-mail and phone."
+  data-t-stepof="Step [n] of [t]" data-t-edit="Edit" data-t-empty="Not answered" >
+  <div class="container ob-wrap">
+    <a hidden tabindex="-1" aria-hidden="true" data-ob-week href="#/pg/cuenta-semana"></a><div class="ob-guest" data-ob-guest>
+        <span class="ob-flame" aria-hidden="true"></span>
         <h2>Sign in first</h2>
         <p class="text-muted">Sign in or create your account and we'll ask a few quick questions to personalise your menu.</p>
         <div class="btn-row">
           <a class="btn btn--gold" href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in</a>
           <a class="btn btn--outline" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Create my account</a>
         </div>
-      </div><div class="panel panel--gold ob-welcome" data-ob-welcome hidden>
+      </div><div class="ob-welcome" data-ob-welcome hidden>
+      <span class="ob-flame" aria-hidden="true"></span>
       <p class="eyebrow">You're all set</p>
       <h2 data-ob-hello>Welcome to Kulinaria</h2>
       <p class="lede">We saved your details. You won't have to type them again.</p>
@@ -22705,92 +22958,137 @@ Digital payment, no cash</li></ul>
       <div class="btn-row"><a class="btn btn--gold" href="#/pg/pedido">Choose my plan</a><button class="btn btn--outline" type="button" data-ob-edit>Edit my details</button></div>
     </div>
 
-    <form class="panel ob-form" data-ob-form novalidate hidden>
-      <p class="eyebrow">Your profile</p>
-      <h2>Tell us about you, just once</h2>
-      <p class="text-muted">We use this to build your menu and block what you can't eat. You won't have to fill it in again; change it anytime in My account.</p>
-      <ol class="ob-dots" aria-hidden="true"><li class="is-on">1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li></ol>
+    <form class="ob" data-ob-form novalidate hidden>
+      <aside class="ob-side">
+        <p class="eyebrow">Your profile</p>
+        <h2>Your flavor passport</h2>
+        <p class="ob-side__text">Six short pauses. They tell us what to cook, what to avoid and where to bring it.</p>
+        <ol class="ob-dots"><li class="is-on" data-ob-nav="1"><b>01</b><span class="ob-dots__t">You</span><span class="ob-dots__why">So we know you and can tell you when your order leaves.</span></li><li data-ob-nav="2"><b>02</b><span class="ob-dots__t">Delivery</span><span class="ob-dots__why">So the courier reaches the right door.</span></li><li data-ob-nav="3"><b>03</b><span class="ob-dots__t">Your table</span><span class="ob-dots__why">To size portions and decide which meals we plan.</span></li><li data-ob-nav="4"><b>04</b><span class="ob-dots__t">Allergies</span><span class="ob-dots__why">This matters most: every dish is checked against it.</span></li><li data-ob-nav="5"><b>05</b><span class="ob-dots__t">Tastes</span><span class="ob-dots__why">So your week feels like yours, not generic.</span></li><li data-ob-nav="6"><b>06</b><span class="ob-dots__t">Review</span><span class="ob-dots__why">One last look before saving.</span></li></ol>
+        <p class="ob-side__secure">Your details are kept in your account and used only for your order.</p>
+      </aside>
 
-      <fieldset class="step is-on" data-ob-step="1">
-        <legend>Who are you?</legend>
-        <div class="form-grid">
-          <div class="field"><label for="pg-bienvenida--ob-name">Full name</label><input class="input" id="pg-bienvenida--ob-name" data-ob="name" autocomplete="name"></div>
-          <div class="field"><label for="pg-bienvenida--ob-email">Email</label><input class="input" id="pg-bienvenida--ob-email" type="email" data-ob="email" autocomplete="email"></div>
-          <div class="field"><label for="pg-bienvenida--ob-phone">Phone / WhatsApp</label><input class="input" id="pg-bienvenida--ob-phone" type="tel" data-ob="phone" autocomplete="tel"></div>
-          <div class="field"><label for="pg-bienvenida--ob-birth">Birth date (optional)</label><input class="input" id="pg-bienvenida--ob-birth" type="date" data-ob="birth" autocomplete="bday"></div>
+      <div class="ob-card">
+        <div class="ob-bar" aria-hidden="true"><i data-ob-bar></i></div>
+        <p class="ob-count" data-ob-count></p>
+        <h2 class="ob-title">Tell us about you, just once</h2>
+
+        <fieldset class="step is-on" data-ob-step="1">
+          <legend>Who are you?</legend>
+          <div class="form-grid">
+            <div class="field"><label for="pg-bienvenida--ob-name">Full name</label><input class="input" id="pg-bienvenida--ob-name" data-ob="name" autocomplete="name"></div>
+            <div class="field"><label for="pg-bienvenida--ob-email">Email</label><input class="input" id="pg-bienvenida--ob-email" type="email" data-ob="email" autocomplete="email"></div>
+            <div class="field"><label for="pg-bienvenida--ob-phone">Phone / WhatsApp</label><input class="input" id="pg-bienvenida--ob-phone" type="tel" data-ob="phone" autocomplete="tel"></div>
+            <div class="field"><label for="pg-bienvenida--ob-birth">Birth date (optional)</label><input class="input" id="pg-bienvenida--ob-birth" type="date" data-ob="birth" autocomplete="bday"></div>
+          </div>
+        </fieldset>
+
+        <fieldset class="step" data-ob-step="2">
+          <legend>Where do we deliver?</legend>
+          <div class="form-grid">
+            <div class="field"><label for="pg-bienvenida--ob-street">Street and lot / house number</label><input class="input" id="pg-bienvenida--ob-street" data-ob="street" autocomplete="address-line1"></div>
+            <div class="field"><label for="pg-bienvenida--ob-num">Street number and apartment</label><input class="input" id="pg-bienvenida--ob-num" data-ob="num" autocomplete="address-line2"></div>
+            <div class="field"><label for="pg-bienvenida--ob-cluster">Cluster and access references</label><input class="input" id="pg-bienvenida--ob-cluster" data-ob="cluster"></div>
+            <div class="field"><label for="pg-bienvenida--ob-city">City</label><input class="input" id="pg-bienvenida--ob-city" data-ob="city" autocomplete="address-level2"></div>
+            <div class="field"><label for="pg-bienvenida--ob-zip">Postal code</label><input class="input" id="pg-bienvenida--ob-zip" data-ob="zip" autocomplete="postal-code" inputmode="numeric"></div>
+            <div class="field"><label for="pg-bienvenida--ob-refs">Directions and landmarks</label><input class="input" id="pg-bienvenida--ob-refs" data-ob="refs"></div>
+          </div>
+          <div class="field"><label for="pg-bienvenida--ob-access">Access notes (gate, floor, buzzer)</label><input class="input" id="pg-bienvenida--ob-access" data-ob="access"></div>
+          <p class="label">Preferred delivery time</p>
+          <div class="seg" data-ob-seg="window"><label class="seg__o"><input type="radio" name="ob-window" value="any"><span>Any time</span></label><label class="seg__o"><input type="radio" name="ob-window" value="am"><span>Morning (8 to 12)</span></label><label class="seg__o"><input type="radio" name="ob-window" value="pm"><span>Afternoon (12 to 5)</span></label><label class="seg__o"><input type="radio" name="ob-window" value="eve"><span>Evening (5 to 9)</span></label></div>
+        </fieldset>
+
+        <fieldset class="step" data-ob-step="3">
+          <legend>Your home and table</legend>
+          <p class="label">How many people will eat your order?</p>
+          <div class="ob-people">
+            <div class="counter"><span>Adults</span>
+              <button type="button" class="counter__b" data-ob-count-btn="adults" data-d="-1" aria-label="-">&minus;</button>
+              <input class="counter__v" id="pg-bienvenida--ob-adults" type="number" min="1" max="12" inputmode="numeric" data-ob="adults" value="1" aria-label="Adults">
+              <button type="button" class="counter__b" data-ob-count-btn="adults" data-d="1" aria-label="+">+</button></div>
+            <div class="counter"><span>Children</span>
+              <button type="button" class="counter__b" data-ob-count-btn="kids" data-d="-1" aria-label="-">&minus;</button>
+              <input class="counter__v" id="pg-bienvenida--ob-kids" type="number" min="0" max="12" inputmode="numeric" data-ob="kids" value="0" aria-label="Children">
+              <button type="button" class="counter__b" data-ob-count-btn="kids" data-d="1" aria-label="+">+</button></div>
+          </div>
+          <p class="legal-note">If we cook for more than one person, you add each of them with their own allergies later in My account, Family.</p>
+          <p class="label">Which meals interest you most?</p>
+          <div class="pills"><label class="pill"><input type="checkbox" data-ob-group="meals" value="desayunos"><span>Breakfasts</span></label><label class="pill"><input type="checkbox" data-ob-group="meals" value="comidas"><span>Lunches</span></label><label class="pill"><input type="checkbox" data-ob-group="meals" value="cenas"><span>Dinners</span></label><label class="pill"><input type="checkbox" data-ob-group="meals" value="snacks"><span>Snacks</span></label><label class="pill"><input type="checkbox" data-ob-group="meals" value="postres"><span>Desserts</span></label></div>
+          <p class="label">Portion size</p>
+          <div class="seg" data-ob-seg="portion"><label class="seg__o"><input type="radio" name="ob-portion" value="ligera"><span>Light</span></label><label class="seg__o"><input type="radio" name="ob-portion" value="normal"><span>Regular</span></label><label class="seg__o"><input type="radio" name="ob-portion" value="abundante"><span>Generous</span></label></div>
+          <p class="label">Physical activity</p>
+          <div class="seg" data-ob-seg="activity"><label class="seg__o"><input type="radio" name="ob-activity" value="poca"><span>Low</span></label><label class="seg__o"><input type="radio" name="ob-activity" value="moderada"><span>Moderate</span></label><label class="seg__o"><input type="radio" name="ob-activity" value="alta"><span>High</span></label></div>
+        </fieldset>
+
+        <fieldset class="step" data-ob-step="4">
+          <legend>Allergies and health</legend>
+          <p class="label">Block 1 · Allergies and medical restrictions</p>
+          <div class="pills pills--al"><label class="pill"><input type="checkbox" data-ob-allergy value="Gluten"><span>Gluten</span></label><label class="pill"><input type="checkbox" data-ob-allergy value="Lácteos"><span>Dairy</span></label><label class="pill"><input type="checkbox" data-ob-allergy value="Frutos secos"><span>Tree nuts</span></label><label class="pill"><input type="checkbox" data-ob-allergy value="Mariscos"><span>Shellfish</span></label></div>
+          <p class="label">Other allergies</p>
+          <div class="tags" data-ob-tags="allergy_other">
+            <div class="tag-input"><input type="text" data-ob-tag-input placeholder="Type and press Enter" aria-label="Other allergies"></div>
+            <input type="hidden" data-ob="allergy_other">
+            <div class="chips chips--sug"><button class="chip" type="button" data-ob-suggest="Soy">+ Soy</button><button class="chip" type="button" data-ob-suggest="Egg">+ Egg</button><button class="chip" type="button" data-ob-suggest="Sesame">+ Sesame</button><button class="chip" type="button" data-ob-suggest="Fish">+ Fish</button><button class="chip" type="button" data-ob-suggest="Peanut">+ Peanut</button><button class="chip" type="button" data-ob-suggest="Almond">+ Almond</button><button class="chip" type="button" data-ob-suggest="Mustard">+ Mustard</button><button class="chip" type="button" data-ob-suggest="Celery">+ Celery</button><button class="chip" type="button" data-ob-suggest="Sulfites">+ Sulfites</button></div>
+          </div>
+          <p class="label">How serious is your allergy?</p>
+          <div class="seg" data-ob-seg="severity"><label class="seg__o"><input type="radio" name="ob-severity" value="leve"><span>Mild intolerance</span></label><label class="seg__o"><input type="radio" name="ob-severity" value="fuerte"><span>Strong reaction</span></label><label class="seg__o"><input type="radio" name="ob-severity" value="anafilaxia"><span>Risk of anaphylaxis</span></label></div>
+          <p class="label">How strict about cross-contact?</p>
+          <div class="seg" data-ob-seg="cross"><label class="seg__o"><input type="radio" name="ob-cross" value="tolera"><span>I can tolerate traces</span></label><label class="seg__o"><input type="radio" name="ob-cross" value="estricto"><span>Zero traces, please</span></label></div>
+          <p class="label">Health conditions we should consider</p>
+          <div class="pills"><label class="pill"><input type="checkbox" data-ob-group="conditions" value="diabetes"><span>Diabetes</span></label><label class="pill"><input type="checkbox" data-ob-group="conditions" value="hipertension"><span>Hypertension</span></label><label class="pill"><input type="checkbox" data-ob-group="conditions" value="celiaquia"><span>Celiac disease</span></label><label class="pill"><input type="checkbox" data-ob-group="conditions" value="embarazo"><span>Pregnancy or breastfeeding</span></label><label class="pill"><input type="checkbox" data-ob-group="conditions" value="colesterol"><span>High cholesterol</span></label><label class="pill"><input type="checkbox" data-ob-group="conditions" value="ninguna"><span>None</span></label></div>
+          <p class="legal-note">The site cross-checks ingredients against the profile you declared. You are responsible for declaring your allergies and restrictions in detail when you sign up.</p>
+        </fieldset>
+
+        <fieldset class="step" data-ob-step="5">
+          <legend>Tastes and goals</legend>
+          <p class="label">Dietary preferences</p>
+          <div class="pills"><label class="pill"><input type="checkbox" data-ob-diet value="Keto"><span>Keto</span></label><label class="pill"><input type="checkbox" data-ob-diet value="Libre de gluten"><span>Gluten-free</span></label><label class="pill"><input type="checkbox" data-ob-diet value="Vegetariano"><span>Vegetarian</span></label><label class="pill"><input type="checkbox" data-ob-diet value="Vegano"><span>Vegan</span></label><label class="pill"><input type="checkbox" data-ob-diet value="Bajo en carbohidratos"><span>Low carb</span></label>
+            <label class="pill"><input type="checkbox" data-ob-diet value="Alto en proteína"><span>High protein</span></label>
+          </div>
+          <p class="label">What you dislike (we keep it away)</p>
+          <div class="tags" data-ob-tags="dislikes">
+            <div class="tag-input"><input type="text" data-ob-tag-input placeholder="Type and press Enter" aria-label="What you dislike (we keep it away)"></div>
+            <input type="hidden" data-ob="dislikes">
+            <div class="chips chips--sug"><button class="chip" type="button" data-ob-suggest="Onion">+ Onion</button><button class="chip" type="button" data-ob-suggest="Cilantro">+ Cilantro</button><button class="chip" type="button" data-ob-suggest="Mushrooms">+ Mushrooms</button><button class="chip" type="button" data-ob-suggest="Spicy food">+ Spicy food</button><button class="chip" type="button" data-ob-suggest="Coconut">+ Coconut</button><button class="chip" type="button" data-ob-suggest="Beets">+ Beets</button><button class="chip" type="button" data-ob-suggest="Olives">+ Olives</button><button class="chip" type="button" data-ob-suggest="Raisins">+ Raisins</button></div>
+          </div>
+          <p class="label">Ingredients you love</p>
+          <div class="tags" data-ob-tags="loves">
+            <div class="tag-input"><input type="text" data-ob-tag-input placeholder="Type and press Enter" aria-label="Ingredients you love"></div>
+            <input type="hidden" data-ob="loves">
+            <div class="chips chips--sug"><button class="chip" type="button" data-ob-suggest="Avocado">+ Avocado</button><button class="chip" type="button" data-ob-suggest="Poblano chile">+ Poblano chile</button><button class="chip" type="button" data-ob-suggest="Lime">+ Lime</button><button class="chip" type="button" data-ob-suggest="Salmon">+ Salmon</button><button class="chip" type="button" data-ob-suggest="Corn">+ Corn</button><button class="chip" type="button" data-ob-suggest="Beans">+ Beans</button><button class="chip" type="button" data-ob-suggest="Basil">+ Basil</button></div>
+          </div>
+          <p class="label">Cuisines you like</p>
+          <div class="pills"><label class="pill"><input type="checkbox" data-ob-group="cuisines" value="mexicana"><span>Mexican</span></label><label class="pill"><input type="checkbox" data-ob-group="cuisines" value="mediterranea"><span>Mediterranean</span></label><label class="pill"><input type="checkbox" data-ob-group="cuisines" value="asiatica"><span>Asian</span></label><label class="pill"><input type="checkbox" data-ob-group="cuisines" value="italiana"><span>Italian</span></label><label class="pill"><input type="checkbox" data-ob-group="cuisines" value="brasa"><span>Grill and embers</span></label><label class="pill"><input type="checkbox" data-ob-group="cuisines" value="huerto"><span>From the garden</span></label></div>
+          <p class="label">Spice level</p>
+          <div class="seg" data-ob-seg="spice"><label class="seg__o"><input type="radio" name="ob-spice" value="0"><span>None</span></label><label class="seg__o"><input type="radio" name="ob-spice" value="1"><span>Mild</span></label><label class="seg__o"><input type="radio" name="ob-spice" value="2"><span>Medium</span></label><label class="seg__o"><input type="radio" name="ob-spice" value="3"><span>Hot</span></label></div>
+          <div class="form-grid">
+            <div class="field"><label for="pg-bienvenida--ob-goal">Your goal</label><select class="select" id="pg-bienvenida--ob-goal" data-ob="goal"><option value="">Choose an option</option><option value="mejor">Eat better</option><option value="bajar">Lose weight</option><option value="musculo">Build muscle</option><option value="mantener">Keep my weight</option><option value="deporte">Sports performance</option></select></div>
+            <div class="field"><label for="pg-bienvenida--ob-kcal">Calories per day (if you know them)</label><input class="input" id="pg-bienvenida--ob-kcal" type="number" min="800" max="6000" inputmode="numeric" data-ob="kcal"></div>
+          </div>
+        </fieldset>
+
+        <fieldset class="step" data-ob-step="6">
+          <legend>Last step</legend>
+          <p class="text-muted">Check your answers. Change any of them with Edit.</p>
+          <div class="review" data-ob-review></div>
+          <p class="label">A couple more things</p>
+          <div class="form-grid">
+            <div class="field"><label for="pg-bienvenida--ob-ref">Referral code (if you have one)</label><input class="input" id="pg-bienvenida--ob-ref" data-ob="ref" autocapitalize="characters"></div>
+            <div class="field"><label for="pg-bienvenida--ob-heard">How did you hear about us?</label><select class="select" id="pg-bienvenida--ob-heard" data-ob="heard"><option value="">Choose an option</option><option value="instagram">Instagram</option><option value="amigos">Friends or family</option><option value="gym">Trainer or gym</option><option value="web">Internet search</option><option value="otro">Other</option></select></div>
+          </div>
+          <p class="label">How should we reach you?</p>
+          <div class="seg" data-ob-seg="contact"><label class="seg__o"><input type="radio" name="ob-contact" value="correo"><span>E-mail</span></label><label class="seg__o"><input type="radio" name="ob-contact" value="whatsapp"><span>WhatsApp</span></label><label class="seg__o"><input type="radio" name="ob-contact" value="ambos"><span>Both</span></label></div>
+          <p class="label">Confirmations</p>
+          <label class="check check--box"><input type="checkbox" data-ob-consent> <span>I accept the terms and the privacy notice.</span></label>
+          <label class="check check--box"><input type="checkbox" data-ob-consent> <span>I allow my data to be used to deliver my order and look after my allergies.</span></label>
+          <label class="check check--box"><input type="checkbox" data-ob-consent> <span>I understand the kitchen handles common ingredients and cannot guarantee the total absence of traces.</span></label>
+        </fieldset>
+
+        <p class="alert alert--warn" data-ob-error hidden role="alert"></p>
+        <div class="steps__actions">
+          <button class="text-link" type="button" data-ob-prev hidden>Back</button>
+          <button class="btn btn--gold" type="button" data-ob-next>Continue</button>
+          <button class="btn btn--gold" type="submit" data-ob-save hidden>Save and enter</button>
         </div>
-      </fieldset>
-
-      <fieldset class="step" data-ob-step="2">
-        <legend>Where do we deliver?</legend>
-        <div class="form-grid">
-          <div class="field"><label for="pg-bienvenida--ob-street">Street and lot / house number</label><input class="input" id="pg-bienvenida--ob-street" data-ob="street" autocomplete="address-line1"></div>
-          <div class="field"><label for="pg-bienvenida--ob-num">Street number and apartment</label><input class="input" id="pg-bienvenida--ob-num" data-ob="num" autocomplete="address-line2"></div>
-          <div class="field"><label for="pg-bienvenida--ob-cluster">Cluster and access references</label><input class="input" id="pg-bienvenida--ob-cluster" data-ob="cluster"></div>
-          <div class="field"><label for="pg-bienvenida--ob-city">City</label><input class="input" id="pg-bienvenida--ob-city" data-ob="city" autocomplete="address-level2"></div>
-          <div class="field"><label for="pg-bienvenida--ob-zip">Postal code</label><input class="input" id="pg-bienvenida--ob-zip" data-ob="zip" autocomplete="postal-code" inputmode="numeric"></div>
-          <div class="field"><label for="pg-bienvenida--ob-window">Preferred delivery time</label><select class="select" id="pg-bienvenida--ob-window" data-ob="window"><option value="">Choose an option</option><option value="any">Any time</option><option value="am">Morning (8 to 12)</option><option value="pm">Afternoon (12 to 5)</option><option value="eve">Evening (5 to 9)</option></select></div>
-        </div>
-        <div class="field"><label for="pg-bienvenida--ob-refs">Directions and landmarks</label><input class="input" id="pg-bienvenida--ob-refs" data-ob="refs"></div>
-        <div class="field"><label for="pg-bienvenida--ob-access">Access notes (gate, floor, buzzer)</label><input class="input" id="pg-bienvenida--ob-access" data-ob="access"></div>
-      </fieldset>
-
-      <fieldset class="step" data-ob-step="3">
-        <legend>Your home and table</legend>
-        <p class="label">How many people will eat your order?</p>
-        <div class="form-grid">
-          <div class="field"><label for="pg-bienvenida--ob-adults">Adults</label><input class="input" id="pg-bienvenida--ob-adults" type="number" min="1" max="12" inputmode="numeric" data-ob="adults" value="1"></div>
-          <div class="field"><label for="pg-bienvenida--ob-kids">Children</label><input class="input" id="pg-bienvenida--ob-kids" type="number" min="0" max="12" inputmode="numeric" data-ob="kids" value="0"></div>
-        </div>
-        <p class="legal-note">If we cook for more than one person, you add each of them with their own allergies later in My account, Family.</p>
-        <p class="label">Which meals interest you most?</p>
-        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-group="meals" value="desayunos"> <span>Breakfasts</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="comidas"> <span>Lunches</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="cenas"> <span>Dinners</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="snacks"> <span>Snacks</span></label><label class="check"><input type="checkbox" data-ob-group="meals" value="postres"> <span>Desserts</span></label></div>
-      </fieldset>
-
-      <fieldset class="step" data-ob-step="4">
-        <legend>Allergies and health</legend>
-        <p class="label">Block 1 · Allergies and medical restrictions</p>
-        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-allergy value="Gluten"> <span>Gluten</span></label><label class="check"><input type="checkbox" data-ob-allergy value="Lácteos"> <span>Dairy</span></label><label class="check"><input type="checkbox" data-ob-allergy value="Frutos secos"> <span>Tree nuts</span></label><label class="check"><input type="checkbox" data-ob-allergy value="Mariscos"> <span>Shellfish</span></label></div>
-        <div class="field"><label for="pg-bienvenida--ob-other">Other allergies</label>
-          <input class="input" id="pg-bienvenida--ob-other" data-ob="allergy_other" list="pg-bienvenida--ob-allergy-list" placeholder="Separate with commas: soy, egg, sesame">
-          <datalist id="pg-bienvenida--ob-allergy-list"><option value="Soya"></option><option value="Huevo"></option><option value="Ajonjolí"></option><option value="Pescado"></option><option value="Cacahuate"></option><option value="Nuez"></option><option value="Almendra"></option><option value="Mostaza"></option><option value="Apio"></option><option value="Sulfitos"></option><option value="Maíz"></option><option value="Fresa"></option><option value="Aguacate"></option></datalist></div>
-        <div class="field"><label for="pg-bienvenida--ob-severity">How serious is your allergy?</label><select class="select" id="pg-bienvenida--ob-severity" data-ob="severity"><option value="">Choose an option</option><option value="leve">Mild intolerance</option><option value="fuerte">Strong reaction</option><option value="anafilaxia">Risk of anaphylaxis</option></select></div>
-        <p class="label">Health conditions we should consider</p>
-        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-group="conditions" value="diabetes"> <span>Diabetes</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="hipertension"> <span>Hypertension</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="celiaquia"> <span>Celiac disease</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="embarazo"> <span>Pregnancy or breastfeeding</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="colesterol"> <span>High cholesterol</span></label><label class="check"><input type="checkbox" data-ob-group="conditions" value="ninguna"> <span>None</span></label></div>
-        <p class="legal-note">The site cross-checks ingredients against the profile you declared. You are responsible for declaring your allergies and restrictions in detail when you sign up.</p>
-      </fieldset>
-
-      <fieldset class="step" data-ob-step="5">
-        <legend>Tastes and goals</legend>
-        <p class="label">Dietary preferences</p>
-        <div class="check-grid"><label class="check"><input type="checkbox" data-ob-diet value="Keto"> <span>Keto</span></label><label class="check"><input type="checkbox" data-ob-diet value="Libre de gluten"> <span>Gluten-free</span></label><label class="check"><input type="checkbox" data-ob-diet value="Vegetariano"> <span>Vegetarian</span></label><label class="check"><input type="checkbox" data-ob-diet value="Vegano"> <span>Vegan</span></label><label class="check"><input type="checkbox" data-ob-diet value="Bajo en carbohidratos"> <span>Low carb</span></label>
-          <label class="check"><input type="checkbox" data-ob-diet value="Alto en proteína"> <span>High protein</span></label>
-        </div>
-        <div class="field"><label for="pg-bienvenida--ob-dis">Block 2 · Ingredients I don't like</label><input class="input" id="pg-bienvenida--ob-dis" data-ob="dislikes" placeholder="E.g. tomato"></div>
-        <div class="form-grid">
-          <div class="field"><label for="pg-bienvenida--ob-goal">Your goal</label><select class="select" id="pg-bienvenida--ob-goal" data-ob="goal"><option value="">Choose an option</option><option value="mejor">Eat better</option><option value="bajar">Lose weight</option><option value="musculo">Build muscle</option><option value="mantener">Keep my weight</option><option value="deporte">Sports performance</option></select></div>
-          <div class="field"><label for="pg-bienvenida--ob-kcal">Calories per day (if you know them)</label><input class="input" id="pg-bienvenida--ob-kcal" type="number" min="800" max="6000" inputmode="numeric" data-ob="kcal"></div>
-          <div class="field"><label for="pg-bienvenida--ob-spice">Spice level</label><select class="select" id="pg-bienvenida--ob-spice" data-ob="spice"><option value="">Choose an option</option><option value="0">None</option><option value="1">Mild</option><option value="2">Medium</option><option value="3">Hot</option></select></div>
-        </div>
-      </fieldset>
-
-      <fieldset class="step" data-ob-step="6">
-        <legend>Last step</legend>
-        <div class="form-grid">
-          <div class="field"><label for="pg-bienvenida--ob-ref">Referral code (if you have one)</label><input class="input" id="pg-bienvenida--ob-ref" data-ob="ref" autocapitalize="characters"></div>
-          <div class="field"><label for="pg-bienvenida--ob-heard">How did you hear about us?</label><select class="select" id="pg-bienvenida--ob-heard" data-ob="heard"><option value="">Choose an option</option><option value="instagram">Instagram</option><option value="amigos">Friends or family</option><option value="gym">Trainer or gym</option><option value="web">Internet search</option><option value="otro">Other</option></select></div>
-          <div class="field"><label for="pg-bienvenida--ob-contact">How should we reach you?</label><select class="select" id="pg-bienvenida--ob-contact" data-ob="contact"><option value="">Choose an option</option><option value="correo">E-mail</option><option value="whatsapp">WhatsApp</option><option value="ambos">Both</option></select></div>
-        </div>
-        <label class="check"><input type="checkbox" data-ob-consent> <span>I accept the terms and the privacy notice.</span></label>
-        <label class="check"><input type="checkbox" data-ob-consent> <span>I allow my data to be used to deliver my order and look after my allergies.</span></label>
-        <label class="check"><input type="checkbox" data-ob-consent> <span>I understand the kitchen handles common ingredients and cannot guarantee the total absence of traces.</span></label>
-      </fieldset>
-
-      <p class="alert alert--warn" data-ob-error hidden role="alert"></p>
-      <div class="steps__actions">
-        <button class="text-link" type="button" data-ob-prev hidden>Back</button>
-        <button class="btn btn--gold" type="button" data-ob-next>Continue</button>
-        <button class="btn btn--gold" type="submit" data-ob-save hidden>Save and enter</button>
       </div>
     </form>
   </div>
@@ -24966,15 +25264,20 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     var steps = $$('[data-ob-step]', form), dots = $$('.ob-dots li', form), nextB = $('[data-ob-next]', form), prevB = $('[data-ob-prev]', form), saveB = $('[data-ob-save]', form);
     var fields = $$('[data-ob]', form), acs = $$('[data-ob-allergy]', form), dts = $$('[data-ob-diet]', form), grps = $$('[data-ob-group]', form), cons = $$('[data-ob-consent]', form);
     var cn = root.getAttribute('data-customer-name'), ce = root.getAttribute('data-customer-email');
-    var f0 = readFunnel(), info = f0.info || {}, prof = loadProfile(), step = 0;
+    var f0 = readFunnel(), info = f0.info || {}, prof = loadProfile(), step = 0, maxStep = 0;
     if (ce && !info.email) info.email = ce; if (cn && !info.name) info.name = cn;
-    fields.forEach(function (x) { x.value = info[x.getAttribute('data-ob')] || ''; });
+    fields.forEach(function (x) { var iv = info[x.getAttribute('data-ob')]; x.value = iv != null && iv !== '' ? iv : (x.defaultValue || ''); });
     acs.forEach(function (c) { c.checked = (f0.allergies || prof.allergies || []).map(norm).indexOf(norm(c.value)) > -1; });
     dts.forEach(function (c) { c.checked = (prof.diets || []).map(norm).indexOf(norm(c.value)) > -1; });
     grps.forEach(function (c) { c.checked = String(info[c.getAttribute('data-ob-group')] || '').split(', ').indexOf(c.value) > -1; });
     var show = function () {
-      steps.forEach(function (s, k) { s.classList.toggle('is-on', k === step); }); dots.forEach(function (d, k) { d.classList.toggle('is-on', k <= step); });
+      steps.forEach(function (s, k) { s.classList.toggle('is-on', k === step); }); dots.forEach(function (d, k) { d.classList.toggle('is-on', k === step); d.classList.toggle('is-done', k < step); });
+      maxStep = Math.max(maxStep, step);
       prevB.hidden = step === 0; nextB.hidden = step === steps.length - 1; saveB.hidden = step !== steps.length - 1;
+      var cnt = $('[data-ob-count]', form), bar = $('[data-ob-bar]', form), tt = dots[step] ? $('.ob-dots__t', dots[step]) : null;
+      if (cnt) cnt.textContent = (root.getAttribute('data-t-stepof') || '[n] / [t]').replace('[n]', step + 1).replace('[t]', steps.length) + (tt ? '  ·  ' + tt.textContent : '');
+      if (bar) bar.style.width = ((step + 1) / steps.length * 100) + '%';
+      if (step === steps.length - 1) renderReview();
     };
     var say = function (m) { err.hidden = !m; err.textContent = m || ''; };
     var val = function (k) { var x = $('[data-ob="' + k + '"]', form); return x ? x.value.trim() : ''; };
@@ -24988,6 +25291,76 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     window.addEventListener('hashchange', function () { setTimeout(forward, 60); });
     if (forward()) return;
     if (done && !edit && ce) { form.hidden = true; welcome.hidden = false; hello(); }
+    // ---- segmented radios (one answer), counters, removable tag boxes
+    var segs = $$('[data-ob-seg]', form);
+    segs.forEach(function (g) { var v = info[g.getAttribute('data-ob-seg')]; $$('input', g).forEach(function (r) { r.checked = !!v && r.value === v; }); });
+    $$('[data-ob-count-btn]', form).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var inp = $('[data-ob="' + b.getAttribute('data-ob-count-btn') + '"]', form); if (!inp) return;
+        var mn = +inp.min || 0, mx = +inp.max || 99, v = (parseInt(inp.value, 10) || 0) + (+b.getAttribute('data-d'));
+        inp.value = Math.max(mn, Math.min(mx, v));
+      });
+    });
+    if (!val('dislikes') && prof.dislikes && prof.dislikes.length) { var hd = $('[data-ob="dislikes"]', form); if (hd) hd.value = prof.dislikes.join(', '); }
+    var tagBoxes = $$('[data-ob-tags]', form).map(function (box) {
+      var hid = $('[data-ob="' + box.getAttribute('data-ob-tags') + '"]', box), wrap = $('.tag-input', box), inp = $('[data-ob-tag-input]', box);
+      var list = function () { return hid.value.split(',').map(function (v) { return v.trim(); }).filter(Boolean); };
+      var paint = function () {
+        $$('.tag', wrap).forEach(function (t) { t.remove(); });
+        list().forEach(function (d) {
+          var t = document.createElement('span'); t.className = 'tag'; t.textContent = d;
+          var x = document.createElement('button'); x.type = 'button'; x.setAttribute('aria-label', T('remove', { name: d })); x.textContent = '×';
+          x.addEventListener('click', function () { hid.value = list().filter(function (v) { return norm(v) !== norm(d); }).join(', '); paint(); });
+          t.appendChild(x); wrap.insertBefore(t, inp);
+        });
+        $$('[data-ob-suggest]', box).forEach(function (b) { b.classList.toggle('is-active', list().map(norm).indexOf(norm(b.getAttribute('data-ob-suggest'))) > -1); });
+      };
+      var add = function (v) { v = String(v || '').replace(/\s*,\s*/g, ' ').trim(); if (!v) return; if (list().map(norm).indexOf(norm(v)) < 0) hid.value = list().concat(v).join(', '); inp.value = ''; paint(); };
+      inp.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); add(inp.value); } else if (e.key === 'Backspace' && !inp.value) { var l = list(); l.pop(); hid.value = l.join(', '); paint(); } });
+      inp.addEventListener('blur', function () { add(inp.value); });
+      $$('[data-ob-suggest]', box).forEach(function (b) { b.addEventListener('click', function () { var v = b.getAttribute('data-ob-suggest'); if (list().map(norm).indexOf(norm(v)) > -1) { hid.value = list().filter(function (x) { return norm(x) !== norm(v); }).join(', '); paint(); } else add(v); }); });
+      paint(); return paint;
+    });
+    $$('input[type="text"],input[type="email"],input[type="tel"],input[type="number"],input[type="date"]', form).forEach(function (i) {
+      if (i.hasAttribute('data-ob-tag-input')) return;
+      i.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); if (!nextB.hidden) nextB.click(); } });
+    });
+    // review: every answer, section by section, each with an Edit button that jumps back
+    var textOf = function (n) { return (n.textContent || '').trim(); };
+    var reviewRows = function (st) {
+      var rows = [], cur = '';
+      Array.prototype.forEach.call(st.children, function (n) {
+        if (n.tagName === 'LEGEND') return;
+        if (n.classList.contains('label')) { cur = textOf(n); return; }
+        var take = function (label, vals) { vals = vals.filter(Boolean); if (vals.length) rows.push([label, vals.join(', ')]); };
+        var fieldRow = function (fd) {
+          var lb = $('label', fd), inp = $('[data-ob]', fd); if (!lb || !inp) return;
+          take(textOf(lb), [inp.tagName === 'SELECT' ? (inp.value ? textOf(inp.options[inp.selectedIndex]) : '') : inp.value.trim()]);
+        };
+        if (n.classList.contains('pills')) take(cur, $$('input:checked', n).map(function (i) { return textOf(i.nextElementSibling); }));
+        else if (n.hasAttribute('data-ob-seg')) take(cur, $$('input:checked', n).map(function (i) { return textOf(i.nextElementSibling); }));
+        else if (n.hasAttribute('data-ob-tags')) take(cur, $('[data-ob]', n).value.split(',').map(function (v) { return v.trim(); }));
+        else if (n.classList.contains('ob-people')) take(cur, $$('.counter', n).map(function (c) { return textOf($('span', c)) + ' ' + $('input', c).value; }));
+        else if (n.classList.contains('field')) fieldRow(n);
+        else if (n.classList.contains('form-grid')) $$('.field', n).forEach(fieldRow);
+      });
+      return rows;
+    };
+    var renderReview = function () {
+      var box = $('[data-ob-review]', form); if (!box) return; box.innerHTML = '';
+      steps.slice(0, steps.length - 1).forEach(function (st, k) {
+        var sec = document.createElement('section'); sec.className = 'review__sec';
+        var head = document.createElement('div'); head.className = 'review__h';
+        var h = document.createElement('h4'); h.textContent = textOf($('legend', st)); head.appendChild(h);
+        var eb = document.createElement('button'); eb.type = 'button'; eb.className = 'text-link'; eb.textContent = root.getAttribute('data-t-edit') || 'Edit';
+        eb.addEventListener('click', function () { step = k; say(''); show(); }); head.appendChild(eb); sec.appendChild(head);
+        var rows = reviewRows(st), dl = document.createElement('dl');
+        if (!rows.length) { var e = document.createElement('p'); e.className = 'text-muted'; e.textContent = root.getAttribute('data-t-empty') || ''; sec.appendChild(e); }
+        rows.forEach(function (r) { var dt = document.createElement('dt'); dt.textContent = r[0]; var dd = document.createElement('dd'); dd.textContent = r[1]; dl.appendChild(dt); dl.appendChild(dd); });
+        if (rows.length) sec.appendChild(dl); box.appendChild(sec);
+      });
+    };
+    dots.forEach(function (d, k) { d.addEventListener('click', function () { if (k <= maxStep && k !== step) { say(''); step = k; show(); } }); });
     var stepOk = function (k) {
       if (k === 0 && !(val('name') && /.+@.+/.test(val('email')) && val('phone'))) { say(root.getAttribute('data-t-need')); return false; }
       if (k === 1 && !(val('street') && val('cluster') && val('city') && val('zip'))) { say(root.getAttribute('data-t-need-addr')); return false; }
@@ -24998,13 +25371,14 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       say(''); step = Math.min(steps.length - 1, step + 1); show();
     });
     prevB.addEventListener('click', function () { step = Math.max(0, step - 1); show(); });
-    var editB = $('[data-ob-edit]', root); if (editB) editB.addEventListener('click', function () { welcome.hidden = true; form.hidden = false; step = 0; show(); });
+    var editB = $('[data-ob-edit]', root); if (editB) editB.addEventListener('click', function () { welcome.hidden = true; form.hidden = false; step = 0; tagBoxes.forEach(function (f2) { f2(); }); show(); });
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       for (var sk = 0; sk < 2; sk++) { if (!stepOk(sk)) { step = sk; show(); return; } }
       if (cons.length && !cons.every(function (c) { return c.checked; })) { step = steps.length - 1; show(); say(root.getAttribute('data-t-need-consent')); return; }
       var f = readFunnel(); f.v = 2; f.info = f.info || {}; fields.forEach(function (x) { f.info[x.getAttribute('data-ob')] = x.value.trim(); });
       var gnames = {}; grps.forEach(function (c) { var g = c.getAttribute('data-ob-group'); gnames[g] = gnames[g] || []; if (c.checked) gnames[g].push(c.value); }); Object.keys(gnames).forEach(function (g) { f.info[g] = gnames[g].join(', '); });
+      segs.forEach(function (g) { var c = $('input:checked', g); f.info[g.getAttribute('data-ob-seg')] = c ? c.value : ''; });
       f.info.consent = new Date().toISOString().slice(0, 10);
       if (f.info.ref) { try { localStorage.setItem('kulinaria_ref', f.info.ref); } catch (x) {} }
       f.allergies = acs.filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
@@ -25040,6 +25414,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var g1 = $('[data-fn-gate-s1]', gate), g2 = $('[data-fn-gate-s2]', gate);
         g1.classList.toggle('is-done', signedIn); g2.classList.toggle('is-done', signedIn && onbDone); g2.classList.toggle('is-wait', !signedIn);
         var a1 = $('[data-fn-gate-a1]', gate), a2 = $('[data-fn-gate-a2]', gate); if (a1) a1.hidden = signedIn; if (a2) a2.hidden = !signedIn || onbDone;
+        var c1 = $('[data-fn-chip]', g1), c2 = $('[data-fn-chip]', g2); if (c1) c1.textContent = signedIn ? gate.getAttribute('data-t-done') : gate.getAttribute('data-t-todo'); if (c2) c2.textContent = !signedIn ? gate.getAttribute('data-t-wait') : (onbDone ? gate.getAttribute('data-t-done') : gate.getAttribute('data-t-todo'));
       }
       var startAtPlan = false; try { startAtPlan = location.protocol === 'file:' && !!sessionStorage.getItem('kx-test-start') && !!st.rulesOk; } catch (e) {}   // local preview only (test hook)
       st.step = startAtPlan ? 1 : 0;
