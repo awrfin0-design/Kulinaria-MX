@@ -3422,6 +3422,61 @@ body .funnel.is-gated[data-step="3"] .fn-gate{max-width:none;width:100%}
 .hub__kv div:nth-child(2) dd{white-space:nowrap;letter-spacing:.04em;font-size:clamp(1.1rem,3.2vw,1.5rem)}
 .hub__kv dt{white-space:normal}
 
+/* =====================================================================
+   v80 — dropdowns (menu category / level, home lifestyle filter): one styled select instead of a sliding row of chips
+   ===================================================================== */
+.dd-src{display:none !important}
+.dd{position:relative;display:inline-block;min-width:min(100%,250px);max-width:100%}
+.dd__btn{display:flex;align-items:center;gap:14px;width:100%;padding:9px 10px 9px 22px;border:1.5px solid var(--border-accent);border-radius:999px;background:linear-gradient(180deg,color-mix(in srgb,var(--bg-raised) 92%,transparent),color-mix(in srgb,var(--bg-base) 80%,var(--bg-raised)));color:var(--text);text-align:left;cursor:pointer;min-height:54px;transition:border-color .2s,box-shadow .25s,transform .2s}
+.dd__btn:hover{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-wash)}
+.dd__btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.dd__btn[aria-expanded="true"]{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-wash),0 14px 30px -18px rgba(0,0,0,.6)}
+.dd__lab{flex:none;padding-right:14px;border-right:1px solid var(--line);font:700 .6rem var(--font-label);letter-spacing:.18em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.dd__val{flex:1;min-width:0;font-family:var(--font-display,var(--font-heading));font-size:1.1rem;font-weight:500;letter-spacing:-.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dd:not(.has-value) .dd__val{color:var(--text-muted)}
+.dd__chev{flex:none;position:relative;width:34px;height:34px;border-radius:50%;border:1px solid var(--border-accent);background:var(--accent-wash);transition:background .2s,transform .3s}
+.dd__chev::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;border:solid var(--accent);border-width:0 2px 2px 0;transform:translate(-50%,-70%) rotate(45deg);transition:border-color .2s}
+.dd__btn:hover .dd__chev,.dd__btn[aria-expanded="true"] .dd__chev{background:var(--accent)}
+.dd__btn:hover .dd__chev::after,.dd__btn[aria-expanded="true"] .dd__chev::after{border-color:var(--bg-base)}
+.dd__btn[aria-expanded="true"] .dd__chev{transform:rotate(180deg)}
+.dd__list{position:absolute;z-index:80;top:calc(100% + 10px);left:0;min-width:100%;width:max-content;max-width:min(92vw,380px);max-height:min(66vh,440px);overflow-y:auto;overscroll-behavior:auto;padding:8px;border-radius:22px;border:1px solid var(--border-accent);background:color-mix(in srgb,var(--bg-raised) 95%,transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 34px 70px -24px rgba(0,0,0,.75),0 0 0 1px var(--line);animation:ddIn .2s cubic-bezier(.2,.7,.2,1);scrollbar-width:thin;scrollbar-color:var(--border-accent) transparent}
+.dd__list[hidden]{display:none}
+.dd--up .dd__list{top:auto;bottom:calc(100% + 10px)}
+@keyframes ddIn{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+.dd__opt{display:flex;align-items:center;gap:14px;width:100%;padding:12px 14px;border:0;border-radius:14px;background:none;color:var(--text);font:500 .95rem var(--font-body,inherit);text-align:left;cursor:pointer;transition:background .15s}
+.dd__opt:hover,.dd__opt:focus-visible{background:var(--accent-wash);outline:none}
+.dd__tick{flex:none;position:relative;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);transition:background .15s,border-color .15s}
+.dd--multi .dd__tick{border-radius:6px}
+.dd__opt.is-on .dd__tick{background:var(--accent);border-color:var(--accent)}
+.dd__opt.is-on .dd__tick::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid var(--bg-base);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.dd__opt.is-on .dd__t{font-weight:700}
+.dd__clear{display:block;margin:2px 6px 6px auto;padding:6px 12px;border:0;background:none;color:var(--accent);font:700 .66rem var(--font-label);letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.dd__clear[hidden]{display:none}
+/* where they live */
+.filter-sticky{padding:10px 14px;gap:16px;flex-wrap:wrap}
+.filter-sticky .dd{flex:1 1 280px;max-width:420px}
+.filter-bar__row:has(.dd) .filter-bar__label{display:none}
+.filter-secondary .dd{min-width:min(100%,230px)}
+[data-dchips].dd-src + *,.dd + [data-dchips]{margin:0}
+.section .container > .dd{margin-bottom:var(--space-md)}
+@media (max-width:760px){
+  .dd,.filter-sticky .dd{display:block;width:100%;max-width:none;flex:1 1 100%}
+  .dd__btn{min-height:56px}
+  .dd__list{max-width:none;width:100%;max-height:min(60vh,420px)}
+  body .menu-shell .filter-sticky{display:block}
+  body .menu-shell .filter-sticky .filter-count{display:block;margin-top:8px}
+}
+.dd.is-open{z-index:100}
+.menu-shell .filter-sticky,.menu-shell .filter-secondary,.diet-chips__top,[data-dchips] + .dd{position:relative}
+.menu-shell .filter-sticky{z-index:60}.menu-shell .filter-secondary{z-index:55}
+body .menu-shell .filter-sticky{position:relative;z-index:60}
+.dd:has(.dd__list:not([hidden])){z-index:100}
+section:has(.dd.is-open){position:relative;z-index:30}
+.dd__list{background:var(--bg-raised) !important;max-height:min(78vh,540px);scrollbar-width:none}
+.dd__list::-webkit-scrollbar{display:none}
+.dd__opt{padding:10px 14px}
+@media (max-width:760px){.dd__list{max-height:min(70vh,520px)}}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -4694,7 +4749,7 @@ Fuego</span>
   <div class="container">
     <div class="section__head"><span class="eyebrow">Enfoque nutricional</span><h2>Filtra el menú según tu <em>estilo de vida</em></h2>
     </div>
-    <div class="chips" data-dchips><button class="chip" type="button" data-dchip="keto" aria-pressed="false" >Keto</button><button class="chip" type="button" data-dchip="sin-gluten" aria-pressed="false" >Libre de gluten</button><button class="chip" type="button" data-dchip="vegetariano" aria-pressed="false" >Vegetariano</button><button class="chip" type="button" data-dchip="vegano" aria-pressed="false" >Basado en plantas / Vegano</button><button class="chip" type="button" data-dchip="bajo-calorias" aria-pressed="false" >Bajas calorías</button><button class="chip" type="button" data-dchip="bajo-carbos" aria-pressed="false" >Bajos carbohidratos</button><button class="chip" type="button" data-dchip="alto-proteina" aria-pressed="false" >Alta proteína / Rendimiento</button></div>
+    <div class="chips" data-dchips data-dropdown="multi" data-dd-label="Enfoque nutricional" data-dd-all="Todos" data-dd-n="{n} seleccionados" data-dd-clear="Limpiar"><button class="chip" type="button" data-dchip="keto" aria-pressed="false" >Keto</button><button class="chip" type="button" data-dchip="sin-gluten" aria-pressed="false" >Libre de gluten</button><button class="chip" type="button" data-dchip="vegetariano" aria-pressed="false" >Vegetariano</button><button class="chip" type="button" data-dchip="vegano" aria-pressed="false" >Basado en plantas / Vegano</button><button class="chip" type="button" data-dchip="bajo-calorias" aria-pressed="false" >Bajas calorías</button><button class="chip" type="button" data-dchip="bajo-carbos" aria-pressed="false" >Bajos carbohidratos</button><button class="chip" type="button" data-dchip="alto-proteina" aria-pressed="false" >Alta proteína / Rendimiento</button></div>
     <p class="dc-count" data-dc-count data-t="[n] platillos" aria-live="polite"></p>
     <div class="dc-grid" data-dc-grid><article class="dish" data-dish data-has-detail
   data-category="diario-premium" data-tier="selecto"
@@ -5080,7 +5135,7 @@ Pago digital, sin efectivo</li></ul>
             <button class="season-pill season-pill--s" type="button" data-filter="season" data-value="season" aria-pressed="false">&#10022; De temporada <small>Edición limitada</small></button>
           </div>
           <p class="season-note" data-season-note hidden>Platillos de edición limitada: salen cuando la temporada y el clima lo permiten (chiles en nogada, calabaza de otoño, pavo de diciembre…) y se acaban cuando se acaba el ingrediente.</p><div class="filter-sticky">
-          <div class="chips" role="group" aria-label="Categoría">
+          <div class="chips" role="group" aria-label="Categoría" data-dropdown="single" data-dd-label="Categoría">
             <button class="chip" type="button" data-filter="category" data-value="all" aria-pressed="true">Todo</button><button class="chip" type="button" data-filter="category" data-value="al-fuego" aria-pressed="false">Al fuego</button><button class="chip" type="button" data-filter="category" data-value="desayunos" aria-pressed="false">Desayunos</button><button class="chip" type="button" data-filter="category" data-value="bowls" aria-pressed="false">Bowls</button><button class="chip" type="button" data-filter="category" data-value="diario" aria-pressed="false">Diario</button><button class="chip" type="button" data-filter="category" data-value="keto-low-carb" aria-pressed="false">Keto / Low carb</button><button class="chip" type="button" data-filter="category" data-value="fit-proteina" aria-pressed="false">Fit / Proteína</button><button class="chip" type="button" data-filter="category" data-value="veggie" aria-pressed="false">Veggie</button><button class="chip" type="button" data-filter="category" data-value="sin-gluten" aria-pressed="false">Sin gluten</button><button class="chip" type="button" data-filter="category" data-value="junior" aria-pressed="false">Junior</button><button class="chip" type="button" data-filter="category" data-value="entradas" aria-pressed="false">Entradas</button><button class="chip" type="button" data-filter="category" data-value="snacks-postres" aria-pressed="false">Snacks y postres</button></div>
           <span class="filter-count"><strong data-count>11</strong> platillos</span>
         </div>
@@ -5088,7 +5143,7 @@ Pago digital, sin efectivo</li></ul>
         <div class="filter-secondary">
           <div class="filter-bar__row">
             <span class="filter-bar__label">Nivel</span>
-            <div class="chips">
+            <div class="chips" data-dropdown="single" data-dd-label="Nivel">
               <button class="chip" type="button" data-filter="tier" data-value="all" aria-pressed="true">Todos</button><button class="chip" type="button" data-filter="tier" data-value="selecto" aria-pressed="false">Selecto</button><button class="chip" type="button" data-filter="tier" data-value="exclusivo" aria-pressed="false">Exclusivo $</button><button class="chip" type="button" data-filter="tier" data-value="signature" aria-pressed="false">Signature $$</button><button class="chip" type="button" data-filter="tier" data-value="reserve" aria-pressed="false">Reserve $$$</button></div>
           </div><div><a class="btn btn--ghost" href="#/pg/perfil">Declara tus alergias para filtrar el menú</a></div></div>
 
@@ -14604,7 +14659,7 @@ Pago digital, sin efectivo</li></ul>
   <div class="container">
     <div class="section__head"><span class="eyebrow">Nutritional focus</span><h2>Filter the menu to <em>fit your lifestyle</em></h2>
     </div>
-    <div class="chips" data-dchips><button class="chip" type="button" data-dchip="keto" aria-pressed="false" >Keto</button><button class="chip" type="button" data-dchip="sin-gluten" aria-pressed="false" >Gluten-free</button><button class="chip" type="button" data-dchip="vegetariano" aria-pressed="false" >Vegetarian</button><button class="chip" type="button" data-dchip="vegano" aria-pressed="false" >Plant-based / Vegan</button><button class="chip" type="button" data-dchip="bajo-calorias" aria-pressed="false" >Low calorie</button><button class="chip" type="button" data-dchip="bajo-carbos" aria-pressed="false" >Low carb</button><button class="chip" type="button" data-dchip="alto-proteina" aria-pressed="false" >High protein / Performance</button></div>
+    <div class="chips" data-dchips data-dropdown="multi" data-dd-label="Nutritional focus" data-dd-all="All" data-dd-n="{n} selected" data-dd-clear="Clear"><button class="chip" type="button" data-dchip="keto" aria-pressed="false" >Keto</button><button class="chip" type="button" data-dchip="sin-gluten" aria-pressed="false" >Gluten-free</button><button class="chip" type="button" data-dchip="vegetariano" aria-pressed="false" >Vegetarian</button><button class="chip" type="button" data-dchip="vegano" aria-pressed="false" >Plant-based / Vegan</button><button class="chip" type="button" data-dchip="bajo-calorias" aria-pressed="false" >Low calorie</button><button class="chip" type="button" data-dchip="bajo-carbos" aria-pressed="false" >Low carb</button><button class="chip" type="button" data-dchip="alto-proteina" aria-pressed="false" >High protein / Performance</button></div>
     <p class="dc-count" data-dc-count data-t="[n] dishes" aria-live="polite"></p>
     <div class="dc-grid" data-dc-grid><article class="dish" data-dish data-has-detail
   data-category="diario-premium" data-tier="selecto"
@@ -14990,7 +15045,7 @@ Digital payment, no cash</li></ul>
             <button class="season-pill season-pill--s" type="button" data-filter="season" data-value="season" aria-pressed="false">&#10022; Seasonal <small>Limited edition</small></button>
           </div>
           <p class="season-note" data-season-note hidden>Limited-edition dishes: they appear when the season and the weather allow (chiles en nogada, autumn pumpkin, December turkey…) and they are gone when the ingredient is gone.</p><div class="filter-sticky">
-          <div class="chips" role="group" aria-label="Category">
+          <div class="chips" role="group" aria-label="Category" data-dropdown="single" data-dd-label="Category">
             <button class="chip" type="button" data-filter="category" data-value="all" aria-pressed="true">All</button><button class="chip" type="button" data-filter="category" data-value="al-fuego" aria-pressed="false">From the fire</button><button class="chip" type="button" data-filter="category" data-value="desayunos" aria-pressed="false">Breakfasts</button><button class="chip" type="button" data-filter="category" data-value="bowls" aria-pressed="false">Bowls</button><button class="chip" type="button" data-filter="category" data-value="diario" aria-pressed="false">Daily</button><button class="chip" type="button" data-filter="category" data-value="keto-low-carb" aria-pressed="false">Keto / Low carb</button><button class="chip" type="button" data-filter="category" data-value="fit-proteina" aria-pressed="false">Fit / Protein</button><button class="chip" type="button" data-filter="category" data-value="veggie" aria-pressed="false">Veggie</button><button class="chip" type="button" data-filter="category" data-value="sin-gluten" aria-pressed="false">Gluten-free</button><button class="chip" type="button" data-filter="category" data-value="junior" aria-pressed="false">Junior</button><button class="chip" type="button" data-filter="category" data-value="entradas" aria-pressed="false">Starters</button><button class="chip" type="button" data-filter="category" data-value="snacks-postres" aria-pressed="false">Snacks & desserts</button></div>
           <span class="filter-count"><strong data-count>11</strong> dishes</span>
         </div>
@@ -14998,7 +15053,7 @@ Digital payment, no cash</li></ul>
         <div class="filter-secondary">
           <div class="filter-bar__row">
             <span class="filter-bar__label">Level</span>
-            <div class="chips">
+            <div class="chips" data-dropdown="single" data-dd-label="Level">
               <button class="chip" type="button" data-filter="tier" data-value="all" aria-pressed="true">All</button><button class="chip" type="button" data-filter="tier" data-value="selecto" aria-pressed="false">Selecto</button><button class="chip" type="button" data-filter="tier" data-value="exclusivo" aria-pressed="false">Exclusivo $</button><button class="chip" type="button" data-filter="tier" data-value="signature" aria-pressed="false">Signature $$</button><button class="chip" type="button" data-filter="tier" data-value="reserve" aria-pressed="false">Reserve $$$</button></div>
           </div><div><a class="btn btn--ghost" href="#/pg/perfil">Declare your allergies to filter the menu</a></div></div>
 
@@ -24484,47 +24539,120 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   }
 
   // Hard filter (allergies) hides / blocks; soft filter (dislikes) lowers compatibility.
-  // Allergen detection. A dish is flagged when its allergen tags or ingredients match what the profile declares:
-  // exact tag, ingredient containing the word, or one of the usual ingredients of that allergen family (so a forgotten tag cannot hide a nut, shrimp, dairy...).
+  // How a dish is checked against what a client declares (no AI, just a careful vocabulary):
+  //  1. the declared word is turned into one canonical Spanish name (English names, plurals and typos included: "octopus" -> "pulpo");
+  //  2. a declared FAMILY (mariscos, pescado, frutos secos, lacteos, gluten...) expands to all its usual members, so "shellfish" catches shrimp, octopus, clams...;
+  //  3. a declared MEMBER (octopus) also counts when the dish is tagged with its family and its ingredient list does not name a different member (the tag then most likely means it);
+  //     with a strict profile (anaphylaxis / zero traces) any dish of the family is flagged;
+  //  4. harmless look-alikes are excluded (corn flour is not gluten, almond milk is not dairy, nutmeg is not a nut).
   var SYN = {
-    'frutos secos': ['almendra', 'nuez', 'nueces', 'pistache', 'avellana', 'cacahuate', 'anacardo', 'macadamia', 'pecana', 'castana'],
-    'mariscos': ['camaron', 'langosta', 'cangrejo', 'pulpo', 'calamar', 'ostion', 'almeja', 'mejillon', 'jaiba', 'langostino'],
-    'lacteos': ['leche', 'queso', 'crema', 'mantequilla', 'yogur', 'yogurt', 'nata', 'requeson'],
-    'gluten': ['trigo', 'pasta', 'pan ', 'cebada', 'centeno', 'harina', 'avena', 'cuscus'],
-    'huevo': ['huevo', 'clara', 'yema', 'mayonesa'],
-    'pescado': ['salmon', 'atun', 'huachinango', 'pescado', 'robalo', 'tilapia', 'bacalao', 'sardina'],
-    'soya': ['soya', 'tofu', 'edamame', 'miso'],
-    'ajonjoli': ['ajonjoli', 'tahini', 'sesamo'],
-    'cacahuate': ['cacahuate', 'mani'],
-    'nuez': ['nuez', 'nueces', 'pecana'],
-    'almendra': ['almendra']
+    'mariscos': ['marisco', 'camaron', 'langosta', 'langostino', 'cangrejo', 'jaiba', 'centolla', 'cigala', 'bogavante', 'acocil', 'pulpo', 'calamar', 'sepia', 'chipiron', 'ostion', 'almeja', 'mejillon', 'vieira', 'callo de hacha', 'abulon', 'caracol'],
+    'crustaceos': ['camaron', 'langosta', 'langostino', 'cangrejo', 'jaiba', 'centolla', 'cigala', 'bogavante', 'acocil'],
+    'moluscos': ['pulpo', 'calamar', 'sepia', 'chipiron', 'ostion', 'almeja', 'mejillon', 'vieira', 'callo de hacha', 'abulon', 'caracol'],
+    'cefalopodos': ['pulpo', 'calamar', 'sepia', 'chipiron'],
+    'pescado': ['salmon', 'atun', 'huachinango', 'pargo', 'robalo', 'tilapia', 'bacalao', 'sardina', 'anchoa', 'trucha', 'mojarra', 'merluza', 'lenguado', 'dorado', 'mahi', 'cazon', 'surimi', 'caballa', 'arenque', 'pescado'],
+    'frutos secos': ['almendra', 'nuez', 'nueces', 'pistache', 'avellana', 'anacardo', 'nuez de la india', 'macadamia', 'pecana', 'castana', 'nuez de brasil', 'pinon', 'cacahuate', 'mazapan', 'praline', 'turron', 'nogada'],
+    'lacteos': ['leche', 'queso', 'crema', 'mantequilla', 'yogur', 'yogurt', 'nata', 'requeson', 'suero', 'caseina', 'lactosa', 'ghee', 'paneer', 'ricotta', 'mozzarella', 'parmesano', 'cotija', 'panela', 'manchego', 'mascarpone', 'burrata', 'helado', 'flan', 'cajeta'],
+    'gluten': ['trigo', 'harina', 'pasta', 'pan', 'cebada', 'centeno', 'avena', 'cuscus', 'bulgur', 'espelta', 'seitan', 'galleta', 'empanizado', 'pan molido', 'pan rallado', 'cerveza', 'fideo', 'macarron', 'lasana', 'tempura', 'semola', 'malta', 'ravioli', 'crouton'],
+    'huevo': ['huevo', 'clara', 'yema', 'mayonesa', 'merengue', 'aioli', 'omelette', 'omelet'],
+    'soya': ['soya', 'soja', 'tofu', 'edamame', 'miso', 'tempeh', 'shoyu', 'tamari', 'salsa de soya'],
+    'ajonjoli': ['ajonjoli', 'tahini', 'tahin', 'sesamo'],
+    'cacahuate': ['cacahuate', 'mani', 'mantequilla de cacahuate'],
+    'nuez': ['nuez', 'nueces', 'pecana', 'nuez de castilla'],
+    'almendra': ['almendra', 'mazapan'],
+    'apio': ['apio'], 'mostaza': ['mostaza'],
+    'sulfitos': ['vino', 'vinagre balsamico', 'pasas', 'orejones', 'fruta seca', 'uva pasa'],
+    'maiz': ['maiz', 'elote', 'esquite', 'nixtamal', 'tortilla', 'tostada', 'palomitas', 'masa']
+  };
+  var EXCL = {   // harmless look-alikes: an ingredient containing one of these never counts for that family
+    'gluten': ['harina de maiz', 'harina de arroz', 'harina de almendra', 'harina de coco', 'harina de garbanzo', 'harina de avena sin gluten', 'sin gluten', 'libre de gluten', 'tortilla de maiz', 'pasta de arroz', 'fideo de arroz'],
+    'lacteos': ['leche de coco', 'leche de almendra', 'leche de avena', 'leche de soya', 'leche vegetal', 'crema de coco', 'mantequilla de cacahuate', 'mantequilla de almendra', 'queso vegano', 'sin lactosa', 'mantequilla de cacao'],
+    'frutos secos': ['nuez moscada', 'moscada', 'mantequilla de karite', 'castana de agua', 'coco'],
+    'nuez': ['nuez moscada', 'moscada'],
+    'huevo': ['sin huevo', 'berenjena', 'huevo vegano'],
+    'soya': ['sin soya'],
+    'pescado': ['sin pescado', 'salsa de pescado vegana']
   };
   // What the client types may be English or a different spelling: map it to the Spanish names used in the ingredient lists
-  var ALIAS = { 'peanut': 'cacahuate', 'peanuts': 'cacahuate', 'mani': 'cacahuate', 'cacahuates': 'cacahuate', 'nuts': 'frutos secos', 'tree nuts': 'frutos secos', 'nut': 'frutos secos', 'frutos-secos': 'frutos secos',
-    'shellfish': 'mariscos', 'seafood': 'mariscos', 'shrimp': 'camaron', 'prawn': 'camaron', 'crab': 'cangrejo', 'lobster': 'langosta', 'fish': 'pescado', 'salmon': 'salmon', 'tuna': 'atun',
-    'dairy': 'lacteos', 'milk': 'leche', 'cheese': 'queso', 'cream': 'crema', 'butter': 'mantequilla', 'egg': 'huevo', 'eggs': 'huevo', 'huevos': 'huevo', 'wheat': 'gluten', 'soy': 'soya', 'sesame': 'ajonjoli',
-    'almond': 'almendra', 'almonds': 'almendra', 'walnut': 'nuez', 'broccoli': 'brocoli', 'onion': 'cebolla', 'cilantro': 'cilantro', 'coriander': 'cilantro', 'mushroom': 'champinones', 'mushrooms': 'champinones', 'champinon': 'champinones',
-    'tomato': 'jitomate', 'tomate': 'jitomate', 'avocado': 'aguacate', 'corn': 'maiz', 'pork': 'puerco', 'beef': 'res', 'chicken': 'pollo', 'garlic': 'ajo', 'pepper': 'pimiento', 'spinach': 'espinaca', 'carrot': 'zanahoria', 'celery': 'apio', 'mustard': 'mostaza', 'strawberry': 'fresa', 'raisins': 'pasas' };
-  var canon = function (raw) { var a = norm(raw).replace(/\s+/g, ' '); return ALIAS[a] || a; };
+  var ALIAS = {
+    'octopus': 'pulpo', 'squid': 'calamar', 'calamari': 'calamar', 'cuttlefish': 'sepia', 'clam': 'almeja', 'clams': 'almeja', 'oyster': 'ostion', 'oysters': 'ostion', 'mussel': 'mejillon', 'mussels': 'mejillon',
+    'scallop': 'vieira', 'scallops': 'vieira', 'crab': 'cangrejo', 'lobster': 'langosta', 'shrimp': 'camaron', 'shrimps': 'camaron', 'prawn': 'camaron', 'prawns': 'camaron', 'crayfish': 'langostino', 'langoustine': 'langostino', 'abalone': 'abulon', 'snail': 'caracol',
+    'shellfish': 'mariscos', 'seafood': 'mariscos', 'marisco': 'mariscos', 'crustacean': 'crustaceos', 'crustaceans': 'crustaceos', 'crustaceo': 'crustaceos', 'mollusk': 'moluscos', 'mollusks': 'moluscos', 'mollusc': 'moluscos', 'molluscs': 'moluscos', 'molusco': 'moluscos', 'cephalopod': 'cefalopodos', 'cephalopods': 'cefalopodos', 'cefalopodo': 'cefalopodos',
+    'fish': 'pescado', 'pescados': 'pescado', 'salmon': 'salmon', 'tuna': 'atun', 'cod': 'bacalao', 'trout': 'trucha', 'sea bass': 'robalo', 'snapper': 'huachinango', 'anchovy': 'anchoa', 'anchovies': 'anchoa', 'sardine': 'sardina', 'sardines': 'sardina', 'tilapia': 'tilapia', 'mackerel': 'caballa', 'herring': 'arenque',
+    'nuts': 'frutos secos', 'tree nuts': 'frutos secos', 'tree nut': 'frutos secos', 'nut': 'frutos secos', 'fruto seco': 'frutos secos', 'frutos-secos': 'frutos secos', 'brazil nut': 'nuez de brasil',
+    'peanut': 'cacahuate', 'peanuts': 'cacahuate', 'mani': 'cacahuate', 'cacahuates': 'cacahuate', 'almond': 'almendra', 'almonds': 'almendra', 'walnut': 'nuez', 'walnuts': 'nuez', 'pecan': 'pecana', 'pecans': 'pecana', 'cashew': 'anacardo', 'cashews': 'anacardo', 'pistachio': 'pistache', 'pistachios': 'pistache', 'hazelnut': 'avellana', 'hazelnuts': 'avellana', 'macadamia': 'macadamia', 'pine nut': 'pinon',
+    'dairy': 'lacteos', 'lactose': 'lacteos', 'lacteo': 'lacteos', 'milk': 'leche', 'cheese': 'queso', 'cream': 'crema', 'butter': 'mantequilla', 'yogurt': 'yogur', 'whey': 'suero', 'casein': 'caseina', 'ice cream': 'helado',
+    'egg': 'huevo', 'eggs': 'huevo', 'huevos': 'huevo', 'wheat': 'gluten', 'gluten': 'gluten', 'celiac': 'gluten', 'barley': 'cebada', 'rye': 'centeno', 'oats': 'avena', 'bread': 'pan', 'flour': 'harina',
+    'soy': 'soya', 'soybean': 'soya', 'soybeans': 'soya', 'sesame': 'ajonjoli', 'mustard': 'mostaza', 'celery': 'apio', 'sulfite': 'sulfitos', 'sulfites': 'sulfitos', 'sulphites': 'sulfitos', 'wine': 'vino',
+    'broccoli': 'brocoli', 'onion': 'cebolla', 'cilantro': 'cilantro', 'coriander': 'cilantro', 'mushroom': 'champinones', 'mushrooms': 'champinones', 'champinon': 'champinones',
+    'tomato': 'jitomate', 'tomate': 'jitomate', 'avocado': 'aguacate', 'corn': 'maiz', 'pork': 'puerco', 'beef': 'res', 'chicken': 'pollo', 'garlic': 'ajo', 'pepper': 'pimiento', 'spinach': 'espinaca', 'carrot': 'zanahoria', 'strawberry': 'fresa', 'strawberries': 'fresa', 'raisins': 'pasas', 'raisin': 'pasas', 'olive': 'aceituna', 'olives': 'aceituna', 'coconut': 'coco', 'beet': 'betabel', 'beets': 'betabel', 'beetroot': 'betabel', 'spicy': 'chile', 'spicy food': 'chile', 'picante': 'chile', 'hot': 'chile', 'hongo': 'champinones', 'hongos': 'champinones', 'seta': 'champinones', 'setas': 'champinones', 'chili': 'chile', 'chile': 'chile', 'lime': 'limon', 'lemon': 'limon', 'banana': 'platano', 'pumpkin': 'calabaza', 'squash': 'calabaza', 'beans': 'frijol', 'bean': 'frijol', 'basil': 'albahaca', 'poblano chile': 'poblano', 'rice': 'arroz', 'potato': 'papa', 'potatoes': 'papa'
+  };
+  var MEMBER_OF = {};
+  Object.keys(SYN).forEach(function (g) { SYN[g].forEach(function (m) { (MEMBER_OF[m] = MEMBER_OF[m] || []).push(g); }); });
+  var singular = function (a) { return a.replace(/(ces)$/, 'z').replace(/(es)$/, '').replace(/s$/, ''); };
+  var canon = function (raw) {
+    var a = norm(raw).replace(/\s+/g, ' ');
+    if (ALIAS[a]) return ALIAS[a];
+    if (SYN[a] || MEMBER_OF[a]) return a;
+    var s1 = a.replace(/s$/, ''), s2 = a.replace(/es$/, ''), s3 = singular(a);
+    var c = [s1, s2, s3].filter(function (x) { return x && (ALIAS[x] || SYN[x] || MEMBER_OF[x]); })[0];
+    return c ? (ALIAS[c] || c) : a;
+  };
+  // true when two words are the same up to one typo (only for words of 5+ letters, so short words never match by accident)
+  var near = function (a, b) {
+    if (a === b) return true; if (a.length < 5 || b.length < 5 || Math.abs(a.length - b.length) > 1) return false;
+    var i = 0, j = 0, d = 0;
+    while (i < a.length && j < b.length) {
+      if (a[i] === b[j]) { i++; j++; continue; }
+      if (++d > 1) return false;
+      if (a.length === b.length) { i++; j++; } else if (a.length > b.length) i++; else j++;
+    }
+    return d + (a.length - i) + (b.length - j) <= 1;
+  };
+  var words = function (t) { return t.split(/[^a-z0-9]+/).filter(Boolean); };
+  // does ingredient `ing` name `w` (a canonical word / phrase of family `key`)?
+  var named = function (ing, w, key) {
+    var ex = EXCL[key] || [];
+    for (var e = 0; e < ex.length; e++) if (ing.indexOf(ex[e]) > -1) return false;
+    if (ing === w) return true;
+    var tk = words(ing);
+    if (w.length < 4) return tk.indexOf(w) > -1;
+    if (ing.indexOf(w) > -1) return true;
+    if (ing.length >= 4 && w.indexOf(ing) > -1) return true;
+    if (w.indexOf(' ') < 0) { for (var k = 0; k < tk.length; k++) if (near(tk[k], w)) return true; }
+    return false;
+  };
   function allergyHits(p, tags, ings) {
-    var out = [];
-    (p.allergies || []).forEach(function (raw) {
+    var out = [], strict = !!(p && p.strict);
+    ((p && p.allergies) || []).forEach(function (raw) {
       var a = canon(raw); if (!a) return;
-      var words = [a].concat(SYN[a] || []);
-      var hit = tags.indexOf(a) > -1 || words.some(function (w) { return ings.some(function (i) { return i === w || (w.length >= 4 && i.indexOf(w) > -1) || (i.length >= 4 && w.indexOf(i) > -1); }); });
-      if (hit) out.push(raw);
+      var ws = [a].concat(SYN[a] || []);
+      var direct = tags.indexOf(a) > -1 || tags.some(function (t) { return ws.indexOf(t) > -1; }) || ws.some(function (w) { return ings.some(function (i) { return named(i, w, a); }); });
+      var via = false;
+      if (!direct) {
+        var fam = (MEMBER_OF[a] || []).concat(SYN[a] ? [a] : []).filter(function (g, k, arr) { return arr.indexOf(g) === k; });
+        var tagged = fam.filter(function (g) { return tags.indexOf(g) > -1; });
+        if (tagged.length) via = strict || !tagged.some(function (g) { return (SYN[g] || []).some(function (m) { return ings.some(function (i) { return named(i, m, g); }); }); });
+      }
+      if (direct || via) out.push(raw);
     });
     return out;
   }
   function dislikeHits(p, tags, ings) {
-    return (p.dislikes || []).filter(function (raw) { var d = canon(raw); return d && (ings.some(function (i) { return i.indexOf(d) > -1 || (d.length > 3 && d.indexOf(i) > -1 && i.length > 3); }) || tags.indexOf(d) > -1); });
+    return ((p && p.dislikes) || []).filter(function (raw) {
+      var d = canon(raw); if (!d) return false;
+      var ws = [d].concat(SYN[d] || []);
+      return tags.indexOf(d) > -1 || ws.some(function (w) { return ings.some(function (i) { return named(i, w, d); }); });
+    });
   }
+  if (location.protocol === 'file:') window.KX_TEST = { allergyHits: allergyHits, dislikeHits: dislikeHits, canon: canon };   // local preview only (used by the tests)
   // The profile that applies right now: the account holder's, or the person the order is being built for (family members have their own allergies and dislikes)
+  function strictFlag(f) { var inf = (f && f.info) || {}; return inf.cross === 'estricto' || inf.severity === 'anafilaxia'; }
   function effectiveProfile() {
     // allergy and dislike warnings belong to a signed-in, onboarded account: a visitor who is not signed in never sees them (even if the browser still holds an old profile)
     if (!$('#kx-account')) return { allergies: [], dislikes: [], diets: [], people: [] };
-    var p = loadProfile(), f = readFunnel();
-    if (f && f.para && p.people) { var who = p.people.filter(function (x) { return x.id === f.para; })[0]; if (who) return { allergies: who.allergies || [], dislikes: who.dislikes || [], diets: who.diets || [], name: who.name, people: p.people }; }
+    var p = loadProfile(), f = readFunnel(); p.strict = strictFlag(f);
+    if (f && f.para && p.people) { var who = p.people.filter(function (x) { return x.id === f.para; })[0]; if (who) return { strict: p.strict, allergies: who.allergies || [], dislikes: who.dislikes || [], diets: who.diets || [], name: who.name, people: p.people }; }
     return p;
   }
   function applyProfile() {
@@ -24699,6 +24827,60 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       saveProfile(p); applyProfile();
       var msg = $('[data-profile-msg]', form);
       if (msg) { msg.hidden = false; }
+    });
+  }
+
+  /* ---------- dropdowns: a row of chips becomes one styled select (the chips stay in the page, hidden, so the filters and deep links keep working) ---------- */
+  function initDropdowns() {
+    $$('[data-dropdown]').forEach(function (src, idx) {
+      if (src.getAttribute('data-dd-ready')) return; src.setAttribute('data-dd-ready', '1');
+      var multi = src.getAttribute('data-dropdown') === 'multi', chips = $$('button.chip', src);
+      if (!chips.length) return;
+      var lab = src.getAttribute('data-dd-label') || '', allT = src.getAttribute('data-dd-all') || '', nT = src.getAttribute('data-dd-n') || '{n}', clrT = src.getAttribute('data-dd-clear') || '';
+      var id = 'dd-' + idx, wrap = document.createElement('div'); wrap.className = 'dd' + (multi ? ' dd--multi' : '');
+      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'dd__btn'; btn.setAttribute('aria-haspopup', 'listbox'); btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-controls', id);
+      var l1 = document.createElement('span'); l1.className = 'dd__lab'; l1.textContent = lab; var l2 = document.createElement('span'); l2.className = 'dd__val'; var l3 = document.createElement('span'); l3.className = 'dd__chev'; l3.setAttribute('aria-hidden', 'true');
+      if (lab) btn.appendChild(l1); btn.appendChild(l2); btn.appendChild(l3);
+      var list = document.createElement('div'); list.className = 'dd__list'; list.id = id; list.setAttribute('role', 'listbox'); list.hidden = true; if (multi) list.setAttribute('aria-multiselectable', 'true'); if (lab) list.setAttribute('aria-label', lab);
+      var clr = null;
+      if (multi && clrT) { clr = document.createElement('button'); clr.type = 'button'; clr.className = 'dd__clear'; clr.textContent = clrT; list.appendChild(clr); }
+      var opts = chips.map(function (ch) {
+        var o = document.createElement('button'); o.type = 'button'; o.className = 'dd__opt'; o.setAttribute('role', 'option'); o.setAttribute('data-value', ch.getAttribute('data-value') || ch.getAttribute('data-dchip') || '');
+        var tick = document.createElement('span'); tick.className = 'dd__tick'; tick.setAttribute('aria-hidden', 'true'); var t = document.createElement('span'); t.className = 'dd__t'; t.textContent = ch.textContent.trim();
+        o.appendChild(tick); o.appendChild(t); list.appendChild(o);
+        o.addEventListener('click', function () { ch.click(); sync(); if (!multi) close(true); });
+        return o;
+      });
+      wrap.appendChild(btn); wrap.appendChild(list); src.parentNode.insertBefore(wrap, src); src.classList.add('dd-src'); src.setAttribute('aria-hidden', 'true'); chips.forEach(function (c) { c.tabIndex = -1; });
+      var pressed = function (ch) { return ch.getAttribute('aria-pressed') === 'true'; };
+      var sync = function () {
+        var on = chips.filter(pressed);
+        opts.forEach(function (o, k) { var p = pressed(chips[k]); o.setAttribute('aria-selected', p ? 'true' : 'false'); o.classList.toggle('is-on', p); });
+        l2.textContent = multi ? (on.length === 0 ? allT : on.length === 1 ? on[0].textContent.trim() : nT.replace('{n}', on.length)) : (on[0] || chips[0]).textContent.trim();
+        wrap.classList.toggle('has-value', multi ? on.length > 0 : (on[0] && chips.indexOf(on[0]) > 0));
+        if (clr) clr.hidden = on.length === 0;
+      };
+      var isOpen = function () { return !list.hidden; };
+      var open = function () {
+        $$('.dd.is-open').forEach(function (w) { if (w !== wrap) { var b2 = w.querySelector('.dd__btn'); if (b2) b2.click(); } });
+        list.hidden = false; wrap.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true');
+        var r = btn.getBoundingClientRect(), room = window.innerHeight - r.bottom; wrap.classList.toggle('dd--up', room < 300 && r.top > room);
+        var sel = list.querySelector('.dd__opt.is-on') || list.querySelector('.dd__opt'); if (sel) sel.scrollIntoView({ block: 'nearest' });
+      };
+      var close = function (focusBtn) { if (!isOpen()) return; list.hidden = true; wrap.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); if (focusBtn) btn.focus(); };
+      btn.addEventListener('click', function () { if (isOpen()) close(false); else open(); });
+      btn.addEventListener('keydown', function (e) { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); if (!isOpen()) open(); var s = list.querySelector('.dd__opt.is-on') || list.querySelector('.dd__opt'); if (s) s.focus(); } });
+      list.addEventListener('keydown', function (e) {
+        var all = $$('.dd__opt', list), k = all.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') { e.preventDefault(); (all[Math.min(all.length - 1, k + 1)] || all[0]).focus(); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); (all[Math.max(0, k - 1)] || all[0]).focus(); }
+        else if (e.key === 'Home') { e.preventDefault(); all[0].focus(); } else if (e.key === 'End') { e.preventDefault(); all[all.length - 1].focus(); }
+        else if (e.key === 'Escape') { e.preventDefault(); close(true); } else if (e.key === 'Tab') close(false);
+      });
+      if (clr) clr.addEventListener('click', function () { chips.filter(pressed).forEach(function (c) { c.click(); }); sync(); });
+      document.addEventListener('click', function (e) { if (isOpen() && !wrap.contains(e.target) && !src.contains(e.target)) close(false); });
+      if (window.MutationObserver) new MutationObserver(sync).observe(src, { attributes: true, attributeFilter: ['aria-pressed'], subtree: true });
+      sync();
     });
   }
 
@@ -25205,7 +25387,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     var dayNames = (T_('days') || 'Lun,Mar,Mié,Jue,Vie').split(',');
     var upg = function (n) { return +root.getAttribute('data-upg-' + n) || 70 * n; };
     var dishes = $$('[data-mw-dishes] li', root).map(function (li) { return { pid: li.getAttribute('data-pid'), title: li.getAttribute('data-title'), label: li.getAttribute('data-label') || li.getAttribute('data-title'), tier: li.getAttribute('data-tier'), al: (li.getAttribute('data-allergens') || '').split('|').filter(Boolean), ing: (li.getAttribute('data-ingredients') || '').split('|').filter(Boolean) }; });
-    var prof = loadProfile();
+    var prof = loadProfile(); prof.strict = strictFlag(readFunnel());
     var warnOf = function (d) { return allergyHits(prof, d.al.map(norm), d.ing.map(norm)); };
     var level = function (d) { return d ? Math.max(0, Math.min(3, rank(d.tier))) : 0; };   // every plan starts at the Selecto base
     var byTitle = function (t) { return dishes.filter(function (d) { return d.title === t; })[0]; };
@@ -26377,7 +26559,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
