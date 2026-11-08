@@ -3489,6 +3489,16 @@ section:has(.dd.is-open){position:relative;z-index:30}
 @media (max-width:760px){.menu-shell .filter-sticky{width:100%;flex-wrap:wrap;pointer-events:auto}.menu-shell .filter-sticky .dd{flex:1 1 100%}}
 .menu-shell .filter-sticky{opacity:1 !important;transform:none !important;transition:none}
 
+/* v82 — service area: one honest line wherever someone could order */
+.svc-badge{display:inline-flex;align-items:center;gap:10px;margin:10px 0 0;padding:7px 14px 7px 12px;border:1px solid var(--border-accent);border-radius:999px;background:var(--accent-wash);font-size:.78rem;line-height:1.35;color:var(--text);max-width:100%}
+.svc-badge__pin{flex:none;width:9px;height:9px;border-radius:50% 50% 50% 0;background:var(--accent);transform:rotate(-45deg);box-shadow:0 0 0 3px var(--accent-wash)}
+.svc-badge--hero{margin-top:14px;background:rgba(0,0,0,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.hero__copy .svc-badge{justify-self:center}
+.footer-grid .svc-badge{margin-top:var(--space-md);border-radius:14px}
+.fn-rules__head .svc-badge{margin-top:8px}
+.svc-note{margin:0 0 var(--space-md);padding:12px 14px;border-left:2px solid var(--accent);background:var(--accent-wash);border-radius:0 12px 12px 0;font-size:.84rem;color:var(--text)}
+@media (max-width:760px){.svc-badge{font-size:.74rem;border-radius:14px}}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -3862,7 +3872,8 @@ Fuego</span>
     </div>
     <div class="hero__copy">
       <span class="hero__rule" aria-hidden="true"></span>
-      <h1>Una semana, servida como <em>una pieza de autor.</em></h1><p class="hero__sub">Platillos preparados por chefs, adaptados a tu estilo de vida.</p><div class="hero__cta"><a class="arrow-link" href="#/pg/planes" data-order-cta data-returning-label="Elegir mi semana"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+      <h1>Una semana, servida como <em>una pieza de autor.</em></h1><p class="hero__sub">Platillos preparados por chefs, adaptados a tu estilo de vida.</p><p class="svc-badge svc-badge--hero"><span class="svc-badge__pin" aria-hidden="true"></span>Por ahora entregamos solo en Puebla y su área metropolitana.</p>
+<div class="hero__cta"><a class="arrow-link" href="#/pg/planes" data-order-cta data-returning-label="Elegir mi semana"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Haz tu pedido</a><a class="text-link" href="#/menu">Ver los especiales de la semana</a></div>
     </div>
   </div>
@@ -3936,7 +3947,8 @@ Fuego</span>
       <div class="funnel__main">
         <fieldset class="step is-on" data-fn-step="0">
           <legend class="fn-sr">Antes de empezar: así funciona tu plan</legend><div class="fn-rules" data-fn-rules>
-            <div class="fn-rules__head"><h3 class="fn-rules__title">Antes de empezar: así funciona tu plan</h3><p class="fn-rules__lede">Léelo completo, es lo que necesitas saber para pedir sin sorpresas.</p></div>
+            <div class="fn-rules__head"><h3 class="fn-rules__title">Antes de empezar: así funciona tu plan</h3><p class="fn-rules__lede">Léelo completo, es lo que necesitas saber para pedir sin sorpresas.</p><p class="svc-badge "><span class="svc-badge__pin" aria-hidden="true"></span>Por ahora entregamos solo en Puebla y su área metropolitana.</p>
+</div>
             <div class="fn-rules__carousel">
               <button class="fn-arrow fn-arrow--prev" type="button" data-fn-rules-arrow="-1" aria-label="Platillos anteriores">&#8249;</button>
               <div class="fn-rules__rail" data-fn-rules-rail><article class="fn-rcard"><b class="fn-rules__n">1</b><h4>Pagas una base al empezar</h4><p>En el plan de 4 semanas se cobra una base de $3,600 al inicio. Equivale a un presupuesto de unos $900 por semana.</p></article><article class="fn-rcard fn-rcard--signin" data-fn-rules-signin><b class="fn-rules__n">2</b><h4>Para armar tu semana, entras a tu cuenta</h4><p>Entras con tu correo: te llega un código y, si es tu primera vez, tu cuenta se crea sola. Después te hacemos unas preguntas (2 minutos), una sola vez.</p>
@@ -12567,7 +12579,8 @@ Pago digital, sin efectivo</li></ul>
       <div class="funnel__main">
         <fieldset class="step is-on" data-fn-step="0">
           <legend class="fn-sr">Antes de empezar: así funciona tu plan</legend><div class="fn-rules" data-fn-rules>
-            <div class="fn-rules__head"><h3 class="fn-rules__title">Antes de empezar: así funciona tu plan</h3><p class="fn-rules__lede">Léelo completo, es lo que necesitas saber para pedir sin sorpresas.</p></div>
+            <div class="fn-rules__head"><h3 class="fn-rules__title">Antes de empezar: así funciona tu plan</h3><p class="fn-rules__lede">Léelo completo, es lo que necesitas saber para pedir sin sorpresas.</p><p class="svc-badge "><span class="svc-badge__pin" aria-hidden="true"></span>Por ahora entregamos solo en Puebla y su área metropolitana.</p>
+</div>
             <div class="fn-rules__carousel">
               <button class="fn-arrow fn-arrow--prev" type="button" data-fn-rules-arrow="-1" aria-label="Platillos anteriores">&#8249;</button>
               <div class="fn-rules__rail" data-fn-rules-rail><article class="fn-rcard"><b class="fn-rules__n">1</b><h4>Pagas una base al empezar</h4><p>En el plan de 4 semanas se cobra una base de $3,600 al inicio. Equivale a un presupuesto de unos $900 por semana.</p></article><article class="fn-rcard fn-rcard--signin" data-fn-rules-signin><b class="fn-rules__n">2</b><h4>Para armar tu semana, entras a tu cuenta</h4><p>Entras con tu correo: te llega un código y, si es tu primera vez, tu cuenta se crea sola. Después te hacemos unas preguntas (2 minutos), una sola vez.</p>
@@ -13232,7 +13245,7 @@ Pago digital, sin efectivo</li></ul>
 
 </div><div id="pg-bienvenida--shopify-section-ob" class="shopify-section"><section class="section onboarding" data-onboarding data-next-url="/pages/pedido"
   data-t-welcome="Bienvenido, {n}" data-t-need-addr="Escribe tu calle, colonia o clúster, ciudad y código postal de 5 dígitos para poder entregarte." data-t-need-consent="Marca las tres confirmaciones para guardar tu perfil." data-t-need="Completa tu nombre, correo y teléfono."
-  data-t-stepof="Paso [n] de [t]" data-t-edit="Editar" data-t-empty="Sin responder" >
+  data-zip-prefixes="72" data-t-out="Todavía no llegamos a ese código postal: por ahora entregamos solo en Puebla y su área metropolitana. Escríbenos y te avisamos cuando lleguemos a tu zona." data-t-stepof="Paso [n] de [t]" data-t-edit="Editar" data-t-empty="Sin responder" >
   <div class="container ob-wrap">
     <a hidden tabindex="-1" aria-hidden="true" data-ob-week href="#/pg/cuenta-semana"></a><div class="ob-guest" data-ob-guest>
         <span class="ob-flame" aria-hidden="true"></span>
@@ -13279,6 +13292,7 @@ Pago digital, sin efectivo</li></ul>
 
         <fieldset class="step" data-ob-step="2">
           <legend>¿Dónde te entregamos?</legend>
+          <p class="svc-note">Por ahora entregamos solo en Puebla y su área metropolitana (códigos postales 72xxx). Si vives fuera, escríbenos y te avisamos cuando lleguemos.</p>
           <div class="form-grid">
             <div class="field"><label for="pg-bienvenida--ob-street">Calle y número de lote / casa</label><input class="input" id="pg-bienvenida--ob-street" data-ob="street" autocomplete="address-line1"></div>
             <div class="field"><label for="pg-bienvenida--ob-num">Número exterior e interior</label><input class="input" id="pg-bienvenida--ob-num" data-ob="num" autocomplete="address-line2"></div>
@@ -13772,7 +13786,8 @@ Pago digital, sin efectivo</li></ul>
     </div>
     <div class="hero__copy">
       <span class="hero__rule" aria-hidden="true"></span>
-      <h1>A week, served like <em>a signature piece.</em></h1><p class="hero__sub">Dishes prepared by chefs, tailored to your lifestyle.</p><div class="hero__cta"><a class="arrow-link" href="#/pg/planes" data-order-cta data-returning-label="Choose my week"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+      <h1>A week, served like <em>a signature piece.</em></h1><p class="hero__sub">Dishes prepared by chefs, tailored to your lifestyle.</p><p class="svc-badge svc-badge--hero"><span class="svc-badge__pin" aria-hidden="true"></span>For now we deliver only in Puebla and its metropolitan area.</p>
+<div class="hero__cta"><a class="arrow-link" href="#/pg/planes" data-order-cta data-returning-label="Choose my week"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Place your order</a><a class="text-link" href="#/menu">See this week's specials</a></div>
     </div>
   </div>
@@ -13846,7 +13861,8 @@ Pago digital, sin efectivo</li></ul>
       <div class="funnel__main">
         <fieldset class="step is-on" data-fn-step="0">
           <legend class="fn-sr">Before you start: how your plan works</legend><div class="fn-rules" data-fn-rules>
-            <div class="fn-rules__head"><h3 class="fn-rules__title">Before you start: how your plan works</h3><p class="fn-rules__lede">Read it all, it is what you need to know to order with no surprises.</p></div>
+            <div class="fn-rules__head"><h3 class="fn-rules__title">Before you start: how your plan works</h3><p class="fn-rules__lede">Read it all, it is what you need to know to order with no surprises.</p><p class="svc-badge "><span class="svc-badge__pin" aria-hidden="true"></span>For now we deliver only in Puebla and its metropolitan area.</p>
+</div>
             <div class="fn-rules__carousel">
               <button class="fn-arrow fn-arrow--prev" type="button" data-fn-rules-arrow="-1" aria-label="Previous dishes">&#8249;</button>
               <div class="fn-rules__rail" data-fn-rules-rail><article class="fn-rcard"><b class="fn-rules__n">1</b><h4>You pay a base upfront</h4><p>On the 4-week plan a base of $3,600 is charged at the start. It is a budget of about $900 per week.</p></article><article class="fn-rcard fn-rcard--signin" data-fn-rules-signin><b class="fn-rules__n">2</b><h4>To build your week, you sign in</h4><p>You sign in with your e-mail: you get a code and, if it is your first time, your account is created automatically. Then we ask a few questions (2 minutes), only once.</p>
@@ -22477,7 +22493,8 @@ Digital payment, no cash</li></ul>
       <div class="funnel__main">
         <fieldset class="step is-on" data-fn-step="0">
           <legend class="fn-sr">Before you start: how your plan works</legend><div class="fn-rules" data-fn-rules>
-            <div class="fn-rules__head"><h3 class="fn-rules__title">Before you start: how your plan works</h3><p class="fn-rules__lede">Read it all, it is what you need to know to order with no surprises.</p></div>
+            <div class="fn-rules__head"><h3 class="fn-rules__title">Before you start: how your plan works</h3><p class="fn-rules__lede">Read it all, it is what you need to know to order with no surprises.</p><p class="svc-badge "><span class="svc-badge__pin" aria-hidden="true"></span>For now we deliver only in Puebla and its metropolitan area.</p>
+</div>
             <div class="fn-rules__carousel">
               <button class="fn-arrow fn-arrow--prev" type="button" data-fn-rules-arrow="-1" aria-label="Previous dishes">&#8249;</button>
               <div class="fn-rules__rail" data-fn-rules-rail><article class="fn-rcard"><b class="fn-rules__n">1</b><h4>You pay a base upfront</h4><p>On the 4-week plan a base of $3,600 is charged at the start. It is a budget of about $900 per week.</p></article><article class="fn-rcard fn-rcard--signin" data-fn-rules-signin><b class="fn-rules__n">2</b><h4>To build your week, you sign in</h4><p>You sign in with your e-mail: you get a code and, if it is your first time, your account is created automatically. Then we ask a few questions (2 minutes), only once.</p>
@@ -23142,7 +23159,7 @@ Digital payment, no cash</li></ul>
 
 </div><div id="pg-bienvenida--shopify-section-ob" class="shopify-section"><section class="section onboarding" data-onboarding data-next-url="/pages/pedido"
   data-t-welcome="Welcome, {n}" data-t-need-addr="Write your street, neighborhood or cluster, city and a 5-digit postal code so we can deliver." data-t-need-consent="Tick the three confirmations to save your profile." data-t-need="Please complete your name, e-mail and phone."
-  data-t-stepof="Step [n] of [t]" data-t-edit="Edit" data-t-empty="Not answered" >
+  data-zip-prefixes="72" data-t-out="We do not reach that postal code yet: for now we deliver only in Puebla and its metropolitan area. Write to us and we will let you know when we reach your area." data-t-stepof="Step [n] of [t]" data-t-edit="Edit" data-t-empty="Not answered" >
   <div class="container ob-wrap">
     <a hidden tabindex="-1" aria-hidden="true" data-ob-week href="#/pg/cuenta-semana"></a><div class="ob-guest" data-ob-guest>
         <span class="ob-flame" aria-hidden="true"></span>
@@ -23189,6 +23206,7 @@ Digital payment, no cash</li></ul>
 
         <fieldset class="step" data-ob-step="2">
           <legend>Where do we deliver?</legend>
+          <p class="svc-note">For now we deliver only in Puebla and its metropolitan area (postal codes 72xxx). If you live elsewhere, write to us and we will let you know when we arrive.</p>
           <div class="form-grid">
             <div class="field"><label for="pg-bienvenida--ob-street">Street and lot / house number</label><input class="input" id="pg-bienvenida--ob-street" data-ob="street" autocomplete="address-line1"></div>
             <div class="field"><label for="pg-bienvenida--ob-num">Street number and apartment</label><input class="input" id="pg-bienvenida--ob-num" data-ob="num" autocomplete="address-line2"></div>
@@ -23683,6 +23701,8 @@ Digital payment, no cash</li></ul>
   <img class="logo logo--gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true" decoding="async">
   <img class="logo logo--fuego" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-fuego.webp" width="700" height="342" alt="" aria-hidden="true" decoding="async">
         <p class="text-muted" style="margin-top:var(--space-md);max-width:34ch">Servicio premium de comida saludable a domicilio, adaptada al estilo de vida de cada cliente.</p>
+        <p class="svc-badge "><span class="svc-badge__pin" aria-hidden="true"></span>Por ahora entregamos solo en Puebla y su área metropolitana.</p>
+
         <div class="social"><a href="https://www.instagram.com/kulinariamx" aria-label="Instagram" rel="noopener" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><circle cx="17.5" cy="6.5" r="0.9"/></svg>
 </a><a href="https://www.tiktok.com/" aria-label="TikTok" rel="noopener" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
 </a><a href="https://www.facebook.com/" aria-label="Facebook" rel="noopener" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
@@ -23725,6 +23745,8 @@ Digital payment, no cash</li></ul>
   <img class="logo logo--gold" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo.webp" width="700" height="342" alt="" aria-hidden="true" decoding="async">
   <img class="logo logo--fuego" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-fuego.webp" width="700" height="342" alt="" aria-hidden="true" decoding="async">
         <p class="text-muted" style="margin-top:var(--space-md);max-width:34ch">Premium healthy meal delivery, tailored to each client's lifestyle.</p>
+        <p class="svc-badge "><span class="svc-badge__pin" aria-hidden="true"></span>For now we deliver only in Puebla and its metropolitan area.</p>
+
         <div class="social"><a href="https://www.instagram.com/kulinariamx" aria-label="Instagram" rel="noopener" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><circle cx="17.5" cy="6.5" r="0.9"/></svg>
 </a><a href="https://www.tiktok.com/" aria-label="TikTok" rel="noopener" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
 </a><a href="https://www.facebook.com/" aria-label="Facebook" rel="noopener" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
@@ -25680,6 +25702,10 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     var stepOk = function (k) {
       if (k === 0 && !(val('name') && /.+@.+\..+/.test(val('email')) && val('phone').replace(/\D/g, '').length >= 8)) { say(root.getAttribute('data-t-need')); return false; }
       if (k === 1 && !(val('street') && val('cluster') && val('city') && /^\d{5}$/.test(val('zip').replace(/\s/g, '')))) { say(root.getAttribute('data-t-need-addr')); return false; }
+      if (k === 1) {                                                   // we only deliver inside the service area (postal-code prefixes set in the theme settings)
+        var pre = String(root.getAttribute('data-zip-prefixes') || '72').split(',').map(function (x) { return x.trim(); }).filter(Boolean), zp = val('zip').replace(/\s/g, '');
+        if (pre.length && !pre.some(function (x) { return zp.indexOf(x) === 0; })) { say(root.getAttribute('data-t-out')); return false; }
+      }
       return true;
     };
     nextB.addEventListener('click', function () {

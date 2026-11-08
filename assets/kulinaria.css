@@ -3434,7 +3434,6 @@ body .funnel.is-gated[data-step="3"] .fn-gate{max-width:none;width:100%}
   .dd__btn{min-height:56px}
   .dd__list{max-width:none;width:100%;max-height:min(60vh,420px)}
   body .menu-shell .filter-sticky{display:block}
-  body .menu-shell .filter-sticky .filter-count{display:block;margin-top:8px}
 }
 .dd.is-open{z-index:100}
 .menu-shell .filter-secondary{position:relative}
@@ -3468,3 +3467,5 @@ section:has(.dd.is-open){position:relative;z-index:30}
 .fn-rules__head .svc-badge{margin-top:8px}
 .svc-note{margin:0 0 var(--space-md);padding:12px 14px;border-left:2px solid var(--accent);background:var(--accent-wash);border-radius:0 12px 12px 0;font-size:.84rem;color:var(--text)}
 @media (max-width:760px){.svc-badge{font-size:.74rem;border-radius:14px}}
+
+@media (max-width:760px){body .menu-shell .filter-sticky .filter-count{display:none !important}body .menu-shell .filter-sticky{margin:0 0 18px !important}body .menu-shell .filter-sticky .dd{margin:0}}
