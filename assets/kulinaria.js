@@ -413,6 +413,60 @@
     });
   }
 
+  /* ---------- dropdowns: a row of chips becomes one styled select (the chips stay in the page, hidden, so the filters and deep links keep working) ---------- */
+  function initDropdowns() {
+    $$('[data-dropdown]').forEach(function (src, idx) {
+      if (src.getAttribute('data-dd-ready')) return; src.setAttribute('data-dd-ready', '1');
+      var multi = src.getAttribute('data-dropdown') === 'multi', chips = $$('button.chip', src);
+      if (!chips.length) return;
+      var lab = src.getAttribute('data-dd-label') || '', allT = src.getAttribute('data-dd-all') || '', nT = src.getAttribute('data-dd-n') || '{n}', clrT = src.getAttribute('data-dd-clear') || '';
+      var id = 'dd-' + idx, wrap = document.createElement('div'); wrap.className = 'dd' + (multi ? ' dd--multi' : '');
+      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'dd__btn'; btn.setAttribute('aria-haspopup', 'listbox'); btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-controls', id);
+      var l1 = document.createElement('span'); l1.className = 'dd__lab'; l1.textContent = lab; var l2 = document.createElement('span'); l2.className = 'dd__val'; var l3 = document.createElement('span'); l3.className = 'dd__chev'; l3.setAttribute('aria-hidden', 'true');
+      if (lab) btn.appendChild(l1); btn.appendChild(l2); btn.appendChild(l3);
+      var list = document.createElement('div'); list.className = 'dd__list'; list.id = id; list.setAttribute('role', 'listbox'); list.hidden = true; if (multi) list.setAttribute('aria-multiselectable', 'true'); if (lab) list.setAttribute('aria-label', lab);
+      var clr = null;
+      if (multi && clrT) { clr = document.createElement('button'); clr.type = 'button'; clr.className = 'dd__clear'; clr.textContent = clrT; list.appendChild(clr); }
+      var opts = chips.map(function (ch) {
+        var o = document.createElement('button'); o.type = 'button'; o.className = 'dd__opt'; o.setAttribute('role', 'option'); o.setAttribute('data-value', ch.getAttribute('data-value') || ch.getAttribute('data-dchip') || '');
+        var tick = document.createElement('span'); tick.className = 'dd__tick'; tick.setAttribute('aria-hidden', 'true'); var t = document.createElement('span'); t.className = 'dd__t'; t.textContent = ch.textContent.trim();
+        o.appendChild(tick); o.appendChild(t); list.appendChild(o);
+        o.addEventListener('click', function () { ch.click(); sync(); if (!multi) close(true); });
+        return o;
+      });
+      wrap.appendChild(btn); wrap.appendChild(list); src.parentNode.insertBefore(wrap, src); src.classList.add('dd-src'); src.setAttribute('aria-hidden', 'true'); chips.forEach(function (c) { c.tabIndex = -1; });
+      var pressed = function (ch) { return ch.getAttribute('aria-pressed') === 'true'; };
+      var sync = function () {
+        var on = chips.filter(pressed);
+        opts.forEach(function (o, k) { var p = pressed(chips[k]); o.setAttribute('aria-selected', p ? 'true' : 'false'); o.classList.toggle('is-on', p); });
+        l2.textContent = multi ? (on.length === 0 ? allT : on.length === 1 ? on[0].textContent.trim() : nT.replace('{n}', on.length)) : (on[0] || chips[0]).textContent.trim();
+        wrap.classList.toggle('has-value', multi ? on.length > 0 : (on[0] && chips.indexOf(on[0]) > 0));
+        if (clr) clr.hidden = on.length === 0;
+      };
+      var isOpen = function () { return !list.hidden; };
+      var open = function () {
+        $$('.dd.is-open').forEach(function (w) { if (w !== wrap) { var b2 = w.querySelector('.dd__btn'); if (b2) b2.click(); } });
+        list.hidden = false; wrap.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true');
+        var r = btn.getBoundingClientRect(), room = window.innerHeight - r.bottom; wrap.classList.toggle('dd--up', room < 300 && r.top > room);
+        var sel = list.querySelector('.dd__opt.is-on') || list.querySelector('.dd__opt'); if (sel) sel.scrollIntoView({ block: 'nearest' });
+      };
+      var close = function (focusBtn) { if (!isOpen()) return; list.hidden = true; wrap.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); if (focusBtn) btn.focus(); };
+      btn.addEventListener('click', function () { if (isOpen()) close(false); else open(); });
+      btn.addEventListener('keydown', function (e) { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); if (!isOpen()) open(); var s = list.querySelector('.dd__opt.is-on') || list.querySelector('.dd__opt'); if (s) s.focus(); } });
+      list.addEventListener('keydown', function (e) {
+        var all = $$('.dd__opt', list), k = all.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') { e.preventDefault(); (all[Math.min(all.length - 1, k + 1)] || all[0]).focus(); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); (all[Math.max(0, k - 1)] || all[0]).focus(); }
+        else if (e.key === 'Home') { e.preventDefault(); all[0].focus(); } else if (e.key === 'End') { e.preventDefault(); all[all.length - 1].focus(); }
+        else if (e.key === 'Escape') { e.preventDefault(); close(true); } else if (e.key === 'Tab') close(false);
+      });
+      if (clr) clr.addEventListener('click', function () { chips.filter(pressed).forEach(function (c) { c.click(); }); sync(); });
+      document.addEventListener('click', function (e) { if (isOpen() && !wrap.contains(e.target) && !src.contains(e.target)) close(false); });
+      if (window.MutationObserver) new MutationObserver(sync).observe(src, { attributes: true, attributeFilter: ['aria-pressed'], subtree: true });
+      sync();
+    });
+  }
+
   /* ---------- menu filters ---------- */
   function initFilters() {
     var bar = $('[data-filters]');
@@ -2088,7 +2142,7 @@
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

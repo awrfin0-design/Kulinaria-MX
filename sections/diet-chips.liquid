@@ -6,7 +6,7 @@
       {%- if tx_s_eyebrow != blank -%}<span class="eyebrow">{{ tx_s_eyebrow }}</span>{%- endif -%}
       <h2>{% render 'headline', text: tx_s_heading %}</h2>
     </div>
-    <div class="chips" data-dchips>
+    <div class="chips" data-dchips data-dropdown="multi" data-dd-label="{{ tx_s_eyebrow | escape }}" data-dd-all="{{ 'collection.dd_all' | t }}" data-dd-n="{{ 'collection.dd_n' | t }}" data-dd-clear="{{ 'collection.dd_clear' | t }}">
       {%- for block in section.blocks -%}{%- capture tx_b_label -%}{% render 'tx', s: block.settings.label %}{%- endcapture -%}
         <button class="chip" type="button" data-dchip="{{ block.settings.slug }}" aria-pressed="false" {{ block.shopify_attributes }}>{{ tx_b_label }}</button>
       {%- endfor -%}

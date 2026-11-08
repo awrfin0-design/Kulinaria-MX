@@ -86,9 +86,16 @@ for (const base of groups) {
 await page.goto(`${URL0}#/menu`); await page.waitForTimeout(150);
 const scope = '[data-page="menu"]';
 ok('menu shows the 9 dishes scheduled for this week (2 are planned for later weeks)', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 9);
-await page.click(`${scope} [data-filter="category"][data-value="al-fuego"]`);
+ok('the category row is a styled dropdown, not a sliding row of chips (chips stay in the page, hidden)', await page.evaluate((sc) => { const d = document.querySelector(sc + ' .filter-sticky .dd'); const src = document.querySelector(sc + ' [data-dropdown].dd-src'); return !!d && !!d.querySelector('.dd__btn') && getComputedStyle(src).display === 'none' && d.querySelectorAll('.dd__opt').length === 12 && /Todo|All/.test(d.querySelector('.dd__val').textContent); }, scope));
+await page.click(`${scope} .filter-sticky .dd__btn`); await page.waitForTimeout(250);
+ok('opening it lists all 12 groups in a solid panel that sits above the dishes', await page.evaluate((sc) => { const l = document.querySelector(sc + ' .filter-sticky .dd__list'); const r = l.getBoundingClientRect(); const top = document.elementFromPoint(r.left + r.width / 2, r.top + Math.min(r.height - 6, 60)); return !l.hidden && l.contains(top) && l.querySelectorAll('.dd__opt').length === 12 && getComputedStyle(l).backgroundColor !== 'rgba(0, 0, 0, 0)'; }, scope));
+await page.keyboard.press('Escape'); await page.waitForTimeout(150);
+ok('Escape closes the dropdown', await page.$eval(`${scope} .filter-sticky .dd__list`, (e) => e.hidden));
+await page.click(`${scope} .filter-sticky .dd__btn`); await page.waitForTimeout(200);
+await page.click(`${scope} .filter-sticky .dd__opt[data-value="al-fuego"]`); await page.waitForTimeout(200);
+ok('choosing an option closes the list, shows its name on the button and filters the menu', await page.evaluate((sc) => document.querySelector(sc + ' .filter-sticky .dd__list').hidden && /fuego/i.test(document.querySelector(sc + ' .filter-sticky .dd__val').textContent), scope));
 ok('category filter -> 3 dishes', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 3);
-await page.click(`${scope} [data-filter="category"][data-value="keto-low-carb"]`);
+await page.click(`${scope} .filter-sticky .dd__btn`); await page.click(`${scope} .filter-sticky .dd__opt[data-value="keto-low-carb"]`); await page.waitForTimeout(200);
 const ketoOk = await page.evaluate((sc) => { const v = [...document.querySelectorAll(sc + ' [data-dish]:not(.is-hidden)')]; return v.length > 0 && v.every((x) => /keto|bajo-carbos/.test(x.getAttribute('data-diets'))) && document.querySelector(sc + ' [data-count]').textContent.trim() === String(v.length); }, scope);
 ok('keto / low carb group shows only keto or low-carb dishes and the counter matches', ketoOk);
 ok('the 12 menu groups are offered (all + 11) and the old diet row is gone', await page.evaluate((sc) => document.querySelectorAll(sc + ' [data-filter="category"]').length === 12 && !document.querySelector(sc + ' [data-filter="diet"]'), scope));
@@ -99,7 +106,10 @@ ok('deep link ?dieta=vegano opens the Veggie group (vegetarian + vegan dishes on
 
 // ---- home diet chip deep-links into the filtered menu without reload
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(100);
-await page.evaluate(() => document.querySelector('[data-page="home"] [data-dchip="sin-gluten"]').click()); await page.waitForTimeout(250);
+ok('home: the lifestyle chips are one multi-select dropdown that starts on "all"', await page.evaluate(() => { const d = document.querySelector('[data-page="home"] .dd--multi'); return !!d && d.querySelectorAll('.dd__opt').length >= 5 && /Todos|All/.test(d.querySelector('.dd__val').textContent); }));
+await page.click('[data-page="home"] .dd--multi .dd__btn'); await page.click('[data-page="home"] .dd--multi .dd__opt[data-value="sin-gluten"]'); await page.waitForTimeout(250);
+ok('home: ticking an option keeps the list open (several can be ticked) and the button names it', await page.evaluate(() => { const d = document.querySelector('[data-page="home"] .dd--multi'); return !d.querySelector('.dd__list').hidden && /gluten/i.test(d.querySelector('.dd__val').textContent) && d.querySelector('.dd__opt[data-value="sin-gluten"]').getAttribute('aria-selected') === 'true'; }));
+await page.keyboard.press('Escape'); await page.waitForTimeout(150);
 { const n = await page.$$eval('[data-page="home"] [data-dc-grid] [data-dish]:not(.is-hidden)', (e) => e.map((x) => x.dataset.diets)); ok('home chips filter the dishes listed right below them (5 gluten-free dishes this week)', n.length === 5 && n.every((d) => d.split('|').includes('sin-gluten')), n.length + ' shown');
   await page.evaluate(() => document.querySelector('[data-page="home"] [data-dchip="vegano"]').click()); await page.waitForTimeout(200);
   const n2 = await page.$$eval('[data-page="home"] [data-dc-grid] [data-dish]:not(.is-hidden)', (e) => e.length);
@@ -439,7 +449,7 @@ for (const k of keys.filter((k) => !k.startsWith('p/') || k === 'p/salmon-costra
 ok('no Spanish UI strings leak into the English storefront', leaks.length === 0, leaks.join(' | '));
 await page.goto(`${URL0}#/menu`); await page.waitForTimeout(250);
 ok('menu filters are translated and still work in English', (await page.$eval('[data-page="menu"] [data-filter="category"][data-value="al-fuego"]', (b) => b.textContent.trim())) === "From the fire");
-await page.click('[data-page="menu"] [data-filter="category"][data-value="al-fuego"]');
+await page.click('[data-page="menu"] .filter-sticky .dd__btn'); await page.click('[data-page="menu"] .filter-sticky .dd__opt[data-value="al-fuego"]'); await page.waitForTimeout(200);
 ok('category filter works in English', (await page.$$eval('[data-page="menu"] [data-dish]:not(.is-hidden)', (e) => e.length)) === 3);
 await page.goto(`${URL0}#/pg/perfil`); await page.waitForTimeout(150);
 await page.check('[data-page="pg/perfil"] input[name="allergy"][value="Frutos secos"]'); await page.click('[data-page="pg/perfil"] button[type="submit"]'); await page.waitForTimeout(100);

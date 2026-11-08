@@ -201,6 +201,9 @@
     "sopas-y-entradas": "Sopas y Entradas"
   },
   "collection": {
+    "dd_all": "Todos",
+    "dd_n": "{n} seleccionados",
+    "dd_clear": "Limpiar",
     "all": "Todo",
     "all_plural": "Todos",
     "category": "Categoría",

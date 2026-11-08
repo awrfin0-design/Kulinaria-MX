@@ -27,7 +27,7 @@
           <p class="season-note" data-season-note hidden>{{ 'season.note' | t }}</p>
         {%- endif -%}
         <div class="filter-sticky">
-          <div class="chips" role="group" aria-label="{{ 'collection.category' | t }}">
+          <div class="chips" role="group" aria-label="{{ 'collection.category' | t }}" data-dropdown="single" data-dd-label="{{ 'collection.category' | t }}">
             <button class="chip" type="button" data-filter="category" data-value="all" aria-pressed="true">{{ 'menu_group.all' | t }}</button>
             {%- for c in cats -%}{%- assign ck = 'menu_group.' | append: c -%}
               <button class="chip" type="button" data-filter="category" data-value="{{ c }}" aria-pressed="false">{{ ck | t }}</button>
@@ -39,7 +39,7 @@
         <div class="filter-secondary">
           <div class="filter-bar__row">
             <span class="filter-bar__label">{{ 'collection.level' | t }}</span>
-            <div class="chips">
+            <div class="chips" data-dropdown="single" data-dd-label="{{ 'collection.level' | t }}">
               <button class="chip" type="button" data-filter="tier" data-value="all" aria-pressed="true">{{ 'collection.all_plural' | t }}</button>
               {%- for tr in tiers -%}{%- assign tk = 'tier.' | append: tr -%}
                 <button class="chip" type="button" data-filter="tier" data-value="{{ tr }}" aria-pressed="false">{{ tk | t }}</button>

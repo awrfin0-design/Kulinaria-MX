@@ -201,6 +201,9 @@
     "sopas-y-entradas": "Soups & Starters"
   },
   "collection": {
+    "dd_all": "All",
+    "dd_n": "{n} selected",
+    "dd_clear": "Clear",
     "all": "All",
     "all_plural": "All",
     "category": "Category",

@@ -3422,6 +3422,61 @@ body .funnel.is-gated[data-step="3"] .fn-gate{max-width:none;width:100%}
 .hub__kv div:nth-child(2) dd{white-space:nowrap;letter-spacing:.04em;font-size:clamp(1.1rem,3.2vw,1.5rem)}
 .hub__kv dt{white-space:normal}
 
+/* =====================================================================
+   v80 — dropdowns (menu category / level, home lifestyle filter): one styled select instead of a sliding row of chips
+   ===================================================================== */
+.dd-src{display:none !important}
+.dd{position:relative;display:inline-block;min-width:min(100%,250px);max-width:100%}
+.dd__btn{display:flex;align-items:center;gap:14px;width:100%;padding:9px 10px 9px 22px;border:1.5px solid var(--border-accent);border-radius:999px;background:linear-gradient(180deg,color-mix(in srgb,var(--bg-raised) 92%,transparent),color-mix(in srgb,var(--bg-base) 80%,var(--bg-raised)));color:var(--text);text-align:left;cursor:pointer;min-height:54px;transition:border-color .2s,box-shadow .25s,transform .2s}
+.dd__btn:hover{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-wash)}
+.dd__btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.dd__btn[aria-expanded="true"]{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-wash),0 14px 30px -18px rgba(0,0,0,.6)}
+.dd__lab{flex:none;padding-right:14px;border-right:1px solid var(--line);font:700 .6rem var(--font-label);letter-spacing:.18em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.dd__val{flex:1;min-width:0;font-family:var(--font-display,var(--font-heading));font-size:1.1rem;font-weight:500;letter-spacing:-.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dd:not(.has-value) .dd__val{color:var(--text-muted)}
+.dd__chev{flex:none;position:relative;width:34px;height:34px;border-radius:50%;border:1px solid var(--border-accent);background:var(--accent-wash);transition:background .2s,transform .3s}
+.dd__chev::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;border:solid var(--accent);border-width:0 2px 2px 0;transform:translate(-50%,-70%) rotate(45deg);transition:border-color .2s}
+.dd__btn:hover .dd__chev,.dd__btn[aria-expanded="true"] .dd__chev{background:var(--accent)}
+.dd__btn:hover .dd__chev::after,.dd__btn[aria-expanded="true"] .dd__chev::after{border-color:var(--bg-base)}
+.dd__btn[aria-expanded="true"] .dd__chev{transform:rotate(180deg)}
+.dd__list{position:absolute;z-index:80;top:calc(100% + 10px);left:0;min-width:100%;width:max-content;max-width:min(92vw,380px);max-height:min(66vh,440px);overflow-y:auto;overscroll-behavior:auto;padding:8px;border-radius:22px;border:1px solid var(--border-accent);background:color-mix(in srgb,var(--bg-raised) 95%,transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 34px 70px -24px rgba(0,0,0,.75),0 0 0 1px var(--line);animation:ddIn .2s cubic-bezier(.2,.7,.2,1);scrollbar-width:thin;scrollbar-color:var(--border-accent) transparent}
+.dd__list[hidden]{display:none}
+.dd--up .dd__list{top:auto;bottom:calc(100% + 10px)}
+@keyframes ddIn{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+.dd__opt{display:flex;align-items:center;gap:14px;width:100%;padding:12px 14px;border:0;border-radius:14px;background:none;color:var(--text);font:500 .95rem var(--font-body,inherit);text-align:left;cursor:pointer;transition:background .15s}
+.dd__opt:hover,.dd__opt:focus-visible{background:var(--accent-wash);outline:none}
+.dd__tick{flex:none;position:relative;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);transition:background .15s,border-color .15s}
+.dd--multi .dd__tick{border-radius:6px}
+.dd__opt.is-on .dd__tick{background:var(--accent);border-color:var(--accent)}
+.dd__opt.is-on .dd__tick::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid var(--bg-base);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.dd__opt.is-on .dd__t{font-weight:700}
+.dd__clear{display:block;margin:2px 6px 6px auto;padding:6px 12px;border:0;background:none;color:var(--accent);font:700 .66rem var(--font-label);letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.dd__clear[hidden]{display:none}
+/* where they live */
+.filter-sticky{padding:10px 14px;gap:16px;flex-wrap:wrap}
+.filter-sticky .dd{flex:1 1 280px;max-width:420px}
+.filter-bar__row:has(.dd) .filter-bar__label{display:none}
+.filter-secondary .dd{min-width:min(100%,230px)}
+[data-dchips].dd-src + *,.dd + [data-dchips]{margin:0}
+.section .container > .dd{margin-bottom:var(--space-md)}
+@media (max-width:760px){
+  .dd,.filter-sticky .dd{display:block;width:100%;max-width:none;flex:1 1 100%}
+  .dd__btn{min-height:56px}
+  .dd__list{max-width:none;width:100%;max-height:min(60vh,420px)}
+  body .menu-shell .filter-sticky{display:block}
+  body .menu-shell .filter-sticky .filter-count{display:block;margin-top:8px}
+}
+.dd.is-open{z-index:100}
+.menu-shell .filter-sticky,.menu-shell .filter-secondary,.diet-chips__top,[data-dchips] + .dd{position:relative}
+.menu-shell .filter-sticky{z-index:60}.menu-shell .filter-secondary{z-index:55}
+body .menu-shell .filter-sticky{position:relative;z-index:60}
+.dd:has(.dd__list:not([hidden])){z-index:100}
+section:has(.dd.is-open){position:relative;z-index:30}
+.dd__list{background:var(--bg-raised) !important;max-height:min(78vh,540px);scrollbar-width:none}
+.dd__list::-webkit-scrollbar{display:none}
+.dd__opt{padding:10px 14px}
+@media (max-width:760px){.dd__list{max-height:min(70vh,520px)}}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -4700,7 +4755,7 @@ Fuego</span>
   <div class="container">
     <div class="section__head"><span class="eyebrow">Enfoque nutricional</span><h2>Filtra el menú según tu <em>estilo de vida</em></h2>
     </div>
-    <div class="chips" data-dchips><button class="chip" type="button" data-dchip="keto" aria-pressed="false" >Keto</button><button class="chip" type="button" data-dchip="sin-gluten" aria-pressed="false" >Libre de gluten</button><button class="chip" type="button" data-dchip="vegetariano" aria-pressed="false" >Vegetariano</button><button class="chip" type="button" data-dchip="vegano" aria-pressed="false" >Basado en plantas / Vegano</button><button class="chip" type="button" data-dchip="bajo-calorias" aria-pressed="false" >Bajas calorías</button><button class="chip" type="button" data-dchip="bajo-carbos" aria-pressed="false" >Bajos carbohidratos</button><button class="chip" type="button" data-dchip="alto-proteina" aria-pressed="false" >Alta proteína / Rendimiento</button></div>
+    <div class="chips" data-dchips data-dropdown="multi" data-dd-label="Enfoque nutricional" data-dd-all="Todos" data-dd-n="{n} seleccionados" data-dd-clear="Limpiar"><button class="chip" type="button" data-dchip="keto" aria-pressed="false" >Keto</button><button class="chip" type="button" data-dchip="sin-gluten" aria-pressed="false" >Libre de gluten</button><button class="chip" type="button" data-dchip="vegetariano" aria-pressed="false" >Vegetariano</button><button class="chip" type="button" data-dchip="vegano" aria-pressed="false" >Basado en plantas / Vegano</button><button class="chip" type="button" data-dchip="bajo-calorias" aria-pressed="false" >Bajas calorías</button><button class="chip" type="button" data-dchip="bajo-carbos" aria-pressed="false" >Bajos carbohidratos</button><button class="chip" type="button" data-dchip="alto-proteina" aria-pressed="false" >Alta proteína / Rendimiento</button></div>
     <p class="dc-count" data-dc-count data-t="[n] platillos" aria-live="polite"></p>
     <div class="dc-grid" data-dc-grid><article class="dish" data-dish data-has-detail
   data-category="diario-premium" data-tier="selecto"
@@ -5086,7 +5141,7 @@ Pago digital, sin efectivo</li></ul>
             <button class="season-pill season-pill--s" type="button" data-filter="season" data-value="season" aria-pressed="false">&#10022; De temporada <small>Edición limitada</small></button>
           </div>
           <p class="season-note" data-season-note hidden>Platillos de edición limitada: salen cuando la temporada y el clima lo permiten (chiles en nogada, calabaza de otoño, pavo de diciembre…) y se acaban cuando se acaba el ingrediente.</p><div class="filter-sticky">
-          <div class="chips" role="group" aria-label="Categoría">
+          <div class="chips" role="group" aria-label="Categoría" data-dropdown="single" data-dd-label="Categoría">
             <button class="chip" type="button" data-filter="category" data-value="all" aria-pressed="true">Todo</button><button class="chip" type="button" data-filter="category" data-value="al-fuego" aria-pressed="false">Al fuego</button><button class="chip" type="button" data-filter="category" data-value="desayunos" aria-pressed="false">Desayunos</button><button class="chip" type="button" data-filter="category" data-value="bowls" aria-pressed="false">Bowls</button><button class="chip" type="button" data-filter="category" data-value="diario" aria-pressed="false">Diario</button><button class="chip" type="button" data-filter="category" data-value="keto-low-carb" aria-pressed="false">Keto / Low carb</button><button class="chip" type="button" data-filter="category" data-value="fit-proteina" aria-pressed="false">Fit / Proteína</button><button class="chip" type="button" data-filter="category" data-value="veggie" aria-pressed="false">Veggie</button><button class="chip" type="button" data-filter="category" data-value="sin-gluten" aria-pressed="false">Sin gluten</button><button class="chip" type="button" data-filter="category" data-value="junior" aria-pressed="false">Junior</button><button class="chip" type="button" data-filter="category" data-value="entradas" aria-pressed="false">Entradas</button><button class="chip" type="button" data-filter="category" data-value="snacks-postres" aria-pressed="false">Snacks y postres</button></div>
           <span class="filter-count"><strong data-count>11</strong> platillos</span>
         </div>
@@ -5094,7 +5149,7 @@ Pago digital, sin efectivo</li></ul>
         <div class="filter-secondary">
           <div class="filter-bar__row">
             <span class="filter-bar__label">Nivel</span>
-            <div class="chips">
+            <div class="chips" data-dropdown="single" data-dd-label="Nivel">
               <button class="chip" type="button" data-filter="tier" data-value="all" aria-pressed="true">Todos</button><button class="chip" type="button" data-filter="tier" data-value="selecto" aria-pressed="false">Selecto</button><button class="chip" type="button" data-filter="tier" data-value="exclusivo" aria-pressed="false">Exclusivo $</button><button class="chip" type="button" data-filter="tier" data-value="signature" aria-pressed="false">Signature $$</button><button class="chip" type="button" data-filter="tier" data-value="reserve" aria-pressed="false">Reserve $$$</button></div>
           </div></div>
 
@@ -14930,7 +14985,7 @@ Pago digital, sin efectivo</li></ul>
   <div class="container">
     <div class="section__head"><span class="eyebrow">Nutritional focus</span><h2>Filter the menu to <em>fit your lifestyle</em></h2>
     </div>
-    <div class="chips" data-dchips><button class="chip" type="button" data-dchip="keto" aria-pressed="false" >Keto</button><button class="chip" type="button" data-dchip="sin-gluten" aria-pressed="false" >Gluten-free</button><button class="chip" type="button" data-dchip="vegetariano" aria-pressed="false" >Vegetarian</button><button class="chip" type="button" data-dchip="vegano" aria-pressed="false" >Plant-based / Vegan</button><button class="chip" type="button" data-dchip="bajo-calorias" aria-pressed="false" >Low calorie</button><button class="chip" type="button" data-dchip="bajo-carbos" aria-pressed="false" >Low carb</button><button class="chip" type="button" data-dchip="alto-proteina" aria-pressed="false" >High protein / Performance</button></div>
+    <div class="chips" data-dchips data-dropdown="multi" data-dd-label="Nutritional focus" data-dd-all="All" data-dd-n="{n} selected" data-dd-clear="Clear"><button class="chip" type="button" data-dchip="keto" aria-pressed="false" >Keto</button><button class="chip" type="button" data-dchip="sin-gluten" aria-pressed="false" >Gluten-free</button><button class="chip" type="button" data-dchip="vegetariano" aria-pressed="false" >Vegetarian</button><button class="chip" type="button" data-dchip="vegano" aria-pressed="false" >Plant-based / Vegan</button><button class="chip" type="button" data-dchip="bajo-calorias" aria-pressed="false" >Low calorie</button><button class="chip" type="button" data-dchip="bajo-carbos" aria-pressed="false" >Low carb</button><button class="chip" type="button" data-dchip="alto-proteina" aria-pressed="false" >High protein / Performance</button></div>
     <p class="dc-count" data-dc-count data-t="[n] dishes" aria-live="polite"></p>
     <div class="dc-grid" data-dc-grid><article class="dish" data-dish data-has-detail
   data-category="diario-premium" data-tier="selecto"
@@ -15316,7 +15371,7 @@ Digital payment, no cash</li></ul>
             <button class="season-pill season-pill--s" type="button" data-filter="season" data-value="season" aria-pressed="false">&#10022; Seasonal <small>Limited edition</small></button>
           </div>
           <p class="season-note" data-season-note hidden>Limited-edition dishes: they appear when the season and the weather allow (chiles en nogada, autumn pumpkin, December turkey…) and they are gone when the ingredient is gone.</p><div class="filter-sticky">
-          <div class="chips" role="group" aria-label="Category">
+          <div class="chips" role="group" aria-label="Category" data-dropdown="single" data-dd-label="Category">
             <button class="chip" type="button" data-filter="category" data-value="all" aria-pressed="true">All</button><button class="chip" type="button" data-filter="category" data-value="al-fuego" aria-pressed="false">From the fire</button><button class="chip" type="button" data-filter="category" data-value="desayunos" aria-pressed="false">Breakfasts</button><button class="chip" type="button" data-filter="category" data-value="bowls" aria-pressed="false">Bowls</button><button class="chip" type="button" data-filter="category" data-value="diario" aria-pressed="false">Daily</button><button class="chip" type="button" data-filter="category" data-value="keto-low-carb" aria-pressed="false">Keto / Low carb</button><button class="chip" type="button" data-filter="category" data-value="fit-proteina" aria-pressed="false">Fit / Protein</button><button class="chip" type="button" data-filter="category" data-value="veggie" aria-pressed="false">Veggie</button><button class="chip" type="button" data-filter="category" data-value="sin-gluten" aria-pressed="false">Gluten-free</button><button class="chip" type="button" data-filter="category" data-value="junior" aria-pressed="false">Junior</button><button class="chip" type="button" data-filter="category" data-value="entradas" aria-pressed="false">Starters</button><button class="chip" type="button" data-filter="category" data-value="snacks-postres" aria-pressed="false">Snacks & desserts</button></div>
           <span class="filter-count"><strong data-count>11</strong> dishes</span>
         </div>
@@ -15324,7 +15379,7 @@ Digital payment, no cash</li></ul>
         <div class="filter-secondary">
           <div class="filter-bar__row">
             <span class="filter-bar__label">Level</span>
-            <div class="chips">
+            <div class="chips" data-dropdown="single" data-dd-label="Level">
               <button class="chip" type="button" data-filter="tier" data-value="all" aria-pressed="true">All</button><button class="chip" type="button" data-filter="tier" data-value="selecto" aria-pressed="false">Selecto</button><button class="chip" type="button" data-filter="tier" data-value="exclusivo" aria-pressed="false">Exclusivo $</button><button class="chip" type="button" data-filter="tier" data-value="signature" aria-pressed="false">Signature $$</button><button class="chip" type="button" data-filter="tier" data-value="reserve" aria-pressed="false">Reserve $$$</button></div>
           </div></div>
 
@@ -25433,6 +25488,60 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     });
   }
 
+  /* ---------- dropdowns: a row of chips becomes one styled select (the chips stay in the page, hidden, so the filters and deep links keep working) ---------- */
+  function initDropdowns() {
+    $$('[data-dropdown]').forEach(function (src, idx) {
+      if (src.getAttribute('data-dd-ready')) return; src.setAttribute('data-dd-ready', '1');
+      var multi = src.getAttribute('data-dropdown') === 'multi', chips = $$('button.chip', src);
+      if (!chips.length) return;
+      var lab = src.getAttribute('data-dd-label') || '', allT = src.getAttribute('data-dd-all') || '', nT = src.getAttribute('data-dd-n') || '{n}', clrT = src.getAttribute('data-dd-clear') || '';
+      var id = 'dd-' + idx, wrap = document.createElement('div'); wrap.className = 'dd' + (multi ? ' dd--multi' : '');
+      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'dd__btn'; btn.setAttribute('aria-haspopup', 'listbox'); btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-controls', id);
+      var l1 = document.createElement('span'); l1.className = 'dd__lab'; l1.textContent = lab; var l2 = document.createElement('span'); l2.className = 'dd__val'; var l3 = document.createElement('span'); l3.className = 'dd__chev'; l3.setAttribute('aria-hidden', 'true');
+      if (lab) btn.appendChild(l1); btn.appendChild(l2); btn.appendChild(l3);
+      var list = document.createElement('div'); list.className = 'dd__list'; list.id = id; list.setAttribute('role', 'listbox'); list.hidden = true; if (multi) list.setAttribute('aria-multiselectable', 'true'); if (lab) list.setAttribute('aria-label', lab);
+      var clr = null;
+      if (multi && clrT) { clr = document.createElement('button'); clr.type = 'button'; clr.className = 'dd__clear'; clr.textContent = clrT; list.appendChild(clr); }
+      var opts = chips.map(function (ch) {
+        var o = document.createElement('button'); o.type = 'button'; o.className = 'dd__opt'; o.setAttribute('role', 'option'); o.setAttribute('data-value', ch.getAttribute('data-value') || ch.getAttribute('data-dchip') || '');
+        var tick = document.createElement('span'); tick.className = 'dd__tick'; tick.setAttribute('aria-hidden', 'true'); var t = document.createElement('span'); t.className = 'dd__t'; t.textContent = ch.textContent.trim();
+        o.appendChild(tick); o.appendChild(t); list.appendChild(o);
+        o.addEventListener('click', function () { ch.click(); sync(); if (!multi) close(true); });
+        return o;
+      });
+      wrap.appendChild(btn); wrap.appendChild(list); src.parentNode.insertBefore(wrap, src); src.classList.add('dd-src'); src.setAttribute('aria-hidden', 'true'); chips.forEach(function (c) { c.tabIndex = -1; });
+      var pressed = function (ch) { return ch.getAttribute('aria-pressed') === 'true'; };
+      var sync = function () {
+        var on = chips.filter(pressed);
+        opts.forEach(function (o, k) { var p = pressed(chips[k]); o.setAttribute('aria-selected', p ? 'true' : 'false'); o.classList.toggle('is-on', p); });
+        l2.textContent = multi ? (on.length === 0 ? allT : on.length === 1 ? on[0].textContent.trim() : nT.replace('{n}', on.length)) : (on[0] || chips[0]).textContent.trim();
+        wrap.classList.toggle('has-value', multi ? on.length > 0 : (on[0] && chips.indexOf(on[0]) > 0));
+        if (clr) clr.hidden = on.length === 0;
+      };
+      var isOpen = function () { return !list.hidden; };
+      var open = function () {
+        $$('.dd.is-open').forEach(function (w) { if (w !== wrap) { var b2 = w.querySelector('.dd__btn'); if (b2) b2.click(); } });
+        list.hidden = false; wrap.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true');
+        var r = btn.getBoundingClientRect(), room = window.innerHeight - r.bottom; wrap.classList.toggle('dd--up', room < 300 && r.top > room);
+        var sel = list.querySelector('.dd__opt.is-on') || list.querySelector('.dd__opt'); if (sel) sel.scrollIntoView({ block: 'nearest' });
+      };
+      var close = function (focusBtn) { if (!isOpen()) return; list.hidden = true; wrap.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); if (focusBtn) btn.focus(); };
+      btn.addEventListener('click', function () { if (isOpen()) close(false); else open(); });
+      btn.addEventListener('keydown', function (e) { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); if (!isOpen()) open(); var s = list.querySelector('.dd__opt.is-on') || list.querySelector('.dd__opt'); if (s) s.focus(); } });
+      list.addEventListener('keydown', function (e) {
+        var all = $$('.dd__opt', list), k = all.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') { e.preventDefault(); (all[Math.min(all.length - 1, k + 1)] || all[0]).focus(); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); (all[Math.max(0, k - 1)] || all[0]).focus(); }
+        else if (e.key === 'Home') { e.preventDefault(); all[0].focus(); } else if (e.key === 'End') { e.preventDefault(); all[all.length - 1].focus(); }
+        else if (e.key === 'Escape') { e.preventDefault(); close(true); } else if (e.key === 'Tab') close(false);
+      });
+      if (clr) clr.addEventListener('click', function () { chips.filter(pressed).forEach(function (c) { c.click(); }); sync(); });
+      document.addEventListener('click', function (e) { if (isOpen() && !wrap.contains(e.target) && !src.contains(e.target)) close(false); });
+      if (window.MutationObserver) new MutationObserver(sync).observe(src, { attributes: true, attributeFilter: ['aria-pressed'], subtree: true });
+      sync();
+    });
+  }
+
   /* ---------- menu filters ---------- */
   function initFilters() {
     var bar = $('[data-filters]');
@@ -27108,7 +27217,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initProfileForm, initCart, initRefSave, applyProfile,
+    [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
