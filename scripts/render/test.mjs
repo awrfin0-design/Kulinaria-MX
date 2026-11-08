@@ -1430,7 +1430,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
 // =====================================================================  v51: the builder always starts on step 1; phone stepper moves freely
 {
   await page.setViewportSize({ width: 390, height: 800 });
-  await page.evaluate(() => { localStorage.removeItem('kx-test-norules'); sessionStorage.removeItem('kx-test-start'); localStorage.setItem('kx-test-nostart', '1'); localStorage.setItem('kx-rules-ok', '1'); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_newplan', '1'); localStorage.removeItem('kulinaria_funnel'); });
+  await page.evaluate(() => { localStorage.removeItem('kx-test-norules'); sessionStorage.removeItem('kx-test-start'); localStorage.setItem('kx-test-nostart', '1'); localStorage.setItem('kx-rules-ok', '1'); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_newplan', '1'); localStorage.removeItem('kulinaria_funnel'); sessionStorage.removeItem('kx_reach'); });
   await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(900);
   const PS = '[data-page="pg/pedido"] ';
   const st0 = await page.evaluate((ps) => { const f = document.querySelector(ps + '[data-funnel]'); return { step: f.getAttribute('data-step'), chk: f.querySelector('[data-fn-rules-check]').checked, unlocked: !f.querySelector('[data-fn-rules-check]').disabled, btn: f.querySelector('[data-fn-rules-next]').disabled }; }, PS);
