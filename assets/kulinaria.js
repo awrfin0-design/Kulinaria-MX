@@ -1251,6 +1251,10 @@
     var stepOk = function (k) {
       if (k === 0 && !(val('name') && /.+@.+\..+/.test(val('email')) && val('phone').replace(/\D/g, '').length >= 8)) { say(root.getAttribute('data-t-need')); return false; }
       if (k === 1 && !(val('street') && val('cluster') && val('city') && /^\d{5}$/.test(val('zip').replace(/\s/g, '')))) { say(root.getAttribute('data-t-need-addr')); return false; }
+      if (k === 1) {                                                   // we only deliver inside the service area (postal-code prefixes set in the theme settings)
+        var pre = String(root.getAttribute('data-zip-prefixes') || '72').split(',').map(function (x) { return x.trim(); }).filter(Boolean), zp = val('zip').replace(/\s/g, '');
+        if (pre.length && !pre.some(function (x) { return zp.indexOf(x) === 0; })) { say(root.getAttribute('data-t-out')); return false; }
+      }
       return true;
     };
     nextB.addEventListener('click', function () {

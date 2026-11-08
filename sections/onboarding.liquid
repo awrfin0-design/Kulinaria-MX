@@ -19,7 +19,7 @@
 <section class="section onboarding" data-onboarding data-next-url="{{ section.settings.next_url | default: '/pages/pedido' }}"
   {%- if customer %} data-customer-name="{{ customer.name | escape }}" data-customer-email="{{ customer.email | escape }}"{% endif %}
   data-t-welcome="{{ 'onboarding.welcome' | t }}" data-t-need-addr="{{ 'onboarding.ob_need_addr' | t }}" data-t-need-consent="{{ 'onboarding.ob_need_consent' | t }}" data-t-need="{{ 'onboarding.need' | t }}"
-  data-t-stepof="{{ 'onboarding.stepof' | t }}" data-t-edit="{{ 'onboarding.ob_review_edit' | t }}" data-t-empty="{{ 'onboarding.ob_review_empty' | t }}" {{ section.shopify_attributes }}>
+  data-zip-prefixes="{{ settings.service_zip_prefixes | default: '72' | escape }}" data-t-out="{{ 'service.out' | t }}" data-t-stepof="{{ 'onboarding.stepof' | t }}" data-t-edit="{{ 'onboarding.ob_review_edit' | t }}" data-t-empty="{{ 'onboarding.ob_review_empty' | t }}" {{ section.shopify_attributes }}>
   <div class="container ob-wrap">
     <a hidden tabindex="-1" aria-hidden="true" data-ob-week href="/pages/cuenta-semana"></a>
     {%- unless customer -%}
@@ -76,6 +76,7 @@
 
         <fieldset class="step" data-ob-step="2">
           <legend>{{ 'onboarding.s2' | t }}</legend>
+          <p class="svc-note">{{ 'service.form_note' | t }}</p>
           <div class="form-grid">
             <div class="field"><label for="ob-street">{{ 'addr.street' | t }}</label><input class="input" id="ob-street" data-ob="street" autocomplete="address-line1"></div>
             <div class="field"><label for="ob-num">{{ 'onboarding.ob_num' | t }}</label><input class="input" id="ob-num" data-ob="num" autocomplete="address-line2"></div>

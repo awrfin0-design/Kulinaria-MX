@@ -109,6 +109,7 @@
 
             {%- if customer -%}
               <div class="alert alert--warn" data-cart-profile hidden><p style="margin:0 0 8px">{{ 'cart.profile_needed' | t }}</p><a class="btn btn--gold btn--sm" href="/pages/bienvenida">{{ 'cart.profile_cta' | t }}</a></div>
+              {% render 'service-badge' %}
               <button class="btn btn--gold btn--block" type="submit" name="checkout" data-checkout disabled>{{ 'cart.checkout' | t }}</button>
             {%- else -%}
               <p class="alert alert--warn">{{ 'cart.login_needed' | t }}</p>

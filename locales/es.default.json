@@ -585,6 +585,15 @@
     "placeholder": "Busca un platillo",
     "results_for": "Resultados para \""
   },
+  "service": {
+    "area": "Puebla y su área metropolitana",
+    "badge": "Por ahora entregamos solo en Puebla y su área metropolitana.",
+    "form_note": "Por ahora entregamos solo en Puebla y su área metropolitana (códigos postales 72xxx). Si vives fuera, escríbenos y te avisamos cuando lleguemos.",
+    "out": "Todavía no llegamos a ese código postal: por ahora entregamos solo en Puebla y su área metropolitana. Escríbenos y te avisamos cuando lleguemos a tu zona.",
+    "cart_note": "Entregas solo en Puebla y su área metropolitana.",
+    "faq_t": "¿Dónde entregan?",
+    "faq_p": "Por ahora entregamos solo en Puebla y su área metropolitana. Estamos creciendo: si vives en otra ciudad, escríbenos y te avisamos."
+  },
   "theme": {
     "to_dark": "Activar modo oscuro",
     "to_light": "Activar modo claro",

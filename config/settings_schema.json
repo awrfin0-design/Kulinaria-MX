@@ -198,6 +198,18 @@
     ]
   },
   {
+    "name": "Zona de entrega",
+    "settings": [
+      {
+        "type": "text",
+        "id": "service_zip_prefixes",
+        "label": "Códigos postales atendidos (inicios, separados por coma)",
+        "info": "Por ahora solo Puebla y su área metropolitana: 72. Para abrir otra zona agrega su inicio, por ejemplo 72,75.",
+        "default": "72"
+      }
+    ]
+  },
+  {
     "name": "Firma del sitio",
     "settings": [
       {

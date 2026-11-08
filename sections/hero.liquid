@@ -20,6 +20,7 @@
       <span class="hero__rule" aria-hidden="true"></span>
       <h1>{{ tx_s_heading | escape }}{%- if tx_s_heading_em != blank %} <em>{{ tx_s_heading_em | escape }}</em>{% endif -%}</h1>
       {%- if tx_s_text != blank -%}<p class="hero__sub">{{ tx_s_text }}</p>{%- endif -%}
+      {% render 'service-badge', class: 'svc-badge--hero' %}
 
       {%- if section.settings.show_countdown -%}
         <p><span class="countdown" data-cutoff>{{ 'cutoff.orders_close_in' | t }} <strong data-cutoff-value>…</strong></span></p>

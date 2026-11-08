@@ -66,7 +66,7 @@
           {%- assign r_meal = r_mn | times: 100 | money_without_trailing_zeros -%}
           {%- assign r_wk = r_bn | divided_by: 4 | times: 100 | money_without_trailing_zeros -%}
           <div class="fn-rules" data-fn-rules>
-            <div class="fn-rules__head"><h3 class="fn-rules__title">{{ 'funnel.rules_title' | t }}</h3><p class="fn-rules__lede">{{ 'funnel.rules_lede' | t }}</p></div>
+            <div class="fn-rules__head"><h3 class="fn-rules__title">{{ 'funnel.rules_title' | t }}</h3><p class="fn-rules__lede">{{ 'funnel.rules_lede' | t }}</p>{% render 'service-badge' %}</div>
             <div class="fn-rules__carousel">
               <button class="fn-arrow fn-arrow--prev" type="button" data-fn-rules-arrow="-1" aria-label="{{ 'funnel.prev_dishes' | t }}">&#8249;</button>
               <div class="fn-rules__rail" data-fn-rules-rail>

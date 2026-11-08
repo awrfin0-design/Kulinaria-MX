@@ -585,6 +585,15 @@
     "placeholder": "Search for a dish",
     "results_for": "Results for \""
   },
+  "service": {
+    "area": "Puebla and its metropolitan area",
+    "badge": "For now we deliver only in Puebla and its metropolitan area.",
+    "form_note": "For now we deliver only in Puebla and its metropolitan area (postal codes 72xxx). If you live elsewhere, write to us and we will let you know when we arrive.",
+    "out": "We do not reach that postal code yet: for now we deliver only in Puebla and its metropolitan area. Write to us and we will let you know when we reach your area.",
+    "cart_note": "Delivery only in Puebla and its metropolitan area.",
+    "faq_t": "Where do you deliver?",
+    "faq_p": "For now we deliver only in Puebla and its metropolitan area. We are growing: if you live in another city, write to us and we will let you know."
+  },
   "theme": {
     "to_dark": "Switch to dark mode",
     "to_light": "Switch to light mode",

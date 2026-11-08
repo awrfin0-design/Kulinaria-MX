@@ -18,7 +18,7 @@ for (const [name, vp, mobile] of [['d', { width: 1360, height: 900 }, false], ['
     await page.screenshot({ path: `/tmp/ob-${tag}-${name}-${k}.png` });
     const nx = await page.$('[data-page="pg/bienvenida"] [data-ob-next]:not([hidden])'); if (!nx) break;
     if (k === 1) { await page.fill('[data-page="pg/bienvenida"] [data-ob="name"]', 'Ana Pérez'); await page.fill('[data-page="pg/bienvenida"] [data-ob="email"]', 'ana@ejemplo.com'); await page.fill('[data-page="pg/bienvenida"] [data-ob="phone"]', '999 000 0000'); }
-    if (k === 2) { for (const [kk, v] of [['street', 'Calle Lago'], ['cluster', 'Las Lomas'], ['city', 'Mérida'], ['zip', '97000']]) await page.fill(`[data-page="pg/bienvenida"] [data-ob="${kk}"]`, v); }
+    if (k === 2) { for (const [kk, v] of [['street', 'Calle Lago'], ['cluster', 'Las Lomas'], ['city', 'Puebla'], ['zip', '72000']]) await page.fill(`[data-page="pg/bienvenida"] [data-ob="${kk}"]`, v); }
     await nx.click(); await page.waitForTimeout(250);
   }
   await ctx.close();

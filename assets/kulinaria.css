@@ -3458,3 +3458,13 @@ section:has(.dd.is-open){position:relative;z-index:30}
 .menu-shell .filter-sticky .filter-count{flex:none;padding:9px 16px;border-radius:999px;background:var(--bg-raised);border:1px solid var(--line);box-shadow:0 12px 28px -16px rgba(0,0,0,.7);font-size:.82rem;white-space:nowrap}
 @media (max-width:760px){.menu-shell .filter-sticky{width:100%;flex-wrap:wrap;pointer-events:auto}.menu-shell .filter-sticky .dd{flex:1 1 100%}}
 .menu-shell .filter-sticky{opacity:1 !important;transform:none !important;transition:none}
+
+/* v82 — service area: one honest line wherever someone could order */
+.svc-badge{display:inline-flex;align-items:center;gap:10px;margin:10px 0 0;padding:7px 14px 7px 12px;border:1px solid var(--border-accent);border-radius:999px;background:var(--accent-wash);font-size:.78rem;line-height:1.35;color:var(--text);max-width:100%}
+.svc-badge__pin{flex:none;width:9px;height:9px;border-radius:50% 50% 50% 0;background:var(--accent);transform:rotate(-45deg);box-shadow:0 0 0 3px var(--accent-wash)}
+.svc-badge--hero{margin-top:14px;background:rgba(0,0,0,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.hero__copy .svc-badge{justify-self:center}
+.footer-grid .svc-badge{margin-top:var(--space-md);border-radius:14px}
+.fn-rules__head .svc-badge{margin-top:8px}
+.svc-note{margin:0 0 var(--space-md);padding:12px 14px;border-left:2px solid var(--accent);background:var(--accent-wash);border-radius:0 12px 12px 0;font-size:.84rem;color:var(--text)}
+@media (max-width:760px){.svc-badge{font-size:.74rem;border-radius:14px}}
