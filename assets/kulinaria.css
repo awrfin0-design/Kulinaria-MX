@@ -3469,3 +3469,4 @@ section:has(.dd.is-open){position:relative;z-index:30}
 @media (max-width:760px){.svc-badge{font-size:.74rem;border-radius:14px}}
 
 @media (max-width:760px){body .menu-shell .filter-sticky .filter-count{display:none !important}body .menu-shell .filter-sticky{margin:0 0 18px !important}body .menu-shell .filter-sticky .dd{margin:0}}
+@media (max-width:760px){body .menu-shell .filter-sticky{top:0 !important;inset-block-start:0 !important}}
