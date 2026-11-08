@@ -122,47 +122,120 @@
   }
 
   // Hard filter (allergies) hides / blocks; soft filter (dislikes) lowers compatibility.
-  // Allergen detection. A dish is flagged when its allergen tags or ingredients match what the profile declares:
-  // exact tag, ingredient containing the word, or one of the usual ingredients of that allergen family (so a forgotten tag cannot hide a nut, shrimp, dairy...).
+  // How a dish is checked against what a client declares (no AI, just a careful vocabulary):
+  //  1. the declared word is turned into one canonical Spanish name (English names, plurals and typos included: "octopus" -> "pulpo");
+  //  2. a declared FAMILY (mariscos, pescado, frutos secos, lacteos, gluten...) expands to all its usual members, so "shellfish" catches shrimp, octopus, clams...;
+  //  3. a declared MEMBER (octopus) also counts when the dish is tagged with its family and its ingredient list does not name a different member (the tag then most likely means it);
+  //     with a strict profile (anaphylaxis / zero traces) any dish of the family is flagged;
+  //  4. harmless look-alikes are excluded (corn flour is not gluten, almond milk is not dairy, nutmeg is not a nut).
   var SYN = {
-    'frutos secos': ['almendra', 'nuez', 'nueces', 'pistache', 'avellana', 'cacahuate', 'anacardo', 'macadamia', 'pecana', 'castana'],
-    'mariscos': ['camaron', 'langosta', 'cangrejo', 'pulpo', 'calamar', 'ostion', 'almeja', 'mejillon', 'jaiba', 'langostino'],
-    'lacteos': ['leche', 'queso', 'crema', 'mantequilla', 'yogur', 'yogurt', 'nata', 'requeson'],
-    'gluten': ['trigo', 'pasta', 'pan ', 'cebada', 'centeno', 'harina', 'avena', 'cuscus'],
-    'huevo': ['huevo', 'clara', 'yema', 'mayonesa'],
-    'pescado': ['salmon', 'atun', 'huachinango', 'pescado', 'robalo', 'tilapia', 'bacalao', 'sardina'],
-    'soya': ['soya', 'tofu', 'edamame', 'miso'],
-    'ajonjoli': ['ajonjoli', 'tahini', 'sesamo'],
-    'cacahuate': ['cacahuate', 'mani'],
-    'nuez': ['nuez', 'nueces', 'pecana'],
-    'almendra': ['almendra']
+    'mariscos': ['marisco', 'camaron', 'langosta', 'langostino', 'cangrejo', 'jaiba', 'centolla', 'cigala', 'bogavante', 'acocil', 'pulpo', 'calamar', 'sepia', 'chipiron', 'ostion', 'almeja', 'mejillon', 'vieira', 'callo de hacha', 'abulon', 'caracol'],
+    'crustaceos': ['camaron', 'langosta', 'langostino', 'cangrejo', 'jaiba', 'centolla', 'cigala', 'bogavante', 'acocil'],
+    'moluscos': ['pulpo', 'calamar', 'sepia', 'chipiron', 'ostion', 'almeja', 'mejillon', 'vieira', 'callo de hacha', 'abulon', 'caracol'],
+    'cefalopodos': ['pulpo', 'calamar', 'sepia', 'chipiron'],
+    'pescado': ['salmon', 'atun', 'huachinango', 'pargo', 'robalo', 'tilapia', 'bacalao', 'sardina', 'anchoa', 'trucha', 'mojarra', 'merluza', 'lenguado', 'dorado', 'mahi', 'cazon', 'surimi', 'caballa', 'arenque', 'pescado'],
+    'frutos secos': ['almendra', 'nuez', 'nueces', 'pistache', 'avellana', 'anacardo', 'nuez de la india', 'macadamia', 'pecana', 'castana', 'nuez de brasil', 'pinon', 'cacahuate', 'mazapan', 'praline', 'turron', 'nogada'],
+    'lacteos': ['leche', 'queso', 'crema', 'mantequilla', 'yogur', 'yogurt', 'nata', 'requeson', 'suero', 'caseina', 'lactosa', 'ghee', 'paneer', 'ricotta', 'mozzarella', 'parmesano', 'cotija', 'panela', 'manchego', 'mascarpone', 'burrata', 'helado', 'flan', 'cajeta'],
+    'gluten': ['trigo', 'harina', 'pasta', 'pan', 'cebada', 'centeno', 'avena', 'cuscus', 'bulgur', 'espelta', 'seitan', 'galleta', 'empanizado', 'pan molido', 'pan rallado', 'cerveza', 'fideo', 'macarron', 'lasana', 'tempura', 'semola', 'malta', 'ravioli', 'crouton'],
+    'huevo': ['huevo', 'clara', 'yema', 'mayonesa', 'merengue', 'aioli', 'omelette', 'omelet'],
+    'soya': ['soya', 'soja', 'tofu', 'edamame', 'miso', 'tempeh', 'shoyu', 'tamari', 'salsa de soya'],
+    'ajonjoli': ['ajonjoli', 'tahini', 'tahin', 'sesamo'],
+    'cacahuate': ['cacahuate', 'mani', 'mantequilla de cacahuate'],
+    'nuez': ['nuez', 'nueces', 'pecana', 'nuez de castilla'],
+    'almendra': ['almendra', 'mazapan'],
+    'apio': ['apio'], 'mostaza': ['mostaza'],
+    'sulfitos': ['vino', 'vinagre balsamico', 'pasas', 'orejones', 'fruta seca', 'uva pasa'],
+    'maiz': ['maiz', 'elote', 'esquite', 'nixtamal', 'tortilla', 'tostada', 'palomitas', 'masa']
+  };
+  var EXCL = {   // harmless look-alikes: an ingredient containing one of these never counts for that family
+    'gluten': ['harina de maiz', 'harina de arroz', 'harina de almendra', 'harina de coco', 'harina de garbanzo', 'harina de avena sin gluten', 'sin gluten', 'libre de gluten', 'tortilla de maiz', 'pasta de arroz', 'fideo de arroz'],
+    'lacteos': ['leche de coco', 'leche de almendra', 'leche de avena', 'leche de soya', 'leche vegetal', 'crema de coco', 'mantequilla de cacahuate', 'mantequilla de almendra', 'queso vegano', 'sin lactosa', 'mantequilla de cacao'],
+    'frutos secos': ['nuez moscada', 'moscada', 'mantequilla de karite', 'castana de agua', 'coco'],
+    'nuez': ['nuez moscada', 'moscada'],
+    'huevo': ['sin huevo', 'berenjena', 'huevo vegano'],
+    'soya': ['sin soya'],
+    'pescado': ['sin pescado', 'salsa de pescado vegana']
   };
   // What the client types may be English or a different spelling: map it to the Spanish names used in the ingredient lists
-  var ALIAS = { 'peanut': 'cacahuate', 'peanuts': 'cacahuate', 'mani': 'cacahuate', 'cacahuates': 'cacahuate', 'nuts': 'frutos secos', 'tree nuts': 'frutos secos', 'nut': 'frutos secos', 'frutos-secos': 'frutos secos',
-    'shellfish': 'mariscos', 'seafood': 'mariscos', 'shrimp': 'camaron', 'prawn': 'camaron', 'crab': 'cangrejo', 'lobster': 'langosta', 'fish': 'pescado', 'salmon': 'salmon', 'tuna': 'atun',
-    'dairy': 'lacteos', 'milk': 'leche', 'cheese': 'queso', 'cream': 'crema', 'butter': 'mantequilla', 'egg': 'huevo', 'eggs': 'huevo', 'huevos': 'huevo', 'wheat': 'gluten', 'soy': 'soya', 'sesame': 'ajonjoli',
-    'almond': 'almendra', 'almonds': 'almendra', 'walnut': 'nuez', 'broccoli': 'brocoli', 'onion': 'cebolla', 'cilantro': 'cilantro', 'coriander': 'cilantro', 'mushroom': 'champinones', 'mushrooms': 'champinones', 'champinon': 'champinones',
-    'tomato': 'jitomate', 'tomate': 'jitomate', 'avocado': 'aguacate', 'corn': 'maiz', 'pork': 'puerco', 'beef': 'res', 'chicken': 'pollo', 'garlic': 'ajo', 'pepper': 'pimiento', 'spinach': 'espinaca', 'carrot': 'zanahoria', 'celery': 'apio', 'mustard': 'mostaza', 'strawberry': 'fresa', 'raisins': 'pasas' };
-  var canon = function (raw) { var a = norm(raw).replace(/\s+/g, ' '); return ALIAS[a] || a; };
+  var ALIAS = {
+    'octopus': 'pulpo', 'squid': 'calamar', 'calamari': 'calamar', 'cuttlefish': 'sepia', 'clam': 'almeja', 'clams': 'almeja', 'oyster': 'ostion', 'oysters': 'ostion', 'mussel': 'mejillon', 'mussels': 'mejillon',
+    'scallop': 'vieira', 'scallops': 'vieira', 'crab': 'cangrejo', 'lobster': 'langosta', 'shrimp': 'camaron', 'shrimps': 'camaron', 'prawn': 'camaron', 'prawns': 'camaron', 'crayfish': 'langostino', 'langoustine': 'langostino', 'abalone': 'abulon', 'snail': 'caracol',
+    'shellfish': 'mariscos', 'seafood': 'mariscos', 'marisco': 'mariscos', 'crustacean': 'crustaceos', 'crustaceans': 'crustaceos', 'crustaceo': 'crustaceos', 'mollusk': 'moluscos', 'mollusks': 'moluscos', 'mollusc': 'moluscos', 'molluscs': 'moluscos', 'molusco': 'moluscos', 'cephalopod': 'cefalopodos', 'cephalopods': 'cefalopodos', 'cefalopodo': 'cefalopodos',
+    'fish': 'pescado', 'pescados': 'pescado', 'salmon': 'salmon', 'tuna': 'atun', 'cod': 'bacalao', 'trout': 'trucha', 'sea bass': 'robalo', 'snapper': 'huachinango', 'anchovy': 'anchoa', 'anchovies': 'anchoa', 'sardine': 'sardina', 'sardines': 'sardina', 'tilapia': 'tilapia', 'mackerel': 'caballa', 'herring': 'arenque',
+    'nuts': 'frutos secos', 'tree nuts': 'frutos secos', 'tree nut': 'frutos secos', 'nut': 'frutos secos', 'fruto seco': 'frutos secos', 'frutos-secos': 'frutos secos', 'brazil nut': 'nuez de brasil',
+    'peanut': 'cacahuate', 'peanuts': 'cacahuate', 'mani': 'cacahuate', 'cacahuates': 'cacahuate', 'almond': 'almendra', 'almonds': 'almendra', 'walnut': 'nuez', 'walnuts': 'nuez', 'pecan': 'pecana', 'pecans': 'pecana', 'cashew': 'anacardo', 'cashews': 'anacardo', 'pistachio': 'pistache', 'pistachios': 'pistache', 'hazelnut': 'avellana', 'hazelnuts': 'avellana', 'macadamia': 'macadamia', 'pine nut': 'pinon',
+    'dairy': 'lacteos', 'lactose': 'lacteos', 'lacteo': 'lacteos', 'milk': 'leche', 'cheese': 'queso', 'cream': 'crema', 'butter': 'mantequilla', 'yogurt': 'yogur', 'whey': 'suero', 'casein': 'caseina', 'ice cream': 'helado',
+    'egg': 'huevo', 'eggs': 'huevo', 'huevos': 'huevo', 'wheat': 'gluten', 'gluten': 'gluten', 'celiac': 'gluten', 'barley': 'cebada', 'rye': 'centeno', 'oats': 'avena', 'bread': 'pan', 'flour': 'harina',
+    'soy': 'soya', 'soybean': 'soya', 'soybeans': 'soya', 'sesame': 'ajonjoli', 'mustard': 'mostaza', 'celery': 'apio', 'sulfite': 'sulfitos', 'sulfites': 'sulfitos', 'sulphites': 'sulfitos', 'wine': 'vino',
+    'broccoli': 'brocoli', 'onion': 'cebolla', 'cilantro': 'cilantro', 'coriander': 'cilantro', 'mushroom': 'champinones', 'mushrooms': 'champinones', 'champinon': 'champinones',
+    'tomato': 'jitomate', 'tomate': 'jitomate', 'avocado': 'aguacate', 'corn': 'maiz', 'pork': 'puerco', 'beef': 'res', 'chicken': 'pollo', 'garlic': 'ajo', 'pepper': 'pimiento', 'spinach': 'espinaca', 'carrot': 'zanahoria', 'strawberry': 'fresa', 'strawberries': 'fresa', 'raisins': 'pasas', 'raisin': 'pasas', 'olive': 'aceituna', 'olives': 'aceituna', 'coconut': 'coco', 'beet': 'betabel', 'beets': 'betabel', 'beetroot': 'betabel', 'spicy': 'chile', 'spicy food': 'chile', 'picante': 'chile', 'hot': 'chile', 'hongo': 'champinones', 'hongos': 'champinones', 'seta': 'champinones', 'setas': 'champinones', 'chili': 'chile', 'chile': 'chile', 'lime': 'limon', 'lemon': 'limon', 'banana': 'platano', 'pumpkin': 'calabaza', 'squash': 'calabaza', 'beans': 'frijol', 'bean': 'frijol', 'basil': 'albahaca', 'poblano chile': 'poblano', 'rice': 'arroz', 'potato': 'papa', 'potatoes': 'papa'
+  };
+  var MEMBER_OF = {};
+  Object.keys(SYN).forEach(function (g) { SYN[g].forEach(function (m) { (MEMBER_OF[m] = MEMBER_OF[m] || []).push(g); }); });
+  var singular = function (a) { return a.replace(/(ces)$/, 'z').replace(/(es)$/, '').replace(/s$/, ''); };
+  var canon = function (raw) {
+    var a = norm(raw).replace(/\s+/g, ' ');
+    if (ALIAS[a]) return ALIAS[a];
+    if (SYN[a] || MEMBER_OF[a]) return a;
+    var s1 = a.replace(/s$/, ''), s2 = a.replace(/es$/, ''), s3 = singular(a);
+    var c = [s1, s2, s3].filter(function (x) { return x && (ALIAS[x] || SYN[x] || MEMBER_OF[x]); })[0];
+    return c ? (ALIAS[c] || c) : a;
+  };
+  // true when two words are the same up to one typo (only for words of 5+ letters, so short words never match by accident)
+  var near = function (a, b) {
+    if (a === b) return true; if (a.length < 5 || b.length < 5 || Math.abs(a.length - b.length) > 1) return false;
+    var i = 0, j = 0, d = 0;
+    while (i < a.length && j < b.length) {
+      if (a[i] === b[j]) { i++; j++; continue; }
+      if (++d > 1) return false;
+      if (a.length === b.length) { i++; j++; } else if (a.length > b.length) i++; else j++;
+    }
+    return d + (a.length - i) + (b.length - j) <= 1;
+  };
+  var words = function (t) { return t.split(/[^a-z0-9]+/).filter(Boolean); };
+  // does ingredient `ing` name `w` (a canonical word / phrase of family `key`)?
+  var named = function (ing, w, key) {
+    var ex = EXCL[key] || [];
+    for (var e = 0; e < ex.length; e++) if (ing.indexOf(ex[e]) > -1) return false;
+    if (ing === w) return true;
+    var tk = words(ing);
+    if (w.length < 4) return tk.indexOf(w) > -1;
+    if (ing.indexOf(w) > -1) return true;
+    if (ing.length >= 4 && w.indexOf(ing) > -1) return true;
+    if (w.indexOf(' ') < 0) { for (var k = 0; k < tk.length; k++) if (near(tk[k], w)) return true; }
+    return false;
+  };
   function allergyHits(p, tags, ings) {
-    var out = [];
-    (p.allergies || []).forEach(function (raw) {
+    var out = [], strict = !!(p && p.strict);
+    ((p && p.allergies) || []).forEach(function (raw) {
       var a = canon(raw); if (!a) return;
-      var words = [a].concat(SYN[a] || []);
-      var hit = tags.indexOf(a) > -1 || words.some(function (w) { return ings.some(function (i) { return i === w || (w.length >= 4 && i.indexOf(w) > -1) || (i.length >= 4 && w.indexOf(i) > -1); }); });
-      if (hit) out.push(raw);
+      var ws = [a].concat(SYN[a] || []);
+      var direct = tags.indexOf(a) > -1 || tags.some(function (t) { return ws.indexOf(t) > -1; }) || ws.some(function (w) { return ings.some(function (i) { return named(i, w, a); }); });
+      var via = false;
+      if (!direct) {
+        var fam = (MEMBER_OF[a] || []).concat(SYN[a] ? [a] : []).filter(function (g, k, arr) { return arr.indexOf(g) === k; });
+        var tagged = fam.filter(function (g) { return tags.indexOf(g) > -1; });
+        if (tagged.length) via = strict || !tagged.some(function (g) { return (SYN[g] || []).some(function (m) { return ings.some(function (i) { return named(i, m, g); }); }); });
+      }
+      if (direct || via) out.push(raw);
     });
     return out;
   }
   function dislikeHits(p, tags, ings) {
-    return (p.dislikes || []).filter(function (raw) { var d = canon(raw); return d && (ings.some(function (i) { return i.indexOf(d) > -1 || (d.length > 3 && d.indexOf(i) > -1 && i.length > 3); }) || tags.indexOf(d) > -1); });
+    return ((p && p.dislikes) || []).filter(function (raw) {
+      var d = canon(raw); if (!d) return false;
+      var ws = [d].concat(SYN[d] || []);
+      return tags.indexOf(d) > -1 || ws.some(function (w) { return ings.some(function (i) { return named(i, w, d); }); });
+    });
   }
+  if (location.protocol === 'file:') window.KX_TEST = { allergyHits: allergyHits, dislikeHits: dislikeHits, canon: canon };   // local preview only (used by the tests)
   // The profile that applies right now: the account holder's, or the person the order is being built for (family members have their own allergies and dislikes)
+  function strictFlag(f) { var inf = (f && f.info) || {}; return inf.cross === 'estricto' || inf.severity === 'anafilaxia'; }
   function effectiveProfile() {
     // allergy and dislike warnings belong to a signed-in, onboarded account: a visitor who is not signed in never sees them (even if the browser still holds an old profile)
     if (!$('#kx-account')) return { allergies: [], dislikes: [], diets: [], people: [] };
-    var p = loadProfile(), f = readFunnel();
-    if (f && f.para && p.people) { var who = p.people.filter(function (x) { return x.id === f.para; })[0]; if (who) return { allergies: who.allergies || [], dislikes: who.dislikes || [], diets: who.diets || [], name: who.name, people: p.people }; }
+    var p = loadProfile(), f = readFunnel(); p.strict = strictFlag(f);
+    if (f && f.para && p.people) { var who = p.people.filter(function (x) { return x.id === f.para; })[0]; if (who) return { strict: p.strict, allergies: who.allergies || [], dislikes: who.dislikes || [], diets: who.diets || [], name: who.name, people: p.people }; }
     return p;
   }
   function applyProfile() {
@@ -843,7 +916,7 @@
     var dayNames = (T_('days') || 'Lun,Mar,Mié,Jue,Vie').split(',');
     var upg = function (n) { return +root.getAttribute('data-upg-' + n) || 70 * n; };
     var dishes = $$('[data-mw-dishes] li', root).map(function (li) { return { pid: li.getAttribute('data-pid'), title: li.getAttribute('data-title'), label: li.getAttribute('data-label') || li.getAttribute('data-title'), tier: li.getAttribute('data-tier'), al: (li.getAttribute('data-allergens') || '').split('|').filter(Boolean), ing: (li.getAttribute('data-ingredients') || '').split('|').filter(Boolean) }; });
-    var prof = loadProfile();
+    var prof = loadProfile(); prof.strict = strictFlag(readFunnel());
     var warnOf = function (d) { return allergyHits(prof, d.al.map(norm), d.ing.map(norm)); };
     var level = function (d) { return d ? Math.max(0, Math.min(3, rank(d.tier))) : 0; };   // every plan starts at the Selecto base
     var byTitle = function (t) { return dishes.filter(function (d) { return d.title === t; })[0]; };
