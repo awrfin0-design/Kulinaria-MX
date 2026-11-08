@@ -44,7 +44,13 @@ const A = [
   [['soy'], [], ['salsa de soya'], false, true, 'soy -> soy sauce'],
   [['kiwi'], [], ['ensalada de kiwi'], false, true, 'anything typed: exact word in the list'],
   [['Mariscos'], [], [], false, false, 'no ingredients, no tag -> nothing to flag'],
-  [[], ['mariscos'], ['camaron'], false, false, 'no declared allergies -> nothing flagged']
+  [[], ['mariscos'], ['camaron'], false, false, 'no declared allergies -> nothing flagged'],
+  [['Frutos secos'], [], ['champinones'], false, false, 'mushrooms are not pine nuts ("pinon" hides inside "champinones")'],
+  [['peanut'], [], ['mantequilla'], false, false, 'plain butter is not peanut butter'],
+  [['Gluten'], [], ['panela'], false, false, 'panela cheese is not bread'],
+  [['Mariscos'], [], ['espinaca'], false, false, 'spinach is not seafood'],
+  [['egg'], [], ['claras'], false, true, 'egg -> egg whites'],
+  [['Frutos secos'], [], ['almendras'], false, true, 'plural ingredient still found']
 ];
 const D = [
   [['onion'], ['cebolla morada'], true, 'onion -> cebolla'],

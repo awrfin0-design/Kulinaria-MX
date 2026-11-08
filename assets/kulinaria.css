@@ -3439,10 +3439,12 @@ body .funnel.is-gated[data-step="3"] .fn-gate{max-width:none;width:100%}
 .dd.is-open{z-index:100}
 .menu-shell .filter-sticky,.menu-shell .filter-secondary,.diet-chips__top,[data-dchips] + .dd{position:relative}
 .menu-shell .filter-sticky{z-index:60}.menu-shell .filter-secondary{z-index:55}
-body .menu-shell .filter-sticky{position:relative;z-index:60}
 .dd:has(.dd__list:not([hidden])){z-index:100}
 section:has(.dd.is-open){position:relative;z-index:30}
 .dd__list{background:var(--bg-raised) !important;max-height:min(78vh,540px);scrollbar-width:none}
 .dd__list::-webkit-scrollbar{display:none}
 .dd__opt{padding:10px 14px}
 @media (max-width:760px){.dd__list{max-height:min(70vh,520px)}}
+
+@media (max-width:760px){body .menu-shell .filter-sticky{position:relative}}
+.menu-shell .filter-sticky{z-index:60}

@@ -3469,13 +3469,15 @@ body .funnel.is-gated[data-step="3"] .fn-gate{max-width:none;width:100%}
 .dd.is-open{z-index:100}
 .menu-shell .filter-sticky,.menu-shell .filter-secondary,.diet-chips__top,[data-dchips] + .dd{position:relative}
 .menu-shell .filter-sticky{z-index:60}.menu-shell .filter-secondary{z-index:55}
-body .menu-shell .filter-sticky{position:relative;z-index:60}
 .dd:has(.dd__list:not([hidden])){z-index:100}
 section:has(.dd.is-open){position:relative;z-index:30}
 .dd__list{background:var(--bg-raised) !important;max-height:min(78vh,540px);scrollbar-width:none}
 .dd__list::-webkit-scrollbar{display:none}
 .dd__opt{padding:10px 14px}
 @media (max-width:760px){.dd__list{max-height:min(70vh,520px)}}
+
+@media (max-width:760px){body .menu-shell .filter-sticky{position:relative}}
+.menu-shell .filter-sticky{z-index:60}
 
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
@@ -25274,9 +25276,11 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     for (var e = 0; e < ex.length; e++) if (ing.indexOf(ex[e]) > -1) return false;
     if (ing === w) return true;
     var tk = words(ing);
-    if (w.length < 4) return tk.indexOf(w) > -1;
-    if (ing.indexOf(w) > -1) return true;
-    if (ing.length >= 4 && w.indexOf(ing) > -1) return true;
+    if (w.length <= 4) return tk.indexOf(w) > -1 || tk.indexOf(w + 's') > -1;            // short words only as a whole word (so "pan" never matches "panela", nor "mani" "manicotti")
+    // the word (or phrase) must START a word of the ingredient: "pinon" is not found inside "champiñones", but "camaron" is found in "camarones"
+    var at = ing.indexOf(w);
+    while (at > -1) { if (at === 0 || /[^a-z0-9]/.test(ing.charAt(at - 1))) return true; at = ing.indexOf(w, at + 1); }
+    if (w.indexOf(' ') < 0 && ing.indexOf(' ') < 0 && ing.length >= 4 && w.indexOf(ing) === 0) return true;   // "almendra" listed, "almendras" declared
     if (w.indexOf(' ') < 0) { for (var k = 0; k < tk.length; k++) if (near(tk[k], w)) return true; }
     return false;
   };
@@ -25535,6 +25539,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         else if (e.key === 'Home') { e.preventDefault(); all[0].focus(); } else if (e.key === 'End') { e.preventDefault(); all[all.length - 1].focus(); }
         else if (e.key === 'Escape') { e.preventDefault(); close(true); } else if (e.key === 'Tab') close(false);
       });
+      wrap.addEventListener('keydown', function (e) { if (e.key === 'Escape' && isOpen()) { e.preventDefault(); e.stopPropagation(); close(true); } });
       if (clr) clr.addEventListener('click', function () { chips.filter(pressed).forEach(function (c) { c.click(); }); sync(); });
       document.addEventListener('click', function (e) { if (isOpen() && !wrap.contains(e.target) && !src.contains(e.target)) close(false); });
       if (window.MutationObserver) new MutationObserver(sync).observe(src, { attributes: true, attributeFilter: ['aria-pressed'], subtree: true });

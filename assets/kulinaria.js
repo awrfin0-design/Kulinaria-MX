@@ -199,9 +199,11 @@
     for (var e = 0; e < ex.length; e++) if (ing.indexOf(ex[e]) > -1) return false;
     if (ing === w) return true;
     var tk = words(ing);
-    if (w.length < 4) return tk.indexOf(w) > -1;
-    if (ing.indexOf(w) > -1) return true;
-    if (ing.length >= 4 && w.indexOf(ing) > -1) return true;
+    if (w.length <= 4) return tk.indexOf(w) > -1 || tk.indexOf(w + 's') > -1;            // short words only as a whole word (so "pan" never matches "panela", nor "mani" "manicotti")
+    // the word (or phrase) must START a word of the ingredient: "pinon" is not found inside "champiñones", but "camaron" is found in "camarones"
+    var at = ing.indexOf(w);
+    while (at > -1) { if (at === 0 || /[^a-z0-9]/.test(ing.charAt(at - 1))) return true; at = ing.indexOf(w, at + 1); }
+    if (w.indexOf(' ') < 0 && ing.indexOf(' ') < 0 && ing.length >= 4 && w.indexOf(ing) === 0) return true;   // "almendra" listed, "almendras" declared
     if (w.indexOf(' ') < 0) { for (var k = 0; k < tk.length; k++) if (near(tk[k], w)) return true; }
     return false;
   };
