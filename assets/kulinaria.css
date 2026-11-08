@@ -3448,3 +3448,13 @@ section:has(.dd.is-open){position:relative;z-index:30}
 
 @media (max-width:760px){body .menu-shell .filter-sticky{position:relative}}
 .menu-shell .filter-sticky{z-index:60}
+
+/* v81 — the pinned filter: no wide pill behind it; just the dropdown and a small count chip floating while you scroll */
+.menu-shell .filter-sticky{background:none !important;border:0 !important;box-shadow:none !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;padding:0 !important;border-radius:0 !important;display:flex;flex-wrap:nowrap;align-items:center;gap:12px;width:fit-content;max-width:100%;pointer-events:none;margin-bottom:var(--space-lg)}
+.menu-shell .filter-sticky > *{pointer-events:auto}
+.menu-shell .filter-sticky .dd{flex:0 1 330px}
+.menu-shell .filter-sticky .dd__btn{background:var(--bg-raised);box-shadow:0 16px 36px -16px rgba(0,0,0,.75),0 0 0 1px var(--line)}
+.menu-shell .filter-sticky .dd__btn:hover,.menu-shell .filter-sticky .dd__btn[aria-expanded="true"]{box-shadow:0 16px 36px -16px rgba(0,0,0,.75),0 0 0 4px var(--accent-wash)}
+.menu-shell .filter-sticky .filter-count{flex:none;padding:9px 16px;border-radius:999px;background:var(--bg-raised);border:1px solid var(--line);box-shadow:0 12px 28px -16px rgba(0,0,0,.7);font-size:.82rem;white-space:nowrap}
+@media (max-width:760px){.menu-shell .filter-sticky{width:100%;flex-wrap:wrap;pointer-events:auto}.menu-shell .filter-sticky .dd{flex:1 1 100%}}
+.menu-shell .filter-sticky{opacity:1 !important;transform:none !important;transition:none}

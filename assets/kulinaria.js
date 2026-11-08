@@ -635,7 +635,7 @@
   // staggered reveal on scroll
   function initReveal() {
     var SEL = '.card,.tier-row,.index-row,.plan-card,.accordion details,.panel,.dish,.product__info>*,.account-block,.cart-line,.footer-grid>div,' +
-      '.section__head .eyebrow,.section__head .lede,.spec,.rail__nav,.filter-sticky,.filter-secondary,.fg__foot,.countdown';
+      '.section__head .eyebrow,.section__head .lede,.spec,.rail__nav,.filter-secondary,.fg__foot,.countdown';
     var els = $$(SEL).filter(function (e, i, a) { return a.indexOf(e) === i; });
     els.forEach(function (el) {
       if (el.classList.contains('reveal')) return;
