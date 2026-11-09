@@ -8,8 +8,6 @@
     render 'login-url', back: '/pages/bienvenida'
   elsif u contains '/account/register'
     render 'login-url', kind: 'register', back: '/pages/bienvenida'
-  elsif u contains '/pages/cuenta-perfil'
-    echo '/pages/bienvenida?edit=1'
   elsif u contains '/account/addresses' or u == '/account'
     echo '/pages/cuenta'
   else

@@ -3570,6 +3570,19 @@ section:has(.dd.is-open){position:relative;z-index:30}
   .fn-rg__opts,.fn-ex{grid-template-columns:1fr}
   .fn-rg__opt{text-align:left}
 }
+.fn-ex__bar i{white-space:nowrap;padding-inline:8px}
+.fn-ex__bar .is-base{flex:1 1 auto}.fn-ex__bar .is-extra{flex:0 0 30%}
+.fn-rcard .fn-ex__m,.fn-rcard .fn-ex__m2{font-size:clamp(.6rem,.78vw,.72rem);color:var(--text-muted)}
+.fn-rcard .fn-ex__ok{font-size:clamp(.74rem,.95vw,.86rem);color:var(--text)}
+.fn-rcard .fn-ex__tot{font-size:clamp(.76rem,1vw,.9rem);color:var(--text)}
+@media (max-width:860px){.fn-rcard .fn-ex__m,.fn-rcard .fn-ex__m2{font-size:.68rem}}
+.fn-warnbox{position:static !important}
+.fn-warnbtn{position:absolute;top:10px;right:10px;z-index:8}
+.fn-warnbox .fn-warn{top:54px !important;left:10px !important;right:10px !important;width:auto !important}
+.fn-warnbtn svg path:last-child{stroke:#ffb020}
+.fn-warnbox.is-soft .fn-warnbtn svg path:last-child{stroke:var(--bg-raised)}
+.acct__pop{max-height:calc(100svh - 160px)}@media (max-width:600px){.acct__pop{max-height:calc(100svh - var(--app-top,56px) - 20px)}}
+.svc-badge--hero{margin-top:6px;padding:4px 12px;font-size:.72rem}
 
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
@@ -3809,7 +3822,7 @@ Fuego</span>
               <a class="sitemap__top" href="#/menu"><span>01</span>Especiales de la semana</a><ul class="sitemap__sub"><li><a href="#/pg/calendario">Calendario del menú</a></li><li><a href="#/pg/pedido">Armar mi pedido</a></li><li><a href="#/pg/perfil">Mi perfil de alergias</a></li></ul></div><div class="sitemap__group" style="--i:1">
               <a class="sitemap__top" href="#/pg/planes"><span>02</span>Planes</a><ul class="sitemap__sub"><li><a href="#/pg/plan-bloque">Bloque de 4 semanas</a></li><li><a href="#/pg/plan-prueba">Semana de prueba</a></li><li><a href="#/pg/niveles-y-precios">Niveles y precios</a></li><li><a href="#/pg/ciclo-y-politicas">Ciclo y políticas</a></li></ul></div><div class="sitemap__group" style="--i:2">
               <a class="sitemap__top" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida"><span>03</span>Registro y checkout</a><ul class="sitemap__sub"><li><a href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Crear cuenta</a></li><li><a href="#/pg/checkout">Checkout y contrato</a></li><li><a href="#/pg/confirmacion">Confirmación</a></li><li><a href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Iniciar sesión</a></li></ul></div><div class="sitemap__group" style="--i:3">
-              <a class="sitemap__top" href="#/cuenta"><span>04</span>Mi cuenta</a><ul class="sitemap__sub"><li><a href="#/pg/cuenta-semana">Mi semana</a></li><li><a href="#/pg/cuenta-pausas">Pausar entregas</a></li><li><a href="#/pg/cuenta-monedero">Monedero</a></li><li><a href="#/pg/bienvenida?edit=1">Alergias y gustos</a></li><li><a href="#/pg/cuenta-referidos">Mis referidos</a></li><li><a href="#/pg/cuenta-pedidos">Pedidos y facturas</a></li><li><a href="#/pg/cuenta-entregas">Entregas y envases</a></li><li><a href="#/cuenta">Direcciones</a></li></ul></div><div class="sitemap__group" style="--i:4">
+              <a class="sitemap__top" href="#/cuenta"><span>04</span>Mi cuenta</a><ul class="sitemap__sub"><li><a href="#/pg/cuenta-semana">Mi semana</a></li><li><a href="#/pg/cuenta-pausas">Pausar entregas</a></li><li><a href="#/pg/cuenta-monedero">Monedero</a></li><li><a href="#/pg/cuenta-perfil">Alergias y gustos</a></li><li><a href="#/pg/cuenta-referidos">Mis referidos</a></li><li><a href="#/pg/cuenta-pedidos">Pedidos y facturas</a></li><li><a href="#/pg/cuenta-entregas">Entregas y envases</a></li><li><a href="#/cuenta">Direcciones</a></li></ul></div><div class="sitemap__group" style="--i:4">
               <a class="sitemap__top" href="#/pg/embajadores"><span>05</span>Embajadores</a><ul class="sitemap__sub"><li><a href="#/pg/embajadores-entrenadores">Entrenadores</a></li><li><a href="#/pg/embajadores-clientes">Clientes referidos</a></li><li><a href="#/pg/embajadores-gimnasios">Gimnasios aliados</a></li><li><a href="#/pg/embajadores-directorio">Directorio</a></li><li><a href="#/pg/embajadores-reglas">Reglas de alianza</a></li><li><a href="#/pg/embajadores-solicitar">Solicitar código</a></li></ul></div><div class="sitemap__group" style="--i:5">
               <a class="sitemap__top" href="#/pg/carta-kulinaria"><span>06</span>Carta Kulinaria</a><ul class="sitemap__sub"><li><a href="#/pg/carta-chef-privado">Chef privado</a></li><li><a href="#/pg/carta-cenas-romanticas">Cenas románticas</a></li><li><a href="#/pg/carta-galeria">Galería de eventos</a></li><li><a href="#/pg/carta-cotizacion">Cotización privada</a></li></ul></div><div class="sitemap__group" style="--i:6">
               <a class="sitemap__top" href="#/tienda"><span>07</span>Kulinaria Store</a><ul class="sitemap__sub"><li><a href="#/p/playera-oficial-kulinaria">Playera Oficial Kulinaria</a></li><li><a href="#/p/vaso-mezclador-premium">Vaso mezclador (shaker) premium Kulinaria</a></li></ul></div><div class="sitemap__group" style="--i:7">
@@ -3910,7 +3923,7 @@ Fuego</span>
               <a class="sitemap__top" href="#/menu"><span>01</span>Weekly specials</a><ul class="sitemap__sub"><li><a href="#/pg/calendario">Menu calendar</a></li><li><a href="#/pg/pedido">Build my order</a></li><li><a href="#/pg/perfil">My allergy profile</a></li></ul></div><div class="sitemap__group" style="--i:1">
               <a class="sitemap__top" href="#/pg/planes"><span>02</span>Plans</a><ul class="sitemap__sub"><li><a href="#/pg/plan-bloque">4-week block</a></li><li><a href="#/pg/plan-prueba">Trial week</a></li><li><a href="#/pg/niveles-y-precios">Levels and prices</a></li><li><a href="#/pg/ciclo-y-politicas">Cycle and policies</a></li></ul></div><div class="sitemap__group" style="--i:2">
               <a class="sitemap__top" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida"><span>03</span>Sign-up and checkout</a><ul class="sitemap__sub"><li><a href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Create account</a></li><li><a href="#/pg/checkout">Checkout and contract</a></li><li><a href="#/pg/confirmacion">Confirmation</a></li><li><a href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in</a></li></ul></div><div class="sitemap__group" style="--i:3">
-              <a class="sitemap__top" href="#/cuenta"><span>04</span>My account</a><ul class="sitemap__sub"><li><a href="#/pg/cuenta-semana">My week</a></li><li><a href="#/pg/cuenta-pausas">Pause deliveries</a></li><li><a href="#/pg/cuenta-monedero">Wallet</a></li><li><a href="#/pg/bienvenida?edit=1">Allergies & tastes</a></li><li><a href="#/pg/cuenta-referidos">My referrals</a></li><li><a href="#/pg/cuenta-pedidos">Orders & invoices</a></li><li><a href="#/pg/cuenta-entregas">Deliveries & containers</a></li><li><a href="#/cuenta">Addresses</a></li></ul></div><div class="sitemap__group" style="--i:4">
+              <a class="sitemap__top" href="#/cuenta"><span>04</span>My account</a><ul class="sitemap__sub"><li><a href="#/pg/cuenta-semana">My week</a></li><li><a href="#/pg/cuenta-pausas">Pause deliveries</a></li><li><a href="#/pg/cuenta-monedero">Wallet</a></li><li><a href="#/pg/cuenta-perfil">Allergies & tastes</a></li><li><a href="#/pg/cuenta-referidos">My referrals</a></li><li><a href="#/pg/cuenta-pedidos">Orders & invoices</a></li><li><a href="#/pg/cuenta-entregas">Deliveries & containers</a></li><li><a href="#/cuenta">Addresses</a></li></ul></div><div class="sitemap__group" style="--i:4">
               <a class="sitemap__top" href="#/pg/embajadores"><span>05</span>Ambassadors</a><ul class="sitemap__sub"><li><a href="#/pg/embajadores-entrenadores">Trainers</a></li><li><a href="#/pg/embajadores-clientes">Referred clients</a></li><li><a href="#/pg/embajadores-gimnasios">Partner gyms</a></li><li><a href="#/pg/embajadores-directorio">Directory</a></li><li><a href="#/pg/embajadores-reglas">Partnership rules</a></li><li><a href="#/pg/embajadores-solicitar">Request a code</a></li></ul></div><div class="sitemap__group" style="--i:5">
               <a class="sitemap__top" href="#/pg/carta-kulinaria"><span>06</span>Kulinaria Carta</a><ul class="sitemap__sub"><li><a href="#/pg/carta-chef-privado">Private chef</a></li><li><a href="#/pg/carta-cenas-romanticas">Romantic dinners</a></li><li><a href="#/pg/carta-galeria">Event gallery</a></li><li><a href="#/pg/carta-cotizacion">Private quote</a></li></ul></div><div class="sitemap__group" style="--i:6">
               <a class="sitemap__top" href="#/tienda"><span>07</span>Kulinaria Store</a><ul class="sitemap__sub"><li><a href="#/p/playera-oficial-kulinaria">Official Kulinaria Tee</a></li><li><a href="#/p/vaso-mezclador-premium">Kulinaria premium shaker cup</a></li></ul></div><div class="sitemap__group" style="--i:7">
@@ -24851,9 +24864,10 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     var out = [], strict = !!(p && p.strict);
     ((p && p.allergies) || []).forEach(function (raw) {
       var a = canon(raw); if (!a) return;
-      var ws = [a].concat(SYN[a] || []), items = [];
+      var ws = [a].concat(SYN[a] || []), items = [], tagItems = [];
       ings.forEach(function (i, k) { if (ws.some(function (w) { return named(i, w, a); })) items.push(ingsO[k]); });
-      tags.forEach(function (t, k) { if (t === a || ws.indexOf(t) > -1) items.push(tagsO[k]); });
+      tags.forEach(function (t, k) { if (t === a || ws.indexOf(t) > -1) tagItems.push(tagsO[k]); });
+      if (!items.length) items = tagItems.slice();             // name the ingredient when we can; the dish tag only when the list does not spell it out
       if (!items.length) {
         var fam = (MEMBER_OF[a] || []).concat(SYN[a] ? [a] : []).filter(function (g, k, arr) { return arr.indexOf(g) === k; });
         var tagged = fam.filter(function (g) { return tags.indexOf(g) > -1; });

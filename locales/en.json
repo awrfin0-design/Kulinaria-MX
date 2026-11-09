@@ -520,6 +520,9 @@
     "sold_out": "Sold out"
   },
   "profile": {
+    "edit_full_t": "Edit your whole profile",
+    "edit_full_p": "Details, delivery, allergies, tastes and confirmations: the full questionnaire, with your answers already loaded.",
+    "edit_full_btn": "Edit my full profile",
     "people_edit": "Edit person",
     "people_save": "Save person",
     "people_cancel": "Cancel",

@@ -20,6 +20,9 @@
     {%- if customer -%}<div class="hub__card" data-hub-profile style="margin-bottom:var(--space-lg)" data-t-none="{{ 'acct.hub_profile_none' | t }}" data-t-allergies="{{ 'acct.hub_allergies' | t }}" data-t-dislikes="{{ 'acct.hub_dislikes' | t }}" data-t-diets="{{ 'acct.hub_diets' | t }}" data-t-people="{{ 'acct.hub_people' | t }}"><h3>{{ 'acct.hub_profile_t' | t }}</h3><div class="hub__list" data-hub-profile-body></div></div>{%- endif -%}
 
     {%- if customer -%}
+    {%- if customer -%}
+      <div class="panel panel--gold" style="margin-bottom:var(--space-lg)"><h3 style="margin:0 0 6px">{{ 'profile.edit_full_t' | t }}</h3><p class="text-muted" style="margin:0 0 14px">{{ 'profile.edit_full_p' | t }}</p><a class="btn btn--gold" href="/pages/bienvenida?edit=1">{{ 'profile.edit_full_btn' | t }}</a></div>
+    {%- endif -%}
     <form data-profile-form class="panel panel--gold" novalidate data-t-people-none="{{ 'profile.people_none' | t }}" data-t-people-edit="{{ 'profile.people_edit_btn' | t }}">
       <h3>{{ 'profile.block1' | t }} <span class="tier-badge tier-badge--exclusivo" style="vertical-align:middle;margin-left:8px">{{ 'profile.critical' | t }}</span></h3>
       <p class="text-muted">{{ 'profile.block1_text' | t }}</p>

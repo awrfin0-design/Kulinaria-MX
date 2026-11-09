@@ -520,6 +520,9 @@
     "sold_out": "Agotado"
   },
   "profile": {
+    "edit_full_t": "Edita todo tu perfil",
+    "edit_full_p": "Datos, entrega, alergias, gustos y confirmaciones: el cuestionario completo, con tus respuestas ya cargadas.",
+    "edit_full_btn": "Editar mi perfil completo",
     "people_edit": "Editar persona",
     "people_save": "Guardar persona",
     "people_cancel": "Cancelar",
