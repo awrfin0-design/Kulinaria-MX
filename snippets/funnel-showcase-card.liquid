@@ -11,7 +11,9 @@
   assign sc_category = mf.category.value | default: product.type | handleize
 -%}
 {%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}{%- capture tx_pdesc -%}{% render 'tx', s: card_src %}{%- endcapture -%}
-<article class="fn-sc"{% if seasonal %} data-seasonal="true"{% endif %}>
+{%- assign sc_allergens = mf.allergens.value | join: '|' -%}{%- assign sc_ingredients = mf.ingredients.value | join: '|' -%}
+<article class="fn-sc" data-sc-dish data-has-detail data-allergens="{{ sc_allergens | escape }}" data-ingredients="{{ sc_ingredients | escape }}"{% if seasonal %} data-seasonal="true"{% endif %}>
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="{{ 'js.warn_label' | t }}"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img">
     {%- if product.featured_image -%}
       {{ product.featured_image | image_url: width: 420 | image_tag: loading: 'lazy', widths: '210, 320, 420', sizes: '(min-width: 1100px) 14vw, 60vw', alt: tx_ptitle }}
@@ -27,5 +29,6 @@
     {%- if mf.calories.value or mf.carbs.value -%}<p class="fn-sc__facts">{%- if mf.calories.value %}{{ mf.calories.value }} kcal{% endif -%}{%- if mf.calories.value and mf.carbs.value %} · {% endif -%}{%- if mf.carbs.value %}{{ mf.carbs.value }} {{ 'dish.carbs_g' | t }}{% endif -%}</p>{%- endif -%}
     <div class="fn-sc__row"><span class="fn-sc__price">{% render 'plan-price', tier: tier, kind: 'meal', money: true %}<small> {{ 'funnel.per_meal' | t }}</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
+  {% render 'dish-detail', product: product %}
 </article>
 {%- endif -%}

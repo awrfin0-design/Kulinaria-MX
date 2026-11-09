@@ -3553,3 +3553,6 @@ section:has(.dd.is-open){position:relative;z-index:30}
 .fn-warnbox.is-soft .fn-warnbtn svg path:last-child{stroke:var(--bg-raised)}
 .acct__pop{max-height:calc(100svh - 160px)}@media (max-width:600px){.acct__pop{max-height:calc(100svh - var(--app-top,56px) - 20px)}}
 .svc-badge--hero{margin-top:6px;padding:4px 12px;font-size:.72rem}
+
+.fn-sc .fn-warnbtn{top:8px;right:8px}
+.fn-sc{cursor:pointer}

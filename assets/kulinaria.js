@@ -250,7 +250,7 @@
   function applyProfile() {
     var p = effectiveProfile();
     var al = (p.allergies || []).map(norm), dl = (p.dislikes || []).map(norm);
-    $$('[data-dish]').forEach(function (card) {
+    $$('[data-dish], [data-sc-dish]').forEach(function (card) {
       var tags = (card.getAttribute('data-allergens') || '').split('|').map(norm).filter(Boolean);
       var ings = (card.getAttribute('data-ingredients') || '').split('|').map(norm).filter(Boolean);
       var tagsO = (card.getAttribute('data-allergens') || '').split('|').filter(Boolean), ingsO = (card.getAttribute('data-ingredients') || '').split('|').filter(Boolean);
