@@ -3623,3 +3623,6 @@ section:has(.dd.is-open){position:relative;z-index:30}
 .fn-macros__h{margin:0;font-size:.7rem;line-height:1.4;color:var(--text-muted)}.fn-macros__h[hidden]{display:none}
 .fn-macros.is-empty .fn-macros__l,.fn-macros.is-empty .fn-macros__bar{opacity:.35}
 @media (max-width:1000px){.fn-macros{display:none}}
+/* the dish carousel's right arrow sits at the edge of the dishes, left of the macro column */
+.fn-carousel > .fn-arrow--next[data-fn-arrow]{right:calc(clamp(128px,11vw,158px) + 24px) !important}
+@media (max-width:1000px){.fn-carousel > .fn-arrow--next[data-fn-arrow]{right:10px !important}}
