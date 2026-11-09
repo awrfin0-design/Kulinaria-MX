@@ -3584,6 +3584,43 @@ section:has(.dd.is-open){position:relative;z-index:30}
 .acct__pop{max-height:calc(100svh - 160px)}@media (max-width:600px){.acct__pop{max-height:calc(100svh - var(--app-top,56px) - 20px)}}
 .svc-badge--hero{margin-top:6px;padding:4px 12px;font-size:.72rem}
 
+.fn-sc .fn-warnbtn{top:8px;right:8px}
+.fn-sc{cursor:pointer}
+
+/* v85 — carousel arrows you can actually see: solid, bigger, inside the frame, with a soft pulse */
+.funnel .fn-arrow{top:50% !important;transform:translateY(-50%);width:52px;height:52px;border:2px solid rgba(255,255,255,.9);background:var(--accent);color:#fff;font-size:0;box-shadow:0 10px 26px -6px rgba(0,0,0,.8),0 0 0 6px rgba(255,98,0,.18);transition:transform .2s,box-shadow .2s,background .2s;display:grid;place-items:center;opacity:1}
+.funnel .fn-arrow::after{content:"";width:12px;height:12px;border:solid #fff;border-width:0 3px 3px 0;border-radius:2px}
+.funnel .fn-arrow--next{right:10px !important}.funnel .fn-arrow--prev{left:10px !important}
+.funnel .fn-arrow--next::after{transform:translateX(-2px) rotate(-45deg)}
+.funnel .fn-arrow--prev::after{transform:translateX(2px) rotate(135deg)}
+.funnel .fn-arrow:hover{transform:translateY(-50%) scale(1.1);box-shadow:0 12px 30px -6px rgba(0,0,0,.85),0 0 0 9px rgba(255,98,0,.28)}
+.funnel .fn-arrow:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.funnel .fn-arrow[hidden]{display:none !important}
+@media (prefers-reduced-motion:no-preference){.funnel .fn-arrow--next:not(:hover){animation:kxArrowPulse 2.4s ease-in-out infinite}}
+@keyframes kxArrowPulse{0%,100%{box-shadow:0 10px 26px -6px rgba(0,0,0,.8),0 0 0 6px rgba(255,98,0,.18)}50%{box-shadow:0 10px 26px -6px rgba(0,0,0,.8),0 0 0 11px rgba(255,98,0,.06)}}
+
+/* v86 — step 3 of the guide fits its frame on any desktop height */
+@media (min-width:861px){
+  .fn-rcard.fn-rg{gap:clamp(5px,1.2vh,12px);padding:clamp(10px,2vh,24px) clamp(16px,3vw,40px)}
+  .fn-rg--ex{justify-content:flex-start;gap:clamp(5px,1.1vh,10px)}
+  .fn-rcard .fn-rg--ex .fn-rg__p{font-size:clamp(.74rem,1.75vh,.98rem);line-height:1.45}
+  .fn-ex{width:min(100%,900px);gap:clamp(8px,1.4vw,18px)}
+  .fn-ex__card{display:grid;grid-template-columns:1fr 1fr;gap:clamp(4px,.9vh,9px) 10px;justify-items:center;align-items:center;padding:clamp(8px,1.6vh,18px) clamp(10px,1.4vw,18px)}
+  .fn-ex__card h5{grid-column:1/-1;font-size:clamp(.66rem,1.5vh,.88rem)}
+  .fn-ex__card h5 small{display:inline;margin-left:6px}
+  .fn-ex__bar{grid-column:1/-1;height:clamp(28px,5.2vh,44px)}
+  .fn-ex__bar i{font-size:clamp(.72rem,1.7vh,.96rem)}
+  .fn-ex__m,.fn-ex__m2,.fn-ex__ok{grid-column:1/-1}
+  .fn-rcard .fn-ex__m,.fn-rcard .fn-ex__m2{font-size:clamp(.54rem,1.25vh,.7rem)}
+  .fn-rcard .fn-ex__ok,.fn-rcard .fn-ex__tot{font-size:clamp(.68rem,1.5vh,.86rem)}
+  .fn-ex__pay b{padding:clamp(4px,.9vh,8px) 12px;font-size:clamp(.56rem,1.3vh,.74rem)}
+  .fn-ex__tot{grid-column:1;justify-self:end}.fn-ex__pay{grid-column:2;justify-self:start}
+}
+@media (min-width:861px) and (max-height:700px){
+  .fn-rcard .fn-rg--ex .fn-rg__lab{font-size:.62rem}
+  .fn-ex__m2{display:none}
+}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -4141,83 +4178,237 @@ Fuego</span>
           <div class="fn-carousel fn-carousel--show">
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Platillos anteriores">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
-            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc">
+            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Pollo a las hierbas con puré rústico</h3><p class="fn-sc__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de papa.</p><p class="fn-sc__facts">480 kcal · 22 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pollo-a-las-hierbas" data-title="Pollo a las hierbas con puré rústico">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Pollo a las hierbas con puré rústico</h2><p class="dd__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de papa.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Pollo"><span>Pollo</span></li><li data-ing="Papa"><span>Papa</span></li><li data-ing="Mantequilla"><span>Mantequilla</span></li><li data-ing="Hierbas finas"><span>Hierbas finas</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>480<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>34<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>22<small> g</small></dd></div><div><dt>Grasas</dt><dd>16<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Keto</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Lácteos</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Bowl de res magra y quinoa</h3><p class="fn-sc__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="fn-sc__facts">560 kcal · 34 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/bowl-res-quinoa" data-title="Bowl de res magra y quinoa">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Bowl de res magra y quinoa</h2><p class="dd__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Res magra"><span>Res magra</span></li><li data-ing="Quinoa"><span>Quinoa</span></li><li data-ing="Aguacate"><span>Aguacate</span></li><li data-ing="Cilantro"><span>Cilantro</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>560<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>39<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>34<small> g</small></dd></div><div><dt>Grasas</dt><dd>19<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Alta proteína</li><li>Libre de gluten</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Sin alérgenos declarados</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3>Salmón gourmet en costra de almendras</h3><p class="fn-sc__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry rostizado.</p><p class="fn-sc__facts">520 kcal · 14 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/salmon-costra-almendras" data-title="Salmón gourmet en costra de almendras">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Salmón gourmet en costra de almendras</h2><p class="dd__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry rostizado.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Salmón"><span>Salmón</span></li><li data-ing="Almendra"><span>Almendra</span></li><li data-ing="Eneldo"><span>Eneldo</span></li><li data-ing="Espárragos"><span>Espárragos</span></li><li data-ing="Jitomate cherry"><span>Jitomate cherry</span></li><li data-ing="Limón"><span>Limón</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>520<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>36<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>14<small> g</small></dd></div><div><dt>Grasas</dt><dd>17<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Keto</li><li>Bajos carbohidratos</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Frutos secos · Pescado</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Omelette de claras con espinaca</h3><p class="fn-sc__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="fn-sc__facts">310 kcal · 8 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/omelette-claras-espinaca" data-title="Omelette de claras con espinaca">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Omelette de claras con espinaca</h2><p class="dd__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Claras"><span>Claras</span></li><li data-ing="Espinaca"><span>Espinaca</span></li><li data-ing="Champiñones"><span>Champiñones</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>310<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>22<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>8<small> g</small></dd></div><div><dt>Grasas</dt><dd>10<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Vegetariano</li><li>Bajas calorías</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Huevo</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3>Arrachera al carbón con maíz y espárragos</h3><p class="fn-sc__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="fn-sc__facts">640 kcal · 28 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$320<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/arrachera-carbon" data-title="Arrachera al carbón con maíz y espárragos">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--signature">Signature $$</span>
+<span class="dd__price">$320<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Arrachera al carbón con maíz y espárragos</h2><p class="dd__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Arrachera"><span>Arrachera</span></li><li data-ing="Maíz"><span>Maíz</span></li><li data-ing="Espárragos"><span>Espárragos</span></li><li data-ing="Micro hierbas"><span>Micro hierbas</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>640<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>45<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>28<small> g</small></dd></div><div><dt>Grasas</dt><dd>21<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Alta proteína</li><li>Libre de gluten</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Sin alérgenos declarados</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 
     <h3>Filete Prime con verduras asadas</h3><p class="fn-sc__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin perder su punto.</p><p class="fn-sc__facts">710 kcal · 16 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$390<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/filete-prime" data-title="Filete Prime con verduras asadas">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+<span class="dd__price">$390<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Filete Prime con verduras asadas</h2><p class="dd__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin perder su punto.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Res Prime"><span>Res Prime</span></li><li data-ing="Brócoli"><span>Brócoli</span></li><li data-ing="Zanahoria"><span>Zanahoria</span></li><li data-ing="Mantequilla"><span>Mantequilla</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>710<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>50<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>16<small> g</small></dd></div><div><dt>Grasas</dt><dd>24<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Keto</li><li>Alta proteína</li><li>Libre de gluten</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Sin alérgenos declarados</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3>Bowl vegano de garbanzo y tahini</h3><p class="fn-sc__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="fn-sc__facts">450 kcal · 52 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/bowl-vegano-garbanzo" data-title="Bowl vegano de garbanzo y tahini">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Bowl vegano de garbanzo y tahini</h2><p class="dd__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Garbanzo"><span>Garbanzo</span></li><li data-ing="Tahini"><span>Tahini</span></li><li data-ing="Pepino"><span>Pepino</span></li><li data-ing="Cebolla"><span>Cebolla</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>450<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>32<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>52<small> g</small></dd></div><div><dt>Grasas</dt><dd>15<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Vegano</li><li>Vegetariano</li><li>Libre de gluten</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Ajonjolí</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Crema de calabaza asada</h3><p class="fn-sc__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="fn-sc__facts">220 kcal · 18 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/crema-calabaza" data-title="Crema de calabaza asada">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Crema de calabaza asada</h2><p class="dd__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Calabaza"><span>Calabaza</span></li><li data-ing="Crema"><span>Crema</span></li><li data-ing="Semillas de calabaza"><span>Semillas de calabaza</span></li><li data-ing="Tomillo"><span>Tomillo</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>220<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>15<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>18<small> g</small></dd></div><div><dt>Grasas</dt><dd>7<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Vegetariano</li><li>Libre de gluten</li><li>Bajas calorías</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Lácteos</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Mini pasta de pollo para peques</h3><p class="fn-sc__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="fn-sc__facts">380 kcal · 44 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc" data-seasonal="true">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pasta-pollo-junior" data-title="Mini pasta de pollo para peques">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Mini pasta de pollo para peques</h2><p class="dd__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Pasta"><span>Pasta</span></li><li data-ing="Pollo"><span>Pollo</span></li><li data-ing="Queso"><span>Queso</span></li><li data-ing="Jitomate"><span>Jitomate</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>380<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>27<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>44<small> g</small></dd></div><div><dt>Grasas</dt><dd>13<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Gluten · Lácteos</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada" data-seasonal="true">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Chiles en nogada de temporada" loading="lazy"><span class="fn-ribbon">Edición limitada · Septiembre</span></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3>Chiles en nogada de temporada</h3><p class="fn-sc__desc">Chile poblano relleno de picadillo, bañado en nogada y granada. Solo en temporada.</p><p class="fn-sc__facts">690 kcal · 48 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$320<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc" data-seasonal="true">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/chiles-en-nogada" data-title="Chiles en nogada de temporada">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Chiles en nogada de temporada" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--signature">Signature $$</span>
+<span class="dd__price">$320<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Chiles en nogada de temporada</h2><p class="dd__desc">Chile poblano relleno de picadillo, bañado en nogada y granada. Solo en temporada.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Chile poblano"><span>Chile poblano</span></li><li data-ing="Res"><span>Res</span></li><li data-ing="Nuez de Castilla"><span>Nuez de Castilla</span></li><li data-ing="Granada"><span>Granada</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>690<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>48<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>48<small> g</small></dd></div><div><dt>Grasas</dt><dd>23<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Nuez · Lácteos</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena" data-seasonal="true">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="lazy"><span class="fn-ribbon">Edición limitada · Otoño</span></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3>Pan de calabaza con especias</h3><p class="fn-sc__desc">Pan húmedo de calabaza de otoño con canela y nuez moscada.</p><p class="fn-sc__facts">320 kcal · 38 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pan-calabaza-especias" data-title="Pan de calabaza con especias">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Pan de calabaza con especias</h2><p class="dd__desc">Pan húmedo de calabaza de otoño con canela y nuez moscada.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Calabaza"><span>Calabaza</span></li><li data-ing="Canela"><span>Canela</span></li><li data-ing="Moscada"><span>Moscada</span></li><li data-ing="Avena"><span>Avena</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>320<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>22<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>38<small> g</small></dd></div><div><dt>Grasas</dt><dd>11<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Gluten · Huevo</p>
+  </div>
+</div>
+
 </article></div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Platillos siguientes">&#8250;</button>
             <button class="fn-gonext" type="button" data-fn-sc-next><span>Continuar al siguiente paso</span><i aria-hidden="true">&rarr;</i></button>
@@ -12802,83 +12993,237 @@ Pago digital, sin efectivo</li></ul>
           <div class="fn-carousel fn-carousel--show">
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Platillos anteriores">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
-            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc">
+            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Pollo a las hierbas con puré rústico</h3><p class="fn-sc__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de papa.</p><p class="fn-sc__facts">480 kcal · 22 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pollo-a-las-hierbas" data-title="Pollo a las hierbas con puré rústico">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Pollo a las hierbas con puré rústico</h2><p class="dd__desc">Pechuga de pollo marinada en hierbas, sellada al fuego y servida sobre puré rústico de papa.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Pollo"><span>Pollo</span></li><li data-ing="Papa"><span>Papa</span></li><li data-ing="Mantequilla"><span>Mantequilla</span></li><li data-ing="Hierbas finas"><span>Hierbas finas</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>480<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>34<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>22<small> g</small></dd></div><div><dt>Grasas</dt><dd>16<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Keto</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Lácteos</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Bowl de res magra y quinoa</h3><p class="fn-sc__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="fn-sc__facts">560 kcal · 34 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/bowl-res-quinoa" data-title="Bowl de res magra y quinoa">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Bowl de res magra y quinoa</h2><p class="dd__desc">Tiras de res magra sobre quinoa tibia, aguacate y cilantro fresco.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Res magra"><span>Res magra</span></li><li data-ing="Quinoa"><span>Quinoa</span></li><li data-ing="Aguacate"><span>Aguacate</span></li><li data-ing="Cilantro"><span>Cilantro</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>560<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>39<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>34<small> g</small></dd></div><div><dt>Grasas</dt><dd>19<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Alta proteína</li><li>Libre de gluten</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Sin alérgenos declarados</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3>Salmón gourmet en costra de almendras</h3><p class="fn-sc__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry rostizado.</p><p class="fn-sc__facts">520 kcal · 14 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/salmon-costra-almendras" data-title="Salmón gourmet en costra de almendras">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Salmón gourmet en costra de almendras</h2><p class="dd__desc">Lomo de salmón con costra de almendras y eneldo, espárragos asados y jitomate cherry rostizado.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Salmón"><span>Salmón</span></li><li data-ing="Almendra"><span>Almendra</span></li><li data-ing="Eneldo"><span>Eneldo</span></li><li data-ing="Espárragos"><span>Espárragos</span></li><li data-ing="Jitomate cherry"><span>Jitomate cherry</span></li><li data-ing="Limón"><span>Limón</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>520<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>36<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>14<small> g</small></dd></div><div><dt>Grasas</dt><dd>17<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Keto</li><li>Bajos carbohidratos</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Frutos secos · Pescado</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Omelette de claras con espinaca</h3><p class="fn-sc__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="fn-sc__facts">310 kcal · 8 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/omelette-claras-espinaca" data-title="Omelette de claras con espinaca">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Omelette de claras con espinaca</h2><p class="dd__desc">Claras esponjosas con espinaca salteada y champiñones.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Claras"><span>Claras</span></li><li data-ing="Espinaca"><span>Espinaca</span></li><li data-ing="Champiñones"><span>Champiñones</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>310<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>22<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>8<small> g</small></dd></div><div><dt>Grasas</dt><dd>10<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Vegetariano</li><li>Bajas calorías</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Huevo</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3>Arrachera al carbón con maíz y espárragos</h3><p class="fn-sc__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="fn-sc__facts">640 kcal · 28 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$320<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/arrachera-carbon" data-title="Arrachera al carbón con maíz y espárragos">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--signature">Signature $$</span>
+<span class="dd__price">$320<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Arrachera al carbón con maíz y espárragos</h2><p class="dd__desc">Arrachera marcada al carbón, elote desgranado y espárragos con micro hierbas.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Arrachera"><span>Arrachera</span></li><li data-ing="Maíz"><span>Maíz</span></li><li data-ing="Espárragos"><span>Espárragos</span></li><li data-ing="Micro hierbas"><span>Micro hierbas</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>640<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>45<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>28<small> g</small></dd></div><div><dt>Grasas</dt><dd>21<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Alta proteína</li><li>Libre de gluten</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Sin alérgenos declarados</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 
     <h3>Filete Prime con verduras asadas</h3><p class="fn-sc__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin perder su punto.</p><p class="fn-sc__facts">710 kcal · 16 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$390<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/filete-prime" data-title="Filete Prime con verduras asadas">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+<span class="dd__price">$390<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Filete Prime con verduras asadas</h2><p class="dd__desc">Corte Prime sellado al fuego con verduras asadas, acondicionado para recalentar sin perder su punto.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Res Prime"><span>Res Prime</span></li><li data-ing="Brócoli"><span>Brócoli</span></li><li data-ing="Zanahoria"><span>Zanahoria</span></li><li data-ing="Mantequilla"><span>Mantequilla</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>710<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>50<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>16<small> g</small></dd></div><div><dt>Grasas</dt><dd>24<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Keto</li><li>Alta proteína</li><li>Libre de gluten</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Sin alérgenos declarados</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3>Bowl vegano de garbanzo y tahini</h3><p class="fn-sc__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="fn-sc__facts">450 kcal · 52 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/bowl-vegano-garbanzo" data-title="Bowl vegano de garbanzo y tahini">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Bowl vegano de garbanzo y tahini</h2><p class="dd__desc">Garbanzo especiado, tahini cremoso, pepino y cebolla morada encurtida.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Garbanzo"><span>Garbanzo</span></li><li data-ing="Tahini"><span>Tahini</span></li><li data-ing="Pepino"><span>Pepino</span></li><li data-ing="Cebolla"><span>Cebolla</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>450<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>32<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>52<small> g</small></dd></div><div><dt>Grasas</dt><dd>15<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Vegano</li><li>Vegetariano</li><li>Libre de gluten</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Ajonjolí</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Crema de calabaza asada</h3><p class="fn-sc__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="fn-sc__facts">220 kcal · 18 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/crema-calabaza" data-title="Crema de calabaza asada">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Crema de calabaza asada</h2><p class="dd__desc">Calabaza rostizada al fuego, crema ligera y semillas tostadas.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Calabaza"><span>Calabaza</span></li><li data-ing="Crema"><span>Crema</span></li><li data-ing="Semillas de calabaza"><span>Semillas de calabaza</span></li><li data-ing="Tomillo"><span>Tomillo</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>220<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>15<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>18<small> g</small></dd></div><div><dt>Grasas</dt><dd>7<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><ul class="dd__chips"><li>Vegetariano</li><li>Libre de gluten</li><li>Bajas calorías</li></ul><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Lácteos</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Mini pasta de pollo para peques</h3><p class="fn-sc__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="fn-sc__facts">380 kcal · 44 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc" data-seasonal="true">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pasta-pollo-junior" data-title="Mini pasta de pollo para peques">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Mini pasta de pollo para peques</h2><p class="dd__desc">Pasta corta con pollo desmenuzado y salsa suave de jitomate.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Pasta"><span>Pasta</span></li><li data-ing="Pollo"><span>Pollo</span></li><li data-ing="Queso"><span>Queso</span></li><li data-ing="Jitomate"><span>Jitomate</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>380<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>27<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>44<small> g</small></dd></div><div><dt>Grasas</dt><dd>13<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Gluten · Lácteos</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada" data-seasonal="true">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Chiles en nogada de temporada" loading="lazy"><span class="fn-ribbon">Edición limitada · Septiembre</span></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3>Chiles en nogada de temporada</h3><p class="fn-sc__desc">Chile poblano relleno de picadillo, bañado en nogada y granada. Solo en temporada.</p><p class="fn-sc__facts">690 kcal · 48 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$320<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc" data-seasonal="true">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/chiles-en-nogada" data-title="Chiles en nogada de temporada">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Chiles en nogada de temporada" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--signature">Signature $$</span>
+<span class="dd__price">$320<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Chiles en nogada de temporada</h2><p class="dd__desc">Chile poblano relleno de picadillo, bañado en nogada y granada. Solo en temporada.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Chile poblano"><span>Chile poblano</span></li><li data-ing="Res"><span>Res</span></li><li data-ing="Nuez de Castilla"><span>Nuez de Castilla</span></li><li data-ing="Granada"><span>Granada</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>690<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>48<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>48<small> g</small></dd></div><div><dt>Grasas</dt><dd>23<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Nuez · Lácteos</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena" data-seasonal="true">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="lazy"><span class="fn-ribbon">Edición limitada · Otoño</span></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3>Pan de calabaza con especias</h3><p class="fn-sc__desc">Pan húmedo de calabaza de otoño con canela y nuez moscada.</p><p class="fn-sc__facts">320 kcal · 38 g carbohidratos</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> por comida</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pan-calabaza-especias" data-title="Pan de calabaza con especias">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> por comida</small></span></div>
+    <h2 class="dd__title" data-dd-title>Pan de calabaza con especias</h2><p class="dd__desc">Pan húmedo de calabaza de otoño con canela y nuez moscada.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredientes</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Calabaza"><span>Calabaza</span></li><li data-ing="Canela"><span>Canela</span></li><li data-ing="Moscada"><span>Moscada</span></li><li data-ing="Avena"><span>Avena</span></li></ul><h3 class="dd__h">Información nutricional</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calorías</dt><dd>320<small> kcal</small></dd></div><div><dt>Proteína</dt><dd>22<small> g</small></dd></div><div><dt>Carbohidratos</dt><dd>38<small> g</small></dd></div><div><dt>Grasas</dt><dd>11<small> g</small></dd></div><div><dt>Fibra</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Valores estimados por porción. Pueden variar ligeramente según el corte y la cocción.</p><h3 class="dd__h">Alérgenos</h3>
+    <p class="dd__list dd__allergens">Gluten · Huevo</p>
+  </div>
+</div>
+
 </article></div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Platillos siguientes">&#8250;</button>
             <button class="fn-gonext" type="button" data-fn-sc-next><span>Continuar al siguiente paso</span><i aria-hidden="true">&rarr;</i></button>
@@ -14113,83 +14458,237 @@ Pago digital, sin efectivo</li></ul>
           <div class="fn-carousel fn-carousel--show">
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Previous dishes">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
-            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc">
+            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Herb chicken with rustic mash</h3><p class="fn-sc__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="fn-sc__facts">480 kcal · 22 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pollo-a-las-hierbas" data-title="Herb chicken with rustic mash">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Herb chicken with rustic mash</h2><p class="dd__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Pollo"><span>Chicken</span></li><li data-ing="Papa"><span>Potato</span></li><li data-ing="Mantequilla"><span>Butter</span></li><li data-ing="Hierbas finas"><span>Fine herbs</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>480<small> kcal</small></dd></div><div><dt>Protein</dt><dd>34<small> g</small></dd></div><div><dt>Carbs</dt><dd>22<small> g</small></dd></div><div><dt>Fat</dt><dd>16<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Keto</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Dairy</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Lean beef and quinoa bowl</h3><p class="fn-sc__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="fn-sc__facts">560 kcal · 34 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/bowl-res-quinoa" data-title="Lean beef and quinoa bowl">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Lean beef and quinoa bowl</h2><p class="dd__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Res magra"><span>Lean beef</span></li><li data-ing="Quinoa"><span>Quinoa</span></li><li data-ing="Aguacate"><span>Avocado</span></li><li data-ing="Cilantro"><span>Cilantro</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>560<small> kcal</small></dd></div><div><dt>Protein</dt><dd>39<small> g</small></dd></div><div><dt>Carbs</dt><dd>34<small> g</small></dd></div><div><dt>Fat</dt><dd>19<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>High protein</li><li>Gluten-free</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">No declared allergens</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3>Gourmet salmon in an almond crust</h3><p class="fn-sc__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="fn-sc__facts">520 kcal · 14 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/salmon-costra-almendras" data-title="Gourmet salmon in an almond crust">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Gourmet salmon in an almond crust</h2><p class="dd__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Salmón"><span>Salmon</span></li><li data-ing="Almendra"><span>Almond</span></li><li data-ing="Eneldo"><span>Dill</span></li><li data-ing="Espárragos"><span>Asparagus</span></li><li data-ing="Jitomate cherry"><span>Cherry tomato</span></li><li data-ing="Limón"><span>Lime</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>520<small> kcal</small></dd></div><div><dt>Protein</dt><dd>36<small> g</small></dd></div><div><dt>Carbs</dt><dd>14<small> g</small></dd></div><div><dt>Fat</dt><dd>17<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Keto</li><li>Low carb</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Tree nuts · Fish</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Egg-white omelette with spinach</h3><p class="fn-sc__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="fn-sc__facts">310 kcal · 8 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/omelette-claras-espinaca" data-title="Egg-white omelette with spinach">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Egg-white omelette with spinach</h2><p class="dd__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Claras"><span>Egg whites</span></li><li data-ing="Espinaca"><span>Spinach</span></li><li data-ing="Champiñones"><span>Mushrooms</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>310<small> kcal</small></dd></div><div><dt>Protein</dt><dd>22<small> g</small></dd></div><div><dt>Carbs</dt><dd>8<small> g</small></dd></div><div><dt>Fat</dt><dd>10<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Vegetarian</li><li>Low calorie</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Egg</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3>Charcoal-grilled skirt steak with corn and asparagus</h3><p class="fn-sc__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="fn-sc__facts">640 kcal · 28 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$320<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/arrachera-carbon" data-title="Charcoal-grilled skirt steak with corn and asparagus">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--signature">Signature $$</span>
+<span class="dd__price">$320<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Charcoal-grilled skirt steak with corn and asparagus</h2><p class="dd__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Arrachera"><span>Skirt steak</span></li><li data-ing="Maíz"><span>Corn</span></li><li data-ing="Espárragos"><span>Asparagus</span></li><li data-ing="Micro hierbas"><span>Micro herbs</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>640<small> kcal</small></dd></div><div><dt>Protein</dt><dd>45<small> g</small></dd></div><div><dt>Carbs</dt><dd>28<small> g</small></dd></div><div><dt>Fat</dt><dd>21<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>High protein</li><li>Gluten-free</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">No declared allergens</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 
     <h3>Prime filet with roasted vegetables</h3><p class="fn-sc__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losing its doneness.</p><p class="fn-sc__facts">710 kcal · 16 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$390<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/filete-prime" data-title="Prime filet with roasted vegetables">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+<span class="dd__price">$390<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Prime filet with roasted vegetables</h2><p class="dd__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losing its doneness.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Res Prime"><span>Prime beef</span></li><li data-ing="Brócoli"><span>Broccoli</span></li><li data-ing="Zanahoria"><span>Carrot</span></li><li data-ing="Mantequilla"><span>Butter</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>710<small> kcal</small></dd></div><div><dt>Protein</dt><dd>50<small> g</small></dd></div><div><dt>Carbs</dt><dd>16<small> g</small></dd></div><div><dt>Fat</dt><dd>24<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Keto</li><li>High protein</li><li>Gluten-free</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">No declared allergens</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3>Vegan chickpea and tahini bowl</h3><p class="fn-sc__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="fn-sc__facts">450 kcal · 52 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/bowl-vegano-garbanzo" data-title="Vegan chickpea and tahini bowl">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Vegan chickpea and tahini bowl</h2><p class="dd__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Garbanzo"><span>Chickpeas</span></li><li data-ing="Tahini"><span>Tahini</span></li><li data-ing="Pepino"><span>Cucumber</span></li><li data-ing="Cebolla"><span>Onion</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>450<small> kcal</small></dd></div><div><dt>Protein</dt><dd>32<small> g</small></dd></div><div><dt>Carbs</dt><dd>52<small> g</small></dd></div><div><dt>Fat</dt><dd>15<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Vegan</li><li>Vegetarian</li><li>Gluten-free</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Sesame</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Roasted pumpkin cream soup</h3><p class="fn-sc__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="fn-sc__facts">220 kcal · 18 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/crema-calabaza" data-title="Roasted pumpkin cream soup">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Roasted pumpkin cream soup</h2><p class="dd__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Calabaza"><span>Pumpkin</span></li><li data-ing="Crema"><span>Cream</span></li><li data-ing="Semillas de calabaza"><span>Pumpkin seeds</span></li><li data-ing="Tomillo"><span>Thyme</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>220<small> kcal</small></dd></div><div><dt>Protein</dt><dd>15<small> g</small></dd></div><div><dt>Carbs</dt><dd>18<small> g</small></dd></div><div><dt>Fat</dt><dd>7<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Vegetarian</li><li>Gluten-free</li><li>Low calorie</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Dairy</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Mini chicken pasta for little ones</h3><p class="fn-sc__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="fn-sc__facts">380 kcal · 44 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc" data-seasonal="true">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pasta-pollo-junior" data-title="Mini chicken pasta for little ones">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Mini chicken pasta for little ones</h2><p class="dd__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Pasta"><span>Pasta</span></li><li data-ing="Pollo"><span>Chicken</span></li><li data-ing="Queso"><span>Cheese</span></li><li data-ing="Jitomate"><span>Tomato</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>380<small> kcal</small></dd></div><div><dt>Protein</dt><dd>27<small> g</small></dd></div><div><dt>Carbs</dt><dd>44<small> g</small></dd></div><div><dt>Fat</dt><dd>13<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Gluten · Dairy</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada" data-seasonal="true">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Seasonal chiles en nogada" loading="lazy"><span class="fn-ribbon">Limited edition · Septiembre</span></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3>Seasonal chiles en nogada</h3><p class="fn-sc__desc">Poblano pepper stuffed with picadillo, covered in walnut sauce and pomegranate. Only in season.</p><p class="fn-sc__facts">690 kcal · 48 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$320<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc" data-seasonal="true">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/chiles-en-nogada" data-title="Seasonal chiles en nogada">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Seasonal chiles en nogada" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--signature">Signature $$</span>
+<span class="dd__price">$320<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Seasonal chiles en nogada</h2><p class="dd__desc">Poblano pepper stuffed with picadillo, covered in walnut sauce and pomegranate. Only in season.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Chile poblano"><span>Chile poblano</span></li><li data-ing="Res"><span>Res</span></li><li data-ing="Nuez de Castilla"><span>Nuez de Castilla</span></li><li data-ing="Granada"><span>Granada</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>690<small> kcal</small></dd></div><div><dt>Protein</dt><dd>48<small> g</small></dd></div><div><dt>Carbs</dt><dd>48<small> g</small></dd></div><div><dt>Fat</dt><dd>23<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Walnut · Dairy</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena" data-seasonal="true">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="lazy"><span class="fn-ribbon">Limited edition · Otoño</span></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3>Spiced pumpkin bread</h3><p class="fn-sc__desc">Moist autumn pumpkin bread with cinnamon and nutmeg.</p><p class="fn-sc__facts">320 kcal · 38 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pan-calabaza-especias" data-title="Spiced pumpkin bread">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Spiced pumpkin bread</h2><p class="dd__desc">Moist autumn pumpkin bread with cinnamon and nutmeg.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Calabaza"><span>Pumpkin</span></li><li data-ing="Canela"><span>Canela</span></li><li data-ing="Moscada"><span>Moscada</span></li><li data-ing="Avena"><span>Avena</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>320<small> kcal</small></dd></div><div><dt>Protein</dt><dd>22<small> g</small></dd></div><div><dt>Carbs</dt><dd>38<small> g</small></dd></div><div><dt>Fat</dt><dd>11<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Gluten · Egg</p>
+  </div>
+</div>
+
 </article></div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Next dishes">&#8250;</button>
             <button class="fn-gonext" type="button" data-fn-sc-next><span>Continue to the next step</span><i aria-hidden="true">&rarr;</i></button>
@@ -22774,83 +23273,237 @@ Digital payment, no cash</li></ul>
           <div class="fn-carousel fn-carousel--show">
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Previous dishes">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
-            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc">
+            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Herb chicken with rustic mash</h3><p class="fn-sc__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="fn-sc__facts">480 kcal · 22 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pollo-a-las-hierbas" data-title="Herb chicken with rustic mash">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Herb chicken with rustic mash</h2><p class="dd__desc">Chicken breast marinated in herbs, fire-seared and served over rustic potato mash.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Pollo"><span>Chicken</span></li><li data-ing="Papa"><span>Potato</span></li><li data-ing="Mantequilla"><span>Butter</span></li><li data-ing="Hierbas finas"><span>Fine herbs</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>480<small> kcal</small></dd></div><div><dt>Protein</dt><dd>34<small> g</small></dd></div><div><dt>Carbs</dt><dd>22<small> g</small></dd></div><div><dt>Fat</dt><dd>16<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Keto</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Dairy</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Lean beef and quinoa bowl</h3><p class="fn-sc__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="fn-sc__facts">560 kcal · 34 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/bowl-res-quinoa" data-title="Lean beef and quinoa bowl">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Lean beef and quinoa bowl</h2><p class="dd__desc">Strips of lean beef over warm quinoa, avocado and fresh cilantro.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Res magra"><span>Lean beef</span></li><li data-ing="Quinoa"><span>Quinoa</span></li><li data-ing="Aguacate"><span>Avocado</span></li><li data-ing="Cilantro"><span>Cilantro</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>560<small> kcal</small></dd></div><div><dt>Protein</dt><dd>39<small> g</small></dd></div><div><dt>Carbs</dt><dd>34<small> g</small></dd></div><div><dt>Fat</dt><dd>19<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>High protein</li><li>Gluten-free</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">No declared allergens</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3>Gourmet salmon in an almond crust</h3><p class="fn-sc__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="fn-sc__facts">520 kcal · 14 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/salmon-costra-almendras" data-title="Gourmet salmon in an almond crust">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Gourmet salmon in an almond crust</h2><p class="dd__desc">Salmon loin with an almond and dill crust, roasted asparagus and roasted cherry tomatoes.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Salmón"><span>Salmon</span></li><li data-ing="Almendra"><span>Almond</span></li><li data-ing="Eneldo"><span>Dill</span></li><li data-ing="Espárragos"><span>Asparagus</span></li><li data-ing="Jitomate cherry"><span>Cherry tomato</span></li><li data-ing="Limón"><span>Lime</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>520<small> kcal</small></dd></div><div><dt>Protein</dt><dd>36<small> g</small></dd></div><div><dt>Carbs</dt><dd>14<small> g</small></dd></div><div><dt>Fat</dt><dd>17<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Keto</li><li>Low carb</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Tree nuts · Fish</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Egg-white omelette with spinach</h3><p class="fn-sc__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="fn-sc__facts">310 kcal · 8 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/omelette-claras-espinaca" data-title="Egg-white omelette with spinach">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Egg-white omelette with spinach</h2><p class="dd__desc">Fluffy egg whites with sautéed spinach and mushrooms.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Claras"><span>Egg whites</span></li><li data-ing="Espinaca"><span>Spinach</span></li><li data-ing="Champiñones"><span>Mushrooms</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>310<small> kcal</small></dd></div><div><dt>Protein</dt><dd>22<small> g</small></dd></div><div><dt>Carbs</dt><dd>8<small> g</small></dd></div><div><dt>Fat</dt><dd>10<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Vegetarian</li><li>Low calorie</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Egg</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3>Charcoal-grilled skirt steak with corn and asparagus</h3><p class="fn-sc__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="fn-sc__facts">640 kcal · 28 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$320<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/arrachera-carbon" data-title="Charcoal-grilled skirt steak with corn and asparagus">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--signature">Signature $$</span>
+<span class="dd__price">$320<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Charcoal-grilled skirt steak with corn and asparagus</h2><p class="dd__desc">Charcoal-marked skirt steak, shucked corn and asparagus with micro herbs.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Arrachera"><span>Skirt steak</span></li><li data-ing="Maíz"><span>Corn</span></li><li data-ing="Espárragos"><span>Asparagus</span></li><li data-ing="Micro hierbas"><span>Micro herbs</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>640<small> kcal</small></dd></div><div><dt>Protein</dt><dd>45<small> g</small></dd></div><div><dt>Carbs</dt><dd>28<small> g</small></dd></div><div><dt>Fat</dt><dd>21<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>High protein</li><li>Gluten-free</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">No declared allergens</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 
     <h3>Prime filet with roasted vegetables</h3><p class="fn-sc__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losing its doneness.</p><p class="fn-sc__facts">710 kcal · 16 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$390<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/filete-prime" data-title="Prime filet with roasted vegetables">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--reserve">Reserve $$$</span>
+<span class="dd__price">$390<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Prime filet with roasted vegetables</h2><p class="dd__desc">Prime cut seared over fire with roasted vegetables, conditioned to reheat without losing its doneness.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Res Prime"><span>Prime beef</span></li><li data-ing="Brócoli"><span>Broccoli</span></li><li data-ing="Zanahoria"><span>Carrot</span></li><li data-ing="Mantequilla"><span>Butter</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>710<small> kcal</small></dd></div><div><dt>Protein</dt><dd>50<small> g</small></dd></div><div><dt>Carbs</dt><dd>16<small> g</small></dd></div><div><dt>Fat</dt><dd>24<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Keto</li><li>High protein</li><li>Gluten-free</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">No declared allergens</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3>Vegan chickpea and tahini bowl</h3><p class="fn-sc__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="fn-sc__facts">450 kcal · 52 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/bowl-vegano-garbanzo" data-title="Vegan chickpea and tahini bowl">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Vegan chickpea and tahini bowl</h2><p class="dd__desc">Spiced chickpeas, creamy tahini, cucumber and pickled red onion.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Garbanzo"><span>Chickpeas</span></li><li data-ing="Tahini"><span>Tahini</span></li><li data-ing="Pepino"><span>Cucumber</span></li><li data-ing="Cebolla"><span>Onion</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>450<small> kcal</small></dd></div><div><dt>Protein</dt><dd>32<small> g</small></dd></div><div><dt>Carbs</dt><dd>52<small> g</small></dd></div><div><dt>Fat</dt><dd>15<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Vegan</li><li>Vegetarian</li><li>Gluten-free</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Sesame</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Roasted pumpkin cream soup</h3><p class="fn-sc__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="fn-sc__facts">220 kcal · 18 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/crema-calabaza" data-title="Roasted pumpkin cream soup">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Roasted pumpkin cream soup</h2><p class="dd__desc">Fire-roasted pumpkin, light cream and toasted seeds.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Calabaza"><span>Pumpkin</span></li><li data-ing="Crema"><span>Cream</span></li><li data-ing="Semillas de calabaza"><span>Pumpkin seeds</span></li><li data-ing="Tomillo"><span>Thyme</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>220<small> kcal</small></dd></div><div><dt>Protein</dt><dd>15<small> g</small></dd></div><div><dt>Carbs</dt><dd>18<small> g</small></dd></div><div><dt>Fat</dt><dd>7<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><ul class="dd__chips"><li>Vegetarian</li><li>Gluten-free</li><li>Low calorie</li></ul><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Dairy</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--selecto">Selecto</span>
 
     <h3>Mini chicken pasta for little ones</h3><p class="fn-sc__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="fn-sc__facts">380 kcal · 44 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$180<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc" data-seasonal="true">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pasta-pollo-junior" data-title="Mini chicken pasta for little ones">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--selecto">Selecto</span>
+<span class="dd__price">$180<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Mini chicken pasta for little ones</h2><p class="dd__desc">Short pasta with shredded chicken and a mild tomato sauce.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Pasta"><span>Pasta</span></li><li data-ing="Pollo"><span>Chicken</span></li><li data-ing="Queso"><span>Cheese</span></li><li data-ing="Jitomate"><span>Tomato</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>380<small> kcal</small></dd></div><div><dt>Protein</dt><dd>27<small> g</small></dd></div><div><dt>Carbs</dt><dd>44<small> g</small></dd></div><div><dt>Fat</dt><dd>13<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Gluten · Dairy</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada" data-seasonal="true">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Seasonal chiles en nogada" loading="lazy"><span class="fn-ribbon">Limited edition · Septiembre</span></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--signature">Signature $$</span>
 
     <h3>Seasonal chiles en nogada</h3><p class="fn-sc__desc">Poblano pepper stuffed with picadillo, covered in walnut sauce and pomegranate. Only in season.</p><p class="fn-sc__facts">690 kcal · 48 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$320<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
-</article><article class="fn-sc" data-seasonal="true">
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/chiles-en-nogada" data-title="Seasonal chiles en nogada">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Seasonal chiles en nogada" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--signature">Signature $$</span>
+<span class="dd__price">$320<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Seasonal chiles en nogada</h2><p class="dd__desc">Poblano pepper stuffed with picadillo, covered in walnut sauce and pomegranate. Only in season.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Chile poblano"><span>Chile poblano</span></li><li data-ing="Res"><span>Res</span></li><li data-ing="Nuez de Castilla"><span>Nuez de Castilla</span></li><li data-ing="Granada"><span>Granada</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>690<small> kcal</small></dd></div><div><dt>Protein</dt><dd>48<small> g</small></dd></div><div><dt>Carbs</dt><dd>48<small> g</small></dd></div><div><dt>Fat</dt><dd>23<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Walnut · Dairy</p>
+  </div>
+</div>
+
+</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena" data-seasonal="true">
+  <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="lazy"><span class="fn-ribbon">Limited edition · Otoño</span></div>
   <div class="fn-sc__body">
     <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 
     <h3>Spiced pumpkin bread</h3><p class="fn-sc__desc">Moist autumn pumpkin bread with cinnamon and nutmeg.</p><p class="fn-sc__facts">320 kcal · 38 g carbs</p><div class="fn-sc__row"><span class="fn-sc__price">$250<small> per meal</small></span><span class="fn-sc__go" aria-hidden="true">&rarr;</span></div>
   </div>
+  <div class="dish-detail" data-dish-detail hidden data-url="/products/pan-calabaza-especias" data-title="Spiced pumpkin bread">
+  <div class="dd__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="lazy"></div>
+  <div class="dd__body">
+    <div class="dd__head"><span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
+<span class="dd__price">$250<small> per meal</small></span></div>
+    <h2 class="dd__title" data-dd-title>Spiced pumpkin bread</h2><p class="dd__desc">Moist autumn pumpkin bread with cinnamon and nutmeg.</p><p class="dd__flag" data-dd-flag hidden role="alert"></p><h3 class="dd__h">Ingredients</h3>
+      <ul class="dd__ing" data-dd-ing><li data-ing="Calabaza"><span>Pumpkin</span></li><li data-ing="Canela"><span>Canela</span></li><li data-ing="Moscada"><span>Moscada</span></li><li data-ing="Avena"><span>Avena</span></li></ul><h3 class="dd__h">Nutrition facts</h3>
+      <dl class="dd__nutri"><div class="is-main"><dt>Calories</dt><dd>320<small> kcal</small></dd></div><div><dt>Protein</dt><dd>22<small> g</small></dd></div><div><dt>Carbs</dt><dd>38<small> g</small></dd></div><div><dt>Fat</dt><dd>11<small> g</small></dd></div><div><dt>Fiber</dt><dd>4<small> g</small></dd></div></dl>
+      <p class="dd__note">Estimated values per serving. They may vary slightly with the cut and the cooking.</p><h3 class="dd__h">Allergens</h3>
+    <p class="dd__list dd__allergens">Gluten · Egg</p>
+  </div>
+</div>
+
 </article></div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="Next dishes">&#8250;</button>
             <button class="fn-gonext" type="button" data-fn-sc-next><span>Continue to the next step</span><i aria-hidden="true">&rarr;</i></button>
@@ -24902,7 +25555,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   function applyProfile() {
     var p = effectiveProfile();
     var al = (p.allergies || []).map(norm), dl = (p.dislikes || []).map(norm);
-    $$('[data-dish]').forEach(function (card) {
+    $$('[data-dish], [data-sc-dish]').forEach(function (card) {
       var tags = (card.getAttribute('data-allergens') || '').split('|').map(norm).filter(Boolean);
       var ings = (card.getAttribute('data-ingredients') || '').split('|').map(norm).filter(Boolean);
       var tagsO = (card.getAttribute('data-allergens') || '').split('|').filter(Boolean), ingsO = (card.getAttribute('data-ingredients') || '').split('|').filter(Boolean);

@@ -3556,3 +3556,38 @@ section:has(.dd.is-open){position:relative;z-index:30}
 
 .fn-sc .fn-warnbtn{top:8px;right:8px}
 .fn-sc{cursor:pointer}
+
+/* v85 — carousel arrows you can actually see: solid, bigger, inside the frame, with a soft pulse */
+.funnel .fn-arrow{top:50% !important;transform:translateY(-50%);width:52px;height:52px;border:2px solid rgba(255,255,255,.9);background:var(--accent);color:#fff;font-size:0;box-shadow:0 10px 26px -6px rgba(0,0,0,.8),0 0 0 6px rgba(255,98,0,.18);transition:transform .2s,box-shadow .2s,background .2s;display:grid;place-items:center;opacity:1}
+.funnel .fn-arrow::after{content:"";width:12px;height:12px;border:solid #fff;border-width:0 3px 3px 0;border-radius:2px}
+.funnel .fn-arrow--next{right:10px !important}.funnel .fn-arrow--prev{left:10px !important}
+.funnel .fn-arrow--next::after{transform:translateX(-2px) rotate(-45deg)}
+.funnel .fn-arrow--prev::after{transform:translateX(2px) rotate(135deg)}
+.funnel .fn-arrow:hover{transform:translateY(-50%) scale(1.1);box-shadow:0 12px 30px -6px rgba(0,0,0,.85),0 0 0 9px rgba(255,98,0,.28)}
+.funnel .fn-arrow:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.funnel .fn-arrow[hidden]{display:none !important}
+@media (prefers-reduced-motion:no-preference){.funnel .fn-arrow--next:not(:hover){animation:kxArrowPulse 2.4s ease-in-out infinite}}
+@keyframes kxArrowPulse{0%,100%{box-shadow:0 10px 26px -6px rgba(0,0,0,.8),0 0 0 6px rgba(255,98,0,.18)}50%{box-shadow:0 10px 26px -6px rgba(0,0,0,.8),0 0 0 11px rgba(255,98,0,.06)}}
+
+/* v86 — step 3 of the guide fits its frame on any desktop height */
+@media (min-width:861px){
+  .fn-rcard.fn-rg{gap:clamp(5px,1.2vh,12px);padding:clamp(10px,2vh,24px) clamp(16px,3vw,40px)}
+  .fn-rg--ex{justify-content:flex-start;gap:clamp(5px,1.1vh,10px)}
+  .fn-rcard .fn-rg--ex .fn-rg__p{font-size:clamp(.74rem,1.75vh,.98rem);line-height:1.45}
+  .fn-ex{width:min(100%,900px);gap:clamp(8px,1.4vw,18px)}
+  .fn-ex__card{display:grid;grid-template-columns:1fr 1fr;gap:clamp(4px,.9vh,9px) 10px;justify-items:center;align-items:center;padding:clamp(8px,1.6vh,18px) clamp(10px,1.4vw,18px)}
+  .fn-ex__card h5{grid-column:1/-1;font-size:clamp(.66rem,1.5vh,.88rem)}
+  .fn-ex__card h5 small{display:inline;margin-left:6px}
+  .fn-ex__bar{grid-column:1/-1;height:clamp(28px,5.2vh,44px)}
+  .fn-ex__bar i{font-size:clamp(.72rem,1.7vh,.96rem)}
+  .fn-ex__m,.fn-ex__m2,.fn-ex__ok{grid-column:1/-1}
+  .fn-rcard .fn-ex__m,.fn-rcard .fn-ex__m2{font-size:clamp(.54rem,1.25vh,.7rem)}
+  .fn-rcard .fn-ex__ok,.fn-rcard .fn-ex__tot{font-size:clamp(.68rem,1.5vh,.86rem)}
+  .fn-ex__pay b{padding:clamp(4px,.9vh,8px) 12px;font-size:clamp(.56rem,1.3vh,.74rem)}
+  .fn-ex__tot{grid-column:1;justify-self:end}.fn-ex__pay{grid-column:2;justify-self:start}
+}
+@media (min-width:861px) and (max-height:700px){
+  .fn-rcard .fn-rg--ex .fn-rg__lab{font-size:.62rem}
+  .fn-ex__m2{display:none}
+}
+.fn-ex__pay b{white-space:nowrap}.fn-ex__tot{white-space:nowrap}
