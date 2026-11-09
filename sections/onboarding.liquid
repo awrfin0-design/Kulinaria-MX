@@ -1,6 +1,6 @@
 {%- capture tx_disclaimer -%}{% render 'tx', s: settings.allergy_disclaimer %}{%- endcapture -%}
 {%- liquid
-  assign allergy_list = 'Gluten,Lácteos,Frutos secos,Mariscos' | split: ','
+  assign allergy_list = 'Gluten,Lácteos,Frutos secos,Cacahuate,Mariscos,Pescado,Huevo,Soya,Ajonjolí,Apio,Mostaza,Sulfitos' | split: ','
   assign diet_list = 'Keto,Libre de gluten,Vegetariano,Vegano' | split: ','
   assign sug_dis = 'onboarding.ob_sug_dis' | t | split: ','
   assign sug_al = 'onboarding.ob_sug_al' | t | split: ','

@@ -45,7 +45,7 @@
       </p>
     {%- endif -%}
     <span class="compat" data-compat></span>
-    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="{{ 'js.warn_label' | t }}"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
     <div class="dish__meta">
       <span class="dish__price">{% render 'plan-price', tier: tier, kind: 'meal', money: true %}<small> {{ 'funnel.per_meal' | t }}</small></span>
       <a class="dish__go" href="{{ product.url }}" aria-label="{{ 'dish.view_of' | t }} {{ tx_ptitle | escape }}">→</a>

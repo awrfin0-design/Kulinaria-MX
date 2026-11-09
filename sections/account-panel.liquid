@@ -30,7 +30,7 @@
         <a href="/pages/cuenta"{% if panel == 'resumen' %} aria-current="page"{% endif %}>{{ 'account.overview' | t }}</a>
         <a href="/pages/cuenta-semana"{% if section.settings.panel == 'semana' %} aria-current="page"{% endif %}>{{ 'account.my_week' | t }}</a>
         <a href="/pages/cuenta-pausas"{% if section.settings.panel == 'pausas' %} aria-current="page"{% endif %}>{{ 'account.pause_deliveries' | t }}</a>
-        <a href="/pages/cuenta-perfil"{% if section.settings.panel == 'perfil' %} aria-current="page"{% endif %}>{{ 'acct.my_data' | t }}</a>
+        <a href="/pages/bienvenida?edit=1"{% if section.settings.panel == 'perfil' %} aria-current="page"{% endif %}>{{ 'acct.my_data' | t }}</a>
       </nav>
 
       <div class="account-content">

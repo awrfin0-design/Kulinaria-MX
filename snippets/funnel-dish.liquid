@@ -37,7 +37,7 @@
     {%- if mf.calories.value or mf.carbs.value -%}
       <p class="dish__facts">{%- if mf.calories.value %}{{ mf.calories.value }} kcal{% endif -%}{%- if mf.calories.value and mf.carbs.value %} · {% endif -%}{%- if mf.carbs.value %}{{ mf.carbs.value }} {{ 'dish.carbs_g' | t }}{% endif -%}</p>
     {%- endif -%}
-    <p class="fn-warn" data-fn-warn hidden role="note"></p>
+    <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="{{ 'js.warn_label' | t }}"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
     <span class="compat" data-compat></span>
     <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ {{ 'funnel.note_t' | t }}</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="{{ 'funnel.mods_ph' | t }}" aria-label="{{ 'funnel.mods_note' | t }}"></div></div>
     <div class="fn-dish__row">

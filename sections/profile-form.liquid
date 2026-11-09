@@ -100,6 +100,7 @@
       </div>
     {%- endif -%}
   </div>
+  {%- if customer -%}<div class="container" style="margin-top:var(--space-lg)"><a class="btn btn--outline" href="{{ routes.account_logout_url }}">{{ 'account.logout_big' | t }}</a></div>{%- endif -%}
 </section>
 
 {% schema %}

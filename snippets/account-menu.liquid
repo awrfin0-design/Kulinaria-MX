@@ -18,13 +18,14 @@
       <div class="acct__who">
         <span class="acct__avatar" aria-hidden="true">{{ am_initial }}</span>
         <div><strong>{{ 'acct.hello' | t }} {{ am_name }}</strong><span class="acct__mail">{{ customer.email }}</span></div>
+        <a class="acct__out-top" href="{{ routes.account_logout_url }}">{{ 'account.logout_big' | t }}</a>
       </div>
       <a class="acct__todo" data-acct-todo href="/pages/bienvenida?edit=1" hidden>{{ 'acct.todo' | t }} →</a>
       <nav class="acct__links" aria-label="{{ 'general.account' | t }}">
         <a href="/pages/cuenta">{{ 'acct.my_account' | t }}</a>
         <a href="/pages/cuenta-semana">{{ 'account.my_week' | t }}</a>
         <a href="/pages/cuenta-pausas">{{ 'account.pause_deliveries' | t }}</a>
-        <a href="/pages/cuenta-perfil">{{ 'account.allergies_tastes' | t }}</a>
+        <a href="/pages/bienvenida?edit=1">{{ 'account.allergies_tastes' | t }}</a>
         <a href="/pages/cuenta-pedidos">{{ 'account.orders_invoices' | t }}</a>
       </nav>
     {%- else -%}
@@ -43,6 +44,6 @@
       <a class="btn btn--gold btn--sm btn--block" href="{{ routes.cart_url }}">{{ 'acct.view_cart' | t }}</a>
       <button class="acct__clear" type="button" data-cart-clear data-confirm="{{ 'cart.clear_confirm' | t }}"{% if cart.item_count == 0 %} hidden{% endif %}>{{ 'cart.clear' | t }}</button>
     </div>
-    {%- if customer -%}<a class="acct__out" href="{{ routes.account_logout_url }}">{{ 'account.logout' | t }}</a>{%- endif -%}
+    {%- if customer -%}<a class="acct__out" href="{{ routes.account_logout_url }}">{{ 'account.logout_big' | t }}</a>{%- endif -%}
   </div>
 </div>

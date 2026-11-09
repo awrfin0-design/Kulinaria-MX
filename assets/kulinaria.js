@@ -207,22 +207,29 @@
     if (w.indexOf(' ') < 0) { for (var k = 0; k < tk.length; k++) if (near(tk[k], w)) return true; }
     return false;
   };
-  function allergyHits(p, tags, ings) {
+  // The report says WHICH ingredient (or dish tag) clashes with WHICH declared allergy, so the card and the panel can point at it.
+  function allergyCore(p, tags, ings, tagsO, ingsO) {
     var out = [], strict = !!(p && p.strict);
     ((p && p.allergies) || []).forEach(function (raw) {
       var a = canon(raw); if (!a) return;
-      var ws = [a].concat(SYN[a] || []);
-      var direct = tags.indexOf(a) > -1 || tags.some(function (t) { return ws.indexOf(t) > -1; }) || ws.some(function (w) { return ings.some(function (i) { return named(i, w, a); }); });
-      var via = false;
-      if (!direct) {
+      var ws = [a].concat(SYN[a] || []), items = [], tagItems = [];
+      ings.forEach(function (i, k) { if (ws.some(function (w) { return named(i, w, a); })) items.push(ingsO[k]); });
+      tags.forEach(function (t, k) { if (t === a || ws.indexOf(t) > -1) tagItems.push(tagsO[k]); });
+      if (!items.length) items = tagItems.slice();             // name the ingredient when we can; the dish tag only when the list does not spell it out
+      if (!items.length) {
         var fam = (MEMBER_OF[a] || []).concat(SYN[a] ? [a] : []).filter(function (g, k, arr) { return arr.indexOf(g) === k; });
         var tagged = fam.filter(function (g) { return tags.indexOf(g) > -1; });
-        if (tagged.length) via = strict || !tagged.some(function (g) { return (SYN[g] || []).some(function (m) { return ings.some(function (i) { return named(i, m, g); }); }); });
+        if (tagged.length && (strict || !tagged.some(function (g) { return (SYN[g] || []).some(function (m) { return ings.some(function (i) { return named(i, m, g); }); }); })))
+          tagged.forEach(function (g) { items.push(tagsO[tags.indexOf(g)]); });
       }
-      if (direct || via) out.push(raw);
+      if (items.length) out.push({ raw: raw, items: items.filter(function (x, k, arr) { return arr.indexOf(x) === k; }) });
     });
     return out;
   }
+  function allergyHits(p, tags, ings) { return allergyCore(p, tags, ings, tags, ings).map(function (r) { return r.raw; }); }
+  function allergyReport(p, tagsO, ingsO) { return allergyCore(p, tagsO.map(norm), ingsO.map(norm), tagsO, ingsO); }
+  var cap = function (s) { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); };
+  var reportText = function (rep) { return T('warnHard', { list: rep.map(function (r) { return r.items.map(cap).join(', ') + ' (' + T('yourAllergy') + ': ' + r.raw + ')'; }).join('; ') }); };
   function dislikeHits(p, tags, ings) {
     return ((p && p.dislikes) || []).filter(function (raw) {
       var d = canon(raw); if (!d) return false;
@@ -246,7 +253,8 @@
     $$('[data-dish]').forEach(function (card) {
       var tags = (card.getAttribute('data-allergens') || '').split('|').map(norm).filter(Boolean);
       var ings = (card.getAttribute('data-ingredients') || '').split('|').map(norm).filter(Boolean);
-      var hard = allergyHits(p, tags, ings), soft = dislikeHits(p, tags, ings);
+      var tagsO = (card.getAttribute('data-allergens') || '').split('|').filter(Boolean), ingsO = (card.getAttribute('data-ingredients') || '').split('|').filter(Boolean);
+      var rep = allergyReport(p, tagsO, ingsO), hard = rep.map(function (r) { return r.raw; }), soft = dislikeHits(p, tags, ings);
       var compat = hard.length ? 0 : (soft.length ? Math.max(40, 100 - soft.length * 30) : 100);
       card.classList.toggle('is-warned', hard.length > 0);
       var badge = $('[data-compat]', card);
@@ -254,11 +262,13 @@
         badge.textContent = (al.length || dl.length) ? T('compat', { n: compat }) : '';
         badge.setAttribute('data-low', compat < 100 ? 'true' : 'false');
       }
-      var warn = $('[data-fn-warn]', card);
-      if (warn) {
-        warn.hidden = !(hard.length || soft.length);
+      var wbox = $('[data-fn-warnbox]', card), warn = $('[data-fn-warn]', card);
+      if (warn && wbox) {
+        var has = hard.length || soft.length;
+        wbox.hidden = !has; wbox.classList.toggle('is-hard', hard.length > 0); wbox.classList.toggle('is-soft', !hard.length && soft.length > 0);
         warn.className = 'fn-warn ' + (hard.length ? 'is-hard' : 'is-soft');
-        warn.textContent = hard.length ? T('notSuitable', { list: hard.join(', ') }) : (soft.length ? T('dislikeHit', { list: soft.join(', ') }) : '');
+        warn.textContent = hard.length ? reportText(rep) : (soft.length ? T('dislikeHit', { list: soft.join(', ') }) : '');
+        if (!has) { wbox.classList.remove('is-open'); var wb0 = $('[data-fn-warnbtn]', wbox); if (wb0) wb0.setAttribute('aria-expanded', 'false'); }
       }
       card.setAttribute('data-compat-value', compat);
     });
@@ -916,10 +926,21 @@
   function initDishPanel() {
     var panel = $('[data-dish-panel]'); if (!panel) return;
     var content = $('[data-dp-content]', panel), pick = $('[data-dp-pick]', panel), full = $('[data-dp-full]', panel), sheet = $('.dish-panel__sheet', panel), last = null, current = null, timer = 0;
+    var flagPanel = function (card) {
+      var p = effectiveProfile(), tagsO = (card.getAttribute('data-allergens') || '').split('|').filter(Boolean), ingsO = (card.getAttribute('data-ingredients') || '').split('|').filter(Boolean);
+      var rep = allergyReport(p, tagsO, ingsO), soft = dislikeHits(p, tagsO.map(norm), ingsO.map(norm));
+      $$('[data-dd-ing] li', content).forEach(function (li) {
+        var raw = li.getAttribute('data-ing') || '', hit = rep.filter(function (r) { return r.items.indexOf(raw) > -1; }), sf = soft.filter(function (d) { var c = canon(d); return c && (norm(raw).indexOf(c) > -1 || named(norm(raw), c, c)); });
+        if (hit.length) { li.classList.add('is-flag'); var s = document.createElement('small'); s.textContent = T('yourAllergy') + ': ' + hit.map(function (r) { return r.raw; }).join(', '); li.appendChild(s); li.title = T('ingFlag'); }
+        else if (sf.length) { li.classList.add('is-soft'); li.title = T('ingSoft'); }
+      });
+      var fl = $('[data-dd-flag]', content);
+      if (fl) { if (rep.length) { fl.hidden = false; fl.className = 'dd__flag is-hard'; fl.textContent = reportText(rep); } else if (soft.length) { fl.hidden = false; fl.className = 'dd__flag is-soft'; fl.textContent = T('dislikeHit', { list: soft.join(', ') }); } else fl.hidden = true; }
+    };
     var open = function (card) {
       var det = $('[data-dish-detail]', card); if (!det) return;
       content.innerHTML = det.innerHTML; var cp = $('[data-fn-price]', card), dp = $('.dd__price', content); if (cp && dp && dp.firstChild) dp.firstChild.textContent = cp.textContent; full.setAttribute('href', det.getAttribute('data-url') || '#'); sheet.setAttribute('aria-label', det.getAttribute('data-title') || '');
-      current = card; var btn = $('[data-pick]', card); pick.hidden = !(card.hasAttribute('data-fn-dish') && btn && !card.classList.contains('is-blocked'));
+      flagPanel(card); current = card; var btn = $('[data-pick]', card); pick.hidden = !(card.hasAttribute('data-fn-dish') && btn && !card.classList.contains('is-blocked'));
       last = document.activeElement; clearTimeout(timer); panel.hidden = false; document.documentElement.classList.add('has-dish-panel');
       content.scrollTop = 0; sheet.scrollTop = 0;
       requestAnimationFrame(function () { requestAnimationFrame(function () { panel.classList.add('is-open'); }); }); sheet.focus({ preventScroll: true });
@@ -934,7 +955,12 @@
       if (t.closest('[data-dp-close]')) { close(); return; }
       if (t.closest('[data-dp-pick]')) { var b = current && $('[data-pick]', current); close(); if (b) b.click(); return; }
       if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
-      var hit = t.closest('.dish__media, .dish__title a, .dish__go, .fn-dish__media, .fn-dish__title'); if (!hit || t.closest('[data-pick], button')) return;
+      var wbtn = t.closest('[data-fn-warnbtn]');
+      if (wbtn) { e.preventDefault(); var bx = wbtn.closest('[data-fn-warnbox]'), on = !bx.classList.contains('is-open'); $$('[data-fn-warnbox].is-open').forEach(function (x) { x.classList.remove('is-open'); var b3 = $('[data-fn-warnbtn]', x); if (b3) b3.setAttribute('aria-expanded', 'false'); }); bx.classList.toggle('is-open', on); wbtn.setAttribute('aria-expanded', on ? 'true' : 'false'); return; }
+      if (!t.closest('[data-fn-warnbox]')) $$('[data-fn-warnbox].is-open').forEach(function (x) { x.classList.remove('is-open'); });
+      var hit = t.closest('.dish__media, .dish__title a, .dish__go, .fn-dish__media, .fn-dish__title');
+      if (!hit) { var cc = t.closest('[data-has-detail]'); if (cc && !t.closest('a, button, input, select, textarea, label, .fn-warnbox, .fn-note, .fn-mods, [data-fn-note]')) hit = cc; }
+      if (!hit || t.closest('[data-pick], button')) return;
       var card = hit.closest('[data-has-detail]'); if (!card) return;
       e.preventDefault(); open(card);
     });
@@ -1188,6 +1214,12 @@
       });
     });
     if (!val('dislikes') && prof.dislikes && prof.dislikes.length) { var hd = $('[data-ob="dislikes"]', form); if (hd) hd.value = prof.dislikes.join(', '); }
+    if (prof.allergies && prof.allergies.length) {                 // editing later: every saved allergy shows as a tick or a removable tag
+      var known = acs.map(function (c) { return norm(c.value); }), mine = prof.allergies.map(norm);
+      acs.forEach(function (c) { c.checked = mine.indexOf(norm(c.value)) > -1; });
+      var hao = $('[data-ob="allergy_other"]', form); if (hao) hao.value = prof.allergies.filter(function (a) { return known.indexOf(norm(a)) < 0; }).join(', ');
+    }
+    if (prof.dislikes && prof.dislikes.length) { var hdl = $('[data-ob="dislikes"]', form); if (hdl) hdl.value = prof.dislikes.join(', '); }
     var tagBoxes = $$('[data-ob-tags]', form).map(function (box) {
       var hid = $('[data-ob="' + box.getAttribute('data-ob-tags') + '"]', box), wrap = $('.tag-input', box), inp = $('[data-ob-tag-input]', box);
       var list = function () { return hid.value.split(',').map(function (v) { return v.trim(); }).filter(Boolean); };
