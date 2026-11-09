@@ -3663,3 +3663,8 @@ section:has(.dd.is-open){position:relative;z-index:30}
 .fn-day__thumb.is-split:not(.has-h1) .fn-day__h1,.fn-day__thumb.is-split:not(.has-h2) .fn-day__h2{background-color:color-mix(in srgb,var(--accent) 10%,var(--bg-deep))}
 .fn-day__thumb.is-split:not(.has-h2) .fn-day__h2::after,.fn-day__thumb.is-split:not(.has-h1) .fn-day__h1::after{content:'+';position:absolute;inset:0;display:grid;place-items:center;font:700 .8rem var(--font-label);color:var(--accent)}
 .fn-day__thumb.is-split.has-h1,.fn-day__thumb.is-split.has-h2{border-style:solid;border-color:var(--accent)}
+/* v90: phone day strip - the split circle already shows both plates, so no second-plate label; keep the clear buttons inside the strip */
+@media (max-width:760px){
+  body .funnel .step[data-fn-step="3"] .fn-day__dish2{display:none !important}
+  body .funnel .step[data-fn-step="3"] .fn-week{padding-top:7px !important}
+}
