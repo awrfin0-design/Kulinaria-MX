@@ -3652,3 +3652,14 @@ section:has(.dd.is-open){position:relative;z-index:30}
 .fn-course[hidden]{display:none !important}
 @media (max-width:760px){body .funnel .fn-pickbar .fn-perday{flex:0 0 auto}.fn-perday__l{padding:0 6px 0 10px;font-size:.56rem}}
 @media (max-width:760px){body .funnel .step[data-fn-step="3"][data-perday="2"] .fn-carousel{height:min(314px,43svh) !important;min-height:240px !important}}
+
+/* v89: with 2 plates per day the day circle is split in half: 1st plate = left half, 2nd plate = right half */
+.fn-day__thumb{position:relative;overflow:hidden;flex:none}
+.fn-day__h1,.fn-day__h2{display:none;position:absolute;top:0;bottom:0;width:50%;background:center/auto 100% no-repeat}
+.fn-day__thumb.is-split{background-image:none !important}
+.fn-day__thumb.is-split .fn-day__h1,.fn-day__thumb.is-split .fn-day__h2{display:block}
+.fn-day__h1{left:0;background-position:center;border-right:1px solid var(--accent)}
+.fn-day__h2{right:0;background-position:center}
+.fn-day__thumb.is-split:not(.has-h1) .fn-day__h1,.fn-day__thumb.is-split:not(.has-h2) .fn-day__h2{background-color:color-mix(in srgb,var(--accent) 10%,var(--bg-deep))}
+.fn-day__thumb.is-split:not(.has-h2) .fn-day__h2::after,.fn-day__thumb.is-split:not(.has-h1) .fn-day__h1::after{content:'+';position:absolute;inset:0;display:grid;place-items:center;font:700 .8rem var(--font-label);color:var(--accent)}
+.fn-day__thumb.is-split.has-h1,.fn-day__thumb.is-split.has-h2{border-style:solid;border-color:var(--accent)}

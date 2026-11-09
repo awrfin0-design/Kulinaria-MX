@@ -1466,7 +1466,7 @@
         for (var i = 0; i < MEALS; i++) {
           var li = document.createElement('li'), b = document.createElement('button'), x = document.createElement('span');
           b.type = 'button'; b.className = 'fn-day'; b.setAttribute('data-fn-day-btn', i);
-          b.innerHTML = '<i class="fn-day__thumb" aria-hidden="true"></i><span class="fn-day__d"></span><span class="fn-day__dish"></span><span class="fn-day__dish2" hidden></span><span class="fn-day__ing"></span>';
+          b.innerHTML = '<i class="fn-day__thumb" aria-hidden="true"><b class="fn-day__h1"></b><b class="fn-day__h2"></b></i><span class="fn-day__d"></span><span class="fn-day__dish"></span><span class="fn-day__dish2" hidden></span><span class="fn-day__ing"></span>';
           x.className = 'fn-day__x'; x.setAttribute('data-fn-day-x', i); x.setAttribute('role', 'button'); x.tabIndex = 0; x.textContent = '×'; x.hidden = true;
           var ed = document.createElement('span'); ed.className = 'fn-day__e'; ed.setAttribute('data-fn-day-edit', i); ed.setAttribute('role', 'button'); ed.tabIndex = 0; ed.textContent = '✎'; ed.hidden = true;
           var x2 = document.createElement('span'); x2.className = 'fn-day__x2'; x2.setAttribute('data-fn-day2-x', i); x2.setAttribute('role', 'button'); x2.tabIndex = 0; x2.textContent = '×'; x2.hidden = true;
@@ -1497,6 +1497,8 @@
           var d2 = st.days2[i] && byPid(st.days2[i]), dsh2 = $('.fn-day__dish2', b), x2e = $('[data-fn-day2-x]', li); dsh2.hidden = !d2; dsh2.textContent = d2 ? '+ ' + lab(d2) : ''; if (x2e) { x2e.hidden = !d2; x2e.setAttribute('aria-label', fill(T_('clear-day'), { d: dayLabel(i) })); }
           var ingEl = $('.fn-day__ing', b); if (ingEl) { var ig = d ? (d.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean) : [], mt0 = d ? modsText(i) : ''; ingEl.textContent = (ig.length ? ig.slice(0, 7).join(' · ') : '') + (mt0 ? '  ✎ ' + mt0 : ''); }
           var img = d && $('img', d); thumb.style.backgroundImage = img ? 'url("' + (img.currentSrc || img.src) + '")' : '';
+          var im2 = d2 && $('img', d2), h1 = $('.fn-day__h1', thumb), h2 = $('.fn-day__h2', thumb); thumb.classList.toggle('is-split', st.perDay === 2); thumb.classList.toggle('has-h1', !!d); thumb.classList.toggle('has-h2', !!d2);
+          if (h1) h1.style.backgroundImage = img ? 'url("' + (img.currentSrc || img.src) + '")' : ''; if (h2) h2.style.backgroundImage = im2 ? 'url("' + (im2.currentSrc || im2.src) + '")' : '';
           b.classList.toggle('is-set', !!d); b.classList.toggle('is-active', i === st.active); b.classList.toggle('has-warn', !!(d && d.classList.contains('is-warned')));
           b.setAttribute('aria-pressed', i === st.active ? 'true' : 'false');
           b.setAttribute('aria-label', dayLabel(i) + ': ' + (d ? lab(d) : T_('day-empty')));
