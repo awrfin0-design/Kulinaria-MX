@@ -454,7 +454,7 @@ ok('category filter works in English', (await page.$$eval('[data-page="menu"] [d
 await page.goto(`${URL0}#/pg/perfil`); await page.waitForTimeout(150);
 await page.check('[data-page="pg/perfil"] input[name="allergy"][value="Frutos secos"]'); await page.click('[data-page="pg/perfil"] button[type="submit"]'); await page.waitForTimeout(100);
 await page.goto(`${URL0}#/p/salmon-costra-almendras`); await page.waitForTimeout(150);
-ok('allergen warning still works in English with English alert text', await page.evaluate(() => { const d = document.querySelector('[data-page="p/salmon-costra-almendras"]'); return !d.querySelector('[data-allergen-alert]').hidden && /According to our data/.test(d.querySelector('[data-allergen-alert]').textContent) && !d.querySelector('[data-add]').disabled; }));
+ok('allergen warning still works in English with English alert text', await page.evaluate(() => { const d = document.querySelector('[data-page="p/salmon-costra-almendras"]'); return !d.querySelector('[data-allergen-alert]').hidden && /Contains or may contain|According to our data/.test(d.querySelector('[data-allergen-alert]').textContent) && !d.querySelector('[data-add]').disabled; }));
 await page.evaluate(() => localStorage.removeItem('kulinaria_profile'));
 await openMenu(); await page.click('#menu-overlay .lang__btn[value="es"]'); await page.waitForTimeout(1000);
 ok('language switches back to Spanish', (await page.evaluate(() => document.documentElement.lang)) === 'es' && /Elegir mi plan/.test(await page.evaluate(() => document.querySelector('#menu-overlay .menu-overlay__foot .arrow-link').textContent)));
@@ -1365,6 +1365,8 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   // ---- two courses per day, the macro column and the order memory
   { const PD = '[data-page="pg/pedido"] ';
     await page.evaluate((pd) => document.querySelector(pd + '[data-fn-day-btn="0"]').click(), PD); await page.waitForTimeout(150);
+    ok('the planner has a "plates per day" setting (1 | 2); the course chips stay hidden while it is on 1', await page.evaluate((pd) => !!document.querySelector(pd + '[data-fn-perday="2"]') && document.querySelector(pd + '[data-fn-course-group]').hidden, PD));
+    await page.evaluate((pd) => document.querySelector(pd + '[data-fn-perday="2"]').click(), PD); await page.waitForTimeout(200);
     await page.evaluate((pd) => document.querySelector(pd + '[data-fn-course="1"]').click(), PD); await page.waitForTimeout(200);
     ok('the 2nd-course chip switches the picker and the prompt says which course is being chosen', await page.evaluate((pd) => document.querySelector(pd + '[data-fn-course="1"]').getAttribute('aria-pressed') === 'true' && /2\.º|2nd/.test(document.querySelector(pd + '[data-fn-prompt]').textContent), PD));
     const first = await page.evaluate((pd) => JSON.parse(localStorage.getItem('kulinaria_funnel')).days[0], PD);

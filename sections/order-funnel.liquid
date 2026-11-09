@@ -269,7 +269,8 @@
           <p class="fn-mods__tip">✎ {{ 'funnel.mods_open' | t }}</p>
           <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
-            <div class="fn-course" role="group" aria-label="{{ 'funnel.course_aria' | t }}"><button type="button" class="fn-course__b is-on" data-fn-course="0" aria-pressed="true">{{ 'funnel.c1' | t }}</button><button type="button" class="fn-course__b" data-fn-course="1" aria-pressed="false">{{ 'funnel.c2' | t }}</button></div>
+            <div class="fn-course fn-perday" role="group" aria-label="{{ 'funnel.perday_aria' | t }}"><span class="fn-perday__l">{{ 'funnel.perday' | t }}</span><button type="button" class="fn-course__b is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" class="fn-course__b" data-fn-perday="2" aria-pressed="false">2</button></div>
+            <div class="fn-course" data-fn-course-group hidden role="group" aria-label="{{ 'funnel.course_aria' | t }}"><button type="button" class="fn-course__b is-on" data-fn-course="0" aria-pressed="true">{{ 'funnel.c1' | t }}</button><button type="button" class="fn-course__b" data-fn-course="1" aria-pressed="false">{{ 'funnel.c2' | t }}</button></div>
             <button class="text-link fn-repeat" type="button" data-fn-repeat hidden data-t-done="{{ 'funnel.repeat_done' | t }}" data-t-none="{{ 'funnel.repeat_none' | t }}">&#8634; {{ 'funnel.repeat' | t }}</button>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / {{ meals_per_week }} <span>{{ 'funnel.meals_word' | t }}</span><i data-fn-meter-bar></i></p>
             <label class="fn-sel"><span class="fn-sr">{{ 'collection.category' | t }}</span>

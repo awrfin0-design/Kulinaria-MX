@@ -687,6 +687,8 @@
     "have_account": "¿Ya tienes cuenta?"
   },
   "funnel": {
+    "perday": "Platos al día",
+    "perday_aria": "Cuántos platos quieres cada día",
     "course_aria": "Tiempo del día que estás eligiendo",
     "c1": "1.er tiempo",
     "c2": "2.º tiempo",

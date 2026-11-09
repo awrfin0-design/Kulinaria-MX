@@ -1378,6 +1378,8 @@
       if (typeof st.active !== 'number' || st.active < 0 || st.active >= MEALS) st.active = Math.max(0, st.days.indexOf(''));
       if (!Array.isArray(st.days2) || st.days2.length !== MEALS) st.days2 = blankDays();      // the 2nd course of each day (a meal has two courses)
       if (st.course !== 1) st.course = 0;
+      if (st.perDay !== 2) st.perDay = st.days2.some(function (p) { return !!p; }) ? 2 : 1;
+      if (st.perDay === 1) st.course = 0;
       var eligible = function (d) { return !!d && rank(d.getAttribute('data-tier')) >= rank(st.tier); };
       var dayLevel = function (i) { return Math.max(levelOf(byPid(st.days[i])) || 0, levelOf(byPid(st.days2[i])) || 0); };
       var curSlot = function () { return st.course ? st.days2 : st.days; };
@@ -1648,6 +1650,8 @@
         var e1 = $('[data-fn-empty]', holder); if (e1) e1.hidden = shown > 0;
         // meter + summary
         var prm = $('[data-fn-prompt]', holder); if (prm) prm.textContent = st.course === 1 ? fill(T_('pick2-for'), { d: dayLabel(st.active) }) : (n === MEALS ? T_('all-done') : fill(T_('pick-for'), { d: dayLabel(st.active) }));
+        $$('[data-fn-perday]', holder).forEach(function (pb) { var on = +pb.getAttribute('data-fn-perday') === st.perDay; pb.classList.toggle('is-on', on); pb.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+        var cg = $('[data-fn-course-group]', holder); if (cg) cg.hidden = st.perDay !== 2; var stp = cg && cg.closest('.step'); if (stp) stp.setAttribute('data-perday', st.perDay);
         $$('[data-fn-course]', holder).forEach(function (cb) { var on = +cb.getAttribute('data-fn-course') === st.course; cb.classList.toggle('is-on', on); cb.setAttribute('aria-pressed', on ? 'true' : 'false'); });
         paintMacros();
         var mn = $('[data-fn-meter-n]', holder); if (mn) mn.textContent = n;
@@ -1734,6 +1738,8 @@
         var xb = e.target.closest ? e.target.closest('[data-fn-day-x]') : null;
         var x2b = e.target.closest ? e.target.closest('[data-fn-day2-x]') : null;
         if (x2b) { var x2i = +x2b.getAttribute('data-fn-day2-x'); st.days2[x2i] = ''; st.active = x2i; say(''); persist(); render(); return; }
+        var pdb = e.target.closest ? e.target.closest('[data-fn-perday]') : null;
+        if (pdb) { st.perDay = +pdb.getAttribute('data-fn-perday') === 2 ? 2 : 1; if (st.perDay === 1) { st.days2 = blankDays(); st.course = 0; st.qty = {}; st.days.forEach(function (p) { if (p) st.qty[p] = (st.qty[p] || 0) + 1; }); } say(''); persist(); render(); return; }
         var cbtn = e.target.closest ? e.target.closest('[data-fn-course]') : null;
         if (cbtn) { st.course = +cbtn.getAttribute('data-fn-course') === 1 ? 1 : 0; say(''); persist(); render(); return; }
         if (xb) { var xi = +xb.getAttribute('data-fn-day-x'); st.days[xi] = ''; st.days2[xi] = ''; st.active = xi; say(''); persist(); render(); return; }

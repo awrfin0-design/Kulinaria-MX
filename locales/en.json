@@ -687,6 +687,8 @@
     "have_account": "Already have an account?"
   },
   "funnel": {
+    "perday": "Plates per day",
+    "perday_aria": "How many plates you want each day",
     "course_aria": "Course of the day you are choosing",
     "c1": "1st course",
     "c2": "2nd course",
