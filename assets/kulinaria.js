@@ -815,7 +815,7 @@
       if (location.protocol === 'file:' && !localStorage.getItem('kx-test-identity')) return;       // local preview keeps its test fixtures
       var a = $('#kx-account'), cid = a ? String(a.getAttribute('data-cid') || '') : '', stored = localStorage.getItem('kx_cid') || '';
       var wipe = function () {
-        localStorage.removeItem(PROFILE_KEY); localStorage.removeItem(ONB_KEY); sessionStorage.removeItem('kx_pulled');
+        localStorage.removeItem(PROFILE_KEY); localStorage.removeItem(ONB_KEY); sessionStorage.removeItem('kx_pulled'); Object.keys(localStorage).forEach(function (k) { if (k.indexOf('kx_last_order') === 0) localStorage.removeItem(k); });
         var f = JSON.parse(localStorage.getItem(FUNNEL_KEY) || 'null');
         if (f) { f.info = {}; f.allergies = []; f.para = ''; f.mods = f.mods || []; localStorage.setItem(FUNNEL_KEY, JSON.stringify(f)); }
       };
@@ -1350,12 +1350,18 @@
         var c1 = g1 ? $('[data-fn-chip]', g1) : null, c2 = $('[data-fn-chip]', g2); if (c1) c1.textContent = signedIn ? gate.getAttribute('data-t-done') : gate.getAttribute('data-t-todo'); if (c2) c2.textContent = !signedIn ? gate.getAttribute('data-t-wait') : (onbDone ? gate.getAttribute('data-t-done') : gate.getAttribute('data-t-todo'));
       }
       var startAtPlan = false; try { startAtPlan = location.protocol === 'file:' && !!sessionStorage.getItem('kx-test-start') && !!st.rulesOk; } catch (e) {}   // local preview only (test hook)
-      st.step = startAtPlan ? 1 : 0;
+      var savedStep = +st.step || 0, savedReach = +st.reach || 0;           // what the visitor had reached when they left (saved with the order in progress)
       var REACH_KEY = 'kx_reach';
       st.reach = 0; try { st.reach = parseInt(sessionStorage.getItem(REACH_KEY), 10) || 0; } catch (e) {}
+      var forceGuide = false; try { forceGuide = location.protocol === 'file:' && localStorage.getItem('kx-test-guide') === '1'; } catch (e) {}   // local preview only (test hook)
+      if (st.rulesOk && !forceGuide) {                                       // a returning client already knows the guide: resume, never restart
+        st.reach = Math.max(st.reach, savedReach, 1);
+        st.step = Math.max(1, Math.min(savedStep, st.reach));
+      } else st.step = 0;
+      if (startAtPlan) st.step = 1;
       st.planChosen = st.reach >= 2;
       if (startAtPlan) { st.reach = 3; st.planChosen = true; }                          // local preview only (test hook)
-      var setReach = function (n) { if (n > st.reach) { st.reach = n; try { sessionStorage.setItem(REACH_KEY, String(n)); } catch (e) {} } };
+      var setReach = function (n) { if (n > st.reach) { st.reach = n; try { sessionStorage.setItem(REACH_KEY, String(n)); } catch (e) {} } persist(); };
       var T_ = function (k) { return holder.getAttribute('data-t-' + k) || ''; };
       var steps = $$('[data-fn-step]', holder), dots = $$('[data-fn-dot]', holder), bar = $('[data-fn-bar]', holder);
       var next = $('[data-fn-next]', holder), prev = $('[data-fn-prev]', holder), finish = $('[data-fn-finish]', holder), err = $('[data-fn-error]', holder);
@@ -1370,8 +1376,12 @@
       // first visit with an old selection (quantities) -> turn it into day slots
       if (!Array.isArray(st.days) || st.days.length !== MEALS) { var seq = []; Object.keys(st.qty || {}).forEach(function (k) { for (var j = 0; j < st.qty[k]; j++) seq.push(k); }); st.days = blankDays().map(function (x, j) { return seq[j] || ''; }); }
       if (typeof st.active !== 'number' || st.active < 0 || st.active >= MEALS) st.active = Math.max(0, st.days.indexOf(''));
+      if (!Array.isArray(st.days2) || st.days2.length !== MEALS) st.days2 = blankDays();      // the 2nd course of each day (a meal has two courses)
+      if (st.course !== 1) st.course = 0;
       var eligible = function (d) { return !!d && rank(d.getAttribute('data-tier')) >= rank(st.tier); };
-      var upgradeExtra = function () { var sum = 0; st.days.forEach(function (p) { var l = levelOf(byPid(p)); if (l) sum += upg(l); }); return sum; };      // the extra is paid per week, when that week is chosen
+      var dayLevel = function (i) { return Math.max(levelOf(byPid(st.days[i])) || 0, levelOf(byPid(st.days2[i])) || 0); };
+      var curSlot = function () { return st.course ? st.days2 : st.days; };
+      var upgradeExtra = function () { var sum = 0; for (var i0 = 0; i0 < MEALS; i0++) { var l = dayLevel(i0); if (l) sum += upg(l); } return sum; };      // the extra is paid per week, when that week is chosen
       // the first delivery is the coming Monday; orders after Saturday 10:00 (cut-off) start the Monday after
       var firstMonday = function () { var n = mxNow(), d = ((1 - n.dow + 7) % 7) || 7; if (n.dow === 0 || (n.dow === 6 && n.minutes >= cutoffMin)) d += 7; return d; };
       var dateOf = function (i) { try { return new Intl.DateTimeFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { timeZone: TZ, day: 'numeric', month: 'short' }).format(new Date(Date.now() + (firstMonday() + i) * 86400000)); } catch (e) { return ''; } };
@@ -1441,6 +1451,7 @@
       };
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modsOpen > -1) { modsOpen = -1; render(); } });
       var persist = function () { try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(Object.assign({ v: 2 }, st))); } catch (e) {} };
+      var lastKey = function () { var a0 = acct(); return 'kx_last_order' + (a0 ? '_' + a0.cid : ''); };
       var say = function (msg) { if (!err) return; err.hidden = !msg; err.textContent = msg || ''; };
       var fill = function (tpl, o) { return String(tpl).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; }); };
       var planTotal = function () { return priceOf(tierEl(), st.plan) + upgradeExtra(); };
@@ -1453,11 +1464,26 @@
         for (var i = 0; i < MEALS; i++) {
           var li = document.createElement('li'), b = document.createElement('button'), x = document.createElement('span');
           b.type = 'button'; b.className = 'fn-day'; b.setAttribute('data-fn-day-btn', i);
-          b.innerHTML = '<i class="fn-day__thumb" aria-hidden="true"></i><span class="fn-day__d"></span><span class="fn-day__dish"></span><span class="fn-day__ing"></span>';
+          b.innerHTML = '<i class="fn-day__thumb" aria-hidden="true"></i><span class="fn-day__d"></span><span class="fn-day__dish"></span><span class="fn-day__dish2" hidden></span><span class="fn-day__ing"></span>';
           x.className = 'fn-day__x'; x.setAttribute('data-fn-day-x', i); x.setAttribute('role', 'button'); x.tabIndex = 0; x.textContent = '×'; x.hidden = true;
           var ed = document.createElement('span'); ed.className = 'fn-day__e'; ed.setAttribute('data-fn-day-edit', i); ed.setAttribute('role', 'button'); ed.tabIndex = 0; ed.textContent = '✎'; ed.hidden = true;
-          li.appendChild(b); li.appendChild(x); li.appendChild(ed); weekBox.appendChild(li);
+          var x2 = document.createElement('span'); x2.className = 'fn-day__x2'; x2.setAttribute('data-fn-day2-x', i); x2.setAttribute('role', 'button'); x2.tabIndex = 0; x2.textContent = '×'; x2.hidden = true;
+          li.appendChild(b); li.appendChild(x); li.appendChild(x2); li.appendChild(ed); weekBox.appendChild(li);
         }
+      };
+      var macroOf = function (pid) { var d = pid && byPid(pid); if (!d) return null; return { k: +d.getAttribute('data-kcal') || 0, p: +d.getAttribute('data-protein') || 0, c: +d.getAttribute('data-carbs') || 0, f: +d.getAttribute('data-fat') || 0 }; };
+      var dayMacros = function (i) { var t = { k: 0, p: 0, c: 0, f: 0, n: 0 }; [st.days[i], st.days2[i]].forEach(function (pid) { var m = macroOf(pid); if (m) { t.k += m.k; t.p += m.p; t.c += m.c; t.f += m.f; t.n++; } }); return t; };
+      var paintMacros = function () {
+        var box = $('[data-fn-macros]', holder); if (!box) return;
+        var t = dayMacros(st.active), wk = 0; for (var i1 = 0; i1 < MEALS; i1++) wk += dayMacros(i1).k;
+        var set = function (k, v) { var e = $('[data-fn-m="' + k + '"]', box); if (e) e.textContent = v; };
+        var nz = t.n > 0, fmt = function (n) { return Math.round(n).toLocaleString(cfg.lang === 'en' ? 'en-US' : 'es-MX'); };
+        set('kcal', nz ? fmt(t.k) : '—'); set('p', nz ? Math.round(t.p) + ' g' : '—'); set('c', nz ? Math.round(t.c) + ' g' : '—'); set('f', nz ? Math.round(t.f) + ' g' : '—'); set('wk', wk ? fmt(wk) : '—');
+        var tot = t.p * 4 + t.c * 4 + t.f * 9 || 1;
+        ['p', 'c', 'f'].forEach(function (k) { var u = $('[data-fn-mb="' + k + '"]', box); if (u) u.style.flexGrow = nz ? String(Math.max(0.0001, (k === 'f' ? t.f * 9 : (k === 'p' ? t.p : t.c) * 4) / tot)) : '0'; });
+        var dayEl = $('[data-fn-macros-day]', box); if (dayEl) dayEl.textContent = dayShort(st.active);
+        var hint = $('[data-fn-macros-hint]', box); if (hint) hint.hidden = nz;
+        box.classList.toggle('is-empty', !nz);
       };
       var paintWeek = function () {
         buildWeek(); if (!weekBox) return;
@@ -1465,7 +1491,8 @@
           var i = +b.getAttribute('data-fn-day-btn'), d = st.days[i] && byPid(st.days[i]), li = b.parentNode, x = $('[data-fn-day-x]', li);
           $('.fn-day__d', b).textContent = dayShort(i);
           var dish = $('.fn-day__dish', b), thumb = $('.fn-day__thumb', b), lv = levelOf(d);
-          dish.textContent = d ? lab(d) + (lv ? ' · +' + money(upg(lv)) : '') : '—';
+          var lvDay = dayLevel(i); dish.textContent = d ? lab(d) + (lvDay ? ' · +' + money(upg(lvDay)) : '') : '—';
+          var d2 = st.days2[i] && byPid(st.days2[i]), dsh2 = $('.fn-day__dish2', b), x2e = $('[data-fn-day2-x]', li); dsh2.hidden = !d2; dsh2.textContent = d2 ? '+ ' + lab(d2) : ''; if (x2e) { x2e.hidden = !d2; x2e.setAttribute('aria-label', fill(T_('clear-day'), { d: dayLabel(i) })); }
           var ingEl = $('.fn-day__ing', b); if (ingEl) { var ig = d ? (d.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean) : [], mt0 = d ? modsText(i) : ''; ingEl.textContent = (ig.length ? ig.slice(0, 7).join(' · ') : '') + (mt0 ? '  ✎ ' + mt0 : ''); }
           var img = d && $('img', d); thumb.style.backgroundImage = img ? 'url("' + (img.currentSrc || img.src) + '")' : '';
           b.classList.toggle('is-set', !!d); b.classList.toggle('is-active', i === st.active); b.classList.toggle('has-warn', !!(d && d.classList.contains('is-warned')));
@@ -1476,6 +1503,19 @@
         });
       };
 
+      // order memory: "repeat my last order" fills the week with what was confirmed last time (only dishes that are on this week's menu)
+      var repeatBtn = $('[data-fn-repeat]', holder), lastOrder = null;
+      try { lastOrder = JSON.parse(localStorage.getItem(lastKey()) || 'null'); } catch (e) {}
+      var repeatPool = function () { return lastOrder && Array.isArray(lastOrder.days) ? lastOrder.days.map(function (pid) { return pid && eligible(byPid(pid)) ? pid : ''; }) : []; };
+      if (repeatBtn && repeatPool().some(Boolean)) repeatBtn.hidden = false;
+      if (repeatBtn) repeatBtn.addEventListener('click', function () {
+        var pool = repeatPool();
+        if (!pool.some(Boolean)) { say(repeatBtn.getAttribute('data-t-none')); return; }
+        st.days = blankDays().map(function (x, k) { return pool[k] || ''; }); st.days2 = blankDays(); st.qty = {}; st.days.forEach(function (p) { if (p) st.qty[p] = (st.qty[p] || 0) + 1; });
+        st.mods = blankDays().map(function (x, k) { var m = lastOrder.mods && lastOrder.mods[k]; return m && pool[k] ? { off: (m.off || []).slice(), note: m.note || '' } : { off: [], note: '' }; });
+        st.active = Math.max(0, st.days.indexOf('')); if (st.active < 0) st.active = 0; if (daysBox) daysBox.removeAttribute('data-built');
+        persist(); render(); say(repeatBtn.getAttribute('data-t-done'));
+      });
       // phone planner (app deck): the bar button picks the card that is in the middle of the row for the active day
       var barPick = $('[data-fn-barpick]', holder);
       if (barPick) barPick.addEventListener('click', function () {
@@ -1580,7 +1620,8 @@
       var render = function () {
         // dishes of a lower tier or blocked by the profile cannot stay in the plan; slots are the source of truth
         st.days = st.days.map(function (p) { return p && eligible(byPid(p)) ? p : ''; });
-        st.qty = {}; st.days.forEach(function (p) { if (p) st.qty[p] = (st.qty[p] || 0) + 1; });
+        st.days2 = st.days2.map(function (p, k) { return p && st.days[k] && eligible(byPid(p)) ? p : ''; });
+        st.qty = {}; st.days.concat(st.days2).forEach(function (p) { if (p) st.qty[p] = (st.qty[p] || 0) + 1; });
         paintWeek();
         $$('[data-plan-choice]', holder).forEach(function (b) { b.setAttribute('aria-checked', b.getAttribute('data-plan-choice') === st.plan ? 'true' : 'false'); });
         tierBtns.forEach(function (b) {
@@ -1601,12 +1642,14 @@
           d.classList.toggle('is-picked', q > 0);
           var cb = $('[data-fn-count]', d); if (cb) { cb.hidden = q === 0; cb.textContent = '×' + q; }
           var pick = $('[data-pick]', d);
-          if (pick) { pick.hidden = false; pick.disabled = false; pick.textContent = st.days[st.active] === d.getAttribute('data-pid') ? T_('picked') : T_('pick'); }
-          if (pick) { pick.classList.toggle('is-on', st.days[st.active] === d.getAttribute('data-pid')); pick.setAttribute('aria-label', pick.textContent); }
+          if (pick) { pick.hidden = false; pick.disabled = false; pick.textContent = curSlot()[st.active] === d.getAttribute('data-pid') ? T_('picked') : T_('pick'); }
+          if (pick) { pick.classList.toggle('is-on', curSlot()[st.active] === d.getAttribute('data-pid')); pick.setAttribute('aria-label', pick.textContent); }
         });
         var e1 = $('[data-fn-empty]', holder); if (e1) e1.hidden = shown > 0;
         // meter + summary
-        var prm = $('[data-fn-prompt]', holder); if (prm) prm.textContent = n === MEALS ? T_('all-done') : fill(T_('pick-for'), { d: dayLabel(st.active) });
+        var prm = $('[data-fn-prompt]', holder); if (prm) prm.textContent = st.course === 1 ? fill(T_('pick2-for'), { d: dayLabel(st.active) }) : (n === MEALS ? T_('all-done') : fill(T_('pick-for'), { d: dayLabel(st.active) }));
+        $$('[data-fn-course]', holder).forEach(function (cb) { var on = +cb.getAttribute('data-fn-course') === st.course; cb.classList.toggle('is-on', on); cb.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+        paintMacros();
         var mn = $('[data-fn-meter-n]', holder); if (mn) mn.textContent = n;
         var mb = $('[data-fn-meter-bar]', holder); if (mb) mb.style.transform = 'scaleX(' + Math.min(1, n / MEALS) + ')';
         var meter = $('[data-fn-meter]', holder); if (meter) meter.classList.toggle('is-full', full);
@@ -1617,8 +1660,8 @@
         if (list) {
           list.innerHTML = '';
           st.days.forEach(function (pid, i) {
-            var d = pid && byPid(pid); if (!d) return; var l = levelOf(d);
-            var li = document.createElement('li'); li.innerHTML = '<span></span><b></b><em class="fn-s-ing"></em><i class="fn-s-edit" role="button" tabindex="0" data-fn-day-edit="' + i + '">✎</i>'; li.firstChild.textContent = dayLabel(i) + ' · ' + lab(d); $('b', li).textContent = l ? '+' + money(upg(l)) : '';
+            var d = pid && byPid(pid); if (!d) return; var l = dayLevel(i), s2 = st.days2[i] && byPid(st.days2[i]);
+            var li = document.createElement('li'); li.innerHTML = '<span></span><b></b><em class="fn-s-ing"></em><i class="fn-s-edit" role="button" tabindex="0" data-fn-day-edit="' + i + '">✎</i>'; li.firstChild.textContent = dayLabel(i) + ' · ' + lab(d) + (s2 ? ' + ' + lab(s2) : ''); $('b', li).textContent = l ? '+' + money(upg(l)) : '';
             var ingS = (d.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean), mt = modsText(i);
             $('.fn-s-ing', li).textContent = (ingS.length ? ingS.slice(0, 9).join(' · ') : '') + (mt ? '  —  ✎ ' + mt : '');
             if (i === sumOpen) li.classList.add('is-open'); li.classList.add('fn-s-item');
@@ -1689,7 +1732,11 @@
       var renewBox = $('[data-fn-renew-box]', holder); if (renewBox) renewBox.addEventListener('change', function () { st.renew = renewBox.checked; persist(); });
       holder.addEventListener('click', function (e) {
         var xb = e.target.closest ? e.target.closest('[data-fn-day-x]') : null;
-        if (xb) { var xi = +xb.getAttribute('data-fn-day-x'); st.days[xi] = ''; st.active = xi; say(''); persist(); render(); return; }
+        var x2b = e.target.closest ? e.target.closest('[data-fn-day2-x]') : null;
+        if (x2b) { var x2i = +x2b.getAttribute('data-fn-day2-x'); st.days2[x2i] = ''; st.active = x2i; say(''); persist(); render(); return; }
+        var cbtn = e.target.closest ? e.target.closest('[data-fn-course]') : null;
+        if (cbtn) { st.course = +cbtn.getAttribute('data-fn-course') === 1 ? 1 : 0; say(''); persist(); render(); return; }
+        if (xb) { var xi = +xb.getAttribute('data-fn-day-x'); st.days[xi] = ''; st.days2[xi] = ''; st.active = xi; say(''); persist(); render(); return; }
         var eb = e.target.closest ? e.target.closest('[data-fn-day-edit]') : null;
         if (eb) { var ei = +eb.getAttribute('data-fn-day-edit'); st.active = ei; modsOpen = modsOpen === ei ? -1 : ei; modsKey = ''; if (st.reach >= 3) st.step = 3; persist(); render(); return; }
         var db = e.target.closest ? e.target.closest('[data-fn-day-btn]') : null;
@@ -1708,6 +1755,10 @@
         var d = e.target.closest ? e.target.closest('[data-fn-dish]') : null; if (!d) return;
         var id = d.getAttribute('data-pid');
         if (!e.target.closest('[data-pick]')) return;
+        if (st.course === 1) {                                                     // 2nd course of the active day (the meal's second "tiempo")
+          if (!st.days[st.active]) { say(T_('need-first')); return; }
+          st.days2[st.active] = st.days2[st.active] === id ? '' : id; say(''); persist(); render(); return;
+        }
         if (st.days[st.active] !== id) { st.mods[st.active] = { off: [], note: '' }; modsOpen = -1; }
         syncCardToDay(id, st.active);
         st.days[st.active] = id;
@@ -1715,7 +1766,7 @@
         say(''); persist(); render();
       });
       var reset = $('[data-fn-reset]', holder);
-      if (reset) reset.addEventListener('click', function () { st.qty = {}; st.days = blankDays(); st.active = 0; if (daysBox) daysBox.removeAttribute('data-built'); st.cat = 'all'; st.diet = 'all'; st.tier = 'selecto'; st.plan = 'block'; st.step = 0; persist(); render(); });
+      if (reset) reset.addEventListener('click', function () { st.qty = {}; st.days = blankDays(); st.days2 = blankDays(); st.course = 0; st.active = 0; if (daysBox) daysBox.removeAttribute('data-built'); st.cat = 'all'; st.diet = 'all'; st.tier = 'selecto'; st.plan = 'block'; st.step = 0; persist(); render(); });
 
       // details
       var fields = $$('[data-info]', holder), checks = $$('[data-allergy]', holder), ref = $('[data-fn-ref]', holder);
@@ -1744,7 +1795,7 @@
         var q = (location.search + '&' + (location.hash.split('?')[1] || '')).match(/[?&]dish=([\w-]+)/);
         if (q) {
           var pre = dishes.filter(function (d) { return d.getAttribute('data-handle') === q[1]; })[0];
-          if (pre) { st.days = blankDays(); st.days[0] = pre.getAttribute('data-pid'); st.active = 1; if (daysBox) daysBox.removeAttribute('data-built'); if (st.reach >= 3) st.step = 3; persist(); }
+          if (pre) { st.days = blankDays(); st.days2 = blankDays(); st.course = 0; st.days[0] = pre.getAttribute('data-pid'); st.active = 1; if (daysBox) daysBox.removeAttribute('data-built'); if (st.reach >= 3) st.step = 3; persist(); }
         }
       } catch (e) {}
 
@@ -1760,12 +1811,12 @@
         if (!guest && ordersCount() === 0 && (!onb || !i.name || !i.email || !i.phone)) { window.location.href = lnk('[data-fn-onb]') || '/pages/bienvenida'; return; }
         i = { name: i.name || cn || '', email: i.email || ce || '', phone: i.phone || '', street: i.street, cluster: i.cluster, zip: i.zip, allergy_other: i.allergy_other, dislikes: i.dislikes };
         var p = effectiveProfile(), warned = [], paraName = p.name || '', paraId = st.para || 'yo';
-        st.days.forEach(function (pid) { var d = byPid(pid), t = d && d.getAttribute('data-title'); if (d && d.classList.contains('is-warned') && warned.indexOf(t) < 0) warned.push(t); });
+        st.days.concat(st.days2).forEach(function (pid) { var d = byPid(pid), t = d && d.getAttribute('data-title'); if (d && d.classList.contains('is-warned') && warned.indexOf(t) < 0) warned.push(t); });
         var list = dishes.filter(function (d) { return st.qty[d.getAttribute('data-pid')]; }).map(function (d) { return st.qty[d.getAttribute('data-pid')] + '× ' + d.getAttribute('data-title'); }).join(' | ');
         var cl = function (k) { return (i[k] || '').trim(); };
         var attrs = {
           nombre: i.name, correo: i.email, telefono: i.phone, direccion: [i.street, i.num, i.cluster, i.city, i.zip].filter(Boolean).join(', ') + (i.refs ? ' · ' + i.refs : '') + (i.access ? ' · ' + i.access : ''), calle: cl('street'), cluster: cl('cluster'), cp: cl('zip'),
-          dias: st.days.map(function (q, k) { var d = byPid(q); return (dayNames[k] || k + 1) + ': ' + (d ? d.getAttribute('data-title') : ''); }).join(' | '),
+          dias: st.days.map(function (q, k) { var d = byPid(q), d2 = byPid(st.days2[k]); return (dayNames[k] || k + 1) + ': ' + (d ? d.getAttribute('data-title') : '') + (d && d2 ? ' + ' + d2.getAttribute('data-title') : ''); }).join(' | '),
           alergias: (p.allergies || []).join(', '), no_me_gustan: (p.dislikes || []).join(', '), dietas: (p.diets || []).join(', '), alerta_alergias: warned.join(' | '),
           plan: st.plan, nivel: st.tier, pedido_embudo: list
         };
@@ -1774,7 +1825,7 @@
         if (ficha) attrs.ficha_cocina = ficha;
         var rc = ''; try { rc = localStorage.getItem('kulinaria_ref') || ''; } catch (x) {} if (rc) attrs.codigo_referencia = rc;
         var props = {}; props[T_('prop-meals')] = String(count()); props[T_('prop-tier')] = tb.getAttribute('data-name'); props[T_('prop-length')] = st.plan === 'block' ? T_('length-block') : T_('length-week');
-        st.days.forEach(function (q, k) { var dd = byPid(q); if (dd) props[dayLabel(k)] = dd.getAttribute('data-title'); });
+        st.days.forEach(function (q, k) { var dd = byPid(q), d2c = byPid(st.days2[k]); if (dd) props[dayLabel(k)] = dd.getAttribute('data-title') + (d2c ? ' + ' + d2c.getAttribute('data-title') : ''); });
         props['_platillos'] = list; props['_para'] = paraId; if (paraName) { props[T_('prop-for') || 'Para'] = paraName; props['_para_nombre'] = paraName; }
         var notesAll = st.days.map(function (q, k) { var tx = q ? modsText(k) : ''; return tx ? dayLabel(k) + ': ' + tx : ''; }).filter(Boolean).join(' | '); if (notesAll) { props[T_('prop-notes')] = notesAll; props['_notas'] = notesAll; }
         props['_dias'] = attrs.dias; props['_alergias'] = attrs.alergias || '-'; props['_no_me_gustan'] = attrs.no_me_gustan || '-'; props['_dietas'] = attrs.dietas || '-'; props['_alerta'] = attrs.alerta_alergias || '-';
@@ -1782,11 +1833,12 @@
         var sp = tb.getAttribute('data-selling-plan'); if (st.plan === 'block' && st.renew && sp) line.selling_plan = parseInt(sp, 10);
         var lines = [line];
         for (var lvl = 1; lvl <= 3; lvl++) {
-          var names = []; st.days.forEach(function (q) { var dd = byPid(q); if (dd && levelOf(dd) === lvl) names.push(dd.getAttribute('data-title')); });
+          var names = []; st.days.forEach(function (q, k) { if (dayLevel(k) !== lvl) return; var c1 = byPid(q), c2 = byPid(st.days2[k]), top = (c1 && levelOf(c1) === lvl) ? c1 : c2; if (top) names.push(top.getAttribute('data-title')); });
           var vid = parseInt(holder.getAttribute('data-upv-' + lvl), 10);
           if (names.length && vid) { var up = {}; up[T_('prop-upgrade')] = names.join(', '); up['_para'] = paraId; lines.push({ id: vid, quantity: names.length, properties: up }); }
         }
         st.sent = true; persist();
+        try { localStorage.setItem(lastKey(), JSON.stringify({ plan: st.plan, days: st.days, mods: st.mods, at: Date.now() })); } catch (x) {}
         var go2 = function () { window.location.href = guest ? (lnk('[data-fn-login]') || '/pages/bienvenida').replace(/(return_url|return_to)=[^&]*/g, '$1=' + encodeURIComponent(finish.getAttribute('href') || '/cart')) : finish.getAttribute('href'); };
         // the cart can hold one plan per person: this person's earlier plan is replaced, the others stay
         fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).catch(function () { return { items: [] }; })
@@ -1819,7 +1871,7 @@
           paraSel.value = st.para || ''; var wrap = paraSel.closest('[data-fn-para-wrap]'); if (wrap) wrap.hidden = false;
         };
         buildPara();
-        paraSel.addEventListener('change', function () { st.para = paraSel.value; st.days = blankDays(); st.qty = {}; st.active = 0; persist(); applyProfile(); render(); });
+        paraSel.addEventListener('change', function () { st.para = paraSel.value; st.days = blankDays(); st.days2 = blankDays(); st.course = 0; st.qty = {}; st.active = 0; persist(); applyProfile(); render(); });
       }
       var gridEl = $('[data-fn-grid]', holder);
       var scGrid = $('[data-fn-sc-grid]', holder), scCount = $('[data-fn-sc-count]', holder);
@@ -1832,7 +1884,7 @@
       applyProfile();
       render();
       // the order was sent to the cart earlier: if the cart has been emptied since (items removed, cart cleared), the next order starts from a fresh list
-      if (st.sent) { try { fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(function (c) { if (c && !c.item_count) { st.days = blankDays(); st.qty = {}; st.active = 0; st.step = 0; st.sent = false; persist(); render(); } }).catch(function () {}); } catch (e1) {} }
+      if (st.sent) { try { fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(function (c) { if (c && !c.item_count) { st.days = blankDays(); st.days2 = blankDays(); st.course = 0; st.qty = {}; st.active = 0; st.step = st.rulesOk ? 1 : 0; st.sent = false; persist(); render(); } }).catch(function () {}); } catch (e1) {} }
       // ?plan=block / ?plan=week (from the "Get started" buttons of the plans page): the plan is already chosen, go straight to the meals
       try {
         var qs0 = location.search || (location.hash.indexOf('?') > -1 ? location.hash.slice(location.hash.indexOf('?')) : ''), qp = new URLSearchParams(qs0).get('plan');

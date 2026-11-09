@@ -1362,6 +1362,21 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.click('[data-page="pg/pedido"] .fn-week [data-fn-day-edit="0"]'); await page.waitForTimeout(250);
   await page.keyboard.press('Escape'); await page.waitForTimeout(200);
   ok('Escape also closes the tweak panel', await page.$eval('[data-page="pg/pedido"] [data-fn-mods]', (e) => e.hidden));
+  // ---- two courses per day, the macro column and the order memory
+  { const PD = '[data-page="pg/pedido"] ';
+    await page.evaluate((pd) => document.querySelector(pd + '[data-fn-day-btn="0"]').click(), PD); await page.waitForTimeout(150);
+    await page.evaluate((pd) => document.querySelector(pd + '[data-fn-course="1"]').click(), PD); await page.waitForTimeout(200);
+    ok('the 2nd-course chip switches the picker and the prompt says which course is being chosen', await page.evaluate((pd) => document.querySelector(pd + '[data-fn-course="1"]').getAttribute('aria-pressed') === 'true' && /2\.º|2nd/.test(document.querySelector(pd + '[data-fn-prompt]').textContent), PD));
+    const first = await page.evaluate((pd) => JSON.parse(localStorage.getItem('kulinaria_funnel')).days[0], PD);
+    await page.evaluate((pd) => { const c = [...document.querySelectorAll(pd + '[data-fn-dish]:not(.is-hidden)')].find((x) => x.getAttribute('data-pid') !== JSON.parse(localStorage.getItem('kulinaria_funnel')).days[0]); c.querySelector('[data-pick]').click(); }, PD); await page.waitForTimeout(250);
+    const two = await page.evaluate((pd) => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel')); const g = (pid) => document.querySelector(pd + '[data-fn-dish][data-pid="' + pid + '"]'); const a1 = g(f.days[0]), a2 = g(f.days2[0]); return { has: !!f.days2[0], day: document.querySelector(pd + '[data-fn-day-btn="0"] .fn-day__dish2').textContent, kcal: (+a1.getAttribute('data-kcal')) + (+a2.getAttribute('data-kcal')), shown: document.querySelector(pd + '[data-fn-m="kcal"]').textContent, p: (+a1.getAttribute('data-protein')) + (+a2.getAttribute('data-protein')) , pShown: document.querySelector(pd + '[data-fn-m="p"]').textContent }; }, PD);
+    ok('a day can hold a 2nd course: it shows as a second line "+ dish" on the day', two.has && /^\+ /.test(two.day), JSON.stringify(two));
+    ok('the macro column adds up both courses of the day (kcal and protein)', Number(two.shown.replace(/\D/g, '')) === two.kcal && parseInt(two.pShown, 10) === Math.round(two.p), JSON.stringify(two));
+    await page.evaluate((pd) => document.querySelector(pd + '[data-fn-course="0"]').click(), PD); await page.waitForTimeout(100);
+    ok('the 2nd course adds no charge on its own (a Selecto 2nd course is included)', await page.evaluate((pd) => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel')); const g = (pid) => document.querySelector(pd + '[data-fn-dish][data-pid="' + pid + '"]'); return !!g(f.days2[0]) && !!f.days[0]; }, PD));
+    await page.evaluate((pd) => document.querySelector(pd + '[data-fn-day2-x="0"]').click(), PD); await page.waitForTimeout(150);
+    ok('the small cross on the 2nd line removes only that course', await page.evaluate(() => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel')); return !f.days2[0] && !!f.days[0]; }));
+  }
   await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.removeItem('kulinaria_onboarded'); localStorage.setItem('kx-test-fresh', '1'); sessionStorage.setItem('kx_ob_asked', '1'); }); await page.goto(`${URL0}#/pg/cuenta-perfil`); await page.reload(); await page.waitForTimeout(500);
   ok('profile page starts with the questionnaire banner until the onboarding is done', await page.evaluate(() => { const b = document.querySelector('[data-page="pg/cuenta-perfil"] [data-onb-banner]'); return !!b && !b.hidden && /bienvenida/.test(b.querySelector('a').getAttribute('href')); }));
   await page.evaluate(() => { localStorage.removeItem('kx-test-fresh'); localStorage.setItem('kulinaria_onboarded', '1'); });
@@ -1433,11 +1448,11 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
 // =====================================================================  v51: the builder always starts on step 1; phone stepper moves freely
 {
   await page.setViewportSize({ width: 390, height: 800 });
-  await page.evaluate(() => { localStorage.removeItem('kx-test-norules'); sessionStorage.removeItem('kx-test-start'); localStorage.setItem('kx-test-nostart', '1'); localStorage.setItem('kx-rules-ok', '1'); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_newplan', '1'); localStorage.removeItem('kulinaria_funnel'); sessionStorage.removeItem('kx_reach'); });
+  await page.evaluate(() => { localStorage.setItem('kx-test-guide', '1'); localStorage.removeItem('kx-test-norules'); sessionStorage.removeItem('kx-test-start'); localStorage.setItem('kx-test-nostart', '1'); localStorage.setItem('kx-rules-ok', '1'); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_newplan', '1'); localStorage.removeItem('kulinaria_funnel'); sessionStorage.removeItem('kx_reach'); });
   await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(900);
   const PS = '[data-page="pg/pedido"] ';
   const st0 = await page.evaluate((ps) => { const f = document.querySelector(ps + '[data-funnel]'); return { step: f.getAttribute('data-step'), chk: f.querySelector('[data-fn-rules-check]').checked, unlocked: !f.querySelector('[data-fn-rules-check]').disabled, btn: f.querySelector('[data-fn-rules-next]').disabled }; }, PS);
-  ok('the builder always opens on step 1 (how it works), also for someone who has read it before; the box is available but never pre-ticked', st0.step === '0' && st0.chk === false && st0.unlocked === true && st0.btn === true, JSON.stringify(st0));
+  ok('a first-time visitor opens the builder on step 1 (how it works); the box is never pre-ticked', st0.step === '0' && st0.chk === false && st0.unlocked === true && st0.btn === true, JSON.stringify(st0));
   ok('phone: a row of four step pills is visible, and the later ones look locked until step 1 is complete', await page.evaluate((ps) => { const n = document.querySelector(ps + '.funnel__top .steps__nav'); const li = [...n.querySelectorAll('li')]; return getComputedStyle(n).display !== 'none' && li.length === 4 && li.every((x) => x.getBoundingClientRect().height >= 36) && li[1].classList.contains('is-locked') && li[3].classList.contains('is-locked') && !li[0].classList.contains('is-locked'); }, PS), await page.evaluate((ps) => { const n = document.querySelector(ps + '.funnel__top .steps__nav'); const li = [...n.querySelectorAll('li')]; return JSON.stringify({ disp: getComputedStyle(n).display, n: li.length, h: li.map((x) => Math.round(x.getBoundingClientRect().height)), locked: li.map((x) => x.classList.contains('is-locked')), vw: innerWidth }); }, PS));
   await page.click(`${PS}.steps__nav li:nth-child(2)`); await page.waitForTimeout(300);
   ok('step 2 cannot be opened before step 1 is complete (a message says why)', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '0' && /anterior|previous/i.test(document.querySelector(ps + '[data-fn-error]').textContent), PS));
@@ -1457,6 +1472,13 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('and any step already completed can be reopened freely', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '0', PS));
   await page.click(`${PS}.steps__nav li:nth-child(4)`); await page.waitForTimeout(300);
   ok('(and the steps already reached stay open: back to step 4)', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '3', PS));
+  // a client who has read the guide before never lands on it again; leaving (e.g. to add a family member) and coming back resumes the same step
+  await page.evaluate(() => { localStorage.removeItem('kx-test-guide'); localStorage.setItem('kx-rules-ok', '1'); });
+  await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(900);
+  ok('a returning client (guide read before) opens at the plan step, not at the guide', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '1', PS));
+  await page.evaluate((ps) => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel') || '{}'); f.v = 2; f.step = 3; f.reach = 3; f.days = ['', '', '', '', '']; localStorage.setItem('kulinaria_funnel', JSON.stringify(f)); }, PS);
+  await page.goto(`${URL0}#/home`); await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(900);
+  ok('coming back after leaving mid-order resumes the planner (nothing restarts at step 1)', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '3', PS));
   await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
   ok('home on a phone: the welcome film is contained in a rounded frame with side margins (not edge to edge)', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] .welcome-video__frame'); const r = f.getBoundingClientRect(); return r.left >= 12 && innerWidth - r.right >= 12 && parseFloat(getComputedStyle(f).borderTopLeftRadius) >= 16; }));
   ok('home on a phone: the order builder starts on step 1', await page.evaluate(() => document.querySelector('[data-page="home"] [data-funnel]').getAttribute('data-step') === '0'));

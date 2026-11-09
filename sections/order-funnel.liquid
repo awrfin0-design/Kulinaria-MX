@@ -17,7 +17,7 @@
   data-t-prop-tier="{{ 'funnel.prop_tier' | t }}" data-t-prop-length="{{ 'funnel.prop_length' | t }}" data-t-length-block="{{ 'funnel.length_block' | t }}" data-t-length-week="{{ 'funnel.length_week' | t }}"
   data-t-budget="{{ 'funnel.budget' | t }}" data-t-budget-short="{{ 'funnel.budget_short' | t }}" data-t-budget-x="{{ 'funnel.budget_x' | t }}" data-t-budget-ok="{{ 'funnel.budget_ok' | t }}" data-t-how-open="{{ 'funnel.how_open' | t }}" data-t-pick-day="{{ 'funnel.pick_day' | t }}" data-t-tour-1="{{ 'funnel.tour_1' | t }}" data-t-tour-2="{{ 'funnel.tour_2' | t }}" data-t-tour-2m="{{ 'funnel.tour_2m' | t }}" data-t-tour-3="{{ 'funnel.tour_3' | t }}" data-t-tour-4="{{ 'funnel.tour_4' | t }}" data-t-tour-next="{{ 'funnel.tour_next' | t }}" data-t-tour-done="{{ 'funnel.tour_done' | t }}" data-t-tour-skip="{{ 'funnel.tour_skip' | t }}" data-t-tour-guide="{{ 'funnel.tour_guide' | t }}" data-t-locked="{{ 'funnel.locked' | t }}" data-t-mods-done="{{ 'funnel.mods_done' | t }}" data-t-mods-edit="{{ 'funnel.mods_edit' | t }}" data-t-mods-title="{{ 'funnel.mods_title' | t }}" data-t-mods-hint="{{ 'funnel.mods_hint' | t }}" data-t-mods-note="{{ 'funnel.mods_note' | t }}" data-t-mods-ph="{{ 'funnel.mods_ph' | t }}" data-t-mods-warn="{{ 'funnel.mods_warn' | t }}" data-t-mods-without="{{ 'funnel.mods_without' | t }}" data-t-prop-notes="{{ 'funnel.prop_notes' | t }}" data-t-mods-open="{{ 'funnel.mods_open' | t }}"
   data-t-para-me="{{ 'funnel.para_me' | t }}" data-t-prop-for="{{ 'funnel.prop_for' | t }}"
-  data-t-renew="{{ 'funnel.renew' | t }}" data-t-days="{{ 'funnel.days' | t }}" data-t-finish="{{ 'funnel.finish' | t }}" data-t-finish-guest="{{ 'funnel.finish_guest' | t }}" data-t-credit="{{ 'funnel.credit' | t }}" data-t-rolled="{{ 'funnel.rolled' | t }}" data-t-pick="{{ 'funnel.pick' | t }}" data-t-picked="{{ 'funnel.picked' | t }}" data-t-pick-for="{{ 'funnel.pick_for' | t }}" data-t-all-done="{{ 'funnel.all_done' | t }}" data-t-clear-day="{{ 'funnel.clear_day' | t }}" data-t-first="{{ 'funnel.first_delivery' | t }}" data-t-day-empty="{{ 'funnel.day_empty' | t }}" data-t-up-badge="{{ 'funnel.up_badge' | t }}" data-t-up-total="{{ 'funnel.up_total' | t }}"
+  data-t-renew="{{ 'funnel.renew' | t }}" data-t-days="{{ 'funnel.days' | t }}" data-t-finish="{{ 'funnel.finish' | t }}" data-t-finish-guest="{{ 'funnel.finish_guest' | t }}" data-t-credit="{{ 'funnel.credit' | t }}" data-t-rolled="{{ 'funnel.rolled' | t }}" data-t-pick="{{ 'funnel.pick' | t }}" data-t-picked="{{ 'funnel.picked' | t }}" data-t-pick-for="{{ 'funnel.pick_for' | t }}" data-t-pick2-for="{{ 'funnel.pick2_for' | t }}" data-t-need-first="{{ 'funnel.need_first' | t }}" data-t-macros-empty="{{ 'funnel.m_empty' | t }}" data-t-all-done="{{ 'funnel.all_done' | t }}" data-t-clear-day="{{ 'funnel.clear_day' | t }}" data-t-first="{{ 'funnel.first_delivery' | t }}" data-t-day-empty="{{ 'funnel.day_empty' | t }}" data-t-up-badge="{{ 'funnel.up_badge' | t }}" data-t-up-total="{{ 'funnel.up_total' | t }}"
   data-t-prop-upgrade="{{ 'funnel.prop_upgrade' | t }}" data-t-need-contract="{{ 'funnel.need_contract' | t }}" data-t-days-missing="{{ 'funnel.days_missing' | t }}"
   data-upg-1="{{ upg.variants[0].price | divided_by: 100 | default: 70 }}" data-upg-2="{{ upg.variants[1].price | divided_by: 100 | default: 140 }}" data-upg-3="{{ upg.variants[2].price | divided_by: 100 | default: 210 }}"
   data-upv-1="{{ upg.variants[0].id }}" data-upv-2="{{ upg.variants[1].id }}" data-upv-3="{{ upg.variants[2].id }}" {{ section.shopify_attributes }}>
@@ -269,6 +269,8 @@
           <p class="fn-mods__tip">✎ {{ 'funnel.mods_open' | t }}</p>
           <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
+            <div class="fn-course" role="group" aria-label="{{ 'funnel.course_aria' | t }}"><button type="button" class="fn-course__b is-on" data-fn-course="0" aria-pressed="true">{{ 'funnel.c1' | t }}</button><button type="button" class="fn-course__b" data-fn-course="1" aria-pressed="false">{{ 'funnel.c2' | t }}</button></div>
+            <button class="text-link fn-repeat" type="button" data-fn-repeat hidden data-t-done="{{ 'funnel.repeat_done' | t }}" data-t-none="{{ 'funnel.repeat_none' | t }}">&#8634; {{ 'funnel.repeat' | t }}</button>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / {{ meals_per_week }} <span>{{ 'funnel.meals_word' | t }}</span><i data-fn-meter-bar></i></p>
             <label class="fn-sel"><span class="fn-sr">{{ 'collection.category' | t }}</span>
               <select class="select" data-fn-cat>
@@ -285,6 +287,14 @@
               {%- for product in seasonal_f.products limit: 8 -%}{% render 'funnel-dish', product: product, seasonal: true, show_all: true %}{%- endfor -%}
             </div>
             <button class="fn-arrow fn-arrow--next" type="button" data-fn-arrow="1" aria-label="{{ 'funnel.next_dishes' | t }}">&#8250;</button>
+            <aside class="fn-macros" data-fn-macros aria-live="polite">
+              <p class="fn-macros__t">{{ 'funnel.macros_t' | t }}<small data-fn-macros-day></small></p>
+              <p class="fn-macros__kcal"><b data-fn-m="kcal">&mdash;</b> <span>{{ 'funnel.m_kcal' | t }}</span></p>
+              <i class="fn-macros__bar" aria-hidden="true"><u data-fn-mb="p"></u><u data-fn-mb="c"></u><u data-fn-mb="f"></u></i>
+              <ul class="fn-macros__l"><li class="is-p"><span>{{ 'funnel.m_p' | t }}</span><b data-fn-m="p">&mdash;</b></li><li class="is-c"><span>{{ 'funnel.m_c' | t }}</span><b data-fn-m="c">&mdash;</b></li><li class="is-f"><span>{{ 'funnel.m_f' | t }}</span><b data-fn-m="f">&mdash;</b></li></ul>
+              <p class="fn-macros__w"><span>{{ 'funnel.m_week' | t }}</span> <b data-fn-m="wk">&mdash;</b> {{ 'funnel.m_kcal' | t }}</p>
+              <p class="fn-macros__h" data-fn-macros-hint>{{ 'funnel.m_empty' | t }}</p>
+            </aside>
           </div>
           <p class="alert" data-fn-empty hidden>{{ 'funnel.s3_empty' | t }}</p>
         </fieldset>
