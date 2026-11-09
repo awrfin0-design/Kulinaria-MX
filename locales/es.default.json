@@ -402,6 +402,9 @@
     "scroll": "Desliza"
   },
   "js": {
+    "dislike_hit": "Contiene algo que prefieres evitar: {list}.",
+    "your_dislike": "no te gusta",
+    "not_suitable": "⚠ Contiene o puede contener: {list}.",
     "warn_hard": "⚠ Contiene o puede contener: {list}.",
     "your_allergy": "tu alergia",
     "warn_label": "Ver qué ingrediente choca con tu perfil",
@@ -409,10 +412,8 @@
     "ing_soft": "Algo que prefieres evitar",
     "compat": "Compatibilidad {n}%",
     "days": "d",
-    "dislike_hit": "Contiene ingredientes que marcaste como \"no me gustan\": {list}.",
     "hours": "h",
     "minutes": "min",
-    "not_suitable": "⚠ Según nuestros datos, incluye o puede incluir algo a lo que declaraste alergia: {list}.",
     "pause_left": "Quedan {time} para pausar.",
     "remove": "Quitar {name}"
   },

@@ -402,6 +402,9 @@
     "scroll": "Scroll"
   },
   "js": {
+    "dislike_hit": "Contains something you prefer to avoid: {list}.",
+    "your_dislike": "you dislike it",
+    "not_suitable": "⚠ Contains or may contain: {list}.",
     "warn_hard": "⚠ Contains or may contain: {list}.",
     "your_allergy": "your allergy",
     "warn_label": "See which ingredient clashes with your profile",
@@ -409,10 +412,8 @@
     "ing_soft": "Something you prefer to avoid",
     "compat": "{n}% match",
     "days": "d",
-    "dislike_hit": "Contains ingredients you marked as \"I don't like\": {list}.",
     "hours": "h",
     "minutes": "min",
-    "not_suitable": "⚠ According to our data, this includes or may include something you are allergic to: {list}.",
     "pause_left": "{time} left to pause.",
     "remove": "Remove {name}"
   },

@@ -21,6 +21,7 @@
   function T(key, vars) {
     var src = (window.KULINARIA && window.KULINARIA.i18n) || {};
     var str = src[key] != null ? src[key] : FALLBACK[key] || key;
+    str = String(str).replace(/&quot;/g, '"').replace(/&#39;|&#x27;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
     return String(str).replace(/\{(\w+)\}/g, function (m, n) { return vars && vars[n] != null ? vars[n] : m; });
   }
   // preview hook: the single-file preview serves media from memory
@@ -230,6 +231,16 @@
   function allergyReport(p, tagsO, ingsO) { return allergyCore(p, tagsO.map(norm), ingsO.map(norm), tagsO, ingsO); }
   var cap = function (s) { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); };
   var reportText = function (rep) { return T('warnHard', { list: rep.map(function (r) { return r.items.map(cap).join(', ') + ' (' + T('yourAllergy') + ': ' + r.raw + ')'; }).join('; ') }); };
+  function dislikeText(p, tagsO, ingsO, soft) {
+    var tags = tagsO.map(norm), ings = ingsO.map(norm), out = [];
+    ((p && p.dislikes) || []).forEach(function (raw) {
+      var d = canon(raw); if (!d) return; var ws = [d].concat(SYN[d] || []), items = [];
+      ings.forEach(function (i, k) { if (ws.some(function (w) { return named(i, w, d); })) items.push(ingsO[k]); });
+      tags.forEach(function (t, k) { if (t === d) items.push(tagsO[k]); });
+      if (items.length) out.push(items.filter(function (x, k, arr) { return arr.indexOf(x) === k; }).map(cap).join(', ') + ' (' + T('yourDislike') + ')');
+    });
+    return T('dislikeHit', { list: out.length ? out.join('; ') : (soft || []).join(', ') });
+  }
   function dislikeHits(p, tags, ings) {
     return ((p && p.dislikes) || []).filter(function (raw) {
       var d = canon(raw); if (!d) return false;
@@ -267,7 +278,7 @@
         var has = hard.length || soft.length;
         wbox.hidden = !has; wbox.classList.toggle('is-hard', hard.length > 0); wbox.classList.toggle('is-soft', !hard.length && soft.length > 0);
         warn.className = 'fn-warn ' + (hard.length ? 'is-hard' : 'is-soft');
-        warn.textContent = hard.length ? reportText(rep) : (soft.length ? T('dislikeHit', { list: soft.join(', ') }) : '');
+        warn.textContent = hard.length ? reportText(rep) : (soft.length ? dislikeText(p, tagsO, ingsO, soft) : '');
         if (!has) { wbox.classList.remove('is-open'); var wb0 = $('[data-fn-warnbtn]', wbox); if (wb0) wb0.setAttribute('aria-expanded', 'false'); }
       }
       card.setAttribute('data-compat-value', compat);
@@ -275,16 +286,15 @@
     $$('[data-dish-detail]').forEach(function (detail) {
       var alert = $('[data-allergen-alert]', detail);
       if (!alert) return;
-      var tags = (detail.getAttribute('data-allergens') || '').split('|').map(norm).filter(Boolean);
-      var ings = (detail.getAttribute('data-ingredients') || '').split('|').map(norm).filter(Boolean);
-      var hit = allergyHits(p, tags, ings), soft = dislikeHits(p, tags, ings);
-      alert.hidden = !(hit.length || soft.length);
-            if (hit.length) {
+      var tagsO = (detail.getAttribute('data-allergens') || '').split('|').filter(Boolean), ingsO = (detail.getAttribute('data-ingredients') || '').split('|').filter(Boolean);
+      var rep = allergyReport(p, tagsO, ingsO), soft = dislikeHits(p, tagsO.map(norm), ingsO.map(norm));
+      alert.hidden = !(rep.length || soft.length);
+      if (rep.length) {
         alert.className = 'alert alert--warn';
-        alert.textContent = T('notSuitable', { list: hit.join(', ') });
+        alert.textContent = reportText(rep);
       } else if (soft.length) {
         alert.className = 'alert alert--ok';
-        alert.textContent = T('dislikeHit', { list: soft.join(', ') });
+        alert.textContent = dislikeText(p, tagsO, ingsO, soft);
       }
     });
   }
@@ -935,7 +945,7 @@
         else if (sf.length) { li.classList.add('is-soft'); li.title = T('ingSoft'); }
       });
       var fl = $('[data-dd-flag]', content);
-      if (fl) { if (rep.length) { fl.hidden = false; fl.className = 'dd__flag is-hard'; fl.textContent = reportText(rep); } else if (soft.length) { fl.hidden = false; fl.className = 'dd__flag is-soft'; fl.textContent = T('dislikeHit', { list: soft.join(', ') }); } else fl.hidden = true; }
+      if (fl) { if (rep.length) { fl.hidden = false; fl.className = 'dd__flag is-hard'; fl.textContent = reportText(rep); } else if (soft.length) { fl.hidden = false; fl.className = 'dd__flag is-soft'; fl.textContent = dislikeText(p, tagsO, ingsO, soft); } else fl.hidden = true; }
     };
     var open = function (card) {
       var det = $('[data-dish-detail]', card); if (!det) return;
