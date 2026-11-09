@@ -3657,6 +3657,25 @@ section:has(.dd.is-open){position:relative;z-index:30}
 .fn-carousel > .fn-arrow--next[data-fn-arrow]{right:calc(clamp(128px,11vw,158px) + 24px) !important}
 @media (max-width:1000px){.fn-carousel > .fn-arrow--next[data-fn-arrow]{right:10px !important}}
 
+/* phone: the prompt gets its own line; the course chips and the category select share the line below it */
+@media (max-width:760px){
+  .funnel .fn-pickbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+  .funnel .fn-pickbar .fn-prompt{flex:1 1 100%;margin:0;font-size:1rem;line-height:1.2}
+  .funnel .fn-pickbar .fn-meter{flex:1 1 100%;order:5}
+  .funnel .fn-pickbar .fn-course{flex:0 0 auto;margin:0}
+  .funnel .fn-pickbar .fn-course__b{padding:6px 10px;font-size:.6rem}
+  .funnel .fn-pickbar .fn-sel{flex:1 1 90px;min-width:90px;margin:0}
+  .funnel .fn-pickbar .fn-repeat{flex:1 1 100%;margin:0;order:4}
+}
+@media (max-width:760px){
+  body .funnel .fn-pickbar{display:flex !important;flex-wrap:wrap !important;grid-template-columns:none !important;align-items:center;gap:6px 8px}
+  body .funnel .fn-pickbar .fn-prompt{flex:1 1 100% !important;width:100% !important;max-width:none !important;margin:0 !important;font-size:1rem;line-height:1.2}
+  body .funnel .fn-pickbar .fn-meter{flex:1 1 100% !important;order:5}
+  body .funnel .fn-pickbar .fn-sel{flex:1 1 90px !important;min-width:90px;margin:0 !important}
+}
+@media (max-width:760px){body .funnel .step[data-fn-step="3"] .fn-carousel{height:min(400px,56svh) !important;min-height:300px !important}}
+@media (max-width:760px){body .funnel .step[data-fn-step="3"] .fn-carousel{height:min(352px,48svh) !important;min-height:270px !important}}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
