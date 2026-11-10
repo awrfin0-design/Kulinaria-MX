@@ -292,6 +292,17 @@
     "privacy_s9_p": "Any change will be published on this page with its update date.",
     "contact_note": ""
   },
+  "dgate": {
+    "q": "What kind of diet are you after?",
+    "all": "No preference",
+    "all_s": "See the whole menu",
+    "bar": "Showing:",
+    "change": "Change",
+    "s_keto-low-carb": "Few carbs",
+    "s_fit-proteina": "More protein",
+    "s_veggie": "No meat",
+    "s_sin-gluten": "No wheat or gluten"
+  },
   "menu_group": {
     "home_cta_t": "Build my order",
     "home_cta_b": "Continue",

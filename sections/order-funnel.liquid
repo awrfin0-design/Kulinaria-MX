@@ -208,7 +208,7 @@
         </div>
 
 
-        <fieldset class="step" data-fn-step="2">
+        <fieldset class="step" data-fn-step="2" data-dgate-scope>
           <legend class="fn-sr">{{ 'funnel.s_menu' | t }}</legend>
           {%- assign seasonal_f = collections['temporada'] -%}
           {%- if seasonal_f.products.size > 0 -%}
@@ -218,7 +218,8 @@
             </div>
           {%- endif -%}
           <div class="fn-menunote"><button class="text-link" type="button" data-fn-prev-sc>&lsaquo; {{ 'funnel.menu_back' | t }}</button><p>{{ 'funnel.menu_note' | t }}</p></div>
-          <div class="fn-carousel fn-carousel--show">
+          {% render 'diet-gate' %}
+          <div class="fn-carousel fn-carousel--show" data-dgate-body>
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="{{ 'funnel.prev_dishes' | t }}">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
             <div class="fn-showcase" data-fn-sc-grid>

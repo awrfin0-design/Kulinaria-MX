@@ -292,6 +292,17 @@
     "privacy_s9_p": "Cualquier cambio se publicará en esta página con su fecha de actualización.",
     "contact_note": ""
   },
+  "dgate": {
+    "q": "¿Qué tipo de dieta buscas?",
+    "all": "Sin preferencia",
+    "all_s": "Ver todo el menú",
+    "bar": "Mostrando:",
+    "change": "Cambiar",
+    "s_keto-low-carb": "Pocos carbohidratos",
+    "s_fit-proteina": "Más proteína",
+    "s_veggie": "Sin carne",
+    "s_sin-gluten": "Sin trigo ni gluten"
+  },
   "menu_group": {
     "home_cta_t": "Armar mi pedido",
     "home_cta_b": "Continuar",

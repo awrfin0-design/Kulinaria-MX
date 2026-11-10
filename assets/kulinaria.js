@@ -525,6 +525,7 @@
         run();
       });
     });
+    document.addEventListener('kx:diet', function (e) { var v = e.detail; if (!v) return; var b = $('[data-filter="category"][data-value="' + v + '"]', bar) || $('[data-filter="category"][data-value="all"]', bar); if (b) b.click(); });
     // deep link: ?categoria=bowls&dieta=keto  (also works as #/menu?categoria=bowls)
     var deepLink = function () {
       var qs = location.search || (location.hash.indexOf('?') > -1 ? location.hash.slice(location.hash.indexOf('?')) : '');
@@ -883,6 +884,28 @@
   }
 
   /* ---------- home: nutritional-focus chips filter the dishes shown right below them ---------- */
+  /* ---------- "what kind of diet are you after?": asked before any dish list; remembered, shown as a one-line bar with "change" ---------- */
+  function initDietGate() {
+    var KEY = 'kx_dietpick', scopes = $$('[data-dgate-scope]'); if (!scopes.length) return;
+    var get = function () { try { return localStorage.getItem(KEY) || ''; } catch (e) { return ''; } };
+    var put = function (v) { try { if (v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); } catch (e) {} };
+    var labelOf = function (v) { var b = $('[data-dg-pick="' + v + '"]'); return b ? b.getAttribute('data-dg-label') : ''; };
+    var paint = function (v) {
+      scopes.forEach(function (sc) {
+        var asking = !v, g = $('[data-dgate]', sc), bar = $('[data-dgbar]', sc), nm = $('[data-dg-name]', sc);
+        sc.setAttribute('data-dg', asking ? 'ask' : 'on'); if (g) g.hidden = !asking; if (bar) bar.hidden = asking; if (nm) nm.textContent = labelOf(v);
+      });
+      document.dispatchEvent(new CustomEvent('kx:diet', { detail: v }));
+    };
+    document.addEventListener('click', function (e) {
+      var p = e.target.closest && e.target.closest('[data-dg-pick]');
+      if (p) { var v = p.getAttribute('data-dg-pick'); put(v); paint(v); return; }
+      if (e.target.closest && e.target.closest('[data-dg-change]')) { put(''); paint(''); }
+    });
+    var linked = /[?&](dieta|categoria)=/.test((location.search || '') + (location.hash || ''));   // a deep link already says what to show
+    paint(get() || (linked ? 'all' : ''));
+  }
+
   function initDietChips() {
     var root = $('[data-dchips]'); if (!root) return;
     var scope = root.closest('section'), grid = $('[data-dc-grid]', scope), cnt = $('[data-dc-count]', scope), empty = $('[data-dc-empty]', scope);
@@ -1883,8 +1906,9 @@
       }
       var gridEl = $('[data-fn-grid]', holder);
       var scGrid = $('[data-fn-sc-grid]', holder), scCount = $('[data-fn-sc-count]', holder);
-      var scUpdate = function () { if (!scGrid || !scCount) return; var cards = scGrid.children, n = cards.length; if (!n) return; var w = cards[0].getBoundingClientRect().width + 12, i = Math.min(n - 1, Math.round(scGrid.scrollLeft / Math.max(1, w))); scCount.textContent = (i + 1) + ' / ' + n; };
+      var scUpdate = function () { if (!scGrid || !scCount) return; var cards = [].filter.call(scGrid.children, function (c) { return !c.classList.contains('is-dg-off') && c.offsetParent !== null; }), n = cards.length; if (!n) return; var w = cards[0].getBoundingClientRect().width + 12, i = Math.min(n - 1, Math.round(scGrid.scrollLeft / Math.max(1, w))); scCount.textContent = (i + 1) + ' / ' + n; };
       if (scGrid) { scGrid.addEventListener('scroll', function () { window.requestAnimationFrame(scUpdate); }, { passive: true }); scUpdate(); }
+      document.addEventListener('kx:diet', function (e) { var v = e.detail; if (!v) return; $$('[data-sc-dish]', holder).forEach(function (c) { c.classList.toggle('is-dg-off', !inGroup(c, v)); }); if (scGrid) scGrid.scrollLeft = 0; st.cat = v; persist(); render(); scUpdate(); });
       var arrows = function () { if (!gridEl) return; var pv = $('[data-fn-arrow="-1"]', holder), nx = $('[data-fn-arrow="1"]', holder); if (pv) pv.hidden = gridEl.scrollLeft < 8; if (nx) nx.hidden = gridEl.scrollLeft + gridEl.clientWidth >= gridEl.scrollWidth - 8; };
       if (gridEl) { gridEl.addEventListener('scroll', arrows, { passive: true }); window.addEventListener('resize', arrows); }
       var recPaint = function () { var tb0 = tierEl(), sp0 = tb0 && tb0.getAttribute('data-selling-plan'), kind = st.plan === 'week' ? 'week' : (sp0 && st.renew ? 'auto' : 'manual'); $$('[data-fn-rec]', holder).forEach(function (p) { p.hidden = p.getAttribute('data-fn-rec') !== kind; }); };
@@ -2251,7 +2275,7 @@
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile,
+    [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile, initDietGate,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

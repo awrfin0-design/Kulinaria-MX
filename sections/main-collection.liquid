@@ -17,7 +17,8 @@
     {%- if collection.products.size == 0 -%}
       <p class="alert">{{ 'collection.empty' | t }}</p>
     {%- elsif layout == 'menu' -%}
-      <div class="menu-shell" data-filters>
+      <div class="menu-shell" data-filters data-dgate-scope>
+        {% render 'diet-gate' %}
         {%- assign seasonal_coll = collections['temporada'] -%}
         {%- if seasonal_coll.products.size > 0 -%}
           <div class="season-toggle" role="group" aria-label="{{ 'season.aria' | t }}">

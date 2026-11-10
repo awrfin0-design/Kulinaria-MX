@@ -3699,6 +3699,24 @@ section:has(.dd.is-open){position:relative;z-index:30}
   body .funnel .step[data-fn-step="3"] .fn-week{padding-top:7px !important}
 }
 
+/* v91: diet gate - asked before any dish list */
+.dgate{margin:6px 0 14px}
+.dgate[hidden],.dgbar[hidden]{display:none !important}
+.dgate__q{margin:0 0 12px;font:500 clamp(1.25rem,2.4vw,1.7rem)/1.15 var(--font-display);color:var(--text)}
+.dgate__grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.dgate__b{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:14px 16px;text-align:left;border:1.5px solid var(--line);border-radius:16px;background:var(--surface,transparent);color:var(--text);cursor:pointer;transition:border-color .2s,background .2s,transform .2s}
+.dgate__b strong{font:600 1rem/1.15 var(--font-display)}
+.dgate__b small{font-size:.74rem;color:var(--text-muted);line-height:1.3}
+.dgate__b:hover,.dgate__b:focus-visible{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,transparent);transform:translateY(-2px)}
+.dgate__b--all{border-style:dashed}
+.dgbar{display:flex;align-items:center;gap:12px;margin:0 0 8px;font-size:.78rem;color:var(--text-muted)}
+.dgbar b{color:var(--accent);font-weight:700}
+.dgbar .text-link{background:none;border:0;padding:0;cursor:pointer;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.menu-shell[data-dg="ask"]>:not([data-dgate]){display:none !important}
+[data-dgate-scope][data-dg="ask"] [data-dgate-body]{display:none !important}
+.fn-sc.is-dg-off{display:none !important}
+@media (max-width:900px){.dgate__grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dgate__b--all{grid-column:1/-1}.dgate__b{padding:12px 14px}}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -4255,15 +4273,22 @@ Fuego</span>
         </div>
 
 
-        <fieldset class="step" data-fn-step="2">
+        <fieldset class="step" data-fn-step="2" data-dgate-scope>
           <legend class="fn-sr">Menú</legend><div class="season-toggle season-toggle--fn" role="group" aria-label="Menú de la semana o de temporada">
               <button class="season-pill is-on" type="button" data-fn-season="week" aria-pressed="true">Menú de la semana</button>
               <button class="season-pill season-pill--s" type="button" data-fn-season="season" aria-pressed="false">&#10022; De temporada <small>Edición limitada</small></button>
             </div><div class="fn-menunote"><button class="text-link" type="button" data-fn-prev-sc>&lsaquo; Plan</button><p>Este es el menú de la semana. Cada semana vuelves aquí a elegir tus platillos antes del sábado a las 10:00; hoy solo conócelo.</p></div>
-          <div class="fn-carousel fn-carousel--show">
+          <div class="dgate" data-dgate>
+  <h3 class="dgate__q">¿Qué tipo de dieta buscas?</h3>
+  <div class="dgate__grid" role="group" aria-label="¿Qué tipo de dieta buscas?"><button class="dgate__b" type="button" data-dg-pick="keto-low-carb" data-dg-label="Keto / Low carb"><strong>Keto / Low carb</strong><small>Pocos carbohidratos</small></button><button class="dgate__b" type="button" data-dg-pick="fit-proteina" data-dg-label="Fit / Proteína"><strong>Fit / Proteína</strong><small>Más proteína</small></button><button class="dgate__b" type="button" data-dg-pick="veggie" data-dg-label="Veggie"><strong>Veggie</strong><small>Sin carne</small></button><button class="dgate__b" type="button" data-dg-pick="sin-gluten" data-dg-label="Sin gluten"><strong>Sin gluten</strong><small>Sin trigo ni gluten</small></button><button class="dgate__b dgate__b--all" type="button" data-dg-pick="all" data-dg-label="Sin preferencia"><strong>Sin preferencia</strong><small>Ver todo el menú</small></button>
+  </div>
+</div>
+<p class="dgbar" data-dgbar hidden><span>Mostrando: <b data-dg-name></b></span><button class="text-link" type="button" data-dg-change>Cambiar</button></p>
+
+          <div class="fn-carousel fn-carousel--show" data-dgate-body>
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Platillos anteriores">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
-            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
+            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc" data-sc-dish data-category="diario-premium" data-diets="keto" data-has-detail data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -4284,7 +4309,7 @@ Fuego</span>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+</article><article class="fn-sc" data-sc-dish data-category="bowls-de-la-semana" data-diets="alto-proteina|sin-gluten" data-has-detail data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -4305,7 +4330,7 @@ Fuego</span>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+</article><article class="fn-sc" data-sc-dish data-category="al-fuego-y-mar" data-diets="keto|bajo-carbos" data-has-detail data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -4326,7 +4351,7 @@ Fuego</span>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+</article><article class="fn-sc" data-sc-dish data-category="desayunos-premium" data-diets="vegetariano|bajo-calorias" data-has-detail data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -4347,7 +4372,7 @@ Fuego</span>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+</article><article class="fn-sc" data-sc-dish data-category="al-fuego-y-mar" data-diets="alto-proteina|sin-gluten" data-has-detail data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -4368,7 +4393,7 @@ Fuego</span>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+</article><article class="fn-sc" data-sc-dish data-category="al-fuego-y-mar" data-diets="keto|alto-proteina|sin-gluten" data-has-detail data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -4389,7 +4414,7 @@ Fuego</span>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+</article><article class="fn-sc" data-sc-dish data-category="bowls-de-la-semana" data-diets="vegano|vegetariano|sin-gluten" data-has-detail data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -4410,7 +4435,7 @@ Fuego</span>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
+</article><article class="fn-sc" data-sc-dish data-category="sopas-y-entradas" data-diets="vegetariano|sin-gluten|bajo-calorias" data-has-detail data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -4431,7 +4456,7 @@ Fuego</span>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+</article><article class="fn-sc" data-sc-dish data-category="kulinaria-junior" data-diets="" data-has-detail data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -4452,7 +4477,7 @@ Fuego</span>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada" data-seasonal="true">
+</article><article class="fn-sc" data-sc-dish data-category="temporada" data-diets="" data-has-detail data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada" data-seasonal="true">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Chiles en nogada de temporada" loading="lazy"><span class="fn-ribbon">Edición limitada · Septiembre</span></div>
   <div class="fn-sc__body">
@@ -4473,7 +4498,7 @@ Fuego</span>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena" data-seasonal="true">
+</article><article class="fn-sc" data-sc-dish data-category="temporada" data-diets="" data-has-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena" data-seasonal="true">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="lazy"><span class="fn-ribbon">Edición limitada · Otoño</span></div>
   <div class="fn-sc__body">
@@ -5551,7 +5576,14 @@ Pago digital, sin efectivo</li></ul>
 </div><div id="menu--shopify-section-main" class="shopify-section"><section class="section" >
   <div class="container">
     <div class="section__head"><p style="margin-top:var(--space-lg)"><span class="countdown" data-cutoff>Confirma tus platillos antes del sábado 10:00 AM · quedan <strong data-cutoff-value>…</strong></span></p>
-        <p class="legal-note">Si no registras tus opciones a tiempo, se genera un pedido automático con tu plan, historial y perfil de alergias.</p></div><div class="menu-shell" data-filters><div class="season-toggle" role="group" aria-label="Menú de la semana o de temporada">
+        <p class="legal-note">Si no registras tus opciones a tiempo, se genera un pedido automático con tu plan, historial y perfil de alergias.</p></div><div class="menu-shell" data-filters data-dgate-scope>
+        <div class="dgate" data-dgate>
+  <h3 class="dgate__q">¿Qué tipo de dieta buscas?</h3>
+  <div class="dgate__grid" role="group" aria-label="¿Qué tipo de dieta buscas?"><button class="dgate__b" type="button" data-dg-pick="keto-low-carb" data-dg-label="Keto / Low carb"><strong>Keto / Low carb</strong><small>Pocos carbohidratos</small></button><button class="dgate__b" type="button" data-dg-pick="fit-proteina" data-dg-label="Fit / Proteína"><strong>Fit / Proteína</strong><small>Más proteína</small></button><button class="dgate__b" type="button" data-dg-pick="veggie" data-dg-label="Veggie"><strong>Veggie</strong><small>Sin carne</small></button><button class="dgate__b" type="button" data-dg-pick="sin-gluten" data-dg-label="Sin gluten"><strong>Sin gluten</strong><small>Sin trigo ni gluten</small></button><button class="dgate__b dgate__b--all" type="button" data-dg-pick="all" data-dg-label="Sin preferencia"><strong>Sin preferencia</strong><small>Ver todo el menú</small></button>
+  </div>
+</div>
+<p class="dgbar" data-dgbar hidden><span>Mostrando: <b data-dg-name></b></span><button class="text-link" type="button" data-dg-change>Cambiar</button></p>
+<div class="season-toggle" role="group" aria-label="Menú de la semana o de temporada">
             <button class="season-pill" type="button" data-filter="season" data-value="week" aria-pressed="true">Menú de la semana</button>
             <button class="season-pill season-pill--s" type="button" data-filter="season" data-value="season" aria-pressed="false">&#10022; De temporada <small>Edición limitada</small></button>
           </div>
@@ -13332,15 +13364,22 @@ Pago digital, sin efectivo</li></ul>
         </div>
 
 
-        <fieldset class="step" data-fn-step="2">
+        <fieldset class="step" data-fn-step="2" data-dgate-scope>
           <legend class="fn-sr">Menú</legend><div class="season-toggle season-toggle--fn" role="group" aria-label="Menú de la semana o de temporada">
               <button class="season-pill is-on" type="button" data-fn-season="week" aria-pressed="true">Menú de la semana</button>
               <button class="season-pill season-pill--s" type="button" data-fn-season="season" aria-pressed="false">&#10022; De temporada <small>Edición limitada</small></button>
             </div><div class="fn-menunote"><button class="text-link" type="button" data-fn-prev-sc>&lsaquo; Plan</button><p>Este es el menú de la semana. Cada semana vuelves aquí a elegir tus platillos antes del sábado a las 10:00; hoy solo conócelo.</p></div>
-          <div class="fn-carousel fn-carousel--show">
+          <div class="dgate" data-dgate>
+  <h3 class="dgate__q">¿Qué tipo de dieta buscas?</h3>
+  <div class="dgate__grid" role="group" aria-label="¿Qué tipo de dieta buscas?"><button class="dgate__b" type="button" data-dg-pick="keto-low-carb" data-dg-label="Keto / Low carb"><strong>Keto / Low carb</strong><small>Pocos carbohidratos</small></button><button class="dgate__b" type="button" data-dg-pick="fit-proteina" data-dg-label="Fit / Proteína"><strong>Fit / Proteína</strong><small>Más proteína</small></button><button class="dgate__b" type="button" data-dg-pick="veggie" data-dg-label="Veggie"><strong>Veggie</strong><small>Sin carne</small></button><button class="dgate__b" type="button" data-dg-pick="sin-gluten" data-dg-label="Sin gluten"><strong>Sin gluten</strong><small>Sin trigo ni gluten</small></button><button class="dgate__b dgate__b--all" type="button" data-dg-pick="all" data-dg-label="Sin preferencia"><strong>Sin preferencia</strong><small>Ver todo el menú</small></button>
+  </div>
+</div>
+<p class="dgbar" data-dgbar hidden><span>Mostrando: <b data-dg-name></b></span><button class="text-link" type="button" data-dg-change>Cambiar</button></p>
+
+          <div class="fn-carousel fn-carousel--show" data-dgate-body>
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Platillos anteriores">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
-            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
+            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc" data-sc-dish data-category="diario-premium" data-diets="keto" data-has-detail data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -13361,7 +13400,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+</article><article class="fn-sc" data-sc-dish data-category="bowls-de-la-semana" data-diets="alto-proteina|sin-gluten" data-has-detail data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -13382,7 +13421,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+</article><article class="fn-sc" data-sc-dish data-category="al-fuego-y-mar" data-diets="keto|bajo-carbos" data-has-detail data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -13403,7 +13442,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+</article><article class="fn-sc" data-sc-dish data-category="desayunos-premium" data-diets="vegetariano|bajo-calorias" data-has-detail data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -13424,7 +13463,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+</article><article class="fn-sc" data-sc-dish data-category="al-fuego-y-mar" data-diets="alto-proteina|sin-gluten" data-has-detail data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -13445,7 +13484,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+</article><article class="fn-sc" data-sc-dish data-category="al-fuego-y-mar" data-diets="keto|alto-proteina|sin-gluten" data-has-detail data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -13466,7 +13505,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+</article><article class="fn-sc" data-sc-dish data-category="bowls-de-la-semana" data-diets="vegano|vegetariano|sin-gluten" data-has-detail data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -13487,7 +13526,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
+</article><article class="fn-sc" data-sc-dish data-category="sopas-y-entradas" data-diets="vegetariano|sin-gluten|bajo-calorias" data-has-detail data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -13508,7 +13547,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+</article><article class="fn-sc" data-sc-dish data-category="kulinaria-junior" data-diets="" data-has-detail data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -13529,7 +13568,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada" data-seasonal="true">
+</article><article class="fn-sc" data-sc-dish data-category="temporada" data-diets="" data-has-detail data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada" data-seasonal="true">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Chiles en nogada de temporada" loading="lazy"><span class="fn-ribbon">Edición limitada · Septiembre</span></div>
   <div class="fn-sc__body">
@@ -13550,7 +13589,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena" data-seasonal="true">
+</article><article class="fn-sc" data-sc-dish data-category="temporada" data-diets="" data-has-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena" data-seasonal="true">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="Ver qué ingrediente choca con tu perfil"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Pan de calabaza con especias" loading="lazy"><span class="fn-ribbon">Edición limitada · Otoño</span></div>
   <div class="fn-sc__body">
@@ -14867,15 +14906,22 @@ Pago digital, sin efectivo</li></ul>
         </div>
 
 
-        <fieldset class="step" data-fn-step="2">
+        <fieldset class="step" data-fn-step="2" data-dgate-scope>
           <legend class="fn-sr">Menu</legend><div class="season-toggle season-toggle--fn" role="group" aria-label="Menu of the week or seasonal">
               <button class="season-pill is-on" type="button" data-fn-season="week" aria-pressed="true">Menu of the week</button>
               <button class="season-pill season-pill--s" type="button" data-fn-season="season" aria-pressed="false">&#10022; Seasonal <small>Limited edition</small></button>
             </div><div class="fn-menunote"><button class="text-link" type="button" data-fn-prev-sc>&lsaquo; Plan</button><p>This is the menu of the week. Every week you come back here to choose your dishes before Saturday at 10:00; today, just get to know it.</p></div>
-          <div class="fn-carousel fn-carousel--show">
+          <div class="dgate" data-dgate>
+  <h3 class="dgate__q">What kind of diet are you after?</h3>
+  <div class="dgate__grid" role="group" aria-label="What kind of diet are you after?"><button class="dgate__b" type="button" data-dg-pick="keto-low-carb" data-dg-label="Keto / Low carb"><strong>Keto / Low carb</strong><small>Few carbs</small></button><button class="dgate__b" type="button" data-dg-pick="fit-proteina" data-dg-label="Fit / Protein"><strong>Fit / Protein</strong><small>More protein</small></button><button class="dgate__b" type="button" data-dg-pick="veggie" data-dg-label="Veggie"><strong>Veggie</strong><small>No meat</small></button><button class="dgate__b" type="button" data-dg-pick="sin-gluten" data-dg-label="Gluten-free"><strong>Gluten-free</strong><small>No wheat or gluten</small></button><button class="dgate__b dgate__b--all" type="button" data-dg-pick="all" data-dg-label="No preference"><strong>No preference</strong><small>See the whole menu</small></button>
+  </div>
+</div>
+<p class="dgbar" data-dgbar hidden><span>Showing: <b data-dg-name></b></span><button class="text-link" type="button" data-dg-change>Change</button></p>
+
+          <div class="fn-carousel fn-carousel--show" data-dgate-body>
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Previous dishes">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
-            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
+            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc" data-sc-dish data-category="diario-premium" data-diets="keto" data-has-detail data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -14896,7 +14942,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+</article><article class="fn-sc" data-sc-dish data-category="bowls-de-la-semana" data-diets="alto-proteina|sin-gluten" data-has-detail data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -14917,7 +14963,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+</article><article class="fn-sc" data-sc-dish data-category="al-fuego-y-mar" data-diets="keto|bajo-carbos" data-has-detail data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -14938,7 +14984,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+</article><article class="fn-sc" data-sc-dish data-category="desayunos-premium" data-diets="vegetariano|bajo-calorias" data-has-detail data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -14959,7 +15005,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+</article><article class="fn-sc" data-sc-dish data-category="al-fuego-y-mar" data-diets="alto-proteina|sin-gluten" data-has-detail data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -14980,7 +15026,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+</article><article class="fn-sc" data-sc-dish data-category="al-fuego-y-mar" data-diets="keto|alto-proteina|sin-gluten" data-has-detail data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -15001,7 +15047,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+</article><article class="fn-sc" data-sc-dish data-category="bowls-de-la-semana" data-diets="vegano|vegetariano|sin-gluten" data-has-detail data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -15022,7 +15068,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
+</article><article class="fn-sc" data-sc-dish data-category="sopas-y-entradas" data-diets="vegetariano|sin-gluten|bajo-calorias" data-has-detail data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -15043,7 +15089,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+</article><article class="fn-sc" data-sc-dish data-category="kulinaria-junior" data-diets="" data-has-detail data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -15064,7 +15110,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada" data-seasonal="true">
+</article><article class="fn-sc" data-sc-dish data-category="temporada" data-diets="" data-has-detail data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada" data-seasonal="true">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Seasonal chiles en nogada" loading="lazy"><span class="fn-ribbon">Limited edition · Septiembre</span></div>
   <div class="fn-sc__body">
@@ -15085,7 +15131,7 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena" data-seasonal="true">
+</article><article class="fn-sc" data-sc-dish data-category="temporada" data-diets="" data-has-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena" data-seasonal="true">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="lazy"><span class="fn-ribbon">Limited edition · Otoño</span></div>
   <div class="fn-sc__body">
@@ -16163,7 +16209,14 @@ Digital payment, no cash</li></ul>
 </div><div id="menu--shopify-section-main" class="shopify-section"><section class="section" >
   <div class="container">
     <div class="section__head"><p style="margin-top:var(--space-lg)"><span class="countdown" data-cutoff>Confirm your dishes before Saturday 10:00 AM · time left: <strong data-cutoff-value>…</strong></span></p>
-        <p class="legal-note">If you don't register your choices in time, we create an automatic order from your plan, history and allergy profile.</p></div><div class="menu-shell" data-filters><div class="season-toggle" role="group" aria-label="Menu of the week or seasonal">
+        <p class="legal-note">If you don't register your choices in time, we create an automatic order from your plan, history and allergy profile.</p></div><div class="menu-shell" data-filters data-dgate-scope>
+        <div class="dgate" data-dgate>
+  <h3 class="dgate__q">What kind of diet are you after?</h3>
+  <div class="dgate__grid" role="group" aria-label="What kind of diet are you after?"><button class="dgate__b" type="button" data-dg-pick="keto-low-carb" data-dg-label="Keto / Low carb"><strong>Keto / Low carb</strong><small>Few carbs</small></button><button class="dgate__b" type="button" data-dg-pick="fit-proteina" data-dg-label="Fit / Protein"><strong>Fit / Protein</strong><small>More protein</small></button><button class="dgate__b" type="button" data-dg-pick="veggie" data-dg-label="Veggie"><strong>Veggie</strong><small>No meat</small></button><button class="dgate__b" type="button" data-dg-pick="sin-gluten" data-dg-label="Gluten-free"><strong>Gluten-free</strong><small>No wheat or gluten</small></button><button class="dgate__b dgate__b--all" type="button" data-dg-pick="all" data-dg-label="No preference"><strong>No preference</strong><small>See the whole menu</small></button>
+  </div>
+</div>
+<p class="dgbar" data-dgbar hidden><span>Showing: <b data-dg-name></b></span><button class="text-link" type="button" data-dg-change>Change</button></p>
+<div class="season-toggle" role="group" aria-label="Menu of the week or seasonal">
             <button class="season-pill" type="button" data-filter="season" data-value="week" aria-pressed="true">Menu of the week</button>
             <button class="season-pill season-pill--s" type="button" data-filter="season" data-value="season" aria-pressed="false">&#10022; Seasonal <small>Limited edition</small></button>
           </div>
@@ -23944,15 +23997,22 @@ Digital payment, no cash</li></ul>
         </div>
 
 
-        <fieldset class="step" data-fn-step="2">
+        <fieldset class="step" data-fn-step="2" data-dgate-scope>
           <legend class="fn-sr">Menu</legend><div class="season-toggle season-toggle--fn" role="group" aria-label="Menu of the week or seasonal">
               <button class="season-pill is-on" type="button" data-fn-season="week" aria-pressed="true">Menu of the week</button>
               <button class="season-pill season-pill--s" type="button" data-fn-season="season" aria-pressed="false">&#10022; Seasonal <small>Limited edition</small></button>
             </div><div class="fn-menunote"><button class="text-link" type="button" data-fn-prev-sc>&lsaquo; Plan</button><p>This is the menu of the week. Every week you come back here to choose your dishes before Saturday at 10:00; today, just get to know it.</p></div>
-          <div class="fn-carousel fn-carousel--show">
+          <div class="dgate" data-dgate>
+  <h3 class="dgate__q">What kind of diet are you after?</h3>
+  <div class="dgate__grid" role="group" aria-label="What kind of diet are you after?"><button class="dgate__b" type="button" data-dg-pick="keto-low-carb" data-dg-label="Keto / Low carb"><strong>Keto / Low carb</strong><small>Few carbs</small></button><button class="dgate__b" type="button" data-dg-pick="fit-proteina" data-dg-label="Fit / Protein"><strong>Fit / Protein</strong><small>More protein</small></button><button class="dgate__b" type="button" data-dg-pick="veggie" data-dg-label="Veggie"><strong>Veggie</strong><small>No meat</small></button><button class="dgate__b" type="button" data-dg-pick="sin-gluten" data-dg-label="Gluten-free"><strong>Gluten-free</strong><small>No wheat or gluten</small></button><button class="dgate__b dgate__b--all" type="button" data-dg-pick="all" data-dg-label="No preference"><strong>No preference</strong><small>See the whole menu</small></button>
+  </div>
+</div>
+<p class="dgbar" data-dgbar hidden><span>Showing: <b data-dg-name></b></span><button class="text-link" type="button" data-dg-change>Change</button></p>
+
+          <div class="fn-carousel fn-carousel--show" data-dgate-body>
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="Previous dishes">&#8249;</button>
             <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
-            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
+            <div class="fn-showcase" data-fn-sc-grid><article class="fn-sc" data-sc-dish data-category="diario-premium" data-diets="keto" data-has-detail data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -23973,7 +24033,7 @@ Digital payment, no cash</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+</article><article class="fn-sc" data-sc-dish data-category="bowls-de-la-semana" data-diets="alto-proteina|sin-gluten" data-has-detail data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -23994,7 +24054,7 @@ Digital payment, no cash</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+</article><article class="fn-sc" data-sc-dish data-category="al-fuego-y-mar" data-diets="keto|bajo-carbos" data-has-detail data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -24015,7 +24075,7 @@ Digital payment, no cash</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+</article><article class="fn-sc" data-sc-dish data-category="desayunos-premium" data-diets="vegetariano|bajo-calorias" data-has-detail data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -24036,7 +24096,7 @@ Digital payment, no cash</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+</article><article class="fn-sc" data-sc-dish data-category="al-fuego-y-mar" data-diets="alto-proteina|sin-gluten" data-has-detail data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -24057,7 +24117,7 @@ Digital payment, no cash</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+</article><article class="fn-sc" data-sc-dish data-category="al-fuego-y-mar" data-diets="keto|alto-proteina|sin-gluten" data-has-detail data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -24078,7 +24138,7 @@ Digital payment, no cash</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+</article><article class="fn-sc" data-sc-dish data-category="bowls-de-la-semana" data-diets="vegano|vegetariano|sin-gluten" data-has-detail data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -24099,7 +24159,7 @@ Digital payment, no cash</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
+</article><article class="fn-sc" data-sc-dish data-category="sopas-y-entradas" data-diets="vegetariano|sin-gluten|bajo-calorias" data-has-detail data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -24120,7 +24180,7 @@ Digital payment, no cash</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+</article><article class="fn-sc" data-sc-dish data-category="kulinaria-junior" data-diets="" data-has-detail data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"></div>
   <div class="fn-sc__body">
@@ -24141,7 +24201,7 @@ Digital payment, no cash</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada" data-seasonal="true">
+</article><article class="fn-sc" data-sc-dish data-category="temporada" data-diets="" data-has-detail data-allergens="Nuez|Lácteos" data-ingredients="Chile poblano|Res|Nuez de Castilla|Granada" data-seasonal="true">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Seasonal chiles en nogada" loading="lazy"><span class="fn-ribbon">Limited edition · Septiembre</span></div>
   <div class="fn-sc__body">
@@ -24162,7 +24222,7 @@ Digital payment, no cash</li></ul>
   </div>
 </div>
 
-</article><article class="fn-sc" data-sc-dish data-has-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena" data-seasonal="true">
+</article><article class="fn-sc" data-sc-dish data-category="temporada" data-diets="" data-has-detail data-allergens="Gluten|Huevo" data-ingredients="Calabaza|Canela|Moscada|Avena" data-seasonal="true">
   <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="See which ingredient clashes with your profile"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
   <div class="fn-sc__img"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-10.webp" alt="Spiced pumpkin bread" loading="lazy"><span class="fn-ribbon">Limited edition · Otoño</span></div>
   <div class="fn-sc__body">
@@ -26592,6 +26652,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         run();
       });
     });
+    document.addEventListener('kx:diet', function (e) { var v = e.detail; if (!v) return; var b = $('[data-filter="category"][data-value="' + v + '"]', bar) || $('[data-filter="category"][data-value="all"]', bar); if (b) b.click(); });
     // deep link: ?categoria=bowls&dieta=keto  (also works as #/menu?categoria=bowls)
     var deepLink = function () {
       var qs = location.search || (location.hash.indexOf('?') > -1 ? location.hash.slice(location.hash.indexOf('?')) : '');
@@ -26950,6 +27011,28 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   }
 
   /* ---------- home: nutritional-focus chips filter the dishes shown right below them ---------- */
+  /* ---------- "what kind of diet are you after?": asked before any dish list; remembered, shown as a one-line bar with "change" ---------- */
+  function initDietGate() {
+    var KEY = 'kx_dietpick', scopes = $$('[data-dgate-scope]'); if (!scopes.length) return;
+    var get = function () { try { return localStorage.getItem(KEY) || ''; } catch (e) { return ''; } };
+    var put = function (v) { try { if (v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); } catch (e) {} };
+    var labelOf = function (v) { var b = $('[data-dg-pick="' + v + '"]'); return b ? b.getAttribute('data-dg-label') : ''; };
+    var paint = function (v) {
+      scopes.forEach(function (sc) {
+        var asking = !v, g = $('[data-dgate]', sc), bar = $('[data-dgbar]', sc), nm = $('[data-dg-name]', sc);
+        sc.setAttribute('data-dg', asking ? 'ask' : 'on'); if (g) g.hidden = !asking; if (bar) bar.hidden = asking; if (nm) nm.textContent = labelOf(v);
+      });
+      document.dispatchEvent(new CustomEvent('kx:diet', { detail: v }));
+    };
+    document.addEventListener('click', function (e) {
+      var p = e.target.closest && e.target.closest('[data-dg-pick]');
+      if (p) { var v = p.getAttribute('data-dg-pick'); put(v); paint(v); return; }
+      if (e.target.closest && e.target.closest('[data-dg-change]')) { put(''); paint(''); }
+    });
+    var linked = /[?&](dieta|categoria)=/.test((location.search || '') + (location.hash || ''));   // a deep link already says what to show
+    paint(get() || (linked ? 'all' : ''));
+  }
+
   function initDietChips() {
     var root = $('[data-dchips]'); if (!root) return;
     var scope = root.closest('section'), grid = $('[data-dc-grid]', scope), cnt = $('[data-dc-count]', scope), empty = $('[data-dc-empty]', scope);
@@ -27950,8 +28033,9 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       }
       var gridEl = $('[data-fn-grid]', holder);
       var scGrid = $('[data-fn-sc-grid]', holder), scCount = $('[data-fn-sc-count]', holder);
-      var scUpdate = function () { if (!scGrid || !scCount) return; var cards = scGrid.children, n = cards.length; if (!n) return; var w = cards[0].getBoundingClientRect().width + 12, i = Math.min(n - 1, Math.round(scGrid.scrollLeft / Math.max(1, w))); scCount.textContent = (i + 1) + ' / ' + n; };
+      var scUpdate = function () { if (!scGrid || !scCount) return; var cards = [].filter.call(scGrid.children, function (c) { return !c.classList.contains('is-dg-off') && c.offsetParent !== null; }), n = cards.length; if (!n) return; var w = cards[0].getBoundingClientRect().width + 12, i = Math.min(n - 1, Math.round(scGrid.scrollLeft / Math.max(1, w))); scCount.textContent = (i + 1) + ' / ' + n; };
       if (scGrid) { scGrid.addEventListener('scroll', function () { window.requestAnimationFrame(scUpdate); }, { passive: true }); scUpdate(); }
+      document.addEventListener('kx:diet', function (e) { var v = e.detail; if (!v) return; $$('[data-sc-dish]', holder).forEach(function (c) { c.classList.toggle('is-dg-off', !inGroup(c, v)); }); if (scGrid) scGrid.scrollLeft = 0; st.cat = v; persist(); render(); scUpdate(); });
       var arrows = function () { if (!gridEl) return; var pv = $('[data-fn-arrow="-1"]', holder), nx = $('[data-fn-arrow="1"]', holder); if (pv) pv.hidden = gridEl.scrollLeft < 8; if (nx) nx.hidden = gridEl.scrollLeft + gridEl.clientWidth >= gridEl.scrollWidth - 8; };
       if (gridEl) { gridEl.addEventListener('scroll', arrows, { passive: true }); window.addEventListener('resize', arrows); }
       var recPaint = function () { var tb0 = tierEl(), sp0 = tb0 && tb0.getAttribute('data-selling-plan'), kind = st.plan === 'week' ? 'week' : (sp0 && st.renew ? 'auto' : 'manual'); $$('[data-fn-rec]', holder).forEach(function (p) { p.hidden = p.getAttribute('data-fn-rec') !== kind; }); };
@@ -28318,7 +28402,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile,
+    [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile, initDietGate,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });

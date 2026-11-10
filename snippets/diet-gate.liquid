@@ -1,0 +1,15 @@
+{%- comment -%}
+  "What kind of diet are you after?" - shown before any dish list (menu page and the menu step of the order funnel).
+  The choice is remembered (localStorage kx_dietpick) and shown as a one-line bar with a "change" link.
+{%- endcomment -%}
+{%- assign dg_groups = 'keto-low-carb,fit-proteina,veggie,sin-gluten' | split: ',' -%}
+<div class="dgate" data-dgate>
+  <h3 class="dgate__q">{{ 'dgate.q' | t }}</h3>
+  <div class="dgate__grid" role="group" aria-label="{{ 'dgate.q' | t }}">
+    {%- for g in dg_groups -%}{%- assign gk = 'menu_group.' | append: g -%}{%- assign gs = 'dgate.s_' | append: g -%}
+      <button class="dgate__b" type="button" data-dg-pick="{{ g }}" data-dg-label="{{ gk | t | escape }}"><strong>{{ gk | t }}</strong><small>{{ gs | t }}</small></button>
+    {%- endfor -%}
+    <button class="dgate__b dgate__b--all" type="button" data-dg-pick="all" data-dg-label="{{ 'dgate.all' | t | escape }}"><strong>{{ 'dgate.all' | t }}</strong><small>{{ 'dgate.all_s' | t }}</small></button>
+  </div>
+</div>
+<p class="dgbar" data-dgbar hidden><span>{{ 'dgate.bar' | t }} <b data-dg-name></b></span><button class="text-link" type="button" data-dg-change>{{ 'dgate.change' | t }}</button></p>
