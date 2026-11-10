@@ -26652,7 +26652,8 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         run();
       });
     });
-    document.addEventListener('kx:diet', function (e) { var v = e.detail; if (!v) return; var b = $('[data-filter="category"][data-value="' + v + '"]', bar) || $('[data-filter="category"][data-value="all"]', bar); if (b) b.click(); });
+    var dgFirst = true;
+    document.addEventListener('kx:diet', function (e) { var v = e.detail; if (!v) return; if (dgFirst) { dgFirst = false; if (/[?&](dieta|categoria)=/.test((location.search || '') + (location.hash || ''))) return; } var b = $('[data-filter="category"][data-value="' + v + '"]', bar) || $('[data-filter="category"][data-value="all"]', bar); if (b) b.click(); });
     // deep link: ?categoria=bowls&dieta=keto  (also works as #/menu?categoria=bowls)
     var deepLink = function () {
       var qs = location.search || (location.hash.indexOf('?') > -1 ? location.hash.slice(location.hash.indexOf('?')) : '');
