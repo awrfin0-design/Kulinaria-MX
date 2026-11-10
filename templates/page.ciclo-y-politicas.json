@@ -175,7 +175,7 @@
           "type": "item",
           "settings": {
             "title": "15% más cara que el bloque",
-            "text": "<p>Cuesta 15% más que el precio prorrateado del bloque de 4 semanas; la diferencia queda a la vista.</p>",
+            "text": "<p>Cuesta un poco más por comida que el bloque de 4 semanas; la diferencia es visible.</p>",
             "art": "dish-7"
           }
         },
@@ -252,42 +252,42 @@
           "type": "item",
           "settings": {
             "question": "Pago digital, cero efectivo",
-            "answer": "<p>Toda suscripción o renovación se cobra en la página web al hacer el pedido. Los repartidores no llevan efectivo ni cambio.</p>"
+            "answer": "<p>Todo se cobra en la web al hacer el pedido. Los repartidores no llevan efectivo.</p>"
           }
         },
         "q2": {
           "type": "item",
           "settings": {
             "question": "Sin reembolso tras liquidar",
-            "answer": "<p>Los insumos se compran en volumen, por lo que no hay cancelación del contrato vigente ni devolución de dinero. Si pausas a tiempo, las comidas no preparadas se guardan como saldo a favor.</p>"
+            "answer": "<p>Compramos insumos en volumen, así que no hay cancelación ni reembolso. Si pausas a tiempo, lo no preparado queda como saldo a favor.</p>"
           }
         },
         "q3": {
           "type": "item",
           "settings": {
             "question": "Caducidad por inactividad",
-            "answer": "<p>Tras una pausa tienes 30 días naturales para reanudar. Pasado ese plazo el contrato se cancela y se pierde el saldo acumulado.</p>"
+            "answer": "<p>Tras pausar tienes 30 días para reanudar; después el contrato se cancela y se pierde el saldo.</p>"
           }
         },
         "c_q1": {
           "type": "item",
           "settings": {
             "question": "Pago digital, cero efectivo",
-            "answer": "<p>Toda suscripción o renovación se cobra en la página web al hacer el pedido. Los repartidores no llevan efectivo ni cambio.</p>"
+            "answer": "<p>Todo se cobra en la web al hacer el pedido. Los repartidores no llevan efectivo.</p>"
           }
         },
         "c_q2": {
           "type": "item",
           "settings": {
             "question": "Sin reembolso tras liquidar",
-            "answer": "<p>Los insumos se compran en volumen, por lo que no hay cancelación del contrato vigente ni devolución de dinero. Si pausas a tiempo, las comidas no preparadas se guardan como saldo a favor.</p>"
+            "answer": "<p>Compramos insumos en volumen, así que no hay cancelación ni reembolso. Si pausas a tiempo, lo no preparado queda como saldo a favor.</p>"
           }
         },
         "c_q3": {
           "type": "item",
           "settings": {
             "question": "Caducidad por inactividad",
-            "answer": "<p>Tras una pausa tienes 30 días naturales para reanudar. Pasado ese plazo el contrato se cancela y se pierde el saldo acumulado.</p>"
+            "answer": "<p>Tras pausar tienes 30 días para reanudar; después el contrato se cancela y se pierde el saldo.</p>"
           }
         }
       },

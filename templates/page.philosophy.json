@@ -5,7 +5,7 @@
       "settings": {
         "eyebrow": "La marca",
         "heading": "Arte *del fuego*",
-        "text": "Servicio premium de comida saludable a domicilio, adaptada al estilo de vida del cliente. Una experiencia exclusiva, directa y elegante.",
+        "text": "Comida saludable a domicilio, a la medida de tu estilo de vida.",
         "button_label": "Elegir mi plan",
         "button_link": "/pages/planes",
         "art": "air-chef"
@@ -230,7 +230,7 @@
       "settings": {
         "eyebrow": "Por qué así",
         "heading": "Eficiencia que se nota *en el plato*",
-        "text": "<p>Compramos los alimentos en volumen para mantener costos eficientes. Por eso trabajamos con bloques de 4 semanas y planificamos cada ciclo con precisión.</p>",
+        "text": "<p>Compramos en volumen para cuidar costos; por eso trabajamos en bloques de 4 semanas.</p>",
         "columns": "2",
         "background": "raised"
       },

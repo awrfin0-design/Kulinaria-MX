@@ -123,7 +123,7 @@
       "settings": {
         "eyebrow": "Niveles",
         "heading": "Cuatro niveles, un *mismo estándar*",
-        "text": "Cada nivel suma $70 MXN por comida sobre el anterior. El precio incluye el empaque óptimo y la preparación del chef.",
+        "text": "Cada nivel suma $70 MXN por comida. El precio incluye empaque y preparación del chef.",
         "bg_video": true
       },
       "blocks": {
@@ -131,7 +131,7 @@
           "type": "tier",
           "settings": {
             "tier": "selecto",
-            "text": "Nuestro menú base diario: cocina saludable, balanceada y dietas adaptables (Keto, sin gluten, vegetariano) con pollo, cerdo o res magra."
+            "text": "Menú base diario: cocina saludable y balanceada, con dietas adaptables (keto, sin gluten, vegetariano)."
           }
         },
         "t2": {
@@ -379,14 +379,14 @@
           "type": "item",
           "settings": {
             "question": "¿Hasta cuándo puedo elegir mis platillos?",
-            "answer": "<p>Hasta el sábado a las 10:00 AM. Si no eliges, el sistema arma tu pedido con tu plan, tu historial y tus alergias registradas.</p>"
+            "answer": "<p>Hasta el sábado 10:00 AM. Si no eliges, armamos tu pedido con tu plan, historial y alergias.</p>"
           }
         },
         "q2": {
           "type": "item",
           "settings": {
             "question": "¿Puedo pausar mi suscripción?",
-            "answer": "<p>Sí. Pausa las entregas de jueves y viernes a más tardar el martes a las 10:00 AM, y las de lunes a miércoles a más tardar el viernes a las 7:00 PM. Lo no preparado queda como saldo a favor.</p>"
+            "answer": "<p>Sí. Jueves y viernes: hasta el martes 10:00 AM. Lunes a miércoles: hasta el viernes 7:00 PM. Lo no preparado queda como saldo a favor.</p>"
           }
         },
         "q3": {
@@ -407,7 +407,7 @@
           "type": "item",
           "settings": {
             "question": "¿Hay reembolsos?",
-            "answer": "<p>Compramos los insumos en volumen, por eso una vez liquidada la suscripción no hay cancelación ni devolución de dinero.</p>"
+            "answer": "<p>Compramos insumos en volumen: una vez liquidada la suscripción no hay cancelación ni reembolso.</p>"
           }
         }
       },
