@@ -174,7 +174,7 @@
         "b1": {
           "type": "item",
           "settings": {
-            "title": "15% más cara que el bloque",
+            "title": "Un poco más por comida",
             "text": "<p>Cuesta un poco más por comida que el bloque de 4 semanas; la diferencia es visible.</p>",
             "art": "dish-7"
           }

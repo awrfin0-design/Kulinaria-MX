@@ -111,7 +111,7 @@
       "settings": {
         "eyebrow": "Especiales de la semana",
         "heading": "Esta semana *en Kulinaria*",
-        "text": "Variedad gourmet para toda tu semana. Personaliza tu selección antes del sábado a las 10 a.m.",
+        "text": "Variedad gourmet para toda tu semana.",
         "collection": "menu-semanal",
         "limit": 6,
         "button_label": "Ver el menú completo",
@@ -428,7 +428,7 @@
       "settings": {
         "eyebrow": "Bienvenido",
         "heading": "Conoce *Kulinaria*",
-        "text": "Descubre quiénes somos y cómo cocinamos tu semana."
+        "text": "Quiénes somos y cómo cocinamos."
       }
     },
     "marquee": {
@@ -507,7 +507,7 @@
         "p1": {
           "type": "point",
           "settings": {
-            "text": "Vidrio de alta calidad, reutilizable"
+            "text": "Reutilizable"
           }
         },
         "p2": {
