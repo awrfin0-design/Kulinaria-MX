@@ -1385,6 +1385,7 @@
         st.step = Math.max(1, Math.min(savedStep, st.reach));
       } else st.step = 0;
       if (startAtPlan) st.step = 1;
+      if (st.step === 2) st.step = st.reach >= 3 ? 3 : 1;                 // the menu step is merged into "your week"
       st.planChosen = st.reach >= 2;
       if (startAtPlan) { st.reach = 3; st.planChosen = true; }                          // local preview only (test hook)
       var setReach = function (n) { if (n > st.reach) { st.reach = n; try { sessionStorage.setItem(REACH_KEY, String(n)); } catch (e) {} } persist(); };
@@ -1663,7 +1664,7 @@
         var csel = $('[data-fn-cat]', holder); if (csel) csel.value = st.cat; var dsel = $('[data-fn-diet]', holder); if (dsel) dsel.value = st.diet;
         var n = count(), full = n >= MEALS, shown = 0;
         dishes.forEach(function (d) {
-          var show = rank(d.getAttribute('data-tier')) >= rank(st.tier) && inGroup(d, st.cat) && (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1);
+          var show = rank(d.getAttribute('data-tier')) >= rank(st.tier) && (!st.pickTier || d.getAttribute('data-tier') === st.pickTier) && inGroup(d, st.cat) && (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1);
           d.classList.toggle('is-hidden', !show); if (show) shown++;
           var q = st.qty[d.getAttribute('data-pid')] || 0;
           // the per-meal price follows the chosen plan: 4-week block = block price / 20 meals, 1-week plan = week price / 5 meals (so 5 meals add up to the plan price)
@@ -1716,7 +1717,7 @@
         var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? fill(T_('meals'), { n: n, t: MEALS }) : '';
         var tot = $('[data-fn-s-total]', holder); if (tot) tot.textContent = money(planTotal());
         var sb = $('[data-fn-s-block]', holder); if (sb) { sb.hidden = false; sb.textContent = st.plan === 'block' ? fill(T_('weeks-x'), { p: money(priceOf(tierEl(), st.plan) / WEEKS), w: WEEKS }) : fill(T_('per-week'), { p: money(planTotal()) }); }
-        var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step + 1).replace('{t}', steps.length) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
+        var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step === 3 ? 3 : st.step + 1).replace('{t}', 3) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
         var rn = $('[data-fn-renew]', holder); if (rn) { var hasPlan = !!tierEl().getAttribute('data-selling-plan'); rn.hidden = !(hasPlan && st.plan === 'block'); var box = $('[data-fn-renew-box]', holder); if (box) box.checked = st.renew; }
         buildNotes();
         renderMods();
@@ -1725,9 +1726,9 @@
         if (st.step === 3 && !tourArmed && !holder.classList.contains('is-gated')) { tourArmed = true; window.setTimeout(function () { startTour(false); }, 600); }
         // stepper
         steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
-        paintCats(); paintPresets();
+        paintCats(); paintPresets(); paintWk(); paintPicker();
         dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); d.classList.toggle('is-locked', k > st.reach); d.setAttribute('aria-disabled', k > st.reach ? 'true' : 'false'); });
-        if (bar) bar.style.transform = 'scaleX(' + ((st.step + 1) / steps.length) + ')';
+        if (bar) bar.style.transform = 'scaleX(' + (((st.step === 3 ? 3 : st.step + 1) / 3)) + ')';
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
         if (next) { next.hidden = last; next.disabled = (st.step === 1 && !st.catPicked); }
@@ -1745,6 +1746,20 @@
       var paintCats = function () {
         var gn = $('[data-fn-go-next]', holder); if (gn) gn.disabled = !st.catPicked;
         $$('[data-cat-choice]', holder).forEach(function (b) { var on = !!st.catPicked && b.getAttribute('data-cat-choice') === st.cat; b.classList.toggle('is-on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
+      };
+      var buildPresetSets = function () {
+        var okd = function (d) { return !d.hasAttribute('data-seasonal') && !d.classList.contains('is-warned'); };
+        var byName = function (a, b) { return a.getAttribute('data-title') > b.getAttribute('data-title') ? 1 : -1; };
+        var inG = dishes.filter(function (d) { return okd(d) && inGroup(d, st.cat); }).sort(function (a, b) { return rank(a.getAttribute('data-tier')) - rank(b.getAttribute('data-tier')) || byName(a, b); });
+        var base = inG.filter(function (d) { return rank(d.getAttribute('data-tier')) === 0; }), high = inG.filter(function (d) { return rank(d.getAttribute('data-tier')) > 0; });
+        var plain = function (d) { return okd(d) && rank(d.getAttribute('data-tier')) === 0 && !/junior|postres|batidos/.test(d.getAttribute('data-category') || ''); };
+        if (base.length < 3) base = base.concat(dishes.filter(function (d) { return plain(d) && base.indexOf(d) < 0; }).sort(byName));   // a week with variety even when the diet has few base-tier dishes
+        if (!base.length) base = dishes.filter(function (d) { return okd(d) && rank(d.getAttribute('data-tier')) === 0; }).sort(byName);
+        if (!base.length) base = high.slice(0, 1);
+        if (!base.length) return [[]];
+        var out = []; for (var i = 0; i < MEALS; i++) out.push(base[i % base.length]);
+        if (high.length && MEALS > 1) out[MEALS - 1] = high[0];                           // one suggested upgrade, easy to swap back
+        return [out];
       };
       var paintPresets = function () {
         if (!presetBox || st.step !== 2) return;
@@ -1807,6 +1822,69 @@
         });
       }
       holder.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-fn-own]') && ownBox) { if (ownForm) ownForm.hidden = false; if (ownOk) ownOk.hidden = true; ownShow(true); } });
+      /* "your week": five big day cards (1 or 2 plates a day), an upgrade / swap pop-up, warnings kept */
+      var wkRoot = $('[data-fn-wk]', holder), wkBox = $('[data-fn-wk-cards]', holder), picker = $('[data-fn-picker]', holder), pickerTitle = $('[data-fn-picker-title]', holder);
+      var WT = function (k) { return wkRoot ? (wkRoot.getAttribute('data-t-' + k) || '') : ''; }, tierNames = WT('tiers').split(',');
+      var tierOf = function (d) { return d ? d.getAttribute('data-tier') || 'selecto' : 'selecto'; };
+      var slotHtml = function (i, c) {
+        var pid = c ? st.days2[i] : st.days[i], d = pid && byPid(pid), key = i + ':' + c;
+        if (!d) return '<div class="fn-wk__slot is-empty"><button class="fn-wk__add" type="button" data-wk-swap="' + key + '">' + esc(c ? WT('add2') : WT('add1')) + '</button></div>';
+        var im = $('img', d), src = im ? (im.currentSrc || im.src) : '', lv = rank(tierOf(d)), extra = lv ? upg(lv) : 0, m = macroOf(pid) || { k: 0, p: 0 };
+        var wb = $('[data-fn-warnbox]', d), mt = !c ? modsText(i) : '';
+        return '<div class="fn-wk__slot' + (d.classList.contains('is-warned') ? ' has-warn' : '') + (extra ? ' is-up' : '') + '">'
+          + '<div class="fn-wk__img"><button class="fn-wk__imgb" type="button" data-wk-img="' + key + '" aria-label="' + esc(lab(d)) + '" style="background-image:url(&quot;' + esc(src) + '&quot;)"></button>' + (wb ? wb.outerHTML : '') + (c ? '' : '<button class="fn-wk__ed' + (mt ? ' has-note' : '') + '" type="button" data-wk-edit="' + i + '" aria-label="' + esc(WT('edit')) + '">✎</button>') + '</div>'
+          + '<span class="fn-wk__tier fn-wk__tier--' + tierOf(d) + '">' + esc(tierNames[lv] || '') + (extra ? ' · +' + esc(money(extra)) : '') + '</span>'
+          + '<strong class="fn-wk__name">' + esc(lab(d)) + '</strong>'
+          + (mt ? '<span class="fn-wk__note">✎ ' + esc(mt) + '</span>' : '')
+          + '<div class="fn-wk__btns"><button class="fn-wk__up" type="button" data-wk-up="' + key + '">★ ' + esc(WT('up')) + '</button><button class="fn-wk__swap" type="button" data-wk-swap="' + key + '">' + esc(WT('swap')) + '</button>'
+          + (c ? '<button class="fn-wk__ed fn-wk__ed--x" type="button" data-wk-clear="' + key + '" aria-label="×">×</button>' : '')
+          + '</div></div>';
+      };
+      var paintWk = function () {
+        if (!wkBox || st.step !== 3) return;
+        var h = '';
+        for (var i = 0; i < MEALS; i++) h += '<li class="fn-wk__card' + (i === st.active ? ' is-active' : '') + '"><h4>' + esc(dayLabel(i)) + '</h4>' + slotHtml(i, 0) + (st.perDay === 2 ? slotHtml(i, 1) : '') + '</li>';
+        wkBox.innerHTML = h;
+      };
+      var paintPicker = function () {
+        if (!picker) return;
+        var dn = dayLabel(st.active).split(' ')[0]; picker.setAttribute('data-mode', st.pickTier || pickUp ? 'up' : 'swap');
+        if (pickerTitle) pickerTitle.textContent = ((st.pickTier || pickUp) ? WT('pkup') : (st.course === 1 ? WT('pk2') : WT('pk'))).replace('[d]', dn);
+        $$('[data-pick-tier]', picker).forEach(function (b) { var on = (b.getAttribute('data-pick-tier') || '') === (st.pickTier || ''); b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+      };
+      var pickCatBefore = null, pickUp = false;
+      var openPicker = function (i, c, tier) {
+        if (!picker) return;
+        st.active = i; st.course = c ? 1 : 0; st.pickTier = tier || ''; pickCatBefore = tier ? st.cat : null; pickUp = !!tier; if (tier) st.cat = 'all'; persist();
+        picker.hidden = false; holder.classList.add('is-picking'); document.documentElement.classList.add('fn-pick-open');
+        var gr = $('[data-fn-grid]', picker); if (gr) gr.scrollLeft = 0; render();
+      };
+      var closePicker = function () {
+        if (!picker || picker.hidden) return;
+        picker.hidden = true; holder.classList.remove('is-picking'); document.documentElement.classList.remove('fn-pick-open'); st.pickTier = ''; pickUp = false; st.course = 0; if (pickCatBefore) { st.cat = pickCatBefore; pickCatBefore = null; } persist(); render();
+      };
+      holder.addEventListener('click', function (e) {
+        var t = e.target; if (!t || !t.closest) return;
+        var sw = t.closest('[data-wk-swap]'), up = t.closest('[data-wk-up]');
+        if (sw || up) {
+          var kk = (sw || up).getAttribute(sw ? 'data-wk-swap' : 'data-wk-up').split(':'), ii = +kk[0], cc = +kk[1];
+          var cur = byPid(cc ? st.days2[ii] : st.days[ii]), nxt = ['exclusivo', 'signature', 'reserve'][Math.min(2, rank(tierOf(cur)))];
+          openPicker(ii, cc, up ? (cur ? nxt : 'exclusivo') : ''); return;
+        }
+        var im = t.closest('[data-wk-img]');
+        if (im && !t.closest('[data-fn-warnbox]')) { var k2 = im.getAttribute('data-wk-img').split(':'), d2 = byPid(+k2[1] ? st.days2[+k2[0]] : st.days[+k2[0]]), mb = d2 && $('.fn-dish__media', d2); if (mb) mb.click(); return; }
+        var ed = t.closest('[data-wk-edit]');
+        if (ed) { var eb = $('[data-fn-day-edit="' + ed.getAttribute('data-wk-edit') + '"]', holder); if (eb) eb.click(); return; }
+        var cl = t.closest('[data-wk-clear]');
+        if (cl) { var k3 = cl.getAttribute('data-wk-clear').split(':'); st.days2[+k3[0]] = ''; st.active = +k3[0]; persist(); render(); return; }
+        var pt = t.closest('[data-pick-tier]');
+        if (pt) { st.pickTier = pt.getAttribute('data-pick-tier') || ''; persist(); render(); return; }
+        if (t.closest('[data-fn-picker-close]')) { closePicker(); return; }
+        if (t.closest('[data-pick]') && picker && !picker.hidden) { setTimeout(closePicker, 0); return; }
+        var sb = t.closest('[data-fn-sum-toggle]');
+        if (sb) { var asd = sb.closest('.funnel__aside'); if (asd) { var on2 = asd.classList.toggle('is-open'); sb.setAttribute('aria-expanded', on2 ? 'true' : 'false'); } }
+      });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && picker && !picker.hidden) closePicker(); });
       var go = function (n) {
         n = Math.max(0, Math.min(steps.length - 1, n)); if (n > st.reach) { say(T_('locked')); return; } var moved = n !== st.step; st.step = n; say(''); persist(); render();
         if (moved && top) {
@@ -1888,9 +1966,13 @@
       if (next) next.addEventListener('click', function () {
         if (st.step === 1 && !st.catPicked) { say(T_('locked')); return; }
         if (st.step === 1) st.planChosen = true;
+        if (st.step === 1) {                                                  // diet + plan chosen: open the week with a ready-made menu for that diet
+          if (st.presetCat !== st.cat || !st.days.some(Boolean)) { var ps = buildPresetSets(); st.presetCat = st.cat; applyPreset(ps[0] || []); return; }
+          setReach(3); go(3); return;
+        }
         setReach(st.step + 1); go(st.step + 1);
       });
-      if (prev) prev.addEventListener('click', function () { go(st.step - 1); });
+      if (prev) prev.addEventListener('click', function () { go(st.step === 3 ? 1 : st.step - 1); });
       dots.forEach(function (d, k) { d.setAttribute('role', 'button'); d.tabIndex = 0; d.addEventListener('click', function () { go(k); }); d.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(k); } }); });
 
       // arriving from a dish page (…/pedido?dish=handle): that dish is already in the plan, at its tier

@@ -3836,6 +3836,169 @@ html.fn-own-open{overflow:hidden}
 .showcase__video{mix-blend-mode:normal !important}
 .btn:hover,.btn:focus-visible{box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 60%,transparent),0 10px 28px color-mix(in srgb,var(--accent) 32%,transparent)}
 
+/* v101: "Tu semana" - five big day cards, upgrade / swap pop-up, total bar (mockup). Tokens only: Fuego, Night (gold) and Day. */
+.fn-dot--skip{display:none !important}
+body .funnel[data-step="2"] .step[data-fn-step="2"]{display:none !important}
+body .funnel:not(.is-gated)[data-step="3"] .step[data-fn-step="3"] > :is(.fn-week,.fn-budget,.fn-mods__tip,.fn-meter){display:none !important}
+.fn-wk__head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:4px 0 16px}
+.fn-wk__head h3{margin:0;font:600 clamp(1.5rem,2.6vw,2.1rem)/1.1 var(--font-display);color:var(--text)}
+.fn-wk__chip{display:inline-block;margin:8px 0 0;padding:6px 14px;border:1.5px solid var(--accent);border-radius:999px;font-size:.78rem;color:var(--text)}
+.fn-wk__perday{display:inline-flex;align-items:center;border:1.5px solid var(--line);border-radius:999px;overflow:hidden}
+.fn-wk__perday span{padding:0 12px;font:700 .62rem var(--font-label);letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.fn-wk__perday button{padding:9px 16px;border:0;border-left:1px solid var(--line);background:none;color:var(--text-muted);font:700 .8rem var(--font-label);cursor:pointer}
+.fn-wk__perday button.is-on{background:var(--accent);color:var(--on-accent,#fff)}
+.fn-wk__cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(10px,1.4vw,18px)}
+.fn-wk__card{display:grid;align-content:start;gap:10px;padding:14px;border:1.5px solid var(--line);border-radius:20px;background:var(--bg-raised);min-width:0}
+.fn-wk__card.is-active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 12px 34px color-mix(in srgb,var(--accent) 26%,transparent)}
+.fn-wk__card h4{margin:0;text-align:center;font:600 1rem var(--font-display);color:var(--text-muted)}
+.fn-wk__slot{display:grid;gap:7px;align-content:start}
+.fn-wk__slot + .fn-wk__slot{padding-top:12px;border-top:1px dashed var(--line)}
+.fn-wk__img{position:relative;border-radius:16px;overflow:hidden;background:var(--bg-deep)}
+.fn-wk__imgb{display:block;width:100%;aspect-ratio:1;border:0;background:var(--bg-deep) center/cover no-repeat;cursor:pointer}
+.fn-wk__img .fn-warnbox{position:absolute;top:8px;right:8px;z-index:2}
+.fn-wk__tier{justify-self:start;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--text);font:700 .62rem var(--font-label);letter-spacing:.08em;text-transform:uppercase}
+.fn-wk__name{font:600 1rem/1.2 var(--font-display);color:var(--text)}
+.fn-wk__m{font-size:.72rem;color:var(--text-muted)}
+.fn-wk__note{font-size:.7rem;color:var(--accent)}
+.fn-wk__btns{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.fn-wk__up{flex:1 1 100%;padding:9px 10px;border:1.5px solid var(--accent);border-radius:999px;background:none;color:var(--accent);font:700 .7rem var(--font-label);cursor:pointer}
+.fn-wk__up:hover{background:var(--accent);color:var(--on-accent,#fff)}
+.fn-wk__swap{flex:1;padding:6px 4px;border:0;background:none;color:var(--text-muted);font:600 .78rem var(--font-body);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.fn-wk__ed{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--line);background:none;color:var(--text-muted);font-size:.95rem;cursor:pointer}
+.fn-wk__ed.has-note{border-color:var(--accent);color:var(--accent)}
+.fn-wk__slot.is-empty{min-height:210px;place-items:center}
+.fn-wk__add{width:100%;min-height:180px;border:2px dashed var(--line);border-radius:16px;background:none;color:var(--accent);font:700 .8rem var(--font-label);cursor:pointer}
+@media (max-width:1000px){.fn-wk__cards{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:min(78%,300px);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:6px}.fn-wk__cards::-webkit-scrollbar{display:none}.fn-wk__card{scroll-snap-align:start}.fn-wk__head{flex-wrap:wrap}}
+/* the picker pop-up (swap / upgrade) */
+.fn-picker[hidden]{display:none !important}
+.fn-picker{position:fixed;inset:0;z-index:280;display:grid;place-items:center;padding:12px}
+.fn-picker__bg{position:absolute;inset:0;background:rgba(0,0,0,.66);backdrop-filter:blur(4px)}
+.fn-picker__box{position:relative;width:min(1120px,100%);max-height:calc(100svh - 24px);overflow:auto;scrollbar-width:none;padding:clamp(14px,2.4vw,26px);border:1px solid var(--accent);border-radius:24px;background:var(--bg-raised);color:var(--text);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.fn-picker__box::-webkit-scrollbar{display:none}
+.fn-picker__head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.fn-picker__head h3{margin:0;font:600 clamp(1.2rem,2.2vw,1.7rem) var(--font-display)}
+.fn-picker__x{width:38px;height:38px;border:0;background:none;color:var(--text);font-size:1.8rem;line-height:1;cursor:pointer}
+.fn-picker__tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.fn-picker__tabs button{padding:9px 16px;border:1.5px solid var(--line);border-radius:999px;background:none;color:var(--text);font:600 .8rem var(--font-body);cursor:pointer}
+.fn-picker__tabs button small{color:var(--accent);font-weight:700}
+.fn-picker__tabs button.is-on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.fn-picker .fn-pickbar{margin:0 0 10px}
+.fn-picker .fn-prompt{display:none}
+.fn-picker .fn-macros{display:none !important}
+.fn-picker .fn-carousel{height:min(470px,62svh) !important}
+html.fn-pick-open{overflow:hidden}
+/* total bar (the order summary becomes a bar; "View summary" opens the list) */
+body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__panel{grid-template-columns:minmax(0,1fr) !important}
+body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__aside{position:sticky;bottom:0;z-index:20;display:grid !important;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 18px;margin-top:16px;padding:14px 18px;border:1px solid var(--accent);border-radius:20px;background:var(--bg-raised);box-shadow:0 -10px 40px rgba(0,0,0,.25);height:auto !important;max-height:none !important}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside > :is(h3,.fn-cut,.funnel__facts,.funnel__list,[data-fn-s-empty],.fn-budget,.fn-more,[data-fn-s-count],[data-fn-s-block],.fn-links,[data-fn-barpick],[data-fn-next]){display:none !important}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside.is-open > :is(.funnel__facts,.funnel__list,[data-fn-s-empty]){display:grid !important;grid-column:1/-1}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total{display:flex;align-items:baseline;gap:10px;margin:0;border:0;padding:0}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__upgrades{grid-column:1;margin:0;font-size:.78rem}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-actions{grid-column:2;grid-row:1/span 2;margin:0 !important;display:flex}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside [data-fn-finish]{min-width:240px;justify-content:center;padding:15px 22px}
+.fn-sum__toggle{display:none;grid-column:1/-1;justify-self:start;padding:0;border:0;background:none;color:var(--accent);font:600 .74rem var(--font-body);text-decoration:underline;cursor:pointer}
+body .funnel[data-step="3"]:not(.is-gated) .fn-sum__toggle{display:block}
+@media (max-width:760px){body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__aside{grid-template-columns:1fr;position:fixed;left:8px;right:8px;bottom:8px}body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-actions{grid-column:1;grid-row:auto}body .funnel[data-step="3"]:not(.is-gated) .funnel__aside [data-fn-finish]{min-width:0;width:100%}.fn-wk{padding-bottom:150px}}
+
+/* v102: the week grows with its cards; tidy total bar; pop-up above the site header; no meter in the pop-up */
+body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__stage,body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__panel,body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__main,body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .step[data-fn-step="3"]{height:auto !important;min-height:0 !important;max-height:none !important;overflow:visible !important}
+.fn-picker{z-index:2000}
+.fn-picker .fn-meter{display:none !important}
+body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__aside{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"tot act" "ups act" "tog act";align-items:center}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total{grid-area:tot}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__upgrades{grid-area:ups;grid-column:auto}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-sum__toggle{grid-area:tog;grid-column:auto}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-actions{grid-area:act;grid-column:auto;grid-row:auto;display:flex;align-items:center;gap:16px}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-actions .fn-reset{display:none !important}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-actions .fn-links{display:flex !important}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total span{font:700 .72rem var(--font-label);letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total strong{font:600 1.7rem var(--font-display);color:var(--text)}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside.is-open > :is(.funnel__facts,.funnel__list,[data-fn-s-empty]){grid-column:1/-1;grid-area:auto}
+@media (max-width:760px){body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__aside{grid-template-columns:1fr;grid-template-areas:"tot" "ups" "act" "tog"}}
+
+/* v103: one compact total bar (flex), phone bar docked at the bottom */
+body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__aside{display:flex !important;flex-wrap:wrap;align-items:center;gap:6px 18px;grid-template-areas:none;top:auto !important;height:auto !important;transform:none !important;padding:12px 18px}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total,body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__upgrades,body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-sum__toggle,body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-actions{grid-area:auto !important}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__upgrades{flex:1 1 auto;min-width:0}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-sum__toggle{order:3}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-actions{margin-left:auto !important;flex:0 0 auto}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside.is-open > :is(.funnel__facts,.funnel__list,[data-fn-s-empty]){flex:1 1 100%;order:9}
+@media (max-width:760px){
+  body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__aside{position:fixed !important;left:8px;right:8px;bottom:8px;top:auto !important;padding:10px 14px;gap:4px 12px;z-index:60}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__upgrades{flex:1 1 100%;order:2}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-actions{flex:1 1 100%;margin-left:0 !important;order:4}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total strong{font-size:1.3rem}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside [data-fn-finish]{min-width:0;flex:1;padding:12px 14px}
+}
+/* v104: the total bar is one row; on phones it sticks to the bottom of the screen */
+body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__aside{flex-direction:row !important;justify-content:flex-start}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total{flex:0 0 auto;flex-direction:row !important;text-align:left;justify-content:flex-start}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__upgrades{text-align:left}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-actions{flex-direction:row !important;width:auto}
+@media (max-width:760px){
+  body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__aside{position:sticky !important;left:auto !important;right:auto !important;bottom:8px !important;flex-wrap:wrap}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-actions{flex-direction:row !important;width:100%}
+  .fn-wk{padding-bottom:0}
+}
+
+/* v105: lighter and more spacious (copy of the mockup): slim header on the inner steps, airy cards, flat total bar */
+body .funnel:not([data-step="0"]):not(.funnel--teaser) :is(.funnel__title,.steps__nav){display:none !important}
+body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__top{min-height:0;padding-block:6px 0;border:0}
+body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__stepcount{display:block !important;margin:4px 0 0;font:500 .78rem var(--font-body);letter-spacing:.04em;text-transform:none;color:var(--text-muted)}
+body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__bar{display:none !important}
+.fn-wk{padding:clamp(6px,1.4vw,18px) 0 clamp(20px,3vw,40px)}
+.fn-wk__head{margin:2px 0 clamp(22px,3vw,40px);align-items:flex-start}
+.fn-wk__head h3{font:400 clamp(1.6rem,2.6vw,2.2rem)/1.15 var(--font-display);letter-spacing:-.01em}
+.fn-wk__chip{border:1px solid var(--line);color:var(--text);padding:7px 16px;font-size:.78rem;margin-top:12px}
+.fn-wk__perday{border:1px solid var(--line)}
+.fn-wk__cards{gap:clamp(14px,2vw,28px)}
+.fn-wk__card{gap:16px;padding:clamp(14px,1.6vw,22px);border:1px solid var(--line);border-radius:18px;background:var(--bg-raised);box-shadow:none}
+.fn-wk__card.is-active{border-color:var(--line);box-shadow:none}
+.fn-wk__card:has(.is-up){border-color:var(--accent);box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 55%,transparent),0 0 34px color-mix(in srgb,var(--accent) 22%,transparent)}
+.fn-wk__card h4{font:400 .98rem var(--font-body);letter-spacing:.01em;color:var(--text-muted)}
+.fn-wk__img{border-radius:14px}
+.fn-wk__tier{padding:5px 11px;background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);font:700 .6rem var(--font-label);letter-spacing:.1em}
+.fn-wk__name{font:500 1.02rem/1.3 var(--font-body);color:var(--text);min-height:2.6em}
+.fn-wk__btns{gap:10px;margin-top:2px}
+.fn-wk__up{padding:11px 10px;border:1px solid var(--accent);font:600 .72rem var(--font-body);letter-spacing:.01em}
+.fn-wk__swap{flex:1 1 100%;font:500 .78rem var(--font-body);color:var(--text-muted)}
+.fn-wk__img .fn-wk__ed{position:absolute;top:8px;left:8px;z-index:2;width:30px;height:30px;border:0;background:rgba(0,0,0,.45);color:#fff;backdrop-filter:blur(4px);font-size:.85rem}
+.fn-wk__img .fn-wk__ed.has-note{background:var(--accent)}
+.fn-wk__ed--x{margin-left:auto}
+.fn-wk__slot.is-up .fn-wk__up{display:none}
+.fn-wk__slot.is-up .fn-wk__swap{flex:1 1 100%;text-align:center}
+.fn-wk__slot.is-empty{min-height:0}.fn-wk__add{min-height:150px;border:1px dashed var(--line)}
+/* total bar: flat, full width, a hairline above (as in the mockup) */
+body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__aside{border:0;border-top:1px solid var(--accent);border-radius:0;box-shadow:none;background:var(--bg-base);padding:16px clamp(16px,3vw,36px);margin-inline:calc(50% - 50vw);width:100vw;max-width:100vw}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total strong{font:600 1.4rem var(--font-body);color:var(--text)}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total span{font:600 1.05rem var(--font-body);letter-spacing:0;text-transform:none;color:var(--text)}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside [data-fn-finish]{border-radius:999px;min-width:280px;padding:16px 28px;font:600 .95rem var(--font-body);letter-spacing:.01em;text-transform:none}
+/* pop-up: light, centred, tier tabs (as in the mockup) */
+.fn-picker__box{border-radius:22px;border:1px solid var(--accent);padding:clamp(18px,3vw,34px)}
+.fn-picker__head{justify-content:center;text-align:center;margin-bottom:18px}
+.fn-picker__head h3{font:400 clamp(1.4rem,2.6vw,2rem) var(--font-display)}
+.fn-picker__x{position:absolute;top:12px;right:16px}
+.fn-picker__tabs{justify-content:center;gap:0;margin:0 auto 20px;max-width:640px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.fn-picker__tabs button{position:relative;flex:1;border:0;border-radius:0;padding:14px 10px;background:none;font:500 .82rem var(--font-body)}
+.fn-picker__tabs button + button{border-left:1px solid var(--line)}
+.fn-picker__tabs button.is-on{background:color-mix(in srgb,var(--accent) 12%,transparent);box-shadow:inset 0 0 0 1.5px var(--accent)}
+.fn-picker__rec{position:absolute;left:50%;bottom:-11px;translate:-50% 0;padding:3px 10px;border-radius:999px;background:var(--accent);color:var(--on-accent,#fff);font:700 .58rem var(--font-label);font-style:normal;letter-spacing:.06em;white-space:nowrap;z-index:2}
+.fn-picker[data-mode="up"] [data-pick-tier=""]{display:none}
+.fn-picker .fn-pickbar{justify-content:flex-end}
+@media (max-width:1000px){.fn-wk__cards{grid-auto-columns:min(80%,300px)}}
+@media (max-width:760px){body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__aside{width:auto;max-width:none;margin-inline:0;border:1px solid var(--accent);border-radius:16px;padding:12px 14px}body .funnel[data-step="3"]:not(.is-gated) .funnel__aside [data-fn-finish]{min-width:0}.fn-picker__tabs button{padding:12px 4px;font-size:.72rem}}
+/* v106: alignment fixes */
+body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__stepcount{width:min(100% - 48px,var(--container,1280px));margin-inline:auto}
+body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__aside{padding-inline:max(24px,calc((100vw - 1280px) / 2 + 24px))}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total{order:1}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__upgrades{order:2}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-sum__toggle{order:3}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-actions{order:4;border:0 !important;padding:0 !important}
+.fn-picker__tabs{overflow:visible}
+.fn-picker__tabs button:first-child{border-radius:14px 0 0 14px}.fn-picker__tabs button:last-child{border-radius:0 14px 14px 0}
+.fn-picker[data-mode="up"] .fn-sel{display:none}
+@media (max-width:760px){body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__stepcount{width:auto;margin-inline:16px}body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__aside{padding-inline:14px}}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -4287,8 +4450,8 @@ Fuego</span>
       <ol class="steps__nav" aria-label="Pasos del pedido">
         <li data-fn-dot class="is-on"><span>01</span>Entra</li>
         <li data-fn-dot><span>02</span>Plan y dieta</li>
-        <li data-fn-dot><span>03</span>Tu menú</li>
-        <li data-fn-dot><span>04</span>Tu semana</li>
+        <li data-fn-dot class="fn-dot--skip"><span>03</span>Tu menú</li>
+        <li data-fn-dot><span>03</span>Tu semana</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -4350,43 +4513,35 @@ Fuego</span>
               <h3 class="fn-pickh"><b>1</b>Elige tu pilar de nutrición</h3>
               <div class="fn-cats" data-fn-cats role="radiogroup" aria-label="Elige tu pilar de nutrición"><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="keto-low-carb">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 5c-5 7-12 12-12 22a12 12 0 0 0 24 0C36 17 29 12 24 5z"/><circle cx="24" cy="29" r="5.5"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 5c-5 7-12 12-12 22a12 12 0 0 0 24 0C36 17 29 12 24 5z"/><circle cx="24" cy="29" r="5.5"/></svg></i>
                   <strong>Keto / Low carb</strong><small>Keto · Bajos carbohidratos</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="al-fuego">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M25 4c1.5 8 11 12 11 24a12 12 0 0 1-24 0c0-6 3-9 6-12 0 4 2 6 4 7 1-6 1-12 3-19z"/><path d="M24 44c-4 0-6-3-6-6 0-4 4-6 6-10 2 3 6 6 6 10 0 3-2 6-6 6z"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M25 4c1.5 8 11 12 11 24a12 12 0 0 1-24 0c0-6 3-9 6-12 0 4 2 6 4 7 1-6 1-12 3-19z"/><path d="M24 44c-4 0-6-3-6-6 0-4 4-6 6-10 2 3 6 6 6 10 0 3-2 6-6 6z"/></svg></i>
                   <strong>Fuego</strong><small>Cortes y pescados al fuego</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="fit-proteina">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 20v8M12 15v18M36 15v18M42 20v8M12 24h24"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 20v8M12 15v18M36 15v18M42 20v8M12 24h24"/></svg></i>
                   <strong>Alta proteína</strong><small>Rendimiento · Fit</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="veggie">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 40C8 20 20 8 40 8c0 20-12 32-32 32z"/><path d="M8 40 28 20"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 40C8 20 20 8 40 8c0 20-12 32-32 32z"/><path d="M8 40 28 20"/></svg></i>
                   <strong>Plantas</strong><small>Vegetariano · Vegano</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="sin-gluten">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 42V14M24 14c-5 0-8-3-8-7 5 0 8 3 8 7zM24 14c5 0 8-3 8-7-5 0-8 3-8 7zM24 24c-5 0-8-3-8-7 5 0 8 3 8 7zM24 24c5 0 8-3 8-7-5 0-8 3-8 7zM24 34c-5 0-8-3-8-7 5 0 8 3 8 7zM24 34c5 0 8-3 8-7-5 0-8 3-8 7z"/><path d="M8 8l32 32"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 42V14M24 14c-5 0-8-3-8-7 5 0 8 3 8 7zM24 14c5 0 8-3 8-7-5 0-8 3-8 7zM24 24c-5 0-8-3-8-7 5 0 8 3 8 7zM24 24c5 0 8-3 8-7-5 0-8 3-8 7zM24 34c-5 0-8-3-8-7 5 0 8 3 8 7zM24 34c5 0 8-3 8-7-5 0-8 3-8 7z"/><path d="M8 8l32 32"/></svg></i>
                   <strong>Sin gluten</strong><small>Libre de trigo y gluten</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="bowls">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 22h36a18 18 0 0 1-36 0z"/><path d="M16 14c0-4 4-4 4-8M26 14c0-4 4-4 4-8"/><path d="M14 42h20"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 22h36a18 18 0 0 1-36 0z"/><path d="M16 14c0-4 4-4 4-8M26 14c0-4 4-4 4-8"/><path d="M14 42h20"/></svg></i>
                   <strong>Bowls</strong><small>Frescos y completos</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="ligero">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 32a16 16 0 0 1 32 0"/><path d="M24 32l7-10"/><circle cx="24" cy="32" r="2.4"/><path d="M12 41h24"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 32a16 16 0 0 1 32 0"/><path d="M24 32l7-10"/><circle cx="24" cy="32" r="2.4"/><path d="M12 41h24"/></svg></i>
                   <strong>Ligero</strong><small>Bajas calorías · Balanceado</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="all">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 6l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/><path d="M38 34l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 6l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/><path d="M38 34l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/></svg></i>
                   <strong>Sin preferencia</strong><small>Todo el menú</small>
                 </button></div>
               <div class="fn-cats__ctl"><button class="fn-cats__a" type="button" data-fn-cats-arrow="-1" aria-label="Platillos anteriores">&#8249;</button><button class="fn-cats__a" type="button" data-fn-cats-arrow="1" aria-label="Platillos siguientes">&#8250;</button><span>Desliza para ver más</span></div>
@@ -4474,15 +4629,33 @@ Fuego</span>
         </div>
       </div>
     </div>
+          <section class="fn-wk" data-fn-wk data-t-up="Elevar nivel este día" data-t-swap="Cambiar" data-t-add1="Elegir platillo" data-t-add2="+ Agregar 2.º plato" data-t-pk="Elige el platillo del [d]" data-t-pk2="Elige el 2.º plato del [d]" data-t-pkup="Eleva tu experiencia del [d]" data-t-kcal="kcal" data-t-prot="g de proteína" data-t-edit="Quitar ingredientes o añadir nota" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
+            <header class="fn-wk__head">
+              <div><h3>Arma tu menú semanal</h3><p class="fn-wk__chip">Plan base · 5 comidas por semana</p></div>
+              <div class="fn-wk__perday" role="group" aria-label="Cuántos platos quieres cada día"><span>Platos al día</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
+            </header>
+            <ol class="fn-wk__cards" data-fn-wk-cards></ol>
+          </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="home--fn-para-funnel">¿Para quién es este pedido?</label><select class="select" id="home--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Agregar a alguien de tu familia</a></div>
           <ol class="fn-week" data-fn-week aria-label="Asigna cada comida a un día"></ol>
           <div class="fn-mods" data-fn-mods hidden></div>
           <p class="fn-budget" data-fn-budget></p>
-          <p class="fn-mods__tip">✎ Quitar ingredientes o añadir nota</p>
-          <div class="fn-pickbar">
+          <p class="fn-mods__tip">✎ Quitar ingredientes o añadir nota</p><div class="fn-picker" data-fn-picker hidden>
+            <div class="fn-picker__bg" data-fn-picker-close></div>
+            <div class="fn-picker__box" role="dialog" aria-modal="true" aria-labelledby="fn-pk-t-funnel">
+              <header class="fn-picker__head">
+                <h3 id="home--fn-pk-t-funnel" data-fn-picker-title></h3>
+                <button class="fn-picker__x" type="button" data-fn-picker-close aria-label="Cerrar">&times;</button>
+              </header>
+              <div class="fn-picker__tabs" role="group" data-fn-picker-tabs>
+                <button type="button" data-pick-tier="">Todos</button>
+                <button type="button" data-pick-tier="exclusivo">Exclusivo $ <small>+$70</small></button>
+                <button type="button" data-pick-tier="signature">Signature $$ <small>+$140</small><em class="fn-picker__rec">&#9733; Recomendado</em></button>
+                <button type="button" data-pick-tier="reserve">Reserve $$$ <small>+$210</small></button>
+              </div>
+              <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
-            <div class="fn-course fn-perday" role="group" aria-label="Cuántos platos quieres cada día"><span class="fn-perday__l">Platos al día</span><button type="button" class="fn-course__b is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" class="fn-course__b" data-fn-perday="2" aria-pressed="false">2</button></div>
-            <div class="fn-course" data-fn-course-group hidden role="group" aria-label="Tiempo del día que estás eligiendo"><button type="button" class="fn-course__b is-on" data-fn-course="0" aria-pressed="true">1.er tiempo</button><button type="button" class="fn-course__b" data-fn-course="1" aria-pressed="false">2.º tiempo</button></div>
+                        <div class="fn-course" data-fn-course-group hidden role="group" aria-label="Tiempo del día que estás eligiendo"><button type="button" class="fn-course__b is-on" data-fn-course="0" aria-pressed="true">1.er tiempo</button><button type="button" class="fn-course__b" data-fn-course="1" aria-pressed="false">2.º tiempo</button></div>
             <button class="text-link fn-repeat" type="button" data-fn-repeat hidden data-t-done="Cargamos tu último pedido. Ajusta lo que quieras." data-t-none="Ya no hay platillos de tu último pedido esta semana.">&#8634; Repetir mi último pedido</button>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>comidas</span><i data-fn-meter-bar></i></p>
             <label class="fn-sel"><span class="fn-sr">Categoría</span>
@@ -4763,6 +4936,9 @@ Fuego</span>
               <p class="fn-macros__h" data-fn-macros-hint>Elige un platillo para ver sus macros</p>
             </aside>
           </div>
+          
+            </div>
+          </div>
           <p class="alert" data-fn-empty hidden>Esta semana no hay platillos con esa combinación. Cambia de nivel o de menú.</p>
         </fieldset>
 
@@ -4773,6 +4949,7 @@ Fuego</span>
       </div>
 
       <aside class="funnel__aside" aria-live="polite">
+        <button class="fn-sum__toggle" type="button" data-fn-sum-toggle aria-expanded="false">Ver resumen</button>
         <h3>Tu pedido</h3>
         <p class="countdown fn-cut" data-cutoff>Confirma tus platillos antes del sábado 10:00 AM · quedan <strong data-cutoff-value>…</strong></p>
         <dl class="funnel__facts">
@@ -13158,8 +13335,8 @@ Pago digital, sin efectivo</li></ul>
       <ol class="steps__nav" aria-label="Pasos del pedido">
         <li data-fn-dot class="is-on"><span>01</span>Entra</li>
         <li data-fn-dot><span>02</span>Plan y dieta</li>
-        <li data-fn-dot><span>03</span>Tu menú</li>
-        <li data-fn-dot><span>04</span>Tu semana</li>
+        <li data-fn-dot class="fn-dot--skip"><span>03</span>Tu menú</li>
+        <li data-fn-dot><span>03</span>Tu semana</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -13221,43 +13398,35 @@ Pago digital, sin efectivo</li></ul>
               <h3 class="fn-pickh"><b>1</b>Elige tu pilar de nutrición</h3>
               <div class="fn-cats" data-fn-cats role="radiogroup" aria-label="Elige tu pilar de nutrición"><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="keto-low-carb">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 5c-5 7-12 12-12 22a12 12 0 0 0 24 0C36 17 29 12 24 5z"/><circle cx="24" cy="29" r="5.5"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 5c-5 7-12 12-12 22a12 12 0 0 0 24 0C36 17 29 12 24 5z"/><circle cx="24" cy="29" r="5.5"/></svg></i>
                   <strong>Keto / Low carb</strong><small>Keto · Bajos carbohidratos</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="al-fuego">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M25 4c1.5 8 11 12 11 24a12 12 0 0 1-24 0c0-6 3-9 6-12 0 4 2 6 4 7 1-6 1-12 3-19z"/><path d="M24 44c-4 0-6-3-6-6 0-4 4-6 6-10 2 3 6 6 6 10 0 3-2 6-6 6z"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M25 4c1.5 8 11 12 11 24a12 12 0 0 1-24 0c0-6 3-9 6-12 0 4 2 6 4 7 1-6 1-12 3-19z"/><path d="M24 44c-4 0-6-3-6-6 0-4 4-6 6-10 2 3 6 6 6 10 0 3-2 6-6 6z"/></svg></i>
                   <strong>Fuego</strong><small>Cortes y pescados al fuego</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="fit-proteina">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 20v8M12 15v18M36 15v18M42 20v8M12 24h24"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 20v8M12 15v18M36 15v18M42 20v8M12 24h24"/></svg></i>
                   <strong>Alta proteína</strong><small>Rendimiento · Fit</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="veggie">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 40C8 20 20 8 40 8c0 20-12 32-32 32z"/><path d="M8 40 28 20"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 40C8 20 20 8 40 8c0 20-12 32-32 32z"/><path d="M8 40 28 20"/></svg></i>
                   <strong>Plantas</strong><small>Vegetariano · Vegano</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="sin-gluten">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 42V14M24 14c-5 0-8-3-8-7 5 0 8 3 8 7zM24 14c5 0 8-3 8-7-5 0-8 3-8 7zM24 24c-5 0-8-3-8-7 5 0 8 3 8 7zM24 24c5 0 8-3 8-7-5 0-8 3-8 7zM24 34c-5 0-8-3-8-7 5 0 8 3 8 7zM24 34c5 0 8-3 8-7-5 0-8 3-8 7z"/><path d="M8 8l32 32"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 42V14M24 14c-5 0-8-3-8-7 5 0 8 3 8 7zM24 14c5 0 8-3 8-7-5 0-8 3-8 7zM24 24c-5 0-8-3-8-7 5 0 8 3 8 7zM24 24c5 0 8-3 8-7-5 0-8 3-8 7zM24 34c-5 0-8-3-8-7 5 0 8 3 8 7zM24 34c5 0 8-3 8-7-5 0-8 3-8 7z"/><path d="M8 8l32 32"/></svg></i>
                   <strong>Sin gluten</strong><small>Libre de trigo y gluten</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="bowls">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 22h36a18 18 0 0 1-36 0z"/><path d="M16 14c0-4 4-4 4-8M26 14c0-4 4-4 4-8"/><path d="M14 42h20"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 22h36a18 18 0 0 1-36 0z"/><path d="M16 14c0-4 4-4 4-8M26 14c0-4 4-4 4-8"/><path d="M14 42h20"/></svg></i>
                   <strong>Bowls</strong><small>Frescos y completos</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="ligero">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 32a16 16 0 0 1 32 0"/><path d="M24 32l7-10"/><circle cx="24" cy="32" r="2.4"/><path d="M12 41h24"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 32a16 16 0 0 1 32 0"/><path d="M24 32l7-10"/><circle cx="24" cy="32" r="2.4"/><path d="M12 41h24"/></svg></i>
                   <strong>Ligero</strong><small>Bajas calorías · Balanceado</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="all">
                   <span class="fn-cat__tag">Seleccionado &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 6l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/><path d="M38 34l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 6l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/><path d="M38 34l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/></svg></i>
                   <strong>Sin preferencia</strong><small>Todo el menú</small>
                 </button></div>
               <div class="fn-cats__ctl"><button class="fn-cats__a" type="button" data-fn-cats-arrow="-1" aria-label="Platillos anteriores">&#8249;</button><button class="fn-cats__a" type="button" data-fn-cats-arrow="1" aria-label="Platillos siguientes">&#8250;</button><span>Desliza para ver más</span></div>
@@ -13345,15 +13514,33 @@ Pago digital, sin efectivo</li></ul>
         </div>
       </div>
     </div>
+          <section class="fn-wk" data-fn-wk data-t-up="Elevar nivel este día" data-t-swap="Cambiar" data-t-add1="Elegir platillo" data-t-add2="+ Agregar 2.º plato" data-t-pk="Elige el platillo del [d]" data-t-pk2="Elige el 2.º plato del [d]" data-t-pkup="Eleva tu experiencia del [d]" data-t-kcal="kcal" data-t-prot="g de proteína" data-t-edit="Quitar ingredientes o añadir nota" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
+            <header class="fn-wk__head">
+              <div><h3>Arma tu menú semanal</h3><p class="fn-wk__chip">Plan base · 5 comidas por semana</p></div>
+              <div class="fn-wk__perday" role="group" aria-label="Cuántos platos quieres cada día"><span>Platos al día</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
+            </header>
+            <ol class="fn-wk__cards" data-fn-wk-cards></ol>
+          </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="pg-pedido--fn-para-funnel">¿Para quién es este pedido?</label><select class="select" id="pg-pedido--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Agregar a alguien de tu familia</a></div>
           <ol class="fn-week" data-fn-week aria-label="Asigna cada comida a un día"></ol>
           <div class="fn-mods" data-fn-mods hidden></div>
           <p class="fn-budget" data-fn-budget></p>
-          <p class="fn-mods__tip">✎ Quitar ingredientes o añadir nota</p>
-          <div class="fn-pickbar">
+          <p class="fn-mods__tip">✎ Quitar ingredientes o añadir nota</p><div class="fn-picker" data-fn-picker hidden>
+            <div class="fn-picker__bg" data-fn-picker-close></div>
+            <div class="fn-picker__box" role="dialog" aria-modal="true" aria-labelledby="fn-pk-t-funnel">
+              <header class="fn-picker__head">
+                <h3 id="pg-pedido--fn-pk-t-funnel" data-fn-picker-title></h3>
+                <button class="fn-picker__x" type="button" data-fn-picker-close aria-label="Cerrar">&times;</button>
+              </header>
+              <div class="fn-picker__tabs" role="group" data-fn-picker-tabs>
+                <button type="button" data-pick-tier="">Todos</button>
+                <button type="button" data-pick-tier="exclusivo">Exclusivo $ <small>+$70</small></button>
+                <button type="button" data-pick-tier="signature">Signature $$ <small>+$140</small><em class="fn-picker__rec">&#9733; Recomendado</em></button>
+                <button type="button" data-pick-tier="reserve">Reserve $$$ <small>+$210</small></button>
+              </div>
+              <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
-            <div class="fn-course fn-perday" role="group" aria-label="Cuántos platos quieres cada día"><span class="fn-perday__l">Platos al día</span><button type="button" class="fn-course__b is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" class="fn-course__b" data-fn-perday="2" aria-pressed="false">2</button></div>
-            <div class="fn-course" data-fn-course-group hidden role="group" aria-label="Tiempo del día que estás eligiendo"><button type="button" class="fn-course__b is-on" data-fn-course="0" aria-pressed="true">1.er tiempo</button><button type="button" class="fn-course__b" data-fn-course="1" aria-pressed="false">2.º tiempo</button></div>
+                        <div class="fn-course" data-fn-course-group hidden role="group" aria-label="Tiempo del día que estás eligiendo"><button type="button" class="fn-course__b is-on" data-fn-course="0" aria-pressed="true">1.er tiempo</button><button type="button" class="fn-course__b" data-fn-course="1" aria-pressed="false">2.º tiempo</button></div>
             <button class="text-link fn-repeat" type="button" data-fn-repeat hidden data-t-done="Cargamos tu último pedido. Ajusta lo que quieras." data-t-none="Ya no hay platillos de tu último pedido esta semana.">&#8634; Repetir mi último pedido</button>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>comidas</span><i data-fn-meter-bar></i></p>
             <label class="fn-sel"><span class="fn-sr">Categoría</span>
@@ -13634,6 +13821,9 @@ Pago digital, sin efectivo</li></ul>
               <p class="fn-macros__h" data-fn-macros-hint>Elige un platillo para ver sus macros</p>
             </aside>
           </div>
+          
+            </div>
+          </div>
           <p class="alert" data-fn-empty hidden>Esta semana no hay platillos con esa combinación. Cambia de nivel o de menú.</p>
         </fieldset>
 
@@ -13644,6 +13834,7 @@ Pago digital, sin efectivo</li></ul>
       </div>
 
       <aside class="funnel__aside" aria-live="polite">
+        <button class="fn-sum__toggle" type="button" data-fn-sum-toggle aria-expanded="false">Ver resumen</button>
         <h3>Tu pedido</h3>
         <p class="countdown fn-cut" data-cutoff>Confirma tus platillos antes del sábado 10:00 AM · quedan <strong data-cutoff-value>…</strong></p>
         <dl class="funnel__facts">
@@ -14480,8 +14671,8 @@ Pago digital, sin efectivo</li></ul>
       <ol class="steps__nav" aria-label="Order steps">
         <li data-fn-dot class="is-on"><span>01</span>Sign in</li>
         <li data-fn-dot><span>02</span>Plan & diet</li>
-        <li data-fn-dot><span>03</span>Your menu</li>
-        <li data-fn-dot><span>04</span>Your week</li>
+        <li data-fn-dot class="fn-dot--skip"><span>03</span>Your menu</li>
+        <li data-fn-dot><span>03</span>Your week</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -14543,43 +14734,35 @@ Pago digital, sin efectivo</li></ul>
               <h3 class="fn-pickh"><b>1</b>Choose your nutrition pillar</h3>
               <div class="fn-cats" data-fn-cats role="radiogroup" aria-label="Choose your nutrition pillar"><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="keto-low-carb">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 5c-5 7-12 12-12 22a12 12 0 0 0 24 0C36 17 29 12 24 5z"/><circle cx="24" cy="29" r="5.5"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 5c-5 7-12 12-12 22a12 12 0 0 0 24 0C36 17 29 12 24 5z"/><circle cx="24" cy="29" r="5.5"/></svg></i>
                   <strong>Keto / Low carb</strong><small>Keto · Low carbs</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="al-fuego">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M25 4c1.5 8 11 12 11 24a12 12 0 0 1-24 0c0-6 3-9 6-12 0 4 2 6 4 7 1-6 1-12 3-19z"/><path d="M24 44c-4 0-6-3-6-6 0-4 4-6 6-10 2 3 6 6 6 10 0 3-2 6-6 6z"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M25 4c1.5 8 11 12 11 24a12 12 0 0 1-24 0c0-6 3-9 6-12 0 4 2 6 4 7 1-6 1-12 3-19z"/><path d="M24 44c-4 0-6-3-6-6 0-4 4-6 6-10 2 3 6 6 6 10 0 3-2 6-6 6z"/></svg></i>
                   <strong>Fire</strong><small>Fire-seared cuts and fish</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="fit-proteina">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 20v8M12 15v18M36 15v18M42 20v8M12 24h24"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 20v8M12 15v18M36 15v18M42 20v8M12 24h24"/></svg></i>
                   <strong>High protein</strong><small>Performance · Fit</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="veggie">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 40C8 20 20 8 40 8c0 20-12 32-32 32z"/><path d="M8 40 28 20"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 40C8 20 20 8 40 8c0 20-12 32-32 32z"/><path d="M8 40 28 20"/></svg></i>
                   <strong>Plant-based</strong><small>Vegetarian · Vegan</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="sin-gluten">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 42V14M24 14c-5 0-8-3-8-7 5 0 8 3 8 7zM24 14c5 0 8-3 8-7-5 0-8 3-8 7zM24 24c-5 0-8-3-8-7 5 0 8 3 8 7zM24 24c5 0 8-3 8-7-5 0-8 3-8 7zM24 34c-5 0-8-3-8-7 5 0 8 3 8 7zM24 34c5 0 8-3 8-7-5 0-8 3-8 7z"/><path d="M8 8l32 32"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 42V14M24 14c-5 0-8-3-8-7 5 0 8 3 8 7zM24 14c5 0 8-3 8-7-5 0-8 3-8 7zM24 24c-5 0-8-3-8-7 5 0 8 3 8 7zM24 24c5 0 8-3 8-7-5 0-8 3-8 7zM24 34c-5 0-8-3-8-7 5 0 8 3 8 7zM24 34c5 0 8-3 8-7-5 0-8 3-8 7z"/><path d="M8 8l32 32"/></svg></i>
                   <strong>Gluten-free</strong><small>No wheat or gluten</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="bowls">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 22h36a18 18 0 0 1-36 0z"/><path d="M16 14c0-4 4-4 4-8M26 14c0-4 4-4 4-8"/><path d="M14 42h20"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 22h36a18 18 0 0 1-36 0z"/><path d="M16 14c0-4 4-4 4-8M26 14c0-4 4-4 4-8"/><path d="M14 42h20"/></svg></i>
                   <strong>Bowls</strong><small>Fresh and complete</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="ligero">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 32a16 16 0 0 1 32 0"/><path d="M24 32l7-10"/><circle cx="24" cy="32" r="2.4"/><path d="M12 41h24"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 32a16 16 0 0 1 32 0"/><path d="M24 32l7-10"/><circle cx="24" cy="32" r="2.4"/><path d="M12 41h24"/></svg></i>
                   <strong>Light</strong><small>Low calorie · Balanced</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="all">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 6l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/><path d="M38 34l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 6l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/><path d="M38 34l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/></svg></i>
                   <strong>No preference</strong><small>The whole menu</small>
                 </button></div>
               <div class="fn-cats__ctl"><button class="fn-cats__a" type="button" data-fn-cats-arrow="-1" aria-label="Previous dishes">&#8249;</button><button class="fn-cats__a" type="button" data-fn-cats-arrow="1" aria-label="Next dishes">&#8250;</button><span>Swipe to see more</span></div>
@@ -14667,15 +14850,33 @@ Pago digital, sin efectivo</li></ul>
         </div>
       </div>
     </div>
+          <section class="fn-wk" data-fn-wk data-t-up="Upgrade this day" data-t-swap="Change" data-t-add1="Choose a dish" data-t-add2="+ Add 2nd plate" data-t-pk="Choose the dish for [d]" data-t-pk2="Choose the 2nd plate for [d]" data-t-pkup="Upgrade your [d]" data-t-kcal="kcal" data-t-prot="g protein" data-t-edit="Remove ingredients or add a note" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
+            <header class="fn-wk__head">
+              <div><h3>Build your weekly menu</h3><p class="fn-wk__chip">Base plan · 5 meals per week</p></div>
+              <div class="fn-wk__perday" role="group" aria-label="How many plates you want each day"><span>Plates per day</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
+            </header>
+            <ol class="fn-wk__cards" data-fn-wk-cards></ol>
+          </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="home--fn-para-funnel">Who is this order for?</label><select class="select" id="home--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Add someone from your family</a></div>
           <ol class="fn-week" data-fn-week aria-label="Assign each meal to a day"></ol>
           <div class="fn-mods" data-fn-mods hidden></div>
           <p class="fn-budget" data-fn-budget></p>
-          <p class="fn-mods__tip">✎ Remove ingredients or add a note</p>
-          <div class="fn-pickbar">
+          <p class="fn-mods__tip">✎ Remove ingredients or add a note</p><div class="fn-picker" data-fn-picker hidden>
+            <div class="fn-picker__bg" data-fn-picker-close></div>
+            <div class="fn-picker__box" role="dialog" aria-modal="true" aria-labelledby="fn-pk-t-funnel">
+              <header class="fn-picker__head">
+                <h3 id="home--fn-pk-t-funnel" data-fn-picker-title></h3>
+                <button class="fn-picker__x" type="button" data-fn-picker-close aria-label="Close">&times;</button>
+              </header>
+              <div class="fn-picker__tabs" role="group" data-fn-picker-tabs>
+                <button type="button" data-pick-tier="">All</button>
+                <button type="button" data-pick-tier="exclusivo">Exclusivo $ <small>+$70</small></button>
+                <button type="button" data-pick-tier="signature">Signature $$ <small>+$140</small><em class="fn-picker__rec">&#9733; Recommended</em></button>
+                <button type="button" data-pick-tier="reserve">Reserve $$$ <small>+$210</small></button>
+              </div>
+              <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
-            <div class="fn-course fn-perday" role="group" aria-label="How many plates you want each day"><span class="fn-perday__l">Plates per day</span><button type="button" class="fn-course__b is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" class="fn-course__b" data-fn-perday="2" aria-pressed="false">2</button></div>
-            <div class="fn-course" data-fn-course-group hidden role="group" aria-label="Course of the day you are choosing"><button type="button" class="fn-course__b is-on" data-fn-course="0" aria-pressed="true">1st course</button><button type="button" class="fn-course__b" data-fn-course="1" aria-pressed="false">2nd course</button></div>
+                        <div class="fn-course" data-fn-course-group hidden role="group" aria-label="Course of the day you are choosing"><button type="button" class="fn-course__b is-on" data-fn-course="0" aria-pressed="true">1st course</button><button type="button" class="fn-course__b" data-fn-course="1" aria-pressed="false">2nd course</button></div>
             <button class="text-link fn-repeat" type="button" data-fn-repeat hidden data-t-done="We loaded your last order. Change anything you like." data-t-none="None of the dishes from your last order are on this week's menu.">&#8634; Repeat my last order</button>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>meals</span><i data-fn-meter-bar></i></p>
             <label class="fn-sel"><span class="fn-sr">Category</span>
@@ -14956,6 +15157,9 @@ Pago digital, sin efectivo</li></ul>
               <p class="fn-macros__h" data-fn-macros-hint>Pick a dish to see its macros</p>
             </aside>
           </div>
+          
+            </div>
+          </div>
           <p class="alert" data-fn-empty hidden>There are no dishes with that combination this week. Change the tier or the menu.</p>
         </fieldset>
 
@@ -14966,6 +15170,7 @@ Pago digital, sin efectivo</li></ul>
       </div>
 
       <aside class="funnel__aside" aria-live="polite">
+        <button class="fn-sum__toggle" type="button" data-fn-sum-toggle aria-expanded="false">View summary</button>
         <h3>Your order</h3>
         <p class="countdown fn-cut" data-cutoff>Confirm your dishes before Saturday 10:00 AM · time left: <strong data-cutoff-value>…</strong></p>
         <dl class="funnel__facts">
@@ -23351,8 +23556,8 @@ Digital payment, no cash</li></ul>
       <ol class="steps__nav" aria-label="Order steps">
         <li data-fn-dot class="is-on"><span>01</span>Sign in</li>
         <li data-fn-dot><span>02</span>Plan & diet</li>
-        <li data-fn-dot><span>03</span>Your menu</li>
-        <li data-fn-dot><span>04</span>Your week</li>
+        <li data-fn-dot class="fn-dot--skip"><span>03</span>Your menu</li>
+        <li data-fn-dot><span>03</span>Your week</li>
       </ol>
     </div>
     <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
@@ -23414,43 +23619,35 @@ Digital payment, no cash</li></ul>
               <h3 class="fn-pickh"><b>1</b>Choose your nutrition pillar</h3>
               <div class="fn-cats" data-fn-cats role="radiogroup" aria-label="Choose your nutrition pillar"><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="keto-low-carb">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 5c-5 7-12 12-12 22a12 12 0 0 0 24 0C36 17 29 12 24 5z"/><circle cx="24" cy="29" r="5.5"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 5c-5 7-12 12-12 22a12 12 0 0 0 24 0C36 17 29 12 24 5z"/><circle cx="24" cy="29" r="5.5"/></svg></i>
                   <strong>Keto / Low carb</strong><small>Keto · Low carbs</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="al-fuego">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M25 4c1.5 8 11 12 11 24a12 12 0 0 1-24 0c0-6 3-9 6-12 0 4 2 6 4 7 1-6 1-12 3-19z"/><path d="M24 44c-4 0-6-3-6-6 0-4 4-6 6-10 2 3 6 6 6 10 0 3-2 6-6 6z"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M25 4c1.5 8 11 12 11 24a12 12 0 0 1-24 0c0-6 3-9 6-12 0 4 2 6 4 7 1-6 1-12 3-19z"/><path d="M24 44c-4 0-6-3-6-6 0-4 4-6 6-10 2 3 6 6 6 10 0 3-2 6-6 6z"/></svg></i>
                   <strong>Fire</strong><small>Fire-seared cuts and fish</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="fit-proteina">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 20v8M12 15v18M36 15v18M42 20v8M12 24h24"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 20v8M12 15v18M36 15v18M42 20v8M12 24h24"/></svg></i>
                   <strong>High protein</strong><small>Performance · Fit</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="veggie">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 40C8 20 20 8 40 8c0 20-12 32-32 32z"/><path d="M8 40 28 20"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 40C8 20 20 8 40 8c0 20-12 32-32 32z"/><path d="M8 40 28 20"/></svg></i>
                   <strong>Plant-based</strong><small>Vegetarian · Vegan</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="sin-gluten">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 42V14M24 14c-5 0-8-3-8-7 5 0 8 3 8 7zM24 14c5 0 8-3 8-7-5 0-8 3-8 7zM24 24c-5 0-8-3-8-7 5 0 8 3 8 7zM24 24c5 0 8-3 8-7-5 0-8 3-8 7zM24 34c-5 0-8-3-8-7 5 0 8 3 8 7zM24 34c5 0 8-3 8-7-5 0-8 3-8 7z"/><path d="M8 8l32 32"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 42V14M24 14c-5 0-8-3-8-7 5 0 8 3 8 7zM24 14c5 0 8-3 8-7-5 0-8 3-8 7zM24 24c-5 0-8-3-8-7 5 0 8 3 8 7zM24 24c5 0 8-3 8-7-5 0-8 3-8 7zM24 34c-5 0-8-3-8-7 5 0 8 3 8 7zM24 34c5 0 8-3 8-7-5 0-8 3-8 7z"/><path d="M8 8l32 32"/></svg></i>
                   <strong>Gluten-free</strong><small>No wheat or gluten</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="bowls">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 22h36a18 18 0 0 1-36 0z"/><path d="M16 14c0-4 4-4 4-8M26 14c0-4 4-4 4-8"/><path d="M14 42h20"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 22h36a18 18 0 0 1-36 0z"/><path d="M16 14c0-4 4-4 4-8M26 14c0-4 4-4 4-8"/><path d="M14 42h20"/></svg></i>
                   <strong>Bowls</strong><small>Fresh and complete</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="ligero">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 32a16 16 0 0 1 32 0"/><path d="M24 32l7-10"/><circle cx="24" cy="32" r="2.4"/><path d="M12 41h24"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 32a16 16 0 0 1 32 0"/><path d="M24 32l7-10"/><circle cx="24" cy="32" r="2.4"/><path d="M12 41h24"/></svg></i>
                   <strong>Light</strong><small>Low calorie · Balanced</small>
                 </button><button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="all">
                   <span class="fn-cat__tag">Selected &#9733;</span>
-                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 6l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/><path d="M38 34l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/></svg>
-</i>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M24 6l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/><path d="M38 34l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/></svg></i>
                   <strong>No preference</strong><small>The whole menu</small>
                 </button></div>
               <div class="fn-cats__ctl"><button class="fn-cats__a" type="button" data-fn-cats-arrow="-1" aria-label="Previous dishes">&#8249;</button><button class="fn-cats__a" type="button" data-fn-cats-arrow="1" aria-label="Next dishes">&#8250;</button><span>Swipe to see more</span></div>
@@ -23538,15 +23735,33 @@ Digital payment, no cash</li></ul>
         </div>
       </div>
     </div>
+          <section class="fn-wk" data-fn-wk data-t-up="Upgrade this day" data-t-swap="Change" data-t-add1="Choose a dish" data-t-add2="+ Add 2nd plate" data-t-pk="Choose the dish for [d]" data-t-pk2="Choose the 2nd plate for [d]" data-t-pkup="Upgrade your [d]" data-t-kcal="kcal" data-t-prot="g protein" data-t-edit="Remove ingredients or add a note" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
+            <header class="fn-wk__head">
+              <div><h3>Build your weekly menu</h3><p class="fn-wk__chip">Base plan · 5 meals per week</p></div>
+              <div class="fn-wk__perday" role="group" aria-label="How many plates you want each day"><span>Plates per day</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
+            </header>
+            <ol class="fn-wk__cards" data-fn-wk-cards></ol>
+          </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="pg-pedido--fn-para-funnel">Who is this order for?</label><select class="select" id="pg-pedido--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Add someone from your family</a></div>
           <ol class="fn-week" data-fn-week aria-label="Assign each meal to a day"></ol>
           <div class="fn-mods" data-fn-mods hidden></div>
           <p class="fn-budget" data-fn-budget></p>
-          <p class="fn-mods__tip">✎ Remove ingredients or add a note</p>
-          <div class="fn-pickbar">
+          <p class="fn-mods__tip">✎ Remove ingredients or add a note</p><div class="fn-picker" data-fn-picker hidden>
+            <div class="fn-picker__bg" data-fn-picker-close></div>
+            <div class="fn-picker__box" role="dialog" aria-modal="true" aria-labelledby="fn-pk-t-funnel">
+              <header class="fn-picker__head">
+                <h3 id="pg-pedido--fn-pk-t-funnel" data-fn-picker-title></h3>
+                <button class="fn-picker__x" type="button" data-fn-picker-close aria-label="Close">&times;</button>
+              </header>
+              <div class="fn-picker__tabs" role="group" data-fn-picker-tabs>
+                <button type="button" data-pick-tier="">All</button>
+                <button type="button" data-pick-tier="exclusivo">Exclusivo $ <small>+$70</small></button>
+                <button type="button" data-pick-tier="signature">Signature $$ <small>+$140</small><em class="fn-picker__rec">&#9733; Recommended</em></button>
+                <button type="button" data-pick-tier="reserve">Reserve $$$ <small>+$210</small></button>
+              </div>
+              <div class="fn-pickbar">
             <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
-            <div class="fn-course fn-perday" role="group" aria-label="How many plates you want each day"><span class="fn-perday__l">Plates per day</span><button type="button" class="fn-course__b is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" class="fn-course__b" data-fn-perday="2" aria-pressed="false">2</button></div>
-            <div class="fn-course" data-fn-course-group hidden role="group" aria-label="Course of the day you are choosing"><button type="button" class="fn-course__b is-on" data-fn-course="0" aria-pressed="true">1st course</button><button type="button" class="fn-course__b" data-fn-course="1" aria-pressed="false">2nd course</button></div>
+                        <div class="fn-course" data-fn-course-group hidden role="group" aria-label="Course of the day you are choosing"><button type="button" class="fn-course__b is-on" data-fn-course="0" aria-pressed="true">1st course</button><button type="button" class="fn-course__b" data-fn-course="1" aria-pressed="false">2nd course</button></div>
             <button class="text-link fn-repeat" type="button" data-fn-repeat hidden data-t-done="We loaded your last order. Change anything you like." data-t-none="None of the dishes from your last order are on this week's menu.">&#8634; Repeat my last order</button>
             <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / 5 <span>meals</span><i data-fn-meter-bar></i></p>
             <label class="fn-sel"><span class="fn-sr">Category</span>
@@ -23827,6 +24042,9 @@ Digital payment, no cash</li></ul>
               <p class="fn-macros__h" data-fn-macros-hint>Pick a dish to see its macros</p>
             </aside>
           </div>
+          
+            </div>
+          </div>
           <p class="alert" data-fn-empty hidden>There are no dishes with that combination this week. Change the tier or the menu.</p>
         </fieldset>
 
@@ -23837,6 +24055,7 @@ Digital payment, no cash</li></ul>
       </div>
 
       <aside class="funnel__aside" aria-live="polite">
+        <button class="fn-sum__toggle" type="button" data-fn-sum-toggle aria-expanded="false">View summary</button>
         <h3>Your order</h3>
         <p class="countdown fn-cut" data-cutoff>Confirm your dishes before Saturday 10:00 AM · time left: <strong data-cutoff-value>…</strong></p>
         <dl class="funnel__facts">
@@ -26751,6 +26970,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         st.step = Math.max(1, Math.min(savedStep, st.reach));
       } else st.step = 0;
       if (startAtPlan) st.step = 1;
+      if (st.step === 2) st.step = st.reach >= 3 ? 3 : 1;                 // the menu step is merged into "your week"
       st.planChosen = st.reach >= 2;
       if (startAtPlan) { st.reach = 3; st.planChosen = true; }                          // local preview only (test hook)
       var setReach = function (n) { if (n > st.reach) { st.reach = n; try { sessionStorage.setItem(REACH_KEY, String(n)); } catch (e) {} } persist(); };
@@ -27029,7 +27249,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var csel = $('[data-fn-cat]', holder); if (csel) csel.value = st.cat; var dsel = $('[data-fn-diet]', holder); if (dsel) dsel.value = st.diet;
         var n = count(), full = n >= MEALS, shown = 0;
         dishes.forEach(function (d) {
-          var show = rank(d.getAttribute('data-tier')) >= rank(st.tier) && inGroup(d, st.cat) && (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1);
+          var show = rank(d.getAttribute('data-tier')) >= rank(st.tier) && (!st.pickTier || d.getAttribute('data-tier') === st.pickTier) && inGroup(d, st.cat) && (st.diet === 'all' || (d.getAttribute('data-diets') || '').split('|').indexOf(st.diet) > -1);
           d.classList.toggle('is-hidden', !show); if (show) shown++;
           var q = st.qty[d.getAttribute('data-pid')] || 0;
           // the per-meal price follows the chosen plan: 4-week block = block price / 20 meals, 1-week plan = week price / 5 meals (so 5 meals add up to the plan price)
@@ -27082,7 +27302,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? fill(T_('meals'), { n: n, t: MEALS }) : '';
         var tot = $('[data-fn-s-total]', holder); if (tot) tot.textContent = money(planTotal());
         var sb = $('[data-fn-s-block]', holder); if (sb) { sb.hidden = false; sb.textContent = st.plan === 'block' ? fill(T_('weeks-x'), { p: money(priceOf(tierEl(), st.plan) / WEEKS), w: WEEKS }) : fill(T_('per-week'), { p: money(planTotal()) }); }
-        var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step + 1).replace('{t}', steps.length) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
+        var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step === 3 ? 3 : st.step + 1).replace('{t}', 3) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
         var rn = $('[data-fn-renew]', holder); if (rn) { var hasPlan = !!tierEl().getAttribute('data-selling-plan'); rn.hidden = !(hasPlan && st.plan === 'block'); var box = $('[data-fn-renew-box]', holder); if (box) box.checked = st.renew; }
         buildNotes();
         renderMods();
@@ -27091,9 +27311,9 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         if (st.step === 3 && !tourArmed && !holder.classList.contains('is-gated')) { tourArmed = true; window.setTimeout(function () { startTour(false); }, 600); }
         // stepper
         steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
-        paintCats(); paintPresets();
+        paintCats(); paintPresets(); paintWk(); paintPicker();
         dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); d.classList.toggle('is-locked', k > st.reach); d.setAttribute('aria-disabled', k > st.reach ? 'true' : 'false'); });
-        if (bar) bar.style.transform = 'scaleX(' + ((st.step + 1) / steps.length) + ')';
+        if (bar) bar.style.transform = 'scaleX(' + (((st.step === 3 ? 3 : st.step + 1) / 3)) + ')';
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
         if (next) { next.hidden = last; next.disabled = (st.step === 1 && !st.catPicked); }
@@ -27111,6 +27331,20 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       var paintCats = function () {
         var gn = $('[data-fn-go-next]', holder); if (gn) gn.disabled = !st.catPicked;
         $$('[data-cat-choice]', holder).forEach(function (b) { var on = !!st.catPicked && b.getAttribute('data-cat-choice') === st.cat; b.classList.toggle('is-on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
+      };
+      var buildPresetSets = function () {
+        var okd = function (d) { return !d.hasAttribute('data-seasonal') && !d.classList.contains('is-warned'); };
+        var byName = function (a, b) { return a.getAttribute('data-title') > b.getAttribute('data-title') ? 1 : -1; };
+        var inG = dishes.filter(function (d) { return okd(d) && inGroup(d, st.cat); }).sort(function (a, b) { return rank(a.getAttribute('data-tier')) - rank(b.getAttribute('data-tier')) || byName(a, b); });
+        var base = inG.filter(function (d) { return rank(d.getAttribute('data-tier')) === 0; }), high = inG.filter(function (d) { return rank(d.getAttribute('data-tier')) > 0; });
+        var plain = function (d) { return okd(d) && rank(d.getAttribute('data-tier')) === 0 && !/junior|postres|batidos/.test(d.getAttribute('data-category') || ''); };
+        if (base.length < 3) base = base.concat(dishes.filter(function (d) { return plain(d) && base.indexOf(d) < 0; }).sort(byName));   // a week with variety even when the diet has few base-tier dishes
+        if (!base.length) base = dishes.filter(function (d) { return okd(d) && rank(d.getAttribute('data-tier')) === 0; }).sort(byName);
+        if (!base.length) base = high.slice(0, 1);
+        if (!base.length) return [[]];
+        var out = []; for (var i = 0; i < MEALS; i++) out.push(base[i % base.length]);
+        if (high.length && MEALS > 1) out[MEALS - 1] = high[0];                           // one suggested upgrade, easy to swap back
+        return [out];
       };
       var paintPresets = function () {
         if (!presetBox || st.step !== 2) return;
@@ -27173,6 +27407,69 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         });
       }
       holder.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-fn-own]') && ownBox) { if (ownForm) ownForm.hidden = false; if (ownOk) ownOk.hidden = true; ownShow(true); } });
+      /* "your week": five big day cards (1 or 2 plates a day), an upgrade / swap pop-up, warnings kept */
+      var wkRoot = $('[data-fn-wk]', holder), wkBox = $('[data-fn-wk-cards]', holder), picker = $('[data-fn-picker]', holder), pickerTitle = $('[data-fn-picker-title]', holder);
+      var WT = function (k) { return wkRoot ? (wkRoot.getAttribute('data-t-' + k) || '') : ''; }, tierNames = WT('tiers').split(',');
+      var tierOf = function (d) { return d ? d.getAttribute('data-tier') || 'selecto' : 'selecto'; };
+      var slotHtml = function (i, c) {
+        var pid = c ? st.days2[i] : st.days[i], d = pid && byPid(pid), key = i + ':' + c;
+        if (!d) return '<div class="fn-wk__slot is-empty"><button class="fn-wk__add" type="button" data-wk-swap="' + key + '">' + esc(c ? WT('add2') : WT('add1')) + '</button></div>';
+        var im = $('img', d), src = im ? (im.currentSrc || im.src) : '', lv = rank(tierOf(d)), extra = lv ? upg(lv) : 0, m = macroOf(pid) || { k: 0, p: 0 };
+        var wb = $('[data-fn-warnbox]', d), mt = !c ? modsText(i) : '';
+        return '<div class="fn-wk__slot' + (d.classList.contains('is-warned') ? ' has-warn' : '') + (extra ? ' is-up' : '') + '">'
+          + '<div class="fn-wk__img"><button class="fn-wk__imgb" type="button" data-wk-img="' + key + '" aria-label="' + esc(lab(d)) + '" style="background-image:url(&quot;' + esc(src) + '&quot;)"></button>' + (wb ? wb.outerHTML : '') + (c ? '' : '<button class="fn-wk__ed' + (mt ? ' has-note' : '') + '" type="button" data-wk-edit="' + i + '" aria-label="' + esc(WT('edit')) + '">✎</button>') + '</div>'
+          + '<span class="fn-wk__tier fn-wk__tier--' + tierOf(d) + '">' + esc(tierNames[lv] || '') + (extra ? ' · +' + esc(money(extra)) : '') + '</span>'
+          + '<strong class="fn-wk__name">' + esc(lab(d)) + '</strong>'
+          + (mt ? '<span class="fn-wk__note">✎ ' + esc(mt) + '</span>' : '')
+          + '<div class="fn-wk__btns"><button class="fn-wk__up" type="button" data-wk-up="' + key + '">★ ' + esc(WT('up')) + '</button><button class="fn-wk__swap" type="button" data-wk-swap="' + key + '">' + esc(WT('swap')) + '</button>'
+          + (c ? '<button class="fn-wk__ed fn-wk__ed--x" type="button" data-wk-clear="' + key + '" aria-label="×">×</button>' : '')
+          + '</div></div>';
+      };
+      var paintWk = function () {
+        if (!wkBox || st.step !== 3) return;
+        var h = '';
+        for (var i = 0; i < MEALS; i++) h += '<li class="fn-wk__card' + (i === st.active ? ' is-active' : '') + '"><h4>' + esc(dayLabel(i)) + '</h4>' + slotHtml(i, 0) + (st.perDay === 2 ? slotHtml(i, 1) : '') + '</li>';
+        wkBox.innerHTML = h;
+      };
+      var paintPicker = function () {
+        if (!picker) return;
+        var dn = dayLabel(st.active).split(' ')[0]; picker.setAttribute('data-mode', st.pickTier || pickUp ? 'up' : 'swap');
+        if (pickerTitle) pickerTitle.textContent = ((st.pickTier || pickUp) ? WT('pkup') : (st.course === 1 ? WT('pk2') : WT('pk'))).replace('[d]', dn);
+        $$('[data-pick-tier]', picker).forEach(function (b) { var on = (b.getAttribute('data-pick-tier') || '') === (st.pickTier || ''); b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+      };
+      var pickCatBefore = null, pickUp = false;
+      var openPicker = function (i, c, tier) {
+        if (!picker) return;
+        st.active = i; st.course = c ? 1 : 0; st.pickTier = tier || ''; pickCatBefore = tier ? st.cat : null; pickUp = !!tier; if (tier) st.cat = 'all'; persist();
+        picker.hidden = false; holder.classList.add('is-picking'); document.documentElement.classList.add('fn-pick-open');
+        var gr = $('[data-fn-grid]', picker); if (gr) gr.scrollLeft = 0; render();
+      };
+      var closePicker = function () {
+        if (!picker || picker.hidden) return;
+        picker.hidden = true; holder.classList.remove('is-picking'); document.documentElement.classList.remove('fn-pick-open'); st.pickTier = ''; pickUp = false; st.course = 0; if (pickCatBefore) { st.cat = pickCatBefore; pickCatBefore = null; } persist(); render();
+      };
+      holder.addEventListener('click', function (e) {
+        var t = e.target; if (!t || !t.closest) return;
+        var sw = t.closest('[data-wk-swap]'), up = t.closest('[data-wk-up]');
+        if (sw || up) {
+          var kk = (sw || up).getAttribute(sw ? 'data-wk-swap' : 'data-wk-up').split(':'), ii = +kk[0], cc = +kk[1];
+          var cur = byPid(cc ? st.days2[ii] : st.days[ii]), nxt = ['exclusivo', 'signature', 'reserve'][Math.min(2, rank(tierOf(cur)))];
+          openPicker(ii, cc, up ? (cur ? nxt : 'exclusivo') : ''); return;
+        }
+        var im = t.closest('[data-wk-img]');
+        if (im && !t.closest('[data-fn-warnbox]')) { var k2 = im.getAttribute('data-wk-img').split(':'), d2 = byPid(+k2[1] ? st.days2[+k2[0]] : st.days[+k2[0]]), mb = d2 && $('.fn-dish__media', d2); if (mb) mb.click(); return; }
+        var ed = t.closest('[data-wk-edit]');
+        if (ed) { var eb = $('[data-fn-day-edit="' + ed.getAttribute('data-wk-edit') + '"]', holder); if (eb) eb.click(); return; }
+        var cl = t.closest('[data-wk-clear]');
+        if (cl) { var k3 = cl.getAttribute('data-wk-clear').split(':'); st.days2[+k3[0]] = ''; st.active = +k3[0]; persist(); render(); return; }
+        var pt = t.closest('[data-pick-tier]');
+        if (pt) { st.pickTier = pt.getAttribute('data-pick-tier') || ''; persist(); render(); return; }
+        if (t.closest('[data-fn-picker-close]')) { closePicker(); return; }
+        if (t.closest('[data-pick]') && picker && !picker.hidden) { setTimeout(closePicker, 0); return; }
+        var sb = t.closest('[data-fn-sum-toggle]');
+        if (sb) { var asd = sb.closest('.funnel__aside'); if (asd) { var on2 = asd.classList.toggle('is-open'); sb.setAttribute('aria-expanded', on2 ? 'true' : 'false'); } }
+      });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && picker && !picker.hidden) closePicker(); });
       var go = function (n) {
         n = Math.max(0, Math.min(steps.length - 1, n)); if (n > st.reach) { say(T_('locked')); return; } var moved = n !== st.step; st.step = n; say(''); persist(); render();
         if (moved && top) {
@@ -27254,9 +27551,13 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       if (next) next.addEventListener('click', function () {
         if (st.step === 1 && !st.catPicked) { say(T_('locked')); return; }
         if (st.step === 1) st.planChosen = true;
+        if (st.step === 1) {                                                  // diet + plan chosen: open the week with a ready-made menu for that diet
+          if (st.presetCat !== st.cat || !st.days.some(Boolean)) { var ps = buildPresetSets(); st.presetCat = st.cat; applyPreset(ps[0] || []); return; }
+          setReach(3); go(3); return;
+        }
         setReach(st.step + 1); go(st.step + 1);
       });
-      if (prev) prev.addEventListener('click', function () { go(st.step - 1); });
+      if (prev) prev.addEventListener('click', function () { go(st.step === 3 ? 1 : st.step - 1); });
       dots.forEach(function (d, k) { d.setAttribute('role', 'button'); d.tabIndex = 0; d.addEventListener('click', function () { go(k); }); d.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(k); } }); });
 
       // arriving from a dish page (…/pedido?dish=handle): that dish is already in the plan, at its tier
