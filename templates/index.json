@@ -24,13 +24,12 @@
       "blocks": {
         "s1": { "type": "slide", "settings": { "tag": "Esta semana", "heading": "El menú de la semana ya está listo", "text": "Elige tu dieta y arma tu semana en minutos.", "button_label": "Haz tu pedido", "button_link": "/pages/pedido", "art": "air-steak" } },
         "s2": { "type": "slide", "settings": { "tag": "Evento", "heading": "Chef privado en tu casa", "text": "Una cena de autor para tu mesa o tu evento, cocinada frente a ti.", "button_label": "Conocer la Carta", "button_link": "/pages/carta-kulinaria", "art": "air-chef" } },
-        "s3": { "type": "slide", "settings": { "tag": "Sábados", "heading": "Cenas románticas de sábado", "text": "Cocina de autor a domicilio, pensada para dos.", "button_label": "Ver las cenas", "button_link": "/pages/carta-cenas-romanticas", "art": "air-romance" } },
-        "s4": { "type": "slide", "settings": { "tag": "Temporada", "heading": "Edición limitada de temporada", "text": "Chiles en nogada y más, mientras dure el ingrediente.", "button_label": "Ver el menú", "button_link": "/collections/menu-semanal", "art": "dinner" } },
-        "s5": { "type": "slide", "settings": { "tag": "Referidos", "heading": "Recomienda y gana saldo", "text": "$150 de saldo por cada amigo que compre su primer bloque de 4 semanas.", "button_label": "Quiero mi código", "button_link": "/pages/embajadores", "art": "air-bowl" } },
-        "s6": { "type": "slide", "settings": { "tag": "Prueba", "heading": "Prueba una semana", "text": "5 comidas de lunes a viernes, sin compromiso de renovación.", "button_label": "Probar 1 semana", "button_link": "/pages/plan-prueba", "art": "air-breakfast" } },
-        "s7": { "type": "slide", "settings": { "tag": "Aviso", "heading": "Entregamos en Puebla y su zona metropolitana", "text": "Pedidos hasta el sábado a las 10:00 AM, en envases de vidrio reutilizables.", "button_label": "Cómo funciona", "button_link": "/pages/ciclo-y-politicas", "art": "air-glass" } }
+        "s3": { "type": "slide", "settings": { "tag": "Entrenadores", "heading": "Entrenadores aliados", "text": "Recomienda Kulinaria a tus clientes y gana bonos, ropa deportiva y estatus.", "button_label": "Ser entrenador aliado", "button_link": "/pages/embajadores-entrenadores", "art": "air-steak-dark" } },
+        "s4": { "type": "slide", "settings": { "tag": "Aliados", "heading": "Gimnasios y marcas que cocinan con nosotros", "text": "Súmate como gimnasio aliado y ofrece a tus socios comida de autor lista para la semana.", "button_label": "Conocer la alianza", "button_link": "/pages/embajadores-gimnasios", "art": "containers" } },
+        "s5": { "type": "slide", "settings": { "tag": "¿Sabías que…?", "heading": "Comer de autor desde $180 por platillo", "text": "Cada platillo se cocina al fuego, llega en vidrio y se revisa contra tus alergias antes de salir. Tú no te preocupas por tu nutrición.", "button_label": "Ver el menú", "button_link": "/collections/menu-semanal", "art": "flames" } },
+        "s6": { "type": "slide", "settings": { "tag": "Aviso", "heading": "Entregamos en Puebla y su zona metropolitana", "text": "Pedidos hasta el sábado a las 10:00 AM, en envases de vidrio reutilizables.", "button_label": "Cómo funciona", "button_link": "/pages/ciclo-y-politicas", "art": "air-glass" } }
       },
-      "block_order": ["s1", "s2", "s3", "s4", "s5", "s6", "s7"]
+      "block_order": ["s1", "s2", "s3", "s4", "s5", "s6"]
     },
     "funnel": {
       "type": "order-funnel",

@@ -2360,77 +2360,79 @@
     });
   }
 
-  /* hero: the intro video is the first face of a 3D cube. It plays ONCE; then the cube turns and each highlight (events, notices...) comes in, every few seconds */
+  /* hero: a 3D cube. Item 1 is the intro VIDEO (it stays until it has played once); then the cube turns through the highlights (events, trainers, partners, notices...) every few seconds, and comes back to the video */
   function initHeroCarousel() {
     var hero = $('[data-hero]'), cube = hero && $('[data-hero-cube]', hero); if (!cube) return;
-    var box = cube.parentNode, intro = $('[data-hero-intro]', cube), slides = $$('.hs', cube), n = slides.length; if (n < 2 || !intro) return;
+    var box = cube.parentNode, faces = $$('.hero__face', cube), n = faces.length; if (n < 3) return;     // faces[0] = the video, the rest = highlights
     var dots = $$('[data-hs-dot]', hero), dur = Math.max(3, Math.min(12, +cube.getAttribute('data-interval') || 5)) * 1000;
-    var video = $('[data-hero-video]', hero), tg = $('[data-media-toggle]', hero);
-    var cur = intro, i = -1, timer = 0, started = false, held = false, away = false, userPaused = false, busy = false;
+    var video = $('[data-hero-video]', hero), tg = $('[data-media-toggle]', hero), canPlay = !!video && !REDUCE && !SAVE;
+    var cur = 0, timer = 0, held = false, away = false, userPaused = false, busy = false, vidSafe = 0;
     $$('img', cube).forEach(function (im) { im.loading = 'eager'; });
-    hero.style.setProperty('--hs-dur', dur + 'ms');
+    hero.classList.add('is-carousel');
     var size = function () { box.style.setProperty('--hc-w', Math.round(box.getBoundingClientRect().width) + 'px'); };
     size(); window.addEventListener('resize', size);
-    var mark = function (k) {
-      slides.concat([intro]).forEach(function (f) { if (f === cur) f.removeAttribute('aria-hidden'); else f.setAttribute('aria-hidden', 'true'); });
-      dots.forEach(function (d, x2) { d.classList.toggle('is-on', x2 === k); if (x2 === k) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
+    var mark = function () {
+      faces.forEach(function (f, x) { if (x === cur) f.removeAttribute('aria-hidden'); else f.setAttribute('aria-hidden', 'true'); });
+      dots.forEach(function (d, x) { d.classList.toggle('is-on', x === cur); if (x === cur) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
     };
-    var spin = function (to, dir) {                        // dir 1: the cube turns to the left (next); -1: back
-      if (busy || to === cur) return false;
-      if (REDUCE) { cur.classList.remove('is-cur'); to.classList.add('is-cur'); cur = to; return true; }
+    var vidMs = function () { return ((video && video.duration && isFinite(video.duration)) ? video.duration : 12) * 1000; };
+    var restartBar = function () { hero.style.setProperty('--hs-dur', (cur === 0 && canPlay ? vidMs() : dur) + 'ms'); hero.classList.remove('hs-run'); void hero.offsetWidth; if (!REDUCE) hero.classList.add('hs-run'); };
+    var turn = function (k, dir) {                                   // dir 1: the cube turns left (next); -1: back
+      k = ((k % n) + n) % n; if (busy || k === cur) return false;
+      var from = faces[cur], to = faces[k];
+      if (REDUCE) { from.classList.remove('is-cur'); to.classList.add('is-cur'); cur = k; mark(); return true; }
       busy = true; size();
-      var from = cur, rot = dir > 0 ? 'rot-next' : 'rot-prev';
-      from.classList.add('is-out'); to.classList.add(dir > 0 ? 'is-nxt' : 'is-prv'); void cube.offsetWidth;
-      cube.classList.add(rot);
+      var rot = dir > 0 ? 'rot-next' : 'rot-prev';
+      from.classList.add('is-out'); to.classList.add(dir > 0 ? 'is-nxt' : 'is-prv'); void cube.offsetWidth; cube.classList.add(rot);
       var fb = 0, done = function () {
         clearTimeout(fb); cube.removeEventListener('transitionend', onEnd);
         cube.style.transition = 'none';
         from.classList.remove('is-cur', 'is-out'); to.classList.remove('is-nxt', 'is-prv'); to.classList.add('is-cur');
         cube.classList.remove(rot); void cube.offsetWidth; cube.style.transition = '';
-        cur = to; busy = false; mark(i);
+        busy = false;
       };
       var onEnd = function (e) { if (e.target === cube && e.propertyName === 'transform') done(); };
       cube.addEventListener('transitionend', onEnd); fb = setTimeout(done, 1500);
-      cur = to; return true;                                // (cur is the target while turning; the faces get their final classes in done)
-    };
-    var show = function (k, dir) {
-      k = ((k % n) + n) % n; if (busy) return false;
-      var from = cur; cur = from;                           // spin() sets cur
-      i = k; var ok = spin(slides[k], dir || 1);
-      if (ok === false) return false;
-      mark(k); hero.classList.remove('hs-run'); void hero.offsetWidth; if (!REDUCE) hero.classList.add('hs-run');
+      cur = k; mark();
+      if (k === 0 && canPlay) { try { video.currentTime = 0; } catch (e) {} playVideo(video); }      // back to the video: it plays again from the start
       return true;
     };
     var tick = function () {
-      clearTimeout(timer);
-      if (!started || held || away || userPaused || REDUCE) { hero.classList.remove('hs-run'); return; }
-      hero.classList.add('hs-run');
-      timer = setTimeout(function () { show(i + 1, 1); tick(); }, dur + 1000);   // + the turn itself
+      clearTimeout(timer); clearTimeout(vidSafe);
+      var pause = held || away || userPaused || REDUCE;
+      if (pause) { hero.classList.remove('hs-run'); return; }
+      restartBar();
+      if (cur === 0 && canPlay) {                                  // the video item lasts until the video has played once (safety: its length + 2s)
+        vidSafe = setTimeout(function () { next(); }, vidMs() + 2000);
+        return;
+      }
+      timer = setTimeout(next, dur + 1000);                        // + the turn itself
     };
-    var go = function (k, dir) { if (show(k, dir)) tick(); };
-    var start = function () { if (started) return; started = true; hero.classList.add('is-carousel'); show(0, 1); tick(); };
-    // start: when the intro video ends (once); if it cannot play, a short fallback so the hero is never static
-    if (video && !REDUCE && !SAVE) {
+    var next = function () { if (turn(cur + 1, 1)) tick(); else if (!busy) tick(); };
+    var go = function (k, dir) { if (turn(k, dir)) tick(); };
+    if (canPlay) {
       video.loop = false; video.removeAttribute('loop');
-      video.addEventListener('ended', start); video.addEventListener('error', start);
-      video.addEventListener('playing', function () { clearTimeout(video._safe); video._safe = setTimeout(start, ((video.duration && isFinite(video.duration) ? video.duration : 12) + 2) * 1000); });
-      setTimeout(function () { if (!started && (video.paused || video.readyState < 2)) start(); }, 9000);
-    } else setTimeout(start, 400);
+      video.addEventListener('ended', function () { if (cur === 0) next(); });
+      video.addEventListener('error', function () { if (cur === 0) next(); });
+      video.addEventListener('playing', function () { if (cur === 0) tick(); });
+      setTimeout(function () { if (cur === 0 && (video.paused || video.readyState < 2)) next(); }, 9000);    // autoplay blocked / still loading: never leave the hero static
+    } else setTimeout(function () { if (cur === 0) next(); }, 600);
+    mark(); tick();
     var hold = function (v) { held = v; tick(); };
     hero.addEventListener('mouseenter', function () { hold(true); }); hero.addEventListener('mouseleave', function () { hold(false); });
     hero.addEventListener('focusin', function () { hold(true); }); hero.addEventListener('focusout', function () { hold(false); });
-    hero.addEventListener('touchstart', function () { held = true; clearTimeout(timer); clearTimeout(box._th); box._th = setTimeout(function () { held = false; tick(); }, 8000); }, { passive: true });
+    hero.addEventListener('touchstart', function () { held = true; clearTimeout(timer); clearTimeout(vidSafe); clearTimeout(box._th); box._th = setTimeout(function () { held = false; tick(); }, 8000); }, { passive: true });
     document.addEventListener('visibilitychange', function () { away = document.hidden; tick(); });
     if (window.IntersectionObserver) new IntersectionObserver(function (en) { away = !en[0].isIntersecting; tick(); }, { threshold: 0.25 }).observe(hero);
     hero.addEventListener('click', function (e) {
       var t = e.target; if (!t || !t.closest) return;
-      if (t.closest('[data-hs-next]')) go(i + 1, 1); else if (t.closest('[data-hs-prev]')) go(i - 1, -1);
-      else { var d = t.closest('[data-hs-dot]'); if (d) { var k = +d.getAttribute('data-hs-dot'); go(k, k >= i ? 1 : -1); } }
+      if (t.closest('[data-hs-next]')) go(cur + 1, 1); else if (t.closest('[data-hs-prev]')) go(cur - 1, -1);
+      else { var d = t.closest('[data-hs-dot]'); if (d) { var k = +d.getAttribute('data-hs-dot'); go(k, k >= cur ? 1 : -1); } }
     });
-    hero.addEventListener('keydown', function (e) { if (!started) return; if (e.key === 'ArrowRight') go(i + 1, 1); else if (e.key === 'ArrowLeft') go(i - 1, -1); });
+    hero.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') go(cur + 1, 1); else if (e.key === 'ArrowLeft') go(cur - 1, -1); });
     var x0 = null;
     cube.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
-    cube.addEventListener('pointerup', function (e) { if (x0 == null) return; var dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 48) go(i + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); });
+    cube.addEventListener('pointerup', function (e) { if (x0 == null) return; var dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 48) go(cur + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); });
     if (tg) tg.addEventListener('click', function () { userPaused = tg.getAttribute('aria-pressed') === 'true'; tick(); });
   }
 

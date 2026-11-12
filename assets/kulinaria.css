@@ -4239,3 +4239,22 @@ body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__stepcount,body .
 
 /* v124 */
 @media (max-width:760px){.hs.hero__face{padding-top:10px !important}}
+/* v125: the video face keeps its original size and defines the height of the cube; the highlight faces take the same box */
+.hero--intro .hero__cubebox{height:auto !important;min-height:0 !important}
+.hero__face--intro{position:relative !important;top:auto !important;bottom:auto !important}
+.hero__face--intro .hero__stage{width:min(100%,min(82svh,720px)) !important;height:auto !important;max-height:none !important;aspect-ratio:1/1 !important;justify-self:center}
+@media (max-width:760px){
+  .hero--intro .hero__cubebox{height:auto !important;min-height:0 !important}
+  body .hero--intro .hero__face--intro .hero__stage{width:calc(100% + 2*var(--pad)) !important;margin-inline:calc(var(--pad) * -1) !important;aspect-ratio:auto !important;height:min(56svh,calc(100vw * 1.15)) !important;max-height:none !important}
+}
+/* v126: the highlight faces live in the first screen; the controls sit at its bottom edge */
+.hero--intro .hs.hero__face{align-items:start;align-content:start;height:min(calc(100svh - var(--hdr) - 150px),680px);bottom:auto}
+.hero--intro .hs__media{height:100%;max-height:100%;width:auto;aspect-ratio:1/1}
+.hero--intro .hs__copy{align-self:center}
+.hero--intro .hero__ctl{position:absolute;left:50%;translate:-50% 0;top:calc(100svh - 118px);margin:0;z-index:4}
+@media (max-width:760px){
+  .hero--intro .hs.hero__face{height:calc(100svh - var(--hdr) - 130px)}
+  .hero--intro .hs__media{width:100%;height:auto;max-height:42svh;aspect-ratio:4/3}
+  .hero--intro .hs__copy{align-self:start}
+  .hero--intro .hero__ctl{top:calc(100svh - 96px)}
+}
