@@ -197,7 +197,7 @@ await page.goto(URL0);
   const hr1 = await page.evaluate((h) => { const e = document.querySelector(h), on = e.querySelector('.hs.is-cur'); const r = on.getBoundingClientRect(); return { h2: on.querySelector('h2').textContent, link: on.querySelector('a').getAttribute('href'), img: !!on.querySelector('img'), fits: r.left >= -1 && r.right <= innerWidth + 1, hiddenOthers: [...e.querySelectorAll('.hero__face:not(.is-cur)')].every((x) => x.getAttribute('aria-hidden') === 'true'), idle: !document.querySelector(h + ' [data-hero-cube]').className.match(/rot-/) }; }, HR);
   ok('hero: the first highlight is in frame after the turn (tag, title, text, photo, link)', (await faceNow()) === 1 && hr1.h2.length > 5 && /^(\/|#\/)/.test(hr1.link) && hr1.img && hr1.fits && hr1.hiddenOthers && hr1.idle, JSON.stringify(hr1));
   const a0 = await faceNow(); await page.waitForTimeout(6800);
-  ok('hero: the cube turns to the next item by itself (about every 5 seconds)', (await faceNow()) === a0 + 1, a0 + ' -> ' + (await faceNow()));
+  ok('hero: the cube turns to the next item by itself (about every 4 seconds)', (await faceNow()) === a0 + 1, a0 + ' -> ' + (await faceNow()));
   await page.hover(HR); const c0 = await faceNow(); await page.waitForTimeout(6800);
   ok('hero: hovering pauses it (nothing turns while you read)', (await faceNow()) === c0);
   await page.mouse.move(2, 2);

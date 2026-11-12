@@ -11,7 +11,7 @@
 <section class="hero hero--{{ size }} hero--intro tone-dark" data-scroll data-hero {{ section.shopify_attributes }}>
   {%- if section.blocks.size > 1 -%}
   <div class="hero__cubebox" data-hero-box>
-    <div class="hero__cube" data-hero-cube data-interval="{{ section.settings.slide_seconds | default: 5 }}" role="region" aria-roledescription="carousel" aria-label="{{ 'hero.slides' | t }}">
+    <div class="hero__cube" data-hero-cube data-interval="{{ section.settings.slide_seconds | default: 4 }}" role="region" aria-roledescription="carousel" aria-label="{{ 'hero.slides' | t }}">
   <div class="container hero__grid hero__face hero__face--intro is-cur" data-hero-intro>
         <div class="hero__stage" aria-hidden="true">
           {%- assign hv_src = section.settings.video_url | default: 'video-hero-intro.mp4' -%}
@@ -108,7 +108,7 @@
     { "type": "text", "id": "button2_label", "label": "Enlace secundario", "default": "Ver los especiales de la semana" },
     { "type": "url", "id": "button2_link", "label": "Enlace secundario (URL)" },
     { "type": "checkbox", "id": "show_countdown", "label": "Mostrar cuenta regresiva de cierre", "default": false },
-    { "type": "range", "id": "slide_seconds", "label": "Segundos por diapositiva", "min": 3, "max": 12, "step": 1, "default": 5, "info": "El carrusel empieza cuando el video de introducción termina (una sola vez)." },
+    { "type": "range", "id": "slide_seconds", "label": "Segundos por diapositiva", "min": 3, "max": 12, "step": 1, "default": 4, "info": "Segundos que se ve cada diapositiva. El carrusel empieza cuando el video de introducción termina (una sola vez)." },
     { "type": "text", "id": "video_url", "label": "Video propio (URL .mp4 cuadrado, opcional)", "info": "Vacío = el video de intro de la marca (video-hero-intro.mp4 en Assets)." }
   ],
   "max_blocks": 10,

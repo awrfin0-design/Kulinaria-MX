@@ -2364,7 +2364,7 @@
   function initHeroCarousel() {
     var hero = $('[data-hero]'), cube = hero && $('[data-hero-cube]', hero); if (!cube) return;
     var box = cube.parentNode, faces = $$('.hero__face', cube), n = faces.length; if (n < 3) return;     // faces[0] = the video, the rest = highlights
-    var dots = $$('[data-hs-dot]', hero), dur = Math.max(3, Math.min(12, +cube.getAttribute('data-interval') || 5)) * 1000;
+    var dots = $$('[data-hs-dot]', hero), dur = Math.max(3, Math.min(12, +cube.getAttribute('data-interval') || 4)) * 1000;
     var video = $('[data-hero-video]', hero), tg = $('[data-media-toggle]', hero), canPlay = !!video && !REDUCE && !SAVE;
     var cur = 0, timer = 0, held = false, away = false, userPaused = false, busy = false, vidSafe = 0;
     $$('img', cube).forEach(function (im) { im.loading = 'eager'; });
@@ -2406,7 +2406,7 @@
         vidSafe = setTimeout(function () { next(); }, vidMs() + 2000);
         return;
       }
-      timer = setTimeout(next, dur + 1000);                        // + the turn itself
+      timer = setTimeout(next, dur + 900);                         // dur on screen + the turn itself
     };
     var next = function () { if (turn(cur + 1, 1)) tick(); else if (!busy) tick(); };
     var go = function (k, dir) { if (turn(k, dir)) tick(); };
