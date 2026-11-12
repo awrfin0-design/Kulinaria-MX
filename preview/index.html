@@ -4160,6 +4160,12 @@ body .funnel:not(.funnel--teaser) .funnel__top .steps__nav{display:none !importa
 }
 /* v114: filtered-out dishes stay out of the pop-up on phones too */
 body .funnel .fn-picker .fn-dishes .fn-dish.is-hidden{display:none !important}
+/* v115: sheet cards: readable price band, shorter photo, no note line (notes stay on the day card pencil) */
+.fn-picker [data-fn-up]{background:var(--bg-raised) !important;color:var(--accent) !important}
+@media (max-width:760px){
+  .fn-picker .fn-dish__media{aspect-ratio:2/1 !important}
+  .fn-picker .fn-dish .fn-note,.fn-picker .fn-dish [data-fn-note]{display:none !important}
+}
 
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
