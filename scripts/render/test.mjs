@@ -86,9 +86,9 @@ for (const base of groups) {
 await page.goto(`${URL0}#/menu`); await page.waitForTimeout(150);
 const scope = '[data-page="menu"]';
 ok('menu shows the 9 dishes scheduled for this week (2 are planned for later weeks)', (await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.length)) === 9);
-ok('the category row is a styled dropdown, not a sliding row of chips (chips stay in the page, hidden)', await page.evaluate((sc) => { const d = document.querySelector(sc + ' .filter-sticky .dd'); const src = document.querySelector(sc + ' [data-dropdown].dd-src'); return !!d && !!d.querySelector('.dd__btn') && getComputedStyle(src).display === 'none' && d.querySelectorAll('.dd__opt').length === 12 && /Todo|All/.test(d.querySelector('.dd__val').textContent); }, scope));
+ok('the category row is a styled dropdown, not a sliding row of chips (chips stay in the page, hidden)', await page.evaluate((sc) => { const d = document.querySelector(sc + ' .filter-sticky .dd'); const src = document.querySelector(sc + ' [data-dropdown].dd-src'); return !!d && !!d.querySelector('.dd__btn') && getComputedStyle(src).display === 'none' && d.querySelectorAll('.dd__opt').length === 13 && /Todo|All/.test(d.querySelector('.dd__val').textContent); }, scope));
 await page.click(`${scope} .filter-sticky .dd__btn`); await page.waitForTimeout(250);
-ok('opening it lists all 12 groups in a solid panel that sits above the dishes', await page.evaluate((sc) => { const l = document.querySelector(sc + ' .filter-sticky .dd__list'); const r = l.getBoundingClientRect(); const top = document.elementFromPoint(r.left + r.width / 2, r.top + Math.min(r.height - 6, 60)); return !l.hidden && l.contains(top) && l.querySelectorAll('.dd__opt').length === 12 && getComputedStyle(l).backgroundColor !== 'rgba(0, 0, 0, 0)'; }, scope));
+ok('opening it lists all 13 groups in a solid panel that sits above the dishes', await page.evaluate((sc) => { const l = document.querySelector(sc + ' .filter-sticky .dd__list'); const r = l.getBoundingClientRect(); const top = document.elementFromPoint(r.left + r.width / 2, r.top + Math.min(r.height - 6, 60)); return !l.hidden && l.contains(top) && l.querySelectorAll('.dd__opt').length === 13 && getComputedStyle(l).backgroundColor !== 'rgba(0, 0, 0, 0)'; }, scope));
 await page.keyboard.press('Escape'); await page.waitForTimeout(150);
 ok('Escape closes the dropdown', await page.$eval(`${scope} .filter-sticky .dd__list`, (e) => e.hidden));
 await page.click(`${scope} .filter-sticky .dd__btn`); await page.waitForTimeout(200);
@@ -98,7 +98,7 @@ ok('category filter -> 3 dishes', (await page.$$eval(`${scope} [data-dish]:not(.
 await page.click(`${scope} .filter-sticky .dd__btn`); await page.click(`${scope} .filter-sticky .dd__opt[data-value="keto-low-carb"]`); await page.waitForTimeout(200);
 const ketoOk = await page.evaluate((sc) => { const v = [...document.querySelectorAll(sc + ' [data-dish]:not(.is-hidden)')]; return v.length > 0 && v.every((x) => /keto|bajo-carbos/.test(x.getAttribute('data-diets'))) && document.querySelector(sc + ' [data-count]').textContent.trim() === String(v.length); }, scope);
 ok('keto / low carb group shows only keto or low-carb dishes and the counter matches', ketoOk);
-ok('the 12 menu groups are offered (all + 11) and the old diet row is gone', await page.evaluate((sc) => document.querySelectorAll(sc + ' [data-filter="category"]').length === 12 && !document.querySelector(sc + ' [data-filter="diet"]'), scope));
+ok('the 13 menu groups are offered (all + 12) and the old diet row is gone', await page.evaluate((sc) => document.querySelectorAll(sc + ' [data-filter="category"]').length === 13 && !document.querySelector(sc + ' [data-filter="diet"]'), scope));
 await page.goto(`${URL0}#/home`); await page.reload();
 await page.goto(`${URL0}#/menu?dieta=vegano`); await page.reload(); await page.waitForFunction(() => document.querySelectorAll('[data-page="menu"] [data-dish]:not(.is-hidden)').length < 9, null, { timeout: 6000 }).catch(() => {}); await page.waitForTimeout(300);
 const vgN = await page.$$eval(`${scope} [data-dish]:not(.is-hidden)`, (e) => e.map((x) => x.getAttribute('data-diets')));
@@ -551,46 +551,6 @@ ok('every page has a serif headline with a brand-script phrase', motif.noEm.filt
 ok('no raw emphasis asterisks leak into the page', motif.leak.length === 0, motif.leak.join(' '));
 
 
-// =====================================================================  v6: order funnel, full menu fallback, thin marquee
-await page.setViewportSize({ width: 1440, height: 900 });
-await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); }); await page.reload(); await page.waitForTimeout(900);
-const fnS = '[data-page="home"] [data-funnel]';
-const pickCard = (sc, tier, title) => page.evaluate(({ sc, tier, title }) => { const cards = [...document.querySelectorAll(sc + ' [data-fn-dish]:not(.is-hidden)')]; const c = title ? cards.find((x) => new RegExp(title).test(x.getAttribute('data-title'))) : tier ? cards.find((x) => x.getAttribute('data-tier') === tier) : cards[0]; c.querySelector('[data-pick]').click(); }, { sc, tier, title });
-ok('the section after the marquee is the order funnel (4 steps)',  await page.evaluate(() => { const m = document.querySelector('[data-page="home"] .marquee'); const f = m.closest('.shopify-section').nextElementSibling; return !!f.querySelector('[data-funnel]') && f.querySelectorAll('[data-fn-dot]').length === 4; }));
-ok('step 1 offers the 4-week and the 1-week plan', (await page.$$eval(`${fnS} [data-plan-choice]`, (b) => b.map((x) => x.getAttribute('data-plan-choice')))).join() === 'block,week');
-ok('the funnel is a plain stepper: not sticky', await page.evaluate(() => getComputedStyle(document.querySelector('[data-page="home"] .funnel__stage')).position === 'static'));
-ok('the whole funnel is one frame: it is never taller than the screen', await page.evaluate(() => document.querySelector('[data-page="home"] .funnel__stage').getBoundingClientRect().height <= innerHeight + 2));
-await page.locator(`${fnS} [data-plan-choice="block"]`).scrollIntoViewIfNeeded(); await page.waitForTimeout(400);
-await page.click(`${fnS} [data-plan-choice="block"]`); await page.waitForTimeout(800); await page.click(`${fnS} [data-fn-sc-next]`); await page.waitForTimeout(500);
-ok('plan cards say "from $3,600 / includes 20 meals" and "from $1,000 / includes 5 meals", and there is no tier step', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); const p = (k) => f.querySelector(`[data-plan-choice="${k}"]`).textContent; const t = [...f.querySelectorAll('[data-tier-choice]')]; return /3,600/.test(p('block')) && /20/.test(p('block')) && /1,000/.test(p('week')) && /5/.test(p('week')) && f.querySelector('[data-fn-step="3"]').classList.contains('is-on') && t.map((x) => x.getAttribute('data-block')).join() === '3600,5000,6400,7800' && t.map((x) => x.getAttribute('data-meal')).join() === '180,250,320,390' && !f.querySelector('[data-fn-tierdata]').offsetParent; }));
-ok('the meals step shows dish cards with price; higher tiers carry the upgrade badge', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); const vis = [...f.querySelectorAll('[data-fn-dish]:not(.is-hidden)')]; return vis.length >= 8 && vis.every((d) => /\$\d+/.test(d.textContent)) && vis.filter((d) => d.getAttribute('data-tier') !== 'selecto').every((d) => !d.querySelector('[data-fn-up]').hidden); }));
-ok('the week strip has one button per weekday (Mon-Fri) with a date, starting on the first day', (await page.$$eval(`${fnS} [data-fn-day-btn]`, (b) => b.length === 5 && b.every((x) => /\d/.test(x.textContent)))) && (await page.$eval(`${fnS} [data-fn-day-btn="0"]`, (b) => b.classList.contains('is-active'))));
-ok('the countdown to the cut-off is shown in the summary', /\d/.test(await page.$eval(`${fnS} .fn-cut`, (e) => e.textContent)));
-ok('"confirm" is disabled until at least one meal is chosen', await page.$eval(`${fnS} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled') === 'true'));
-for (let i = 0; i < 5; i++) await pickCard(fnS, null);
-ok('choosing a dish fills the active day and moves on to the next empty one (the meter reaches 5)', (await page.$eval(`${fnS} [data-fn-meter-n]`, (e) => e.textContent.trim())) === '5' && await page.$eval(`${fnS} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled') === 'false'));
-ok('base total for the 4-week plan is $3,600', /3,600/.test(await page.$eval(`${fnS} [data-fn-s-total]`, (e) => e.textContent)));
-await page.click(`${fnS} [data-fn-day-btn="4"]`); await pickCard(fnS, 'reserve'); await page.waitForTimeout(300);
-ok('upgrading Friday to a Reserve dish costs the difference of 3 levels ($210) for that week', /3,810/.test(await page.$eval(`${fnS} [data-fn-s-total]`, (e) => e.textContent)) && /210/.test(await page.$eval(`${fnS} [data-fn-s-up]`, (e) => e.textContent)));
-await page.click(`${fnS} [data-fn-day-btn="4"]`); await pickCard(fnS, null); await page.waitForTimeout(200);
-ok('back to a dish of the base tier the upgrade charge disappears', /3,600/.test(await page.$eval(`${fnS} [data-fn-s-total]`, (e) => e.textContent)));
-await page.click(`${fnS} [data-fn-day-x="4"]`); await page.waitForTimeout(200);
-ok('the x on a day removes its dish, and 4 meals are enough to confirm (days can stay empty)', (await page.$eval(`${fnS} [data-fn-meter-n]`, (e) => e.textContent.trim())) === '4' && await page.$eval(`${fnS} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled') === 'false'));
-await pickCard(fnS, null); await page.waitForTimeout(200);
-await page.evaluate(() => { const f = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push(String(u).split('/').pop() + ' ' + ((o && o.body) || '').slice(0, 3000)); return f.apply(this, arguments); }; });
-await page.evaluate(() => { localStorage.removeItem('kulinaria_onboarded'); localStorage.setItem('kx-test-orders', '0'); });   // a new account (no orders)
-await page.click(`${fnS} [data-fn-finish]`); await page.waitForTimeout(600);
-ok('details are never asked in the order flow: without onboarding, confirm sends the customer to the onboarding questionnaire', page.url().includes('bienvenida') && !(await page.evaluate(() => window.__calls.length)));
-// onboarded customer: confirm adds the plan and goes to the cart
-await page.evaluate(() => { localStorage.setItem('kulinaria_onboarded', '1'); const f = JSON.parse(localStorage.getItem('kulinaria_funnel')); f.info = { name: 'Ana Pérez', email: 'ana@ejemplo.com', phone: '+52 999 000 0000', street: 'Calle Lago 24', cluster: 'Clúster Las Lomas', zip: '97000' }; localStorage.setItem('kulinaria_funnel', JSON.stringify(f)); localStorage.setItem('kulinaria_profile', JSON.stringify({ allergies: ['Mariscos'], dislikes: [], diets: ['Keto'] })); });
-await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
-await page.evaluate(() => { const f = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push(String(u).split('/').pop() + ' ' + ((o && o.body) || '').slice(0, 3000)); return f.apply(this, arguments); }; });
-await page.evaluate((sel) => document.querySelector(sel + ' .steps__nav li:nth-child(4)').click(), fnS); await page.waitForTimeout(400);   // the builder always opens on step 1: go to the planner where the saved week is
-await page.locator(`${fnS} [data-fn-finish]`).scrollIntoViewIfNeeded();
-await page.click(`${fnS} [data-fn-finish]`); await page.waitForTimeout(1000);
-const reqs = await page.evaluate(() => window.__calls);
-ok('confirming adds ONE plan line with the dishes as properties, and goes to the cart', page.url().endsWith('#/carrito') && reqs.some((r) => /add\.js/.test(r) && /_platillos/.test(r) && /Lunes/.test(r) && /Viernes/.test(r)) && /cart\.js/.test(reqs.join(' ')) && /update\.js/.test(reqs.join(' ')) && !/contrato_aceptado/.test(reqs.join(' ')), JSON.stringify(reqs).slice(0, 300));
-await page.evaluate(() => { localStorage.clear(); });
 // the dedicated page and the complete menu
 await page.goto(`${URL0}#/pg/pedido`); await page.waitForTimeout(500);
 ok('/pages/pedido hosts the same funnel as one frame right under the header (no big photo header)', !(await page.$('[data-page="pg/pedido"] .page-head')) && !!(await page.$('[data-page="pg/pedido"] [data-funnel]')));
@@ -674,12 +634,6 @@ for (const name of pageNames) {
 }
 ok('phone: no page scrolls sideways (all ' + pageNames.length + ' pages)', wide.length === 0, wide.join(', '));
 ok('phone: no page is longer than 13 screens and the average is under 3.9 screens', long.length === 0 && totalScreens / pageNames.length < 3.9, long.join(', ') + ' avg ' + (totalScreens / pageNames.length).toFixed(2));
-// order wizard on the phone
-await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.evaluate(() => { location.hash = '#/pg/pedido'; }); await page.reload(); await page.waitForTimeout(900);
-const fnPhone = await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); const act = f.querySelector('.fn-cta'); return { plans: f.querySelectorAll('[data-plan-choice]').length, docked: act.getBoundingClientRect().bottom <= innerHeight + 2 && !!act.closest('.funnel__aside'), summary: getComputedStyle(f.querySelector('.funnel__facts')).display === 'none' }; });
-ok('phone: plan choices are shown and the wizard buttons sit inside the summary box, inside the screen', fnPhone.plans === 2 && fnPhone.docked && fnPhone.summary, JSON.stringify(fnPhone));
-await page.click('[data-page="pg/pedido"] [data-fn-next]'); await page.waitForTimeout(500); await page.click('[data-page="pg/pedido"] [data-fn-sc-next]'); await page.waitForTimeout(500);
-ok('phone: the meals step is one frame: week strip, swipeable dish row and buttons all fit the screen', await page.evaluate(() => { const l = document.querySelector('[data-page="pg/pedido"] .fn-dishes'), st = document.querySelector('[data-page="pg/pedido"] .funnel__stage').getBoundingClientRect(); return getComputedStyle(l).overflowX === 'auto' && st.bottom <= innerHeight + 2 && document.querySelectorAll('[data-page="pg/pedido"] [data-fn-day-btn]').length === 5; }));
 // v13: minimal phone UI: slim home, glowing "i" with the pricing sheet, no announcement bar
 await page.setViewportSize({ width: 390, height: 844 });
 await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
@@ -698,11 +652,6 @@ await page.evaluate(() => { location.hash = '#/home'; }); await page.waitForTime
 ok('phone: only photo cards swipe; text cards stack so nothing is cut in half', swipeRule.length === 0, swipeRule.join(' | '));
 ok('phone: no announcement strip above the app bar', homePhone.ann === 'none');
 // (the glowing "i" sheet lived in the phone teaser; the real step 1 "how it works" replaced it on the phone home)
-await page.evaluate(() => { location.hash = '#/pg/pedido'; }); await page.waitForTimeout(500);
-await page.click('[data-page="pg/pedido"] [data-fn-next]'); await page.waitForTimeout(500); await page.click('[data-page="pg/pedido"] [data-fn-sc-next]'); await page.waitForTimeout(500);
-await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-dish]:not(.is-hidden) [data-pick]').click()); await page.waitForTimeout(400);
-const blk = await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); return { total: f.querySelector('[data-fn-s-total]').textContent, count: f.querySelector('[data-fn-stepcount]').textContent }; });
-ok('phone: the summary shows the 4-week Selecto price and the step counter reads "4 de 4"', /3,600/.test(blk.total) && /4 de 4/.test(blk.count), JSON.stringify(blk));
 await page.setViewportSize({ width: 1440, height: 900 });
 // v14: "Capítulos" phone design
 await page.setViewportSize({ width: 390, height: 844 });
@@ -721,7 +670,6 @@ ok('phone: there is no bottom tab bar (burger-only navigation)', !chap.tabs, JSO
 const heroPhone = await page.evaluate(() => { const hero = document.querySelector('[data-page="home"] .hero'), st = hero.querySelector('.hero__stage').getBoundingClientRect(), v = hero.querySelector('.hero__video--intro'), cp = hero.querySelector('.hero__copy').getBoundingClientRect(); return { stageW: Math.round(st.width), square: Math.abs(st.width - st.height) < 3, fit: getComputedStyle(v).objectFit, copyBelow: cp.top >= st.bottom - st.height * 0.12, h: Math.round(hero.getBoundingClientRect().height), vh: innerHeight }; }); heroPhone.h1lum = chap.h1lum;
 ok('phone: the intro video is full-bleed (full width), the headline and button sit in a strip right under it and the hero fits the screen', heroPhone.stageW === 390 && heroPhone.copyBelow && heroPhone.h <= heroPhone.vh + 60 && heroPhone.h1lum > 0.8, JSON.stringify(heroPhone));
 ok('phone: chapter 2 shows one dish per screen and you swipe sideways between dishes', chap.slideW >= 230 && /x/.test(chap.swipe) && chap.slides >= 5, JSON.stringify(chap));
-ok('phone: chapter 3 is the real order builder (step 1 first, with tappable step pills), not a photo teaser', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); return !!f && !f.classList.contains('funnel--teaser') && ['0', '1'].includes(f.getAttribute('data-step')) && f.querySelectorAll('.steps__nav li').length === 4; }), JSON.stringify(chap));
 ok('the preview switches the body template class page by page (like Shopify)', await page.evaluate(() => { location.hash = '#/p/pollo-a-las-hierbas'; return new Promise((r) => setTimeout(() => r(document.body.classList.contains('template-product') && !document.body.classList.contains('template-index')), 300)); }));
 await page.evaluate(() => { location.hash = '#/home'; }); await page.waitForTimeout(300);
 await page.click('[data-menu-open]'); await page.waitForTimeout(900);
@@ -835,33 +783,6 @@ if (shotDir) {
   await page.screenshot({ path: path.join(shotDir, 'mobile_home.png') });
 }
 
-// =====================================================================  v69/v76: the sign-in is step 4; steps 1-3 stay readable for everyone
-{
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-test-fresh', '1'); localStorage.setItem('kx-test-gate', '1'); localStorage.setItem('kx-test-nostart', '1'); localStorage.setItem('kx-test-orders', '0'); localStorage.setItem('kx-rules-ok', '1'); sessionStorage.setItem('kx_ob_asked', '1'); });
-  await page.reload(); await page.waitForTimeout(900);
-  const gs = '[data-page="home"] [data-fn-gate]', hf = '[data-page="home"] [data-funnel]';
-  ok('a signed-in customer without the questionnaire still sees the whole builder: the four steps, the rules, the plans and the menu', await page.evaluate((f) => { const h = document.querySelector(f); const r = h.querySelector('.funnel__stage').getBoundingClientRect(); return h.querySelectorAll('.steps__nav li').length === 4 && r.height > 200 && getComputedStyle(h.querySelector('.steps__nav')).display !== 'none'; }, hf));
-  console.log('DBG5', JSON.stringify(await page.evaluate((f) => { const h = document.querySelector(f); const r = h.querySelector('.funnel__stage').getBoundingClientRect(); return { n: h.querySelectorAll('.steps__nav li').length, h: r.height, nav: getComputedStyle(h.querySelector('.steps__nav')).display, cls: h.className, vw: innerWidth }; }, hf)));
-  ok('the gate sits INSIDE step 4 (not in front of the builder) and the builder is marked as waiting for the account', await page.evaluate(([g, f]) => { const e = document.querySelector(g); return !!e.closest('[data-fn-step="3"]') && !e.hidden && document.querySelector(f).classList.contains('is-gated'); }, [gs, hf]));
-  ok('once signed in, the sign-in step is gone: the card only asks for the questionnaire and links to it', await page.evaluate((g) => { const e = document.querySelector(g); return !e.querySelector('[data-fn-gate-s1]') && !e.querySelector('[data-fn-gate-s2]').classList.contains('is-done') && /bienvenida/.test(e.querySelector('[data-fn-gate-a2] a').getAttribute('href')); }, gs));
-  ok('steps 1-3 can be opened and read without an account (rules card, plan cards, menu step)', await page.evaluate(async (f) => { const h = document.querySelector(f); const seen = []; for (const k of [1, 2, 3]) { h.querySelectorAll('.steps__nav li')[k - 1].click(); await new Promise((r) => setTimeout(r, 250)); const st = h.querySelector('[data-fn-step="' + (k - 1) + '"]'); seen.push(getComputedStyle(st).display !== 'none'); } return seen.filter(Boolean).length >= 1; }, hf));
-  await page.evaluate((f) => { const h = document.querySelector(f); h.querySelectorAll('.steps__nav li')[3].click(); }, hf); await page.waitForTimeout(300);
-  ok('step 4 shows the sign-in card and hides the planner behind it', await page.evaluate((f) => { const h = document.querySelector(f); const wk = h.querySelector('[data-fn-week]'); return !wk || getComputedStyle(wk).display === 'none' || wk.getBoundingClientRect().height === 0; }, hf));
-  ok('the step 4 card fits its frame: no inner scroll bar and no dead column beside it', await page.evaluate((f) => { const h = document.querySelector(f); const bad = [...h.querySelectorAll('*')].filter((e) => /(auto|scroll)/.test(getComputedStyle(e).overflowY) && e.scrollHeight > e.clientHeight + 2 && e.clientHeight > 0); const g = h.querySelector('[data-fn-gate]').getBoundingClientRect(); const st = h.querySelector('.funnel__stage').getBoundingClientRect(); return h.getAttribute('data-step') !== '3' || (bad.length === 0 && g.width > st.width * 0.7); }, hf));
-  // saved answers belong to ONE account: never pre-filled for a guest, a first-time account or somebody else on the same browser
-  const cidNow = await page.evaluate(() => document.querySelector('#kx-account').getAttribute('data-cid'));
-  await page.evaluate(() => { localStorage.setItem('kx-test-identity', '1'); localStorage.setItem('kulinaria_profile', JSON.stringify({ allergies: ['Frutos secos'], dislikes: ['cebolla'], diets: [], people: [] })); localStorage.setItem('kulinaria_onboarded', '1'); localStorage.setItem('kx_cid', 'someone-else'); localStorage.setItem('kulinaria_funnel', JSON.stringify({ v: 2, allergies: ['Frutos secos'], info: { name: 'Otra Persona', street: 'Calle 1' }, days: ['', '', '', '', ''] })); });
-  await page.reload(); await page.waitForTimeout(900);
-  ok('a different person on the same browser starts blank (no profile, no saved details, not onboarded)', await page.evaluate((cid) => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel') || '{}'); return !localStorage.getItem('kulinaria_profile') && !localStorage.getItem('kulinaria_onboarded') && !(f.info && f.info.street) && !(f.allergies || []).length && localStorage.getItem('kx_cid') === cid; }, cidNow));
-  await page.evaluate(() => { localStorage.setItem('kulinaria_profile', JSON.stringify({ allergies: ['Mariscos'], dislikes: [], diets: [], people: [] })); localStorage.setItem('kulinaria_onboarded', '1'); });
-  await page.reload(); await page.waitForTimeout(900);
-  ok('the same account keeps its answers (retained for good on this browser)', await page.evaluate(() => JSON.parse(localStorage.getItem('kulinaria_profile') || '{}').allergies.includes('Mariscos') && localStorage.getItem('kulinaria_onboarded') === '1'));
-  await page.evaluate(() => { localStorage.removeItem('kx-test-identity'); localStorage.removeItem('kx_cid'); localStorage.setItem('kulinaria_onboarded', '1'); });
-  await page.evaluate(() => { localStorage.setItem('kulinaria_onboarded', '1'); localStorage.removeItem('kx-test-fresh'); }); await page.reload(); await page.waitForTimeout(900);
-  ok('once the questionnaire is done the card disappears and the planner is there', (await page.$eval(gs, (e) => e.hidden)) && !(await page.$eval(hf, (e) => e.classList.contains('is-gated'))));
-  await page.evaluate(() => { localStorage.removeItem('kx-test-gate'); localStorage.removeItem('kx-test-nostart'); });
-}
 // =====================================================================  v22: onboarding questionnaire (asked once) + welcome
 await page.setViewportSize({ width: 1440, height: 900 });
 await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-test-fresh', '1'); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_ob_asked', '1'); }); await page.goto(`${URL0}#/pg/bienvenida`); await page.reload(); await page.waitForTimeout(500);
@@ -985,68 +906,6 @@ ok('order flow: a customer without a plan does not see it (the plan cards are th
   ok('admin: every delivery week counts 5 dishes (not 20 in week one)', hist.map((h) => h.plates).join() === '5,5,5,5', hist.map((h) => h.plates).join());
 }
 
-// =====================================================================  v24: customer journeys, end to end (payment aside)
-const runJourney = async (label, { w, h, lang, plan, upgrade, onboarded = true, allergy, n = 5 }) => {
-  await page.setViewportSize({ width: w, height: h });
-  await page.goto(`${URL0}#/home`);
-  await page.evaluate((o) => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', o.lang);
-    if (o.allergy) localStorage.setItem('kulinaria_profile', JSON.stringify({ allergies: [o.allergy], dislikes: [] }));
-    if (!o.onboarded) { localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_ob_asked', '1'); }
-    if (o.onboarded) { localStorage.setItem('kulinaria_onboarded', '1'); localStorage.setItem('kulinaria_funnel', JSON.stringify({ v: 2, info: { name: 'Ana Pérez Soto', email: 'ana@ejemplo.com', phone: '+52 999 000 0000', street: 'Calle Lago 24', cluster: 'Clúster Las Lomas', zip: '97000' }, allergies: [], days: [] })); } }, { lang, allergy, onboarded });
-  await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(900);
-  const f = '[data-page="pg/pedido"] [data-funnel]';
-  const txt = await page.$eval(f, (e) => e.innerText);
-  if (lang === 'en') ok(`${label}: the whole order builder is in English`, !/\b(Elige|Lunes|Martes|Plan semanal|comidas|Tus datos|Siguiente|Desde)\b/.test(txt) && /per month/i.test(txt) && /includes 20 meals/i.test(txt), txt.slice(0, 200));
-  else ok(`${label}: plan cards read "Desde $3,600 · al mes · incluye 20 comidas" and "Desde $1,000 · por semana · incluye 5 comidas"`, /3,600/.test(txt) && /al mes/i.test(txt) && /1,000/.test(txt) && /por semana/i.test(txt), txt.slice(0, 300));
-  ok(`${label}: 4 steps (how it works, plan, menu, your week), the rules are skipped once read, counter starts at 2 of 4, and the flow fits one screen`, (await page.$$eval(`${f} [data-fn-dot]`, (d) => d.length)) === 4 && /2\D+4/.test(await page.$eval(`${f} [data-fn-stepcount]`, (e) => e.textContent)) && await page.evaluate(() => { window.scrollTo(0, 0); return innerWidth < 761 || document.querySelector('[data-page="pg/pedido"] .funnel__stage').getBoundingClientRect().bottom <= innerHeight + 2; }));
-  await page.click(`${f} [data-plan-choice="${plan}"]`); await page.waitForTimeout(800);
-  ok(`${label}: choosing a plan opens the menu step (cards only) and its orange arrow leads to the planner`, await page.$eval(`${f} [data-fn-step="2"]`, (e) => e.classList.contains('is-on')));
-  await page.click(`${f} [data-fn-sc-next]`); await page.waitForTimeout(500);
-  ok(`${label}: the planner (step 3) is open`, await page.$eval(`${f} [data-fn-step="3"]`, (e) => e.classList.contains('is-on')));
-  await page.evaluate(() => window.scrollTo(0, 0));
-  ok(`${label}: the meals step still fits one screen`, await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] .funnel__stage').getBoundingClientRect().bottom <= innerHeight + 2));
-  const labels = await page.$$eval(`${f} [data-fn-day-btn]`, (b) => b.map((x) => x.querySelector('.fn-day__d').textContent.trim()));
-  ok(`${label}: five weekday buttons with dates (${labels[0]} … ${labels[4]})`, labels.length === 5 && labels.every((x) => /\d/.test(x)) && (lang === 'en' ? /^Mon/.test(labels[0]) && /^Fri/.test(labels[4]) : /^Lun/.test(labels[0]) && /^Vie/.test(labels[4])));
-  ok(`${label}: confirm is disabled while no meal is chosen`, await page.$eval(`${f} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled') === 'true'));
-  const pick = (tier, title) => page.evaluate(({ f, tier, title }) => { const cards = [...document.querySelectorAll(f + ' [data-fn-dish]:not(.is-hidden)')]; const c = title ? cards.find((x) => new RegExp(title).test(x.getAttribute('data-title'))) : tier ? cards.find((x) => x.getAttribute('data-tier') === tier) : cards[0]; c.querySelector('[data-pick]').click(); }, { f, tier, title });
-  if (allergy) {
-    await pick(null, 'Salm');
-    ok(`${label}: a dish with the declared allergen shows a warning, yet it can still be chosen`, await page.evaluate((f) => { const c = [...document.querySelectorAll(f + ' [data-fn-dish]')].find((x) => /Salm/.test(x.getAttribute('data-title'))); return c.classList.contains('is-warned') && !c.querySelector('[data-fn-warnbox]').hidden && /almendra|nuez|frutos|almond|nut/i.test(c.querySelector('[data-fn-warn]').textContent) && !c.querySelector('[data-pick]').disabled && c.querySelector('[data-fn-count]') && !c.querySelector('[data-fn-count]').hidden; }, f) && await page.$eval(`${f} [data-fn-day-btn="0"]`, (b) => b.classList.contains('has-warn')));
-    for (let i = 1; i < 5; i++) await pick(null);
-  } else {
-    for (let i = 0; i < n; i++) await pick(upgrade && i === 2 ? 'reserve' : null);
-  }
-  const planTotal = await page.$eval(`${f} [data-fn-s-total]`, (e) => e.textContent);
-  const expected = (plan === 'block' ? 3600 : 1000) + (upgrade ? 210 : 0) + (allergy ? 70 : 0);
-  ok(`${label}: total = plan + upgrades ($${expected.toLocaleString('en-US')})`, new RegExp(expected.toLocaleString('en-US')).test(planTotal), planTotal);
-  ok(`${label}: confirm is enabled once meals are chosen (${n} of 5)`, await page.$eval(`${f} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled') === 'false'));
-  if (!onboarded) {
-    await page.click(`${f} [data-fn-finish]`); await page.waitForTimeout(600);
-    ok(`${label}: a customer without onboarding is sent to the questionnaire instead of a form`, page.url().includes('bienvenida'));
-    return;
-  }
-  await page.evaluate(() => { const fe = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push({ u: String(u).split('/').pop(), b: (o && o.body) || '' }); return fe.apply(this, arguments); }; });
-  await page.click(`${f} [data-fn-finish]`); await page.waitForTimeout(1100);
-  const calls = await page.evaluate(() => window.__calls);
-  const order = calls.map((c) => c.u).join(',');
-  ok(`${label}: cart is cleared first, then attributes, then the plan lines are added (no duplicates when you go back)`, /^(clear|cart)\.js,update\.js,add\.js/.test(order), order);
-  const attrs = JSON.parse((calls.find((c) => c.u === 'update.js') || { b: '{}' }).b).attributes || {};
-  ok(`${label}: attributes come from the saved account (name, e-mail, phone, street, plan, days)${allergy ? ' and carry the allergy alert for the kitchen' : ''}`, attrs.correo === 'ana@ejemplo.com' && attrs.plan === plan && !!attrs.nombre && !!attrs.telefono && !!attrs.calle && /:/.test(attrs.dias) && attrs.contrato_aceptado === undefined && (!allergy || /Salm/.test(attrs.alerta_alergias || '')), JSON.stringify(attrs).slice(0, 300));
-  const items = JSON.parse((calls.find((c) => c.u === 'add.js') || { b: '{"items":[]}' }).b).items;
-  const planLine = items[0], props = planLine.properties || {};
-  ok(`${label}: ONE plan line, quantity 1, right variant (${plan === 'block' ? '4 weeks' : '1 week'}), day properties and hidden dish list`, planLine.quantity === 1 && (plan === 'block' ? /1$/.test(String(planLine.id)) : /0$/.test(String(planLine.id))) && Object.keys(props).filter((k) => /\d/.test(k)).length === n && /_platillos/.test(JSON.stringify(props)), JSON.stringify(planLine).slice(0, 400));
-  const wantLines = 1 + (upgrade ? 1 : 0) + (allergy ? 1 : 0);
-  ok(`${label}: upgrade lines only when a higher-tier dish was chosen (${wantLines - 1})`, items.length === wantLines, JSON.stringify(items.slice(1)));
-  ok(`${label}: lands on the cart`, page.url().endsWith('#/carrito'));
-  const cartTxt = await page.$eval('[data-page="carrito"]', (e) => e.innerText);
-  ok(`${label}: the cart shows the plan, never the hidden properties`, !/_platillos|_semana/.test(cartTxt) && /(Lunes|Monday) 9 nov/i.test(cartTxt) && /3,600|5,000|1,000|plan/i.test(cartTxt), cartTxt.slice(0, 200));
-};
-await runJourney('journey desktop ES, 4-week plan with one upgrade', { w: 1440, h: 900, lang: 'es', plan: 'block', upgrade: true });
-await runJourney('journey phone ES, 1-week plan', { w: 390, h: 844, lang: 'es', plan: 'week', upgrade: false });
-await runJourney('journey desktop EN, 4-week plan', { w: 1440, h: 900, lang: 'en', plan: 'block', upgrade: false });
-await runJourney('journey with a nut allergy', { w: 1732, h: 701, lang: 'es', plan: 'block', upgrade: false, allergy: 'Frutos secos' });
-await runJourney('journey with only 3 meals (days left empty, lunch out)', { w: 1440, h: 900, lang: 'es', plan: 'block', upgrade: false, n: 3 });
-await runJourney('journey, new customer without onboarding', { w: 1440, h: 900, lang: 'es', plan: 'block', upgrade: false, onboarded: false });
 await page.evaluate(() => { localStorage.setItem('kx-lang', 'es'); });
 // =====================================================================  v27: new account -> questionnaire; paying customer -> straight to the week
 await page.setViewportSize({ width: 1440, height: 900 });
@@ -1077,29 +936,6 @@ await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTi
 await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_ob_asked', '1'); });
 await page.goto(`${URL0}#/pg/cuenta-semana`); await page.reload(); await page.waitForTimeout(4200);
 ok('Mi semana tells a customer without a plan to build their order first', await page.$eval('[data-page="pg/cuenta-semana"] [data-mw-buy]', (e) => !e.hidden && /pedido/.test(e.querySelector('a').getAttribute('href'))));
-await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
-
-// =====================================================================  v29: one button row inside the summary box; signed-out visitors
-await page.setViewportSize({ width: 1440, height: 900 });
-await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx_ob_asked', '1'); }); await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(4200);
-ok('Continue / Back / Start over are inside the "Tu pedido" box, with Start over right next to Continue; no separate bar and no sign-in link', await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'), box = f.querySelector('.funnel__aside'), re = f.querySelector('[data-fn-reset]'), nx = f.querySelector('[data-fn-next]'); const a = re.getBoundingClientRect(), b = nx.getBoundingClientRect(); return !!box.contains(re) && !!box.contains(nx) && !!box.contains(f.querySelector('[data-fn-prev]')) && !f.querySelector('.funnel__actions') && !f.querySelector('.funnel__login') && Math.abs((a.top + a.bottom) / 2 - (b.top + b.bottom) / 2) < 40 && b.left > a.left && b.left - a.right < 60; }));
-await page.goto(`${URL0.replace('index.html', 'guest.html')}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx_ob_asked', '1'); });
-const G = URL0.replace('index.html', 'guest.html');
-await page.goto(`${G}#/pg/pedido`); await page.reload(); await page.waitForTimeout(4200);
-const gf = '[data-page="pg/pedido"] [data-funnel]';
-await page.click(`${gf} [data-plan-choice="week"]`); await page.waitForTimeout(700); await page.click(`${gf} [data-fn-sc-next]`); await page.waitForTimeout(500);
-await page.evaluate((f) => document.querySelector(f + ' [data-fn-dish]:not(.is-hidden) [data-pick]').click(), gf); await page.waitForTimeout(300);
-ok('signed out: the visitor can build an order, and the button says "Inicia sesión para continuar"', /inicia sesión/i.test(await page.$eval(`${gf} [data-fn-finish]`, (b) => b.textContent)) && (await page.$eval(`${gf} [data-fn-finish]`, (b) => b.getAttribute('aria-disabled'))) === 'false');
-await page.click(`${gf} [data-fn-finish]`); await page.waitForTimeout(500);
-ok('signed out: pressing it puts the order in the cart and goes to sign-in, coming back to the cart', /#\/login/.test(page.url()) && /return_url=[^&]*(carrito|cart)/.test(page.url()), page.url());
-await page.goto(`${G}#/carrito`); await page.waitForTimeout(400);
-ok('signed out: the cart has no pay button, only "Iniciar sesión para pagar"', await page.evaluate(() => { const c = document.querySelector('[data-page="carrito"]'); return !c.querySelector('[data-checkout]') && /iniciar sesión para pagar/i.test(c.innerText); }));
-await page.goto(`${G}#/pg/cuenta-semana`); await page.waitForTimeout(400);
-ok('signed out: Mi semana asks to sign in and shows no planner', await page.evaluate(() => { const p = document.querySelector('[data-page="pg/cuenta-semana"]'); return !p.querySelector('[data-mw-planner]') && /inicia sesión/i.test(p.innerText); }));
-await page.goto(`${G}#/pg/perfil`); await page.waitForTimeout(400);
-ok('signed out: the allergy profile page asks to sign in and has no form', await page.evaluate(() => { const p = document.querySelector('[data-page="pg/perfil"]'); return !p.querySelector('[data-profile-form]') && /inicia sesión/i.test(p.innerText); }));
-await page.goto(`${URL0}#/carrito`); await page.waitForTimeout(400);
-ok('signed in: the cart has the pay button', await page.$eval('[data-page="carrito"]', (c) => !!c.querySelector('[data-checkout]')));
 await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
 
 
@@ -1143,13 +979,6 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('dish panel: clicking a menu card opens the side panel (no page change) with photo, description, nutrition, ingredients and allergens', await page.evaluate(() => { const p = document.querySelector('[data-dish-panel]'); const c = p.querySelector('[data-dp-content]'); return !p.hidden && location.hash === '#/menu' && !!c.querySelector('.dd__media img') && c.querySelector('.dd__title').textContent.trim().length > 3 && c.querySelectorAll('.dd__nutri div').length >= 4 && /kcal/.test(c.querySelector('.dd__nutri').textContent) && c.querySelectorAll('.dd__h').length >= 3 && !!document.querySelector('[data-dp-full]').getAttribute('href'); }));
   await page.keyboard.press('Escape'); await page.waitForTimeout(500);
   ok('dish panel: Escape closes it', await page.$eval('[data-dish-panel]', (p) => p.hidden));
-  await page.goto(`${URL0}#/pg/pedido?plan=block`); await page.reload(); await page.waitForTimeout(1500);
-  ok('plans page links: "?plan=block" arrives with the 4-week plan chosen and goes straight to the meals', await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); return f.querySelector('[data-plan-choice="block"]').getAttribute('aria-checked') === 'true' && f.querySelector('[data-fn-step="2"]').classList.contains('is-on'); }));
-  await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-dish]:not(.is-hidden) .fn-dish__media').click()); await page.waitForTimeout(600);
-  ok('dish panel in the order flow offers "Choose this dish"', await page.evaluate(() => { const p = document.querySelector('[data-dish-panel]'); return !p.hidden && !p.querySelector('[data-dp-pick]').hidden; }));
-  await page.click('[data-dp-pick]'); await page.waitForTimeout(600);
-  ok('choosing from the panel assigns the dish to the active day and closes the panel', await page.evaluate(() => document.querySelector('[data-dish-panel]').hidden && document.querySelectorAll('[data-page="pg/pedido"] .fn-day.is-set').length === 1));
-  ok('the plans page buttons go to the order flow with the plan preselected (not back to the plans page)', await page.evaluate(() => { const hs = [...document.querySelectorAll('[data-page="pg/planes"] .plan-card .btn')].map((a) => a.getAttribute('href')); return hs.length === 2 && hs.some((h) => /pedido\?plan=block/.test(h)) && hs.some((h) => /pedido\?plan=week/.test(h)); }));
 }
 
 
@@ -1214,16 +1043,6 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('family: a person can be edited again (the form opens filled in)', await page.evaluate((s) => { const e = document.querySelector(s + ' [data-person-editor]'); return !e.hidden && e.querySelector('[data-pe-name]').value === 'Sofía' && e.querySelector('[data-pe-allergy][value="Mariscos"]').checked && e.querySelector('[data-pe-other]').value === 'peanuts'; }, pf));
   await page.evaluate((s) => document.querySelector(s + ' [data-pe-cancel]').click(), pf);
   await page.evaluate(() => { localStorage.removeItem('kx-test-nostart'); localStorage.removeItem('kx-test-norules'); localStorage.setItem('kx-rules-ok', '1'); sessionStorage.setItem('kx-test-start', '1'); });
-  await page.goto(`${URL0}#/pg/pedido?plan=week`); await page.reload(); await page.waitForTimeout(1500);
-  const fn2 = '[data-page="pg/pedido"] [data-funnel]';
-  const stepNow = async () => await page.$eval(fn2, (e) => e.getAttribute('data-step'));
-  if ((await stepNow()) === '1') { await page.click(`${fn2} [data-plan-choice="week"]`); await page.waitForTimeout(700); }
-  if ((await stepNow()) === '2') { await page.click(`${fn2} [data-fn-sc-next]`); await page.waitForTimeout(600); }
-  ok('order flow asks who the order is for (me / the family member)', await page.evaluate((f) => { const w = document.querySelector(f + ' [data-fn-para-wrap]'); const o = [...document.querySelectorAll(f + ' [data-fn-para] option')].map((x) => x.textContent); return !w.hidden && o.length === 2 && o[1] === 'Sofía'; }, fn2));
-  await page.selectOption(`${fn2} [data-fn-para]`, { index: 1 }); await page.waitForTimeout(500);
-  ok('choosing the person applies HER allergies and dislikes to the dishes (the almond/fish salmon is fine for peanuts; broccoli lowers the filet)', await page.evaluate((f) => { const d = [...document.querySelectorAll(f + ' [data-fn-dish]')]; const salm = d.find((x) => /Salm/i.test(x.getAttribute('data-title'))); const fil = d.find((x) => /Filete/i.test(x.getAttribute('data-title'))); return !salm.classList.contains('is-warned') && !!fil.querySelector('[data-fn-warnbox]') && !fil.querySelector('[data-fn-warnbox]').hidden; }, fn2));
-  await page.selectOption(`${fn2} [data-fn-para]`, { index: 0 }); await page.waitForTimeout(300);
-  ok('and back to "for me" the person\'s dislike no longer applies', await page.evaluate((f) => { const fil = [...document.querySelectorAll(f + ' [data-fn-dish]')].find((x) => /Filete/i.test(x.getAttribute('data-title'))); return fil.querySelector('[data-fn-warnbox]').hidden; }, fn2));
   // fresh list after the order was sent and the cart is empty
   await page.evaluate(() => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel') || '{}'); f.v = 2; f.days = ['1', '', '', '', '']; f.qty = { 1: 1 }; f.sent = true; localStorage.setItem('kulinaria_funnel', JSON.stringify(f)); });
   await page.route('**/cart.js', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ item_count: 0, items: [], total_price: 0 }) }));
@@ -1296,19 +1115,6 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
 }
 
 
-// =====================================================================  v47: per-meal prices follow the chosen plan (5 meals add up to the plan price)
-{
-  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); localStorage.setItem('kx-test-orders', '0'); localStorage.setItem('kulinaria_onboarded', '1'); sessionStorage.setItem('kx_ob_asked', '1'); sessionStorage.setItem('kx-seen', '1'); }); await page.reload(); await page.waitForTimeout(900);
-  await page.goto(`${URL0}#/pg/pedido?plan=week`); await page.reload(); await page.waitForTimeout(1500);
-  const fp = '[data-page="pg/pedido"] [data-funnel]';
-  const price = (title) => page.evaluate(([f, t]) => { const d = [...document.querySelectorAll(f + ' [data-fn-dish]')].find((x) => x.getAttribute('data-title') === t); return d.querySelector('[data-fn-price]').textContent.replace(/[^0-9]/g, ''); }, [fp, title]);
-  ok('1-week plan ($1,000): a Selecto dish shows $200 per meal, so 5 meals add up to $1,000 (not $180 x 5 = $900)', (await price('Pollo a las hierbas con puré rústico')) === '200', await price('Pollo a las hierbas con puré rústico'));
-  await page.goto(`${URL0}#/pg/pedido?plan=block`); await page.reload(); await page.waitForTimeout(1500);
-  ok('4-week plan ($3,600): the same dish shows $180 per meal (20 meals = $3,600)', (await price('Pollo a las hierbas con puré rústico')) === '180', await price('Pollo a las hierbas con puré rústico'));
-  await page.evaluate((f) => document.querySelector(f + ' [data-fn-dish] .fn-dish__media').click(), fp); await page.waitForTimeout(500);
-  ok('the dish panel shows the same per-meal price as the card it came from', await page.evaluate(() => /180/.test(document.querySelector('[data-dp-content] .dd__price').textContent)));
-  await page.keyboard.press('Escape');
-}
 
 
 // =====================================================================  v48: requests tab in the admin, ambassador page in one piece, author signature
@@ -1332,161 +1138,137 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
 }
 
 
-// =====================================================================  v49: funnel tutorial + per-day ingredient tweaks
+
+// =====================================================================  v110: the new order flow (sign in -> plan + diet -> your week)
 {
-  await page.setViewportSize({ width: 1280, height: 800 });
-  await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.evaluate(() => { location.hash = '#/pg/pedido'; }); await page.reload(); await page.waitForTimeout(800);
-  await page.evaluate(() => { localStorage.setItem('kx-test-norules', '1'); localStorage.removeItem('kx-rules-ok'); localStorage.removeItem('kulinaria_funnel'); }); await page.reload(); await page.waitForTimeout(800);
-  const R0 = '[data-page="pg/pedido"] ';
-  const r0 = await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); const t = f.querySelector('[data-fn-rules]').textContent; return { step: f.getAttribute('data-step'), items: f.querySelectorAll('.fn-rcard').length, chk: f.querySelector('[data-fn-rules-check]').disabled, btn: f.querySelector('[data-fn-rules-next]').disabled, txt: t }; });
-  ok('the guide is the four steps from the brief (subscription, weekly menu, budget example with $900 / $1,110 / $210, account); three once signed in', r0.step === '0' && r0.items >= 3 && r0.items <= 5 && /900/.test(r0.txt) && /1,000/.test(r0.txt) && /1,110/.test(r0.txt) && /210/.test(r0.txt) && /10:00/.test(r0.txt), JSON.stringify([r0.step, r0.items]));
-  ok('until the visitor reaches the end of the rules, "I understand" and the next button are locked', r0.chk === true && r0.btn === true);
-  await page.evaluate(() => { const b = document.querySelector('[data-page="pg/pedido"] [data-fn-dot]:nth-child(3)'); b.click(); }); await page.waitForTimeout(200);
-  ok('the dots cannot skip the rules', await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-funnel]').getAttribute('data-step') === '0'));
-  await page.evaluate(() => { const r = document.querySelector('[data-page="pg/pedido"] [data-fn-rules-rail]'); r.scrollLeft = r.scrollWidth; }); await page.waitForTimeout(500);
-  ok('after scrolling to the end the tick box unlocks, and the button unlocks once it is ticked', await page.evaluate(() => { const f = document.querySelector('[data-page="pg/pedido"] [data-funnel]'); const c = f.querySelector('[data-fn-rules-check]'), b = f.querySelector('[data-fn-rules-next]'); const before = !c.disabled && b.disabled; c.click(); return before && !b.disabled; }));
-  await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-rules-next]').click()); await page.waitForTimeout(400);
-  ok('then the plan step opens and the rules are remembered', await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-funnel]').getAttribute('data-step') === '1' && localStorage.getItem('kx-rules-ok') === '1'));
-  await page.evaluate(() => { localStorage.removeItem('kx-test-norules'); });
-  await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-plan-choice="block"]').click()); await page.waitForTimeout(700); await page.click('[data-page="pg/pedido"] [data-fn-sc-next]'); await page.waitForTimeout(500);
-  await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-dish]:not(.is-hidden) [data-pick]').click()); await page.waitForTimeout(400);
-  ok('the pencil appears on a day with a dish and the tweak panel starts closed', await page.evaluate(() => { const e = document.querySelector('[data-page="pg/pedido"] [data-fn-day-edit="0"]'); const m = document.querySelector('[data-page="pg/pedido"] [data-fn-mods]'); return !!e && !e.hidden && m.hidden; }));
-  await page.click('[data-page="pg/pedido"] .fn-week [data-fn-day-edit="0"]'); await page.waitForTimeout(250);
-  const mods = await page.evaluate(() => { const m = document.querySelector('[data-page="pg/pedido"] [data-fn-mods]'); return m && !m.hidden ? { chips: m.querySelectorAll('.chip').length, inp: !!m.querySelector('[data-fn-mods-note]'), warn: /alergia|allergy/i.test(m.textContent) } : null; });
-  ok('after picking a dish, the day offers its ingredients to leave out, a free note and the allergy disclaimer', !!mods && mods.chips >= 1 && mods.inp && mods.warn, JSON.stringify(mods));
-  await page.click('[data-page="pg/pedido"] [data-fn-mods] .chip'); await page.fill('[data-page="pg/pedido"] [data-fn-mods-note]', 'salsa aparte'); await page.waitForTimeout(150);
-  ok('the summary lists the dish ingredients and the tweak made', await page.evaluate(() => { const t = document.querySelector('[data-page="pg/pedido"] .funnel__list li .fn-s-ing'); return !!t && /salsa aparte/.test(t.textContent) && t.textContent.length > 20; }));
-  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('kulinaria_funnel')).mods[0]);
-  ok('tweaks are saved with the day (ingredient off + note)', saved.off.length === 1 && saved.note === 'salsa aparte', JSON.stringify(saved));
-  ok('the tweak panel has a small cross that closes it (the day keeps its tweaks)', await (async () => { const x = await page.$('[data-page="pg/pedido"] [data-fn-mods] .fn-mods__x'); if (!x) return false; await x.click(); await page.waitForTimeout(250); const closed = await page.$eval('[data-page="pg/pedido"] [data-fn-mods]', (e) => e.hidden); const kept = await page.evaluate(() => JSON.parse(localStorage.getItem('kulinaria_funnel')).mods[0].note === 'salsa aparte'); return closed && kept; })());
-  await page.click('[data-page="pg/pedido"] .fn-week [data-fn-day-edit="0"]'); await page.waitForTimeout(250);
-  await page.keyboard.press('Escape'); await page.waitForTimeout(200);
-  ok('Escape also closes the tweak panel', await page.$eval('[data-page="pg/pedido"] [data-fn-mods]', (e) => e.hidden));
-  // ---- two courses per day, the macro column and the order memory
-  { const PD = '[data-page="pg/pedido"] ';
-    await page.evaluate((pd) => document.querySelector(pd + '[data-fn-day-btn="0"]').click(), PD); await page.waitForTimeout(150);
-    ok('the planner has a "plates per day" setting (1 | 2); the course chips stay hidden while it is on 1', await page.evaluate((pd) => !!document.querySelector(pd + '[data-fn-perday="2"]') && document.querySelector(pd + '[data-fn-course-group]').hidden, PD));
-    await page.evaluate((pd) => document.querySelector(pd + '[data-fn-perday="2"]').click(), PD); await page.waitForTimeout(200);
-    await page.evaluate((pd) => document.querySelector(pd + '[data-fn-course="1"]').click(), PD); await page.waitForTimeout(200);
-    ok('the 2nd-course chip switches the picker and the prompt says which course is being chosen', await page.evaluate((pd) => document.querySelector(pd + '[data-fn-course="1"]').getAttribute('aria-pressed') === 'true' && /2\.º|2nd/.test(document.querySelector(pd + '[data-fn-prompt]').textContent), PD));
-    const first = await page.evaluate((pd) => JSON.parse(localStorage.getItem('kulinaria_funnel')).days[0], PD);
-    await page.evaluate((pd) => { const c = [...document.querySelectorAll(pd + '[data-fn-dish]:not(.is-hidden)')].find((x) => x.getAttribute('data-pid') !== JSON.parse(localStorage.getItem('kulinaria_funnel')).days[0]); c.querySelector('[data-pick]').click(); }, PD); await page.waitForTimeout(250);
-    const two = await page.evaluate((pd) => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel')); const g = (pid) => document.querySelector(pd + '[data-fn-dish][data-pid="' + pid + '"]'); const a1 = g(f.days[0]), a2 = g(f.days2[0]); return { has: !!f.days2[0], day: document.querySelector(pd + '[data-fn-day-btn="0"] .fn-day__dish2').textContent, kcal: (+a1.getAttribute('data-kcal')) + (+a2.getAttribute('data-kcal')), shown: document.querySelector(pd + '[data-fn-m="kcal"]').textContent, p: (+a1.getAttribute('data-protein')) + (+a2.getAttribute('data-protein')) , pShown: document.querySelector(pd + '[data-fn-m="p"]').textContent }; }, PD);
-    ok('a day can hold a 2nd course: it shows as a second line "+ dish" on the day', two.has && /^\+ /.test(two.day), JSON.stringify(two));
-    ok('the macro column adds up both courses of the day (kcal and protein)', Number(two.shown.replace(/\D/g, '')) === two.kcal && parseInt(two.pShown, 10) === Math.round(two.p), JSON.stringify(two));
-    await page.evaluate((pd) => document.querySelector(pd + '[data-fn-course="0"]').click(), PD); await page.waitForTimeout(100);
-    ok('the 2nd course adds no charge on its own (a Selecto 2nd course is included)', await page.evaluate((pd) => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel')); const g = (pid) => document.querySelector(pd + '[data-fn-dish][data-pid="' + pid + '"]'); return !!g(f.days2[0]) && !!f.days[0]; }, PD));
-    await page.evaluate((pd) => document.querySelector(pd + '[data-fn-day2-x="0"]').click(), PD); await page.waitForTimeout(150);
-    ok('the small cross on the 2nd line removes only that course', await page.evaluate(() => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel')); return !f.days2[0] && !!f.days[0]; }));
-  }
-  await page.goto(`${URL0}#/home`); await page.evaluate(() => { localStorage.removeItem('kulinaria_onboarded'); localStorage.setItem('kx-test-fresh', '1'); sessionStorage.setItem('kx_ob_asked', '1'); }); await page.goto(`${URL0}#/pg/cuenta-perfil`); await page.reload(); await page.waitForTimeout(500);
-  ok('profile page starts with the questionnaire banner until the onboarding is done', await page.evaluate(() => { const b = document.querySelector('[data-page="pg/cuenta-perfil"] [data-onb-banner]'); return !!b && !b.hidden && /bienvenida/.test(b.querySelector('a').getAttribute('href')); }));
-  await page.evaluate(() => { localStorage.removeItem('kx-test-fresh'); localStorage.setItem('kulinaria_onboarded', '1'); });
-  await page.evaluate(() => localStorage.setItem('kulinaria_onboarded', '1')); await page.reload(); await page.waitForTimeout(400);
-  ok('the questionnaire banner disappears once the profile exists', await page.evaluate(() => document.querySelector('[data-page="pg/cuenta-perfil"] [data-onb-banner]').hidden));
-  await page.evaluate(() => localStorage.clear());
-  for (const [vw, vh] of [[1440, 900], [1280, 720], [390, 844]]) {
-    await page.setViewportSize({ width: vw, height: vh }); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(700);
-    const wv = await page.evaluate(() => { const f = document.querySelector('[data-page="home"] .welcome-video__frame'); const r = f && f.getBoundingClientRect(); const funnel = document.querySelector('[data-page="home"] [data-funnel]'); const fr = funnel && funnel.closest('.shopify-section').getBoundingClientRect(); return f ? { h: Math.round(r.height), vh: innerHeight, copy: /\S/.test(f.querySelector('.welcome-video__copy').textContent), hasVideo: !!f.querySelector('video'), funnelH: fr ? Math.round(fr.height) : 0 } : null; });
-    ok(`home welcome film @${vw}x${vh}: a framed player with a welcome text that fits inside one screen`, !!wv && wv.hasVideo && wv.copy && wv.h <= wv.vh, JSON.stringify(wv));
-    if (vw > 760) ok(`home order builder section fits one screen @${vw}x${vh}`, !!wv && wv.funnelH > 0 && wv.funnelH <= vh + 2, JSON.stringify(wv));
-    else ok(`home order builder on a phone (${vw}x${vh}): its section is tall enough for the step and the next section does not cover it`, await page.evaluate(() => { const f = document.querySelector('[data-page="home"] [data-funnel]'); const sec = f.closest('.shopify-section'), nx = sec.nextElementSibling; const on = f.querySelector('.step.is-on').getBoundingClientRect(); return on.height > 100 && on.bottom <= nx.getBoundingClientRect().top + 2; }));
-  }
-  await page.setViewportSize({ width: 1280, height: 800 });
-  // a visitor who is not signed in never sees allergy warnings, even with an old profile stored in the browser
-  const G3 = URL0.replace('index.html', 'guest.html');
-  await page.goto(`${G3}#/home`); await page.evaluate(() => { localStorage.setItem('kulinaria_profile', JSON.stringify({ allergies: ['Frutos secos'], dislikes: [], diets: [] })); }); await page.goto(`${G3}#/p/salmon-costra-almendras`); await page.reload(); await page.waitForTimeout(500);
-  ok('guest: no allergy alert on the salmon page (warnings are only for signed-in, onboarded accounts)', await page.evaluate(() => { const d = document.querySelector('[data-page="p/salmon-costra-almendras"]'); return !!d && d.querySelector('[data-allergen-alert]').hidden; }));
-  await page.evaluate(() => localStorage.clear());
-  await page.evaluate(() => localStorage.removeItem('kulinaria_funnel'));
+  const FN = '[data-page="pg/pedido"] [data-funnel]';
+  const G2 = URL0.replace('index.html', 'guest.html');
+  const base = async (opts = {}) => {
+    await page.evaluate((o) => {
+      localStorage.clear(); sessionStorage.clear();
+      localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx-seen', '1'); localStorage.setItem('kx-test-orders', '0');
+      localStorage.setItem('kx_dietpick', 'all'); sessionStorage.setItem('kx_newplan', '1');
+      if (!o.guest) localStorage.setItem('kulinaria_onboarded', '1'); else localStorage.setItem('kx-test-guide', '1');
+      if (o.profile) localStorage.setItem('kulinaria_profile', JSON.stringify(o.profile));
+      if (o.funnel) localStorage.setItem('kulinaria_funnel', JSON.stringify(Object.assign({ v: 2 }, o.funnel)));
+    }, opts);
+  };
+  const open = async (guest) => { await page.goto(`${guest ? G2 : URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(1300); };
+  const names = () => page.evaluate((f) => [...document.querySelector(f).querySelectorAll('.fn-wk__card')].map((c) => (c.querySelector('.fn-wk__name') || {}).textContent || '-'), FN);
+  const chooseDiet = async (cat) => { await page.evaluate(({ f, cat }) => document.querySelector(f + ' [data-cat-choice="' + cat + '"]').click(), { f: FN, cat }); await page.waitForTimeout(150); await page.evaluate((f) => document.querySelector(f + ' [data-fn-go-next]').click(), FN); await page.waitForTimeout(800); };
+  const KETO = ['Pollo a las hierbas con puré rústico', 'Salmón gourmet en costra de almendras', 'Pollo a las hierbas con puré rústico', 'Salmón gourmet en costra de almendras', 'Filete Prime con verduras asadas'];
+
+  // ---- signed out: the first step is the sign-in screen
+  await page.setViewportSize({ width: 1440, height: 860 });
+  await base({ guest: true }); await open(true);
+  const g = await page.evaluate((f) => { const h = document.querySelector(f), s = h.querySelector('.fn-start'); const dots = [...h.querySelectorAll('[data-fn-dot]')].filter((d) => getComputedStyle(d).display !== 'none'); return { step: h.getAttribute('data-step'), start: !!s && s.offsetParent !== null, btn: (s.querySelector('.fn-start__btn') || {}).getAttribute && s.querySelector('.fn-start__btn').getAttribute('href'), txt: s.innerText, dots: dots.length, title: getComputedStyle(h.querySelector('.funnel__title')).display }; }, FN);
+  ok('signed out: step 1 is the sign-in screen (nothing else can be opened first)', g.step === '0' && g.start, JSON.stringify([g.step, g.start]));
+  ok('signed out: one button, "Iniciar sesión", that leads to login / create account', /login|register|account/.test(g.btn || '') && /iniciar sesi[oó]n/i.test(g.txt), g.btn);
+  ok('signed out: the pitch shows $180 a day, the 4-week block ($900 a week) and the 1-week trial per day with its +15% rate', /180/.test(g.txt) && /900/.test(g.txt) && /207/.test(g.txt) && /15%/.test(g.txt), g.txt.replace(/\s+/g, ' ').slice(0, 220));
+  const cnt = await page.evaluate((f) => { const h = document.querySelector(f), c = h.querySelector('[data-fn-stepcount]'); return { txt: c.textContent, vis: c.offsetParent !== null, pills: getComputedStyle(h.querySelector('.steps__nav')).display, bar: getComputedStyle(h.querySelector('.funnel__bar')).display }; }, FN);
+  ok('the step indicator is the counter "Paso 1 de 3" with a slim progress line (no pills) and there is no "4 pasos" headline', /1\D+3/.test(cnt.txt) && cnt.vis && cnt.pills === 'none' && cnt.bar !== 'none' && g.title === 'none', JSON.stringify(cnt));
+
+  // ---- signed in: the sign-in step is skipped, plan + diet first
+  await base(); await open(false);
+  const s1 = await page.evaluate((f) => { const h = document.querySelector(f); const cards = [...h.querySelectorAll('[data-cat-choice]')]; return { step: h.getAttribute('data-step'), n: cards.length, svg: cards.every((c) => !!c.querySelector('svg path, svg circle, svg rect')), ids: cards.map((c) => c.getAttribute('data-cat-choice')).join(), disabled: h.querySelector('[data-fn-go-next]').disabled, plans: [...h.querySelectorAll('[data-plan-choice]')].map((p) => p.innerText.replace(/\s+/g, ' ')), rail: getComputedStyle(h.querySelector('[data-fn-cats]')).overflowX, side: document.documentElement.scrollWidth <= innerWidth + 1 }; }, FN);
+  ok('signed in: the builder opens on "plan and diet" (the sign-in step is not shown)', s1.step === '1', s1.step);
+  ok('the diet carousel offers every menu category (12) plus "no preference", each with its own icon, and it scrolls sideways', s1.n === 13 && s1.svg && s1.rail === 'auto' && /keto-low-carb/.test(s1.ids) && /junior/.test(s1.ids) && /desayunos/.test(s1.ids) && /snacks-postres/.test(s1.ids), JSON.stringify([s1.n, s1.svg, s1.rail]));
+  ok('Continue stays disabled until a diet is chosen', s1.disabled === true);
+  ok('the plan cards show $180 a day / $900 a week for 4 weeks and $207 a day / $1,035 for the 1-week trial', /180/.test(s1.plans[0]) && /900/.test(s1.plans[0]) && /207/.test(s1.plans[1]) && /1,035/.test(s1.plans[1]), s1.plans.join(' || '));
+
+  // ---- the default menu is fixed per category and the same for everybody
+  await chooseDiet('keto-low-carb');
+  const w1 = await page.evaluate((f) => { const h = document.querySelector(f); return { step: h.getAttribute('data-step'), filled: h.querySelectorAll('.fn-wk__slot:not(.is-empty)').length, total: (h.querySelector('[data-fn-s-total]') || {}).textContent, stepcount: (h.querySelector('[data-fn-stepcount]') || {}).textContent }; }, FN);
+  const nKeto = await names();
+  ok('Continue opens "your week" with the five days already filled', w1.step === '3' && w1.filled === 5, JSON.stringify(w1));
+  ok('the keto menu is the fixed one from the theme settings (same dishes, Monday to Friday)', nKeto.join('|') === KETO.join('|'), nKeto.join(' | '));
+  ok('the total includes the suggested upgrades ($3,600 + $70 + $70 + $210)', /3,950/.test(w1.total || ''), w1.total);
+  ok('the stepper reads "Paso 3 de 3"', /3\D+3/.test(w1.stepcount || ''), w1.stepcount);
+  await base({ profile: { allergies: ['Pescado'], dislikes: [], people: [] } }); await open(false); await chooseDiet('keto-low-carb');
+  const nAllergic = await names(), warn = await page.evaluate((f) => document.querySelector(f).querySelectorAll('.fn-wk__slot.has-warn').length, FN);
+  ok('a customer allergic to fish gets the SAME keto menu, with warning icons on the salmon days', nAllergic.join('|') === KETO.join('|') && warn >= 2, warn + ' warnings');
+  await base(); await open(false); await chooseDiet('fit-proteina');
+  ok('another category has its own fixed menu (high protein starts with the beef bowl and ends with the skirt steak)', /Bowl de res/.test((await names())[0]) && /Arrachera/.test((await names())[4]));
+
+  // ---- upgrade pop-up and swap
+  const fridayUp = await page.evaluate((f) => !!document.querySelector(f + ' [data-wk-up="4:0"]'), FN);
+  ok('every card has the upgrade button, Friday included', fridayUp && (await page.evaluate((f) => document.querySelectorAll(f + ' .fn-wk__up').length, FN)) === 5);
+  await page.evaluate((f) => document.querySelector(f + ' [data-wk-up="0:0"]').click(), FN); await page.waitForTimeout(450);
+  const pk = await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); const vis = [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].filter((c) => c.offsetParent); const r = p.querySelector('.fn-picker__box').getBoundingClientRect(); return { open: !p.hidden, title: p.querySelector('[data-fn-picker-title]').textContent, tiers: [...new Set(vis.map((c) => c.getAttribute('data-tier')))].join(), tabs: [...p.querySelectorAll('[data-pick-tier]')].filter((b) => b.offsetParent).map((b) => b.textContent.replace(/\s+/g, ' ').trim()), fits: r.bottom <= innerHeight + 2 && r.top >= -2 }; }, FN);
+  ok('"Elevar nivel" opens a pop-up titled with the day, with Exclusivo / Signature / Reserve tabs and their extra price', pk.open && /Eleva tu experiencia del Lunes/.test(pk.title) && pk.tabs.length === 3 && /\+\$?\s?70/.test(pk.tabs[0]) && /\+\$?\s?140/.test(pk.tabs[1]) && /\+\$?\s?210/.test(pk.tabs[2]), JSON.stringify(pk));
+  ok('the upgrade pop-up lists only higher-tier dishes and fits the screen', !/selecto/.test(pk.tiers) && pk.fits, pk.tiers);
+  const before = await page.evaluate((f) => ({ total: document.querySelector(f + ' [data-fn-s-total]').textContent }), FN);
+  await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].find((c) => c.offsetParent && c.getAttribute('data-tier') === 'exclusivo').querySelector('[data-pick]').click(); }, FN); await page.waitForTimeout(500);
+  const af = await page.evaluate((f) => ({ open: !document.querySelector(f + ' [data-fn-picker]').hidden, tier: document.querySelector(f + ' .fn-wk__card .fn-wk__tier').textContent, total: document.querySelector(f + ' [data-fn-s-total]').textContent }), FN);
+  ok('choosing an upgrade closes the pop-up, tags the card with the extra and raises the total by $70', !af.open && /\+\$70/.test(af.tier) && parseFloat(af.total.replace(/[^\d]/g, '')) === parseFloat(before.total.replace(/[^\d]/g, '')) + 70, JSON.stringify([before, af]));
+  await page.evaluate((f) => document.querySelector(f + ' [data-wk-swap="1:0"]').click(), FN); await page.waitForTimeout(450);
+  const sw = await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); const vis = [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].filter((c) => c.offsetParent); return { selecto: vis.filter((c) => c.getAttribute('data-tier') === 'selecto').length, all: vis.length, tab: (p.querySelector('[data-pick-tier].is-on') || {}).textContent }; }, FN);
+  ok('"Cambiar" lists every dish, base-tier (Selecto) ones included, whatever the diet was', sw.selecto >= 4 && sw.all >= 8, JSON.stringify(sw));
+  const cur = (await names())[1];
+  await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); const cur = document.querySelectorAll(f + ' .fn-wk__card')[1].querySelector('.fn-wk__name').textContent; [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].find((c) => c.offsetParent && c.getAttribute('data-tier') === 'selecto' && c.getAttribute('data-title') !== cur).querySelector('[data-pick]').click(); }, FN); await page.waitForTimeout(500);
+  ok('swapping replaces only that day and the pop-up closes', (await names())[1] !== cur && (await page.evaluate((f) => document.querySelector(f + ' [data-fn-picker]').hidden, FN)));
+  await page.keyboard.press('Escape');
+
+  // ---- two plates a day
+  await page.evaluate((f) => document.querySelector(f + ' [data-fn-perday="2"]').click(), FN); await page.waitForTimeout(400);
+  ok('2 plates a day: every day gets a second slot (10 slots), the second ones empty', (await page.evaluate((f) => document.querySelectorAll(f + ' .fn-wk__slot').length, FN)) === 10 && (await page.evaluate((f) => document.querySelectorAll(f + ' .fn-wk__slot.is-empty').length, FN)) === 5);
+  await page.evaluate((f) => document.querySelector(f + ' [data-wk-swap="0:1"]').click(), FN); await page.waitForTimeout(450);
+  ok('the pop-up for a second plate says so', await page.evaluate((f) => /2\.º/.test(document.querySelector(f + ' [data-fn-picker-title]').textContent), FN));
+  await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].find((c) => c.offsetParent && c.getAttribute('data-tier') === 'selecto').querySelector('[data-pick]').click(); }, FN); await page.waitForTimeout(500);
+  ok('choosing it fills the second slot of Monday', (await page.evaluate((f) => document.querySelectorAll(f + ' .fn-wk__slot.is-empty').length, FN)) === 4);
+  await page.evaluate((f) => document.querySelector(f + ' [data-fn-perday="1"]').click(), FN); await page.waitForTimeout(300);
+  ok('back to 1 plate a day: the extra slots disappear', (await page.evaluate((f) => document.querySelectorAll(f + ' .fn-wk__slot').length, FN)) === 5);
+
+  // ---- people: each one keeps their own week; a new person starts from the default menu
+  await base({ profile: { allergies: [], dislikes: [], people: [{ id: 'p1', name: 'Johnny', allergies: [], dislikes: [], diets: [] }] } }); await open(false); await chooseDiet('fit-proteina');
+  ok('"Pedido para" shows a chip for me and for each family member, plus an add link', await page.evaluate((f) => { const c = [...document.querySelectorAll(f + ' .fn-who__b')].map((b) => b.textContent); return c.length === 2 && /Johnny/.test(c[1]) && !!document.querySelector(f + ' .fn-who__add'); }, FN));
+  await page.evaluate((f) => document.querySelector(f + ' [data-wk-swap="1:0"]').click(), FN); await page.waitForTimeout(400);
+  await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); const cur = document.querySelectorAll(f + ' .fn-wk__card')[1].querySelector('.fn-wk__name').textContent; [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].find((c) => c.offsetParent && c.getAttribute('data-tier') === 'selecto' && c.getAttribute('data-title') !== cur).querySelector('[data-pick]').click(); }, FN); await page.waitForTimeout(500);
+  const mineEdited = await names();
+  await page.evaluate((f) => document.querySelector(f + ' [data-fn-who-pick="p1"]').click(), FN); await page.waitForTimeout(600);
+  const johnny = await names();
+  ok('a family member with no week yet starts from the default menu of the chosen diet (not blank)', johnny.length === 5 && johnny.every((n) => n !== '-') && /Bowl de res/.test(johnny[0]) && /Arrachera/.test(johnny[4]), johnny.join(' | '));
+  await page.evaluate((f) => document.querySelector(f + ' [data-fn-who-pick=""]').click(), FN); await page.waitForTimeout(600);
+  ok('switching back to myself restores my edited week (nothing is lost)', (await names()).join('|') === mineEdited.join('|'), (await names()).join(' | '));
+  await page.evaluate(() => { localStorage.setItem('kx-test-nostart', '1'); sessionStorage.removeItem('kx-test-start'); });
+  await page.reload(); await page.waitForTimeout(1200);
+  ok('and the week survives a page reload', (await page.evaluate((f) => document.querySelector(f).getAttribute('data-step'), FN)) === '3' && (await names()).join('|') === mineEdited.join('|'));
+
+  // ---- confirming puts ONE plan line in the cart with the dishes as properties
+  await base({ funnel: { info: { name: 'Ana Pérez', email: 'ana@ejemplo.com', phone: '+52 999 000 0000', street: 'Calle Lago 24', cluster: 'Clúster Las Lomas', zip: '72000' } } }); await open(false); await chooseDiet('veggie');
+  await page.evaluate(() => { const f = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push(String(u).split('/').pop() + ' ' + ((o && o.body) || '').slice(0, 3000)); return f.apply(this, arguments); }; });
+  await page.locator(`${FN} [data-fn-finish]`).scrollIntoViewIfNeeded(); await page.click(`${FN} [data-fn-finish]`); await page.waitForTimeout(1000);
+  const calls = await page.evaluate(() => window.__calls);
+  ok('confirm adds one plan line with the days as properties and goes to the cart', page.url().endsWith('#/carrito') && calls.some((r) => /add\.js/.test(r) && /_platillos/.test(r) && /Lunes/.test(r) && /Viernes/.test(r)), JSON.stringify(calls).slice(0, 300));
+
+  // ---- "have your own diet?": a real file upload form
+  await base(); await open(false);
+  await page.evaluate((f) => document.querySelector(f + ' [data-fn-own]').click(), FN); await page.waitForTimeout(300);
+  const own = await page.evaluate(() => { const m = document.querySelector('[data-page="pg/pedido"] [data-fn-own-modal]'), r = m.querySelector('.fn-own__box').getBoundingClientRect(); return { open: !m.hidden, file: !!m.querySelector('input[type=file][accept*="pdf"]'), fits: r.bottom <= innerHeight + 2, w: Math.round(r.width), txt: m.innerText }; });
+  ok('the own-diet form opens, has a real file upload, fits the screen and stays compact', own.open && own.file && own.fits && own.w <= 520, JSON.stringify([own.open, own.file, own.fits, own.w]));
+  ok('the consent line reads as plain text (the brand word is not turned into a logo)', /Acepto que usen mi archivo/.test(own.txt), own.txt.slice(-160));
+  await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-own-form] .fn-own__go').click()); await page.waitForTimeout(200);
+  ok('sending it empty shows what is missing and sends nothing', await page.evaluate(() => { const e = document.querySelector('[data-page="pg/pedido"] [data-own-err]'); return !e.hidden && e.textContent.length > 10; }));
+  await page.setInputFiles('[data-page="pg/pedido"] [data-fn-own-modal] input[type=file]', { name: 'plan.png', mimeType: 'image/png', buffer: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64') });
+  await page.fill('[data-page="pg/pedido"] [data-fn-own-form] [name=name]', 'Ana'); await page.check('[data-page="pg/pedido"] [data-fn-own-form] [name=consent]');
+  await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-fn-own-form] .fn-own__go').click()); await page.waitForTimeout(600);
+  ok('a valid file + name + consent shows the thank-you message', await page.evaluate(() => { const m = document.querySelector('[data-page="pg/pedido"] [data-fn-own-modal]'); return !m.querySelector('[data-fn-own-ok]').hidden && m.querySelector('[data-fn-own-form]').hidden; }));
+  await page.keyboard.press('Escape');
+
+  // ---- phones: nothing wider than the screen, the total bar is inside the screen
+  await page.setViewportSize({ width: 390, height: 844 });
+  await base({ guest: true }); await open(true);
+  ok('phone, signed out: the sign-in screen fits the width', await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+  await base(); await open(false);
+  ok('phone: plan and diet fits the width and Continue stays reachable (docked at the bottom of the step)', await page.evaluate((f) => document.documentElement.scrollWidth <= innerWidth + 1 && !!document.querySelector(f + ' [data-fn-go-next]'), FN));
+  await chooseDiet('keto-low-carb');
+  await page.evaluate((f) => { const e = document.querySelector(f); window.scrollTo(0, e.getBoundingClientRect().top + scrollY - 10); }, FN); await page.waitForTimeout(300);
+  const ph = await page.evaluate((f) => { const h = document.querySelector(f), bar = h.querySelector('.funnel__aside').getBoundingClientRect(), rail = h.querySelector('[data-fn-wk-cards]'); return { side: document.documentElement.scrollWidth <= innerWidth + 1, barIn: bar.bottom <= innerHeight + 2 && bar.top >= 0, swipe: getComputedStyle(rail).overflowX === 'auto', finish: !!h.querySelector('[data-fn-finish]').offsetParent }; }, FN);
+  ok('phone: the week is a swipeable row of day cards and the total + confirm bar sits inside the screen', ph.side && ph.barIn && ph.swipe && ph.finish, JSON.stringify(ph));
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
 }
 
-
-// =====================================================================  v50: seasonal staples, returning customers, rules step fits the desktop frame
-{
-  await page.setViewportSize({ width: 1430, height: 650 });
-  await page.goto(`${URL0}#/menu`); await page.evaluate(() => { localStorage.setItem('kx-test-orders', '0'); }); await page.reload(); await page.waitForTimeout(700);
-  const SM = '[data-page="menu"] ';
-  const cnt = () => page.evaluate((sm) => ({ week: document.querySelectorAll(sm + '[data-dish]:not(.is-hidden):not([data-seasonal])').length, season: document.querySelectorAll(sm + '[data-dish]:not(.is-hidden)[data-seasonal]').length, note: !document.querySelector(sm + '[data-season-note]').hidden }), SM);
-  const c0 = await cnt();
-  ok('menu page: by default only the weekly dishes show (the seasonal ones wait behind the toggle)', c0.week === 9 && c0.season === 0 && !c0.note, JSON.stringify(c0));
-  await page.click(`${SM}[data-filter="season"][data-value="season"]`); await page.waitForTimeout(300);
-  const c1 = await cnt();
-  ok('menu page: "De temporada" shows the limited-edition dishes with the explanation, and hides the weekly ones', c1.week === 0 && c1.season === 2 && c1.note, JSON.stringify(c1));
-  ok('seasonal cards carry a "limited edition" ribbon with the season', await page.evaluate((sm) => [...document.querySelectorAll(sm + '[data-seasonal] .dish__ribbon')].every((r) => /limitada/i.test(r.textContent)) && document.querySelectorAll(sm + '[data-seasonal] .dish__ribbon').length === 2, SM));
-  await page.click(`${SM}[data-filter="season"][data-value="week"]`); await page.waitForTimeout(300);
-  ok('and back to the weekly menu', (await cnt()).week === 9);
-
-  // order funnel: the toggle sits on the menu step
-  await page.evaluate(() => { sessionStorage.setItem('kx_newplan', '1'); localStorage.removeItem('kulinaria_funnel'); }); await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(800);
-  const PF = '[data-page="pg/pedido"] ';
-  await page.evaluate(() => document.querySelector('[data-page="pg/pedido"] [data-plan-choice="block"]').click()); await page.waitForTimeout(700);
-  const sc0 = await page.evaluate((pf) => [...document.querySelectorAll(pf + '.fn-sc')].filter((c) => getComputedStyle(c).display !== 'none').length, PF);
-  await page.click(`${PF}[data-fn-season="season"]`); await page.waitForTimeout(300);
-  const sc1 = await page.evaluate((pf) => [...document.querySelectorAll(pf + '.fn-sc')].filter((c) => getComputedStyle(c).display !== 'none').length, PF);
-  ok('order builder, menu step: the seasonal toggle swaps the weekly cards for the 2 limited-edition ones', sc0 === 9 && sc1 === 2, `${sc0} -> ${sc1}`);
-
-  // returning customer: every order button leads to Mi semana and the builder offers it first
-  await page.evaluate(() => { localStorage.setItem('kx-test-orders', '1'); localStorage.setItem('kx-test-returning', '1'); sessionStorage.removeItem('kx_newplan'); sessionStorage.removeItem('kx_credits'); }); await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(1200);
-  ok('returning customer: the order builder opens with "Ya tienes un plan activo" and a button to Mi semana (the steps are hidden)', await page.evaluate((pf) => { const r = document.querySelector(pf + '[data-fn-returning]'); return !!r && !r.hidden && !!r.querySelector('a[href*="cuenta-semana"]') && getComputedStyle(document.querySelector(pf + '.funnel__panel')).display === 'none'; }, PF), await page.evaluate((pf) => { const r = document.querySelector(pf + '[data-fn-returning]'); return JSON.stringify({ r: !!r, hidden: r && r.hidden, ob: localStorage.getItem('kulinaria_onboarded'), fresh: localStorage.getItem('kx-test-fresh'), orders: localStorage.getItem('kx-test-orders'), ret: localStorage.getItem('kx-test-returning'), url: location.hash }); }, PF));
-  await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1200);
-  ok('returning customer: the hero order button leads to Mi semana', await page.evaluate(() => { const a = document.querySelector('[data-page="home"] .hero [data-order-cta]'); return !!a && a.getAttribute('href') === '/pages/cuenta-semana' && /semana/i.test(a.textContent); }));
-  await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(1000);
-  await page.click(`${PF}[data-fn-newplan]`); await page.waitForTimeout(300);
-  ok('"I want to buy a new plan" brings the four steps back', await page.evaluate((pf) => getComputedStyle(document.querySelector(pf + '.funnel__panel')).display !== 'none' && document.querySelectorAll(pf + '[data-fn-dot]').length === 4, PF));
-  await page.evaluate(() => { localStorage.setItem('kx-test-orders', '0'); localStorage.removeItem('kx-test-returning'); sessionStorage.setItem('kx_newplan', '1'); sessionStorage.removeItem('kx_credits'); localStorage.removeItem('kulinaria_funnel'); });
-
-  // the rules fit the desktop frame (no scrolling to read them) and the tick still gates the next button
-  await page.evaluate(() => { localStorage.setItem('kx-test-norules', '1'); localStorage.removeItem('kx-rules-ok'); }); await page.reload(); await page.waitForTimeout(1000);
-  const rf = await page.evaluate((pf) => { const r = document.querySelector(pf + '[data-fn-rules-rail]'), f = document.querySelector(pf + '[data-funnel]'); return { vfits: r.scrollHeight <= r.clientHeight + 8, stage: f.querySelector('.funnel__stage').getBoundingClientRect().bottom <= innerHeight + 12, step: f.getAttribute('data-step'), chk: f.querySelector('[data-fn-rules-check]').disabled, btn: f.querySelector('[data-fn-rules-next]').disabled, ticked: f.querySelector('[data-fn-rules-check]').checked }; }, PF);
-  ok('rules step on desktop: vertical cards in a row, nothing scrolls up and down, the tick and button are in the frame on a 650px-high screen', rf.vfits && rf.stage && rf.step === '0', JSON.stringify(rf));
-  ok('rules step on desktop: the tick is locked and not ticked until the last card has been reached', rf.chk === true && rf.ticked === false && rf.btn === true, JSON.stringify(rf));
-  await page.evaluate(() => { const r = document.querySelector('[data-page="pg/pedido"] [data-fn-rules-rail]'); r.scrollLeft = r.scrollWidth; }); await page.waitForTimeout(500);
-  ok('rules step on desktop: reaching the last card unlocks the box, still unticked, and the button waits for the tick', await page.evaluate((pf) => { const f = document.querySelector(pf + '[data-funnel]'); const c = f.querySelector('[data-fn-rules-check]'), b = f.querySelector('[data-fn-rules-next]'); const ok1 = !c.disabled && !c.checked && b.disabled; c.click(); return ok1 && !b.disabled; }, PF));
-  await page.evaluate(() => { localStorage.removeItem('kx-test-norules'); localStorage.setItem('kx-rules-ok', '1'); });
-}
-
-
-// =====================================================================  v51: the builder always starts on step 1; phone stepper moves freely
-{
-  await page.setViewportSize({ width: 390, height: 800 });
-  await page.evaluate(() => { localStorage.setItem('kx-test-guide', '1'); localStorage.removeItem('kx-test-norules'); sessionStorage.removeItem('kx-test-start'); localStorage.setItem('kx-test-nostart', '1'); localStorage.setItem('kx-rules-ok', '1'); localStorage.setItem('kx-test-orders', '0'); sessionStorage.setItem('kx_newplan', '1'); localStorage.removeItem('kulinaria_funnel'); sessionStorage.removeItem('kx_reach'); });
-  await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(900);
-  const PS = '[data-page="pg/pedido"] ';
-  const st0 = await page.evaluate((ps) => { const f = document.querySelector(ps + '[data-funnel]'); return { step: f.getAttribute('data-step'), chk: f.querySelector('[data-fn-rules-check]').checked, unlocked: !f.querySelector('[data-fn-rules-check]').disabled, btn: f.querySelector('[data-fn-rules-next]').disabled }; }, PS);
-  ok('a first-time visitor opens the builder on step 1 (how it works); the box is never pre-ticked', st0.step === '0' && st0.chk === false && st0.unlocked === true && st0.btn === true, JSON.stringify(st0));
-  ok('phone: a row of four step pills is visible, and the later ones look locked until step 1 is complete', await page.evaluate((ps) => { const n = document.querySelector(ps + '.funnel__top .steps__nav'); const li = [...n.querySelectorAll('li')]; return getComputedStyle(n).display !== 'none' && li.length === 4 && li.every((x) => x.getBoundingClientRect().height >= 36) && li[1].classList.contains('is-locked') && li[3].classList.contains('is-locked') && !li[0].classList.contains('is-locked'); }, PS), await page.evaluate((ps) => { const n = document.querySelector(ps + '.funnel__top .steps__nav'); const li = [...n.querySelectorAll('li')]; return JSON.stringify({ disp: getComputedStyle(n).display, n: li.length, h: li.map((x) => Math.round(x.getBoundingClientRect().height)), locked: li.map((x) => x.classList.contains('is-locked')), vw: innerWidth }); }, PS));
-  await page.click(`${PS}.steps__nav li:nth-child(2)`); await page.waitForTimeout(300);
-  ok('step 2 cannot be opened before step 1 is complete (a message says why)', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '0' && /anterior|previous/i.test(document.querySelector(ps + '[data-fn-error]').textContent), PS));
-  await page.evaluate((ps) => { const r = document.querySelector(ps + '[data-fn-rules-rail]'); r.scrollLeft = r.scrollWidth; }, PS); await page.waitForTimeout(500);
-  await page.evaluate((ps) => { document.querySelector(ps + '[data-fn-rules-check]').click(); }, PS); await page.waitForTimeout(150);
-  await page.evaluate((ps) => { document.querySelector(ps + '[data-fn-rules-next]').click(); }, PS); await page.waitForTimeout(400);
-  ok('ticking "I understand" and continuing opens step 2 (the plan)', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '1', PS));
-  await page.click(`${PS}.steps__nav li:nth-child(3)`); await page.waitForTimeout(300);
-  ok('step 3 (menu) stays closed until a plan has been chosen', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '1', PS));
-  await page.evaluate((ps) => document.querySelector(ps + '[data-plan-choice="block"]').click(), PS); await page.waitForTimeout(700);
-  ok('choosing a plan opens step 3 (the menu)', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '2', PS));
-  await page.click(`${PS}.steps__nav li:nth-child(4)`); await page.waitForTimeout(300);
-  ok('step 4 (the planner) stays closed until the menu step has been continued', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '2', PS));
-  await page.click(`${PS}[data-fn-sc-next]`); await page.waitForTimeout(500);
-  ok('"Continuar al siguiente paso" opens step 4', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '3', PS));
-  await page.click(`${PS}.steps__nav li:nth-child(1)`); await page.waitForTimeout(300);
-  ok('and any step already completed can be reopened freely', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '0', PS));
-  await page.click(`${PS}.steps__nav li:nth-child(4)`); await page.waitForTimeout(300);
-  ok('(and the steps already reached stay open: back to step 4)', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '3', PS));
-  // a client who has read the guide before never lands on it again; leaving (e.g. to add a family member) and coming back resumes the same step
-  await page.evaluate(() => { localStorage.removeItem('kx-test-guide'); localStorage.setItem('kx-rules-ok', '1'); });
-  await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(900);
-  ok('a returning client (guide read before) opens at the plan step, not at the guide', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '1', PS));
-  await page.evaluate((ps) => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel') || '{}'); f.v = 2; f.step = 3; f.reach = 3; f.days = ['', '', '', '', '']; localStorage.setItem('kulinaria_funnel', JSON.stringify(f)); }, PS);
-  await page.goto(`${URL0}#/home`); await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(900);
-  ok('coming back after leaving mid-order resumes the planner (nothing restarts at step 1)', await page.evaluate((ps) => document.querySelector(ps + '[data-funnel]').getAttribute('data-step') === '3', PS));
-  await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
-  ok('home on a phone: the welcome film is contained in a rounded frame with side margins (not edge to edge)', await page.evaluate(() => { const f = document.querySelector('[data-page="home"] .welcome-video__frame'); const r = f.getBoundingClientRect(); return r.left >= 12 && innerWidth - r.right >= 12 && parseFloat(getComputedStyle(f).borderTopLeftRadius) >= 16; }));
-  ok('home on a phone: the order builder starts on step 1', await page.evaluate(() => document.querySelector('[data-page="home"] [data-funnel]').getAttribute('data-step') === '0'));
-  await page.evaluate(() => { localStorage.removeItem('kx-test-nostart'); sessionStorage.setItem('kx-test-start', '1'); sessionStorage.removeItem('kx_newplan'); });
-  await page.setViewportSize({ width: 1280, height: 800 });
-}
 
 await browser.close();
 ok('no JS errors on any page', errors.length === 0, errors.slice(0, 5).join(' | '));

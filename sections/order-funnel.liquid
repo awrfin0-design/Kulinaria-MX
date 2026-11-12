@@ -72,7 +72,7 @@
               <h3 class="fn-start__h">{{ 'funnel.start_h' | t | replace: '[p]', st_meal_m }}</h3>
               <p class="fn-start__sub">{{ 'funnel.start_sub' | t | replace: '[w]', st_bwk_m }}</p>
               <ul class="fn-start__list"><li>{{ 'funnel.start_b1' | t }}</li><li>{{ 'funnel.start_b2' | t }}</li><li>{{ 'funnel.start_b3' | t }}</li></ul>
-              <a class="btn btn--gold fn-start__btn" href="{% render 'login-url', back: '/pages/pedido' %}">{{ 'login.enter' | t }}</a>
+              <a class="btn btn--gold fn-start__btn" href="{% render 'login-url', back: '/pages/pedido' %}">{{ 'funnel.start_btn' | t }}</a>
               <p class="fn-start__note">{{ 'funnel.start_note' | t }}</p>
             </div>
             <aside class="fn-start__side">
@@ -314,10 +314,12 @@
     </div>
           <section class="fn-wk" data-fn-wk data-t-up="{{ 'funnel.up_btn' | t }}" data-t-swap="{{ 'funnel.swap_btn' | t }}" data-t-add1="{{ 'funnel.add1' | t }}" data-t-add2="{{ 'funnel.add2' | t }}" data-t-pk="{{ 'funnel.pk_t' | t }}" data-t-pk2="{{ 'funnel.pk_t2' | t }}" data-t-pkup="{{ 'funnel.pk_up' | t }}" data-t-kcal="{{ 'funnel.m_kcal' | t }}" data-t-prot="{{ 'funnel.wk_prot' | t }}" data-t-edit="{{ 'funnel.mods_open' | t }}" data-t-tiers="{{ 'tier.selecto' | t }},{{ 'tier.exclusivo' | t }},{{ 'tier.signature' | t }},{{ 'tier.reserve' | t }}">
             <header class="fn-wk__head">
+              <button class="fn-wk__back" type="button" data-fn-go-prev>&lsaquo; {{ 'funnel.fn_back' | t }}</button>
               <div><h3>{{ 'funnel.wk_t' | t }}</h3><p class="fn-wk__chip">{{ 'funnel.wk_chip' | t }}</p></div>
               <div class="fn-wk__perday" role="group" aria-label="{{ 'funnel.perday_aria' | t }}"><span>{{ 'funnel.perday' | t }}</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
             </header>
             <div class="fn-who" data-fn-who hidden data-t-for="{{ 'funnel.who' | t }}" data-t-add="{{ 'funnel.who_add' | t }}"></div>
+            <div class="fn-wk__tabs" data-fn-wk-tabs role="tablist"></div>
             <ol class="fn-wk__cards" data-fn-wk-cards></ol>
           </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="fn-para-{{ section.id }}">{{ 'funnel.para' | t }}</label><select class="select" id="fn-para-{{ section.id }}" data-fn-para></select><a class="text-link" href="/pages/cuenta-perfil#familia">{{ 'funnel.para_add' | t }}</a></div>
@@ -425,14 +427,14 @@
       <p class="fn-own__s">{{ 'funnel.own_s' | t }}</p>
       <label class="fn-own__file" data-own-drop><input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required><span data-own-file-name>{{ 'funnel.own_file' | t }}</span></label>
       <div class="fn-own__row">
+        <label>{{ 'funnel.own_name' | t }}<input type="text" name="name" autocomplete="name" required value="{{ customer.name | escape }}"></label>
+        <label>{{ 'funnel.own_email' | t }}<input type="email" name="email" autocomplete="email" required value="{{ customer.email | escape }}"></label>
+      </div>
+      <div class="fn-own__row">
+        <label>{{ 'funnel.own_phone' | t }}<input type="tel" name="phone" autocomplete="tel" placeholder="{{ 'funnel.own_phone_ph' | t }}" value="{{ customer.phone | escape }}"></label>
         <label>{{ 'funnel.own_plan' | t }}<select name="plan"><option value="block">{{ 'funnel.plan_block' | t }}</option><option value="week">{{ 'funnel.plan_week' | t }}</option></select></label>
       </div>
       <label>{{ 'funnel.own_notes' | t }}<textarea name="notes" rows="2" maxlength="600" placeholder="{{ 'funnel.own_notes_ph' | t }}"></textarea></label>
-      <div class="fn-own__row">
-        <label>{{ 'funnel.own_name' | t }}<input type="text" name="name" autocomplete="name" required value="{{ customer.name | escape }}"></label>
-        <label>{{ 'funnel.own_phone' | t }}<input type="tel" name="phone" autocomplete="tel" placeholder="{{ 'funnel.own_phone_ph' | t }}" value="{{ customer.phone | escape }}"></label>
-      </div>
-      <label>{{ 'funnel.own_email' | t }}<input type="email" name="email" autocomplete="email" required value="{{ customer.email | escape }}"></label>
       <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>{{ 'funnel.own_consent' | t }}</span></label>
       <p class="fn-own__err" data-own-err role="alert" hidden></p>
       <button class="btn btn--gold fn-own__go" type="submit">{{ 'funnel.own_send' | t }}</button>

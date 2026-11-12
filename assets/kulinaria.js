@@ -1847,8 +1847,14 @@
           + (c ? '<button class="fn-wk__ed fn-wk__ed--x" type="button" data-wk-clear="' + key + '" aria-label="×">×</button>' : '')
           + '</div></div>';
       };
+      var wkTabs = $('[data-fn-wk-tabs]', holder), wkTabsOn = function (i) { if (!wkTabs) return; $$('[data-wk-tab]', wkTabs).forEach(function (b) { var on = +b.getAttribute('data-wk-tab') === i; b.classList.toggle('is-on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); }); };
+      if (wkBox && wkTabs) {
+        wkBox.addEventListener('scroll', function () { window.requestAnimationFrame(function () { var c = wkBox.children[0]; if (!c) return; var w = c.getBoundingClientRect().width + 14, i = Math.max(0, Math.min(MEALS - 1, Math.round(wkBox.scrollLeft / Math.max(1, w)))); wkTabsOn(i); }); }, { passive: true });
+        wkTabs.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-wk-tab]'); if (!b) return; var i = +b.getAttribute('data-wk-tab'), c = wkBox.children[i]; wkTabsOn(i); if (c && wkBox.scrollTo) wkBox.scrollTo({ left: c.offsetLeft - wkBox.offsetLeft - 4, behavior: REDUCE ? 'auto' : 'smooth' }); });
+      }
       var paintWk = function () {
         if (!wkBox || st.step !== 3) return;
+        if (wkTabs && !wkTabs.children.length) { wkTabs.innerHTML = dayNames.slice(0, MEALS).map(function (n, i) { return '<button type="button" role="tab" data-wk-tab="' + i + '">' + esc(n) + '</button>'; }).join(''); wkTabsOn(0); }
         var h = '';
         for (var i = 0; i < MEALS; i++) h += '<li class="fn-wk__card' + (i === st.active ? ' is-active' : '') + '"><h4>' + esc(dayLabel(i)) + '</h4>' + slotHtml(i, 0) + (st.perDay === 2 ? slotHtml(i, 1) : '') + '</li>';
         wkBox.innerHTML = h;

@@ -4016,6 +4016,149 @@ body .funnel:not(.is-gated)[data-step="3"] .fn-para{display:none !important}
 .fn-picker .fn-pickbar{max-width:100%}
 .fn-start__side small + small{display:block}
 
+/* v109: the old '4 steps' headline is gone (there are 3 steps); the slim step pills stay on the first step */
+body .funnel:not(.funnel--teaser) .funnel__title{display:none !important}
+body .funnel:not(.funnel--teaser) .funnel__top{justify-content:center}
+
+/* v110: a smaller, tighter "own diet" form */
+.fn-own__box{width:min(500px,100%);padding:16px 20px 18px;border-radius:20px}
+.fn-own__form{gap:8px}
+.fn-own h3{font-size:1.3rem;padding-right:34px}
+.fn-own__s{font-size:.76rem;line-height:1.4}
+.fn-own label{gap:3px;font-size:.66rem}
+.fn-own input[type=text],.fn-own input[type=tel],.fn-own input[type=email],.fn-own select,.fn-own textarea{padding:8px 10px;border-radius:10px;font-size:.82rem}
+.fn-own textarea{min-height:0;height:52px;resize:none}
+.fn-own__file{min-height:62px;padding:8px;border-radius:12px;font-size:.78rem !important}
+.fn-own__row{gap:8px}
+.fn-own__consent{font-size:.72rem !important;line-height:1.35}
+.fn-own__go{padding:11px;font-size:.84rem}
+.fn-own__x{top:6px;right:8px;width:32px;height:32px}
+@media (max-width:560px){.fn-own{padding:8px}.fn-own__row{grid-template-columns:repeat(2,minmax(0,1fr))}.fn-own__box{padding:14px 14px 16px}}
+
+/* v111: one step indicator: "Paso X de 3" + a slim 3-part line, on every step (no pills) */
+body .funnel:not(.funnel--teaser) .steps__nav{display:none !important}
+body .funnel:not(.funnel--teaser) .funnel__top{min-height:0;padding-block:4px 0;border:0;justify-content:flex-start}
+body .funnel:not(.funnel--teaser) .funnel__stepcount{display:block !important;width:min(100% - 48px,var(--container,1280px));margin:6px auto 0;padding-left:48px;box-sizing:border-box;font:500 .8rem var(--font-body);letter-spacing:.04em;text-transform:none;color:var(--text-muted)}
+body .funnel:not(.funnel--teaser) .funnel__bar{display:block !important;position:relative;width:min(100% - 96px,calc(var(--container,1280px) - 96px));height:3px;margin:8px auto 14px;border-radius:3px;background:var(--line);overflow:hidden}
+body .funnel:not(.funnel--teaser) .funnel__bar i{display:block;height:100%;width:100%;transform-origin:left;background:var(--accent);border-radius:3px;transition:transform .5s var(--ease)}
+@media (max-width:760px){body .funnel:not(.funnel--teaser) .funnel__stepcount{width:auto;margin:4px 16px 0;padding-left:0}body .funnel:not(.funnel--teaser) .funnel__bar{width:auto;margin:8px 16px 14px}}
+
+/* v112: PHONE design. One idea per screen, thumb-zone actions, big targets, nothing wider than the screen. */
+.fn-wk__tabs,.fn-wk__back{display:none}
+@media (max-width:760px){
+  /* shared: no pills, one counter, calm spacing */
+  body .funnel .steps__nav,body .funnel[data-step="0"] .steps__nav{display:none !important}
+  body .funnel:not(.funnel--teaser) .funnel__top{padding:0}
+  body .funnel:not(.funnel--teaser) .funnel__stepcount{margin:2px 16px 0;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+  body .funnel:not(.funnel--teaser) .funnel__bar{margin:8px 16px 12px;height:3px}
+
+  /* 1 - sign in: price, three lines, one button; the trial is a slim row */
+  .fn-start{display:flex;flex-direction:column;gap:12px;margin:6px 16px 0;max-width:none}
+  .fn-start__main{padding:26px 18px 18px;border-radius:24px;text-align:center}
+  .fn-start__flag{top:-12px;padding:6px 14px;font-size:.58rem;letter-spacing:.1em}
+  .fn-start__h{margin:6px 0 6px;font-size:1.75rem;line-height:1.12}
+  .fn-start__sub{margin:0 0 14px;font-size:.78rem}
+  .fn-start__list{margin:0 0 16px;padding:0;border:0;gap:10px;max-width:none}
+  .fn-start__list li{font-size:.9rem;padding-left:26px}
+  .fn-start__btn{width:100%;padding:16px;font-size:.95rem}
+  .fn-start__note{margin:10px 0 0;font-size:.72rem}
+  .fn-start__side{order:2;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:2px 12px;padding:12px 16px;border-radius:16px;text-align:left}
+  .fn-start__sk{flex:1 1 100%;font-size:.62rem}
+  .fn-start__sp{flex:1 1 auto;font-size:.9rem}.fn-start__sp strong{font-size:1.25rem}
+  .fn-start__side small{flex:1 1 100%;font-size:.7rem}
+  .fn-start__btn2{flex:0 0 auto;margin:0;padding:10px 16px;font-size:.74rem}
+
+  /* 2 - plan and diet: a snap carousel with a peek, a two-option plan switch, Continue docked at the bottom */
+  .fn-pickgrid{grid-template-columns:minmax(0,1fr);gap:20px;margin-top:6px}
+  .fn-pickcol{min-width:0}
+  .fn-pickh{margin:0 16px 10px;font-size:1.05rem}
+  .fn-cats{gap:10px;padding:4px 16px 8px;margin:0;scroll-padding-inline:16px}
+  .fn-cat{flex:0 0 42vw;min-height:0;gap:4px;padding:14px 10px 14px;border-radius:18px}
+  .fn-cat__ico{height:64px;margin-top:10px}.fn-cat__svg{width:44px;height:44px}
+  .fn-cat strong{margin-top:6px;font:700 .95rem/1.15 var(--font-display)}
+  .fn-cat small{font-size:.68rem}
+  .fn-cat__tag{top:8px;right:8px;padding:3px 7px;font-size:.5rem}
+  .fn-cats__ctl{display:none}
+  body .funnel .step[data-fn-step="1"] .fn-plans{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 16px}
+  body .funnel .step[data-fn-step="1"] .fn-plan{padding:14px 12px !important;border-radius:16px;gap:2px}
+  .fn-plan strong{font-size:.95rem}.fn-plan__from{font-size:.74rem}.fn-plan__from b{font-size:1.1rem}
+  .fn-plan small{font-size:.66rem}
+  .fn-plan__ul{display:none}
+  .fn-plan[aria-checked="true"] .fn-plan__ul{display:none}
+  .fn-plan__tag{right:10px;top:-9px;font-size:.5rem}
+  .fn-renew{margin:10px 16px 0;font-size:.8rem}
+  .fn-pickfoot{position:sticky;bottom:10px;z-index:30;flex-direction:column-reverse;align-items:stretch;gap:6px;margin:14px 12px 0;padding:10px 12px 12px;border:1px solid var(--line);border-radius:20px;background:var(--bg-raised);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  .fn-pickfoot .text-link{align-self:center;font-size:.72rem;letter-spacing:.06em}
+  .fn-pickgo{width:100%;min-width:0;padding:15px;font-size:.95rem}
+
+  /* 3 - your week: compact header, day tabs, one dish per screen, a slim confirm bar */
+  .fn-wk{padding:0 0 6px}
+  .fn-wk__head{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:6px 10px;margin:0 16px 8px}
+  .fn-wk__back{display:inline-flex;grid-row:1;grid-column:1;padding:6px 0;border:0;background:none;color:var(--accent);font:600 .8rem var(--font-body);cursor:pointer}
+  .fn-wk__head > div:not(.fn-wk__perday){grid-row:1;grid-column:2}
+  .fn-wk__head h3{font-size:1.2rem;line-height:1.15;text-align:center}
+  .fn-wk__chip{display:none}
+  .fn-wk__perday{grid-row:1;grid-column:3;justify-self:end}
+  .fn-wk__perday span{display:none}
+  .fn-wk__perday button{padding:7px 14px}
+  .fn-who{margin:0 16px 8px;gap:6px}
+  .fn-who__l{display:none}
+  .fn-who__b{padding:7px 14px;font-size:.78rem}
+  .fn-wk__tabs{display:flex;gap:6px;margin:0 16px 10px;padding:4px;border:1px solid var(--line);border-radius:14px;background:var(--bg-raised)}
+  .fn-wk__tabs button{flex:1;padding:9px 0;border:0;border-radius:10px;background:none;color:var(--text-muted);font:600 .78rem var(--font-body);cursor:pointer}
+  .fn-wk__tabs button.is-on{background:var(--accent);color:var(--on-accent,#fff)}
+  .fn-wk__cards{grid-auto-columns:calc(100% - 52px);gap:14px;padding:2px 16px 8px;scroll-padding-inline:16px;margin:0}
+  .fn-wk__card{padding:12px;gap:10px;border-radius:20px}
+  .fn-wk__card h4{display:none}
+  .fn-wk__imgb{aspect-ratio:16/10}
+  .fn-wk__name{min-height:0;font-size:1rem}
+  .fn-wk__btns{display:grid;grid-template-columns:1fr auto;gap:8px}
+  .fn-wk__up{grid-column:1;flex:none;padding:12px 8px;font-size:.78rem}
+  .fn-wk__swap{grid-column:2;flex:none;padding:12px 14px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--text)}
+  .fn-wk__slot.is-up .fn-wk__swap{grid-column:2}
+  .fn-wk__slot.is-empty{min-height:0}.fn-wk__add{min-height:120px}
+  /* bar: total + one big button, back lives in the header */
+  body .funnel[data-step="3"]:not(.is-gated):not(.funnel--teaser) .funnel__aside{display:grid !important;grid-template-columns:1fr auto;gap:2px 10px;position:sticky !important;bottom:8px !important;margin:6px 10px 0;padding:10px 12px;border:1px solid var(--accent);border-radius:20px;background:var(--bg-raised);box-shadow:0 10px 30px rgba(0,0,0,.4)}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total{grid-column:1;order:0;flex-direction:column;align-items:flex-start;gap:0}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total span{font-size:.68rem;color:var(--text-muted)}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total strong{font-size:1.3rem}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__upgrades{grid-column:1;order:1;font-size:.68rem}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-sum__toggle{grid-column:1;order:2;font-size:.68rem}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-actions{grid-column:2;grid-row:1 / span 3;order:0;width:auto;margin:0 !important}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-actions .fn-links{display:none !important}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside [data-fn-finish]{min-width:0;width:auto;padding:15px 20px;font-size:.9rem}
+
+  /* upgrade / swap: a bottom sheet */
+  .fn-picker{place-items:end center;padding:0}
+  .fn-picker__box{width:100%;max-height:88svh;border-radius:24px 24px 0 0;border-width:1px 0 0;padding:20px 14px 18px;animation:fn-sheet .32s var(--ease)}
+  .fn-picker__box::before{content:"";display:block;width:42px;height:4px;margin:-8px auto 12px;border-radius:4px;background:var(--line)}
+  .fn-picker__head{margin-bottom:12px}.fn-picker__head h3{font-size:1.15rem}
+  .fn-picker__x{top:8px;right:10px}
+  .fn-picker__tabs{margin:0 0 16px;max-width:none}
+  .fn-picker .fn-carousel{height:min(360px,48svh) !important}
+  .fn-picker .fn-arrow{display:none !important}
+}
+@keyframes fn-sheet{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+@media (hover:none){.fn-cats__ctl{display:none}}
+/* v113: phone polish */
+body .funnel:not(.funnel--teaser) .funnel__top .steps__nav{display:none !important}
+@media (max-width:760px){
+  .fn-start__list li{font-size:.84rem;line-height:1.35}
+  .fn-start__list{gap:8px;margin-bottom:14px}
+  .fn-start__side{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:12px;row-gap:0;padding:12px 14px}
+  .fn-start__sk,.fn-start__sp,.fn-start__side small{grid-column:1;flex:none}
+  .fn-start__btn2{grid-column:2;grid-row:1 / span 4;align-self:center;padding:10px 14px;font-size:.68rem;letter-spacing:.06em}
+  .fn-cat{flex-basis:40vw}
+  .fn-plan strong{font-size:.86rem;line-height:1.2}.fn-plan__from{font-size:.68rem}.fn-plan__from b{font-size:1.05rem}
+  .fn-plan small{display:none}
+  .fn-wk__head h3{font-size:1.02rem;white-space:nowrap}
+  .fn-wk__up{white-space:nowrap;font-size:.7rem;letter-spacing:0;padding:12px 6px}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total span{white-space:nowrap}
+  .fn-picker .fn-carousel,.fn-picker .fn-dishes{height:auto !important}
+  .fn-picker .fn-dish{height:auto !important;min-height:0}
+  .fn-picker .fn-dish__media{flex:none !important;aspect-ratio:16/10;height:auto !important}
+}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -4027,6 +4170,21 @@ body .funnel:not(.is-gated)[data-step="3"] .fn-para{display:none !important}
         lang: "es",
         routes: { cart: "/cart", cartAdd: "/cart/add", account: "/pages/cuenta" },
         media: { fire: "assets/video-fire.mp4" },
+        defaultMenus: {
+          "keto-low-carb": "pollo-a-las-hierbas, salmon-costra-almendras, pollo-a-las-hierbas, salmon-costra-almendras, filete-prime",
+          "fit-proteina": "bowl-res-quinoa, pollo-a-las-hierbas, bowl-res-quinoa, pollo-a-las-hierbas, arrachera-carbon",
+          "veggie": "omelette-claras-espinaca, crema-calabaza, omelette-claras-espinaca, crema-calabaza, bowl-vegano-garbanzo",
+          "sin-gluten": "bowl-res-quinoa, crema-calabaza, bowl-res-quinoa, crema-calabaza, arrachera-carbon",
+          "ligero": "omelette-claras-espinaca, crema-calabaza, omelette-claras-espinaca, crema-calabaza, batido-verde",
+          "al-fuego": "salmon-costra-almendras, arrachera-carbon, salmon-costra-almendras, arrachera-carbon, filete-prime",
+          "bowls": "bowl-res-quinoa, bowl-res-quinoa, bowl-vegano-garbanzo, bowl-res-quinoa, bowl-vegano-garbanzo",
+          "desayunos": "omelette-claras-espinaca, batido-verde, omelette-claras-espinaca, batido-verde, omelette-claras-espinaca",
+          "diario": "pollo-a-las-hierbas, bowl-res-quinoa, pollo-a-las-hierbas, crema-calabaza, omelette-claras-espinaca",
+          "entradas": "crema-calabaza, omelette-claras-espinaca, crema-calabaza, batido-verde, crema-calabaza",
+          "snacks-postres": "brownie-proteico, batido-verde, brownie-proteico, batido-verde, brownie-proteico",
+          "junior": "pasta-pollo-junior, pasta-pollo-junior, pasta-pollo-junior, pasta-pollo-junior, pasta-pollo-junior",
+          "all": "pollo-a-las-hierbas, bowl-res-quinoa, omelette-claras-espinaca, crema-calabaza, arrachera-carbon"
+        },
         logos: { fuego: "assets/logo-fuego.webp", ink: "assets/logo-black.webp", cream: "assets/logo-cream.webp", gold: "assets/logo.webp" },
         i18n: {
           pauseLeft: "Quedan {time} para pausar.", compat: "Compatibilidad {n}%",
@@ -4469,12 +4627,12 @@ Fuego</span>
               <h3 class="fn-start__h">Empieza tu pedido desde solo $180 al día</h3>
               <p class="fn-start__sub">Equivale a 20 platillos Selecto a domicilio · $900 MXN semanales</p>
               <ul class="fn-start__list"><li>5 comidas de 2 tiempos por semana (lunes a viernes)</li><li>Tu dieta, tus alergias y tus gustos: cada platillo se revisa por ti</li><li>Armas tu semana en minutos y pausas cuando quieras</li></ul>
-              <a class="btn btn--gold fn-start__btn" href="#/login?return_url=%2Fpages%2Fpedido&return_to=%2Fpages%2Fpedido">Entrar o crear cuenta</a>
+              <a class="btn btn--gold fn-start__btn" href="#/login?return_url=%2Fpages%2Fpedido&return_to=%2Fpages%2Fpedido">Iniciar sesión</a>
               <p class="fn-start__note">Con tu correo recibes un código. Sin contraseñas.</p>
             </div>
             <aside class="fn-start__side">
               <b class="fn-start__sk">Prueba de 1 semana</b>
-              <p class="fn-start__sp"><strong>$200</strong> MXN / día</p><small>+11.11111111111111% tarifa de prueba</small><small>Sin compromiso de renovación</small>
+              <p class="fn-start__sp"><strong>$207</strong> MXN / día</p><small>+15% tarifa de prueba</small><small>Sin compromiso de renovación</small>
               <a class="btn btn--outline fn-start__btn2" href="#/login?return_url=%2Fpages%2Fpedido&return_to=%2Fpages%2Fpedido">Probar 1 semana</a>
             </aside>
           </section><div class="fn-rules" data-fn-rules>
@@ -4602,8 +4760,8 @@ Fuego</span>
                 </button>
                 <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
                   <strong>1 semana · 5 comidas</strong>
-                  <em class="fn-plan__from"><b>$200</b> MXN / día</em>
-                  <small>($1,000 MXN en total)</small>
+                  <em class="fn-plan__from"><b>$207</b> MXN / día</em>
+                  <small>($1,035 MXN en total)</small>
                   <ul class="fn-plan__ul"><li>5 comidas de 2 tiempos por semana</li><li>Sin compromiso de renovación</li></ul>
                 </button>
               </div>
@@ -4614,25 +4772,25 @@ Fuego</span>
         </fieldset>
 
         <div class="fn-tierdata" data-fn-tierdata hidden aria-hidden="true"><button class="fn-tier fn-tier--selecto" type="button" role="radio" data-tier-choice="selecto" aria-checked="true"
-              data-week="1000" data-block="3600" data-meal="180"
+              data-week="1035" data-block="3600" data-meal="180"
               data-variant-week="72000" data-variant-block="72001"
               data-selling-plan="810001" data-name="Selecto">
               <span class="fn-tier__price" data-fn-tier-price>$3,600<small data-fn-tier-sub></small></span>
               <strong>Selecto</strong><small>Cocina diaria saludable al mejor precio.</small>
             </button><button class="fn-tier fn-tier--exclusivo" type="button" role="radio" data-tier-choice="exclusivo" aria-checked="false"
-              data-week="1350" data-block="5000" data-meal="250"
+              data-week="1440" data-block="5000" data-meal="250"
               data-variant-week="72010" data-variant-block="72011"
               data-selling-plan="810001" data-name="Exclusivo $">
               <span class="fn-tier__price" data-fn-tier-price>$5,000<small data-fn-tier-sub></small></span>
               <strong>Exclusivo $</strong><small>Ingredientes y cortes de mayor calidad.</small>
             </button><button class="fn-tier fn-tier--signature" type="button" role="radio" data-tier-choice="signature" aria-checked="false"
-              data-week="1700" data-block="6400" data-meal="320"
+              data-week="1840" data-block="6400" data-meal="320"
               data-variant-week="72020" data-variant-block="72021"
               data-selling-plan="810001" data-name="Signature $$">
               <span class="fn-tier__price" data-fn-tier-price>$6,400<small data-fn-tier-sub></small></span>
               <strong>Signature $$</strong><small>Platillos de autor del chef.</small>
             </button><button class="fn-tier fn-tier--reserve" type="button" role="radio" data-tier-choice="reserve" aria-checked="false"
-              data-week="2050" data-block="7800" data-meal="390"
+              data-week="2245" data-block="7800" data-meal="390"
               data-variant-week="72030" data-variant-block="72031"
               data-selling-plan="810001" data-name="Reserve $$$">
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
@@ -4680,10 +4838,12 @@ Fuego</span>
     </div>
           <section class="fn-wk" data-fn-wk data-t-up="Elevar nivel este día" data-t-swap="Cambiar" data-t-add1="Elegir platillo" data-t-add2="+ Agregar 2.º plato" data-t-pk="Elige el platillo del [d]" data-t-pk2="Elige el 2.º plato del [d]" data-t-pkup="Eleva tu experiencia del [d]" data-t-kcal="kcal" data-t-prot="g de proteína" data-t-edit="Quitar ingredientes o añadir nota" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
             <header class="fn-wk__head">
+              <button class="fn-wk__back" type="button" data-fn-go-prev>&lsaquo; Atrás</button>
               <div><h3>Arma tu menú semanal</h3><p class="fn-wk__chip">Plan base · 5 comidas por semana</p></div>
               <div class="fn-wk__perday" role="group" aria-label="Cuántos platos quieres cada día"><span>Platos al día</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
             </header>
             <div class="fn-who" data-fn-who hidden data-t-for="Pedido para" data-t-add="Agregar persona"></div>
+            <div class="fn-wk__tabs" data-fn-wk-tabs role="tablist"></div>
             <ol class="fn-wk__cards" data-fn-wk-cards></ol>
           </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="home--fn-para-funnel">¿Para quién es este pedido?</label><select class="select" id="home--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Agregar a alguien de tu familia</a></div>
@@ -4715,8 +4875,8 @@ Fuego</span>
           </div>
           <div class="fn-carousel">
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-arrow="-1" aria-label="Platillos anteriores">&#8249;</button>
-            <div class="fn-dishes" data-fn-grid><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="480" data-protein="34" data-carbs="22" data-fat="16" data-pm-block="180" data-pm-week="200" data-pid="7100" data-handle="pollo-a-las-hierbas"
-  data-title="Pollo a las hierbas con puré rústico" data-label="Pollo a las hierbas con puré rústico" data-category="diario-premium" data-tier="selecto" data-diets="keto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
+            <div class="fn-dishes" data-fn-grid><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="480" data-protein="34" data-carbs="22" data-fat="16" data-pm-block="180" data-pm-week="207" data-pid="7100" data-handle="pollo-a-las-hierbas"
+  data-handle="pollo-a-las-hierbas" data-title="Pollo a las hierbas con puré rústico" data-label="Pollo a las hierbas con puré rústico" data-category="diario-premium" data-tier="selecto" data-diets="keto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -4744,8 +4904,8 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="560" data-protein="39" data-carbs="34" data-fat="19" data-pm-block="180" data-pm-week="200" data-pid="7101" data-handle="bowl-res-quinoa"
-  data-title="Bowl de res magra y quinoa" data-label="Bowl de res magra y quinoa" data-category="bowls-de-la-semana" data-tier="selecto" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="560" data-protein="39" data-carbs="34" data-fat="19" data-pm-block="180" data-pm-week="207" data-pid="7101" data-handle="bowl-res-quinoa"
+  data-handle="bowl-res-quinoa" data-title="Bowl de res magra y quinoa" data-label="Bowl de res magra y quinoa" data-category="bowls-de-la-semana" data-tier="selecto" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -4773,8 +4933,8 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="520" data-protein="36" data-carbs="14" data-fat="17" data-pm-block="250" data-pm-week="270" data-pid="7102" data-handle="salmon-costra-almendras"
-  data-title="Salmón gourmet en costra de almendras" data-label="Salmón gourmet en costra de almendras" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="520" data-protein="36" data-carbs="14" data-fat="17" data-pm-block="250" data-pm-week="288" data-pid="7102" data-handle="salmon-costra-almendras"
+  data-handle="salmon-costra-almendras" data-title="Salmón gourmet en costra de almendras" data-label="Salmón gourmet en costra de almendras" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -4802,8 +4962,8 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="310" data-protein="22" data-carbs="8" data-fat="10" data-pm-block="180" data-pm-week="200" data-pid="7103" data-handle="omelette-claras-espinaca"
-  data-title="Omelette de claras con espinaca" data-label="Omelette de claras con espinaca" data-category="desayunos-premium" data-tier="selecto" data-diets="vegetariano|bajo-calorias" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="310" data-protein="22" data-carbs="8" data-fat="10" data-pm-block="180" data-pm-week="207" data-pid="7103" data-handle="omelette-claras-espinaca"
+  data-handle="omelette-claras-espinaca" data-title="Omelette de claras con espinaca" data-label="Omelette de claras con espinaca" data-category="desayunos-premium" data-tier="selecto" data-diets="vegetariano|bajo-calorias" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -4831,8 +4991,8 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="640" data-protein="45" data-carbs="28" data-fat="21" data-pm-block="320" data-pm-week="340" data-pid="7104" data-handle="arrachera-carbon"
-  data-title="Arrachera al carbón con maíz y espárragos" data-label="Arrachera al carbón con maíz y espárragos" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="640" data-protein="45" data-carbs="28" data-fat="21" data-pm-block="320" data-pm-week="368" data-pid="7104" data-handle="arrachera-carbon"
+  data-handle="arrachera-carbon" data-title="Arrachera al carbón con maíz y espárragos" data-label="Arrachera al carbón con maíz y espárragos" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -4860,8 +5020,8 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="710" data-protein="50" data-carbs="16" data-fat="24" data-pm-block="390" data-pm-week="410" data-pid="7105" data-handle="filete-prime"
-  data-title="Filete Prime con verduras asadas" data-label="Filete Prime con verduras asadas" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="710" data-protein="50" data-carbs="16" data-fat="24" data-pm-block="390" data-pm-week="449" data-pid="7105" data-handle="filete-prime"
+  data-handle="filete-prime" data-title="Filete Prime con verduras asadas" data-label="Filete Prime con verduras asadas" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -4889,8 +5049,8 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="450" data-protein="32" data-carbs="52" data-fat="15" data-pm-block="250" data-pm-week="270" data-pid="7106" data-handle="bowl-vegano-garbanzo"
-  data-title="Bowl vegano de garbanzo y tahini" data-label="Bowl vegano de garbanzo y tahini" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="450" data-protein="32" data-carbs="52" data-fat="15" data-pm-block="250" data-pm-week="288" data-pid="7106" data-handle="bowl-vegano-garbanzo"
+  data-handle="bowl-vegano-garbanzo" data-title="Bowl vegano de garbanzo y tahini" data-label="Bowl vegano de garbanzo y tahini" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -4918,8 +5078,8 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="220" data-protein="15" data-carbs="18" data-fat="7" data-pm-block="180" data-pm-week="200" data-pid="7107" data-handle="crema-calabaza"
-  data-title="Crema de calabaza asada" data-label="Crema de calabaza asada" data-category="sopas-y-entradas" data-tier="selecto" data-diets="vegetariano|sin-gluten|bajo-calorias" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="220" data-protein="15" data-carbs="18" data-fat="7" data-pm-block="180" data-pm-week="207" data-pid="7107" data-handle="crema-calabaza"
+  data-handle="crema-calabaza" data-title="Crema de calabaza asada" data-label="Crema de calabaza asada" data-category="sopas-y-entradas" data-tier="selecto" data-diets="vegetariano|sin-gluten|bajo-calorias" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -4947,8 +5107,8 @@ Fuego</span>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="380" data-protein="27" data-carbs="44" data-fat="13" data-pm-block="180" data-pm-week="200" data-pid="7110" data-handle="pasta-pollo-junior"
-  data-title="Mini pasta de pollo para peques" data-label="Mini pasta de pollo para peques" data-category="kulinaria-junior" data-tier="selecto" data-diets="" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="380" data-protein="27" data-carbs="44" data-fat="13" data-pm-block="180" data-pm-week="207" data-pid="7110" data-handle="pasta-pollo-junior"
+  data-handle="pasta-pollo-junior" data-title="Mini pasta de pollo para peques" data-label="Mini pasta de pollo para peques" data-category="kulinaria-junior" data-tier="selecto" data-diets="" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -5043,15 +5203,15 @@ Fuego</span>
       <p class="fn-own__s">Sube el plan de tu nutriólogo y armamos tu semana a partir de él. Te respondemos con una propuesta personalizada.</p>
       <label class="fn-own__file" data-own-drop><input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required><span data-own-file-name>Sube tu plan (PDF, JPG o PNG · máx. 5 MB)</span></label>
       <div class="fn-own__row">
+        <label>Tu nombre<input type="text" name="name" autocomplete="name" required value=""></label>
+        <label>Correo<input type="email" name="email" autocomplete="email" required value=""></label>
+      </div>
+      <div class="fn-own__row">
+        <label>WhatsApp<input type="tel" name="phone" autocomplete="tel" placeholder="222 123 4567" value=""></label>
         <label>Plan<select name="plan"><option value="block">4 semanas · 20 comidas</option><option value="week">1 semana · 5 comidas</option></select></label>
       </div>
       <label>Alergias, gramajes o indicaciones (opcional)<textarea name="notes" rows="2" maxlength="600" placeholder="Ej. sin lácteos, pesar la proteína cocida…"></textarea></label>
-      <div class="fn-own__row">
-        <label>Tu nombre<input type="text" name="name" autocomplete="name" required value=""></label>
-        <label>WhatsApp<input type="tel" name="phone" autocomplete="tel" placeholder="222 123 4567" value=""></label>
-      </div>
-      <label>Correo<input type="email" name="email" autocomplete="email" required value=""></label>
-      <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>Acepto que Kulinaria use mi archivo solo para preparar mi propuesta.</span></label>
+      <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>Acepto que usen mi archivo solo para preparar mi propuesta.</span></label>
       <p class="fn-own__err" data-own-err role="alert" hidden></p>
       <button class="btn btn--gold fn-own__go" type="submit">Enviar mi plan</button>
     </form>
@@ -5607,7 +5767,7 @@ Código de referencia propio y monedero</li></ul>
 
       <article class="card plan-card">
         <span class="eyebrow">Semana de prueba</span>
-        <p class="plan-card__price">Desde $1,000<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / semana</small></p>
+        <p class="plan-card__price">Desde $1,035<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / semana</small></p>
         <p class="text-muted">Una sola semana para conocer el servicio. <strong style="color:var(--accent)">5 comidas, de lunes a viernes.</strong></p>
         <ul class="plan-list"><li>Sin compromiso de renovación</li><li>
 Compra hasta el sábado 10:00 AM</li><li>
@@ -9135,7 +9295,7 @@ Pago digital, sin efectivo</li></ul>
           <span class="tier-badge tier-badge--selecto">Selecto</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Plan semanal Selecto</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,000</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,035</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 comidas por semana, de lunes a viernes. Disponible por 1 semana o por 4 semanas.</p></div><div class="meal-card">
@@ -9157,7 +9317,7 @@ Pago digital, sin efectivo</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 1000,
+    "price": 1035,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-selecto"
   }
@@ -9360,7 +9520,7 @@ Pago digital, sin efectivo</li></ul>
           <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Plan semanal Exclusivo</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,350</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,440</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 comidas por semana, de lunes a viernes. Disponible por 1 semana o por 4 semanas.</p></div><div class="meal-card">
@@ -9382,7 +9542,7 @@ Pago digital, sin efectivo</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 1350,
+    "price": 1440,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-exclusivo"
   }
@@ -9585,7 +9745,7 @@ Pago digital, sin efectivo</li></ul>
           <span class="tier-badge tier-badge--signature">Signature $$</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Plan semanal Signature</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,700</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,840</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 comidas por semana, de lunes a viernes. Disponible por 1 semana o por 4 semanas.</p></div><div class="meal-card">
@@ -9607,7 +9767,7 @@ Pago digital, sin efectivo</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 1700,
+    "price": 1840,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-signature"
   }
@@ -9810,7 +9970,7 @@ Pago digital, sin efectivo</li></ul>
           <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Plan semanal Reserve</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$2,050</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$2,245</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="Cómo se cobra"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 comidas por semana, de lunes a viernes. Disponible por 1 semana o por 4 semanas.</p></div><div class="meal-card">
@@ -9832,7 +9992,7 @@ Pago digital, sin efectivo</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 2050,
+    "price": 2245,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-reserve"
   }
@@ -10520,7 +10680,7 @@ Código de referencia propio y monedero</li></ul>
 
       <article class="card plan-card">
         <span class="eyebrow">Semana de prueba</span>
-        <p class="plan-card__price">Desde $1,000<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / semana</small></p>
+        <p class="plan-card__price">Desde $1,035<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / semana</small></p>
         <p class="text-muted">Una sola semana para conocer el servicio. <strong style="color:var(--accent)">5 comidas, de lunes a viernes.</strong></p>
         <ul class="plan-list"><li>Sin compromiso de renovación</li><li>
 Compra hasta el sábado 10:00 AM</li><li>
@@ -10699,7 +10859,7 @@ Código de referencia propio y monedero</li></ul>
 
       <article class="card plan-card">
         <span class="eyebrow">Semana de prueba</span>
-        <p class="plan-card__price">Desde $1,000<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / semana</small></p>
+        <p class="plan-card__price">Desde $1,035<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / semana</small></p>
         <p class="text-muted">Una sola semana para conocer el servicio. <strong style="color:var(--accent)">5 comidas, de lunes a viernes.</strong></p>
         <ul class="plan-list"><li>Sin compromiso de renovación</li><li>
 Compra hasta el sábado 10:00 AM</li><li>
@@ -10878,7 +11038,7 @@ Código de referencia propio y monedero</li></ul>
 
       <article class="card plan-card">
         <span class="eyebrow">Semana de prueba</span>
-        <p class="plan-card__price">Desde $1,000<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / semana</small></p>
+        <p class="plan-card__price">Desde $1,035<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / semana</small></p>
         <p class="text-muted">Una sola semana para conocer el servicio. <strong style="color:var(--accent)">5 comidas, de lunes a viernes.</strong></p>
         <ul class="plan-list"><li>Sin compromiso de renovación</li><li>
 Compra hasta el sábado 10:00 AM</li><li>
@@ -11057,7 +11217,7 @@ Código de referencia propio y monedero</li></ul>
 
       <article class="card plan-card">
         <span class="eyebrow">Semana de prueba</span>
-        <p class="plan-card__price">Desde $1,000<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / semana</small></p>
+        <p class="plan-card__price">Desde $1,035<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / semana</small></p>
         <p class="text-muted">Una sola semana para conocer el servicio. <strong style="color:var(--accent)">5 comidas, de lunes a viernes.</strong></p>
         <ul class="plan-list"><li>Sin compromiso de renovación</li><li>
 Compra hasta el sábado 10:00 AM</li><li>
@@ -11236,7 +11396,7 @@ Código de referencia propio y monedero</li></ul>
 
       <article class="card plan-card">
         <span class="eyebrow">Semana de prueba</span>
-        <p class="plan-card__price">Desde $1,000<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / semana</small></p>
+        <p class="plan-card__price">Desde $1,035<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / semana</small></p>
         <p class="text-muted">Una sola semana para conocer el servicio. <strong style="color:var(--accent)">5 comidas, de lunes a viernes.</strong></p>
         <ul class="plan-list"><li>Sin compromiso de renovación</li><li>
 Compra hasta el sábado 10:00 AM</li><li>
@@ -13139,12 +13299,12 @@ Pago digital, sin efectivo</li></ul>
               <h3 class="fn-start__h">Empieza tu pedido desde solo $180 al día</h3>
               <p class="fn-start__sub">Equivale a 20 platillos Selecto a domicilio · $900 MXN semanales</p>
               <ul class="fn-start__list"><li>5 comidas de 2 tiempos por semana (lunes a viernes)</li><li>Tu dieta, tus alergias y tus gustos: cada platillo se revisa por ti</li><li>Armas tu semana en minutos y pausas cuando quieras</li></ul>
-              <a class="btn btn--gold fn-start__btn" href="#/login?return_url=%2Fpages%2Fpedido&return_to=%2Fpages%2Fpedido">Entrar o crear cuenta</a>
+              <a class="btn btn--gold fn-start__btn" href="#/login?return_url=%2Fpages%2Fpedido&return_to=%2Fpages%2Fpedido">Iniciar sesión</a>
               <p class="fn-start__note">Con tu correo recibes un código. Sin contraseñas.</p>
             </div>
             <aside class="fn-start__side">
               <b class="fn-start__sk">Prueba de 1 semana</b>
-              <p class="fn-start__sp"><strong>$200</strong> MXN / día</p><small>+11.11111111111111% tarifa de prueba</small><small>Sin compromiso de renovación</small>
+              <p class="fn-start__sp"><strong>$207</strong> MXN / día</p><small>+15% tarifa de prueba</small><small>Sin compromiso de renovación</small>
               <a class="btn btn--outline fn-start__btn2" href="#/login?return_url=%2Fpages%2Fpedido&return_to=%2Fpages%2Fpedido">Probar 1 semana</a>
             </aside>
           </section><div class="fn-rules" data-fn-rules>
@@ -13272,8 +13432,8 @@ Pago digital, sin efectivo</li></ul>
                 </button>
                 <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
                   <strong>1 semana · 5 comidas</strong>
-                  <em class="fn-plan__from"><b>$200</b> MXN / día</em>
-                  <small>($1,000 MXN en total)</small>
+                  <em class="fn-plan__from"><b>$207</b> MXN / día</em>
+                  <small>($1,035 MXN en total)</small>
                   <ul class="fn-plan__ul"><li>5 comidas de 2 tiempos por semana</li><li>Sin compromiso de renovación</li></ul>
                 </button>
               </div>
@@ -13284,25 +13444,25 @@ Pago digital, sin efectivo</li></ul>
         </fieldset>
 
         <div class="fn-tierdata" data-fn-tierdata hidden aria-hidden="true"><button class="fn-tier fn-tier--selecto" type="button" role="radio" data-tier-choice="selecto" aria-checked="true"
-              data-week="1000" data-block="3600" data-meal="180"
+              data-week="1035" data-block="3600" data-meal="180"
               data-variant-week="72000" data-variant-block="72001"
               data-selling-plan="810001" data-name="Selecto">
               <span class="fn-tier__price" data-fn-tier-price>$3,600<small data-fn-tier-sub></small></span>
               <strong>Selecto</strong><small>Cocina diaria saludable al mejor precio.</small>
             </button><button class="fn-tier fn-tier--exclusivo" type="button" role="radio" data-tier-choice="exclusivo" aria-checked="false"
-              data-week="1350" data-block="5000" data-meal="250"
+              data-week="1440" data-block="5000" data-meal="250"
               data-variant-week="72010" data-variant-block="72011"
               data-selling-plan="810001" data-name="Exclusivo $">
               <span class="fn-tier__price" data-fn-tier-price>$5,000<small data-fn-tier-sub></small></span>
               <strong>Exclusivo $</strong><small>Ingredientes y cortes de mayor calidad.</small>
             </button><button class="fn-tier fn-tier--signature" type="button" role="radio" data-tier-choice="signature" aria-checked="false"
-              data-week="1700" data-block="6400" data-meal="320"
+              data-week="1840" data-block="6400" data-meal="320"
               data-variant-week="72020" data-variant-block="72021"
               data-selling-plan="810001" data-name="Signature $$">
               <span class="fn-tier__price" data-fn-tier-price>$6,400<small data-fn-tier-sub></small></span>
               <strong>Signature $$</strong><small>Platillos de autor del chef.</small>
             </button><button class="fn-tier fn-tier--reserve" type="button" role="radio" data-tier-choice="reserve" aria-checked="false"
-              data-week="2050" data-block="7800" data-meal="390"
+              data-week="2245" data-block="7800" data-meal="390"
               data-variant-week="72030" data-variant-block="72031"
               data-selling-plan="810001" data-name="Reserve $$$">
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
@@ -13350,10 +13510,12 @@ Pago digital, sin efectivo</li></ul>
     </div>
           <section class="fn-wk" data-fn-wk data-t-up="Elevar nivel este día" data-t-swap="Cambiar" data-t-add1="Elegir platillo" data-t-add2="+ Agregar 2.º plato" data-t-pk="Elige el platillo del [d]" data-t-pk2="Elige el 2.º plato del [d]" data-t-pkup="Eleva tu experiencia del [d]" data-t-kcal="kcal" data-t-prot="g de proteína" data-t-edit="Quitar ingredientes o añadir nota" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
             <header class="fn-wk__head">
+              <button class="fn-wk__back" type="button" data-fn-go-prev>&lsaquo; Atrás</button>
               <div><h3>Arma tu menú semanal</h3><p class="fn-wk__chip">Plan base · 5 comidas por semana</p></div>
               <div class="fn-wk__perday" role="group" aria-label="Cuántos platos quieres cada día"><span>Platos al día</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
             </header>
             <div class="fn-who" data-fn-who hidden data-t-for="Pedido para" data-t-add="Agregar persona"></div>
+            <div class="fn-wk__tabs" data-fn-wk-tabs role="tablist"></div>
             <ol class="fn-wk__cards" data-fn-wk-cards></ol>
           </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="pg-pedido--fn-para-funnel">¿Para quién es este pedido?</label><select class="select" id="pg-pedido--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Agregar a alguien de tu familia</a></div>
@@ -13385,8 +13547,8 @@ Pago digital, sin efectivo</li></ul>
           </div>
           <div class="fn-carousel">
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-arrow="-1" aria-label="Platillos anteriores">&#8249;</button>
-            <div class="fn-dishes" data-fn-grid><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="480" data-protein="34" data-carbs="22" data-fat="16" data-pm-block="180" data-pm-week="200" data-pid="7100" data-handle="pollo-a-las-hierbas"
-  data-title="Pollo a las hierbas con puré rústico" data-label="Pollo a las hierbas con puré rústico" data-category="diario-premium" data-tier="selecto" data-diets="keto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
+            <div class="fn-dishes" data-fn-grid><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="480" data-protein="34" data-carbs="22" data-fat="16" data-pm-block="180" data-pm-week="207" data-pid="7100" data-handle="pollo-a-las-hierbas"
+  data-handle="pollo-a-las-hierbas" data-title="Pollo a las hierbas con puré rústico" data-label="Pollo a las hierbas con puré rústico" data-category="diario-premium" data-tier="selecto" data-diets="keto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -13414,8 +13576,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="560" data-protein="39" data-carbs="34" data-fat="19" data-pm-block="180" data-pm-week="200" data-pid="7101" data-handle="bowl-res-quinoa"
-  data-title="Bowl de res magra y quinoa" data-label="Bowl de res magra y quinoa" data-category="bowls-de-la-semana" data-tier="selecto" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="560" data-protein="39" data-carbs="34" data-fat="19" data-pm-block="180" data-pm-week="207" data-pid="7101" data-handle="bowl-res-quinoa"
+  data-handle="bowl-res-quinoa" data-title="Bowl de res magra y quinoa" data-label="Bowl de res magra y quinoa" data-category="bowls-de-la-semana" data-tier="selecto" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Bowl de res magra y quinoa" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -13443,8 +13605,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="520" data-protein="36" data-carbs="14" data-fat="17" data-pm-block="250" data-pm-week="270" data-pid="7102" data-handle="salmon-costra-almendras"
-  data-title="Salmón gourmet en costra de almendras" data-label="Salmón gourmet en costra de almendras" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="520" data-protein="36" data-carbs="14" data-fat="17" data-pm-block="250" data-pm-week="288" data-pid="7102" data-handle="salmon-costra-almendras"
+  data-handle="salmon-costra-almendras" data-title="Salmón gourmet en costra de almendras" data-label="Salmón gourmet en costra de almendras" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Salmón gourmet en costra de almendras" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -13472,8 +13634,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="310" data-protein="22" data-carbs="8" data-fat="10" data-pm-block="180" data-pm-week="200" data-pid="7103" data-handle="omelette-claras-espinaca"
-  data-title="Omelette de claras con espinaca" data-label="Omelette de claras con espinaca" data-category="desayunos-premium" data-tier="selecto" data-diets="vegetariano|bajo-calorias" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="310" data-protein="22" data-carbs="8" data-fat="10" data-pm-block="180" data-pm-week="207" data-pid="7103" data-handle="omelette-claras-espinaca"
+  data-handle="omelette-claras-espinaca" data-title="Omelette de claras con espinaca" data-label="Omelette de claras con espinaca" data-category="desayunos-premium" data-tier="selecto" data-diets="vegetariano|bajo-calorias" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Omelette de claras con espinaca" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -13501,8 +13663,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="640" data-protein="45" data-carbs="28" data-fat="21" data-pm-block="320" data-pm-week="340" data-pid="7104" data-handle="arrachera-carbon"
-  data-title="Arrachera al carbón con maíz y espárragos" data-label="Arrachera al carbón con maíz y espárragos" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="640" data-protein="45" data-carbs="28" data-fat="21" data-pm-block="320" data-pm-week="368" data-pid="7104" data-handle="arrachera-carbon"
+  data-handle="arrachera-carbon" data-title="Arrachera al carbón con maíz y espárragos" data-label="Arrachera al carbón con maíz y espárragos" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Arrachera al carbón con maíz y espárragos" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -13530,8 +13692,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="710" data-protein="50" data-carbs="16" data-fat="24" data-pm-block="390" data-pm-week="410" data-pid="7105" data-handle="filete-prime"
-  data-title="Filete Prime con verduras asadas" data-label="Filete Prime con verduras asadas" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="710" data-protein="50" data-carbs="16" data-fat="24" data-pm-block="390" data-pm-week="449" data-pid="7105" data-handle="filete-prime"
+  data-handle="filete-prime" data-title="Filete Prime con verduras asadas" data-label="Filete Prime con verduras asadas" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Filete Prime con verduras asadas" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -13559,8 +13721,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="450" data-protein="32" data-carbs="52" data-fat="15" data-pm-block="250" data-pm-week="270" data-pid="7106" data-handle="bowl-vegano-garbanzo"
-  data-title="Bowl vegano de garbanzo y tahini" data-label="Bowl vegano de garbanzo y tahini" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="450" data-protein="32" data-carbs="52" data-fat="15" data-pm-block="250" data-pm-week="288" data-pid="7106" data-handle="bowl-vegano-garbanzo"
+  data-handle="bowl-vegano-garbanzo" data-title="Bowl vegano de garbanzo y tahini" data-label="Bowl vegano de garbanzo y tahini" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Bowl vegano de garbanzo y tahini" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -13588,8 +13750,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="220" data-protein="15" data-carbs="18" data-fat="7" data-pm-block="180" data-pm-week="200" data-pid="7107" data-handle="crema-calabaza"
-  data-title="Crema de calabaza asada" data-label="Crema de calabaza asada" data-category="sopas-y-entradas" data-tier="selecto" data-diets="vegetariano|sin-gluten|bajo-calorias" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="220" data-protein="15" data-carbs="18" data-fat="7" data-pm-block="180" data-pm-week="207" data-pid="7107" data-handle="crema-calabaza"
+  data-handle="crema-calabaza" data-title="Crema de calabaza asada" data-label="Crema de calabaza asada" data-category="sopas-y-entradas" data-tier="selecto" data-diets="vegetariano|sin-gluten|bajo-calorias" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Crema de calabaza asada" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -13617,8 +13779,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Elegir</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="380" data-protein="27" data-carbs="44" data-fat="13" data-pm-block="180" data-pm-week="200" data-pid="7110" data-handle="pasta-pollo-junior"
-  data-title="Mini pasta de pollo para peques" data-label="Mini pasta de pollo para peques" data-category="kulinaria-junior" data-tier="selecto" data-diets="" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="380" data-protein="27" data-carbs="44" data-fat="13" data-pm-block="180" data-pm-week="207" data-pid="7110" data-handle="pasta-pollo-junior"
+  data-handle="pasta-pollo-junior" data-title="Mini pasta de pollo para peques" data-label="Mini pasta de pollo para peques" data-category="kulinaria-junior" data-tier="selecto" data-diets="" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini pasta de pollo para peques" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -13713,15 +13875,15 @@ Pago digital, sin efectivo</li></ul>
       <p class="fn-own__s">Sube el plan de tu nutriólogo y armamos tu semana a partir de él. Te respondemos con una propuesta personalizada.</p>
       <label class="fn-own__file" data-own-drop><input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required><span data-own-file-name>Sube tu plan (PDF, JPG o PNG · máx. 5 MB)</span></label>
       <div class="fn-own__row">
+        <label>Tu nombre<input type="text" name="name" autocomplete="name" required value=""></label>
+        <label>Correo<input type="email" name="email" autocomplete="email" required value=""></label>
+      </div>
+      <div class="fn-own__row">
+        <label>WhatsApp<input type="tel" name="phone" autocomplete="tel" placeholder="222 123 4567" value=""></label>
         <label>Plan<select name="plan"><option value="block">4 semanas · 20 comidas</option><option value="week">1 semana · 5 comidas</option></select></label>
       </div>
       <label>Alergias, gramajes o indicaciones (opcional)<textarea name="notes" rows="2" maxlength="600" placeholder="Ej. sin lácteos, pesar la proteína cocida…"></textarea></label>
-      <div class="fn-own__row">
-        <label>Tu nombre<input type="text" name="name" autocomplete="name" required value=""></label>
-        <label>WhatsApp<input type="tel" name="phone" autocomplete="tel" placeholder="222 123 4567" value=""></label>
-      </div>
-      <label>Correo<input type="email" name="email" autocomplete="email" required value=""></label>
-      <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>Acepto que Kulinaria use mi archivo solo para preparar mi propuesta.</span></label>
+      <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>Acepto que usen mi archivo solo para preparar mi propuesta.</span></label>
       <p class="fn-own__err" data-own-err role="alert" hidden></p>
       <button class="btn btn--gold fn-own__go" type="submit">Enviar mi plan</button>
     </form>
@@ -14452,12 +14614,12 @@ Pago digital, sin efectivo</li></ul>
               <h3 class="fn-start__h">Start your order from just $180 a day</h3>
               <p class="fn-start__sub">Equals 20 Selecto dishes delivered · $900 MXN a week</p>
               <ul class="fn-start__list"><li>5 meals of 2 courses per week (Monday to Friday)</li><li>Your diet, allergies and tastes: every dish is checked for you</li><li>Build your week in minutes and pause whenever you like</li></ul>
-              <a class="btn btn--gold fn-start__btn" href="#/login?return_url=%2Fpages%2Fpedido&return_to=%2Fpages%2Fpedido">Sign in or create account</a>
+              <a class="btn btn--gold fn-start__btn" href="#/login?return_url=%2Fpages%2Fpedido&return_to=%2Fpages%2Fpedido">Sign in</a>
               <p class="fn-start__note">You get a code by email. No passwords.</p>
             </div>
             <aside class="fn-start__side">
               <b class="fn-start__sk">1-week trial</b>
-              <p class="fn-start__sp"><strong>$200</strong> MXN / day</p><small>+11.11111111111111% trial rate</small><small>No renewal commitment</small>
+              <p class="fn-start__sp"><strong>$207</strong> MXN / day</p><small>+15% trial rate</small><small>No renewal commitment</small>
               <a class="btn btn--outline fn-start__btn2" href="#/login?return_url=%2Fpages%2Fpedido&return_to=%2Fpages%2Fpedido">Try 1 week</a>
             </aside>
           </section><div class="fn-rules" data-fn-rules>
@@ -14585,8 +14747,8 @@ Pago digital, sin efectivo</li></ul>
                 </button>
                 <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
                   <strong>1 week · 5 meals</strong>
-                  <em class="fn-plan__from"><b>$200</b> MXN / day</em>
-                  <small>($1,000 MXN in total)</small>
+                  <em class="fn-plan__from"><b>$207</b> MXN / day</em>
+                  <small>($1,035 MXN in total)</small>
                   <ul class="fn-plan__ul"><li>5 meals of 2 courses per week</li><li>No renewal commitment</li></ul>
                 </button>
               </div>
@@ -14597,25 +14759,25 @@ Pago digital, sin efectivo</li></ul>
         </fieldset>
 
         <div class="fn-tierdata" data-fn-tierdata hidden aria-hidden="true"><button class="fn-tier fn-tier--selecto" type="button" role="radio" data-tier-choice="selecto" aria-checked="true"
-              data-week="1000" data-block="3600" data-meal="180"
+              data-week="1035" data-block="3600" data-meal="180"
               data-variant-week="72000" data-variant-block="72001"
               data-selling-plan="810001" data-name="Selecto">
               <span class="fn-tier__price" data-fn-tier-price>$3,600<small data-fn-tier-sub></small></span>
               <strong>Selecto</strong><small>Healthy everyday cooking at the best price.</small>
             </button><button class="fn-tier fn-tier--exclusivo" type="button" role="radio" data-tier-choice="exclusivo" aria-checked="false"
-              data-week="1350" data-block="5000" data-meal="250"
+              data-week="1440" data-block="5000" data-meal="250"
               data-variant-week="72010" data-variant-block="72011"
               data-selling-plan="810001" data-name="Exclusivo $">
               <span class="fn-tier__price" data-fn-tier-price>$5,000<small data-fn-tier-sub></small></span>
               <strong>Exclusivo $</strong><small>Higher-quality ingredients and cuts.</small>
             </button><button class="fn-tier fn-tier--signature" type="button" role="radio" data-tier-choice="signature" aria-checked="false"
-              data-week="1700" data-block="6400" data-meal="320"
+              data-week="1840" data-block="6400" data-meal="320"
               data-variant-week="72020" data-variant-block="72021"
               data-selling-plan="810001" data-name="Signature $$">
               <span class="fn-tier__price" data-fn-tier-price>$6,400<small data-fn-tier-sub></small></span>
               <strong>Signature $$</strong><small>The chef's signature dishes.</small>
             </button><button class="fn-tier fn-tier--reserve" type="button" role="radio" data-tier-choice="reserve" aria-checked="false"
-              data-week="2050" data-block="7800" data-meal="390"
+              data-week="2245" data-block="7800" data-meal="390"
               data-variant-week="72030" data-variant-block="72031"
               data-selling-plan="810001" data-name="Reserve $$$">
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
@@ -14663,10 +14825,12 @@ Pago digital, sin efectivo</li></ul>
     </div>
           <section class="fn-wk" data-fn-wk data-t-up="Upgrade this day" data-t-swap="Change" data-t-add1="Choose a dish" data-t-add2="+ Add 2nd plate" data-t-pk="Choose the dish for [d]" data-t-pk2="Choose the 2nd plate for [d]" data-t-pkup="Upgrade your [d]" data-t-kcal="kcal" data-t-prot="g protein" data-t-edit="Remove ingredients or add a note" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
             <header class="fn-wk__head">
+              <button class="fn-wk__back" type="button" data-fn-go-prev>&lsaquo; Back</button>
               <div><h3>Build your weekly menu</h3><p class="fn-wk__chip">Base plan · 5 meals per week</p></div>
               <div class="fn-wk__perday" role="group" aria-label="How many plates you want each day"><span>Plates per day</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
             </header>
             <div class="fn-who" data-fn-who hidden data-t-for="Order for" data-t-add="Add a person"></div>
+            <div class="fn-wk__tabs" data-fn-wk-tabs role="tablist"></div>
             <ol class="fn-wk__cards" data-fn-wk-cards></ol>
           </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="home--fn-para-funnel">Who is this order for?</label><select class="select" id="home--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Add someone from your family</a></div>
@@ -14698,8 +14862,8 @@ Pago digital, sin efectivo</li></ul>
           </div>
           <div class="fn-carousel">
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-arrow="-1" aria-label="Previous dishes">&#8249;</button>
-            <div class="fn-dishes" data-fn-grid><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="480" data-protein="34" data-carbs="22" data-fat="16" data-pm-block="180" data-pm-week="200" data-pid="7100" data-handle="pollo-a-las-hierbas"
-  data-title="Pollo a las hierbas con puré rústico" data-label="Herb chicken with rustic mash" data-category="diario-premium" data-tier="selecto" data-diets="keto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
+            <div class="fn-dishes" data-fn-grid><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="480" data-protein="34" data-carbs="22" data-fat="16" data-pm-block="180" data-pm-week="207" data-pid="7100" data-handle="pollo-a-las-hierbas"
+  data-handle="pollo-a-las-hierbas" data-title="Pollo a las hierbas con puré rústico" data-label="Herb chicken with rustic mash" data-category="diario-premium" data-tier="selecto" data-diets="keto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -14727,8 +14891,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="560" data-protein="39" data-carbs="34" data-fat="19" data-pm-block="180" data-pm-week="200" data-pid="7101" data-handle="bowl-res-quinoa"
-  data-title="Bowl de res magra y quinoa" data-label="Lean beef and quinoa bowl" data-category="bowls-de-la-semana" data-tier="selecto" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="560" data-protein="39" data-carbs="34" data-fat="19" data-pm-block="180" data-pm-week="207" data-pid="7101" data-handle="bowl-res-quinoa"
+  data-handle="bowl-res-quinoa" data-title="Bowl de res magra y quinoa" data-label="Lean beef and quinoa bowl" data-category="bowls-de-la-semana" data-tier="selecto" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -14756,8 +14920,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="520" data-protein="36" data-carbs="14" data-fat="17" data-pm-block="250" data-pm-week="270" data-pid="7102" data-handle="salmon-costra-almendras"
-  data-title="Salmón gourmet en costra de almendras" data-label="Gourmet salmon in an almond crust" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="520" data-protein="36" data-carbs="14" data-fat="17" data-pm-block="250" data-pm-week="288" data-pid="7102" data-handle="salmon-costra-almendras"
+  data-handle="salmon-costra-almendras" data-title="Salmón gourmet en costra de almendras" data-label="Gourmet salmon in an almond crust" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -14785,8 +14949,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="310" data-protein="22" data-carbs="8" data-fat="10" data-pm-block="180" data-pm-week="200" data-pid="7103" data-handle="omelette-claras-espinaca"
-  data-title="Omelette de claras con espinaca" data-label="Egg-white omelette with spinach" data-category="desayunos-premium" data-tier="selecto" data-diets="vegetariano|bajo-calorias" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="310" data-protein="22" data-carbs="8" data-fat="10" data-pm-block="180" data-pm-week="207" data-pid="7103" data-handle="omelette-claras-espinaca"
+  data-handle="omelette-claras-espinaca" data-title="Omelette de claras con espinaca" data-label="Egg-white omelette with spinach" data-category="desayunos-premium" data-tier="selecto" data-diets="vegetariano|bajo-calorias" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -14814,8 +14978,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="640" data-protein="45" data-carbs="28" data-fat="21" data-pm-block="320" data-pm-week="340" data-pid="7104" data-handle="arrachera-carbon"
-  data-title="Arrachera al carbón con maíz y espárragos" data-label="Charcoal-grilled skirt steak with corn and asparagus" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="640" data-protein="45" data-carbs="28" data-fat="21" data-pm-block="320" data-pm-week="368" data-pid="7104" data-handle="arrachera-carbon"
+  data-handle="arrachera-carbon" data-title="Arrachera al carbón con maíz y espárragos" data-label="Charcoal-grilled skirt steak with corn and asparagus" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -14843,8 +15007,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="710" data-protein="50" data-carbs="16" data-fat="24" data-pm-block="390" data-pm-week="410" data-pid="7105" data-handle="filete-prime"
-  data-title="Filete Prime con verduras asadas" data-label="Prime filet with roasted vegetables" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="710" data-protein="50" data-carbs="16" data-fat="24" data-pm-block="390" data-pm-week="449" data-pid="7105" data-handle="filete-prime"
+  data-handle="filete-prime" data-title="Filete Prime con verduras asadas" data-label="Prime filet with roasted vegetables" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -14872,8 +15036,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="450" data-protein="32" data-carbs="52" data-fat="15" data-pm-block="250" data-pm-week="270" data-pid="7106" data-handle="bowl-vegano-garbanzo"
-  data-title="Bowl vegano de garbanzo y tahini" data-label="Vegan chickpea and tahini bowl" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="450" data-protein="32" data-carbs="52" data-fat="15" data-pm-block="250" data-pm-week="288" data-pid="7106" data-handle="bowl-vegano-garbanzo"
+  data-handle="bowl-vegano-garbanzo" data-title="Bowl vegano de garbanzo y tahini" data-label="Vegan chickpea and tahini bowl" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -14901,8 +15065,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="220" data-protein="15" data-carbs="18" data-fat="7" data-pm-block="180" data-pm-week="200" data-pid="7107" data-handle="crema-calabaza"
-  data-title="Crema de calabaza asada" data-label="Roasted pumpkin cream soup" data-category="sopas-y-entradas" data-tier="selecto" data-diets="vegetariano|sin-gluten|bajo-calorias" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="220" data-protein="15" data-carbs="18" data-fat="7" data-pm-block="180" data-pm-week="207" data-pid="7107" data-handle="crema-calabaza"
+  data-handle="crema-calabaza" data-title="Crema de calabaza asada" data-label="Roasted pumpkin cream soup" data-category="sopas-y-entradas" data-tier="selecto" data-diets="vegetariano|sin-gluten|bajo-calorias" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -14930,8 +15094,8 @@ Pago digital, sin efectivo</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="380" data-protein="27" data-carbs="44" data-fat="13" data-pm-block="180" data-pm-week="200" data-pid="7110" data-handle="pasta-pollo-junior"
-  data-title="Mini pasta de pollo para peques" data-label="Mini chicken pasta for little ones" data-category="kulinaria-junior" data-tier="selecto" data-diets="" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="380" data-protein="27" data-carbs="44" data-fat="13" data-pm-block="180" data-pm-week="207" data-pid="7110" data-handle="pasta-pollo-junior"
+  data-handle="pasta-pollo-junior" data-title="Mini pasta de pollo para peques" data-label="Mini chicken pasta for little ones" data-category="kulinaria-junior" data-tier="selecto" data-diets="" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -15026,15 +15190,15 @@ Pago digital, sin efectivo</li></ul>
       <p class="fn-own__s">Upload your nutritionist's plan and we build your week from it. We reply with a personalised proposal.</p>
       <label class="fn-own__file" data-own-drop><input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required><span data-own-file-name>Upload your plan (PDF, JPG or PNG · max 5 MB)</span></label>
       <div class="fn-own__row">
+        <label>Your name<input type="text" name="name" autocomplete="name" required value=""></label>
+        <label>Email<input type="email" name="email" autocomplete="email" required value=""></label>
+      </div>
+      <div class="fn-own__row">
+        <label>WhatsApp<input type="tel" name="phone" autocomplete="tel" placeholder="222 123 4567" value=""></label>
         <label>Plan<select name="plan"><option value="block">4 weeks · 20 meals</option><option value="week">1 week · 5 meals</option></select></label>
       </div>
       <label>Allergies, portions or instructions (optional)<textarea name="notes" rows="2" maxlength="600" placeholder="E.g. dairy-free, weigh protein cooked…"></textarea></label>
-      <div class="fn-own__row">
-        <label>Your name<input type="text" name="name" autocomplete="name" required value=""></label>
-        <label>WhatsApp<input type="tel" name="phone" autocomplete="tel" placeholder="222 123 4567" value=""></label>
-      </div>
-      <label>Email<input type="email" name="email" autocomplete="email" required value=""></label>
-      <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>I agree Kulinaria uses my file only to prepare my proposal.</span></label>
+      <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>I agree my file is used only to prepare my proposal.</span></label>
       <p class="fn-own__err" data-own-err role="alert" hidden></p>
       <button class="btn btn--gold fn-own__go" type="submit">Send my plan</button>
     </form>
@@ -15590,7 +15754,7 @@ Your own referral code and wallet</li></ul>
 
       <article class="card plan-card">
         <span class="eyebrow">Trial week</span>
-        <p class="plan-card__price">From $1,000<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / week</small></p>
+        <p class="plan-card__price">From $1,035<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / week</small></p>
         <p class="text-muted">A single week to get to know the service. <strong style="color:var(--accent)">5 meals, Monday to Friday.</strong></p>
         <ul class="plan-list"><li>No renewal commitment</li><li>
 Buy until Saturday 10:00 AM</li><li>
@@ -19118,7 +19282,7 @@ Digital payment, no cash</li></ul>
           <span class="tier-badge tier-badge--selecto">Selecto</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Selecto weekly plan</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,000</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,035</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 meals a week, Monday to Friday. Available for 1 week or for 4 weeks.</p></div><div class="meal-card">
@@ -19140,7 +19304,7 @@ Digital payment, no cash</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 1000,
+    "price": 1035,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-selecto"
   }
@@ -19343,7 +19507,7 @@ Digital payment, no cash</li></ul>
           <span class="tier-badge tier-badge--exclusivo">Exclusivo $</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Exclusivo weekly plan</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,350</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,440</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 meals a week, Monday to Friday. Available for 1 week or for 4 weeks.</p></div><div class="meal-card">
@@ -19365,7 +19529,7 @@ Digital payment, no cash</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 1350,
+    "price": 1440,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-exclusivo"
   }
@@ -19568,7 +19732,7 @@ Digital payment, no cash</li></ul>
           <span class="tier-badge tier-badge--signature">Signature $$</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Signature weekly plan</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,700</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$1,840</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 meals a week, Monday to Friday. Available for 1 week or for 4 weeks.</p></div><div class="meal-card">
@@ -19590,7 +19754,7 @@ Digital payment, no cash</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 1700,
+    "price": 1840,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-signature"
   }
@@ -19793,7 +19957,7 @@ Digital payment, no cash</li></ul>
           <span class="tier-badge tier-badge--reserve">Reserve $$$</span>
 </div>
         <h1 style="font-size:clamp(2rem,3.4vw,3rem)">Reserve weekly plan</h1>
-        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$2,050</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>$2,245</p><button class="info-dot" type="button" data-sheet="pricing" aria-label="How pricing works"><i aria-hidden="true">i</i></button></div>
       </div>
 
       <div class="alert" data-allergen-alert hidden role="alert"></div><div class="richtext lede" ><p>5 meals a week, Monday to Friday. Available for 1 week or for 4 weeks.</p></div><div class="meal-card">
@@ -19815,7 +19979,7 @@ Digital payment, no cash</li></ul>
   "offers": {
     "@type": "Offer",
     "priceCurrency": "MXN",
-    "price": 2050,
+    "price": 2245,
     "availability": "https://schema.org/InStock",
     "url": "/products/plan-semanal-reserve"
   }
@@ -20503,7 +20667,7 @@ Your own referral code and wallet</li></ul>
 
       <article class="card plan-card">
         <span class="eyebrow">Trial week</span>
-        <p class="plan-card__price">From $1,000<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / week</small></p>
+        <p class="plan-card__price">From $1,035<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / week</small></p>
         <p class="text-muted">A single week to get to know the service. <strong style="color:var(--accent)">5 meals, Monday to Friday.</strong></p>
         <ul class="plan-list"><li>No renewal commitment</li><li>
 Buy until Saturday 10:00 AM</li><li>
@@ -20682,7 +20846,7 @@ Your own referral code and wallet</li></ul>
 
       <article class="card plan-card">
         <span class="eyebrow">Trial week</span>
-        <p class="plan-card__price">From $1,000<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / week</small></p>
+        <p class="plan-card__price">From $1,035<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / week</small></p>
         <p class="text-muted">A single week to get to know the service. <strong style="color:var(--accent)">5 meals, Monday to Friday.</strong></p>
         <ul class="plan-list"><li>No renewal commitment</li><li>
 Buy until Saturday 10:00 AM</li><li>
@@ -20861,7 +21025,7 @@ Your own referral code and wallet</li></ul>
 
       <article class="card plan-card">
         <span class="eyebrow">Trial week</span>
-        <p class="plan-card__price">From $1,000<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / week</small></p>
+        <p class="plan-card__price">From $1,035<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / week</small></p>
         <p class="text-muted">A single week to get to know the service. <strong style="color:var(--accent)">5 meals, Monday to Friday.</strong></p>
         <ul class="plan-list"><li>No renewal commitment</li><li>
 Buy until Saturday 10:00 AM</li><li>
@@ -21040,7 +21204,7 @@ Your own referral code and wallet</li></ul>
 
       <article class="card plan-card">
         <span class="eyebrow">Trial week</span>
-        <p class="plan-card__price">From $1,000<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / week</small></p>
+        <p class="plan-card__price">From $1,035<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / week</small></p>
         <p class="text-muted">A single week to get to know the service. <strong style="color:var(--accent)">5 meals, Monday to Friday.</strong></p>
         <ul class="plan-list"><li>No renewal commitment</li><li>
 Buy until Saturday 10:00 AM</li><li>
@@ -21219,7 +21383,7 @@ Your own referral code and wallet</li></ul>
 
       <article class="card plan-card">
         <span class="eyebrow">Trial week</span>
-        <p class="plan-card__price">From $1,000<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / week</small></p>
+        <p class="plan-card__price">From $1,035<small style="font-size:1rem;font-family:var(--font-body);color:var(--text-muted)"> / week</small></p>
         <p class="text-muted">A single week to get to know the service. <strong style="color:var(--accent)">5 meals, Monday to Friday.</strong></p>
         <ul class="plan-list"><li>No renewal commitment</li><li>
 Buy until Saturday 10:00 AM</li><li>
@@ -23122,12 +23286,12 @@ Digital payment, no cash</li></ul>
               <h3 class="fn-start__h">Start your order from just $180 a day</h3>
               <p class="fn-start__sub">Equals 20 Selecto dishes delivered · $900 MXN a week</p>
               <ul class="fn-start__list"><li>5 meals of 2 courses per week (Monday to Friday)</li><li>Your diet, allergies and tastes: every dish is checked for you</li><li>Build your week in minutes and pause whenever you like</li></ul>
-              <a class="btn btn--gold fn-start__btn" href="#/login?return_url=%2Fpages%2Fpedido&return_to=%2Fpages%2Fpedido">Sign in or create account</a>
+              <a class="btn btn--gold fn-start__btn" href="#/login?return_url=%2Fpages%2Fpedido&return_to=%2Fpages%2Fpedido">Sign in</a>
               <p class="fn-start__note">You get a code by email. No passwords.</p>
             </div>
             <aside class="fn-start__side">
               <b class="fn-start__sk">1-week trial</b>
-              <p class="fn-start__sp"><strong>$200</strong> MXN / day</p><small>+11.11111111111111% trial rate</small><small>No renewal commitment</small>
+              <p class="fn-start__sp"><strong>$207</strong> MXN / day</p><small>+15% trial rate</small><small>No renewal commitment</small>
               <a class="btn btn--outline fn-start__btn2" href="#/login?return_url=%2Fpages%2Fpedido&return_to=%2Fpages%2Fpedido">Try 1 week</a>
             </aside>
           </section><div class="fn-rules" data-fn-rules>
@@ -23255,8 +23419,8 @@ Digital payment, no cash</li></ul>
                 </button>
                 <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
                   <strong>1 week · 5 meals</strong>
-                  <em class="fn-plan__from"><b>$200</b> MXN / day</em>
-                  <small>($1,000 MXN in total)</small>
+                  <em class="fn-plan__from"><b>$207</b> MXN / day</em>
+                  <small>($1,035 MXN in total)</small>
                   <ul class="fn-plan__ul"><li>5 meals of 2 courses per week</li><li>No renewal commitment</li></ul>
                 </button>
               </div>
@@ -23267,25 +23431,25 @@ Digital payment, no cash</li></ul>
         </fieldset>
 
         <div class="fn-tierdata" data-fn-tierdata hidden aria-hidden="true"><button class="fn-tier fn-tier--selecto" type="button" role="radio" data-tier-choice="selecto" aria-checked="true"
-              data-week="1000" data-block="3600" data-meal="180"
+              data-week="1035" data-block="3600" data-meal="180"
               data-variant-week="72000" data-variant-block="72001"
               data-selling-plan="810001" data-name="Selecto">
               <span class="fn-tier__price" data-fn-tier-price>$3,600<small data-fn-tier-sub></small></span>
               <strong>Selecto</strong><small>Healthy everyday cooking at the best price.</small>
             </button><button class="fn-tier fn-tier--exclusivo" type="button" role="radio" data-tier-choice="exclusivo" aria-checked="false"
-              data-week="1350" data-block="5000" data-meal="250"
+              data-week="1440" data-block="5000" data-meal="250"
               data-variant-week="72010" data-variant-block="72011"
               data-selling-plan="810001" data-name="Exclusivo $">
               <span class="fn-tier__price" data-fn-tier-price>$5,000<small data-fn-tier-sub></small></span>
               <strong>Exclusivo $</strong><small>Higher-quality ingredients and cuts.</small>
             </button><button class="fn-tier fn-tier--signature" type="button" role="radio" data-tier-choice="signature" aria-checked="false"
-              data-week="1700" data-block="6400" data-meal="320"
+              data-week="1840" data-block="6400" data-meal="320"
               data-variant-week="72020" data-variant-block="72021"
               data-selling-plan="810001" data-name="Signature $$">
               <span class="fn-tier__price" data-fn-tier-price>$6,400<small data-fn-tier-sub></small></span>
               <strong>Signature $$</strong><small>The chef's signature dishes.</small>
             </button><button class="fn-tier fn-tier--reserve" type="button" role="radio" data-tier-choice="reserve" aria-checked="false"
-              data-week="2050" data-block="7800" data-meal="390"
+              data-week="2245" data-block="7800" data-meal="390"
               data-variant-week="72030" data-variant-block="72031"
               data-selling-plan="810001" data-name="Reserve $$$">
               <span class="fn-tier__price" data-fn-tier-price>$7,800<small data-fn-tier-sub></small></span>
@@ -23333,10 +23497,12 @@ Digital payment, no cash</li></ul>
     </div>
           <section class="fn-wk" data-fn-wk data-t-up="Upgrade this day" data-t-swap="Change" data-t-add1="Choose a dish" data-t-add2="+ Add 2nd plate" data-t-pk="Choose the dish for [d]" data-t-pk2="Choose the 2nd plate for [d]" data-t-pkup="Upgrade your [d]" data-t-kcal="kcal" data-t-prot="g protein" data-t-edit="Remove ingredients or add a note" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
             <header class="fn-wk__head">
+              <button class="fn-wk__back" type="button" data-fn-go-prev>&lsaquo; Back</button>
               <div><h3>Build your weekly menu</h3><p class="fn-wk__chip">Base plan · 5 meals per week</p></div>
               <div class="fn-wk__perday" role="group" aria-label="How many plates you want each day"><span>Plates per day</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
             </header>
             <div class="fn-who" data-fn-who hidden data-t-for="Order for" data-t-add="Add a person"></div>
+            <div class="fn-wk__tabs" data-fn-wk-tabs role="tablist"></div>
             <ol class="fn-wk__cards" data-fn-wk-cards></ol>
           </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="pg-pedido--fn-para-funnel">Who is this order for?</label><select class="select" id="pg-pedido--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Add someone from your family</a></div>
@@ -23368,8 +23534,8 @@ Digital payment, no cash</li></ul>
           </div>
           <div class="fn-carousel">
             <button class="fn-arrow fn-arrow--prev" type="button" data-fn-arrow="-1" aria-label="Previous dishes">&#8249;</button>
-            <div class="fn-dishes" data-fn-grid><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="480" data-protein="34" data-carbs="22" data-fat="16" data-pm-block="180" data-pm-week="200" data-pid="7100" data-handle="pollo-a-las-hierbas"
-  data-title="Pollo a las hierbas con puré rústico" data-label="Herb chicken with rustic mash" data-category="diario-premium" data-tier="selecto" data-diets="keto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
+            <div class="fn-dishes" data-fn-grid><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="480" data-protein="34" data-carbs="22" data-fat="16" data-pm-block="180" data-pm-week="207" data-pid="7100" data-handle="pollo-a-las-hierbas"
+  data-handle="pollo-a-las-hierbas" data-title="Pollo a las hierbas con puré rústico" data-label="Herb chicken with rustic mash" data-category="diario-premium" data-tier="selecto" data-diets="keto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -23397,8 +23563,8 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="560" data-protein="39" data-carbs="34" data-fat="19" data-pm-block="180" data-pm-week="200" data-pid="7101" data-handle="bowl-res-quinoa"
-  data-title="Bowl de res magra y quinoa" data-label="Lean beef and quinoa bowl" data-category="bowls-de-la-semana" data-tier="selecto" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="560" data-protein="39" data-carbs="34" data-fat="19" data-pm-block="180" data-pm-week="207" data-pid="7101" data-handle="bowl-res-quinoa"
+  data-handle="bowl-res-quinoa" data-title="Bowl de res magra y quinoa" data-label="Lean beef and quinoa bowl" data-category="bowls-de-la-semana" data-tier="selecto" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res magra|Quinoa|Aguacate|Cilantro">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-1.webp" alt="Lean beef and quinoa bowl" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -23426,8 +23592,8 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="520" data-protein="36" data-carbs="14" data-fat="17" data-pm-block="250" data-pm-week="270" data-pid="7102" data-handle="salmon-costra-almendras"
-  data-title="Salmón gourmet en costra de almendras" data-label="Gourmet salmon in an almond crust" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="520" data-protein="36" data-carbs="14" data-fat="17" data-pm-block="250" data-pm-week="288" data-pid="7102" data-handle="salmon-costra-almendras"
+  data-handle="salmon-costra-almendras" data-title="Salmón gourmet en costra de almendras" data-label="Gourmet salmon in an almond crust" data-category="al-fuego-y-mar" data-tier="exclusivo" data-diets="keto|bajo-carbos" data-allergens="Frutos secos|Pescado" data-ingredients="Salmón|Almendra|Eneldo|Espárragos|Jitomate cherry|Limón">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-2.webp" alt="Gourmet salmon in an almond crust" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -23455,8 +23621,8 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="310" data-protein="22" data-carbs="8" data-fat="10" data-pm-block="180" data-pm-week="200" data-pid="7103" data-handle="omelette-claras-espinaca"
-  data-title="Omelette de claras con espinaca" data-label="Egg-white omelette with spinach" data-category="desayunos-premium" data-tier="selecto" data-diets="vegetariano|bajo-calorias" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="310" data-protein="22" data-carbs="8" data-fat="10" data-pm-block="180" data-pm-week="207" data-pid="7103" data-handle="omelette-claras-espinaca"
+  data-handle="omelette-claras-espinaca" data-title="Omelette de claras con espinaca" data-label="Egg-white omelette with spinach" data-category="desayunos-premium" data-tier="selecto" data-diets="vegetariano|bajo-calorias" data-allergens="Huevo" data-ingredients="Claras|Espinaca|Champiñones">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-3.webp" alt="Egg-white omelette with spinach" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -23484,8 +23650,8 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="640" data-protein="45" data-carbs="28" data-fat="21" data-pm-block="320" data-pm-week="340" data-pid="7104" data-handle="arrachera-carbon"
-  data-title="Arrachera al carbón con maíz y espárragos" data-label="Charcoal-grilled skirt steak with corn and asparagus" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="640" data-protein="45" data-carbs="28" data-fat="21" data-pm-block="320" data-pm-week="368" data-pid="7104" data-handle="arrachera-carbon"
+  data-handle="arrachera-carbon" data-title="Arrachera al carbón con maíz y espárragos" data-label="Charcoal-grilled skirt steak with corn and asparagus" data-category="al-fuego-y-mar" data-tier="signature" data-diets="alto-proteina|sin-gluten" data-allergens="" data-ingredients="Arrachera|Maíz|Espárragos|Micro hierbas">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-4.webp" alt="Charcoal-grilled skirt steak with corn and asparagus" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -23513,8 +23679,8 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="710" data-protein="50" data-carbs="16" data-fat="24" data-pm-block="390" data-pm-week="410" data-pid="7105" data-handle="filete-prime"
-  data-title="Filete Prime con verduras asadas" data-label="Prime filet with roasted vegetables" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="710" data-protein="50" data-carbs="16" data-fat="24" data-pm-block="390" data-pm-week="449" data-pid="7105" data-handle="filete-prime"
+  data-handle="filete-prime" data-title="Filete Prime con verduras asadas" data-label="Prime filet with roasted vegetables" data-category="al-fuego-y-mar" data-tier="reserve" data-diets="keto|alto-proteina|sin-gluten" data-allergens="" data-ingredients="Res Prime|Brócoli|Zanahoria|Mantequilla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-5.webp" alt="Prime filet with roasted vegetables" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -23542,8 +23708,8 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="450" data-protein="32" data-carbs="52" data-fat="15" data-pm-block="250" data-pm-week="270" data-pid="7106" data-handle="bowl-vegano-garbanzo"
-  data-title="Bowl vegano de garbanzo y tahini" data-label="Vegan chickpea and tahini bowl" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="450" data-protein="32" data-carbs="52" data-fat="15" data-pm-block="250" data-pm-week="288" data-pid="7106" data-handle="bowl-vegano-garbanzo"
+  data-handle="bowl-vegano-garbanzo" data-title="Bowl vegano de garbanzo y tahini" data-label="Vegan chickpea and tahini bowl" data-category="bowls-de-la-semana" data-tier="exclusivo" data-diets="vegano|vegetariano|sin-gluten" data-allergens="Ajonjolí" data-ingredients="Garbanzo|Tahini|Pepino|Cebolla">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-6.webp" alt="Vegan chickpea and tahini bowl" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -23571,8 +23737,8 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="220" data-protein="15" data-carbs="18" data-fat="7" data-pm-block="180" data-pm-week="200" data-pid="7107" data-handle="crema-calabaza"
-  data-title="Crema de calabaza asada" data-label="Roasted pumpkin cream soup" data-category="sopas-y-entradas" data-tier="selecto" data-diets="vegetariano|sin-gluten|bajo-calorias" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="220" data-protein="15" data-carbs="18" data-fat="7" data-pm-block="180" data-pm-week="207" data-pid="7107" data-handle="crema-calabaza"
+  data-handle="crema-calabaza" data-title="Crema de calabaza asada" data-label="Roasted pumpkin cream soup" data-category="sopas-y-entradas" data-tier="selecto" data-diets="vegetariano|sin-gluten|bajo-calorias" data-allergens="Lácteos" data-ingredients="Calabaza|Crema|Semillas de calabaza|Tomillo">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-8.webp" alt="Roasted pumpkin cream soup" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -23600,8 +23766,8 @@ Digital payment, no cash</li></ul>
       <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>Choose</button>
     </div>
   </div>
-</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="380" data-protein="27" data-carbs="44" data-fat="13" data-pm-block="180" data-pm-week="200" data-pid="7110" data-handle="pasta-pollo-junior"
-  data-title="Mini pasta de pollo para peques" data-label="Mini chicken pasta for little ones" data-category="kulinaria-junior" data-tier="selecto" data-diets="" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
+</article><article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="380" data-protein="27" data-carbs="44" data-fat="13" data-pm-block="180" data-pm-week="207" data-pid="7110" data-handle="pasta-pollo-junior"
+  data-handle="pasta-pollo-junior" data-title="Mini pasta de pollo para peques" data-label="Mini chicken pasta for little ones" data-category="kulinaria-junior" data-tier="selecto" data-diets="" data-allergens="Gluten|Lácteos" data-ingredients="Pasta|Pollo|Queso|Jitomate">
   <div class="fn-dish__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-7.webp" alt="Mini chicken pasta for little ones" loading="lazy"><span class="fn-count" data-fn-count hidden></span><div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
   </div>
   <span class="fn-up" data-fn-up hidden></span>
@@ -23696,15 +23862,15 @@ Digital payment, no cash</li></ul>
       <p class="fn-own__s">Upload your nutritionist's plan and we build your week from it. We reply with a personalised proposal.</p>
       <label class="fn-own__file" data-own-drop><input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required><span data-own-file-name>Upload your plan (PDF, JPG or PNG · max 5 MB)</span></label>
       <div class="fn-own__row">
+        <label>Your name<input type="text" name="name" autocomplete="name" required value=""></label>
+        <label>Email<input type="email" name="email" autocomplete="email" required value=""></label>
+      </div>
+      <div class="fn-own__row">
+        <label>WhatsApp<input type="tel" name="phone" autocomplete="tel" placeholder="222 123 4567" value=""></label>
         <label>Plan<select name="plan"><option value="block">4 weeks · 20 meals</option><option value="week">1 week · 5 meals</option></select></label>
       </div>
       <label>Allergies, portions or instructions (optional)<textarea name="notes" rows="2" maxlength="600" placeholder="E.g. dairy-free, weigh protein cooked…"></textarea></label>
-      <div class="fn-own__row">
-        <label>Your name<input type="text" name="name" autocomplete="name" required value=""></label>
-        <label>WhatsApp<input type="tel" name="phone" autocomplete="tel" placeholder="222 123 4567" value=""></label>
-      </div>
-      <label>Email<input type="email" name="email" autocomplete="email" required value=""></label>
-      <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>I agree Kulinaria uses my file only to prepare my proposal.</span></label>
+      <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>I agree my file is used only to prepare my proposal.</span></label>
       <p class="fn-own__err" data-own-err role="alert" hidden></p>
       <button class="btn btn--gold fn-own__go" type="submit">Send my plan</button>
     </form>
@@ -25151,6 +25317,11 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     if (g.cat) return g.cat.indexOf(card.getAttribute('data-category')) > -1;
     var d = (card.getAttribute('data-diets') || '').split('|'); return g.diet.some(function (x) { return d.indexOf(x) > -1; });
   }
+  /* the suggested menu of a category: the same five dishes (Mon-Fri) for every customer. Set in Theme settings > "Menús sugeridos". */
+  function defaultMenu(cat) {
+    var raw = ((cfg.defaultMenus || {})[cat || 'all']) || '';
+    return String(raw).split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+  }
   function groupForDiet(slug) { var out = ''; Object.keys(GROUPS).forEach(function (k) { if (!out && GROUPS[k].diet && GROUPS[k].diet.indexOf(slug) > -1) out = k; }); return out; }
 
   // Current wall-clock time in the store timezone.
@@ -26138,7 +26309,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     var TIERS = ['selecto', 'exclusivo', 'signature', 'reserve'], rank = function (t) { var r = TIERS.indexOf(t); return r < 0 ? 0 : r; };
     var dayNames = (T_('days') || 'Lun,Mar,Mié,Jue,Vie').split(',');
     var upg = function (n) { return +root.getAttribute('data-upg-' + n) || 70 * n; };
-    var dishes = $$('[data-mw-dishes] li', root).map(function (li) { return { pid: li.getAttribute('data-pid'), title: li.getAttribute('data-title'), label: li.getAttribute('data-label') || li.getAttribute('data-title'), tier: li.getAttribute('data-tier'), al: (li.getAttribute('data-allergens') || '').split('|').filter(Boolean), ing: (li.getAttribute('data-ingredients') || '').split('|').filter(Boolean) }; });
+    var dishes = $$('[data-mw-dishes] li', root).map(function (li) { return { handle: li.getAttribute('data-handle'), pid: li.getAttribute('data-pid'), title: li.getAttribute('data-title'), label: li.getAttribute('data-label') || li.getAttribute('data-title'), tier: li.getAttribute('data-tier'), al: (li.getAttribute('data-allergens') || '').split('|').filter(Boolean), ing: (li.getAttribute('data-ingredients') || '').split('|').filter(Boolean) }; });
     var prof = loadProfile(); prof.strict = strictFlag(readFunnel());
     var warnOf = function (d) { return allergyHits(prof, d.al.map(norm), d.ing.map(norm)); };
     var level = function (d) { return d ? Math.max(0, Math.min(3, rank(d.tier))) : 0; };   // every plan starts at the Selecto base
@@ -26172,10 +26343,12 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       if (keep && $$('option', weekSel).some(function (x) { return x.value === keep; })) weekSel.value = keep;
     };
     var slotsOf = function (s) { var out = (s && s.slots) ? s.slots.slice(0, 5) : []; if (!out.length) (s && s.items || []).forEach(function (it) { for (var j = 0; j < (+it.qty || 1); j++) out.push(it.title); }); while (out.length < 5) out.push(''); return out; };
+    var padFive = function (a) { var o = []; for (var i = 0; i < 5; i++) o.push(a[i] || ''); return o; };
     var loadWeek = function () {
       var w = weekSel.value; days = ['', '', '', '', '']; say(keepMsg || ''); keepMsg = ''; paint(); if (!w) return;
       var done = function (sel, prev) {
         if (sel) days = slotsOf(sel); else if (prev) { days = slotsOf(prev); if (meals()) say(T_('prev'), false); }
+        else { var dm = defaultMenu((readFunnel() || {}).cat).map(function (h) { var d0 = dishes.filter(function (d) { return d.handle === h; })[0]; return d0 ? d0.title : ''; }); if (dm.some(Boolean)) { days = padFive(dm); say(T_('dflt'), false); } }
         days = days.map(function (t) { return byTitle(t) ? t : ''; }); paint();
       };
       if (a) fetch(a.url + (a.url.indexOf('?') > -1 ? '&' : '?') + 'action=week&cid=' + encodeURIComponent(a.cid) + '&token=' + encodeURIComponent(a.token) + '&week=' + encodeURIComponent(w))
@@ -26857,17 +27030,14 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         $$('[data-cat-choice]', holder).forEach(function (b) { var on = !!st.catPicked && b.getAttribute('data-cat-choice') === st.cat; b.classList.toggle('is-on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
       };
       var buildPresetSets = function () {
-        var okd = function (d) { return !d.hasAttribute('data-seasonal') && !d.classList.contains('is-warned'); };
-        var byName = function (a, b) { return a.getAttribute('data-title') > b.getAttribute('data-title') ? 1 : -1; };
+        var fixed = defaultMenu(st.cat).map(function (h) { return dishes.filter(function (d) { return d.getAttribute('data-handle') === h; })[0]; });
+        if (fixed.length >= MEALS && fixed.slice(0, MEALS).every(Boolean)) return [fixed.slice(0, MEALS)];
+        var okd = function (d) { return !d.hasAttribute('data-seasonal'); };                    // fallback (table missing a dish): fixed order, same for everyone
+        var byName = function (a, b) { return a.getAttribute('data-handle') > b.getAttribute('data-handle') ? 1 : -1; };
         var inG = dishes.filter(function (d) { return okd(d) && inGroup(d, st.cat); }).sort(function (a, b) { return rank(a.getAttribute('data-tier')) - rank(b.getAttribute('data-tier')) || byName(a, b); });
-        var base = inG.filter(function (d) { return rank(d.getAttribute('data-tier')) === 0; }), high = inG.filter(function (d) { return rank(d.getAttribute('data-tier')) > 0; });
-        var plain = function (d) { return okd(d) && rank(d.getAttribute('data-tier')) === 0 && !/junior|postres|batidos/.test(d.getAttribute('data-category') || ''); };
-        if (base.length < 3) base = base.concat(dishes.filter(function (d) { return plain(d) && base.indexOf(d) < 0; }).sort(byName));   // a week with variety even when the diet has few base-tier dishes
-        if (!base.length) base = dishes.filter(function (d) { return okd(d) && rank(d.getAttribute('data-tier')) === 0; }).sort(byName);
-        if (!base.length) base = high.slice(0, 1);
-        if (!base.length) return [[]];
-        var out = []; for (var i = 0; i < MEALS; i++) out.push(base[i % base.length]);
-        if (high.length && MEALS > 1) out[MEALS - 1] = high[0];                           // one suggested upgrade, easy to swap back
+        if (!inG.length) inG = dishes.filter(okd).sort(byName);
+        if (!inG.length) return [[]];
+        var out = []; for (var i = 0; i < MEALS; i++) out.push(inG[i % inG.length]);
         return [out];
       };
       var paintPresets = function () {
@@ -26949,8 +27119,14 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           + (c ? '<button class="fn-wk__ed fn-wk__ed--x" type="button" data-wk-clear="' + key + '" aria-label="×">×</button>' : '')
           + '</div></div>';
       };
+      var wkTabs = $('[data-fn-wk-tabs]', holder), wkTabsOn = function (i) { if (!wkTabs) return; $$('[data-wk-tab]', wkTabs).forEach(function (b) { var on = +b.getAttribute('data-wk-tab') === i; b.classList.toggle('is-on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); }); };
+      if (wkBox && wkTabs) {
+        wkBox.addEventListener('scroll', function () { window.requestAnimationFrame(function () { var c = wkBox.children[0]; if (!c) return; var w = c.getBoundingClientRect().width + 14, i = Math.max(0, Math.min(MEALS - 1, Math.round(wkBox.scrollLeft / Math.max(1, w)))); wkTabsOn(i); }); }, { passive: true });
+        wkTabs.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-wk-tab]'); if (!b) return; var i = +b.getAttribute('data-wk-tab'), c = wkBox.children[i]; wkTabsOn(i); if (c && wkBox.scrollTo) wkBox.scrollTo({ left: c.offsetLeft - wkBox.offsetLeft - 4, behavior: REDUCE ? 'auto' : 'smooth' }); });
+      }
       var paintWk = function () {
         if (!wkBox || st.step !== 3) return;
+        if (wkTabs && !wkTabs.children.length) { wkTabs.innerHTML = dayNames.slice(0, MEALS).map(function (n, i) { return '<button type="button" role="tab" data-wk-tab="' + i + '">' + esc(n) + '</button>'; }).join(''); wkTabsOn(0); }
         var h = '';
         for (var i = 0; i < MEALS; i++) h += '<li class="fn-wk__card' + (i === st.active ? ' is-active' : '') + '"><h4>' + esc(dayLabel(i)) + '</h4>' + slotHtml(i, 0) + (st.perDay === 2 ? slotHtml(i, 1) : '') + '</li>';
         wkBox.innerHTML = h;

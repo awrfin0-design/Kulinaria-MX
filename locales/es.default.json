@@ -699,6 +699,7 @@
     "have_account": "¿Ya tienes cuenta?"
   },
   "funnel": {
+    "start_btn": "Iniciar sesión",
     "who": "Pedido para",
     "who_add": "Agregar persona",
     "cat_desayunos": "Desayunos",
@@ -735,7 +736,7 @@
     "own_phone": "WhatsApp",
     "own_phone_ph": "222 123 4567",
     "own_email": "Correo",
-    "own_consent": "Acepto que Kulinaria use mi archivo solo para preparar mi propuesta.",
+    "own_consent": "Acepto que usen mi archivo solo para preparar mi propuesta.",
     "own_send": "Enviar mi plan",
     "own_sending": "Enviando…",
     "own_close": "Cerrar",
