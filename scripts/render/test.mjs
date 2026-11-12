@@ -926,8 +926,8 @@ ok('Mi semana offers previous orders and "my details" links and no "buy credits"
 await page.goto(`${URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(4200);
 {
   const f = '[data-page="pg/pedido"] [data-funnel]';
-  await page.click(`${f} [data-plan-choice="week"]`); await page.waitForTimeout(700); await page.click(`${f} [data-fn-sc-next]`); await page.waitForTimeout(500);
-  for (let i = 0; i < 5; i++) await page.evaluate((f) => document.querySelector(f + ' [data-fn-dish]:not(.is-hidden) [data-pick]').click(), f);
+  await page.evaluate((f) => document.querySelector(f + ' [data-cat-choice="veggie"]').click(), f); await page.waitForTimeout(200); await page.evaluate((f) => document.querySelector(f + ' [data-fn-go-next]').click(), f); await page.waitForTimeout(900);
+  // (the week opens already filled with the suggested menu: nothing to pick)
   await page.evaluate(() => { const fe = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push(String(u).split('/').pop()); return fe.apply(this, arguments); }; });
   await page.click(`${f} [data-fn-finish]`); await page.waitForTimeout(1000);
   ok('existing customer: confirming a week goes straight to the cart without asking for any details', page.url().endsWith('#/carrito') && (await page.evaluate(() => window.__calls)).join() === "cart.js,update.js,add.js", page.url());
