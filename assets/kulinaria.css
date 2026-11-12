@@ -3971,3 +3971,17 @@ body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .fn-actions{order:4;bo
 /* v107 */
 body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__stepcount{padding-left:48px;box-sizing:border-box}
 @media (max-width:760px){body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__stepcount{padding-left:0}}
+
+/* v108: people chips, picker tabs, upgrade on every card, 13 diet cards */
+body .funnel:not(.is-gated)[data-step="3"] .fn-para{display:none !important}
+.fn-who{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 clamp(14px,2vw,24px)}
+.fn-who__l{font:600 .72rem var(--font-label);letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-right:4px}
+.fn-who__b{padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:none;color:var(--text);font:500 .84rem var(--font-body);cursor:pointer}
+.fn-who__b.is-on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--text)}
+.fn-who__add{padding:8px 4px;font:600 .8rem var(--font-body);color:var(--accent);text-decoration:none}
+.fn-who__add:hover{text-decoration:underline}
+.fn-wk__slot.is-up .fn-wk__up{display:block !important}
+.fn-picker[data-mode="up"] [data-pick-tier="selecto"]{display:none}
+.fn-picker__box{overflow-x:hidden}
+.fn-picker .fn-pickbar{max-width:100%}
+.fn-start__side small + small{display:block}

@@ -78,6 +78,8 @@
             <aside class="fn-start__side">
               <b class="fn-start__sk">{{ 'funnel.start_trial_t' | t }}</b>
               <p class="fn-start__sp"><strong>{{ st_day_m }}</strong> {{ 'funnel.pl_day' | t }}</p>
+              {%- assign st_bwk_n = st_meal_n | times: 5 -%}{%- assign st_pct = st_week_n | minus: st_bwk_n | times: 100 | divided_by: st_bwk_n -%}
+              {%- if st_pct > 0 -%}<small>{{ 'funnel.start_trial_pct' | t | replace: '[p]', st_pct }}</small>{%- endif -%}
               <small>{{ 'funnel.start_trial_s' | t }}</small>
               <a class="btn btn--outline fn-start__btn2" href="{% render 'login-url', back: '/pages/pedido' %}">{{ 'funnel.start_trial_btn' | t }}</a>
             </aside>
@@ -155,7 +157,7 @@
             <div class="fn-pickcol">
               <h3 class="fn-pickh"><b>1</b>{{ 'funnel.p1_h' | t }}</h3>
               <div class="fn-cats" data-fn-cats role="radiogroup" aria-label="{{ 'funnel.p1_h' | t }}">
-                {%- assign fn_cats = 'keto-low-carb,al-fuego,fit-proteina,veggie,sin-gluten,bowls,ligero,all' | split: ',' -%}
+                {%- assign fn_cats = 'keto-low-carb,fit-proteina,veggie,sin-gluten,ligero,al-fuego,bowls,desayunos,diario,entradas,snacks-postres,junior,all' | split: ',' -%}
                 {%- for c in fn_cats -%}{%- assign ck = c | replace: '-', '_' -%}{%- assign ckt = 'funnel.cat_' | append: ck -%}{%- assign cks = ckt | append: '_s' -%}
                 <button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="{{ c }}">
                   <span class="fn-cat__tag">{{ 'funnel.cat_sel' | t }} &#9733;</span>
@@ -167,6 +169,11 @@
   {%- when 'veggie' -%}<path d="M8 40C8 20 20 8 40 8c0 20-12 32-32 32z"/><path d="M8 40 28 20"/>
   {%- when 'sin-gluten' -%}<path d="M24 42V14M24 14c-5 0-8-3-8-7 5 0 8 3 8 7zM24 14c5 0 8-3 8-7-5 0-8 3-8 7zM24 24c-5 0-8-3-8-7 5 0 8 3 8 7zM24 24c5 0 8-3 8-7-5 0-8 3-8 7zM24 34c-5 0-8-3-8-7 5 0 8 3 8 7zM24 34c5 0 8-3 8-7-5 0-8 3-8 7z"/><path d="M8 8l32 32"/>
   {%- when 'bowls' -%}<path d="M6 22h36a18 18 0 0 1-36 0z"/><path d="M16 14c0-4 4-4 4-8M26 14c0-4 4-4 4-8"/><path d="M14 42h20"/>
+  {%- when 'desayunos' -%}<path d="M6 34h36"/><path d="M12 34a12 12 0 0 1 24 0"/><path d="M24 12v6M10 18l4 4M38 18l-4 4"/>
+  {%- when 'diario' -%}<rect x="9" y="10" width="30" height="28" rx="4"/><path d="M9 20h30M17 6v8M31 6v8"/><path d="M17 28h6M26 28h6"/>
+  {%- when 'junior' -%}<circle cx="24" cy="24" r="16"/><circle cx="18" cy="21" r="1.6"/><circle cx="30" cy="21" r="1.6"/><path d="M16 29c2 4 14 4 16 0"/>
+  {%- when 'entradas' -%}<path d="M8 28h32c0 7-7 12-16 12S8 35 8 28z"/><path d="M33 7l-6 15"/><ellipse cx="35" cy="10" rx="3" ry="4.5" transform="rotate(22 35 10)"/>
+  {%- when 'snacks-postres' -%}<path d="M12 22h24l-3 18H15z"/><path d="M12 22a12 10 0 0 1 24 0"/><circle cx="24" cy="9" r="2.2"/>
   {%- when 'ligero' -%}<path d="M8 32a16 16 0 0 1 32 0"/><path d="M24 32l7-10"/><circle cx="24" cy="32" r="2.4"/><path d="M12 41h24"/>
   {%- else -%}<path d="M24 6l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/><path d="M38 34l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/>
 {%- endcase -%}
@@ -310,6 +317,7 @@
               <div><h3>{{ 'funnel.wk_t' | t }}</h3><p class="fn-wk__chip">{{ 'funnel.wk_chip' | t }}</p></div>
               <div class="fn-wk__perday" role="group" aria-label="{{ 'funnel.perday_aria' | t }}"><span>{{ 'funnel.perday' | t }}</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
             </header>
+            <div class="fn-who" data-fn-who hidden data-t-for="{{ 'funnel.who' | t }}" data-t-add="{{ 'funnel.who_add' | t }}"></div>
             <ol class="fn-wk__cards" data-fn-wk-cards></ol>
           </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="fn-para-{{ section.id }}">{{ 'funnel.para' | t }}</label><select class="select" id="fn-para-{{ section.id }}" data-fn-para></select><a class="text-link" href="/pages/cuenta-perfil#familia">{{ 'funnel.para_add' | t }}</a></div>
@@ -327,6 +335,7 @@
               </header>
               <div class="fn-picker__tabs" role="group" data-fn-picker-tabs>
                 <button type="button" data-pick-tier="">{{ 'funnel.pk_all' | t }}</button>
+                <button type="button" data-pick-tier="selecto">{{ 'tier.selecto' | t }}</button>
                 <button type="button" data-pick-tier="exclusivo">{{ 'tier.exclusivo' | t }} <small>+{{ pk_u1 | money_without_trailing_zeros }}</small></button>
                 <button type="button" data-pick-tier="signature">{{ 'tier.signature' | t }} <small>+{{ pk_u2 | money_without_trailing_zeros }}</small><em class="fn-picker__rec">&#9733; {{ 'funnel.pk_rec' | t }}</em></button>
                 <button type="button" data-pick-tier="reserve">{{ 'tier.reserve' | t }} <small>+{{ pk_u3 | money_without_trailing_zeros }}</small></button>

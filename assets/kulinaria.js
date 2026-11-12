@@ -1479,7 +1479,10 @@
         var dn = document.createElement('button'); dn.type = 'button'; dn.className = 'btn btn--outline btn--sm'; dn.textContent = T_('mods-done'); dn.addEventListener('click', function () { modsOpen = -1; render(); }); box.appendChild(dn);
       };
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modsOpen > -1) { modsOpen = -1; render(); } });
-      var persist = function () { try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(Object.assign({ v: 2 }, st))); } catch (e) {} };
+      var PKEYS = ['days', 'days2', 'mods', 'cardNotes', 'qty', 'perDay', 'course', 'active', 'cat', 'catPicked', 'presetCat'], switching = false;
+      var pKey = function () { return st.para || 'yo'; };
+      var saveMine = function () { if (switching) return; try { st.people = st.people && typeof st.people === 'object' ? st.people : {}; var o = {}; PKEYS.forEach(function (k) { o[k] = st[k] === undefined ? null : JSON.parse(JSON.stringify(st[k])); }); st.people[pKey()] = o; } catch (e) {} };
+      var persist = function () { saveMine(); try { localStorage.setItem(FUNNEL_KEY, JSON.stringify(Object.assign({ v: 2 }, st))); } catch (e) {} };
       var lastKey = function () { var a0 = acct(); return 'kx_last_order' + (a0 ? '_' + a0.cid : ''); };
       var say = function (msg) { if (!err) return; err.hidden = !msg; err.textContent = msg || ''; };
       var fill = function (tpl, o) { return String(tpl).replace(/\{(\w+)\}/g, function (m, k) { return o[k] != null ? o[k] : m; }); };
@@ -1836,7 +1839,7 @@
           + '<span class="fn-wk__tier fn-wk__tier--' + tierOf(d) + '">' + esc(tierNames[lv] || '') + (extra ? ' · +' + esc(money(extra)) : '') + '</span>'
           + '<strong class="fn-wk__name">' + esc(lab(d)) + '</strong>'
           + (mt ? '<span class="fn-wk__note">✎ ' + esc(mt) + '</span>' : '')
-          + '<div class="fn-wk__btns"><button class="fn-wk__up" type="button" data-wk-up="' + key + '">★ ' + esc(WT('up')) + '</button><button class="fn-wk__swap" type="button" data-wk-swap="' + key + '">' + esc(WT('swap')) + '</button>'
+          + '<div class="fn-wk__btns">' + (lv < 3 ? '<button class="fn-wk__up" type="button" data-wk-up="' + key + '">★ ' + esc(WT('up')) + '</button>' : '') + '<button class="fn-wk__swap" type="button" data-wk-swap="' + key + '">' + esc(WT('swap')) + '</button>'
           + (c ? '<button class="fn-wk__ed fn-wk__ed--x" type="button" data-wk-clear="' + key + '" aria-label="×">×</button>' : '')
           + '</div></div>';
       };
@@ -1855,7 +1858,7 @@
       var pickCatBefore = null, pickUp = false;
       var openPicker = function (i, c, tier) {
         if (!picker) return;
-        st.active = i; st.course = c ? 1 : 0; st.pickTier = tier || ''; pickCatBefore = tier ? st.cat : null; pickUp = !!tier; if (tier) st.cat = 'all'; persist();
+        st.active = i; st.course = c ? 1 : 0; st.pickTier = tier || ''; pickCatBefore = st.cat; pickUp = !!tier; st.cat = 'all'; persist();
         picker.hidden = false; holder.classList.add('is-picking'); document.documentElement.classList.add('fn-pick-open');
         var gr = $('[data-fn-grid]', picker); if (gr) gr.scrollLeft = 0; render();
       };
@@ -2056,7 +2059,29 @@
           paraSel.value = st.para || ''; var wrap = paraSel.closest('[data-fn-para-wrap]'); if (wrap) wrap.hidden = false;
         };
         buildPara();
-        paraSel.addEventListener('change', function () { st.para = paraSel.value; st.days = blankDays(); st.days2 = blankDays(); st.course = 0; st.qty = {}; st.active = 0; persist(); applyProfile(); render(); });
+        var who = $('[data-fn-who]', holder), addA = $('[data-fn-para-wrap] a', holder);
+        var paintWho = function () {
+          if (!who) return;
+          var pp = loadProfile(), people = pp.people || [];
+          who.hidden = false;
+          who.innerHTML = '<span class="fn-who__l">' + esc(who.getAttribute('data-t-for') || '') + '</span>' + [{ id: '', name: T_('para-me') }].concat(people).map(function (x) { return '<button type="button" class="fn-who__b' + ((st.para || '') === (x.id || '') ? ' is-on' : '') + '" data-fn-who-pick="' + esc(x.id || '') + '">' + esc(x.name) + '</button>'; }).join('') + (addA ? '<a class="fn-who__add" href="' + esc(addA.getAttribute('href') || '#') + '">+ ' + esc(who.getAttribute('data-t-add') || '') + '</a>' : '');
+        };
+        var switchPerson = function (id) {
+          if ((st.para || '') === (id || '')) return;
+          saveMine(); switching = true; st.para = id || ''; persist(); applyProfile();
+          var mem = (st.people || {})[pKey()];
+          if (mem) { PKEYS.forEach(function (k) { if (mem[k] !== null && mem[k] !== undefined) st[k] = JSON.parse(JSON.stringify(mem[k])); }); }
+          else {                                                                  // a person with no week yet starts from the default menu of the diet that is selected
+            st.days2 = blankDays(); st.perDay = 1; st.course = 0; st.active = 0; st.qty = {}; st.cardNotes = {}; st.mods = blankDays().map(function () { return { off: [], note: '' }; });
+            var ps = buildPresetSets(), set = ps[0] || []; st.days = blankDays().map(function (x, k) { return set[k] ? set[k].getAttribute('data-pid') : ''; }); st.presetCat = st.cat;
+          }
+          st.qty = {}; st.days.concat(st.days2).forEach(function (p) { if (p) st.qty[p] = (st.qty[p] || 0) + 1; });
+          if (daysBox) daysBox.removeAttribute('data-built');
+          switching = false; paraSel.value = st.para || ''; persist(); applyProfile(); paintWho(); render();
+        };
+        paraSel.addEventListener('change', function () { switchPerson(paraSel.value); });
+        holder.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-fn-who-pick]'); if (b) switchPerson(b.getAttribute('data-fn-who-pick')); });
+        paintWho();
       }
       var gridEl = $('[data-fn-grid]', holder);
       var scGrid = $('[data-fn-sc-grid]', holder), scCount = $('[data-fn-sc-count]', holder);
