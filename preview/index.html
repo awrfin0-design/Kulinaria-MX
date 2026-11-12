@@ -4214,6 +4214,8 @@ body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total span{ma
 }
 /* v119: the counter is a flex row on every step (an older, more specific rule kept it as a block) */
 body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__stepcount,body .funnel:not(.funnel--teaser) .funnel__stepcount{display:flex !important;flex-wrap:wrap !important}
+/* v120 */
+@media (max-width:760px){body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total{flex-direction:row !important;align-items:baseline !important;gap:8px}body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total span{margin-right:0}}
 
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
