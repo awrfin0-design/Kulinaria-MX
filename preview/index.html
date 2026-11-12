@@ -3807,6 +3807,35 @@ body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__stage,body .funnel[dat
 .fn-preset__days span{overflow-wrap:anywhere}
 .fn-start{margin-top:26px}
 
+/* v99: "have your own diet?" modal */
+.fn-own[hidden]{display:none !important}
+.fn-own{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:16px}
+.fn-own__bg{position:absolute;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(4px)}
+.fn-own__box{position:relative;width:min(560px,100%);max-height:calc(100svh - 32px);overflow:auto;scrollbar-width:none;padding:clamp(20px,3vw,32px);border:1px solid var(--accent);border-radius:24px;background:var(--bg-raised);color:var(--text);box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.fn-own__box::-webkit-scrollbar{display:none}
+.fn-own__x{position:absolute;top:10px;right:14px;width:36px;height:36px;border:0;background:none;color:var(--text);font-size:1.7rem;line-height:1;cursor:pointer}
+.fn-own__form{display:grid;gap:12px}.fn-own__form[hidden]{display:none}
+.fn-own h3{margin:0;font:600 clamp(1.3rem,2.4vw,1.7rem) var(--font-display)}
+.fn-own__s{margin:0;font-size:.84rem;color:var(--text-muted)}
+.fn-own label{display:grid;gap:5px;font-size:.74rem;font-weight:600;color:var(--text-muted)}
+.fn-own input[type=text],.fn-own input[type=tel],.fn-own input[type=email],.fn-own select,.fn-own textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg-base);color:var(--text);font:400 .9rem var(--font-body)}
+.fn-own__row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.fn-own__row:has(> :only-child){grid-template-columns:1fr}
+.fn-own__file{position:relative;display:grid !important;place-items:center;min-height:96px;padding:14px;border:2px dashed var(--accent);border-radius:16px;text-align:center;cursor:pointer;color:var(--text) !important;font-size:.86rem !important;background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.fn-own__file input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.fn-own__consent{display:flex !important;align-items:flex-start;gap:8px;font-weight:400 !important}
+.fn-own__err{margin:0;padding:8px 12px;border-radius:10px;background:color-mix(in srgb,#c0392b 16%,transparent);color:var(--text);font-size:.8rem}
+.fn-own__go{justify-content:center;padding:14px}
+.fn-own__ok{display:grid;gap:10px;justify-items:center;text-align:center;padding:14px 0}.fn-own__ok[hidden]{display:none}
+.fn-own__ok b{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--accent);color:var(--on-accent,#fff);font-size:1.5rem}
+.fn-own__ok p{margin:0;font-size:.88rem;color:var(--text-muted)}
+html.fn-own-open{overflow:hidden}
+@media (max-width:560px){.fn-own__row{grid-template-columns:1fr}}
+
+/* v100: no blended video effects (they could paint white streaks over the page). Buttons keep a plain colour glow instead. */
+.btn__fx,.cta-banner__fx{display:none !important}
+.showcase__video{mix-blend-mode:normal !important}
+.btn:hover,.btn:focus-visible{box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 60%,transparent),0 10px 28px color-mix(in srgb,var(--accent) 32%,transparent)}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -4775,6 +4804,37 @@ Fuego</span>
    </div>
   </div>
 </section>
+
+<div class="fn-own" data-fn-own-modal hidden role="dialog" aria-modal="true" aria-labelledby="fn-own-t-funnel" data-endpoint=""
+  data-t-err="Revisa el archivo (PDF, JPG o PNG de hasta 5 MB), tu nombre, correo y la casilla de aceptación." data-t-sending="Enviando…">
+  <div class="fn-own__bg" data-own-close></div>
+  <div class="fn-own__box">
+    <button class="fn-own__x" type="button" data-own-close aria-label="Cerrar">&times;</button>
+    <form class="fn-own__form" data-fn-own-form novalidate>
+      <h3 id="home--fn-own-t-funnel">Tu propia dieta</h3>
+      <p class="fn-own__s">Sube el plan de tu nutriólogo y armamos tu semana a partir de él. Te respondemos con una propuesta personalizada.</p>
+      <label class="fn-own__file" data-own-drop><input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required><span data-own-file-name>Sube tu plan (PDF, JPG o PNG · máx. 5 MB)</span></label>
+      <div class="fn-own__row">
+        <label>Plan<select name="plan"><option value="block">4 semanas · 20 comidas</option><option value="week">1 semana · 5 comidas</option></select></label>
+      </div>
+      <label>Alergias, gramajes o indicaciones (opcional)<textarea name="notes" rows="2" maxlength="600" placeholder="Ej. sin lácteos, pesar la proteína cocida…"></textarea></label>
+      <div class="fn-own__row">
+        <label>Tu nombre<input type="text" name="name" autocomplete="name" required value=""></label>
+        <label>WhatsApp<input type="tel" name="phone" autocomplete="tel" placeholder="222 123 4567" value=""></label>
+      </div>
+      <label>Correo<input type="email" name="email" autocomplete="email" required value="ramon@ejemplo.com"></label>
+      <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>Acepto que Kulinaria use mi archivo solo para preparar mi propuesta.</span></label>
+      <p class="fn-own__err" data-own-err role="alert" hidden></p>
+      <button class="btn btn--gold fn-own__go" type="submit">Enviar mi plan</button>
+    </form>
+    <div class="fn-own__ok" data-fn-own-ok hidden>
+      <b aria-hidden="true">&#10003;</b>
+      <h3>¡Recibido!</h3>
+      <p>Estamos preparando tu propuesta personalizada. Te la enviamos por correo.</p>
+      <button class="btn btn--outline" type="button" data-own-close>Cerrar</button>
+    </div>
+  </div>
+</div>
 
 
 </div><div id="home--shopify-section-dishes" class="shopify-section"><section class="section section--raised" >
@@ -13616,6 +13676,37 @@ Pago digital, sin efectivo</li></ul>
   </div>
 </section>
 
+<div class="fn-own" data-fn-own-modal hidden role="dialog" aria-modal="true" aria-labelledby="fn-own-t-funnel" data-endpoint=""
+  data-t-err="Revisa el archivo (PDF, JPG o PNG de hasta 5 MB), tu nombre, correo y la casilla de aceptación." data-t-sending="Enviando…">
+  <div class="fn-own__bg" data-own-close></div>
+  <div class="fn-own__box">
+    <button class="fn-own__x" type="button" data-own-close aria-label="Cerrar">&times;</button>
+    <form class="fn-own__form" data-fn-own-form novalidate>
+      <h3 id="pg-pedido--fn-own-t-funnel">Tu propia dieta</h3>
+      <p class="fn-own__s">Sube el plan de tu nutriólogo y armamos tu semana a partir de él. Te respondemos con una propuesta personalizada.</p>
+      <label class="fn-own__file" data-own-drop><input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required><span data-own-file-name>Sube tu plan (PDF, JPG o PNG · máx. 5 MB)</span></label>
+      <div class="fn-own__row">
+        <label>Plan<select name="plan"><option value="block">4 semanas · 20 comidas</option><option value="week">1 semana · 5 comidas</option></select></label>
+      </div>
+      <label>Alergias, gramajes o indicaciones (opcional)<textarea name="notes" rows="2" maxlength="600" placeholder="Ej. sin lácteos, pesar la proteína cocida…"></textarea></label>
+      <div class="fn-own__row">
+        <label>Tu nombre<input type="text" name="name" autocomplete="name" required value=""></label>
+        <label>WhatsApp<input type="tel" name="phone" autocomplete="tel" placeholder="222 123 4567" value=""></label>
+      </div>
+      <label>Correo<input type="email" name="email" autocomplete="email" required value="ramon@ejemplo.com"></label>
+      <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>Acepto que Kulinaria use mi archivo solo para preparar mi propuesta.</span></label>
+      <p class="fn-own__err" data-own-err role="alert" hidden></p>
+      <button class="btn btn--gold fn-own__go" type="submit">Enviar mi plan</button>
+    </form>
+    <div class="fn-own__ok" data-fn-own-ok hidden>
+      <b aria-hidden="true">&#10003;</b>
+      <h3>¡Recibido!</h3>
+      <p>Estamos preparando tu propuesta personalizada. Te la enviamos por correo.</p>
+      <button class="btn btn--outline" type="button" data-own-close>Cerrar</button>
+    </div>
+  </div>
+</div>
+
 
 </div>
     </div>
@@ -14906,6 +14997,37 @@ Pago digital, sin efectivo</li></ul>
    </div>
   </div>
 </section>
+
+<div class="fn-own" data-fn-own-modal hidden role="dialog" aria-modal="true" aria-labelledby="fn-own-t-funnel" data-endpoint=""
+  data-t-err="Check the file (PDF, JPG or PNG up to 5 MB), your name, email and the consent box." data-t-sending="Sending…">
+  <div class="fn-own__bg" data-own-close></div>
+  <div class="fn-own__box">
+    <button class="fn-own__x" type="button" data-own-close aria-label="Close">&times;</button>
+    <form class="fn-own__form" data-fn-own-form novalidate>
+      <h3 id="home--fn-own-t-funnel">Your own diet</h3>
+      <p class="fn-own__s">Upload your nutritionist's plan and we build your week from it. We reply with a personalised proposal.</p>
+      <label class="fn-own__file" data-own-drop><input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required><span data-own-file-name>Upload your plan (PDF, JPG or PNG · max 5 MB)</span></label>
+      <div class="fn-own__row">
+        <label>Plan<select name="plan"><option value="block">4 weeks · 20 meals</option><option value="week">1 week · 5 meals</option></select></label>
+      </div>
+      <label>Allergies, portions or instructions (optional)<textarea name="notes" rows="2" maxlength="600" placeholder="E.g. dairy-free, weigh protein cooked…"></textarea></label>
+      <div class="fn-own__row">
+        <label>Your name<input type="text" name="name" autocomplete="name" required value=""></label>
+        <label>WhatsApp<input type="tel" name="phone" autocomplete="tel" placeholder="222 123 4567" value=""></label>
+      </div>
+      <label>Email<input type="email" name="email" autocomplete="email" required value="ramon@ejemplo.com"></label>
+      <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>I agree Kulinaria uses my file only to prepare my proposal.</span></label>
+      <p class="fn-own__err" data-own-err role="alert" hidden></p>
+      <button class="btn btn--gold fn-own__go" type="submit">Send my plan</button>
+    </form>
+    <div class="fn-own__ok" data-fn-own-ok hidden>
+      <b aria-hidden="true">&#10003;</b>
+      <h3>Received!</h3>
+      <p>We're preparing your personalised proposal. We'll email it to you.</p>
+      <button class="btn btn--outline" type="button" data-own-close>Close</button>
+    </div>
+  </div>
+</div>
 
 
 </div><div id="home--shopify-section-dishes" class="shopify-section"><section class="section section--raised" >
@@ -23747,6 +23869,37 @@ Digital payment, no cash</li></ul>
   </div>
 </section>
 
+<div class="fn-own" data-fn-own-modal hidden role="dialog" aria-modal="true" aria-labelledby="fn-own-t-funnel" data-endpoint=""
+  data-t-err="Check the file (PDF, JPG or PNG up to 5 MB), your name, email and the consent box." data-t-sending="Sending…">
+  <div class="fn-own__bg" data-own-close></div>
+  <div class="fn-own__box">
+    <button class="fn-own__x" type="button" data-own-close aria-label="Close">&times;</button>
+    <form class="fn-own__form" data-fn-own-form novalidate>
+      <h3 id="pg-pedido--fn-own-t-funnel">Your own diet</h3>
+      <p class="fn-own__s">Upload your nutritionist's plan and we build your week from it. We reply with a personalised proposal.</p>
+      <label class="fn-own__file" data-own-drop><input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required><span data-own-file-name>Upload your plan (PDF, JPG or PNG · max 5 MB)</span></label>
+      <div class="fn-own__row">
+        <label>Plan<select name="plan"><option value="block">4 weeks · 20 meals</option><option value="week">1 week · 5 meals</option></select></label>
+      </div>
+      <label>Allergies, portions or instructions (optional)<textarea name="notes" rows="2" maxlength="600" placeholder="E.g. dairy-free, weigh protein cooked…"></textarea></label>
+      <div class="fn-own__row">
+        <label>Your name<input type="text" name="name" autocomplete="name" required value=""></label>
+        <label>WhatsApp<input type="tel" name="phone" autocomplete="tel" placeholder="222 123 4567" value=""></label>
+      </div>
+      <label>Email<input type="email" name="email" autocomplete="email" required value="ramon@ejemplo.com"></label>
+      <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>I agree Kulinaria uses my file only to prepare my proposal.</span></label>
+      <p class="fn-own__err" data-own-err role="alert" hidden></p>
+      <button class="btn btn--gold fn-own__go" type="submit">Send my plan</button>
+    </form>
+    <div class="fn-own__ok" data-fn-own-ok hidden>
+      <b aria-hidden="true">&#10003;</b>
+      <h3>Received!</h3>
+      <p>We're preparing your personalised proposal. We'll email it to you.</p>
+      <button class="btn btn--outline" type="button" data-own-close>Close</button>
+    </div>
+  </div>
+</div>
+
 
 </div>
     </div>
@@ -26994,6 +27147,32 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         if (t.closest('[data-fn-go-next]')) { if (next && !next.disabled) next.click(); else say(T_('locked')); return; }
         if (t.closest('[data-fn-go-prev]') && prev) prev.click();
       });
+      /* "have your own diet?": quote request with a real file upload (the sheet backend stores it and drafts a plan) */
+      var ownBox = $('[data-fn-own-modal]', holder.parentNode), ownForm = ownBox && $('[data-fn-own-form]', ownBox), ownOk = ownBox && $('[data-fn-own-ok]', ownBox);
+      var ownShow = function (on) { if (!ownBox) return; ownBox.hidden = !on; document.documentElement.classList.toggle('fn-own-open', on); if (on) { var f0 = $('input[type=file]', ownBox); if (f0) f0.focus(); } };
+      if (ownBox && ownForm) {
+        var ownFile = $('input[type=file]', ownForm), ownName = $('[data-own-file-name]', ownForm), ownErr = $('[data-own-err]', ownForm), ownLabel = ownName ? ownName.textContent : '';
+        var ownMsg = function (m) { if (ownErr) { ownErr.textContent = m || ''; ownErr.hidden = !m; } };
+        if (ownFile) ownFile.addEventListener('change', function () { var f = ownFile.files && ownFile.files[0]; if (ownName) ownName.textContent = f ? f.name : ownLabel; ownMsg(''); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !ownBox.hidden) ownShow(false); });
+        ownBox.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-own-close]')) ownShow(false); });
+        ownForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var f = ownFile && ownFile.files && ownFile.files[0], name = ($('[name=name]', ownForm).value || '').trim(), email = ($('[name=email]', ownForm).value || '').trim();
+          var okType = f && /^(application\/pdf|image\/jpeg|image\/png)$/.test(f.type) && f.size <= 5 * 1024 * 1024;
+          if (!okType || !name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !$('[name=consent]', ownForm).checked) { ownMsg(ownBox.getAttribute('data-t-err')); return; }
+          var ep = ownBox.getAttribute('data-endpoint'), btn = $('.fn-own__go', ownForm), btnTxt = btn.textContent; btn.disabled = true; btn.textContent = ownBox.getAttribute('data-t-sending') || '…';
+          var rd = new FileReader();
+          rd.onload = function () {
+            var data = String(rd.result || '').split(',')[1] || '';
+            try { if (ep) fetch(ep, { method: 'POST', mode: 'no-cors', keepalive: false, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'diet_quote', name: name, email: email, phone: ($('[name=phone]', ownForm).value || '').trim(), plan: $('[name=plan]', ownForm).value, notes: ($('[name=notes]', ownForm).value || '').trim(), file: { name: f.name, type: f.type, data: data } }) }); } catch (x) {}
+            ownForm.hidden = true; if (ownOk) ownOk.hidden = false; btn.disabled = false; btn.textContent = btnTxt;
+          };
+          rd.onerror = function () { ownMsg(ownBox.getAttribute('data-t-err')); btn.disabled = false; btn.textContent = btnTxt; };
+          rd.readAsDataURL(f);
+        });
+      }
+      holder.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-fn-own]') && ownBox) { if (ownForm) ownForm.hidden = false; if (ownOk) ownOk.hidden = true; ownShow(true); } });
       var go = function (n) {
         n = Math.max(0, Math.min(steps.length - 1, n)); if (n > st.reach) { say(T_('locked')); return; } var moved = n !== st.step; st.step = n; say(''); persist(); render();
         if (moved && top) {
@@ -27418,6 +27597,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
 
   // any pill button / circle-arrow link ignites with a fire loop on hover / focus
   function initFire() {
+    return;   // the hover fire video is off: a video blended over the page can escape its clip on some GPUs and paints white streaks over the site
     var url = (cfg.media || {}).fire;
     if (!url || REDUCE || SAVE || !FINE) return;
     var start = function (b) {

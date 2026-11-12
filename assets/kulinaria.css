@@ -3800,3 +3800,8 @@ body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__stage,body .funnel[dat
 .fn-own__ok p{margin:0;font-size:.88rem;color:var(--text-muted)}
 html.fn-own-open{overflow:hidden}
 @media (max-width:560px){.fn-own__row{grid-template-columns:1fr}}
+
+/* v100: no blended video effects (they could paint white streaks over the page). Buttons keep a plain colour glow instead. */
+.btn__fx,.cta-banner__fx{display:none !important}
+.showcase__video{mix-blend-mode:normal !important}
+.btn:hover,.btn:focus-visible{box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 60%,transparent),0 10px 28px color-mix(in srgb,var(--accent) 32%,transparent)}

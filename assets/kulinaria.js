@@ -2231,6 +2231,7 @@
 
   // any pill button / circle-arrow link ignites with a fire loop on hover / focus
   function initFire() {
+    return;   // the hover fire video is off: a video blended over the page can escape its clip on some GPUs and paints white streaks over the site
     var url = (cfg.media || {}).fire;
     if (!url || REDUCE || SAVE || !FINE) return;
     var start = function (b) {
