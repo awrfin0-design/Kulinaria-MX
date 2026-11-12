@@ -3716,6 +3716,9 @@ section:has(.dd.is-open){position:relative;z-index:30}
 [data-dgate-scope][data-dg="ask"] [data-dgate-body]{display:none !important}
 .fn-sc.is-dg-off{display:none !important}
 @media (max-width:900px){.dgate__grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dgate__b--all{grid-column:1/-1}.dgate__b{padding:12px 14px}}
+/* v92: the sign-in gate sizes to its content (no empty frame beneath the box) */
+body .funnel.is-gated:not(.funnel--teaser) .funnel__stage{height:auto !important;min-height:0 !important;max-height:none !important}
+body .funnel.is-gated[data-step="3"]:not(.funnel--teaser) .funnel__panel,body .funnel.is-gated[data-step="3"]:not(.funnel--teaser) .funnel__main{height:auto !important;min-height:0 !important}
 
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
