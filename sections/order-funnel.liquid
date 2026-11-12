@@ -78,7 +78,7 @@
             <aside class="fn-start__side">
               <b class="fn-start__sk">{{ 'funnel.start_trial_t' | t }}</b>
               <p class="fn-start__sp"><strong>{{ st_day_m }}</strong> {{ 'funnel.pl_day' | t }}</p>
-              {%- assign st_bwk_n = st_meal_n | times: 5 -%}{%- assign st_pct = st_week_n | minus: st_bwk_n | times: 100 | divided_by: st_bwk_n -%}
+              {%- assign st_bwk_n = st_meal_n | times: 5 -%}{%- assign st_pct = st_week_n | minus: st_bwk_n | times: 100 | divided_by: st_bwk_n | round -%}
               {%- if st_pct > 0 -%}<small>{{ 'funnel.start_trial_pct' | t | replace: '[p]', st_pct }}</small>{%- endif -%}
               <small>{{ 'funnel.start_trial_s' | t }}</small>
               <a class="btn btn--outline fn-start__btn2" href="{% render 'login-url', back: '/pages/pedido' %}">{{ 'funnel.start_trial_btn' | t }}</a>

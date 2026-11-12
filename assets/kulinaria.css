@@ -3985,3 +3985,7 @@ body .funnel:not(.is-gated)[data-step="3"] .fn-para{display:none !important}
 .fn-picker__box{overflow-x:hidden}
 .fn-picker .fn-pickbar{max-width:100%}
 .fn-start__side small + small{display:block}
+
+/* v109: the old '4 steps' headline is gone (there are 3 steps); the slim step pills stay on the first step */
+body .funnel:not(.funnel--teaser) .funnel__title{display:none !important}
+body .funnel:not(.funnel--teaser) .funnel__top{justify-content:center}
