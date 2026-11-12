@@ -312,10 +312,10 @@ function weekStr_(v) { return v instanceof Date ? Utilities.formatDate(v, Sessio
 function mondayStr_(now) { now = now || new Date(); var back = (now.getDay() + 6) % 7; return ymd_(new Date(now.getFullYear(), now.getMonth(), now.getDate() - back)); }
 function countItems_(slots) {
   var counts = {}, order = [];
-  (slots || []).forEach(function (t) { t = String(t || '').trim(); if (!t) return; if (!(t in counts)) { counts[t] = 0; order.push(t); } counts[t]++; });
+  (slots || []).forEach(function (cell) { String(cell || '').split(' + ').forEach(function (t) { t = t.trim(); if (!t) return; if (!(t in counts)) { counts[t] = 0; order.push(t); } counts[t]++; }); });   // a day can hold two plates: "Plato A + Plato B" counts as two dishes
   return order.map(function (t) { return { title: t, qty: counts[t] }; });
 }
-function padSlots_(arr) { var out = []; for (var i = 0; i < 5; i++) out.push(String((arr || [])[i] || '').trim().slice(0, 120)); return out; }
+function padSlots_(arr) { var out = []; for (var i = 0; i < 5; i++) out.push(String((arr || [])[i] || '').trim().slice(0, 260)); return out; }
 function parseSlots_(diasAttr, dishRows) {
   var slots = ['', '', '', '', ''], parts = String(diasAttr || '').split('|');
   if (diasAttr && parts.length >= 5) {
