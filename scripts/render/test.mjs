@@ -69,7 +69,7 @@ ok('every in-page anchor has a target', badLinks.anchors.length === 0, badLinks.
 
 // ---- actually click through the real navigation (header, footer, hero CTAs)
 await page.goto(`${URL0}#/home`);
-const groups = ['.site-footer a', '[data-page="home"] a.btn:not([data-fn-finish]):not(.funnel__teaser *):not([data-fn-returning] *):not([data-fn-gate] *)', '[data-page="home"] a.arrow-link'];
+const groups = ['.site-footer a', '[data-page="home"] a.btn:not([data-fn-finish]):not(.funnel__teaser *):not([data-fn-returning] *):not([data-fn-gate] *)', '[data-page="home"] a.arrow-link:not(.hs *)'];
 for (const base of groups) {
   const hrefs = await page.$$eval(base, (as) => [...new Set(as.map((a) => a.getAttribute('href')).filter((h) => h && h.startsWith('#/')))]);
   for (const h of hrefs) {
@@ -1303,6 +1303,10 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.evaluate((h) => document.querySelector(h + ' [data-hs-prev]').click(), HR); await page.waitForTimeout(1700);
   ok('hero: the arrow back turns the cube the other way', (await slideNow()) === 6);
   ok('hero: every highlight has a title, a link and a photo (events, notices, season, referrals, trial, delivery)', await page.evaluate((h) => [...document.querySelector(h).querySelectorAll('.hs')].every((x) => x.querySelector('h2').textContent.trim().length > 4 && /^(\/|#\/)/.test(x.querySelector('a').getAttribute('href')) && x.querySelector('img')), HR));
+  const hLink = await page.evaluate((h) => document.querySelector(h + ' .hs.is-cur a').getAttribute('href'), HR);
+  await page.click(HR + ' .hs.is-cur a'); await page.waitForTimeout(400);
+  ok('hero: the button of the highlight in frame opens its page', page.url().endsWith(hLink), page.url() + ' vs ' + hLink);
+  await page.goto(`${URL0}#/home`);
   await page.setViewportSize({ width: 390, height: 844 }); await page.reload(); await page.waitForTimeout(1300);
   await page.evaluate((h) => document.querySelector(h + ' [data-hero-video]').dispatchEvent(new Event('ended')), HR); await page.waitForTimeout(1800);
   ok('hero on a phone: the cube works at phone width, the highlight fits and its controls are inside the screen', await page.evaluate((h) => { const e = document.querySelector(h), c = e.querySelector('.hero__ctl').getBoundingClientRect(), on = e.querySelector('.hs.is-cur').getBoundingClientRect(); return document.documentElement.scrollWidth <= innerWidth + 1 && c.right <= innerWidth + 1 && on.right <= innerWidth + 1 && on.width > 300; }, HR));
