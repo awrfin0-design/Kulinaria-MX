@@ -178,6 +178,31 @@ await page.goto(URL0);
   ok('a valid file + name + consent shows the thank-you message', await page.evaluate(() => { const m = document.querySelector('[data-page="pg/pedido"] [data-fn-own-modal]'); return !m.querySelector('[data-fn-own-ok]').hidden && m.querySelector('[data-fn-own-form]').hidden; }));
   await page.keyboard.press('Escape');
 
+  // ---- hero: the intro video plays once, then a carousel of highlights advances every 5 seconds
+  await page.setViewportSize({ width: 1440, height: 860 });
+  await base(); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1300);
+  const HR = '[data-page="home"] [data-hero]';
+  const hr0 = await page.evaluate((h) => { const e = document.querySelector(h); return { slides: e.querySelectorAll('.hs').length, dots: e.querySelectorAll('[data-hs-dot]').length, loop: e.querySelector('[data-hero-video]').loop, shown: !e.querySelector('[data-hero-slides]').hidden, on: e.classList.contains('is-carousel') }; }, HR);
+  ok('hero: the intro video does not loop and 7 highlight slides wait behind it', hr0.slides === 7 && hr0.dots === 7 && hr0.loop === false && !hr0.shown && !hr0.on, JSON.stringify(hr0));
+  await page.evaluate((h) => document.querySelector(h + ' [data-hero-video]').dispatchEvent(new Event('ended')), HR); await page.waitForTimeout(900);
+  const slideNow = () => page.evaluate((h) => [...document.querySelector(h).querySelectorAll('.hs')].findIndex((x) => x.classList.contains('is-on')), HR);
+  const hr1 = await page.evaluate((h) => { const e = document.querySelector(h), on = e.querySelector('.hs.is-on'); const r = on.getBoundingClientRect(); return { on: e.classList.contains('is-carousel'), shown: !e.querySelector('[data-hero-slides]').hidden, h2: on.querySelector('h2').textContent, link: (on.querySelector('a') || {}).getAttribute && on.querySelector('a').getAttribute('href'), img: !!on.querySelector('img'), fits: r.left >= -1 && r.right <= innerWidth + 1, others: [...e.querySelectorAll('.hs:not(.is-on)')].every((x) => x.getAttribute('aria-hidden') === 'true') }; }, HR);
+  ok('hero: when the video ends the carousel takes over with the first slide (tag, title, text, photo and a link)', hr1.on && hr1.shown && hr1.h2.length > 5 && /^(\/|#\/)/.test(hr1.link || '') && hr1.img && hr1.fits && hr1.others, JSON.stringify(hr1));
+  const a0 = await slideNow(); await page.waitForTimeout(5500);
+  ok('hero: it advances by itself every 5 seconds', (await slideNow()) === a0 + 1, a0 + ' -> ' + (await slideNow()));
+  await page.hover(HR); const c0 = await slideNow(); await page.waitForTimeout(5600);
+  ok('hero: hovering pauses it (nothing moves while you read)', (await slideNow()) === c0);
+  await page.mouse.move(2, 2);
+  await page.evaluate((h) => document.querySelector(h + ' [data-hs-dot="6"]').click(), HR); await page.waitForTimeout(250);
+  ok('hero: a dot jumps to that slide', (await slideNow()) === 6);
+  await page.evaluate((h) => document.querySelector(h + ' [data-hs-next]').click(), HR); await page.waitForTimeout(250);
+  ok('hero: after the last slide it wraps to the first', (await slideNow()) === 0);
+  ok('hero: every slide has a title, a link and a photo (events, notices, season, referrals, trial, delivery)', await page.evaluate((h) => [...document.querySelector(h).querySelectorAll('.hs')].every((x) => x.querySelector('h2').textContent.trim().length > 4 && /^(\/|#\/)/.test(x.querySelector('a').getAttribute('href')) && x.querySelector('img')), HR));
+  await page.setViewportSize({ width: 390, height: 844 }); await page.reload(); await page.waitForTimeout(1300);
+  await page.evaluate((h) => document.querySelector(h + ' [data-hero-video]').dispatchEvent(new Event('ended')), HR); await page.waitForTimeout(900);
+  ok('hero on a phone: the carousel fits the width, with its controls inside the screen', await page.evaluate((h) => { const e = document.querySelector(h), c = e.querySelector('.hero__ctl').getBoundingClientRect(), on = e.querySelector('.hs.is-on').getBoundingClientRect(); return document.documentElement.scrollWidth <= innerWidth + 1 && c.right <= innerWidth + 1 && on.right <= innerWidth + 1; }, HR));
+  await page.setViewportSize({ width: 1440, height: 900 });
+
   // ---- phones: nothing wider than the screen, the total bar is inside the screen
   await page.setViewportSize({ width: 390, height: 844 });
   await base({ guest: true }); await open(true);

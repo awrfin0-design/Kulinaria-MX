@@ -1851,7 +1851,7 @@
           + '<strong class="fn-wk__name">' + esc(lab(d)) + '</strong>'
           + '<span class="fn-wk__m">' + esc(m.k + ' ' + WT('kcal') + ' · ' + WT('mp').charAt(0) + ' ' + m.p + ' · ' + WT('mc').charAt(0) + ' ' + m.c + ' · ' + WT('mf').charAt(0) + ' ' + m.f) + '</span>'
           + (mt ? '<span class="fn-wk__note">✎ ' + esc(mt) + '</span>' : '')
-          + '<div class="fn-wk__btns">' + (lv < 3 ? '<button class="fn-wk__up" type="button" data-wk-up="' + key + '">★ ' + esc(WT('up')) + '</button>' : '') + '<button class="fn-wk__swap" type="button" data-wk-swap="' + key + '">' + esc(WT('swap')) + '</button>'
+          + '<div class="fn-wk__btns">' + (lv < 3 ? '<button class="fn-wk__up" type="button" data-wk-up="' + key + '">★ ' + esc(WT('up')) + '</button>' : '<span class="fn-wk__max">★ ' + esc(WT('max')) + '</span>') + '<button class="fn-wk__swap" type="button" data-wk-swap="' + key + '">' + esc(WT('swap')) + '</button>'
           + (c ? '<button class="fn-wk__ed fn-wk__ed--x" type="button" data-wk-clear="' + key + '" aria-label="×">×</button>' : '')
           + '</div></div>';
       };
@@ -2360,6 +2360,54 @@
     });
   }
 
+  /* hero: the intro video plays ONCE, then a carousel of highlights (events, notices...) takes over and advances by itself */
+  function initHeroCarousel() {
+    var hero = $('[data-hero]'), box = hero && $('[data-hero-slides]', hero); if (!box) return;
+    var slides = $$('.hs', box), n = slides.length; if (n < 2) return;
+    var dots = $$('[data-hs-dot]', hero), dur = Math.max(3, Math.min(12, +box.getAttribute('data-interval') || 5)) * 1000;
+    var video = $('[data-hero-video]', hero), tg = $('[data-media-toggle]', hero);
+    var i = 0, timer = 0, started = false, held = false, away = false, userPaused = false;
+    $$('img', box).forEach(function (im) { im.loading = 'eager'; });
+    box.style.setProperty('--hs-dur', dur + 'ms');
+    var show = function (k) {
+      i = (k + n) % n;
+      slides.forEach(function (s, x) { var on = x === i; s.classList.toggle('is-on', on); if (on) s.removeAttribute('aria-hidden'); else s.setAttribute('aria-hidden', 'true'); });
+      dots.forEach(function (d, x) { d.classList.toggle('is-on', x === i); if (x === i) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
+      hero.classList.remove('hs-run'); void hero.offsetWidth; if (!REDUCE) hero.classList.add('hs-run');
+    };
+    var tick = function () {
+      clearTimeout(timer);
+      if (!started || held || away || userPaused || REDUCE) { hero.classList.remove('hs-run'); return; }
+      hero.classList.add('hs-run');
+      timer = setTimeout(function () { show(i + 1); tick(); }, dur);
+    };
+    var go = function (k) { show(k); tick(); };
+    var start = function () { if (started) return; started = true; hero.classList.add('is-carousel'); box.hidden = false; show(0); tick(); };
+    // when to start: the video ends (once); if it cannot play, a short fallback
+    if (video && !REDUCE && !SAVE) {
+      video.loop = false; video.removeAttribute('loop');
+      video.addEventListener('ended', start); video.addEventListener('error', start);
+      video.addEventListener('playing', function () { clearTimeout(video._safe); video._safe = setTimeout(start, ((video.duration && isFinite(video.duration) ? video.duration : 12) + 2) * 1000); });
+      setTimeout(function () { if (!started && (video.paused || video.readyState < 2)) start(); }, 9000);   // autoplay blocked / still loading: do not leave the hero static
+    } else setTimeout(start, 400);
+    var hold = function (v) { held = v; tick(); };
+    hero.addEventListener('mouseenter', function () { hold(true); }); hero.addEventListener('mouseleave', function () { hold(false); });
+    hero.addEventListener('focusin', function () { hold(true); }); hero.addEventListener('focusout', function () { hold(false); });
+    hero.addEventListener('touchstart', function () { held = true; clearTimeout(timer); clearTimeout(box._th); box._th = setTimeout(function () { held = false; tick(); }, 8000); }, { passive: true });
+    document.addEventListener('visibilitychange', function () { away = document.hidden; tick(); });
+    if (window.IntersectionObserver) new IntersectionObserver(function (en) { away = !en[0].isIntersecting; tick(); }, { threshold: 0.25 }).observe(hero);
+    hero.addEventListener('click', function (e) {
+      var t = e.target; if (!t || !t.closest) return;
+      if (t.closest('[data-hs-next]')) go(i + 1); else if (t.closest('[data-hs-prev]')) go(i - 1);
+      else { var d = t.closest('[data-hs-dot]'); if (d) go(+d.getAttribute('data-hs-dot')); }
+    });
+    hero.addEventListener('keydown', function (e) { if (!started) return; if (e.key === 'ArrowRight') go(i + 1); else if (e.key === 'ArrowLeft') go(i - 1); });
+    var x0 = null;
+    box.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
+    box.addEventListener('pointerup', function (e) { if (x0 == null) return; var dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 48) go(i + (dx < 0 ? 1 : -1)); });
+    if (tg) tg.addEventListener('click', function () { userPaused = tg.getAttribute('aria-pressed') === 'true'; tick(); });
+  }
+
   // video that scrubs with the scroll position
   function initBand() {
     var b = $('[data-band]'); if (!b) return;
@@ -2503,7 +2551,7 @@
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
     [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile, initDietGate,
-      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initFire, initTilt, initPeek].forEach(run);
+      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
   });

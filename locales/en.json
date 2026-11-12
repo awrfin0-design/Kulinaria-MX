@@ -405,6 +405,10 @@
     "view_week_menu": "View this week's menu"
   },
   "hero": {
+    "slides": "Highlights",
+    "prev": "Previous",
+    "next": "Next",
+    "go": "Go to slide [n]",
     "card_alt_1": "Filet with herb butter, broccoli and glazed carrots on slate",
     "card_alt_2": "Quinoa bowl with crispy chickpeas and tahini dressing",
     "card_alt_3": "Fluffy omelette with spinach and mushrooms",
@@ -699,6 +703,7 @@
     "have_account": "Already have an account?"
   },
   "funnel": {
+    "tier_max": "Top tier",
     "wk_plan_block": "Deposit [t] · [w] a week",
     "wk_plan_week": "Trial week · [t]",
     "diet_swap": "Changing diet replaces your week with that diet's suggested menu. Continue?",
@@ -2033,6 +2038,30 @@
     "b01ea9e55476": "My details and allergies",
     "25da768ce493": "Terms and conditions",
     "810bf8832931": "Privacy *notice*",
-    "a51217602faa": "Terms and *conditions*"
+    "a51217602faa": "Terms and *conditions*",
+    "3fc32ef5602c": "This week",
+    "093cb4997b96": "The menu of the week is ready",
+    "7a9088a3168d": "Choose your diet and build your week in minutes.",
+    "d5559420f795": "Event",
+    "cd58e3a2d574": "A private chef at your home",
+    "0783a774eef6": "A signature dinner for your table or event, cooked in front of you.",
+    "5d1024f28810": "Saturdays",
+    "8c37529dfe72": "Saturday romantic dinners",
+    "ba027c50513a": "Signature cooking delivered, made for two.",
+    "81355e27d8f8": "See the dinners",
+    "1de7de8d1885": "In season",
+    "58e04cfbfeb6": "Limited seasonal edition",
+    "9adb9e7419b6": "Chiles en nogada and more, while the ingredient lasts.",
+    "25f17ec3afa5": "Referrals",
+    "948f9e5b7859": "Recommend and earn credit",
+    "d4e57f9ab50a": "$150 credit for every friend who buys their first 4-week block.",
+    "5bd5124e58c1": "Get my code",
+    "5bc8c567a891": "Trial",
+    "1066ebf96132": "Try a week",
+    "3e8ebed0cd3a": "5 meals from Monday to Friday, no renewal commitment.",
+    "1fbeac16cf4f": "Try 1 week",
+    "fd31153a9ab0": "Notice",
+    "4d86799aceb7": "We deliver in Puebla and its metro area",
+    "6793dbacccea": "Order until Saturday 10:00 AM, in reusable glass containers."
   }
 }

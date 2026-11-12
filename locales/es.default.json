@@ -405,6 +405,10 @@
     "view_week_menu": "Ver los especiales de la semana"
   },
   "hero": {
+    "slides": "Destacados",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "go": "Ir a la diapositiva [n]",
     "card_alt_1": "Filete con mantequilla de hierbas, brócoli y zanahorias glaseadas sobre pizarra",
     "card_alt_2": "Bowl de quinoa con garbanzos crujientes y aderezo de tahini",
     "card_alt_3": "Omelette esponjoso con espinacas y champiñones",
@@ -699,6 +703,7 @@
     "have_account": "¿Ya tienes cuenta?"
   },
   "funnel": {
+    "tier_max": "Nivel máximo",
     "wk_plan_block": "Depósito [t] · [w] por semana",
     "wk_plan_week": "Semana de prueba · [t]",
     "diet_swap": "Cambiar de dieta reemplaza tu semana por el menú sugerido de esa dieta. ¿Continuar?",
@@ -2033,6 +2038,30 @@
     "b01ea9e55476": "Mis datos y alergias",
     "25da768ce493": "Términos y condiciones",
     "810bf8832931": "Aviso de *privacidad*",
-    "a51217602faa": "Términos y *condiciones*"
+    "a51217602faa": "Términos y *condiciones*",
+    "3fc32ef5602c": "Esta semana",
+    "093cb4997b96": "El menú de la semana ya está listo",
+    "7a9088a3168d": "Elige tu dieta y arma tu semana en minutos.",
+    "d5559420f795": "Evento",
+    "cd58e3a2d574": "Chef privado en tu casa",
+    "0783a774eef6": "Una cena de autor para tu mesa o tu evento, cocinada frente a ti.",
+    "5d1024f28810": "Sábados",
+    "8c37529dfe72": "Cenas románticas de sábado",
+    "ba027c50513a": "Cocina de autor a domicilio, pensada para dos.",
+    "81355e27d8f8": "Ver las cenas",
+    "1de7de8d1885": "Temporada",
+    "58e04cfbfeb6": "Edición limitada de temporada",
+    "9adb9e7419b6": "Chiles en nogada y más, mientras dure el ingrediente.",
+    "25f17ec3afa5": "Referidos",
+    "948f9e5b7859": "Recomienda y gana saldo",
+    "d4e57f9ab50a": "$150 de saldo por cada amigo que compre su primer bloque de 4 semanas.",
+    "5bd5124e58c1": "Quiero mi código",
+    "5bc8c567a891": "Prueba",
+    "1066ebf96132": "Prueba una semana",
+    "3e8ebed0cd3a": "5 comidas de lunes a viernes, sin compromiso de renovación.",
+    "1fbeac16cf4f": "Probar 1 semana",
+    "fd31153a9ab0": "Aviso",
+    "4d86799aceb7": "Entregamos en Puebla y su zona metropolitana",
+    "6793dbacccea": "Pedidos hasta el sábado a las 10:00 AM, en envases de vidrio reutilizables."
   }
 }
