@@ -312,15 +312,16 @@
         </div>
       </div>
     </div>
-          <section class="fn-wk" data-fn-wk data-t-up="{{ 'funnel.up_btn' | t }}" data-t-swap="{{ 'funnel.swap_btn' | t }}" data-t-add1="{{ 'funnel.add1' | t }}" data-t-add2="{{ 'funnel.add2' | t }}" data-t-pk="{{ 'funnel.pk_t' | t }}" data-t-pk2="{{ 'funnel.pk_t2' | t }}" data-t-pkup="{{ 'funnel.pk_up' | t }}" data-t-kcal="{{ 'funnel.m_kcal' | t }}" data-t-prot="{{ 'funnel.wk_prot' | t }}" data-t-edit="{{ 'funnel.mods_open' | t }}" data-t-tiers="{{ 'tier.selecto' | t }},{{ 'tier.exclusivo' | t }},{{ 'tier.signature' | t }},{{ 'tier.reserve' | t }}">
+          <section class="fn-wk" data-fn-wk data-t-plan-block="{{ 'funnel.wk_plan_block' | t }}" data-t-plan-week="{{ 'funnel.wk_plan_week' | t }}" data-t-swap-confirm="{{ 'funnel.diet_swap' | t }}" data-t-nutri-t="{{ 'funnel.nutri_t' | t }}" data-t-nutri-day="{{ 'funnel.nutri_day' | t }}" data-t-nutri-week="{{ 'funnel.m_week' | t }}" data-t-mp="{{ 'funnel.m_p' | t }}" data-t-mc="{{ 'funnel.m_c' | t }}" data-t-mf="{{ 'funnel.m_f' | t }}" data-t-up="{{ 'funnel.up_btn' | t }}" data-t-swap="{{ 'funnel.swap_btn' | t }}" data-t-add1="{{ 'funnel.add1' | t }}" data-t-add2="{{ 'funnel.add2' | t }}" data-t-pk="{{ 'funnel.pk_t' | t }}" data-t-pk2="{{ 'funnel.pk_t2' | t }}" data-t-pkup="{{ 'funnel.pk_up' | t }}" data-t-kcal="{{ 'funnel.m_kcal' | t }}" data-t-prot="{{ 'funnel.wk_prot' | t }}" data-t-edit="{{ 'funnel.mods_open' | t }}" data-t-tiers="{{ 'tier.selecto' | t }},{{ 'tier.exclusivo' | t }},{{ 'tier.signature' | t }},{{ 'tier.reserve' | t }}">
             <header class="fn-wk__head">
               <button class="fn-wk__back" type="button" data-fn-go-prev>&lsaquo; {{ 'funnel.fn_back' | t }}</button>
-              <div><h3>{{ 'funnel.wk_t' | t }}</h3><p class="fn-wk__chip">{{ 'funnel.wk_chip' | t }}</p></div>
+              <div><h3>{{ 'funnel.wk_t' | t }}</h3><div class="fn-wk__chips"><button class="fn-wk__chip fn-wk__chip--diet" type="button" data-fn-diet-open aria-haspopup="listbox" aria-expanded="false"><span data-fn-diet-name></span><i aria-hidden="true">&#9662;</i></button><span class="fn-wk__chip" data-fn-plan-name></span><div class="fn-dietmenu" data-fn-dietmenu role="listbox" hidden></div></div></div>
               <div class="fn-wk__perday" role="group" aria-label="{{ 'funnel.perday_aria' | t }}"><span>{{ 'funnel.perday' | t }}</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
             </header>
             <div class="fn-who" data-fn-who hidden data-t-for="{{ 'funnel.who' | t }}" data-t-add="{{ 'funnel.who_add' | t }}"></div>
             <div class="fn-wk__tabs" data-fn-wk-tabs role="tablist"></div>
             <ol class="fn-wk__cards" data-fn-wk-cards></ol>
+            <div class="fn-wk__nutri" data-fn-wk-nutri hidden></div>
           </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="fn-para-{{ section.id }}">{{ 'funnel.para' | t }}</label><select class="select" id="fn-para-{{ section.id }}" data-fn-para></select><a class="text-link" href="/pages/cuenta-perfil#familia">{{ 'funnel.para_add' | t }}</a></div>
           <ol class="fn-week" data-fn-week aria-label="{{ 'funnel.days_title' | t }}"></ol>

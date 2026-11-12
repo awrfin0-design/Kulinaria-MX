@@ -1722,12 +1722,19 @@
           var tg2 = document.createElement('button'); tg2.type = 'button'; tg2.className = 'text-link'; tg2.textContent = T_('tour-guide'); tg2.setAttribute('data-fn-tour-open', '');
           bud.appendChild(bt); bud.appendChild(bl); if (!isAside) bud.appendChild(tg2);
         });
-        var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : ''; }
+        var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex), t: money(planTotal() - ex) }) : ''; }
         var emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
         var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? fill(T_('meals'), { n: n, t: MEALS }) : '';
         var tot = $('[data-fn-s-total]', holder); if (tot) tot.textContent = money(planTotal());
         var sb = $('[data-fn-s-block]', holder); if (sb) { sb.hidden = false; sb.textContent = st.plan === 'block' ? fill(T_('weeks-x'), { p: money(priceOf(tierEl(), st.plan) / WEEKS), w: WEEKS }) : fill(T_('per-week'), { p: money(planTotal()) }); }
-        var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step === 3 ? 3 : st.step + 1).replace('{t}', 3) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
+        var sc = $('[data-fn-stepcount]', holder);
+        if (sc) {
+          var vis = [0, 1, 3], pos = st.step === 3 ? 2 : st.step;
+          sc.innerHTML = '<span class="fn-sc__n">' + esc(T_('step-of').replace('{n}', pos + 1).replace('{t}', 3)) + '</span><span class="fn-sc__steps">' + vis.map(function (s2, k2) {
+            var lab = (dots[s2] && dots[s2].textContent.replace(/^\s*\d+/, '').trim()) || '', done = k2 < pos, on = s2 === st.step;
+            return '<button type="button" class="fn-sc__s' + (done ? ' is-done' : '') + (on ? ' is-on' : '') + '" data-fn-step-jump="' + s2 + '"' + (on ? ' aria-current="step"' : '') + '>' + (done ? '&#10003; ' : '') + esc(lab) + '</button>';
+          }).join('') + '</span>';
+        }
         var rn = $('[data-fn-renew]', holder); if (rn) { var hasPlan = !!tierEl().getAttribute('data-selling-plan'); rn.hidden = !(hasPlan && st.plan === 'block'); var box = $('[data-fn-renew-box]', holder); if (box) box.checked = st.renew; }
         buildNotes();
         renderMods();
@@ -1836,12 +1843,13 @@
       var slotHtml = function (i, c) {
         var pid = c ? st.days2[i] : st.days[i], d = pid && byPid(pid), key = i + ':' + c;
         if (!d) return '<div class="fn-wk__slot is-empty"><button class="fn-wk__add" type="button" data-wk-swap="' + key + '">' + esc(c ? WT('add2') : WT('add1')) + '</button></div>';
-        var im = $('img', d), src = im ? (im.currentSrc || im.src) : '', lv = rank(tierOf(d)), extra = lv ? upg(lv) : 0, m = macroOf(pid) || { k: 0, p: 0 };
+        var im = $('img', d), src = im ? (im.currentSrc || im.src) : '', lv = rank(tierOf(d)), extra = lv ? upg(lv) : 0, m = macroOf(pid) || { k: 0, p: 0, c: 0, f: 0 };
         var wb = $('[data-fn-warnbox]', d), mt = !c ? modsText(i) : '';
         return '<div class="fn-wk__slot' + (d.classList.contains('is-warned') ? ' has-warn' : '') + (extra ? ' is-up' : '') + '">'
           + '<div class="fn-wk__img"><button class="fn-wk__imgb" type="button" data-wk-img="' + key + '" aria-label="' + esc(lab(d)) + '" style="background-image:url(&quot;' + esc(src) + '&quot;)"></button>' + (wb ? wb.outerHTML : '') + (c ? '' : '<button class="fn-wk__ed' + (mt ? ' has-note' : '') + '" type="button" data-wk-edit="' + i + '" aria-label="' + esc(WT('edit')) + '">✎</button>') + '</div>'
           + '<span class="fn-wk__tier fn-wk__tier--' + tierOf(d) + '">' + esc(tierNames[lv] || '') + (extra ? ' · +' + esc(money(extra)) : '') + '</span>'
           + '<strong class="fn-wk__name">' + esc(lab(d)) + '</strong>'
+          + '<span class="fn-wk__m">' + esc(m.k + ' ' + WT('kcal') + ' · ' + WT('mp').charAt(0) + ' ' + m.p + ' · ' + WT('mc').charAt(0) + ' ' + m.c + ' · ' + WT('mf').charAt(0) + ' ' + m.f) + '</span>'
           + (mt ? '<span class="fn-wk__note">✎ ' + esc(mt) + '</span>' : '')
           + '<div class="fn-wk__btns">' + (lv < 3 ? '<button class="fn-wk__up" type="button" data-wk-up="' + key + '">★ ' + esc(WT('up')) + '</button>' : '') + '<button class="fn-wk__swap" type="button" data-wk-swap="' + key + '">' + esc(WT('swap')) + '</button>'
           + (c ? '<button class="fn-wk__ed fn-wk__ed--x" type="button" data-wk-clear="' + key + '" aria-label="×">×</button>' : '')
@@ -1858,6 +1866,19 @@
         var h = '';
         for (var i = 0; i < MEALS; i++) h += '<li class="fn-wk__card' + (i === st.active ? ' is-active' : '') + '"><h4>' + esc(dayLabel(i)) + '</h4>' + slotHtml(i, 0) + (st.perDay === 2 ? slotHtml(i, 1) : '') + '</li>';
         wkBox.innerHTML = h;
+        var dnm = $('[data-fn-diet-name]', holder), pnm = $('[data-fn-plan-name]', holder), cbn = $('[data-cat-choice="' + st.cat + '"] strong', holder);
+        if (dnm) dnm.textContent = cbn ? cbn.textContent : '';
+        if (pnm) { var dep = priceOf(tierEl(), st.plan); pnm.textContent = st.plan === 'block' ? WT('plan-block').replace('[t]', money(dep)).replace('[w]', money(Math.round(dep / 4))) : WT('plan-week').replace('[t]', money(dep)); }
+        var dm = $('[data-fn-dietmenu]', holder);
+        if (dm && !dm.children.length) dm.innerHTML = $$('[data-cat-choice]', holder).map(function (b) { var sm = $('small', b); return '<button type="button" role="option" data-fn-diet-pick="' + esc(b.getAttribute('data-cat-choice')) + '"><strong>' + esc($('strong', b).textContent) + '</strong>' + (sm ? '<small>' + esc(sm.textContent) + '</small>' : '') + '</button>'; }).join('');
+        if (dm) $$('[data-fn-diet-pick]', dm).forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-fn-diet-pick') === st.cat); });
+        var nu = $('[data-fn-wk-nutri]', holder);
+        if (nu) {
+          var tk = 0, tp = 0, tc = 0, tf = 0, nd = 0; for (var q = 0; q < MEALS; q++) { var dmx = dayMacros(q); if (dmx.n) { tk += dmx.k; tp += dmx.p; tc += dmx.c; tf += dmx.f; nd++; } }
+          nu.hidden = !nd;
+          if (nd) { var av = function (x) { return Math.round(x / nd).toLocaleString(cfg.lang === 'en' ? 'en-US' : 'es-MX'); };
+            nu.innerHTML = '<h4>' + esc(WT('nutri-t')) + '</h4><dl><div><dt>' + esc(WT('nutri-day')) + '</dt><dd><b>' + av(tk) + '</b> ' + esc(WT('kcal')) + '</dd></div><div><dt>' + esc(WT('mp')) + '</dt><dd><b>' + av(tp) + '</b> g</dd></div><div><dt>' + esc(WT('mc')) + '</dt><dd><b>' + av(tc) + '</b> g</dd></div><div><dt>' + esc(WT('mf')) + '</dt><dd><b>' + av(tf) + '</b> g</dd></div><div><dt>' + esc(WT('nutri-week')) + '</dt><dd><b>' + Math.round(tk).toLocaleString(cfg.lang === 'en' ? 'en-US' : 'es-MX') + '</b> ' + esc(WT('kcal')) + '</dd></div></dl>'; }
+        }
       };
       var paintPicker = function () {
         if (!picker) return;
@@ -1894,10 +1915,26 @@
         if (pt) { st.pickTier = pt.getAttribute('data-pick-tier') || ''; persist(); render(); return; }
         if (t.closest('[data-fn-picker-close]')) { closePicker(); return; }
         if (t.closest('[data-pick]') && picker && !picker.hidden) { setTimeout(closePicker, 0); return; }
+        var dop = t.closest('[data-fn-diet-open]'), dmenu = $('[data-fn-dietmenu]', holder);
+        if (dop && dmenu) { var open2 = dmenu.hidden; dmenu.hidden = !open2; dop.setAttribute('aria-expanded', open2 ? 'true' : 'false'); return; }
+        var dpk = t.closest('[data-fn-diet-pick]');
+        if (dpk) {
+          var nid = dpk.getAttribute('data-fn-diet-pick'), dm2 = $('[data-fn-dietmenu]', holder), cur = st.cat;
+          if (dm2) { dm2.hidden = true; var o3 = $('[data-fn-diet-open]', holder); if (o3) o3.setAttribute('aria-expanded', 'false'); }
+          if (nid === cur) return;
+          var ids = function (set) { return (set || []).map(function (d) { return d ? d.getAttribute('data-pid') : ''; }).join('|'); }, mine = st.days.join('|') + '|' + st.days2.filter(Boolean).join('|');
+          var dflt = ids(buildPresetSets()[0]) + '|';
+          if (mine !== dflt && st.days.some(Boolean) && !window.confirm(WT('swap-confirm'))) return;
+          st.cat = nid; st.catPicked = true; st.presetCat = nid; try { localStorage.setItem('kx_dietpick', nid); } catch (x2) {}
+          applyPreset(buildPresetSets()[0] || []); return;
+        }
+        var sj = t.closest('[data-fn-step-jump]');
+        if (sj) { var n2 = +sj.getAttribute('data-fn-step-jump'); if ((n2 === 0 && acctOn) || n2 === st.step) return; go(n2); return; }
         var sb = t.closest('[data-fn-sum-toggle]');
         if (sb) { var asd = sb.closest('.funnel__aside'); if (asd) { var on2 = asd.classList.toggle('is-open'); sb.setAttribute('aria-expanded', on2 ? 'true' : 'false'); } }
       });
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && picker && !picker.hidden) closePicker(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { if (picker && !picker.hidden) closePicker(); var dmE = $('[data-fn-dietmenu]', holder); if (dmE && !dmE.hidden) dmE.hidden = true; } });
+      document.addEventListener('click', function (e) { var dmC = $('[data-fn-dietmenu]', holder); if (dmC && !dmC.hidden && !(e.target.closest && e.target.closest('[data-fn-dietmenu],[data-fn-diet-open]'))) dmC.hidden = true; });
       var go = function (n) {
         n = Math.max(0, Math.min(steps.length - 1, n)); if (n > st.reach) { say(T_('locked')); return; } var moved = n !== st.step; st.step = n; say(''); persist(); render();
         if (moved && top) {

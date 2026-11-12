@@ -4167,6 +4167,54 @@ body .funnel .fn-picker .fn-dishes .fn-dish.is-hidden{display:none !important}
   .fn-picker .fn-dish .fn-note,.fn-picker .fn-dish [data-fn-note]{display:none !important}
 }
 
+/* v116: diet chip + switcher, deposit / weekly budget chip, per-plate nutrition, weekly nutrition summary, clickable step counter */
+.fn-wk__chips{position:relative;display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.fn-wk__chips .fn-wk__chip{margin:0}
+.fn-wk__chip--diet{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--text);font:600 .78rem var(--font-body);cursor:pointer}
+.fn-wk__chip--diet i{font-style:normal;color:var(--accent);font-size:.8rem}
+.fn-dietmenu{position:absolute;top:calc(100% + 8px);left:0;z-index:40;width:min(340px,92vw);max-height:min(60svh,420px);overflow:auto;scrollbar-width:none;padding:8px;border:1px solid var(--accent);border-radius:18px;background:var(--bg-raised);box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.fn-dietmenu::-webkit-scrollbar{display:none}
+.fn-dietmenu[hidden]{display:none}
+.fn-dietmenu button{display:grid;gap:1px;width:100%;padding:10px 12px;border:0;border-radius:12px;background:none;color:var(--text);text-align:left;cursor:pointer}
+.fn-dietmenu button strong{font:600 .92rem var(--font-body)}.fn-dietmenu button small{font-size:.7rem;color:var(--text-muted)}
+.fn-dietmenu button:hover,.fn-dietmenu button.is-on{background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.fn-dietmenu button.is-on strong::after{content:" ✓";color:var(--accent)}
+.fn-wk__m{font-size:.7rem;line-height:1.35;color:var(--text-muted)}
+.fn-wk__nutri{margin-top:clamp(16px,2.4vw,28px);padding:16px 20px;border:1px solid var(--line);border-radius:18px;background:var(--bg-raised)}
+.fn-wk__nutri h4{margin:0 0 10px;font:600 .78rem var(--font-label);letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.fn-wk__nutri dl{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:0}
+.fn-wk__nutri dt{font-size:.68rem;color:var(--text-muted)}
+.fn-wk__nutri dd{margin:2px 0 0;font-size:.78rem;color:var(--text-muted)}.fn-wk__nutri dd b{font:600 1.25rem var(--font-display);color:var(--text)}
+@media (max-width:760px){.fn-wk__nutri{margin:6px 16px 0;padding:12px 14px}.fn-wk__nutri dl{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 10px}.fn-wk__nutri dd b{font-size:1.05rem}.fn-wk__chips{margin:0 16px 8px;grid-column:1/-1}.fn-wk__head{grid-template-columns:auto 1fr auto}.fn-wk__chips .fn-wk__chip:not(.fn-wk__chip--diet){font-size:.7rem;padding:6px 12px}}
+@media (max-width:760px){.fn-wk__chip{display:inline-flex !important}.fn-wk__head > div:not(.fn-wk__perday):not(.fn-wk__chips){grid-row:1;grid-column:2}.fn-wk__head .fn-wk__chips{grid-row:2;grid-column:1/-1;margin:0}}
+/* clickable step counter */
+body .funnel:not(.funnel--teaser) .funnel__stepcount{display:flex !important;flex-wrap:wrap;align-items:center;gap:6px 14px;text-transform:none;letter-spacing:.02em}
+.fn-sc__n{font:600 .78rem var(--font-body);color:var(--text)}
+.fn-sc__steps{display:inline-flex;flex-wrap:wrap;gap:6px}
+.fn-sc__s{padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:none;color:var(--text-muted);font:500 .72rem var(--font-body);cursor:pointer}
+.fn-sc__s.is-done{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+.fn-sc__s.is-on{background:var(--accent);border-color:var(--accent);color:var(--on-accent,#fff);cursor:default}
+.fn-sc__s:not(.is-on):hover{border-color:var(--accent);color:var(--text)}
+@media (max-width:760px){body .funnel:not(.funnel--teaser) .funnel__stepcount{gap:6px 10px}.fn-sc__n{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);flex:1 1 100%}.fn-sc__steps{flex:1 1 100%}.fn-sc__s{flex:1;text-align:center;padding:7px 4px;font-size:.7rem}}
+/* v117: the pop-up always covers exactly the screen (a stray rule made it taller than the viewport, which pushed the box off-center) */
+.fn-picker{top:0 !important;left:0 !important;right:0 !important;bottom:0 !important;height:100vh !important;height:100dvh !important;max-height:100dvh !important;min-height:0 !important;width:100% !important}
+
+/* v118: polish (counter spacing, one-line nutrition, phone header, today's total) */
+.fn-sc__n{margin-right:12px}
+body .funnel:not(.funnel--teaser) .funnel__stepcount{flex-wrap:wrap !important}
+.fn-wk__m{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total span{margin-right:10px}
+@media (max-width:760px){
+  .fn-sc__n{flex:1 1 100% !important;margin-right:0}
+  .fn-wk__head > div:not(.fn-wk__perday){display:contents}
+  .fn-wk__head h3{grid-row:1;grid-column:2}
+  .fn-wk__head .fn-wk__chips{grid-row:2 !important;grid-column:1 / -1 !important;margin:2px 0 0}
+  .fn-wk__chips .fn-wk__chip--diet{font-size:.78rem;padding:8px 14px}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total span{margin-right:0}
+}
+/* v119: the counter is a flex row on every step (an older, more specific rule kept it as a block) */
+body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__stepcount,body .funnel:not(.funnel--teaser) .funnel__stepcount{display:flex !important;flex-wrap:wrap !important}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -4606,7 +4654,7 @@ Fuego</span>
   data-t-prop-tier="Nivel" data-t-prop-length="Duración" data-t-length-block="4 semanas" data-t-length-week="1 semana"
   data-t-budget="Tu plan incluye {w} por semana en comidas. Lo que elijas por encima se cobra aparte esa semana (pago inicial: {t})." data-t-budget-short="Incluye {w} por semana; lo de más se cobra aparte esa semana." data-t-budget-x="Esta semana: +{x} extra." data-t-budget-ok="Esta semana: sin extra." data-t-how-open="¿Cómo funciona?" data-t-pick-day="Elegir para {d}" data-t-tour-1="Toca un día para elegirle platillo." data-t-tour-2="Desliza las tarjetas y toca la flecha para elegir. Con ✎ quitas ingredientes o dejas una nota." data-t-tour-2m="Desliza las tarjetas y toca este botón para elegir el platillo que ves. Con ✎ quitas ingredientes." data-t-tour-3="¿Algo que quitar? Toca “Nota o quitar ingredientes” en la tarjeta: hamburguesa sin cebolla, salsa aparte…" data-t-tour-4="Aquí ves tu total. Con los 5 días listos, confirma y pasa al pago." data-t-tour-next="Siguiente" data-t-tour-done="Entendido" data-t-tour-skip="Saltar" data-t-tour-guide="Ver guía paso a paso" data-t-locked="Completa el paso anterior para continuar." data-t-mods-done="Listo" data-t-mods-edit="Quitar ingredientes o añadir nota a {d}" data-t-mods-title="Ajustes para {d}: {p}" data-t-mods-hint="¿Algo que quitar? Toca un ingrediente para pedirlo sin él." data-t-mods-note="Nota para la cocina (opcional)" data-t-mods-ph="Ej. sin cebolla, salsa aparte…" data-t-mods-warn="Es un gusto, no sustituye avisar de una alergia (tu perfil). Haremos lo posible por respetarlo." data-t-mods-without="Sin {i}" data-t-prop-notes="Notas de cocina" data-t-mods-open="Quitar ingredientes o añadir nota"
   data-t-para-me="Para mí" data-t-prop-for="Para"
-  data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-finish="Confirmar y continuar" data-t-finish-guest="Inicia sesión para continuar" data-t-credit="Plan activo: te quedan {w} de {t} semanas (hasta el {e}). Elige tus comidas en Mi semana. ¿Más créditos? Elige un plan abajo." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-pick="Elegir" data-t-picked="Elegido" data-t-pick-for="Elige el platillo del {d}" data-t-pick2-for="Elige el 2.º tiempo del {d}" data-t-need-first="Primero elige el 1.er tiempo de ese día." data-t-macros-empty="Elige un platillo para ver sus macros" data-t-all-done="¡Semana completa! Revisa y continúa." data-t-clear-day="Quitar el platillo de {d}" data-t-first="Primera entrega: lunes {d}." data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
+  data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-finish="Confirmar y continuar" data-t-finish-guest="Inicia sesión para continuar" data-t-credit="Plan activo: te quedan {w} de {t} semanas (hasta el {e}). Elige tus comidas en Mi semana. ¿Más créditos? Elige un plan abajo." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-pick="Elegir" data-t-picked="Elegido" data-t-pick-for="Elige el platillo del {d}" data-t-pick2-for="Elige el 2.º tiempo del {d}" data-t-need-first="Primero elige el 1.er tiempo de ese día." data-t-macros-empty="Elige un platillo para ver sus macros" data-t-all-done="¡Semana completa! Revisa y continúa." data-t-clear-day="Quitar el platillo de {d}" data-t-first="Primera entrega: lunes {d}." data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Depósito {t} + mejoras de esta semana +{p}"
   data-t-prop-upgrade="Mejora" data-t-need-contract="Acepta el contrato para continuar." data-t-days-missing="Asigna un platillo a cada día."
   data-upg-1="70" data-upg-2="140" data-upg-3="210"
   data-upv-1="74001" data-upv-2="74002" data-upv-3="74003" >
@@ -4832,15 +4880,16 @@ Fuego</span>
         </div>
       </div>
     </div>
-          <section class="fn-wk" data-fn-wk data-t-up="Elevar nivel este día" data-t-swap="Cambiar" data-t-add1="Elegir platillo" data-t-add2="+ Agregar 2.º plato" data-t-pk="Elige el platillo del [d]" data-t-pk2="Elige el 2.º plato del [d]" data-t-pkup="Eleva tu experiencia del [d]" data-t-kcal="kcal" data-t-prot="g de proteína" data-t-edit="Quitar ingredientes o añadir nota" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
+          <section class="fn-wk" data-fn-wk data-t-plan-block="Depósito [t] · [w] por semana" data-t-plan-week="Semana de prueba · [t]" data-t-swap-confirm="Cambiar de dieta reemplaza tu semana por el menú sugerido de esa dieta. ¿Continuar?" data-t-nutri-t="Resumen nutricional" data-t-nutri-day="Promedio al día" data-t-nutri-week="Semana" data-t-mp="Proteína" data-t-mc="Carbs" data-t-mf="Grasa" data-t-up="Elevar nivel este día" data-t-swap="Cambiar" data-t-add1="Elegir platillo" data-t-add2="+ Agregar 2.º plato" data-t-pk="Elige el platillo del [d]" data-t-pk2="Elige el 2.º plato del [d]" data-t-pkup="Eleva tu experiencia del [d]" data-t-kcal="kcal" data-t-prot="g de proteína" data-t-edit="Quitar ingredientes o añadir nota" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
             <header class="fn-wk__head">
               <button class="fn-wk__back" type="button" data-fn-go-prev>&lsaquo; Atrás</button>
-              <div><h3>Arma tu menú semanal</h3><p class="fn-wk__chip">Plan base · 5 comidas por semana</p></div>
+              <div><h3>Arma tu menú semanal</h3><div class="fn-wk__chips"><button class="fn-wk__chip fn-wk__chip--diet" type="button" data-fn-diet-open aria-haspopup="listbox" aria-expanded="false"><span data-fn-diet-name></span><i aria-hidden="true">&#9662;</i></button><span class="fn-wk__chip" data-fn-plan-name></span><div class="fn-dietmenu" data-fn-dietmenu role="listbox" hidden></div></div></div>
               <div class="fn-wk__perday" role="group" aria-label="Cuántos platos quieres cada día"><span>Platos al día</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
             </header>
             <div class="fn-who" data-fn-who hidden data-t-for="Pedido para" data-t-add="Agregar persona"></div>
             <div class="fn-wk__tabs" data-fn-wk-tabs role="tablist"></div>
             <ol class="fn-wk__cards" data-fn-wk-cards></ol>
+            <div class="fn-wk__nutri" data-fn-wk-nutri hidden></div>
           </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="home--fn-para-funnel">¿Para quién es este pedido?</label><select class="select" id="home--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Agregar a alguien de tu familia</a></div>
           <ol class="fn-week" data-fn-week aria-label="Asigna cada comida a un día"></ol>
@@ -5166,7 +5215,7 @@ Fuego</span>
         <ul class="funnel__list" data-fn-s-list></ul>
         <p class="text-muted" data-fn-s-empty>Aún no eliges comidas.</p>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
-        <div class="funnel__total"><span>Total del plan</span><strong data-fn-s-total>$0</strong></div>
+        <div class="funnel__total"><span>Hoy pagas</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
         <p class="fn-budget fn-budget--aside" data-fn-budget></p>
         <details class="fn-more"><summary>Cómo se cobra</summary>
@@ -13119,7 +13168,7 @@ Pago digital, sin efectivo</li></ul>
         <div class="account-block" id="pg-cuenta-semana--semana"><h2>Mi semana</h2><div class="panel panel--gold myweek" data-myweek
           data-upg-1="70" data-upg-2="140" data-upg-3="210"
           data-upv-1="74001" data-upv-2="74002" data-upv-3="74003"
-          data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
+          data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Depósito {t} + mejoras de esta semana +{p}"
           data-t-prop-upgrade="Mejora" data-t-warn="⚠ Según nuestros datos, estos platillos incluyen o pueden incluir algo a lo que declaraste alergia: {list}." data-t-closed="Esa semana ya cerró. Elige la siguiente." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}."
           data-t-saved="Listo: {n} comidas guardadas para la semana del {d}." data-t-skipped="Listo: la semana del {d} quedó sin entregas." data-t-saved-pay="Guardamos tu selección. Paga la mejora de platillos ({p}) para confirmarla." data-t-prev="Cargamos tu selección anterior; cámbiala si quieres." data-t-dflt="Cargamos el menú sugerido de tu dieta; cámbialo si quieres." data-t-week-opt="Lunes {a} – viernes {b}" data-t-error="No pudimos agregar la mejora al carrito. Intenta de nuevo."
           data-t-count="{n} de 5 comidas elegidas" data-t-buy-none="Aún no tienes un plan activo. Elige un plan de 4 semanas o de 1 semana y escoge tus comidas." data-t-buy-expired="Tu plan terminó. Elige un plan nuevo para seguir recibiendo tus comidas." data-t-credits-error="No pudimos cargar tu plan en este momento. Intenta de nuevo en un momento."
@@ -13515,7 +13564,7 @@ Pago digital, sin efectivo</li></ul>
   data-t-prop-tier="Nivel" data-t-prop-length="Duración" data-t-length-block="4 semanas" data-t-length-week="1 semana"
   data-t-budget="Tu plan incluye {w} por semana en comidas. Lo que elijas por encima se cobra aparte esa semana (pago inicial: {t})." data-t-budget-short="Incluye {w} por semana; lo de más se cobra aparte esa semana." data-t-budget-x="Esta semana: +{x} extra." data-t-budget-ok="Esta semana: sin extra." data-t-how-open="¿Cómo funciona?" data-t-pick-day="Elegir para {d}" data-t-tour-1="Toca un día para elegirle platillo." data-t-tour-2="Desliza las tarjetas y toca la flecha para elegir. Con ✎ quitas ingredientes o dejas una nota." data-t-tour-2m="Desliza las tarjetas y toca este botón para elegir el platillo que ves. Con ✎ quitas ingredientes." data-t-tour-3="¿Algo que quitar? Toca “Nota o quitar ingredientes” en la tarjeta: hamburguesa sin cebolla, salsa aparte…" data-t-tour-4="Aquí ves tu total. Con los 5 días listos, confirma y pasa al pago." data-t-tour-next="Siguiente" data-t-tour-done="Entendido" data-t-tour-skip="Saltar" data-t-tour-guide="Ver guía paso a paso" data-t-locked="Completa el paso anterior para continuar." data-t-mods-done="Listo" data-t-mods-edit="Quitar ingredientes o añadir nota a {d}" data-t-mods-title="Ajustes para {d}: {p}" data-t-mods-hint="¿Algo que quitar? Toca un ingrediente para pedirlo sin él." data-t-mods-note="Nota para la cocina (opcional)" data-t-mods-ph="Ej. sin cebolla, salsa aparte…" data-t-mods-warn="Es un gusto, no sustituye avisar de una alergia (tu perfil). Haremos lo posible por respetarlo." data-t-mods-without="Sin {i}" data-t-prop-notes="Notas de cocina" data-t-mods-open="Quitar ingredientes o añadir nota"
   data-t-para-me="Para mí" data-t-prop-for="Para"
-  data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-finish="Confirmar y continuar" data-t-finish-guest="Inicia sesión para continuar" data-t-credit="Plan activo: te quedan {w} de {t} semanas (hasta el {e}). Elige tus comidas en Mi semana. ¿Más créditos? Elige un plan abajo." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-pick="Elegir" data-t-picked="Elegido" data-t-pick-for="Elige el platillo del {d}" data-t-pick2-for="Elige el 2.º tiempo del {d}" data-t-need-first="Primero elige el 1.er tiempo de ese día." data-t-macros-empty="Elige un platillo para ver sus macros" data-t-all-done="¡Semana completa! Revisa y continúa." data-t-clear-day="Quitar el platillo de {d}" data-t-first="Primera entrega: lunes {d}." data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Incluye mejoras de platillo: +{p}"
+  data-t-renew="Renovar automáticamente cada 4 semanas" data-t-days="Lunes,Martes,Miércoles,Jueves,Viernes" data-t-finish="Confirmar y continuar" data-t-finish-guest="Inicia sesión para continuar" data-t-credit="Plan activo: te quedan {w} de {t} semanas (hasta el {e}). Elige tus comidas en Mi semana. ¿Más créditos? Elige un plan abajo." data-t-rolled="El cierre del sábado ya pasó: ahora eliges la semana del {d}." data-t-pick="Elegir" data-t-picked="Elegido" data-t-pick-for="Elige el platillo del {d}" data-t-pick2-for="Elige el 2.º tiempo del {d}" data-t-need-first="Primero elige el 1.er tiempo de ese día." data-t-macros-empty="Elige un platillo para ver sus macros" data-t-all-done="¡Semana completa! Revisa y continúa." data-t-clear-day="Quitar el platillo de {d}" data-t-first="Primera entrega: lunes {d}." data-t-day-empty="Elegir platillo" data-t-up-badge="+{p} por comida" data-t-up-total="Depósito {t} + mejoras de esta semana +{p}"
   data-t-prop-upgrade="Mejora" data-t-need-contract="Acepta el contrato para continuar." data-t-days-missing="Asigna un platillo a cada día."
   data-upg-1="70" data-upg-2="140" data-upg-3="210"
   data-upv-1="74001" data-upv-2="74002" data-upv-3="74003" >
@@ -13741,15 +13790,16 @@ Pago digital, sin efectivo</li></ul>
         </div>
       </div>
     </div>
-          <section class="fn-wk" data-fn-wk data-t-up="Elevar nivel este día" data-t-swap="Cambiar" data-t-add1="Elegir platillo" data-t-add2="+ Agregar 2.º plato" data-t-pk="Elige el platillo del [d]" data-t-pk2="Elige el 2.º plato del [d]" data-t-pkup="Eleva tu experiencia del [d]" data-t-kcal="kcal" data-t-prot="g de proteína" data-t-edit="Quitar ingredientes o añadir nota" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
+          <section class="fn-wk" data-fn-wk data-t-plan-block="Depósito [t] · [w] por semana" data-t-plan-week="Semana de prueba · [t]" data-t-swap-confirm="Cambiar de dieta reemplaza tu semana por el menú sugerido de esa dieta. ¿Continuar?" data-t-nutri-t="Resumen nutricional" data-t-nutri-day="Promedio al día" data-t-nutri-week="Semana" data-t-mp="Proteína" data-t-mc="Carbs" data-t-mf="Grasa" data-t-up="Elevar nivel este día" data-t-swap="Cambiar" data-t-add1="Elegir platillo" data-t-add2="+ Agregar 2.º plato" data-t-pk="Elige el platillo del [d]" data-t-pk2="Elige el 2.º plato del [d]" data-t-pkup="Eleva tu experiencia del [d]" data-t-kcal="kcal" data-t-prot="g de proteína" data-t-edit="Quitar ingredientes o añadir nota" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
             <header class="fn-wk__head">
               <button class="fn-wk__back" type="button" data-fn-go-prev>&lsaquo; Atrás</button>
-              <div><h3>Arma tu menú semanal</h3><p class="fn-wk__chip">Plan base · 5 comidas por semana</p></div>
+              <div><h3>Arma tu menú semanal</h3><div class="fn-wk__chips"><button class="fn-wk__chip fn-wk__chip--diet" type="button" data-fn-diet-open aria-haspopup="listbox" aria-expanded="false"><span data-fn-diet-name></span><i aria-hidden="true">&#9662;</i></button><span class="fn-wk__chip" data-fn-plan-name></span><div class="fn-dietmenu" data-fn-dietmenu role="listbox" hidden></div></div></div>
               <div class="fn-wk__perday" role="group" aria-label="Cuántos platos quieres cada día"><span>Platos al día</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
             </header>
             <div class="fn-who" data-fn-who hidden data-t-for="Pedido para" data-t-add="Agregar persona"></div>
             <div class="fn-wk__tabs" data-fn-wk-tabs role="tablist"></div>
             <ol class="fn-wk__cards" data-fn-wk-cards></ol>
+            <div class="fn-wk__nutri" data-fn-wk-nutri hidden></div>
           </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="pg-pedido--fn-para-funnel">¿Para quién es este pedido?</label><select class="select" id="pg-pedido--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Agregar a alguien de tu familia</a></div>
           <ol class="fn-week" data-fn-week aria-label="Asigna cada comida a un día"></ol>
@@ -14075,7 +14125,7 @@ Pago digital, sin efectivo</li></ul>
         <ul class="funnel__list" data-fn-s-list></ul>
         <p class="text-muted" data-fn-s-empty>Aún no eliges comidas.</p>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
-        <div class="funnel__total"><span>Total del plan</span><strong data-fn-s-total>$0</strong></div>
+        <div class="funnel__total"><span>Hoy pagas</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
         <p class="fn-budget fn-budget--aside" data-fn-budget></p>
         <details class="fn-more"><summary>Cómo se cobra</summary>
@@ -14875,7 +14925,7 @@ Pago digital, sin efectivo</li></ul>
   data-t-prop-tier="Tier" data-t-prop-length="Length" data-t-length-block="4 weeks" data-t-length-week="1 week"
   data-t-budget="Your plan includes {w} a week in meals. Anything above is charged separately that week (upfront payment: {t})." data-t-budget-short="Includes {w} a week; anything more is charged separately that week." data-t-budget-x="This week: +{x} extra." data-t-budget-ok="This week: no extra." data-t-how-open="How does it work?" data-t-pick-day="Choose for {d}" data-t-tour-1="Tap a day to choose its dish." data-t-tour-2="Swipe the cards and tap the arrow to choose. Use ✎ to leave out ingredients or add a note." data-t-tour-2m="Swipe the cards and tap this button to choose the dish you see. Use ✎ to leave out ingredients." data-t-tour-3="Something to leave out? Tap “Note or leave out ingredients” on the card: burger without onion, sauce on the side…" data-t-tour-4="Here is your total. With all 5 days set, confirm and go to checkout." data-t-tour-next="Next" data-t-tour-done="Got it" data-t-tour-skip="Skip" data-t-tour-guide="Step-by-step guide" data-t-locked="Complete the previous step to continue." data-t-mods-done="Done" data-t-mods-edit="Leave out ingredients or add a note for {d}" data-t-mods-title="Tweaks for {d}: {p}" data-t-mods-hint="Anything to leave out? Tap an ingredient to ask for it without." data-t-mods-note="Note for the kitchen (optional)" data-t-mods-ph="E.g. no onion, sauce on the side…" data-t-mods-warn="A taste preference; it doesn't replace telling us about an allergy (your profile). We'll do our best." data-t-mods-without="No {i}" data-t-prop-notes="Kitchen notes" data-t-mods-open="Remove ingredients or add a note"
   data-t-para-me="For me" data-t-prop-for="For"
-  data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-finish="Confirm and continue" data-t-finish-guest="Sign in to continue" data-t-credit="Active plan: {w} of {t} weeks left (until {e}). Pick meals in My week. Need more credits? Choose a plan below." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-pick="Choose" data-t-picked="Chosen" data-t-pick-for="Choose the dish for {d}" data-t-pick2-for="Choose the 2nd course for {d}" data-t-need-first="Choose that day's 1st course first." data-t-macros-empty="Pick a dish to see its macros" data-t-all-done="Week complete! Review and continue." data-t-clear-day="Remove the dish for {d}" data-t-first="First delivery: Monday {d}." data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
+  data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-finish="Confirm and continue" data-t-finish-guest="Sign in to continue" data-t-credit="Active plan: {w} of {t} weeks left (until {e}). Pick meals in My week. Need more credits? Choose a plan below." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-pick="Choose" data-t-picked="Chosen" data-t-pick-for="Choose the dish for {d}" data-t-pick2-for="Choose the 2nd course for {d}" data-t-need-first="Choose that day's 1st course first." data-t-macros-empty="Pick a dish to see its macros" data-t-all-done="Week complete! Review and continue." data-t-clear-day="Remove the dish for {d}" data-t-first="First delivery: Monday {d}." data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Deposit {t} + this week's upgrades +{p}"
   data-t-prop-upgrade="Upgrade" data-t-need-contract="Accept the contract to continue." data-t-days-missing="Assign a dish to every day."
   data-upg-1="70" data-upg-2="140" data-upg-3="210"
   data-upv-1="74001" data-upv-2="74002" data-upv-3="74003" >
@@ -15101,15 +15151,16 @@ Pago digital, sin efectivo</li></ul>
         </div>
       </div>
     </div>
-          <section class="fn-wk" data-fn-wk data-t-up="Upgrade this day" data-t-swap="Change" data-t-add1="Choose a dish" data-t-add2="+ Add 2nd plate" data-t-pk="Choose the dish for [d]" data-t-pk2="Choose the 2nd plate for [d]" data-t-pkup="Upgrade your [d]" data-t-kcal="kcal" data-t-prot="g protein" data-t-edit="Remove ingredients or add a note" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
+          <section class="fn-wk" data-fn-wk data-t-plan-block="Deposit [t] · [w] a week" data-t-plan-week="Trial week · [t]" data-t-swap-confirm="Changing diet replaces your week with that diet's suggested menu. Continue?" data-t-nutri-t="Nutrition summary" data-t-nutri-day="Daily average" data-t-nutri-week="Week" data-t-mp="Protein" data-t-mc="Carbs" data-t-mf="Fat" data-t-up="Upgrade this day" data-t-swap="Change" data-t-add1="Choose a dish" data-t-add2="+ Add 2nd plate" data-t-pk="Choose the dish for [d]" data-t-pk2="Choose the 2nd plate for [d]" data-t-pkup="Upgrade your [d]" data-t-kcal="kcal" data-t-prot="g protein" data-t-edit="Remove ingredients or add a note" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
             <header class="fn-wk__head">
               <button class="fn-wk__back" type="button" data-fn-go-prev>&lsaquo; Back</button>
-              <div><h3>Build your weekly menu</h3><p class="fn-wk__chip">Base plan · 5 meals per week</p></div>
+              <div><h3>Build your weekly menu</h3><div class="fn-wk__chips"><button class="fn-wk__chip fn-wk__chip--diet" type="button" data-fn-diet-open aria-haspopup="listbox" aria-expanded="false"><span data-fn-diet-name></span><i aria-hidden="true">&#9662;</i></button><span class="fn-wk__chip" data-fn-plan-name></span><div class="fn-dietmenu" data-fn-dietmenu role="listbox" hidden></div></div></div>
               <div class="fn-wk__perday" role="group" aria-label="How many plates you want each day"><span>Plates per day</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
             </header>
             <div class="fn-who" data-fn-who hidden data-t-for="Order for" data-t-add="Add a person"></div>
             <div class="fn-wk__tabs" data-fn-wk-tabs role="tablist"></div>
             <ol class="fn-wk__cards" data-fn-wk-cards></ol>
+            <div class="fn-wk__nutri" data-fn-wk-nutri hidden></div>
           </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="home--fn-para-funnel">Who is this order for?</label><select class="select" id="home--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Add someone from your family</a></div>
           <ol class="fn-week" data-fn-week aria-label="Assign each meal to a day"></ol>
@@ -15435,7 +15486,7 @@ Pago digital, sin efectivo</li></ul>
         <ul class="funnel__list" data-fn-s-list></ul>
         <p class="text-muted" data-fn-s-empty>You haven't chosen any meals yet.</p>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
-        <div class="funnel__total"><span>Plan total</span><strong data-fn-s-total>$0</strong></div>
+        <div class="funnel__total"><span>You pay today</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
         <p class="fn-budget fn-budget--aside" data-fn-budget></p>
         <details class="fn-more"><summary>How you are charged</summary>
@@ -23388,7 +23439,7 @@ Digital payment, no cash</li></ul>
         <div class="account-block" id="pg-cuenta-semana--semana"><h2>My week</h2><div class="panel panel--gold myweek" data-myweek
           data-upg-1="70" data-upg-2="140" data-upg-3="210"
           data-upv-1="74001" data-upv-2="74002" data-upv-3="74003"
-          data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
+          data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Deposit {t} + this week's upgrades +{p}"
           data-t-prop-upgrade="Upgrade" data-t-warn="⚠ According to our data, these dishes include or may include something you declared an allergy to: {list}." data-t-closed="That week is closed. Choose the next one." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}."
           data-t-saved="Done: {n} meals saved for the week of {d}." data-t-skipped="Done: the week of {d} has no deliveries." data-t-saved-pay="We saved your selection. Pay the dish upgrade ({p}) to confirm it." data-t-prev="We loaded your previous selection; change it if you like." data-t-dflt="We loaded the suggested menu for your diet; change it if you like." data-t-week-opt="Monday {a} – Friday {b}" data-t-error="We couldn't add the upgrade to your cart. Please try again."
           data-t-count="{n} of 5 meals chosen" data-t-buy-none="You don't have an active plan yet. Pick a 4-week or 1-week plan and choose your meals." data-t-buy-expired="Your plan has ended. Pick a new plan to keep receiving your meals." data-t-credits-error="We couldn't load your plan right now. Please try again in a moment."
@@ -23784,7 +23835,7 @@ Digital payment, no cash</li></ul>
   data-t-prop-tier="Tier" data-t-prop-length="Length" data-t-length-block="4 weeks" data-t-length-week="1 week"
   data-t-budget="Your plan includes {w} a week in meals. Anything above is charged separately that week (upfront payment: {t})." data-t-budget-short="Includes {w} a week; anything more is charged separately that week." data-t-budget-x="This week: +{x} extra." data-t-budget-ok="This week: no extra." data-t-how-open="How does it work?" data-t-pick-day="Choose for {d}" data-t-tour-1="Tap a day to choose its dish." data-t-tour-2="Swipe the cards and tap the arrow to choose. Use ✎ to leave out ingredients or add a note." data-t-tour-2m="Swipe the cards and tap this button to choose the dish you see. Use ✎ to leave out ingredients." data-t-tour-3="Something to leave out? Tap “Note or leave out ingredients” on the card: burger without onion, sauce on the side…" data-t-tour-4="Here is your total. With all 5 days set, confirm and go to checkout." data-t-tour-next="Next" data-t-tour-done="Got it" data-t-tour-skip="Skip" data-t-tour-guide="Step-by-step guide" data-t-locked="Complete the previous step to continue." data-t-mods-done="Done" data-t-mods-edit="Leave out ingredients or add a note for {d}" data-t-mods-title="Tweaks for {d}: {p}" data-t-mods-hint="Anything to leave out? Tap an ingredient to ask for it without." data-t-mods-note="Note for the kitchen (optional)" data-t-mods-ph="E.g. no onion, sauce on the side…" data-t-mods-warn="A taste preference; it doesn't replace telling us about an allergy (your profile). We'll do our best." data-t-mods-without="No {i}" data-t-prop-notes="Kitchen notes" data-t-mods-open="Remove ingredients or add a note"
   data-t-para-me="For me" data-t-prop-for="For"
-  data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-finish="Confirm and continue" data-t-finish-guest="Sign in to continue" data-t-credit="Active plan: {w} of {t} weeks left (until {e}). Pick meals in My week. Need more credits? Choose a plan below." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-pick="Choose" data-t-picked="Chosen" data-t-pick-for="Choose the dish for {d}" data-t-pick2-for="Choose the 2nd course for {d}" data-t-need-first="Choose that day's 1st course first." data-t-macros-empty="Pick a dish to see its macros" data-t-all-done="Week complete! Review and continue." data-t-clear-day="Remove the dish for {d}" data-t-first="First delivery: Monday {d}." data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Includes dish upgrades: +{p}"
+  data-t-renew="Renew automatically every 4 weeks" data-t-days="Monday,Tuesday,Wednesday,Thursday,Friday" data-t-finish="Confirm and continue" data-t-finish-guest="Sign in to continue" data-t-credit="Active plan: {w} of {t} weeks left (until {e}). Pick meals in My week. Need more credits? Choose a plan below." data-t-rolled="Saturday's cut-off has passed: you are now choosing the week of {d}." data-t-pick="Choose" data-t-picked="Chosen" data-t-pick-for="Choose the dish for {d}" data-t-pick2-for="Choose the 2nd course for {d}" data-t-need-first="Choose that day's 1st course first." data-t-macros-empty="Pick a dish to see its macros" data-t-all-done="Week complete! Review and continue." data-t-clear-day="Remove the dish for {d}" data-t-first="First delivery: Monday {d}." data-t-day-empty="Choose a dish" data-t-up-badge="+{p} per meal" data-t-up-total="Deposit {t} + this week's upgrades +{p}"
   data-t-prop-upgrade="Upgrade" data-t-need-contract="Accept the contract to continue." data-t-days-missing="Assign a dish to every day."
   data-upg-1="70" data-upg-2="140" data-upg-3="210"
   data-upv-1="74001" data-upv-2="74002" data-upv-3="74003" >
@@ -24010,15 +24061,16 @@ Digital payment, no cash</li></ul>
         </div>
       </div>
     </div>
-          <section class="fn-wk" data-fn-wk data-t-up="Upgrade this day" data-t-swap="Change" data-t-add1="Choose a dish" data-t-add2="+ Add 2nd plate" data-t-pk="Choose the dish for [d]" data-t-pk2="Choose the 2nd plate for [d]" data-t-pkup="Upgrade your [d]" data-t-kcal="kcal" data-t-prot="g protein" data-t-edit="Remove ingredients or add a note" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
+          <section class="fn-wk" data-fn-wk data-t-plan-block="Deposit [t] · [w] a week" data-t-plan-week="Trial week · [t]" data-t-swap-confirm="Changing diet replaces your week with that diet's suggested menu. Continue?" data-t-nutri-t="Nutrition summary" data-t-nutri-day="Daily average" data-t-nutri-week="Week" data-t-mp="Protein" data-t-mc="Carbs" data-t-mf="Fat" data-t-up="Upgrade this day" data-t-swap="Change" data-t-add1="Choose a dish" data-t-add2="+ Add 2nd plate" data-t-pk="Choose the dish for [d]" data-t-pk2="Choose the 2nd plate for [d]" data-t-pkup="Upgrade your [d]" data-t-kcal="kcal" data-t-prot="g protein" data-t-edit="Remove ingredients or add a note" data-t-tiers="Selecto,Exclusivo $,Signature $$,Reserve $$$">
             <header class="fn-wk__head">
               <button class="fn-wk__back" type="button" data-fn-go-prev>&lsaquo; Back</button>
-              <div><h3>Build your weekly menu</h3><p class="fn-wk__chip">Base plan · 5 meals per week</p></div>
+              <div><h3>Build your weekly menu</h3><div class="fn-wk__chips"><button class="fn-wk__chip fn-wk__chip--diet" type="button" data-fn-diet-open aria-haspopup="listbox" aria-expanded="false"><span data-fn-diet-name></span><i aria-hidden="true">&#9662;</i></button><span class="fn-wk__chip" data-fn-plan-name></span><div class="fn-dietmenu" data-fn-dietmenu role="listbox" hidden></div></div></div>
               <div class="fn-wk__perday" role="group" aria-label="How many plates you want each day"><span>Plates per day</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
             </header>
             <div class="fn-who" data-fn-who hidden data-t-for="Order for" data-t-add="Add a person"></div>
             <div class="fn-wk__tabs" data-fn-wk-tabs role="tablist"></div>
             <ol class="fn-wk__cards" data-fn-wk-cards></ol>
+            <div class="fn-wk__nutri" data-fn-wk-nutri hidden></div>
           </section>
           <div class="fn-para" data-fn-para-wrap hidden><label for="pg-pedido--fn-para-funnel">Who is this order for?</label><select class="select" id="pg-pedido--fn-para-funnel" data-fn-para></select><a class="text-link" href="#/pg/cuenta-perfil">+ Add someone from your family</a></div>
           <ol class="fn-week" data-fn-week aria-label="Assign each meal to a day"></ol>
@@ -24344,7 +24396,7 @@ Digital payment, no cash</li></ul>
         <ul class="funnel__list" data-fn-s-list></ul>
         <p class="text-muted" data-fn-s-empty>You haven't chosen any meals yet.</p>
         <p class="funnel__upgrades" data-fn-s-up hidden></p>
-        <div class="funnel__total"><span>Plan total</span><strong data-fn-s-total>$0</strong></div>
+        <div class="funnel__total"><span>You pay today</span><strong data-fn-s-total>$0</strong></div>
         <p class="funnel__block" data-fn-s-block hidden></p>
         <p class="fn-budget fn-budget--aside" data-fn-budget></p>
         <details class="fn-more"><summary>How you are charged</summary>
@@ -27586,12 +27638,19 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
           var tg2 = document.createElement('button'); tg2.type = 'button'; tg2.className = 'text-link'; tg2.textContent = T_('tour-guide'); tg2.setAttribute('data-fn-tour-open', '');
           bud.appendChild(bt); bud.appendChild(bl); if (!isAside) bud.appendChild(tg2);
         });
-        var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : ''; }
+        var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex), t: money(planTotal() - ex) }) : ''; }
         var emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
         var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? fill(T_('meals'), { n: n, t: MEALS }) : '';
         var tot = $('[data-fn-s-total]', holder); if (tot) tot.textContent = money(planTotal());
         var sb = $('[data-fn-s-block]', holder); if (sb) { sb.hidden = false; sb.textContent = st.plan === 'block' ? fill(T_('weeks-x'), { p: money(priceOf(tierEl(), st.plan) / WEEKS), w: WEEKS }) : fill(T_('per-week'), { p: money(planTotal()) }); }
-        var sc = $('[data-fn-stepcount]', holder); if (sc) sc.textContent = T_('step-of').replace('{n}', st.step === 3 ? 3 : st.step + 1).replace('{t}', 3) + ' · ' + ((dots[st.step] && dots[st.step].textContent.replace(/^\s*\d+/, '').trim()) || '');
+        var sc = $('[data-fn-stepcount]', holder);
+        if (sc) {
+          var vis = [0, 1, 3], pos = st.step === 3 ? 2 : st.step;
+          sc.innerHTML = '<span class="fn-sc__n">' + esc(T_('step-of').replace('{n}', pos + 1).replace('{t}', 3)) + '</span><span class="fn-sc__steps">' + vis.map(function (s2, k2) {
+            var lab = (dots[s2] && dots[s2].textContent.replace(/^\s*\d+/, '').trim()) || '', done = k2 < pos, on = s2 === st.step;
+            return '<button type="button" class="fn-sc__s' + (done ? ' is-done' : '') + (on ? ' is-on' : '') + '" data-fn-step-jump="' + s2 + '"' + (on ? ' aria-current="step"' : '') + '>' + (done ? '&#10003; ' : '') + esc(lab) + '</button>';
+          }).join('') + '</span>';
+        }
         var rn = $('[data-fn-renew]', holder); if (rn) { var hasPlan = !!tierEl().getAttribute('data-selling-plan'); rn.hidden = !(hasPlan && st.plan === 'block'); var box = $('[data-fn-renew-box]', holder); if (box) box.checked = st.renew; }
         buildNotes();
         renderMods();
@@ -27700,12 +27759,13 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       var slotHtml = function (i, c) {
         var pid = c ? st.days2[i] : st.days[i], d = pid && byPid(pid), key = i + ':' + c;
         if (!d) return '<div class="fn-wk__slot is-empty"><button class="fn-wk__add" type="button" data-wk-swap="' + key + '">' + esc(c ? WT('add2') : WT('add1')) + '</button></div>';
-        var im = $('img', d), src = im ? (im.currentSrc || im.src) : '', lv = rank(tierOf(d)), extra = lv ? upg(lv) : 0, m = macroOf(pid) || { k: 0, p: 0 };
+        var im = $('img', d), src = im ? (im.currentSrc || im.src) : '', lv = rank(tierOf(d)), extra = lv ? upg(lv) : 0, m = macroOf(pid) || { k: 0, p: 0, c: 0, f: 0 };
         var wb = $('[data-fn-warnbox]', d), mt = !c ? modsText(i) : '';
         return '<div class="fn-wk__slot' + (d.classList.contains('is-warned') ? ' has-warn' : '') + (extra ? ' is-up' : '') + '">'
           + '<div class="fn-wk__img"><button class="fn-wk__imgb" type="button" data-wk-img="' + key + '" aria-label="' + esc(lab(d)) + '" style="background-image:url(&quot;' + esc(src) + '&quot;)"></button>' + (wb ? wb.outerHTML : '') + (c ? '' : '<button class="fn-wk__ed' + (mt ? ' has-note' : '') + '" type="button" data-wk-edit="' + i + '" aria-label="' + esc(WT('edit')) + '">✎</button>') + '</div>'
           + '<span class="fn-wk__tier fn-wk__tier--' + tierOf(d) + '">' + esc(tierNames[lv] || '') + (extra ? ' · +' + esc(money(extra)) : '') + '</span>'
           + '<strong class="fn-wk__name">' + esc(lab(d)) + '</strong>'
+          + '<span class="fn-wk__m">' + esc(m.k + ' ' + WT('kcal') + ' · ' + WT('mp').charAt(0) + ' ' + m.p + ' · ' + WT('mc').charAt(0) + ' ' + m.c + ' · ' + WT('mf').charAt(0) + ' ' + m.f) + '</span>'
           + (mt ? '<span class="fn-wk__note">✎ ' + esc(mt) + '</span>' : '')
           + '<div class="fn-wk__btns">' + (lv < 3 ? '<button class="fn-wk__up" type="button" data-wk-up="' + key + '">★ ' + esc(WT('up')) + '</button>' : '') + '<button class="fn-wk__swap" type="button" data-wk-swap="' + key + '">' + esc(WT('swap')) + '</button>'
           + (c ? '<button class="fn-wk__ed fn-wk__ed--x" type="button" data-wk-clear="' + key + '" aria-label="×">×</button>' : '')
@@ -27722,6 +27782,19 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         var h = '';
         for (var i = 0; i < MEALS; i++) h += '<li class="fn-wk__card' + (i === st.active ? ' is-active' : '') + '"><h4>' + esc(dayLabel(i)) + '</h4>' + slotHtml(i, 0) + (st.perDay === 2 ? slotHtml(i, 1) : '') + '</li>';
         wkBox.innerHTML = h;
+        var dnm = $('[data-fn-diet-name]', holder), pnm = $('[data-fn-plan-name]', holder), cbn = $('[data-cat-choice="' + st.cat + '"] strong', holder);
+        if (dnm) dnm.textContent = cbn ? cbn.textContent : '';
+        if (pnm) { var dep = priceOf(tierEl(), st.plan); pnm.textContent = st.plan === 'block' ? WT('plan-block').replace('[t]', money(dep)).replace('[w]', money(Math.round(dep / 4))) : WT('plan-week').replace('[t]', money(dep)); }
+        var dm = $('[data-fn-dietmenu]', holder);
+        if (dm && !dm.children.length) dm.innerHTML = $$('[data-cat-choice]', holder).map(function (b) { var sm = $('small', b); return '<button type="button" role="option" data-fn-diet-pick="' + esc(b.getAttribute('data-cat-choice')) + '"><strong>' + esc($('strong', b).textContent) + '</strong>' + (sm ? '<small>' + esc(sm.textContent) + '</small>' : '') + '</button>'; }).join('');
+        if (dm) $$('[data-fn-diet-pick]', dm).forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-fn-diet-pick') === st.cat); });
+        var nu = $('[data-fn-wk-nutri]', holder);
+        if (nu) {
+          var tk = 0, tp = 0, tc = 0, tf = 0, nd = 0; for (var q = 0; q < MEALS; q++) { var dmx = dayMacros(q); if (dmx.n) { tk += dmx.k; tp += dmx.p; tc += dmx.c; tf += dmx.f; nd++; } }
+          nu.hidden = !nd;
+          if (nd) { var av = function (x) { return Math.round(x / nd).toLocaleString(cfg.lang === 'en' ? 'en-US' : 'es-MX'); };
+            nu.innerHTML = '<h4>' + esc(WT('nutri-t')) + '</h4><dl><div><dt>' + esc(WT('nutri-day')) + '</dt><dd><b>' + av(tk) + '</b> ' + esc(WT('kcal')) + '</dd></div><div><dt>' + esc(WT('mp')) + '</dt><dd><b>' + av(tp) + '</b> g</dd></div><div><dt>' + esc(WT('mc')) + '</dt><dd><b>' + av(tc) + '</b> g</dd></div><div><dt>' + esc(WT('mf')) + '</dt><dd><b>' + av(tf) + '</b> g</dd></div><div><dt>' + esc(WT('nutri-week')) + '</dt><dd><b>' + Math.round(tk).toLocaleString(cfg.lang === 'en' ? 'en-US' : 'es-MX') + '</b> ' + esc(WT('kcal')) + '</dd></div></dl>'; }
+        }
       };
       var paintPicker = function () {
         if (!picker) return;
@@ -27758,10 +27831,26 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         if (pt) { st.pickTier = pt.getAttribute('data-pick-tier') || ''; persist(); render(); return; }
         if (t.closest('[data-fn-picker-close]')) { closePicker(); return; }
         if (t.closest('[data-pick]') && picker && !picker.hidden) { setTimeout(closePicker, 0); return; }
+        var dop = t.closest('[data-fn-diet-open]'), dmenu = $('[data-fn-dietmenu]', holder);
+        if (dop && dmenu) { var open2 = dmenu.hidden; dmenu.hidden = !open2; dop.setAttribute('aria-expanded', open2 ? 'true' : 'false'); return; }
+        var dpk = t.closest('[data-fn-diet-pick]');
+        if (dpk) {
+          var nid = dpk.getAttribute('data-fn-diet-pick'), dm2 = $('[data-fn-dietmenu]', holder), cur = st.cat;
+          if (dm2) { dm2.hidden = true; var o3 = $('[data-fn-diet-open]', holder); if (o3) o3.setAttribute('aria-expanded', 'false'); }
+          if (nid === cur) return;
+          var ids = function (set) { return (set || []).map(function (d) { return d ? d.getAttribute('data-pid') : ''; }).join('|'); }, mine = st.days.join('|') + '|' + st.days2.filter(Boolean).join('|');
+          var dflt = ids(buildPresetSets()[0]) + '|';
+          if (mine !== dflt && st.days.some(Boolean) && !window.confirm(WT('swap-confirm'))) return;
+          st.cat = nid; st.catPicked = true; st.presetCat = nid; try { localStorage.setItem('kx_dietpick', nid); } catch (x2) {}
+          applyPreset(buildPresetSets()[0] || []); return;
+        }
+        var sj = t.closest('[data-fn-step-jump]');
+        if (sj) { var n2 = +sj.getAttribute('data-fn-step-jump'); if ((n2 === 0 && acctOn) || n2 === st.step) return; go(n2); return; }
         var sb = t.closest('[data-fn-sum-toggle]');
         if (sb) { var asd = sb.closest('.funnel__aside'); if (asd) { var on2 = asd.classList.toggle('is-open'); sb.setAttribute('aria-expanded', on2 ? 'true' : 'false'); } }
       });
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && picker && !picker.hidden) closePicker(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { if (picker && !picker.hidden) closePicker(); var dmE = $('[data-fn-dietmenu]', holder); if (dmE && !dmE.hidden) dmE.hidden = true; } });
+      document.addEventListener('click', function (e) { var dmC = $('[data-fn-dietmenu]', holder); if (dmC && !dmC.hidden && !(e.target.closest && e.target.closest('[data-fn-dietmenu],[data-fn-diet-open]'))) dmC.hidden = true; });
       var go = function (n) {
         n = Math.max(0, Math.min(steps.length - 1, n)); if (n > st.reach) { say(T_('locked')); return; } var moved = n !== st.step; st.step = n; say(''); persist(); render();
         if (moved && top) {

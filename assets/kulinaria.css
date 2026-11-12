@@ -4136,3 +4136,53 @@ body .funnel .fn-picker .fn-dishes .fn-dish.is-hidden{display:none !important}
   .fn-picker .fn-dish__media{aspect-ratio:2/1 !important}
   .fn-picker .fn-dish .fn-note,.fn-picker .fn-dish [data-fn-note]{display:none !important}
 }
+
+/* v116: diet chip + switcher, deposit / weekly budget chip, per-plate nutrition, weekly nutrition summary, clickable step counter */
+.fn-wk__chips{position:relative;display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.fn-wk__chips .fn-wk__chip{margin:0}
+.fn-wk__chip--diet{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--text);font:600 .78rem var(--font-body);cursor:pointer}
+.fn-wk__chip--diet i{font-style:normal;color:var(--accent);font-size:.8rem}
+.fn-dietmenu{position:absolute;top:calc(100% + 8px);left:0;z-index:40;width:min(340px,92vw);max-height:min(60svh,420px);overflow:auto;scrollbar-width:none;padding:8px;border:1px solid var(--accent);border-radius:18px;background:var(--bg-raised);box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.fn-dietmenu::-webkit-scrollbar{display:none}
+.fn-dietmenu[hidden]{display:none}
+.fn-dietmenu button{display:grid;gap:1px;width:100%;padding:10px 12px;border:0;border-radius:12px;background:none;color:var(--text);text-align:left;cursor:pointer}
+.fn-dietmenu button strong{font:600 .92rem var(--font-body)}.fn-dietmenu button small{font-size:.7rem;color:var(--text-muted)}
+.fn-dietmenu button:hover,.fn-dietmenu button.is-on{background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.fn-dietmenu button.is-on strong::after{content:" ✓";color:var(--accent)}
+.fn-wk__m{font-size:.7rem;line-height:1.35;color:var(--text-muted)}
+.fn-wk__nutri{margin-top:clamp(16px,2.4vw,28px);padding:16px 20px;border:1px solid var(--line);border-radius:18px;background:var(--bg-raised)}
+.fn-wk__nutri h4{margin:0 0 10px;font:600 .78rem var(--font-label);letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.fn-wk__nutri dl{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:0}
+.fn-wk__nutri dt{font-size:.68rem;color:var(--text-muted)}
+.fn-wk__nutri dd{margin:2px 0 0;font-size:.78rem;color:var(--text-muted)}.fn-wk__nutri dd b{font:600 1.25rem var(--font-display);color:var(--text)}
+@media (max-width:760px){.fn-wk__nutri{margin:6px 16px 0;padding:12px 14px}.fn-wk__nutri dl{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 10px}.fn-wk__nutri dd b{font-size:1.05rem}.fn-wk__chips{margin:0 16px 8px;grid-column:1/-1}.fn-wk__head{grid-template-columns:auto 1fr auto}.fn-wk__chips .fn-wk__chip:not(.fn-wk__chip--diet){font-size:.7rem;padding:6px 12px}}
+@media (max-width:760px){.fn-wk__chip{display:inline-flex !important}.fn-wk__head > div:not(.fn-wk__perday):not(.fn-wk__chips){grid-row:1;grid-column:2}.fn-wk__head .fn-wk__chips{grid-row:2;grid-column:1/-1;margin:0}}
+/* clickable step counter */
+body .funnel:not(.funnel--teaser) .funnel__stepcount{display:flex !important;flex-wrap:wrap;align-items:center;gap:6px 14px;text-transform:none;letter-spacing:.02em}
+.fn-sc__n{font:600 .78rem var(--font-body);color:var(--text)}
+.fn-sc__steps{display:inline-flex;flex-wrap:wrap;gap:6px}
+.fn-sc__s{padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:none;color:var(--text-muted);font:500 .72rem var(--font-body);cursor:pointer}
+.fn-sc__s.is-done{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+.fn-sc__s.is-on{background:var(--accent);border-color:var(--accent);color:var(--on-accent,#fff);cursor:default}
+.fn-sc__s:not(.is-on):hover{border-color:var(--accent);color:var(--text)}
+@media (max-width:760px){body .funnel:not(.funnel--teaser) .funnel__stepcount{gap:6px 10px}.fn-sc__n{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);flex:1 1 100%}.fn-sc__steps{flex:1 1 100%}.fn-sc__s{flex:1;text-align:center;padding:7px 4px;font-size:.7rem}}
+/* v117: the pop-up always covers exactly the screen (a stray rule made it taller than the viewport, which pushed the box off-center) */
+.fn-picker{top:0 !important;left:0 !important;right:0 !important;bottom:0 !important;height:100vh !important;height:100dvh !important;max-height:100dvh !important;min-height:0 !important;width:100% !important}
+
+/* v118: polish (counter spacing, one-line nutrition, phone header, today's total) */
+.fn-sc__n{margin-right:12px}
+body .funnel:not(.funnel--teaser) .funnel__stepcount{flex-wrap:wrap !important}
+.fn-wk__m{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total span{margin-right:10px}
+@media (max-width:760px){
+  .fn-sc__n{flex:1 1 100% !important;margin-right:0}
+  .fn-wk__head > div:not(.fn-wk__perday){display:contents}
+  .fn-wk__head h3{grid-row:1;grid-column:2}
+  .fn-wk__head .fn-wk__chips{grid-row:2 !important;grid-column:1 / -1 !important;margin:2px 0 0}
+  .fn-wk__chips .fn-wk__chip--diet{font-size:.78rem;padding:8px 14px}
+  body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total span{margin-right:0}
+}
+/* v119: the counter is a flex row on every step (an older, more specific rule kept it as a block) */
+body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__stepcount,body .funnel:not(.funnel--teaser) .funnel__stepcount{display:flex !important;flex-wrap:wrap !important}
+/* v120 */
+@media (max-width:760px){body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total{flex-direction:row !important;align-items:baseline !important;gap:8px}body .funnel[data-step="3"]:not(.is-gated) .funnel__aside .funnel__total span{margin-right:0}}
