@@ -1243,6 +1243,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
 
   // ---- people: each one keeps their own week; a new person starts from the default menu
   await base({ profile: { allergies: [], dislikes: [], people: [{ id: 'p1', name: 'Johnny', allergies: [], dislikes: [], diets: [] }] } }); await open(false); await chooseDiet('fit-proteina');
+  await page.waitForFunction((f) => document.querySelectorAll(f + ' .fn-who__b').length >= 2, FN, { timeout: 5000 }).catch(() => {});
   ok('"Pedido para" shows a chip for me and for each family member, plus an add link', await page.evaluate((f) => { const c = [...document.querySelectorAll(f + ' .fn-who__b')].map((b) => b.textContent); return c.length === 2 && /Johnny/.test(c[1]) && !!document.querySelector(f + ' .fn-who__add'); }, FN));
   await page.evaluate((f) => document.querySelector(f + ' [data-wk-swap="1:0"]').click(), FN); await page.waitForTimeout(400);
   await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); const cur = document.querySelectorAll(f + ' .fn-wk__card')[1].querySelector('.fn-wk__name').textContent; [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].find((c) => c.offsetParent && c.getAttribute('data-tier') === 'selecto' && c.getAttribute('data-title') !== cur).querySelector('[data-pick]').click(); }, FN); await page.waitForTimeout(500);
@@ -1277,29 +1278,34 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('a valid file + name + consent shows the thank-you message', await page.evaluate(() => { const m = document.querySelector('[data-page="pg/pedido"] [data-fn-own-modal]'); return !m.querySelector('[data-fn-own-ok]').hidden && m.querySelector('[data-fn-own-form]').hidden; }));
   await page.keyboard.press('Escape');
 
-  // ---- hero: the intro video plays once, then a carousel of highlights advances every 5 seconds
+  // ---- hero: the intro video is the first face of a 3D cube; after it has played once the cube turns through the highlights
   await page.setViewportSize({ width: 1440, height: 860 });
   await base(); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1300);
-  const HR = '[data-page="home"] [data-hero]';
-  const hr0 = await page.evaluate((h) => { const e = document.querySelector(h); return { slides: e.querySelectorAll('.hs').length, dots: e.querySelectorAll('[data-hs-dot]').length, loop: e.querySelector('[data-hero-video]').loop, shown: !e.querySelector('[data-hero-slides]').hidden, on: e.classList.contains('is-carousel') }; }, HR);
-  ok('hero: the intro video does not loop and 7 highlight slides wait behind it', hr0.slides === 7 && hr0.dots === 7 && hr0.loop === false && !hr0.shown && !hr0.on, JSON.stringify(hr0));
-  await page.evaluate((h) => document.querySelector(h + ' [data-hero-video]').dispatchEvent(new Event('ended')), HR); await page.waitForTimeout(900);
-  const slideNow = () => page.evaluate((h) => [...document.querySelector(h).querySelectorAll('.hs')].findIndex((x) => x.classList.contains('is-on')), HR);
-  const hr1 = await page.evaluate((h) => { const e = document.querySelector(h), on = e.querySelector('.hs.is-on'); const r = on.getBoundingClientRect(); return { on: e.classList.contains('is-carousel'), shown: !e.querySelector('[data-hero-slides]').hidden, h2: on.querySelector('h2').textContent, link: (on.querySelector('a') || {}).getAttribute && on.querySelector('a').getAttribute('href'), img: !!on.querySelector('img'), fits: r.left >= -1 && r.right <= innerWidth + 1, others: [...e.querySelectorAll('.hs:not(.is-on)')].every((x) => x.getAttribute('aria-hidden') === 'true') }; }, HR);
-  ok('hero: when the video ends the carousel takes over with the first slide (tag, title, text, photo and a link)', hr1.on && hr1.shown && hr1.h2.length > 5 && /^(\/|#\/)/.test(hr1.link || '') && hr1.img && hr1.fits && hr1.others, JSON.stringify(hr1));
-  const a0 = await slideNow(); await page.waitForTimeout(5500);
-  ok('hero: it advances by itself every 5 seconds', (await slideNow()) === a0 + 1, a0 + ' -> ' + (await slideNow()));
-  await page.hover(HR); const c0 = await slideNow(); await page.waitForTimeout(5600);
-  ok('hero: hovering pauses it (nothing moves while you read)', (await slideNow()) === c0);
+  const HR = '[data-page="home"] [data-hero]', CB = HR + ' [data-hero-cube]';
+  const hr0 = await page.evaluate((h) => { const e = document.querySelector(h), c = e.querySelector('[data-hero-cube]'); return { slides: c.querySelectorAll('.hs').length, dots: e.querySelectorAll('[data-hs-dot]').length, loop: e.querySelector('[data-hero-video]').loop, intro: c.querySelector('[data-hero-intro]').classList.contains('is-cur'), on: e.classList.contains('is-carousel'), d3: getComputedStyle(c).transformStyle }; }, HR);
+  ok('hero: the intro video does not loop; it is the first face of a 3D cube with 7 highlight faces behind it', hr0.slides === 7 && hr0.dots === 7 && hr0.loop === false && hr0.intro && !hr0.on && hr0.d3 === 'preserve-3d', JSON.stringify(hr0));
+  await page.evaluate((h) => document.querySelector(h + ' [data-hero-video]').dispatchEvent(new Event('ended')), HR); await page.waitForTimeout(350);
+  const mid = await page.evaluate((c) => { const e = document.querySelector(c); return { cls: e.className, tr: getComputedStyle(e).transform.slice(0, 9) }; }, CB);
+  ok('hero: when the video ends the cube turns (a real 3D rotation: video out of frame, the first highlight coming in)', /rot-next/.test(mid.cls) && mid.tr === 'matrix3d(', JSON.stringify(mid));
+  await page.waitForTimeout(1500);
+  const slideNow = () => page.evaluate((c) => [...document.querySelector(c).querySelectorAll('.hs')].findIndex((x) => x.classList.contains('is-cur')), CB);
+  const hr1 = await page.evaluate((h) => { const e = document.querySelector(h), on = e.querySelector('.hs.is-cur'); const r = on.getBoundingClientRect(); return { carousel: e.classList.contains('is-carousel'), introOff: !e.querySelector('[data-hero-intro]').classList.contains('is-cur'), h2: on.querySelector('h2').textContent, link: on.querySelector('a').getAttribute('href'), img: !!on.querySelector('img'), fits: r.left >= -1 && r.right <= innerWidth + 1, hiddenOthers: [...e.querySelectorAll('.hs:not(.is-cur)')].every((x) => x.getAttribute('aria-hidden') === 'true'), idle: !document.querySelector(h + ' [data-hero-cube]').className.match(/rot-/) }; }, HR);
+  ok('hero: after the turn the first highlight is in frame (tag, title, text, photo, link) and the video face is out', hr1.carousel && hr1.introOff && hr1.h2.length > 5 && /^(\/|#\/)/.test(hr1.link) && hr1.img && hr1.fits && hr1.hiddenOthers && hr1.idle, JSON.stringify(hr1));
+  const a0 = await slideNow(); await page.waitForTimeout(6800);
+  ok('hero: the cube turns to the next highlight by itself (about every 5 seconds)', (await slideNow()) === a0 + 1, a0 + ' -> ' + (await slideNow()));
+  await page.hover(HR); const c0 = await slideNow(); await page.waitForTimeout(6800);
+  ok('hero: hovering pauses it (nothing turns while you read)', (await slideNow()) === c0);
   await page.mouse.move(2, 2);
-  await page.evaluate((h) => document.querySelector(h + ' [data-hs-dot="6"]').click(), HR); await page.waitForTimeout(250);
-  ok('hero: a dot jumps to that slide', (await slideNow()) === 6);
-  await page.evaluate((h) => document.querySelector(h + ' [data-hs-next]').click(), HR); await page.waitForTimeout(250);
-  ok('hero: after the last slide it wraps to the first', (await slideNow()) === 0);
-  ok('hero: every slide has a title, a link and a photo (events, notices, season, referrals, trial, delivery)', await page.evaluate((h) => [...document.querySelector(h).querySelectorAll('.hs')].every((x) => x.querySelector('h2').textContent.trim().length > 4 && /^(\/|#\/)/.test(x.querySelector('a').getAttribute('href')) && x.querySelector('img')), HR));
+  await page.evaluate((h) => document.querySelector(h + ' [data-hs-dot="6"]').click(), HR); await page.waitForTimeout(1700);
+  ok('hero: a dot turns the cube to that highlight', (await slideNow()) === 6);
+  await page.evaluate((h) => document.querySelector(h + ' [data-hs-next]').click(), HR); await page.waitForTimeout(1700);
+  ok('hero: after the last highlight the cube wraps to the first (the intro video does not come back)', (await slideNow()) === 0);
+  await page.evaluate((h) => document.querySelector(h + ' [data-hs-prev]').click(), HR); await page.waitForTimeout(1700);
+  ok('hero: the arrow back turns the cube the other way', (await slideNow()) === 6);
+  ok('hero: every highlight has a title, a link and a photo (events, notices, season, referrals, trial, delivery)', await page.evaluate((h) => [...document.querySelector(h).querySelectorAll('.hs')].every((x) => x.querySelector('h2').textContent.trim().length > 4 && /^(\/|#\/)/.test(x.querySelector('a').getAttribute('href')) && x.querySelector('img')), HR));
   await page.setViewportSize({ width: 390, height: 844 }); await page.reload(); await page.waitForTimeout(1300);
-  await page.evaluate((h) => document.querySelector(h + ' [data-hero-video]').dispatchEvent(new Event('ended')), HR); await page.waitForTimeout(900);
-  ok('hero on a phone: the carousel fits the width, with its controls inside the screen', await page.evaluate((h) => { const e = document.querySelector(h), c = e.querySelector('.hero__ctl').getBoundingClientRect(), on = e.querySelector('.hs.is-on').getBoundingClientRect(); return document.documentElement.scrollWidth <= innerWidth + 1 && c.right <= innerWidth + 1 && on.right <= innerWidth + 1; }, HR));
+  await page.evaluate((h) => document.querySelector(h + ' [data-hero-video]').dispatchEvent(new Event('ended')), HR); await page.waitForTimeout(1800);
+  ok('hero on a phone: the cube works at phone width, the highlight fits and its controls are inside the screen', await page.evaluate((h) => { const e = document.querySelector(h), c = e.querySelector('.hero__ctl').getBoundingClientRect(), on = e.querySelector('.hs.is-cur').getBoundingClientRect(); return document.documentElement.scrollWidth <= innerWidth + 1 && c.right <= innerWidth + 1 && on.right <= innerWidth + 1 && on.width > 300; }, HR));
   await page.setViewportSize({ width: 1440, height: 900 });
 
   // ---- phones: nothing wider than the screen, the total bar is inside the screen

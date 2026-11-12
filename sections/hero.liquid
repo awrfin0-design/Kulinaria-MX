@@ -9,6 +9,62 @@
   assign art_m = 'photo-' | append: art | append: '-m.webp'
 -%}
 <section class="hero hero--{{ size }} hero--intro tone-dark" data-scroll data-hero {{ section.shopify_attributes }}>
+  {%- if section.blocks.size > 1 -%}
+  <div class="hero__cubebox" data-hero-box>
+    <div class="hero__cube" data-hero-cube data-interval="{{ section.settings.slide_seconds | default: 5 }}" role="region" aria-roledescription="carousel" aria-label="{{ 'hero.slides' | t }}">
+  <div class="container hero__grid hero__face hero__face--intro is-cur" data-hero-intro>
+        <div class="hero__stage" aria-hidden="true">
+          {%- assign hv_src = section.settings.video_url | default: 'video-hero-intro.mp4' -%}
+          {%- if section.settings.video_url == blank -%}{%- assign hv_src = 'video-hero-intro.mp4' | asset_url -%}{%- endif -%}
+          <img class="hero__poster" src="{{ 'video-hero-intro-poster.webp' | asset_url }}" width="640" height="640" alt="" fetchpriority="high" decoding="async">
+          <video class="hero__video hero__video--intro" muted playsinline preload="none" poster="{{ 'video-hero-intro-poster.webp' | asset_url }}" data-video-src="{{ hv_src }}" data-ambient data-hero-video{% unless section.blocks.size > 1 %} loop{% endunless %}></video>
+        </div>
+        <div class="hero__copy">
+          <span class="hero__rule" aria-hidden="true"></span>
+          <h1>{{ tx_s_heading | escape }}{%- if tx_s_heading_em != blank %} <em>{{ tx_s_heading_em | escape }}</em>{% endif -%}</h1>
+          {%- if tx_s_text != blank -%}<p class="hero__sub">{{ tx_s_text }}</p>{%- endif -%}
+          {% render 'service-badge', class: 'svc-badge--hero' %}
+    
+          {%- if section.settings.show_countdown -%}
+            <p><span class="countdown" data-cutoff>{{ 'cutoff.orders_close_in' | t }} <strong data-cutoff-value>…</strong></span></p>
+          {%- endif -%}
+    
+          <div class="hero__cta">
+            {%- if tx_s_button_label != blank -%}
+              <a class="arrow-link" href="{{ section.settings.button_link | default: settings.plans_url | default: '/pages/planes' }}" data-order-cta data-returning-label="{{ 'funnel.ret_go' | t }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ tx_s_button_label }}</a>
+            {%- endif -%}
+            {%- if tx_s_button2_label != blank -%}
+              <a class="text-link" href="{{ section.settings.button2_link | default: '/collections/menu-semanal' }}">{{ tx_s_button2_label }}</a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    
+    {%- for block in section.blocks -%}
+      {%- capture tx_tag -%}{% render 'tx', s: block.settings.tag %}{%- endcapture -%}
+      {%- capture tx_h -%}{% render 'tx', s: block.settings.heading %}{%- endcapture -%}
+      {%- capture tx_p -%}{% render 'tx', s: block.settings.text %}{%- endcapture -%}
+      {%- capture tx_b -%}{% render 'tx', s: block.settings.button_label %}{%- endcapture -%}
+      <article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="{{ forloop.index }} / {{ section.blocks.size }}" aria-hidden="true" {{ block.shopify_attributes }}>
+        <div class="hs__media">{% render 'photo', image: block.settings.image, art: block.settings.art, alt: '', class: 'hs__img', width: 1000 %}</div>
+        <div class="hs__copy">
+          {%- if tx_tag != blank -%}<span class="hs__tag">{{ tx_tag }}</span>{%- endif -%}
+          <h2>{{ tx_h }}</h2>
+          {%- if tx_p != blank -%}<p>{{ tx_p }}</p>{%- endif -%}
+          {%- if tx_b != blank -%}<a class="arrow-link" href="{{ block.settings.button_link | default: '/pages/pedido' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ tx_b }}</a>{%- endif -%}
+        </div>
+      </article>
+    {%- endfor -%}
+    </div>
+  </div>
+  <div class="hero__ctl container" data-hs-ctl>
+    <button class="hero__arr" type="button" data-hs-prev aria-label="{{ 'hero.prev' | t }}">&lsaquo;</button>
+    <div class="hero__dots" role="group">
+      {%- for block in section.blocks -%}<button class="hero__dot{% if forloop.first %} is-on{% endif %}" type="button" data-hs-dot="{{ forloop.index0 }}" aria-label="{{ 'hero.go' | t | replace: '[n]', forloop.index }}"><i></i></button>{%- endfor -%}
+    </div>
+    <button class="hero__arr" type="button" data-hs-next aria-label="{{ 'hero.next' | t }}">&rsaquo;</button>
+  </div>
+  {%- else -%}
   <div class="container hero__grid">
     <div class="hero__stage" aria-hidden="true">
       {%- assign hv_src = section.settings.video_url | default: 'video-hero-intro.mp4' -%}
@@ -34,33 +90,6 @@
           <a class="text-link" href="{{ section.settings.button2_link | default: '/collections/menu-semanal' }}">{{ tx_s_button2_label }}</a>
         {%- endif -%}
       </div>
-    </div>
-  </div>
-  {%- if section.blocks.size > 1 -%}
-  <div class="hero__slides container" data-hero-slides data-interval="{{ section.settings.slide_seconds | default: 5 }}" hidden role="region" aria-roledescription="carousel" aria-label="{{ 'hero.slides' | t }}">
-    <div class="hero__slidebox">
-    {%- for block in section.blocks -%}
-      {%- capture tx_tag -%}{% render 'tx', s: block.settings.tag %}{%- endcapture -%}
-      {%- capture tx_h -%}{% render 'tx', s: block.settings.heading %}{%- endcapture -%}
-      {%- capture tx_p -%}{% render 'tx', s: block.settings.text %}{%- endcapture -%}
-      {%- capture tx_b -%}{% render 'tx', s: block.settings.button_label %}{%- endcapture -%}
-      <article class="hs{% if forloop.first %} is-on{% endif %}" role="group" aria-roledescription="slide" aria-label="{{ forloop.index }} / {{ section.blocks.size }}"{% unless forloop.first %} aria-hidden="true"{% endunless %} {{ block.shopify_attributes }}>
-        <div class="hs__media">{% render 'photo', image: block.settings.image, art: block.settings.art, alt: '', class: 'hs__img', width: 1000 %}</div>
-        <div class="hs__copy">
-          {%- if tx_tag != blank -%}<span class="hs__tag">{{ tx_tag }}</span>{%- endif -%}
-          <h2>{{ tx_h }}</h2>
-          {%- if tx_p != blank -%}<p>{{ tx_p }}</p>{%- endif -%}
-          {%- if tx_b != blank -%}<a class="arrow-link" href="{{ block.settings.button_link | default: '/pages/pedido' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ tx_b }}</a>{%- endif -%}
-        </div>
-      </article>
-    {%- endfor -%}
-    </div>
-    <div class="hero__ctl">
-      <button class="hero__arr" type="button" data-hs-prev aria-label="{{ 'hero.prev' | t }}">&lsaquo;</button>
-      <div class="hero__dots" role="group">
-        {%- for block in section.blocks -%}<button class="hero__dot{% if forloop.first %} is-on{% endif %}" type="button" data-hs-dot="{{ forloop.index0 }}" aria-label="{{ 'hero.go' | t | replace: '[n]', forloop.index }}"><i></i></button>{%- endfor -%}
-      </div>
-      <button class="hero__arr" type="button" data-hs-next aria-label="{{ 'hero.next' | t }}">&rsaquo;</button>
     </div>
   </div>
   {%- endif -%}

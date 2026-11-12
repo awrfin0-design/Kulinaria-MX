@@ -4221,23 +4221,27 @@ body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__stepcount,body .
 .fn-wk__card:has(.is-up){border-color:color-mix(in srgb,var(--accent) 55%,var(--line));box-shadow:none}
 .fn-wk__max{flex:1 1 100%;padding:11px 10px;border:1px dashed var(--line);border-radius:999px;text-align:center;font:600 .72rem var(--font-body);color:var(--text-muted)}
 @media (max-width:760px){.fn-wk__max{grid-column:1 / -1}}
-/* v121: hero carousel (after the intro video has played once) */
-.hero__slides[hidden]{display:none}
-.hero--intro.is-carousel .hero__copy,.hero--intro.is-carousel .hero__stage{visibility:hidden;opacity:0;pointer-events:none;transition:opacity .5s}
-.hero--intro .hero__grid{position:relative}
-.hero--intro .hero__slides{position:absolute;inset:calc(var(--hdr) + 28px) 0 96px;z-index:3;display:flex;flex-direction:column;justify-content:center;padding:0;max-width:none;width:100%;margin:0}
-.hero--intro .hero__slides{left:0;right:0}
-.hero__slidebox{position:relative;display:grid;width:min(100% - 2*var(--pad,24px),var(--container,1280px));margin-inline:auto}
-.hs{grid-area:1/1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,72px);align-items:center;opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .7s var(--ease),transform .7s var(--ease),visibility 0s .7s}
-.hs.is-on{opacity:1;visibility:visible;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease),visibility 0s}
-.hs__media{order:2;justify-self:center;width:min(100%,min(74svh,640px));aspect-ratio:1/1;border-radius:28px;overflow:hidden;background:#111;box-shadow:0 30px 80px rgba(0,0,0,.5)}
-.hs__img{width:100%;height:100%;object-fit:cover;display:block;scale:1.04;transition:scale 6s linear}
-.hs.is-on .hs__img{scale:1.1}
+/* v123: hero 3D cube. The intro video is the first face; the cube turns to each highlight in turn. */
+.hero--intro .hero__cubebox{position:relative;width:100%;height:min(calc(100svh - var(--hdr) - 150px),780px);min-height:440px;perspective:2400px;perspective-origin:50% 50%}
+.hero__cube{position:relative;width:100%;height:100%;transform-style:preserve-3d;transform:translateZ(calc(var(--hc-w,1200px) / -2));transition:transform .95s cubic-bezier(.7,0,.2,1)}
+.hero__cube.rot-next{transform:translateZ(calc(var(--hc-w,1200px) / -2)) rotateY(-90deg)}
+.hero__cube.rot-prev{transform:translateZ(calc(var(--hc-w,1200px) / -2)) rotateY(90deg)}
+.hero__face{position:absolute !important;top:0;bottom:0;left:0;right:0;width:min(100% - 2*var(--pad,24px),var(--container,1280px));margin-inline:auto !important;backface-visibility:hidden;-webkit-backface-visibility:hidden;visibility:hidden;display:grid;align-items:center;box-sizing:border-box}
+.hero__face.is-cur{visibility:visible;transform:translateZ(calc(var(--hc-w,1200px) / 2))}
+.hero__face.is-out{visibility:visible}
+.hero__face.is-nxt{visibility:visible;transform:rotateY(90deg) translateZ(calc(var(--hc-w,1200px) / 2))}
+.hero__face.is-prv{visibility:visible;transform:rotateY(-90deg) translateZ(calc(var(--hc-w,1200px) / 2))}
+.hero__face--intro{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.hero__face--intro .hero__stage{width:auto;height:100%;max-height:100%;aspect-ratio:1/1;justify-self:center}
+.hs{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,72px)}
+.hs__media{order:2;justify-self:center;height:100%;max-height:min(100%,640px);aspect-ratio:1/1;border-radius:28px;overflow:hidden;background:#111;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.hs__img{width:100%;height:100%;object-fit:cover;display:block}
 .hs__copy{order:1;max-width:560px;color:#F5F5F5}
 .hs__tag{display:inline-block;margin-bottom:18px;padding:7px 16px;border:1px solid var(--accent);border-radius:999px;font:700 .68rem var(--font-label);letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
 .hs__copy h2{margin:0 0 16px;font:400 clamp(2.2rem,4.6vw,4.4rem)/1.05 var(--font-display);letter-spacing:-.01em;color:#F5F5F5}
 .hs__copy p{margin:0 0 clamp(22px,4vh,36px);font-size:clamp(1rem,1.3vw,1.2rem);line-height:1.55;color:rgba(245,245,245,.78);max-width:34rem}
-.hero__ctl{display:flex;align-items:center;gap:14px;width:min(100% - 2*var(--pad,24px),var(--container,1280px));margin:clamp(18px,3vh,32px) auto 0}
+.hero--intro .hero__ctl{display:flex;align-items:center;gap:14px;margin:clamp(14px,2.4vh,26px) auto 0;width:min(100% - 2*var(--pad,24px),var(--container,1280px));visibility:hidden}
+.hero--intro.is-carousel .hero__ctl{visibility:visible}
 .hero__arr{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.25);color:#fff;font-size:1.4rem;line-height:1;cursor:pointer;transition:background .2s,border-color .2s}
 .hero__arr:hover{background:var(--accent);border-color:var(--accent);color:var(--on-accent,#fff)}
 .hero__dots{display:flex;gap:8px;align-items:center}
@@ -4247,21 +4251,24 @@ body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__stepcount,body .
 .hero__dot.is-on i::after{transform:scaleX(1)}
 .hero.hs-run .hero__dot.is-on i::after{transform:scaleX(0);animation:hs-fill var(--hs-dur,5s) linear forwards}
 @keyframes hs-fill{to{transform:scaleX(1)}}
-@media (prefers-reduced-motion:reduce){.hs,.hs.is-on{transition:none}.hs__img,.hs.is-on .hs__img{scale:1;transition:none}}
+@media (prefers-reduced-motion:reduce){.hero__cube{transition:none}}
 @media (max-width:760px){
-  .hero--intro .hero__slides{position:absolute;inset:calc(var(--hdr) + 8px) 0 64px;justify-content:flex-start}
-  .hs{grid-template-columns:1fr;gap:16px;align-content:start}
-  .hs__media{order:1;width:100%;aspect-ratio:4/3;max-height:42svh;border-radius:22px}
+  .hero--intro .hero__cubebox{height:calc(100svh - var(--hdr) - 112px);min-height:520px}
+  .hero__face--intro{grid-template-columns:1fr;align-content:start}
+  .hero__face--intro .hero__stage{height:auto;width:100%;max-height:44svh;aspect-ratio:auto;min-height:0}
+  .hs{grid-template-columns:1fr;gap:14px;align-content:start;align-items:start}
+  .hs__media{order:1;width:100%;height:auto;max-height:44svh;aspect-ratio:4/3;border-radius:22px}
   .hs__copy{order:2;max-width:none}
   .hs__tag{margin-bottom:10px;padding:5px 12px;font-size:.6rem}
   .hs__copy h2{font-size:1.7rem;margin-bottom:8px}
   .hs__copy p{font-size:.92rem;margin-bottom:14px}
-  .hero__ctl{margin-top:12px;justify-content:space-between}
+  .hero--intro .hero__ctl{justify-content:space-between;margin-top:8px}
   .hero__dots{gap:2px}.hero__dot{width:26px}
 }
+.hero--intro .hero__grid.hero__face,.hero--intro .hs.hero__face{width:min(100% - 2*var(--pad,24px),var(--container,1280px));padding-inline:0 !important}
 
-/* v122 */
-@media (max-width:760px){.hero--intro .hero__slides{justify-content:center}.hs__media{max-height:46svh}}
+/* v124 */
+@media (max-width:760px){.hs.hero__face{padding-top:10px !important}}
 
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
@@ -4644,52 +4651,52 @@ Fuego</span>
 </div></template>
 
     <main id="main" tabindex="-1"><template data-l="es"><div data-page="home" data-template="index" data-title="Home" hidden>
-      <div id="home--shopify-section-hero" class="shopify-section"><section class="hero hero--10 hero--intro tone-dark" data-scroll data-hero >
-  <div class="container hero__grid">
-    <div class="hero__stage" aria-hidden="true"><img class="hero__poster" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="video-hero-intro-poster.webp" width="640" height="640" alt="" fetchpriority="high" decoding="async">
-      <video class="hero__video hero__video--intro" muted playsinline preload="none" data-poster="assets/video-hero-intro-poster.webp" data-video-src="assets/video-hero-intro.mp4" data-ambient data-hero-video></video>
-    </div>
-    <div class="hero__copy">
-      <span class="hero__rule" aria-hidden="true"></span>
-      <h1>Una semana, servida como <em>una pieza de autor.</em></h1><p class="hero__sub">Platillos preparados por chefs, adaptados a tu estilo de vida.</p><p class="svc-badge svc-badge--hero"><span class="svc-badge__pin" aria-hidden="true"></span>Por ahora entregamos solo en Puebla y su área metropolitana.</p>
+      <div id="home--shopify-section-hero" class="shopify-section"><section class="hero hero--10 hero--intro tone-dark" data-scroll data-hero ><div class="hero__cubebox" data-hero-box>
+    <div class="hero__cube" data-hero-cube data-interval="5" role="region" aria-roledescription="carousel" aria-label="Destacados">
+  <div class="container hero__grid hero__face hero__face--intro is-cur" data-hero-intro>
+        <div class="hero__stage" aria-hidden="true"><img class="hero__poster" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="video-hero-intro-poster.webp" width="640" height="640" alt="" fetchpriority="high" decoding="async">
+          <video class="hero__video hero__video--intro" muted playsinline preload="none" data-poster="assets/video-hero-intro-poster.webp" data-video-src="assets/video-hero-intro.mp4" data-ambient data-hero-video></video>
+        </div>
+        <div class="hero__copy">
+          <span class="hero__rule" aria-hidden="true"></span>
+          <h1>Una semana, servida como <em>una pieza de autor.</em></h1><p class="hero__sub">Platillos preparados por chefs, adaptados a tu estilo de vida.</p><p class="svc-badge svc-badge--hero"><span class="svc-badge__pin" aria-hidden="true"></span>Por ahora entregamos solo en Puebla y su área metropolitana.</p>
 <div class="hero__cta"><a class="arrow-link" href="#/pg/planes" data-order-cta data-returning-label="Elegir mi semana"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Haz tu pedido</a><a class="text-link" href="#/menu">Ver los especiales de la semana</a></div>
-    </div>
-  </div><div class="hero__slides container" data-hero-slides data-interval="5" hidden role="region" aria-roledescription="carousel" aria-label="Destacados">
-    <div class="hero__slidebox"><article class="hs is-on" role="group" aria-roledescription="slide" aria-label="1 / 7" >
+        </div>
+      </div><article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="1 / 7" aria-hidden="true" >
         <div class="hs__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-steak.webp" width="1200" height="800" alt="" class="hs__img" loading="lazy" decoding="async"></div>
         <div class="hs__copy"><span class="hs__tag">Esta semana</span><h2>El menú de la semana ya está listo</h2><p>Elige tu dieta y arma tu semana en minutos.</p><a class="arrow-link" href="#/pg/pedido"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Haz tu pedido</a></div>
-      </article><article class="hs" role="group" aria-roledescription="slide" aria-label="2 / 7" aria-hidden="true" >
+      </article><article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="2 / 7" aria-hidden="true" >
         <div class="hs__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-chef.webp" width="1200" height="800" alt="" class="hs__img" loading="lazy" decoding="async"></div>
         <div class="hs__copy"><span class="hs__tag">Evento</span><h2>Chef privado en tu casa</h2><p>Una cena de autor para tu mesa o tu evento, cocinada frente a ti.</p><a class="arrow-link" href="#/pg/carta-kulinaria"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Conocer la Carta</a></div>
-      </article><article class="hs" role="group" aria-roledescription="slide" aria-label="3 / 7" aria-hidden="true" >
+      </article><article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="3 / 7" aria-hidden="true" >
         <div class="hs__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-romance.webp" width="1200" height="800" alt="" class="hs__img" loading="lazy" decoding="async"></div>
         <div class="hs__copy"><span class="hs__tag">Sábados</span><h2>Cenas románticas de sábado</h2><p>Cocina de autor a domicilio, pensada para dos.</p><a class="arrow-link" href="#/pg/carta-cenas-romanticas"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Ver las cenas</a></div>
-      </article><article class="hs" role="group" aria-roledescription="slide" aria-label="4 / 7" aria-hidden="true" >
+      </article><article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="4 / 7" aria-hidden="true" >
         <div class="hs__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dinner.webp" width="1200" height="800" alt="" class="hs__img" loading="lazy" decoding="async"></div>
         <div class="hs__copy"><span class="hs__tag">Temporada</span><h2>Edición limitada de temporada</h2><p>Chiles en nogada y más, mientras dure el ingrediente.</p><a class="arrow-link" href="#/menu"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Ver el menú</a></div>
-      </article><article class="hs" role="group" aria-roledescription="slide" aria-label="5 / 7" aria-hidden="true" >
+      </article><article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="5 / 7" aria-hidden="true" >
         <div class="hs__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-bowl.webp" width="1200" height="800" alt="" class="hs__img" loading="lazy" decoding="async"></div>
         <div class="hs__copy"><span class="hs__tag">Referidos</span><h2>Recomienda y gana saldo</h2><p>$150 de saldo por cada amigo que compre su primer bloque de 4 semanas.</p><a class="arrow-link" href="#/pg/embajadores"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Quiero mi código</a></div>
-      </article><article class="hs" role="group" aria-roledescription="slide" aria-label="6 / 7" aria-hidden="true" >
+      </article><article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="6 / 7" aria-hidden="true" >
         <div class="hs__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-breakfast.webp" width="1200" height="800" alt="" class="hs__img" loading="lazy" decoding="async"></div>
         <div class="hs__copy"><span class="hs__tag">Prueba</span><h2>Prueba una semana</h2><p>5 comidas de lunes a viernes, sin compromiso de renovación.</p><a class="arrow-link" href="#/pg/plan-prueba"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Probar 1 semana</a></div>
-      </article><article class="hs" role="group" aria-roledescription="slide" aria-label="7 / 7" aria-hidden="true" >
+      </article><article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="7 / 7" aria-hidden="true" >
         <div class="hs__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-glass.webp" width="1200" height="800" alt="" class="hs__img" loading="lazy" decoding="async"></div>
         <div class="hs__copy"><span class="hs__tag">Aviso</span><h2>Entregamos en Puebla y su zona metropolitana</h2><p>Pedidos hasta el sábado a las 10:00 AM, en envases de vidrio reutilizables.</p><a class="arrow-link" href="#/pg/ciclo-y-politicas"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Cómo funciona</a></div>
       </article></div>
-    <div class="hero__ctl">
-      <button class="hero__arr" type="button" data-hs-prev aria-label="Anterior">&lsaquo;</button>
-      <div class="hero__dots" role="group"><button class="hero__dot is-on" type="button" data-hs-dot="0" aria-label="Ir a la diapositiva 1"><i></i></button><button class="hero__dot" type="button" data-hs-dot="1" aria-label="Ir a la diapositiva 2"><i></i></button><button class="hero__dot" type="button" data-hs-dot="2" aria-label="Ir a la diapositiva 3"><i></i></button><button class="hero__dot" type="button" data-hs-dot="3" aria-label="Ir a la diapositiva 4"><i></i></button><button class="hero__dot" type="button" data-hs-dot="4" aria-label="Ir a la diapositiva 5"><i></i></button><button class="hero__dot" type="button" data-hs-dot="5" aria-label="Ir a la diapositiva 6"><i></i></button><button class="hero__dot" type="button" data-hs-dot="6" aria-label="Ir a la diapositiva 7"><i></i></button></div>
-      <button class="hero__arr" type="button" data-hs-next aria-label="Siguiente">&rsaquo;</button>
-    </div>
+  </div>
+  <div class="hero__ctl container" data-hs-ctl>
+    <button class="hero__arr" type="button" data-hs-prev aria-label="Anterior">&lsaquo;</button>
+    <div class="hero__dots" role="group"><button class="hero__dot is-on" type="button" data-hs-dot="0" aria-label="Ir a la diapositiva 1"><i></i></button><button class="hero__dot" type="button" data-hs-dot="1" aria-label="Ir a la diapositiva 2"><i></i></button><button class="hero__dot" type="button" data-hs-dot="2" aria-label="Ir a la diapositiva 3"><i></i></button><button class="hero__dot" type="button" data-hs-dot="3" aria-label="Ir a la diapositiva 4"><i></i></button><button class="hero__dot" type="button" data-hs-dot="4" aria-label="Ir a la diapositiva 5"><i></i></button><button class="hero__dot" type="button" data-hs-dot="5" aria-label="Ir a la diapositiva 6"><i></i></button><button class="hero__dot" type="button" data-hs-dot="6" aria-label="Ir a la diapositiva 7"><i></i></button></div>
+    <button class="hero__arr" type="button" data-hs-next aria-label="Siguiente">&rsaquo;</button>
   </div><button class="hero__toggle" type="button" data-media-toggle aria-pressed="false" aria-label="Pausar video"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="8" y1="5" x2="8" y2="19"/><line x1="16" y1="5" x2="16" y2="19"/></svg>
 </button>
   <span class="hero__scroll" aria-hidden="true"><i></i>Desliza</span>
@@ -14667,52 +14674,52 @@ Pago digital, sin efectivo</li></ul>
     </div>
 <div data-page="indice" data-title="Índice de páginas" hidden><section class="section"><div class="container"><div class="section__head"><span class="eyebrow">Todas las páginas</span><h1>Índice de páginas</h1></div><ul class="menu-overlay__more" style="list-style:none"><li><a href="#/home">Home</a></li><li><a href="#/menu">Especiales de la semana</a></li><li><a href="#/tienda">Kulinaria Store</a></li><li><a href="#/p/salmon-costra-almendras">Ficha de platillo</a></li><li><a href="#/pg/planes">Planes</a></li><li><a href="#/pg/plan-bloque">Bloque de 4 semanas</a></li><li><a href="#/pg/plan-prueba">Semana de prueba</a></li><li><a href="#/pg/niveles-y-precios">Niveles y precios</a></li><li><a href="#/pg/ciclo-y-politicas">Ciclo y políticas</a></li><li><a href="#/pg/embajadores">Embajadores</a></li><li><a href="#/pg/embajadores-entrenadores">Entrenadores</a></li><li><a href="#/pg/embajadores-clientes">Clientes referidos</a></li><li><a href="#/pg/embajadores-gimnasios">Gimnasios aliados</a></li><li><a href="#/pg/embajadores-directorio">Directorio</a></li><li><a href="#/pg/embajadores-reglas">Reglas de alianza</a></li><li><a href="#/pg/embajadores-solicitar">Solicitar código</a></li><li><a href="#/pg/carta-kulinaria">Carta Kulinaria</a></li><li><a href="#/pg/carta-chef-privado">Chef privado</a></li><li><a href="#/pg/carta-cenas-romanticas">Cenas románticas</a></li><li><a href="#/pg/carta-galeria">Galería de eventos</a></li><li><a href="#/pg/carta-cotizacion">Cotización privada</a></li><li><a href="#/pg/nosotros">Nosotros</a></li><li><a href="#/pg/nosotros-historia">Historia y fundador</a></li><li><a href="#/pg/nosotros-equipo">Equipo de cocina</a></li><li><a href="#/pg/nosotros-calidad">Calidad y envases</a></li><li><a href="#/pg/filosofia">Filosofía</a></li><li><a href="#/pg/ayuda">Ayuda y legales</a></li><li><a href="#/pg/terminos">Contrato y términos</a></li><li><a href="#/pg/privacidad">Aviso de privacidad</a></li><li><a href="#/pg/checkout">Checkout y contrato</a></li><li><a href="#/pg/confirmacion">Confirmación</a></li><li><a href="#/pg/cuenta-semana">Mi semana</a></li><li><a href="#/pg/cuenta-pausas">Pausar entregas</a></li><li><a href="#/pg/cuenta-monedero">Monedero</a></li><li><a href="#/pg/cuenta-perfil">Alergias y gustos</a></li><li><a href="#/pg/cuenta-referidos">Mis referidos</a></li><li><a href="#/pg/cuenta-pedidos">Pedidos y facturas</a></li><li><a href="#/pg/cuenta-entregas">Entregas y envases</a></li><li><a href="#/pg/pedido">Armar mi pedido</a></li><li><a href="#/pg/calendario">Calendario del menú</a></li><li><a href="#/pg/perfil">Mi perfil de alergias</a></li><li><a href="#/pg/bienvenida">Bienvenida</a></li><li><a href="#/carrito">Mi selección</a></li><li><a href="#/cuenta">Mi cuenta</a></li><li><a href="#/login">Iniciar sesión</a></li><li><a href="#/registro">Crear cuenta</a></li><li><a href="#/direcciones">Mis direcciones</a></li><li><a href="#/pedido">Pedido #1001</a></li><li><a href="#/reset">Restablecer contraseña</a></li><li><a href="#/buscar">Buscar</a></li><li><a href="#/404">Página no encontrada</a></li></ul></div></section></div></template>
 <template data-l="en"><div data-page="home" data-template="index" data-title="Home" hidden>
-      <div id="home--shopify-section-hero" class="shopify-section"><section class="hero hero--10 hero--intro tone-dark" data-scroll data-hero >
-  <div class="container hero__grid">
-    <div class="hero__stage" aria-hidden="true"><img class="hero__poster" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="video-hero-intro-poster.webp" width="640" height="640" alt="" fetchpriority="high" decoding="async">
-      <video class="hero__video hero__video--intro" muted playsinline preload="none" data-poster="assets/video-hero-intro-poster.webp" data-video-src="assets/video-hero-intro.mp4" data-ambient data-hero-video></video>
-    </div>
-    <div class="hero__copy">
-      <span class="hero__rule" aria-hidden="true"></span>
-      <h1>A week, served like <em>a signature piece.</em></h1><p class="hero__sub">Dishes prepared by chefs, tailored to your lifestyle.</p><p class="svc-badge svc-badge--hero"><span class="svc-badge__pin" aria-hidden="true"></span>For now we deliver only in Puebla and its metropolitan area.</p>
+      <div id="home--shopify-section-hero" class="shopify-section"><section class="hero hero--10 hero--intro tone-dark" data-scroll data-hero ><div class="hero__cubebox" data-hero-box>
+    <div class="hero__cube" data-hero-cube data-interval="5" role="region" aria-roledescription="carousel" aria-label="Highlights">
+  <div class="container hero__grid hero__face hero__face--intro is-cur" data-hero-intro>
+        <div class="hero__stage" aria-hidden="true"><img class="hero__poster" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="video-hero-intro-poster.webp" width="640" height="640" alt="" fetchpriority="high" decoding="async">
+          <video class="hero__video hero__video--intro" muted playsinline preload="none" data-poster="assets/video-hero-intro-poster.webp" data-video-src="assets/video-hero-intro.mp4" data-ambient data-hero-video></video>
+        </div>
+        <div class="hero__copy">
+          <span class="hero__rule" aria-hidden="true"></span>
+          <h1>A week, served like <em>a signature piece.</em></h1><p class="hero__sub">Dishes prepared by chefs, tailored to your lifestyle.</p><p class="svc-badge svc-badge--hero"><span class="svc-badge__pin" aria-hidden="true"></span>For now we deliver only in Puebla and its metropolitan area.</p>
 <div class="hero__cta"><a class="arrow-link" href="#/pg/planes" data-order-cta data-returning-label="Choose my week"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Place your order</a><a class="text-link" href="#/menu">See this week's specials</a></div>
-    </div>
-  </div><div class="hero__slides container" data-hero-slides data-interval="5" hidden role="region" aria-roledescription="carousel" aria-label="Highlights">
-    <div class="hero__slidebox"><article class="hs is-on" role="group" aria-roledescription="slide" aria-label="1 / 7" >
+        </div>
+      </div><article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="1 / 7" aria-hidden="true" >
         <div class="hs__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-steak.webp" width="1200" height="800" alt="" class="hs__img" loading="lazy" decoding="async"></div>
         <div class="hs__copy"><span class="hs__tag">This week</span><h2>The menu of the week is ready</h2><p>Choose your diet and build your week in minutes.</p><a class="arrow-link" href="#/pg/pedido"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Place your order</a></div>
-      </article><article class="hs" role="group" aria-roledescription="slide" aria-label="2 / 7" aria-hidden="true" >
+      </article><article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="2 / 7" aria-hidden="true" >
         <div class="hs__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-chef.webp" width="1200" height="800" alt="" class="hs__img" loading="lazy" decoding="async"></div>
         <div class="hs__copy"><span class="hs__tag">Event</span><h2>A private chef at your home</h2><p>A signature dinner for your table or event, cooked in front of you.</p><a class="arrow-link" href="#/pg/carta-kulinaria"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Discover the Carta</a></div>
-      </article><article class="hs" role="group" aria-roledescription="slide" aria-label="3 / 7" aria-hidden="true" >
+      </article><article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="3 / 7" aria-hidden="true" >
         <div class="hs__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-romance.webp" width="1200" height="800" alt="" class="hs__img" loading="lazy" decoding="async"></div>
         <div class="hs__copy"><span class="hs__tag">Saturdays</span><h2>Saturday romantic dinners</h2><p>Signature cooking delivered, made for two.</p><a class="arrow-link" href="#/pg/carta-cenas-romanticas"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>See the dinners</a></div>
-      </article><article class="hs" role="group" aria-roledescription="slide" aria-label="4 / 7" aria-hidden="true" >
+      </article><article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="4 / 7" aria-hidden="true" >
         <div class="hs__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dinner.webp" width="1200" height="800" alt="" class="hs__img" loading="lazy" decoding="async"></div>
         <div class="hs__copy"><span class="hs__tag">In season</span><h2>Limited seasonal edition</h2><p>Chiles en nogada and more, while the ingredient lasts.</p><a class="arrow-link" href="#/menu"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>See the menu</a></div>
-      </article><article class="hs" role="group" aria-roledescription="slide" aria-label="5 / 7" aria-hidden="true" >
+      </article><article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="5 / 7" aria-hidden="true" >
         <div class="hs__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-bowl.webp" width="1200" height="800" alt="" class="hs__img" loading="lazy" decoding="async"></div>
         <div class="hs__copy"><span class="hs__tag">Referrals</span><h2>Recommend and earn credit</h2><p>$150 credit for every friend who buys their first 4-week block.</p><a class="arrow-link" href="#/pg/embajadores"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Get my code</a></div>
-      </article><article class="hs" role="group" aria-roledescription="slide" aria-label="6 / 7" aria-hidden="true" >
+      </article><article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="6 / 7" aria-hidden="true" >
         <div class="hs__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-breakfast.webp" width="1200" height="800" alt="" class="hs__img" loading="lazy" decoding="async"></div>
         <div class="hs__copy"><span class="hs__tag">Trial</span><h2>Try a week</h2><p>5 meals from Monday to Friday, no renewal commitment.</p><a class="arrow-link" href="#/pg/plan-prueba"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Try 1 week</a></div>
-      </article><article class="hs" role="group" aria-roledescription="slide" aria-label="7 / 7" aria-hidden="true" >
+      </article><article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="7 / 7" aria-hidden="true" >
         <div class="hs__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-air-glass.webp" width="1200" height="800" alt="" class="hs__img" loading="lazy" decoding="async"></div>
         <div class="hs__copy"><span class="hs__tag">Notice</span><h2>We deliver in Puebla and its metro area</h2><p>Order until Saturday 10:00 AM, in reusable glass containers.</p><a class="arrow-link" href="#/pg/ciclo-y-politicas"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>How it works</a></div>
       </article></div>
-    <div class="hero__ctl">
-      <button class="hero__arr" type="button" data-hs-prev aria-label="Previous">&lsaquo;</button>
-      <div class="hero__dots" role="group"><button class="hero__dot is-on" type="button" data-hs-dot="0" aria-label="Go to slide 1"><i></i></button><button class="hero__dot" type="button" data-hs-dot="1" aria-label="Go to slide 2"><i></i></button><button class="hero__dot" type="button" data-hs-dot="2" aria-label="Go to slide 3"><i></i></button><button class="hero__dot" type="button" data-hs-dot="3" aria-label="Go to slide 4"><i></i></button><button class="hero__dot" type="button" data-hs-dot="4" aria-label="Go to slide 5"><i></i></button><button class="hero__dot" type="button" data-hs-dot="5" aria-label="Go to slide 6"><i></i></button><button class="hero__dot" type="button" data-hs-dot="6" aria-label="Go to slide 7"><i></i></button></div>
-      <button class="hero__arr" type="button" data-hs-next aria-label="Next">&rsaquo;</button>
-    </div>
+  </div>
+  <div class="hero__ctl container" data-hs-ctl>
+    <button class="hero__arr" type="button" data-hs-prev aria-label="Previous">&lsaquo;</button>
+    <div class="hero__dots" role="group"><button class="hero__dot is-on" type="button" data-hs-dot="0" aria-label="Go to slide 1"><i></i></button><button class="hero__dot" type="button" data-hs-dot="1" aria-label="Go to slide 2"><i></i></button><button class="hero__dot" type="button" data-hs-dot="2" aria-label="Go to slide 3"><i></i></button><button class="hero__dot" type="button" data-hs-dot="3" aria-label="Go to slide 4"><i></i></button><button class="hero__dot" type="button" data-hs-dot="4" aria-label="Go to slide 5"><i></i></button><button class="hero__dot" type="button" data-hs-dot="5" aria-label="Go to slide 6"><i></i></button><button class="hero__dot" type="button" data-hs-dot="6" aria-label="Go to slide 7"><i></i></button></div>
+    <button class="hero__arr" type="button" data-hs-next aria-label="Next">&rsaquo;</button>
   </div><button class="hero__toggle" type="button" data-media-toggle aria-pressed="false" aria-label="Pause video"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="8" y1="5" x2="8" y2="19"/><line x1="16" y1="5" x2="16" y2="19"/></svg>
 </button>
   <span class="hero__scroll" aria-hidden="true"><i></i>Scroll</span>
@@ -27808,35 +27815,61 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     });
   }
 
-  /* hero: the intro video plays ONCE, then a carousel of highlights (events, notices...) takes over and advances by itself */
+  /* hero: the intro video is the first face of a 3D cube. It plays ONCE; then the cube turns and each highlight (events, notices...) comes in, every few seconds */
   function initHeroCarousel() {
-    var hero = $('[data-hero]'), box = hero && $('[data-hero-slides]', hero); if (!box) return;
-    var slides = $$('.hs', box), n = slides.length; if (n < 2) return;
-    var dots = $$('[data-hs-dot]', hero), dur = Math.max(3, Math.min(12, +box.getAttribute('data-interval') || 5)) * 1000;
+    var hero = $('[data-hero]'), cube = hero && $('[data-hero-cube]', hero); if (!cube) return;
+    var box = cube.parentNode, intro = $('[data-hero-intro]', cube), slides = $$('.hs', cube), n = slides.length; if (n < 2 || !intro) return;
+    var dots = $$('[data-hs-dot]', hero), dur = Math.max(3, Math.min(12, +cube.getAttribute('data-interval') || 5)) * 1000;
     var video = $('[data-hero-video]', hero), tg = $('[data-media-toggle]', hero);
-    var i = 0, timer = 0, started = false, held = false, away = false, userPaused = false;
-    $$('img', box).forEach(function (im) { im.loading = 'eager'; });
-    box.style.setProperty('--hs-dur', dur + 'ms');
-    var show = function (k) {
-      i = (k + n) % n;
-      slides.forEach(function (s, x) { var on = x === i; s.classList.toggle('is-on', on); if (on) s.removeAttribute('aria-hidden'); else s.setAttribute('aria-hidden', 'true'); });
-      dots.forEach(function (d, x) { d.classList.toggle('is-on', x === i); if (x === i) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
-      hero.classList.remove('hs-run'); void hero.offsetWidth; if (!REDUCE) hero.classList.add('hs-run');
+    var cur = intro, i = -1, timer = 0, started = false, held = false, away = false, userPaused = false, busy = false;
+    $$('img', cube).forEach(function (im) { im.loading = 'eager'; });
+    hero.style.setProperty('--hs-dur', dur + 'ms');
+    var size = function () { box.style.setProperty('--hc-w', Math.round(box.getBoundingClientRect().width) + 'px'); };
+    size(); window.addEventListener('resize', size);
+    var mark = function (k) {
+      slides.concat([intro]).forEach(function (f) { if (f === cur) f.removeAttribute('aria-hidden'); else f.setAttribute('aria-hidden', 'true'); });
+      dots.forEach(function (d, x2) { d.classList.toggle('is-on', x2 === k); if (x2 === k) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
+    };
+    var spin = function (to, dir) {                        // dir 1: the cube turns to the left (next); -1: back
+      if (busy || to === cur) return false;
+      if (REDUCE) { cur.classList.remove('is-cur'); to.classList.add('is-cur'); cur = to; return true; }
+      busy = true; size();
+      var from = cur, rot = dir > 0 ? 'rot-next' : 'rot-prev';
+      from.classList.add('is-out'); to.classList.add(dir > 0 ? 'is-nxt' : 'is-prv'); void cube.offsetWidth;
+      cube.classList.add(rot);
+      var fb = 0, done = function () {
+        clearTimeout(fb); cube.removeEventListener('transitionend', onEnd);
+        cube.style.transition = 'none';
+        from.classList.remove('is-cur', 'is-out'); to.classList.remove('is-nxt', 'is-prv'); to.classList.add('is-cur');
+        cube.classList.remove(rot); void cube.offsetWidth; cube.style.transition = '';
+        cur = to; busy = false; mark(i);
+      };
+      var onEnd = function (e) { if (e.target === cube && e.propertyName === 'transform') done(); };
+      cube.addEventListener('transitionend', onEnd); fb = setTimeout(done, 1500);
+      cur = to; return true;                                // (cur is the target while turning; the faces get their final classes in done)
+    };
+    var show = function (k, dir) {
+      k = ((k % n) + n) % n; if (busy) return false;
+      var from = cur; cur = from;                           // spin() sets cur
+      i = k; var ok = spin(slides[k], dir || 1);
+      if (ok === false) return false;
+      mark(k); hero.classList.remove('hs-run'); void hero.offsetWidth; if (!REDUCE) hero.classList.add('hs-run');
+      return true;
     };
     var tick = function () {
       clearTimeout(timer);
       if (!started || held || away || userPaused || REDUCE) { hero.classList.remove('hs-run'); return; }
       hero.classList.add('hs-run');
-      timer = setTimeout(function () { show(i + 1); tick(); }, dur);
+      timer = setTimeout(function () { show(i + 1, 1); tick(); }, dur + 1000);   // + the turn itself
     };
-    var go = function (k) { show(k); tick(); };
-    var start = function () { if (started) return; started = true; hero.classList.add('is-carousel'); box.hidden = false; show(0); tick(); };
-    // when to start: the video ends (once); if it cannot play, a short fallback
+    var go = function (k, dir) { if (show(k, dir)) tick(); };
+    var start = function () { if (started) return; started = true; hero.classList.add('is-carousel'); show(0, 1); tick(); };
+    // start: when the intro video ends (once); if it cannot play, a short fallback so the hero is never static
     if (video && !REDUCE && !SAVE) {
       video.loop = false; video.removeAttribute('loop');
       video.addEventListener('ended', start); video.addEventListener('error', start);
       video.addEventListener('playing', function () { clearTimeout(video._safe); video._safe = setTimeout(start, ((video.duration && isFinite(video.duration) ? video.duration : 12) + 2) * 1000); });
-      setTimeout(function () { if (!started && (video.paused || video.readyState < 2)) start(); }, 9000);   // autoplay blocked / still loading: do not leave the hero static
+      setTimeout(function () { if (!started && (video.paused || video.readyState < 2)) start(); }, 9000);
     } else setTimeout(start, 400);
     var hold = function (v) { held = v; tick(); };
     hero.addEventListener('mouseenter', function () { hold(true); }); hero.addEventListener('mouseleave', function () { hold(false); });
@@ -27846,13 +27879,13 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     if (window.IntersectionObserver) new IntersectionObserver(function (en) { away = !en[0].isIntersecting; tick(); }, { threshold: 0.25 }).observe(hero);
     hero.addEventListener('click', function (e) {
       var t = e.target; if (!t || !t.closest) return;
-      if (t.closest('[data-hs-next]')) go(i + 1); else if (t.closest('[data-hs-prev]')) go(i - 1);
-      else { var d = t.closest('[data-hs-dot]'); if (d) go(+d.getAttribute('data-hs-dot')); }
+      if (t.closest('[data-hs-next]')) go(i + 1, 1); else if (t.closest('[data-hs-prev]')) go(i - 1, -1);
+      else { var d = t.closest('[data-hs-dot]'); if (d) { var k = +d.getAttribute('data-hs-dot'); go(k, k >= i ? 1 : -1); } }
     });
-    hero.addEventListener('keydown', function (e) { if (!started) return; if (e.key === 'ArrowRight') go(i + 1); else if (e.key === 'ArrowLeft') go(i - 1); });
+    hero.addEventListener('keydown', function (e) { if (!started) return; if (e.key === 'ArrowRight') go(i + 1, 1); else if (e.key === 'ArrowLeft') go(i - 1, -1); });
     var x0 = null;
-    box.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
-    box.addEventListener('pointerup', function (e) { if (x0 == null) return; var dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 48) go(i + (dx < 0 ? 1 : -1)); });
+    cube.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
+    cube.addEventListener('pointerup', function (e) { if (x0 == null) return; var dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 48) go(i + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); });
     if (tg) tg.addEventListener('click', function () { userPaused = tg.getAttribute('aria-pressed') === 'true'; tick(); });
   }
 

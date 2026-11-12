@@ -2360,35 +2360,61 @@
     });
   }
 
-  /* hero: the intro video plays ONCE, then a carousel of highlights (events, notices...) takes over and advances by itself */
+  /* hero: the intro video is the first face of a 3D cube. It plays ONCE; then the cube turns and each highlight (events, notices...) comes in, every few seconds */
   function initHeroCarousel() {
-    var hero = $('[data-hero]'), box = hero && $('[data-hero-slides]', hero); if (!box) return;
-    var slides = $$('.hs', box), n = slides.length; if (n < 2) return;
-    var dots = $$('[data-hs-dot]', hero), dur = Math.max(3, Math.min(12, +box.getAttribute('data-interval') || 5)) * 1000;
+    var hero = $('[data-hero]'), cube = hero && $('[data-hero-cube]', hero); if (!cube) return;
+    var box = cube.parentNode, intro = $('[data-hero-intro]', cube), slides = $$('.hs', cube), n = slides.length; if (n < 2 || !intro) return;
+    var dots = $$('[data-hs-dot]', hero), dur = Math.max(3, Math.min(12, +cube.getAttribute('data-interval') || 5)) * 1000;
     var video = $('[data-hero-video]', hero), tg = $('[data-media-toggle]', hero);
-    var i = 0, timer = 0, started = false, held = false, away = false, userPaused = false;
-    $$('img', box).forEach(function (im) { im.loading = 'eager'; });
-    box.style.setProperty('--hs-dur', dur + 'ms');
-    var show = function (k) {
-      i = (k + n) % n;
-      slides.forEach(function (s, x) { var on = x === i; s.classList.toggle('is-on', on); if (on) s.removeAttribute('aria-hidden'); else s.setAttribute('aria-hidden', 'true'); });
-      dots.forEach(function (d, x) { d.classList.toggle('is-on', x === i); if (x === i) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
-      hero.classList.remove('hs-run'); void hero.offsetWidth; if (!REDUCE) hero.classList.add('hs-run');
+    var cur = intro, i = -1, timer = 0, started = false, held = false, away = false, userPaused = false, busy = false;
+    $$('img', cube).forEach(function (im) { im.loading = 'eager'; });
+    hero.style.setProperty('--hs-dur', dur + 'ms');
+    var size = function () { box.style.setProperty('--hc-w', Math.round(box.getBoundingClientRect().width) + 'px'); };
+    size(); window.addEventListener('resize', size);
+    var mark = function (k) {
+      slides.concat([intro]).forEach(function (f) { if (f === cur) f.removeAttribute('aria-hidden'); else f.setAttribute('aria-hidden', 'true'); });
+      dots.forEach(function (d, x2) { d.classList.toggle('is-on', x2 === k); if (x2 === k) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
+    };
+    var spin = function (to, dir) {                        // dir 1: the cube turns to the left (next); -1: back
+      if (busy || to === cur) return false;
+      if (REDUCE) { cur.classList.remove('is-cur'); to.classList.add('is-cur'); cur = to; return true; }
+      busy = true; size();
+      var from = cur, rot = dir > 0 ? 'rot-next' : 'rot-prev';
+      from.classList.add('is-out'); to.classList.add(dir > 0 ? 'is-nxt' : 'is-prv'); void cube.offsetWidth;
+      cube.classList.add(rot);
+      var fb = 0, done = function () {
+        clearTimeout(fb); cube.removeEventListener('transitionend', onEnd);
+        cube.style.transition = 'none';
+        from.classList.remove('is-cur', 'is-out'); to.classList.remove('is-nxt', 'is-prv'); to.classList.add('is-cur');
+        cube.classList.remove(rot); void cube.offsetWidth; cube.style.transition = '';
+        cur = to; busy = false; mark(i);
+      };
+      var onEnd = function (e) { if (e.target === cube && e.propertyName === 'transform') done(); };
+      cube.addEventListener('transitionend', onEnd); fb = setTimeout(done, 1500);
+      cur = to; return true;                                // (cur is the target while turning; the faces get their final classes in done)
+    };
+    var show = function (k, dir) {
+      k = ((k % n) + n) % n; if (busy) return false;
+      var from = cur; cur = from;                           // spin() sets cur
+      i = k; var ok = spin(slides[k], dir || 1);
+      if (ok === false) return false;
+      mark(k); hero.classList.remove('hs-run'); void hero.offsetWidth; if (!REDUCE) hero.classList.add('hs-run');
+      return true;
     };
     var tick = function () {
       clearTimeout(timer);
       if (!started || held || away || userPaused || REDUCE) { hero.classList.remove('hs-run'); return; }
       hero.classList.add('hs-run');
-      timer = setTimeout(function () { show(i + 1); tick(); }, dur);
+      timer = setTimeout(function () { show(i + 1, 1); tick(); }, dur + 1000);   // + the turn itself
     };
-    var go = function (k) { show(k); tick(); };
-    var start = function () { if (started) return; started = true; hero.classList.add('is-carousel'); box.hidden = false; show(0); tick(); };
-    // when to start: the video ends (once); if it cannot play, a short fallback
+    var go = function (k, dir) { if (show(k, dir)) tick(); };
+    var start = function () { if (started) return; started = true; hero.classList.add('is-carousel'); show(0, 1); tick(); };
+    // start: when the intro video ends (once); if it cannot play, a short fallback so the hero is never static
     if (video && !REDUCE && !SAVE) {
       video.loop = false; video.removeAttribute('loop');
       video.addEventListener('ended', start); video.addEventListener('error', start);
       video.addEventListener('playing', function () { clearTimeout(video._safe); video._safe = setTimeout(start, ((video.duration && isFinite(video.duration) ? video.duration : 12) + 2) * 1000); });
-      setTimeout(function () { if (!started && (video.paused || video.readyState < 2)) start(); }, 9000);   // autoplay blocked / still loading: do not leave the hero static
+      setTimeout(function () { if (!started && (video.paused || video.readyState < 2)) start(); }, 9000);
     } else setTimeout(start, 400);
     var hold = function (v) { held = v; tick(); };
     hero.addEventListener('mouseenter', function () { hold(true); }); hero.addEventListener('mouseleave', function () { hold(false); });
@@ -2398,13 +2424,13 @@
     if (window.IntersectionObserver) new IntersectionObserver(function (en) { away = !en[0].isIntersecting; tick(); }, { threshold: 0.25 }).observe(hero);
     hero.addEventListener('click', function (e) {
       var t = e.target; if (!t || !t.closest) return;
-      if (t.closest('[data-hs-next]')) go(i + 1); else if (t.closest('[data-hs-prev]')) go(i - 1);
-      else { var d = t.closest('[data-hs-dot]'); if (d) go(+d.getAttribute('data-hs-dot')); }
+      if (t.closest('[data-hs-next]')) go(i + 1, 1); else if (t.closest('[data-hs-prev]')) go(i - 1, -1);
+      else { var d = t.closest('[data-hs-dot]'); if (d) { var k = +d.getAttribute('data-hs-dot'); go(k, k >= i ? 1 : -1); } }
     });
-    hero.addEventListener('keydown', function (e) { if (!started) return; if (e.key === 'ArrowRight') go(i + 1); else if (e.key === 'ArrowLeft') go(i - 1); });
+    hero.addEventListener('keydown', function (e) { if (!started) return; if (e.key === 'ArrowRight') go(i + 1, 1); else if (e.key === 'ArrowLeft') go(i - 1, -1); });
     var x0 = null;
-    box.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
-    box.addEventListener('pointerup', function (e) { if (x0 == null) return; var dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 48) go(i + (dx < 0 ? 1 : -1)); });
+    cube.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
+    cube.addEventListener('pointerup', function (e) { if (x0 == null) return; var dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 48) go(i + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); });
     if (tg) tg.addEventListener('click', function () { userPaused = tg.getAttribute('aria-pressed') === 'true'; tick(); });
   }
 
