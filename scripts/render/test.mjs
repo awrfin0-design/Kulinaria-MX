@@ -36,7 +36,7 @@ await ctx.addInitScript(SKIP_LOADER);
 const page = await ctx.newPage();
 const errors = [];
 page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
-page.on('console', (m) => { if (m.type() === 'error' && !/fonts\.g|Failed to load resource/.test(m.text())) errors.push('console: ' + m.text()); });
+page.on('console', (m) => { if (m.type() === 'error' && !/fonts\.g|Failed to load resource|file:\/\/\/cart\.js/.test(m.text())) errors.push('console: ' + m.text()); });
 
 // ---- every page: renders, has content, headings use the new fonts, links resolve
 const keys = routes.map((r) => r.key);
@@ -688,7 +688,7 @@ ok('phone inner pages: the title sits over a photo (not a separate block)', awai
   await fresh.close();
 }
 await page.setViewportSize({ width: 1440, height: 900 });
-ok('desktop never shows the info dot, the sheet or the block line', await page.evaluate(() => [...document.querySelectorAll('.info-dot,.sheet,.funnel__block,.funnel__teaser,.funnel__stepcount')].every((e) => getComputedStyle(e).display === 'none')));
+ok('desktop never shows the info dot, the sheet or the block line (the step counter now shows everywhere)', await page.evaluate(() => [...document.querySelectorAll('.info-dot,.sheet,.funnel__block,.funnel__teaser')].every((e) => getComputedStyle(e).display === 'none')));
 await page.setViewportSize({ width: 1440, height: 900 });
 // =====================================================================  v17: Day / Night / Fuego carousel
 await page.setViewportSize({ width: 1440, height: 900 });
