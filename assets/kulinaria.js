@@ -1703,11 +1703,11 @@
         $$('[data-fn-budget]', holder).forEach(function (bud) {
           var wk = st.plan === 'block' ? Math.round(priceOf(tierEl(), 'block') / 4) : priceOf(tierEl(), 'week'), exb = upgradeExtra();
           bud.innerHTML = '';
-          var smallUi = window.matchMedia && window.matchMedia('(max-width:760px)').matches && !bud.classList.contains('fn-budget--aside');
+          var isAside = bud.classList.contains('fn-budget--aside'), smallUi = isAside || (window.matchMedia && window.matchMedia('(max-width:760px)').matches);
           var bt = document.createElement('span'); bt.textContent = (smallUi ? fill(T_('budget-short'), { w: money(wk) }) : fill(T_('budget'), { w: money(wk), t: money(planTotal() - exb) })) + ' ' + (exb ? fill(T_('budget-x'), { x: money(exb) }) : T_('budget-ok')) + ' ';
           var bl = document.createElement('button'); bl.type = 'button'; bl.className = 'text-link'; bl.textContent = T_('how-open'); bl.setAttribute('data-fn-how-open', '');
           var tg2 = document.createElement('button'); tg2.type = 'button'; tg2.className = 'text-link'; tg2.textContent = T_('tour-guide'); tg2.setAttribute('data-fn-tour-open', '');
-          bud.appendChild(bt); bud.appendChild(bl); bud.appendChild(tg2);
+          bud.appendChild(bt); bud.appendChild(bl); if (!isAside) bud.appendChild(tg2);
         });
         var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex) }) : ''; }
         var emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
