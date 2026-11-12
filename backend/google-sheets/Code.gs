@@ -85,6 +85,7 @@ function doPost(e) {
   var props = PropertiesService.getScriptProperties();
   var params = (e && e.parameter) || {};
   if (e && e.postData && /"action"\s*:\s*"lead"/.test(e.postData.contents || '')) { try { return out_(leadAdd_(JSON.parse(e.postData.contents))); } catch (errL) { return out_({ ok: false, error: String(errL) }); } }
+  if (e && e.postData && /"action"\s*:\s*"diet_quote"/.test((e.postData.contents || '').slice(0, 200))) { try { return out_(dietQuoteAdd_(JSON.parse(e.postData.contents))); } catch (errD) { return out_({ ok: false, error: String(errD) }); } }
   if (e && e.postData && /"action"\s*:\s*"week"/.test(e.postData.contents || '')) { try { var wb = JSON.parse(e.postData.contents); return out_(weekSet_(wb.cid, wb.token, wb)); } catch (err2) { return out_({ ok: false, error: String(err2) }); } }
   if (e && e.postData && /"action"\s*:\s*"profile"/.test(e.postData.contents || '')) { try { var pb = JSON.parse(e.postData.contents); return out_(profileSet_(pb.cid, pb.token, pb.profile)); } catch (err) { return out_({ ok: false, error: String(err) }); } }
   if (!props.getProperty('WEBHOOK_KEY') || params.key !== props.getProperty('WEBHOOK_KEY')) return out_({ ok: false, error: 'forbidden' });
@@ -776,4 +777,90 @@ function leadAdd_(b) {
     if (to) MailApp.sendEmail(to, 'Nueva solicitud (' + kind + ') · ' + name, ['Tipo: ' + kind, 'Nombre: ' + name, 'Correo: ' + email, 'Teléfono: ' + phone, '', detail, '', 'Verla y marcarla como atendida: /pages/admin → Solicitudes'].join('\n'));
   } catch (e) { /* never block the request */ }
   return { ok: true };
+}
+
+
+/* =====================================================================================================
+ * "¿Tienes tu propia dieta?"  (POST {action:'diet_quote', name, email, phone, plan, notes, file:{name,type,data(base64)}})
+ *  1. saves the uploaded plan (PDF / JPG / PNG, max 5 MB) in the Drive folder "Kulinaria · Dietas"
+ *  2. adds a row in the sheet "Dietas"
+ *  3. if the script property ANTHROPIC_API_KEY is set, asks Claude to read the plan and draft a personalised week using the REAL dishes of the store
+ *  4. e-mails the draft. DIET_AI_MODE = 'review' (default: only the owner gets it, to check it first) or 'auto' (the client gets it too)
+ * Script properties used: ANTHROPIC_API_KEY (secret, never in the theme), DIET_AI_MODE, DIET_AI_MODEL (default claude-sonnet-5-5), ALERT_EMAILS (owner, already used by other alerts)
+ * ===================================================================================================== */
+var DIET_HEAD = ['Fecha', 'Nombre', 'Correo', 'Teléfono', 'Plan', 'Notas', 'Archivo', 'Estado', 'Propuesta (IA)', 'ID'];
+function dietSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet(), sh = ss.getSheetByName('Dietas');
+  if (!sh) { sh = ss.insertSheet('Dietas'); sh.getRange(1, 1, 1, DIET_HEAD.length).setValues([DIET_HEAD]).setFontWeight('bold').setBackground('#1B2316').setFontColor('#FFFFFF'); sh.setFrozenRows(1); }
+  return sh;
+}
+function dietFolder_() {
+  var it = DriveApp.getFoldersByName('Kulinaria · Dietas');
+  return it.hasNext() ? it.next() : DriveApp.createFolder('Kulinaria · Dietas');
+}
+function dietCatalog_() {
+  /* the dishes of the store with their nutrition, so the draft only uses dishes that really exist */
+  try {
+    var d = shopifyGql_('{ products(first: 60, query: "status:active") { nodes { title metafields(first: 20, namespace: "kulinaria") { nodes { key value } } } } }', {});
+    var nodes = (((d || {}).data || {}).products || {}).nodes || [], out = [];
+    nodes.forEach(function (p) {
+      var m = {}; ((p.metafields || {}).nodes || []).forEach(function (x) { m[x.key] = x.value; });
+      if (!m.calories) return;
+      out.push(p.title + ' | nivel ' + (m.tier || 'selecto') + ' | ' + m.calories + ' kcal | P ' + (m.protein || '?') + ' g | C ' + (m.carbs || '?') + ' g | G ' + (m.fat || '?') + ' g | dietas ' + (m.diets || '[]') + ' | alérgenos ' + (m.allergens || '[]'));
+    });
+    return out.join('\n');
+  } catch (err) { return ''; }
+}
+function dietPlanAI_(blob, b) {
+  var props = PropertiesService.getScriptProperties(), key = props.getProperty('ANTHROPIC_API_KEY');
+  if (!key) return { ok: false, text: '', error: 'sin ANTHROPIC_API_KEY' };
+  var mime = blob.getContentType(), data = Utilities.base64Encode(blob.getBytes());
+  var fileBlock = mime === 'application/pdf'
+    ? { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: data } }
+    : { type: 'image', source: { type: 'base64', media_type: mime, data: data } };
+  var catalog = dietCatalog_();
+  var prompt = [
+    'Eres el equipo de nutrición de Kulinaria MX (comida gourmet preparada, entrega semanal en Puebla). Un cliente subió el plan de su nutriólogo (archivo adjunto).',
+    'Tareas: 1) Resume en 3 líneas lo que pide el plan (objetivo, calorías y macros diarios, restricciones, alergias). 2) Propón una semana de lunes a viernes con 5 comidas de 2 tiempos usando SOLO platillos del catálogo de abajo (nombres exactos). 3) Para cada día indica kcal, proteína, carbohidratos y grasa aproximados. 4) Lista ajustes o dudas para confirmar con el nutriólogo. 5) Si el archivo no parece un plan nutricional, dilo y no inventes.',
+    'Reglas: respeta alergias y restricciones; si el catálogo no alcanza para cumplir el plan, dilo con claridad y sugiere qué platillo personalizado haría falta. No des consejos médicos ni cambies el plan del nutriólogo; esto es una propuesta de menú. Responde en español, en Markdown breve (una tabla por semana).',
+    'Plan contratado: ' + (b.plan === 'week' ? 'semana de prueba' : 'bloque de 4 semanas') + '. Notas del cliente: ' + (b.notes || '(sin notas)'),
+    '', 'CATÁLOGO (platillo | nivel | kcal | P | C | G | dietas | alérgenos):', catalog || '(catálogo no disponible: indica que la propuesta es general)'
+  ].join('\n');
+  var payload = { model: props.getProperty('DIET_AI_MODEL') || 'claude-sonnet-5-5', max_tokens: 3500, messages: [{ role: 'user', content: [fileBlock, { type: 'text', text: prompt }] }] };
+  var r = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', { method: 'post', contentType: 'application/json', muteHttpExceptions: true, headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' }, payload: JSON.stringify(payload) });
+  var code = r.getResponseCode(), body = {};
+  try { body = JSON.parse(r.getContentText()); } catch (e) {}
+  if (code !== 200) return { ok: false, text: '', error: 'API ' + code + ' ' + String(r.getContentText()).slice(0, 200) };
+  var text = (body.content || []).map(function (c) { return c.text || ''; }).join('\n').trim();
+  return { ok: !!text, text: text, error: text ? '' : 'respuesta vacía' };
+}
+function dietHtml_(md) {
+  var esc = String(md || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return '<div style="font:14px/1.5 Arial,sans-serif;color:#222;white-space:pre-wrap">' + esc.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>') + '</div>';
+}
+function dietQuoteAdd_(b) {
+  var name = String(b.name || '').trim().slice(0, 100), email = String(b.email || '').trim().toLowerCase().slice(0, 120), phone = String(b.phone || '').trim().slice(0, 40);
+  var notes = String(b.notes || '').trim().slice(0, 600), plan = b.plan === 'week' ? 'week' : 'block', f = b.file || {};
+  if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { ok: false, error: 'bad_request' };
+  if (!/^(application\/pdf|image\/jpeg|image\/png)$/.test(String(f.type)) || !f.data || String(f.data).length > 7200000) return { ok: false, error: 'bad_file' };
+  var cache = CacheService.getScriptCache(), ck = 'diet:' + email;
+  if (cache.get(ck)) return { ok: true, duplicate: true };
+  cache.put(ck, '1', 120);
+  var bytes = Utilities.base64Decode(String(f.data)), safe = String(f.name || 'plan').replace(/[^\w.\- ]+/g, '_').slice(0, 80);
+  var blob = Utilities.newBlob(bytes, f.type, new Date().getTime().toString(36) + '-' + safe);
+  var file = dietFolder_().createFile(blob), url = file.getUrl(), id = 'd' + new Date().getTime().toString(36), sh = dietSheet_(), row;
+  var lock = LockService.getScriptLock(); lock.waitLock(20000);
+  try { row = sh.getLastRow() + 1; sh.getRange(row, 1, 1, DIET_HEAD.length).setValues([[new Date(), name, email, phone, plan === 'week' ? 'Semana de prueba' : 'Bloque de 4 semanas', notes, url, 'Recibida', '', id]]); } finally { lock.releaseLock(); }
+  var props = PropertiesService.getScriptProperties(), owner = props.getProperty('ALERT_EMAILS'), mode = props.getProperty('DIET_AI_MODE') || 'review';
+  var ai = { ok: false, text: '', error: '' };
+  try { ai = dietPlanAI_(Utilities.newBlob(bytes, f.type, safe), { plan: plan, notes: notes }); } catch (e1) { ai.error = String(e1); }
+  try {
+    sh.getRange(row, 8).setValue(ai.ok ? (mode === 'auto' ? 'Propuesta enviada' : 'Borrador para revisar') : 'Revisar a mano' + (ai.error ? ' (' + ai.error + ')' : ''));
+    if (ai.ok) sh.getRange(row, 9).setValue(ai.text.slice(0, 49000));
+  } catch (e2) {}
+  try {
+    if (owner) MailApp.sendEmail({ to: owner, subject: 'Dieta personalizada · ' + name, htmlBody: '<p><b>' + name + '</b> · ' + email + ' · ' + phone + '<br>Plan: ' + plan + '<br>Notas: ' + notes + '<br>Archivo: <a href="' + url + '">' + url + '</a></p>' + (ai.ok ? '<h3>Borrador de propuesta (' + (mode === 'auto' ? 'ya enviado al cliente' : 'revísalo antes de enviarlo') + ')</h3>' + dietHtml_(ai.text) : '<p>No se generó borrador automático: ' + (ai.error || 'sin clave de IA') + '. Atender a mano desde la hoja “Dietas”.</p>'), attachments: [blob] });
+    if (ai.ok && mode === 'auto') MailApp.sendEmail({ to: email, subject: 'Tu propuesta personalizada · Kulinaria MX', htmlBody: '<p>Hola ' + name + ',</p><p>Con base en el plan que nos compartiste, esta es nuestra propuesta de menú. Es una propuesta de platillos, no sustituye las indicaciones de tu nutriólogo.</p>' + dietHtml_(ai.text) + '<p>¿Te late? Responde a este correo y armamos tu semana.</p>' });
+  } catch (e3) { /* never block the request */ }
+  return { ok: true, id: id, ai: ai.ok };
 }

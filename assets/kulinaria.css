@@ -3776,3 +3776,27 @@ body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__stage,body .funnel[dat
 .fn-preset__days i{height:auto}
 .fn-preset__days span{overflow-wrap:anywhere}
 .fn-start{margin-top:26px}
+
+/* v99: "have your own diet?" modal */
+.fn-own[hidden]{display:none !important}
+.fn-own{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:16px}
+.fn-own__bg{position:absolute;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(4px)}
+.fn-own__box{position:relative;width:min(560px,100%);max-height:calc(100svh - 32px);overflow:auto;scrollbar-width:none;padding:clamp(20px,3vw,32px);border:1px solid var(--accent);border-radius:24px;background:var(--bg-raised);color:var(--text);box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.fn-own__box::-webkit-scrollbar{display:none}
+.fn-own__x{position:absolute;top:10px;right:14px;width:36px;height:36px;border:0;background:none;color:var(--text);font-size:1.7rem;line-height:1;cursor:pointer}
+.fn-own__form{display:grid;gap:12px}.fn-own__form[hidden]{display:none}
+.fn-own h3{margin:0;font:600 clamp(1.3rem,2.4vw,1.7rem) var(--font-display)}
+.fn-own__s{margin:0;font-size:.84rem;color:var(--text-muted)}
+.fn-own label{display:grid;gap:5px;font-size:.74rem;font-weight:600;color:var(--text-muted)}
+.fn-own input[type=text],.fn-own input[type=tel],.fn-own input[type=email],.fn-own select,.fn-own textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg-base);color:var(--text);font:400 .9rem var(--font-body)}
+.fn-own__row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.fn-own__row:has(> :only-child){grid-template-columns:1fr}
+.fn-own__file{position:relative;display:grid !important;place-items:center;min-height:96px;padding:14px;border:2px dashed var(--accent);border-radius:16px;text-align:center;cursor:pointer;color:var(--text) !important;font-size:.86rem !important;background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.fn-own__file input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.fn-own__consent{display:flex !important;align-items:flex-start;gap:8px;font-weight:400 !important}
+.fn-own__err{margin:0;padding:8px 12px;border-radius:10px;background:color-mix(in srgb,#c0392b 16%,transparent);color:var(--text);font-size:.8rem}
+.fn-own__go{justify-content:center;padding:14px}
+.fn-own__ok{display:grid;gap:10px;justify-items:center;text-align:center;padding:14px 0}.fn-own__ok[hidden]{display:none}
+.fn-own__ok b{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--accent);color:var(--on-accent,#fff);font-size:1.5rem}
+.fn-own__ok p{margin:0;font-size:.88rem;color:var(--text-muted)}
+html.fn-own-open{overflow:hidden}
+@media (max-width:560px){.fn-own__row{grid-template-columns:1fr}}

@@ -371,6 +371,37 @@
   </div>
 </section>
 
+<div class="fn-own" data-fn-own-modal hidden role="dialog" aria-modal="true" aria-labelledby="fn-own-t-{{ section.id }}" data-endpoint="{{ shop.metafields.kulinaria.sheet_url.value | escape }}"
+  data-t-err="{{ 'funnel.own_err' | t }}" data-t-sending="{{ 'funnel.own_sending' | t }}">
+  <div class="fn-own__bg" data-own-close></div>
+  <div class="fn-own__box">
+    <button class="fn-own__x" type="button" data-own-close aria-label="{{ 'funnel.own_close' | t }}">&times;</button>
+    <form class="fn-own__form" data-fn-own-form novalidate>
+      <h3 id="fn-own-t-{{ section.id }}">{{ 'funnel.own_t' | t }}</h3>
+      <p class="fn-own__s">{{ 'funnel.own_s' | t }}</p>
+      <label class="fn-own__file" data-own-drop><input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required><span data-own-file-name>{{ 'funnel.own_file' | t }}</span></label>
+      <div class="fn-own__row">
+        <label>{{ 'funnel.own_plan' | t }}<select name="plan"><option value="block">{{ 'funnel.plan_block' | t }}</option><option value="week">{{ 'funnel.plan_week' | t }}</option></select></label>
+      </div>
+      <label>{{ 'funnel.own_notes' | t }}<textarea name="notes" rows="2" maxlength="600" placeholder="{{ 'funnel.own_notes_ph' | t }}"></textarea></label>
+      <div class="fn-own__row">
+        <label>{{ 'funnel.own_name' | t }}<input type="text" name="name" autocomplete="name" required value="{{ customer.name | escape }}"></label>
+        <label>{{ 'funnel.own_phone' | t }}<input type="tel" name="phone" autocomplete="tel" placeholder="{{ 'funnel.own_phone_ph' | t }}" value="{{ customer.phone | escape }}"></label>
+      </div>
+      <label>{{ 'funnel.own_email' | t }}<input type="email" name="email" autocomplete="email" required value="{{ customer.email | escape }}"></label>
+      <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>{{ 'funnel.own_consent' | t }}</span></label>
+      <p class="fn-own__err" data-own-err role="alert" hidden></p>
+      <button class="btn btn--gold fn-own__go" type="submit">{{ 'funnel.own_send' | t }}</button>
+    </form>
+    <div class="fn-own__ok" data-fn-own-ok hidden>
+      <b aria-hidden="true">&#10003;</b>
+      <h3>{{ 'funnel.own_ok_t' | t }}</h3>
+      <p>{{ 'funnel.own_ok_p' | t }}</p>
+      <button class="btn btn--outline" type="button" data-own-close>{{ 'funnel.own_close' | t }}</button>
+    </div>
+  </div>
+</div>
+
 {% schema %}
 {
   "name": "Embudo de pedido",

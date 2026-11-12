@@ -3801,6 +3801,11 @@ body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__aside,body .funnel[dat
 /* v97: steps 1-2 grow with their content (no fixed frame, nothing clipped) */
 body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__stage,body .funnel[data-step="2"]:not(.funnel--teaser) .funnel__stage,body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__panel,body .funnel[data-step="2"]:not(.funnel--teaser) .funnel__panel,body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__main,body .funnel[data-step="2"]:not(.funnel--teaser) .funnel__main,body .funnel[data-step="1"]:not(.funnel--teaser) .step.is-on,body .funnel[data-step="2"]:not(.funnel--teaser) .step.is-on{height:auto !important;min-height:0 !important;max-height:none !important;overflow:visible !important}
 .fn-cats{-webkit-mask-image:linear-gradient(90deg,#000 90%,transparent);mask-image:linear-gradient(90deg,#000 90%,transparent)}
+/* v98: preset day tiles never overlap; a little air above the landing flag */
+.fn-preset__days li{min-width:0;grid-template-columns:minmax(0,1fr);align-content:start}
+.fn-preset__days i{height:auto}
+.fn-preset__days span{overflow-wrap:anywhere}
+.fn-start{margin-top:26px}
 
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
@@ -26358,7 +26363,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         if (bar) bar.style.transform = 'scaleX(' + ((st.step + 1) / steps.length) + ')';
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
-        if (next) { next.hidden = last; next.disabled = (st.step === 1 && !(st.planChosen && st.catPicked)); }
+        if (next) { next.hidden = last; next.disabled = (st.step === 1 && !st.catPicked); }
         var phoneUi = window.matchMedia && window.matchMedia('(max-width:760px)').matches, bp = $('[data-fn-barpick]', holder), deckMode = !!(bp && phoneUi && st.step === 3 && n < MEALS);
         if (bp) { bp.hidden = !deckMode; if (deckMode) bp.textContent = fill(T_('pick-day'), { d: dayLabel(st.active) }); }
         holder.classList.toggle('is-deck', deckMode);
@@ -26371,7 +26376,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       /* step 2: diet cards (step 1) and ready-made weekly menus (step 2) */
       var presetBox = $('[data-fn-presets]', holder), presetSets = [], esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
       var paintCats = function () {
-        var gn = $('[data-fn-go-next]', holder); if (gn) gn.disabled = !(st.planChosen && st.catPicked);
+        var gn = $('[data-fn-go-next]', holder); if (gn) gn.disabled = !st.catPicked;
         $$('[data-cat-choice]', holder).forEach(function (b) { var on = !!st.catPicked && b.getAttribute('data-cat-choice') === st.cat; b.classList.toggle('is-on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
       };
       var paintPresets = function () {
@@ -26418,7 +26423,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       };
 
       // choices
-      $$('[data-plan-choice]', holder).forEach(function (b) { b.addEventListener('click', function () { st.plan = b.getAttribute('data-plan-choice'); st.planChosen = true; setReach(2); persist(); render(); setTimeout(function () { go(2); }, REDUCE ? 0 : 280); }); });
+      $$('[data-plan-choice]', holder).forEach(function (b) { b.addEventListener('click', function () { st.plan = b.getAttribute('data-plan-choice'); st.planChosen = true; persist(); render(); }); });
       tierBtns.forEach(function (b) {
         b.addEventListener('click', function () {
           var t = b.getAttribute('data-tier-choice');
@@ -26488,7 +26493,8 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       if (ref) { var rs = ''; try { rs = localStorage.getItem('kulinaria_ref') || ''; } catch (e) {} if (rs) ref.value = rs; }
 
       if (next) next.addEventListener('click', function () {
-        if (st.step === 1 && !(st.planChosen && st.catPicked)) { say(T_('locked')); return; }
+        if (st.step === 1 && !st.catPicked) { say(T_('locked')); return; }
+        if (st.step === 1) st.planChosen = true;
         setReach(st.step + 1); go(st.step + 1);
       });
       if (prev) prev.addEventListener('click', function () { go(st.step - 1); });

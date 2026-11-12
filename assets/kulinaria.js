@@ -1781,6 +1781,32 @@
         if (t.closest('[data-fn-go-next]')) { if (next && !next.disabled) next.click(); else say(T_('locked')); return; }
         if (t.closest('[data-fn-go-prev]') && prev) prev.click();
       });
+      /* "have your own diet?": quote request with a real file upload (the sheet backend stores it and drafts a plan) */
+      var ownBox = $('[data-fn-own-modal]', holder.parentNode), ownForm = ownBox && $('[data-fn-own-form]', ownBox), ownOk = ownBox && $('[data-fn-own-ok]', ownBox);
+      var ownShow = function (on) { if (!ownBox) return; ownBox.hidden = !on; document.documentElement.classList.toggle('fn-own-open', on); if (on) { var f0 = $('input[type=file]', ownBox); if (f0) f0.focus(); } };
+      if (ownBox && ownForm) {
+        var ownFile = $('input[type=file]', ownForm), ownName = $('[data-own-file-name]', ownForm), ownErr = $('[data-own-err]', ownForm), ownLabel = ownName ? ownName.textContent : '';
+        var ownMsg = function (m) { if (ownErr) { ownErr.textContent = m || ''; ownErr.hidden = !m; } };
+        if (ownFile) ownFile.addEventListener('change', function () { var f = ownFile.files && ownFile.files[0]; if (ownName) ownName.textContent = f ? f.name : ownLabel; ownMsg(''); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !ownBox.hidden) ownShow(false); });
+        ownBox.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-own-close]')) ownShow(false); });
+        ownForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var f = ownFile && ownFile.files && ownFile.files[0], name = ($('[name=name]', ownForm).value || '').trim(), email = ($('[name=email]', ownForm).value || '').trim();
+          var okType = f && /^(application\/pdf|image\/jpeg|image\/png)$/.test(f.type) && f.size <= 5 * 1024 * 1024;
+          if (!okType || !name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !$('[name=consent]', ownForm).checked) { ownMsg(ownBox.getAttribute('data-t-err')); return; }
+          var ep = ownBox.getAttribute('data-endpoint'), btn = $('.fn-own__go', ownForm), btnTxt = btn.textContent; btn.disabled = true; btn.textContent = ownBox.getAttribute('data-t-sending') || '…';
+          var rd = new FileReader();
+          rd.onload = function () {
+            var data = String(rd.result || '').split(',')[1] || '';
+            try { if (ep) fetch(ep, { method: 'POST', mode: 'no-cors', keepalive: false, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'diet_quote', name: name, email: email, phone: ($('[name=phone]', ownForm).value || '').trim(), plan: $('[name=plan]', ownForm).value, notes: ($('[name=notes]', ownForm).value || '').trim(), file: { name: f.name, type: f.type, data: data } }) }); } catch (x) {}
+            ownForm.hidden = true; if (ownOk) ownOk.hidden = false; btn.disabled = false; btn.textContent = btnTxt;
+          };
+          rd.onerror = function () { ownMsg(ownBox.getAttribute('data-t-err')); btn.disabled = false; btn.textContent = btnTxt; };
+          rd.readAsDataURL(f);
+        });
+      }
+      holder.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-fn-own]') && ownBox) { if (ownForm) ownForm.hidden = false; if (ownOk) ownOk.hidden = true; ownShow(true); } });
       var go = function (n) {
         n = Math.max(0, Math.min(steps.length - 1, n)); if (n > st.reach) { say(T_('locked')); return; } var moved = n !== st.step; st.step = n; say(''); persist(); render();
         if (moved && top) {
