@@ -4289,6 +4289,38 @@ body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__stepcount,body .
   .hero--intro .hero__ctl{top:calc(100svh - 96px)}
 }
 
+/* v127: the hero carousel fits the screen; 7 tiny dots, centred at the very bottom (no arrows, no progress bar) */
+.hero--intro .hero__cubebox{height:calc(100svh - var(--hdr) - 76px) !important;min-height:360px !important;max-height:820px}
+.hero__face{top:0 !important;bottom:0 !important;height:100% !important}
+.hero__face--intro{position:absolute !important;display:grid !important;grid-template-columns:1fr !important;grid-template-rows:minmax(0,1fr) auto !important;align-items:center;justify-items:center;gap:clamp(6px,1.4vh,16px);height:100% !important}
+.hero__face--intro .hero__stage{width:auto !important;height:100% !important;max-height:100% !important;min-height:0 !important;aspect-ratio:1/1 !important;margin:0 !important;justify-self:center}
+.hero__face--intro .hero__copy{max-width:min(46rem,92%);text-align:center;margin:0 auto}
+.hero__face--intro .hero__copy h1{font-size:clamp(1.7rem,3.4vw,3.2rem) !important;margin:0 0 8px !important}
+.hero__face--intro .hero__sub{margin:0 0 8px !important;line-height:1.5 !important}
+.hero__face--intro .hero__cta{justify-content:center;gap:14px 28px}
+.hero--intro .hs.hero__face{height:100% !important;align-items:center !important;align-content:center !important}
+.hero--intro .hs__media{height:auto !important;max-height:100% !important;width:min(100%,calc(100svh - var(--hdr) - 120px),600px) !important;aspect-ratio:1/1 !important}
+.hs__copy h2{font-size:clamp(1.8rem,3.6vw,3.4rem) !important}
+.hero--intro .hero__ctl{position:absolute !important;left:50% !important;right:auto !important;top:auto !important;bottom:16px !important;translate:-50% 0 !important;width:auto !important;margin:0 !important;gap:0 !important;z-index:5}
+.hero__arr{display:none !important}
+.hero__dots{gap:10px !important}
+.hero__dot{width:14px !important;height:14px !important}
+.hero__dot i{left:50% !important;right:auto !important;top:50% !important;width:6px !important;height:6px !important;margin:-3px 0 0 -3px !important;border-radius:50% !important;background:rgba(255,255,255,.3) !important;overflow:visible !important;transition:background .3s,transform .3s}
+.hero__dot i::after{display:none !important}
+.hero__dot.is-on i{background:var(--accent) !important;transform:scale(1.35)}
+.hero.hs-run .hero__dot.is-on i::after{animation:none !important}
+.hero--intro .hero__scroll,.hero--intro .hero__toggle{display:none !important}
+@media (max-width:760px){
+  .hero--intro .hero__cubebox{height:calc(100svh - var(--hdr) - 60px) !important;min-height:380px !important}
+  .hero__face--intro .hero__stage{width:100% !important;height:auto !important;max-height:48svh !important;aspect-ratio:auto !important;margin-inline:0 !important;-webkit-mask-image:none !important;mask-image:none !important}
+  body .hero--intro .hero__face--intro .hero__stage{width:100% !important;margin-inline:0 !important;height:min(46svh,100vw) !important;max-height:46svh !important;aspect-ratio:auto !important}
+  .hero__face--intro .hero__copy h1{font-size:1.6rem !important}
+  .hs.hero__face{align-content:start !important;align-items:start !important}
+  .hero--intro .hs__media{width:100% !important;height:auto !important;max-height:40svh !important;aspect-ratio:4/3 !important}
+  .hs__copy h2{font-size:1.5rem !important}
+  .hero--intro .hero__ctl{bottom:12px !important}
+}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -4709,10 +4741,8 @@ Fuego</span>
       </article></div>
   </div>
   <div class="hero__ctl container" data-hs-ctl>
-    <button class="hero__arr" type="button" data-hs-prev aria-label="Anterior">&lsaquo;</button>
     <div class="hero__dots" role="group">
       <button class="hero__dot is-on" type="button" data-hs-dot="0" aria-label="Ir a la diapositiva 1"><i></i></button><button class="hero__dot" type="button" data-hs-dot="1" aria-label="Ir a la diapositiva 2"><i></i></button><button class="hero__dot" type="button" data-hs-dot="2" aria-label="Ir a la diapositiva 3"><i></i></button><button class="hero__dot" type="button" data-hs-dot="3" aria-label="Ir a la diapositiva 4"><i></i></button><button class="hero__dot" type="button" data-hs-dot="4" aria-label="Ir a la diapositiva 5"><i></i></button><button class="hero__dot" type="button" data-hs-dot="5" aria-label="Ir a la diapositiva 6"><i></i></button><button class="hero__dot" type="button" data-hs-dot="6" aria-label="Ir a la diapositiva 7"><i></i></button></div>
-    <button class="hero__arr" type="button" data-hs-next aria-label="Siguiente">&rsaquo;</button>
   </div><button class="hero__toggle" type="button" data-media-toggle aria-pressed="false" aria-label="Pausar video"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="8" y1="5" x2="8" y2="19"/><line x1="16" y1="5" x2="16" y2="19"/></svg>
 </button>
   <span class="hero__scroll" aria-hidden="true"><i></i>Desliza</span>
@@ -14729,10 +14759,8 @@ Pago digital, sin efectivo</li></ul>
       </article></div>
   </div>
   <div class="hero__ctl container" data-hs-ctl>
-    <button class="hero__arr" type="button" data-hs-prev aria-label="Previous">&lsaquo;</button>
     <div class="hero__dots" role="group">
       <button class="hero__dot is-on" type="button" data-hs-dot="0" aria-label="Go to slide 1"><i></i></button><button class="hero__dot" type="button" data-hs-dot="1" aria-label="Go to slide 2"><i></i></button><button class="hero__dot" type="button" data-hs-dot="2" aria-label="Go to slide 3"><i></i></button><button class="hero__dot" type="button" data-hs-dot="3" aria-label="Go to slide 4"><i></i></button><button class="hero__dot" type="button" data-hs-dot="4" aria-label="Go to slide 5"><i></i></button><button class="hero__dot" type="button" data-hs-dot="5" aria-label="Go to slide 6"><i></i></button><button class="hero__dot" type="button" data-hs-dot="6" aria-label="Go to slide 7"><i></i></button></div>
-    <button class="hero__arr" type="button" data-hs-next aria-label="Next">&rsaquo;</button>
   </div><button class="hero__toggle" type="button" data-media-toggle aria-pressed="false" aria-label="Pause video"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="8" y1="5" x2="8" y2="19"/><line x1="16" y1="5" x2="16" y2="19"/></svg>
 </button>
   <span class="hero__scroll" aria-hidden="true"><i></i>Scroll</span>

@@ -58,12 +58,10 @@
     </div>
   </div>
   <div class="hero__ctl container" data-hs-ctl>
-    <button class="hero__arr" type="button" data-hs-prev aria-label="{{ 'hero.prev' | t }}">&lsaquo;</button>
     <div class="hero__dots" role="group">
       <button class="hero__dot is-on" type="button" data-hs-dot="0" aria-label="{{ 'hero.go' | t | replace: '[n]', 1 }}"><i></i></button>
       {%- for block in section.blocks -%}{%- assign dn = forloop.index | plus: 1 -%}<button class="hero__dot" type="button" data-hs-dot="{{ forloop.index }}" aria-label="{{ 'hero.go' | t | replace: '[n]', dn }}"><i></i></button>{%- endfor -%}
     </div>
-    <button class="hero__arr" type="button" data-hs-next aria-label="{{ 'hero.next' | t }}">&rsaquo;</button>
   </div>
   {%- else -%}
   <div class="container hero__grid">
