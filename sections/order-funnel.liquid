@@ -57,6 +57,32 @@
       <div class="funnel__main">
         <fieldset class="step is-on" data-fn-step="0">
           <legend class="fn-sr">{{ 'funnel.rules_title' | t }}</legend>
+          {%- capture st_meal -%}{% render 'plan-price', tier: 'selecto', kind: 'meal' %}{%- endcapture -%}
+          {%- capture st_week -%}{% render 'plan-price', tier: 'selecto', kind: 'week' %}{%- endcapture -%}
+          {%- assign st_meal_n = st_meal | strip | plus: 0 -%}{%- assign st_week_n = st_week | strip | plus: 0 -%}
+          {%- assign st_meal_m = st_meal_n | times: 100 | money_without_trailing_zeros -%}
+          {%- assign st_day_m = st_week_n | divided_by: 5 | times: 100 | money_without_trailing_zeros -%}
+          {%- assign st_week_m = st_week_n | times: 100 | money_without_trailing_zeros -%}
+          {%- assign st_bwk_m = st_meal_n | times: 5 | times: 100 | money_without_trailing_zeros -%}
+          {%- assign st_blk_m = st_meal_n | times: 20 | times: 100 | money_without_trailing_zeros -%}
+          {%- unless customer -%}
+          <section class="fn-start" data-fn-start>
+            <div class="fn-start__main">
+              <span class="fn-start__flag">{{ 'funnel.start_flag' | t }}</span>
+              <h3 class="fn-start__h">{{ 'funnel.start_h' | t | replace: '[p]', st_meal_m }}</h3>
+              <p class="fn-start__sub">{{ 'funnel.start_sub' | t | replace: '[w]', st_bwk_m }}</p>
+              <ul class="fn-start__list"><li>{{ 'funnel.start_b1' | t }}</li><li>{{ 'funnel.start_b2' | t }}</li><li>{{ 'funnel.start_b3' | t }}</li></ul>
+              <a class="btn btn--gold fn-start__btn" href="{% render 'login-url', back: '/pages/pedido' %}">{{ 'login.enter' | t }}</a>
+              <p class="fn-start__note">{{ 'funnel.start_note' | t }}</p>
+            </div>
+            <aside class="fn-start__side">
+              <b class="fn-start__sk">{{ 'funnel.start_trial_t' | t }}</b>
+              <p class="fn-start__sp"><strong>{{ st_day_m }}</strong> {{ 'funnel.pl_day' | t }}</p>
+              <small>{{ 'funnel.start_trial_s' | t }}</small>
+              <a class="btn btn--outline fn-start__btn2" href="{% render 'login-url', back: '/pages/pedido' %}">{{ 'funnel.start_trial_btn' | t }}</a>
+            </aside>
+          </section>
+          {%- endunless -%}
           {%- capture r_bn %}{% render 'plan-price', tier: 'selecto', kind: 'block' %}{% endcapture -%}
           {%- capture r_wn %}{% render 'plan-price', tier: 'selecto', kind: 'week' %}{% endcapture -%}
           {%- capture r_mn %}{% render 'plan-price', tier: 'selecto', kind: 'meal' %}{% endcapture -%}
@@ -123,25 +149,44 @@
           </div>
         </fieldset>
         <fieldset class="step" data-fn-step="1">
-          <legend>{{ 'funnel.s1_title' | t }}</legend>
-          <p class="text-muted">{{ 'funnel.s1_text' | t }}</p>
+          <legend class="fn-sr">{{ 'funnel.s1_title' | t }}</legend>
           <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="/pages/cuenta-semana" data-fn-credit-link>{{ 'funnel.credit_cta' | t }}</a></div>
-          <div class="fn-plans" role="radiogroup" aria-label="{{ 'funnel.s1_title' | t }}">
-            <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
-              <span class="plan-card__flag">{{ 'plans.recommended' | t }}</span>
-              <strong>{{ 'funnel.plan_block' | t }}</strong>
-              <small>{{ 'funnel.plan_block_text' | t }}</small>
-              <em class="fn-plan__from">{{ 'plans.from' | t }}{% render 'plan-price', tier: 'selecto', kind: 'block', money: true %}</em>
-              <span class="fn-plan__incl">{{ 'funnel.includes_block' | t }}</span>
-            </button>
-            <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
-              <strong>{{ 'funnel.plan_week' | t }}</strong>
-              <small>{{ 'funnel.plan_week_text' | t }}</small>
-              <em class="fn-plan__from">{{ 'plans.from' | t }}{% render 'plan-price', tier: 'selecto', kind: 'week', money: true %}</em>
-              <span class="fn-plan__incl">{{ 'funnel.includes_week' | t }}</span>
-            </button>
+          <div class="fn-pickgrid">
+            <div class="fn-pickcol">
+              <h3 class="fn-pickh"><b>1</b>{{ 'funnel.p1_h' | t }}</h3>
+              <div class="fn-cats" data-fn-cats role="radiogroup" aria-label="{{ 'funnel.p1_h' | t }}">
+                {%- assign fn_cats = 'keto-low-carb,al-fuego,fit-proteina,veggie,sin-gluten,bowls,ligero,all' | split: ',' -%}
+                {%- for c in fn_cats -%}{%- assign ck = c | replace: '-', '_' -%}{%- assign ckt = 'funnel.cat_' | append: ck -%}{%- assign cks = ckt | append: '_s' -%}
+                <button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="{{ c }}">
+                  <span class="fn-cat__tag">{{ 'funnel.cat_sel' | t }} &#9733;</span>
+                  <i class="fn-cat__ico">{% render 'cat-icon', name: c %}</i>
+                  <strong>{{ ckt | t }}</strong><small>{{ cks | t }}</small>
+                </button>
+                {%- endfor -%}
+              </div>
+              <div class="fn-cats__ctl"><button class="fn-cats__a" type="button" data-fn-cats-arrow="-1" aria-label="{{ 'funnel.prev_dishes' | t }}">&#8249;</button><button class="fn-cats__a" type="button" data-fn-cats-arrow="1" aria-label="{{ 'funnel.next_dishes' | t }}">&#8250;</button><span>{{ 'funnel.cats_hint' | t }}</span></div>
+            </div>
+            <div class="fn-pickcol">
+              <h3 class="fn-pickh"><b>2</b>{{ 'funnel.p2_h' | t }}</h3>
+              <div class="fn-plans" role="radiogroup" aria-label="{{ 'funnel.p2_h' | t }}">
+                <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
+                  <span class="fn-plan__tag">{{ 'funnel.pl_block_tag' | t }}</span>
+                  <strong>{{ 'funnel.plan_block' | t }}</strong>
+                  <em class="fn-plan__from">{{ 'funnel.pl_from' | t }} <b>{{ st_meal_m }}</b> {{ 'funnel.pl_day' | t }}</em>
+                  <small>{{ 'funnel.pl_wk' | t | replace: '[w]', st_bwk_m }}</small>
+                  <ul class="fn-plan__ul"><li>{{ 'funnel.pl_b1' | t }}</li><li>{{ 'funnel.pl_b2' | t | replace: '[b]', st_blk_m }}</li><li>{{ 'funnel.pl_b3' | t }}</li></ul>
+                </button>
+                <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
+                  <strong>{{ 'funnel.plan_week' | t }}</strong>
+                  <em class="fn-plan__from"><b>{{ st_day_m }}</b> {{ 'funnel.pl_day' | t }}</em>
+                  <small>{{ 'funnel.pl_wk_total' | t | replace: '[w]', st_week_m }}</small>
+                  <ul class="fn-plan__ul"><li>{{ 'funnel.pl_b1' | t }}</li><li>{{ 'funnel.pl_w_b2' | t }}</li></ul>
+                </button>
+              </div>
+              <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>{{ 'funnel.renew' | t }}</span></label>
+            </div>
           </div>
-          <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>{{ 'funnel.renew' | t }}</span></label>
+          <div class="fn-pickfoot"><button class="text-link" type="button" data-fn-own>{{ 'funnel.own_q' | t }}</button><button class="btn btn--gold fn-pickgo" type="button" data-fn-go-next disabled>{{ 'funnel.go' | t }} &rarr;</button></div>
         </fieldset>
 
         <div class="fn-tierdata" data-fn-tierdata hidden aria-hidden="true">
@@ -208,26 +253,12 @@
         </div>
 
 
-        <fieldset class="step" data-fn-step="2" data-dgate-scope>
+        <fieldset class="step" data-fn-step="2">
           <legend class="fn-sr">{{ 'funnel.s_menu' | t }}</legend>
-          {%- assign seasonal_f = collections['temporada'] -%}
-          {%- if seasonal_f.products.size > 0 -%}
-            <div class="season-toggle season-toggle--fn" role="group" aria-label="{{ 'season.aria' | t }}">
-              <button class="season-pill is-on" type="button" data-fn-season="week" aria-pressed="true">{{ 'season.week' | t }}</button>
-              <button class="season-pill season-pill--s" type="button" data-fn-season="season" aria-pressed="false">&#10022; {{ 'season.season' | t }} <small>{{ 'season.limited' | t }}</small></button>
-            </div>
-          {%- endif -%}
-          <div class="fn-menunote"><button class="text-link" type="button" data-fn-prev-sc>&lsaquo; {{ 'funnel.menu_back' | t }}</button><p>{{ 'funnel.menu_note' | t }}</p></div>
-          {% render 'diet-gate' %}
-          <div class="fn-carousel fn-carousel--show" data-dgate-body>
-            <button class="fn-arrow fn-arrow--prev" type="button" data-fn-sc-arrow="-1" aria-label="{{ 'funnel.prev_dishes' | t }}">&#8249;</button>
-            <span class="fn-sc__count" data-fn-sc-count aria-hidden="true"></span>
-            <div class="fn-showcase" data-fn-sc-grid>
-              {%- for product in coll.products limit: section.settings.limit -%}{% render 'funnel-showcase-card', product: product %}{%- endfor -%}
-              {%- for product in seasonal_f.products limit: 8 -%}{% render 'funnel-showcase-card', product: product, seasonal: true, show_all: true %}{%- endfor -%}
-            </div>
-            <button class="fn-arrow fn-arrow--next" type="button" data-fn-sc-arrow="1" aria-label="{{ 'funnel.next_dishes' | t }}">&#8250;</button>
-            <button class="fn-gonext" type="button" data-fn-sc-next><span>{{ 'funnel.menu_go' | t }}</span><i aria-hidden="true">&rarr;</i></button>
+          <div class="fn-presets" data-fn-presets data-t-kcal="{{ 'funnel.pre_kcal' | t }}" data-t-prot="{{ 'funnel.pre_prot' | t }}" data-t-pick="{{ 'funnel.pre_pick' | t }}" data-t-sub="{{ 'funnel.pre_sub' | t }}">
+            <header class="fn-presets__head"><h3>{{ 'funnel.pre_h' | t }}</h3><p data-fn-presets-sub></p></header>
+            <div class="fn-presets__grid" data-fn-presets-grid></div>
+            <p class="fn-presets__alt"><button class="text-link" type="button" data-fn-go-prev>&lsaquo; {{ 'funnel.fn_back' | t }}</button><button class="text-link" type="button" data-fn-preset-empty>{{ 'funnel.pre_empty' | t }}</button></p>
           </div>
         </fieldset>
         <fieldset class="step" data-fn-step="3">
@@ -278,7 +309,7 @@
               <select class="select" data-fn-cat>
                 <option value="all">{{ 'menu_group.all' | t }}</option>
                 {%- if seasonal_f.products.size > 0 -%}<option value="seasonal">&#10022; {{ 'season.season' | t }}</option>{%- endif -%}
-                {%- assign cats = 'al-fuego,desayunos,bowls,diario,keto-low-carb,fit-proteina,veggie,sin-gluten,junior,entradas,snacks-postres' | split: ',' -%}
+                {%- assign cats = 'al-fuego,desayunos,bowls,diario,keto-low-carb,fit-proteina,veggie,sin-gluten,ligero,junior,entradas,snacks-postres' | split: ',' -%}
                 {%- for c in cats -%}{%- assign ck = 'menu_group.' | append: c -%}<option value="{{ c }}">{{ ck | t }}</option>{%- endfor -%}
               </select></label>
           </div>

@@ -35,7 +35,7 @@
   /* menu groups: 7 follow the dish category, 4 follow the diets of the dish (a dish can be in several) */
   var GROUPS = {
     'al-fuego': { cat: ['al-fuego-y-mar'] }, desayunos: { cat: ['desayunos-premium'] }, bowls: { cat: ['bowls-de-la-semana'] }, diario: { cat: ['diario-premium'] },
-    'keto-low-carb': { diet: ['keto', 'bajo-carbos'] }, 'fit-proteina': { diet: ['alto-proteina'] }, veggie: { diet: ['vegetariano', 'vegano'] }, 'sin-gluten': { diet: ['sin-gluten', 'libre-de-gluten'] },
+    'keto-low-carb': { diet: ['keto', 'bajo-carbos'] }, 'fit-proteina': { diet: ['alto-proteina'] }, veggie: { diet: ['vegetariano', 'vegano'] }, 'sin-gluten': { diet: ['sin-gluten', 'libre-de-gluten'] }, ligero: { diet: ['bajo-calorias'] },
     junior: { cat: ['kulinaria-junior'] }, entradas: { cat: ['sopas-y-entradas'] }, 'snacks-postres': { cat: ['postres-y-snacks', 'batidos-y-bebidas'] }
   };
   function inGroup(card, gid) {
@@ -1362,6 +1362,8 @@
       var RULES_KEY = 'kx-rules-ok';
       st.rulesOk = false;                                         // read from its own key only (never from the saved selection)
       try { if (localStorage.getItem(RULES_KEY)) st.rulesOk = true; } catch (e) {}
+      var acctOn = !!$('#kx-account'), kxGuide = false; try { kxGuide = location.protocol === 'file:' && localStorage.getItem('kx-test-guide') === '1'; } catch (e) {}
+      st.rulesOk = !!(acctOn || (location.protocol === 'file:' && !kxGuide));      // an account is the condition to start an order (the local preview skips it for tests)
       st.sv = 4;
       // steps 1 and 2 before the builder: sign in, then the questionnaire (shown until both are done; the local preview can skip it for tests)
       var gate = $('[data-fn-gate]', holder), signedIn = !!$('#kx-account'), onbDone = isOnboarded(), skipGate = false;
@@ -1723,11 +1725,12 @@
         if (st.step === 3 && !tourArmed && !holder.classList.contains('is-gated')) { tourArmed = true; window.setTimeout(function () { startTour(false); }, 600); }
         // stepper
         steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
+        paintCats(); paintPresets();
         dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); d.classList.toggle('is-locked', k > st.reach); d.setAttribute('aria-disabled', k > st.reach ? 'true' : 'false'); });
         if (bar) bar.style.transform = 'scaleX(' + ((st.step + 1) / steps.length) + ')';
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
-        if (next) { next.hidden = last; next.disabled = (st.step === 1 && !st.planChosen); }
+        if (next) { next.hidden = last; next.disabled = (st.step === 1 && !st.catPicked); }
         var phoneUi = window.matchMedia && window.matchMedia('(max-width:760px)').matches, bp = $('[data-fn-barpick]', holder), deckMode = !!(bp && phoneUi && st.step === 3 && n < MEALS);
         if (bp) { bp.hidden = !deckMode; if (deckMode) bp.textContent = fill(T_('pick-day'), { d: dayLabel(st.active) }); }
         holder.classList.toggle('is-deck', deckMode);
@@ -1737,6 +1740,47 @@
 
       // the page keeps scrolling normally; changing step brings the top of the funnel back into view if needed
       var top = $('.funnel__top', holder);
+      /* step 2: diet cards (step 1) and ready-made weekly menus (step 2) */
+      var presetBox = $('[data-fn-presets]', holder), presetSets = [], esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+      var paintCats = function () {
+        var gn = $('[data-fn-go-next]', holder); if (gn) gn.disabled = !st.catPicked;
+        $$('[data-cat-choice]', holder).forEach(function (b) { var on = !!st.catPicked && b.getAttribute('data-cat-choice') === st.cat; b.classList.toggle('is-on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
+      };
+      var paintPresets = function () {
+        if (!presetBox || st.step !== 2) return;
+        var grid = $('[data-fn-presets-grid]', presetBox); if (!grid) return;
+        var cb = $('[data-cat-choice="' + st.cat + '"] strong', holder), cname = cb ? cb.textContent : '';
+        var sub = $('[data-fn-presets-sub]', presetBox); if (sub) sub.textContent = (presetBox.getAttribute('data-t-sub') || '').replace('[c]', cname);
+        var okd = function (d) { return !d.hasAttribute('data-seasonal') && !d.classList.contains('is-warned'); };
+        var pool = dishes.filter(function (d) { return okd(d) && inGroup(d, st.cat); });
+        if (pool.length < 2) pool = pool.concat(dishes.filter(function (d) { return okd(d) && pool.indexOf(d) < 0 && rank(d.getAttribute('data-tier')) === 0; }));
+        pool.sort(function (a, b) { return rank(a.getAttribute('data-tier')) - rank(b.getAttribute('data-tier')) || (a.getAttribute('data-title') > b.getAttribute('data-title') ? 1 : -1); });
+        if (!pool.length) { grid.innerHTML = ''; presetSets = []; return; }
+        var h = Math.ceil(pool.length / 2), mk = function (list) { var a = []; for (var i = 0; i < MEALS; i++) a.push(list[i % list.length]); return a; };
+        presetSets = [mk(pool), mk(pool.slice(h).concat(pool.slice(0, h)))];
+        grid.innerHTML = presetSets.map(function (set, n) {
+          var k = 0, p = 0; set.forEach(function (d) { k += +d.getAttribute('data-kcal') || 0; p += +d.getAttribute('data-protein') || 0; });
+          var days = set.map(function (d, i) { var im = $('img', d), src = im ? (im.currentSrc || im.src) : ''; return '<li><i style="background-image:url(&quot;' + esc(src) + '&quot;)"></i><b>' + esc(dayNames[i] || '') + '</b><span>' + esc(lab(d)) + '</span></li>'; }).join('');
+          return '<article class="fn-preset"><header><strong>' + esc(cname + ' ' + (n + 1)) + '</strong><span>' + esc((presetBox.getAttribute('data-t-kcal') || '').replace('[k]', Math.round(k / MEALS))) + ' · ' + esc((presetBox.getAttribute('data-t-prot') || '').replace('[p]', Math.round(p / MEALS))) + '</span></header><ol class="fn-preset__days">' + days + '</ol><button class="btn btn--gold" type="button" data-fn-preset-pick="' + n + '">' + esc(presetBox.getAttribute('data-t-pick') || '') + '</button></article>';
+        }).join('');
+      };
+      var applyPreset = function (list) {
+        st.days = blankDays().map(function (x, k) { return list[k] ? list[k].getAttribute('data-pid') : ''; }); st.days2 = blankDays(); st.perDay = 1; st.course = 0; st.mods = blankDays().map(function () { return { off: [], note: '' }; }); st.cardNotes = {}; st.qty = {};
+        st.days.forEach(function (p) { if (p) st.qty[p] = (st.qty[p] || 0) + 1; }); st.active = 0; if (daysBox) daysBox.removeAttribute('data-built');
+        setReach(3); go(3);
+      };
+      holder.addEventListener('click', function (e) {
+        var t = e.target; if (!t || !t.closest) return;
+        var cb = t.closest('[data-cat-choice]');
+        if (cb) { st.cat = cb.getAttribute('data-cat-choice'); st.catPicked = true; try { localStorage.setItem('kx_dietpick', st.cat); } catch (x) {} persist(); render(); return; }
+        var ca = t.closest('[data-fn-cats-arrow]');
+        if (ca) { var rail = $('[data-fn-cats]', holder); if (rail) rail.scrollBy({ left: (+ca.getAttribute('data-fn-cats-arrow')) * Math.max(200, rail.clientWidth * 0.7), behavior: REDUCE ? 'auto' : 'smooth' }); return; }
+        var pb = t.closest('[data-fn-preset-pick]');
+        if (pb) { applyPreset(presetSets[+pb.getAttribute('data-fn-preset-pick')] || []); return; }
+        if (t.closest('[data-fn-preset-empty]')) { applyPreset([]); return; }
+        if (t.closest('[data-fn-go-next]')) { if (next && !next.disabled) next.click(); else say(T_('locked')); return; }
+        if (t.closest('[data-fn-go-prev]') && prev) prev.click();
+      });
       var go = function (n) {
         n = Math.max(0, Math.min(steps.length - 1, n)); if (n > st.reach) { say(T_('locked')); return; } var moved = n !== st.step; st.step = n; say(''); persist(); render();
         if (moved && top) {
@@ -1746,7 +1790,7 @@
       };
 
       // choices
-      $$('[data-plan-choice]', holder).forEach(function (b) { b.addEventListener('click', function () { st.plan = b.getAttribute('data-plan-choice'); st.planChosen = true; setReach(2); persist(); render(); setTimeout(function () { go(2); }, REDUCE ? 0 : 280); }); });
+      $$('[data-plan-choice]', holder).forEach(function (b) { b.addEventListener('click', function () { st.plan = b.getAttribute('data-plan-choice'); st.planChosen = true; persist(); render(); }); });
       tierBtns.forEach(function (b) {
         b.addEventListener('click', function () {
           var t = b.getAttribute('data-tier-choice');
@@ -1816,7 +1860,8 @@
       if (ref) { var rs = ''; try { rs = localStorage.getItem('kulinaria_ref') || ''; } catch (e) {} if (rs) ref.value = rs; }
 
       if (next) next.addEventListener('click', function () {
-        if (st.step === 1 && !st.planChosen) { say(T_('locked')); return; }
+        if (st.step === 1 && !st.catPicked) { say(T_('locked')); return; }
+        if (st.step === 1) st.planChosen = true;
         setReach(st.step + 1); go(st.step + 1);
       });
       if (prev) prev.addEventListener('click', function () { go(st.step - 1); });

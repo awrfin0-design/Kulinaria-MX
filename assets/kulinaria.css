@@ -3691,3 +3691,88 @@ body .funnel.is-gated:not(.funnel--teaser) .funnel__stage{height:auto !important
 body .funnel.is-gated[data-step="3"]:not(.funnel--teaser) .funnel__panel,body .funnel.is-gated[data-step="3"]:not(.funnel--teaser) .funnel__main{height:auto !important;min-height:0 !important}
 /* v93: the plate list in the summary box always keeps room (it scrolls inside) */
 .funnel__aside .funnel__list{flex:1 1 auto !important;min-height:92px !important;overflow:auto}
+
+/* v94: sign-in landing, diet carousel + plan (step 1) and ready-made menus (step 2). Tokens only, so Fuego, Night (gold) and Day all work. */
+body .funnel .fn-rules,body .funnel [data-fn-step="0"] .fn-rules{display:none !important}
+.fn-start{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,.8fr);gap:clamp(16px,3vw,36px);align-items:center;max-width:1100px;margin:6px auto 0}
+.fn-start__main{position:relative;padding:clamp(22px,3.4vw,40px);border:1px solid var(--line);border-radius:28px;background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 8%,var(--bg-raised)),var(--bg-raised));text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.18)}
+.fn-start__flag{position:absolute;top:-15px;left:50%;translate:-50% 0;white-space:nowrap;padding:8px 18px;border-radius:999px;background:var(--accent);color:var(--on-accent,#fff);font:700 .68rem var(--font-label);letter-spacing:.14em;text-transform:uppercase}
+.fn-start__h{margin:14px 0 8px;font:600 clamp(1.7rem,3.6vw,2.7rem)/1.1 var(--font-display);color:var(--text)}
+.fn-start__sub{margin:0 0 16px;font-size:.84rem;color:var(--text-muted)}
+.fn-start__list{list-style:none;margin:0 auto 20px;padding:14px 16px;display:grid;gap:9px;max-width:520px;text-align:left;border:1px solid var(--line);border-radius:16px;font-size:.9rem;color:var(--text)}
+.fn-start__list li{position:relative;padding-left:26px}
+.fn-start__list li::before{content:"";position:absolute;left:2px;top:.25em;width:12px;height:7px;border-left:2.5px solid var(--accent);border-bottom:2.5px solid var(--accent);rotate:-45deg}
+.fn-start__btn{width:min(100%,420px);justify-content:center;padding:16px 22px}
+.fn-start__note{margin:12px 0 0;font-size:.74rem;color:var(--text-muted)}
+.fn-start__side{display:grid;gap:6px;justify-items:center;text-align:center;padding:22px;border:1px solid var(--line);border-radius:22px;background:var(--bg-raised);color:var(--text-muted)}
+.fn-start__sk{font:700 .8rem var(--font-label);letter-spacing:.12em;text-transform:uppercase}
+.fn-start__sp{margin:0;color:var(--text)}.fn-start__sp strong{font:600 1.7rem var(--font-display)}
+.fn-start__side small{font-size:.74rem}
+.fn-start__btn2{margin-top:6px}
+@media (max-width:860px){.fn-start{grid-template-columns:1fr}.fn-start__side{order:2}}
+/* step 1 */
+.fn-pickgrid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:clamp(18px,3vw,40px);align-items:start}
+.fn-pickh{display:flex;align-items:baseline;gap:10px;margin:0 0 14px;font:600 clamp(1.05rem,1.5vw,1.3rem)/1.2 var(--font-display);color:var(--text)}
+.fn-pickh b{font:700 .78rem var(--font-label);letter-spacing:.12em;color:var(--accent)}
+.fn-cats{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:8px 4px 14px;margin:0 -4px}
+.fn-cats::-webkit-scrollbar{display:none}
+.fn-cat{position:relative;flex:0 0 clamp(150px,14vw,184px);scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:232px;padding:16px 12px 18px;text-align:center;border:1.5px solid var(--line);border-radius:20px;background:var(--bg-raised);color:var(--text);cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .2s}
+.fn-cat:hover,.fn-cat:focus-visible{border-color:var(--accent);transform:translateY(-3px)}
+.fn-cat__ico{display:grid;place-items:center;height:104px;margin-top:18px;color:var(--accent)}
+.fn-cat__svg{width:64px;height:64px}
+.fn-cat strong{margin-top:auto;font:700 1.08rem/1.15 var(--font-display)}
+.fn-cat small{font-size:.74rem;line-height:1.35;color:var(--text-muted)}
+.fn-cat__tag{position:absolute;top:10px;right:10px;display:none;padding:4px 9px;border-radius:999px;background:var(--accent);color:var(--on-accent,#fff);font:700 .56rem var(--font-label);letter-spacing:.08em;text-transform:uppercase}
+.fn-cat.is-on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 12px 34px color-mix(in srgb,var(--accent) 30%,transparent)}
+.fn-cat.is-on .fn-cat__tag{display:inline-block}
+.fn-cats__ctl{display:flex;align-items:center;gap:8px;margin-top:2px;font-size:.74rem;color:var(--text-muted)}
+.fn-cats__a{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);background:none;color:var(--accent);font-size:1.2rem;line-height:1;cursor:pointer}
+.fn-cats__a:hover{background:var(--accent);color:var(--on-accent,#fff)}
+body .funnel .step[data-fn-step="1"] .fn-plans{display:grid;grid-template-columns:1fr;gap:12px}
+body .funnel .step[data-fn-step="1"] .fn-plan{position:relative;display:grid;gap:4px;text-align:left;padding:16px 18px;border:1.5px solid var(--line);border-radius:18px;background:var(--bg-raised);color:var(--text);cursor:pointer}
+body .funnel .step[data-fn-step="1"] .fn-plan[aria-checked="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 10px 28px color-mix(in srgb,var(--accent) 24%,transparent)}
+.fn-plan__tag{position:absolute;top:-10px;right:14px;padding:4px 10px;border-radius:999px;background:var(--accent);color:var(--on-accent,#fff);font:700 .58rem var(--font-label);letter-spacing:.1em;text-transform:uppercase}
+.fn-plan strong{font:700 1.1rem var(--font-display)}
+.fn-plan__from{font-style:normal;font-size:.84rem;color:var(--text-muted)}.fn-plan__from b{font:600 1.2rem var(--font-display);color:var(--text)}
+.fn-plan small{font-size:.74rem;color:var(--text-muted)}
+.fn-plan__ul{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:4px;font-size:.78rem;color:var(--text)}
+.fn-plan__ul li{position:relative;padding-left:18px}
+.fn-plan__ul li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:700}
+.fn-ownq{margin:10px 0 0}
+@media (max-width:900px){.fn-pickgrid{grid-template-columns:1fr}.fn-cat{flex-basis:148px;min-height:210px}}
+/* step 2: ready-made menus */
+.fn-presets__head h3{margin:0 0 4px;font:600 clamp(1.3rem,2.2vw,1.8rem) var(--font-display);color:var(--text)}
+.fn-presets__head p{margin:0 0 16px;font-size:.84rem;color:var(--text-muted)}
+.fn-presets__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.fn-preset{display:grid;gap:12px;padding:18px;border:1.5px solid var(--line);border-radius:22px;background:var(--bg-raised)}
+.fn-preset header{display:grid;gap:2px}.fn-preset header strong{font:700 1.2rem var(--font-display);color:var(--text)}.fn-preset header span{font-size:.76rem;color:var(--accent);font-weight:600}
+.fn-preset__days{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.fn-preset__days li{display:grid;gap:4px;justify-items:center;text-align:center;font-size:.68rem;line-height:1.2;color:var(--text)}
+.fn-preset__days i{display:block;width:100%;aspect-ratio:1;border-radius:14px;background:var(--bg-deep) center/cover no-repeat}
+.fn-preset__days b{font:700 .62rem var(--font-label);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.fn-preset .btn{justify-self:stretch;justify-content:center}
+.fn-presets__alt{margin:14px 0 0;text-align:center}
+@media (max-width:760px){.fn-presets__grid{grid-template-columns:1fr}.fn-preset__days{gap:6px}.fn-preset__days span{font-size:.6rem}}
+
+/* v95: steps 1-2 use the full width (no order summary beside them); the step carries its own Continue / Back */
+body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__panel,body .funnel[data-step="2"]:not(.funnel--teaser) .funnel__panel{grid-template-columns:minmax(0,1fr) !important}
+body .funnel[data-step="1"] .funnel__aside,body .funnel[data-step="2"] .funnel__aside,body .funnel[data-step="1"] .funnel__bar,body .funnel[data-step="2"] .funnel__bar{display:none !important}
+body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__main,body .funnel[data-step="2"]:not(.funnel--teaser) .funnel__main{max-width:none;width:100%}
+.fn-pickfoot{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:16px}
+.fn-pickgo{min-width:200px;justify-content:center}
+.fn-pickgo:disabled{opacity:.45;cursor:not-allowed}
+.fn-presets__alt{display:flex;justify-content:space-between;align-items:center;gap:14px}
+@media (max-width:760px){.fn-pickfoot{position:sticky;bottom:8px;z-index:3;padding:10px;border-radius:16px;background:var(--bg-raised);border:1px solid var(--line)}.fn-pickgo{min-width:0;flex:1}}
+/* v96: step 1 polish (plan cards fill their column, aside really hidden on phones, bigger icons) */
+body .funnel .step[data-fn-step="1"] .fn-plan{grid-template-columns:minmax(0,1fr) !important;justify-content:stretch !important;min-height:0 !important;padding:16px 18px !important;gap:4px}
+body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__aside,body .funnel[data-step="2"]:not(.funnel--teaser) .funnel__aside{display:none !important}
+.fn-pickgrid{margin-top:22px}
+.fn-cat{min-height:218px}.fn-cat__svg{width:72px;height:72px}.fn-cat__ico{height:110px}
+/* v97: steps 1-2 grow with their content (no fixed frame, nothing clipped) */
+body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__stage,body .funnel[data-step="2"]:not(.funnel--teaser) .funnel__stage,body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__panel,body .funnel[data-step="2"]:not(.funnel--teaser) .funnel__panel,body .funnel[data-step="1"]:not(.funnel--teaser) .funnel__main,body .funnel[data-step="2"]:not(.funnel--teaser) .funnel__main,body .funnel[data-step="1"]:not(.funnel--teaser) .step.is-on,body .funnel[data-step="2"]:not(.funnel--teaser) .step.is-on{height:auto !important;min-height:0 !important;max-height:none !important;overflow:visible !important}
+.fn-cats{-webkit-mask-image:linear-gradient(90deg,#000 90%,transparent);mask-image:linear-gradient(90deg,#000 90%,transparent)}
+/* v98: preset day tiles never overlap; a little air above the landing flag */
+.fn-preset__days li{min-width:0;grid-template-columns:minmax(0,1fr);align-content:start}
+.fn-preset__days i{height:auto}
+.fn-preset__days span{overflow-wrap:anywhere}
+.fn-start{margin-top:26px}
