@@ -2419,9 +2419,9 @@
     } else setTimeout(function () { if (cur === 0) next(); }, 600);
     mark(); tick();
     var hold = function (v) { held = v; tick(); };
-    hero.addEventListener('mouseenter', function () { hold(true); }); hero.addEventListener('mouseleave', function () { hold(false); });
-    hero.addEventListener('focusin', function () { hold(true); }); hero.addEventListener('focusout', function () { hold(false); });
-    hero.addEventListener('touchstart', function () { held = true; clearTimeout(timer); clearTimeout(vidSafe); clearTimeout(box._th); box._th = setTimeout(function () { held = false; tick(); }, 8000); }, { passive: true });
+    // no pause on a resting mouse (it would freeze the hero); only keyboard focus inside it pauses, and a touch holds it for a moment
+    hero.addEventListener('focusin', function (e) { try { if (e.target.matches && e.target.matches(':focus-visible')) hold(true); } catch (x) {} }); hero.addEventListener('focusout', function () { hold(false); });
+    hero.addEventListener('touchstart', function () { held = true; clearTimeout(timer); clearTimeout(vidSafe); clearTimeout(box._th); box._th = setTimeout(function () { held = false; tick(); }, 4000); }, { passive: true });
     document.addEventListener('visibilitychange', function () { away = document.hidden; tick(); });
     if (window.IntersectionObserver) new IntersectionObserver(function (en) { away = !en[0].isIntersecting; tick(); }, { threshold: 0.25 }).observe(hero);
     hero.addEventListener('click', function (e) {
