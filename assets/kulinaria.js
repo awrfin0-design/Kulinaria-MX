@@ -45,6 +45,11 @@
     if (g.cat) return g.cat.indexOf(card.getAttribute('data-category')) > -1;
     var d = (card.getAttribute('data-diets') || '').split('|'); return g.diet.some(function (x) { return d.indexOf(x) > -1; });
   }
+  /* the suggested menu of a category: the same five dishes (Mon-Fri) for every customer. Set in Theme settings > "Menús sugeridos". */
+  function defaultMenu(cat) {
+    var raw = ((cfg.defaultMenus || {})[cat || 'all']) || '';
+    return String(raw).split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+  }
   function groupForDiet(slug) { var out = ''; Object.keys(GROUPS).forEach(function (k) { if (!out && GROUPS[k].diet && GROUPS[k].diet.indexOf(slug) > -1) out = k; }); return out; }
 
   // Current wall-clock time in the store timezone.
@@ -1032,7 +1037,7 @@
     var TIERS = ['selecto', 'exclusivo', 'signature', 'reserve'], rank = function (t) { var r = TIERS.indexOf(t); return r < 0 ? 0 : r; };
     var dayNames = (T_('days') || 'Lun,Mar,Mié,Jue,Vie').split(',');
     var upg = function (n) { return +root.getAttribute('data-upg-' + n) || 70 * n; };
-    var dishes = $$('[data-mw-dishes] li', root).map(function (li) { return { pid: li.getAttribute('data-pid'), title: li.getAttribute('data-title'), label: li.getAttribute('data-label') || li.getAttribute('data-title'), tier: li.getAttribute('data-tier'), al: (li.getAttribute('data-allergens') || '').split('|').filter(Boolean), ing: (li.getAttribute('data-ingredients') || '').split('|').filter(Boolean) }; });
+    var dishes = $$('[data-mw-dishes] li', root).map(function (li) { return { handle: li.getAttribute('data-handle'), pid: li.getAttribute('data-pid'), title: li.getAttribute('data-title'), label: li.getAttribute('data-label') || li.getAttribute('data-title'), tier: li.getAttribute('data-tier'), al: (li.getAttribute('data-allergens') || '').split('|').filter(Boolean), ing: (li.getAttribute('data-ingredients') || '').split('|').filter(Boolean) }; });
     var prof = loadProfile(); prof.strict = strictFlag(readFunnel());
     var warnOf = function (d) { return allergyHits(prof, d.al.map(norm), d.ing.map(norm)); };
     var level = function (d) { return d ? Math.max(0, Math.min(3, rank(d.tier))) : 0; };   // every plan starts at the Selecto base
@@ -1066,10 +1071,12 @@
       if (keep && $$('option', weekSel).some(function (x) { return x.value === keep; })) weekSel.value = keep;
     };
     var slotsOf = function (s) { var out = (s && s.slots) ? s.slots.slice(0, 5) : []; if (!out.length) (s && s.items || []).forEach(function (it) { for (var j = 0; j < (+it.qty || 1); j++) out.push(it.title); }); while (out.length < 5) out.push(''); return out; };
+    var padFive = function (a) { var o = []; for (var i = 0; i < 5; i++) o.push(a[i] || ''); return o; };
     var loadWeek = function () {
       var w = weekSel.value; days = ['', '', '', '', '']; say(keepMsg || ''); keepMsg = ''; paint(); if (!w) return;
       var done = function (sel, prev) {
         if (sel) days = slotsOf(sel); else if (prev) { days = slotsOf(prev); if (meals()) say(T_('prev'), false); }
+        else { var dm = defaultMenu((readFunnel() || {}).cat).map(function (h) { var d0 = dishes.filter(function (d) { return d.handle === h; })[0]; return d0 ? d0.title : ''; }); if (dm.some(Boolean)) { days = padFive(dm); say(T_('dflt'), false); } }
         days = days.map(function (t) { return byTitle(t) ? t : ''; }); paint();
       };
       if (a) fetch(a.url + (a.url.indexOf('?') > -1 ? '&' : '?') + 'action=week&cid=' + encodeURIComponent(a.cid) + '&token=' + encodeURIComponent(a.token) + '&week=' + encodeURIComponent(w))
@@ -1751,17 +1758,14 @@
         $$('[data-cat-choice]', holder).forEach(function (b) { var on = !!st.catPicked && b.getAttribute('data-cat-choice') === st.cat; b.classList.toggle('is-on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
       };
       var buildPresetSets = function () {
-        var okd = function (d) { return !d.hasAttribute('data-seasonal') && !d.classList.contains('is-warned'); };
-        var byName = function (a, b) { return a.getAttribute('data-title') > b.getAttribute('data-title') ? 1 : -1; };
+        var fixed = defaultMenu(st.cat).map(function (h) { return dishes.filter(function (d) { return d.getAttribute('data-handle') === h; })[0]; });
+        if (fixed.length >= MEALS && fixed.slice(0, MEALS).every(Boolean)) return [fixed.slice(0, MEALS)];
+        var okd = function (d) { return !d.hasAttribute('data-seasonal'); };                    // fallback (table missing a dish): fixed order, same for everyone
+        var byName = function (a, b) { return a.getAttribute('data-handle') > b.getAttribute('data-handle') ? 1 : -1; };
         var inG = dishes.filter(function (d) { return okd(d) && inGroup(d, st.cat); }).sort(function (a, b) { return rank(a.getAttribute('data-tier')) - rank(b.getAttribute('data-tier')) || byName(a, b); });
-        var base = inG.filter(function (d) { return rank(d.getAttribute('data-tier')) === 0; }), high = inG.filter(function (d) { return rank(d.getAttribute('data-tier')) > 0; });
-        var plain = function (d) { return okd(d) && rank(d.getAttribute('data-tier')) === 0 && !/junior|postres|batidos/.test(d.getAttribute('data-category') || ''); };
-        if (base.length < 3) base = base.concat(dishes.filter(function (d) { return plain(d) && base.indexOf(d) < 0; }).sort(byName));   // a week with variety even when the diet has few base-tier dishes
-        if (!base.length) base = dishes.filter(function (d) { return okd(d) && rank(d.getAttribute('data-tier')) === 0; }).sort(byName);
-        if (!base.length) base = high.slice(0, 1);
-        if (!base.length) return [[]];
-        var out = []; for (var i = 0; i < MEALS; i++) out.push(base[i % base.length]);
-        if (high.length && MEALS > 1) out[MEALS - 1] = high[0];                           // one suggested upgrade, easy to swap back
+        if (!inG.length) inG = dishes.filter(okd).sort(byName);
+        if (!inG.length) return [[]];
+        var out = []; for (var i = 0; i < MEALS; i++) out.push(inG[i % inG.length]);
         return [out];
       };
       var paintPresets = function () {

@@ -1318,6 +1318,7 @@
     "note": "Pauses and resumes close Saturday 10:00 the week before. Pausing also stops reminders."
   },
   "myweek": {
+    "dflt": "We loaded the suggested menu for your diet; change it if you like.",
     "intro": "Your plan is paid. Choose what you eat each day (up to 5 meals); leave a day empty if you don't want one. If you choose nothing we repeat last week; to skip entirely, use “Skip this week”.",
     "guest": "Sign in with your account to see your plan and choose your meals for the week.",
     "week_label": "Delivery week",

@@ -1318,6 +1318,7 @@
     "note": "Pausas y reanudaciones se cierran el sábado a las 10:00 de la semana anterior. Pausar también detiene los recordatorios."
   },
   "myweek": {
+    "dflt": "Cargamos el menú sugerido de tu dieta; cámbialo si quieres.",
     "intro": "Tu plan ya está pagado. Elige qué comes cada día (hasta 5 comidas) y deja vacío el día que no quieras. Si no eliges, repetimos tu selección anterior; para no recibir nada, usa «Saltar esta semana».",
     "guest": "Entra con tu cuenta para ver tu plan y elegir tus comidas de la semana.",
     "week_label": "Semana de entrega",

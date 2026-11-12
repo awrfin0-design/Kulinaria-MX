@@ -44,7 +44,7 @@
           data-upv-1="{{ upg.variants[0].id }}" data-upv-2="{{ upg.variants[1].id }}" data-upv-3="{{ upg.variants[2].id }}"
           data-t-days="{{ 'funnel.days' | t }}" data-t-day-empty="{{ 'funnel.day_empty' | t }}" data-t-up-badge="{{ 'funnel.up_badge' | t }}" data-t-up-total="{{ 'funnel.up_total' | t }}"
           data-t-prop-upgrade="{{ 'funnel.prop_upgrade' | t }}" data-t-warn="{{ 'myweek.warn' | t }}" data-t-closed="{{ 'myweek.closed' | t }}" data-t-rolled="{{ 'funnel.rolled' | t }}"
-          data-t-saved="{{ 'myweek.saved' | t }}" data-t-skipped="{{ 'myweek.skipped' | t }}" data-t-saved-pay="{{ 'myweek.saved_pay' | t }}" data-t-prev="{{ 'myweek.prev' | t }}" data-t-week-opt="{{ 'myweek.week_opt' | t }}" data-t-error="{{ 'myweek.error' | t }}"
+          data-t-saved="{{ 'myweek.saved' | t }}" data-t-skipped="{{ 'myweek.skipped' | t }}" data-t-saved-pay="{{ 'myweek.saved_pay' | t }}" data-t-prev="{{ 'myweek.prev' | t }}" data-t-dflt="{{ 'myweek.dflt' | t }}" data-t-week-opt="{{ 'myweek.week_opt' | t }}" data-t-error="{{ 'myweek.error' | t }}"
           data-t-count="{{ 'myweek.count' | t }}" data-t-buy-none="{{ 'myweek.buy_none' | t }}" data-t-buy-expired="{{ 'myweek.buy_expired' | t }}" data-t-credits-error="{{ 'myweek.credits_error' | t }}"
           data-t-err-noplan="{{ 'myweek.err_noplan' | t }}" data-t-err-notcovered="{{ 'myweek.err_notcovered' | t }}">
           {%- unless customer -%}
@@ -86,7 +86,7 @@
             {%- for product in collections['menu-semanal'].products limit: 40 -%}{%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}
               {%- capture mw_state -%}{% render 'menu-week', product: product %}{%- endcapture -%}
               {%- if mw_state == 'on' -%}
-                <li data-pid="{{ product.id }}" data-title="{{ product.title | escape }}" data-label="{{ tx_ptitle | escape }}" data-tier="{{ product.metafields.kulinaria.tier.value | default: 'selecto' }}" data-allergens="{{ product.metafields.kulinaria.allergens.value | join: '|' | escape }}" data-ingredients="{{ product.metafields.kulinaria.ingredients.value | join: '|' | escape }}"></li>
+                <li data-pid="{{ product.id }}" data-handle="{{ product.handle }}" data-title="{{ product.title | escape }}" data-label="{{ tx_ptitle | escape }}" data-tier="{{ product.metafields.kulinaria.tier.value | default: 'selecto' }}" data-allergens="{{ product.metafields.kulinaria.allergens.value | join: '|' | escape }}" data-ingredients="{{ product.metafields.kulinaria.ingredients.value | join: '|' | escape }}"></li>
               {%- endif -%}
             {%- endfor -%}
           </ul>

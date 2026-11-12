@@ -45,6 +45,21 @@
         lang: {{ request.locale.iso_code | default: 'es' | json }},
         routes: { cart: {{ routes.cart_url | json }}, cartAdd: {{ routes.cart_add_url | json }}, account: "/pages/cuenta" },
         media: { fire: {{ 'video-fire.mp4' | asset_url | json }} },
+        defaultMenus: {
+          "keto-low-carb": {{ settings.dm_keto_low_carb | default: "pollo-a-las-hierbas, salmon-costra-almendras, pollo-a-las-hierbas, salmon-costra-almendras, filete-prime" | json }},
+          "fit-proteina": {{ settings.dm_fit_proteina | default: "bowl-res-quinoa, pollo-a-las-hierbas, bowl-res-quinoa, pollo-a-las-hierbas, arrachera-carbon" | json }},
+          "veggie": {{ settings.dm_veggie | default: "omelette-claras-espinaca, crema-calabaza, omelette-claras-espinaca, crema-calabaza, bowl-vegano-garbanzo" | json }},
+          "sin-gluten": {{ settings.dm_sin_gluten | default: "bowl-res-quinoa, crema-calabaza, bowl-res-quinoa, crema-calabaza, arrachera-carbon" | json }},
+          "ligero": {{ settings.dm_ligero | default: "omelette-claras-espinaca, crema-calabaza, omelette-claras-espinaca, crema-calabaza, batido-verde" | json }},
+          "al-fuego": {{ settings.dm_al_fuego | default: "salmon-costra-almendras, arrachera-carbon, salmon-costra-almendras, arrachera-carbon, filete-prime" | json }},
+          "bowls": {{ settings.dm_bowls | default: "bowl-res-quinoa, bowl-res-quinoa, bowl-vegano-garbanzo, bowl-res-quinoa, bowl-vegano-garbanzo" | json }},
+          "desayunos": {{ settings.dm_desayunos | default: "omelette-claras-espinaca, batido-verde, omelette-claras-espinaca, batido-verde, omelette-claras-espinaca" | json }},
+          "diario": {{ settings.dm_diario | default: "pollo-a-las-hierbas, bowl-res-quinoa, pollo-a-las-hierbas, crema-calabaza, omelette-claras-espinaca" | json }},
+          "entradas": {{ settings.dm_entradas | default: "crema-calabaza, omelette-claras-espinaca, crema-calabaza, batido-verde, crema-calabaza" | json }},
+          "snacks-postres": {{ settings.dm_snacks_postres | default: "brownie-proteico, batido-verde, brownie-proteico, batido-verde, brownie-proteico" | json }},
+          "junior": {{ settings.dm_junior | default: "pasta-pollo-junior, pasta-pollo-junior, pasta-pollo-junior, pasta-pollo-junior, pasta-pollo-junior" | json }},
+          "all": {{ settings.dm_all | default: "pollo-a-las-hierbas, bowl-res-quinoa, omelette-claras-espinaca, crema-calabaza, arrachera-carbon" | json }}
+        },
         logos: { fuego: {{ 'logo-fuego.webp' | asset_url | json }}, ink: {{ 'logo-black.webp' | asset_url | json }}, cream: {{ 'logo-cream.webp' | asset_url | json }}, gold: {{ 'logo.webp' | asset_url | json }} },
         i18n: {
           pauseLeft: {{ 'js.pause_left' | t | json }}, compat: {{ 'js.compat' | t | json }},

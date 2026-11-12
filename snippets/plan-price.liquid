@@ -2,19 +2,19 @@
   Prints a plan price in whole pesos (or formatted money). The prices live on the 4 plan products of the collection "planes-semanales"
   (one product per tier; variant 1 = "1 semana", variant 2 = "4 semanas"), so the owner changes them in Products, not in theme code.
   Params: tier (selecto|exclusivo|signature|reserve) · kind (meal | week | block) · money (true = formatted with the store currency)
-  Fallbacks when the collection is missing: week 1035/1350/1700/2050 and block 20 x meal (180/250/320/390).
+  Fallbacks when the collection is missing: week 1035/1440/1840/2245 and block 20 x meal (180/250/320/390).
 {%- endcomment -%}
 {%- liquid
   assign t = tier | default: 'selecto'
   case t
     when 'exclusivo'
-      assign week = 1350
+      assign week = 1440
       assign meal = 250
     when 'signature'
-      assign week = 1700
+      assign week = 1840
       assign meal = 320
     when 'reserve'
-      assign week = 2050
+      assign week = 2245
       assign meal = 390
     else
       assign week = 1035

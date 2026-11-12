@@ -242,5 +242,92 @@
         "default": "https://vellumandquill.com"
       }
     ]
+  },
+  {
+    "name": "Menús sugeridos",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "El MISMO menú sugerido para todos los clientes que elijan esa categoría (lunes a viernes). Escribe los 5 identificadores (handle) de los platillos separados por coma; se pueden repetir. Lo usan el pedido y «Mi semana»."
+      },
+      {
+        "type": "text",
+        "id": "dm_keto_low_carb",
+        "label": "Keto / Low carb",
+        "default": "pollo-a-las-hierbas, salmon-costra-almendras, pollo-a-las-hierbas, salmon-costra-almendras, filete-prime"
+      },
+      {
+        "type": "text",
+        "id": "dm_fit_proteina",
+        "label": "Alta proteína",
+        "default": "bowl-res-quinoa, pollo-a-las-hierbas, bowl-res-quinoa, pollo-a-las-hierbas, arrachera-carbon"
+      },
+      {
+        "type": "text",
+        "id": "dm_veggie",
+        "label": "Plantas",
+        "default": "omelette-claras-espinaca, crema-calabaza, omelette-claras-espinaca, crema-calabaza, bowl-vegano-garbanzo"
+      },
+      {
+        "type": "text",
+        "id": "dm_sin_gluten",
+        "label": "Sin gluten",
+        "default": "bowl-res-quinoa, crema-calabaza, bowl-res-quinoa, crema-calabaza, arrachera-carbon"
+      },
+      {
+        "type": "text",
+        "id": "dm_ligero",
+        "label": "Ligero",
+        "default": "omelette-claras-espinaca, crema-calabaza, omelette-claras-espinaca, crema-calabaza, batido-verde"
+      },
+      {
+        "type": "text",
+        "id": "dm_al_fuego",
+        "label": "Fuego",
+        "default": "salmon-costra-almendras, arrachera-carbon, salmon-costra-almendras, arrachera-carbon, filete-prime"
+      },
+      {
+        "type": "text",
+        "id": "dm_bowls",
+        "label": "Bowls",
+        "default": "bowl-res-quinoa, bowl-res-quinoa, bowl-vegano-garbanzo, bowl-res-quinoa, bowl-vegano-garbanzo"
+      },
+      {
+        "type": "text",
+        "id": "dm_desayunos",
+        "label": "Desayunos",
+        "default": "omelette-claras-espinaca, batido-verde, omelette-claras-espinaca, batido-verde, omelette-claras-espinaca"
+      },
+      {
+        "type": "text",
+        "id": "dm_diario",
+        "label": "Diario",
+        "default": "pollo-a-las-hierbas, bowl-res-quinoa, pollo-a-las-hierbas, crema-calabaza, omelette-claras-espinaca"
+      },
+      {
+        "type": "text",
+        "id": "dm_entradas",
+        "label": "Entradas",
+        "default": "crema-calabaza, omelette-claras-espinaca, crema-calabaza, batido-verde, crema-calabaza"
+      },
+      {
+        "type": "text",
+        "id": "dm_snacks_postres",
+        "label": "Snacks y postres",
+        "default": "brownie-proteico, batido-verde, brownie-proteico, batido-verde, brownie-proteico"
+      },
+      {
+        "type": "text",
+        "id": "dm_junior",
+        "label": "Junior",
+        "default": "pasta-pollo-junior, pasta-pollo-junior, pasta-pollo-junior, pasta-pollo-junior, pasta-pollo-junior"
+      },
+      {
+        "type": "text",
+        "id": "dm_all",
+        "label": "Sin preferencia",
+        "default": "pollo-a-las-hierbas, bowl-res-quinoa, omelette-claras-espinaca, crema-calabaza, arrachera-carbon"
+      }
+    ]
   }
 ]
