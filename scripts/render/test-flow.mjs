@@ -67,7 +67,7 @@ await page.goto(URL0);
   ok('signed out: one button, "Iniciar sesión", that leads to login / create account', /login|register|account/.test(g.btn || '') && /iniciar sesi[oó]n/i.test(g.txt), g.btn);
   ok('signed out: the pitch shows $180 a day, the 4-week block ($900 a week) and the 1-week trial per day with its +15% rate', /180/.test(g.txt) && /900/.test(g.txt) && /207/.test(g.txt) && /15%/.test(g.txt), g.txt.replace(/\s+/g, ' ').slice(0, 220));
   const cnt = await page.evaluate((f) => { const h = document.querySelector(f), c = h.querySelector('[data-fn-stepcount]'); return { txt: c.textContent, vis: c.offsetParent !== null, pills: getComputedStyle(h.querySelector('.steps__nav')).display, bar: getComputedStyle(h.querySelector('.funnel__bar')).display }; }, FN);
-  ok('the step indicator is the counter "Paso 1 de 3" with a slim progress line (no pills) and there is no "4 pasos" headline', /1\D+3/.test(cnt.txt) && cnt.vis && cnt.pills === 'none' && cnt.bar !== 'none' && g.title === 'none', JSON.stringify(cnt));
+  ok('the step indicator is the counter "Paso 1 de 4" with a slim progress line (no pills) and there is no "4 pasos" headline', /1\D+4/.test(cnt.txt) && cnt.vis && cnt.pills === 'none' && cnt.bar !== 'none' && g.title === 'none', JSON.stringify(cnt));
 
   // ---- signed in: the sign-in step is skipped, plan + diet first
   await base(); await open(false);
@@ -84,12 +84,31 @@ await page.goto(URL0);
   ok('Continue opens "your week" with the five days already filled', w1.step === '3' && w1.filled === 5, JSON.stringify(w1));
   ok('the keto menu is the fixed one from the theme settings (same dishes, Monday to Friday)', nKeto.join('|') === KETO.join('|'), nKeto.join(' | '));
   ok('the total includes the suggested upgrades ($3,600 + $70 + $70 + $210)', /3,950/.test(w1.total || ''), w1.total);
-  ok('the stepper reads "Paso 3 de 3"', /3\D+3/.test(w1.stepcount || ''), w1.stepcount);
+  ok('the stepper reads "Paso 4 de 4"', /4\D+4/.test(w1.stepcount || ''), w1.stepcount);
   await base({ profile: { allergies: ['Pescado'], dislikes: [], people: [] } }); await open(false); await chooseDiet('keto-low-carb');
   const nAllergic = await names(), warn = await page.evaluate((f) => document.querySelector(f).querySelectorAll('.fn-wk__slot.has-warn').length, FN);
   ok('a customer allergic to fish gets the SAME keto menu, with warning icons on the salmon days', nAllergic.join('|') === KETO.join('|') && warn >= 2, warn + ' warnings');
   await base(); await open(false); await chooseDiet('fit-proteina');
   ok('another category has its own fixed menu (high protein starts with the beef bowl and ends with the skirt steak)', /Bowl de res/.test((await names())[0]) && /Arrachera/.test((await names())[4]));
+
+  // ---- step 2 of 4: "how it works" (three steps and the money), shown once to a signed-in customer
+  await base(); await page.evaluate(() => { localStorage.setItem('kx-test-guide', '1'); localStorage.removeItem('kx-rules-ok'); });
+  await open(false);
+  const hw = await page.evaluate((f) => { const h = document.querySelector(f), w = h.querySelector('.fn-hw'), r = w && w.getBoundingClientRect(); return { step: h.getAttribute('data-step'), vis: !!w && w.offsetParent !== null, steps: w ? w.querySelectorAll('.fn-hw__steps li').length : 0, money: w ? w.innerText.replace(/\s+/g, ' ') : '', btn: !!(w && w.querySelector('[data-fn-how-go]')), cnt: h.querySelector('[data-fn-stepcount]').innerText.replace(/\s+/g, ' '), side: document.documentElement.scrollWidth <= innerWidth + 1, start: !!(h.querySelector('.fn-start') && h.querySelector('.fn-start').offsetParent) }; }, FN);
+  ok('a signed-in customer who has not read the instructions lands on "Cómo funciona" (no sign-in screen)', hw.step === '0' && hw.vis && !hw.start, JSON.stringify([hw.step, hw.vis, hw.start]));
+  ok('it shows exactly three steps and how the money works: $3,600 deposit, $900 weekly budget, +$70-$210 per upgraded dish, trial week $1,035', hw.steps === 3 && /3,600/.test(hw.money) && /900/.test(hw.money) && /70/.test(hw.money) && /210/.test(hw.money) && /1,035/.test(hw.money), hw.money.slice(0, 260));
+  ok('the counter reads "Paso 2 de 4" with Entra completed and Cómo funciona highlighted', /2\D+4/.test(hw.cnt) && /✓\s*Entra/.test(hw.cnt) && hw.btn, hw.cnt);
+  await page.evaluate((f) => document.querySelector(f + ' [data-fn-how-go]').click(), FN); await page.waitForTimeout(500);
+  ok('"Entendido, empezar" opens plan and diet (step 3 of 4) and remembers it', (await page.evaluate((f) => document.querySelector(f).getAttribute('data-step'), FN)) === '1' && (await page.evaluate(() => localStorage.getItem('kx-rules-ok'))) === '1' && /3\D+4/.test(await page.evaluate((f) => document.querySelector(f + ' [data-fn-stepcount]').innerText, FN)));
+  await page.evaluate(() => { localStorage.removeItem('kx-test-guide'); localStorage.setItem('kx-test-nostart', '1'); }); await page.reload(); await page.waitForTimeout(1200);
+  ok('on the next visit the instructions are skipped (straight to plan and diet)', (await page.evaluate((f) => document.querySelector(f).getAttribute('data-step'), FN)) === '1');
+  await page.evaluate((f) => [...document.querySelector(f + ' [data-fn-stepcount]').querySelectorAll('.fn-sc__s')][1].click(), FN); await page.waitForTimeout(400);
+  ok('the counter reopens "Cómo funciona" whenever you want to read it again', (await page.evaluate((f) => document.querySelector(f).getAttribute('data-step'), FN)) === '0' && (await page.evaluate((f) => !!document.querySelector(f + ' .fn-hw').offsetParent, FN)));
+  await page.setViewportSize({ width: 390, height: 844 });
+  ok('phone: the instructions fit the width and the three steps stack', await page.evaluate((f) => { const w = document.querySelector(f + ' .fn-hw'), r = w.getBoundingClientRect(); return document.documentElement.scrollWidth <= innerWidth + 1 && r.right <= innerWidth + 1 && w.querySelectorAll('.fn-hw__steps li').length === 3; }, FN));
+  await page.setViewportSize({ width: 1440, height: 860 });
+
+  await base(); await open(false); await chooseDiet('fit-proteina');
 
   // ---- upgrade pop-up and swap
   const fridayUp = await page.evaluate((f) => !!document.querySelector(f + ' [data-wk-up="4:0"]'), FN);
@@ -133,11 +152,11 @@ await page.goto(URL0);
   const nv = await names();
   ok('choosing another diet loads that diet\'s suggested menu (the fixed one) and updates the chip', /Omelette/.test(nv[0]) && /Bowl vegano/.test(nv[4]) && /Plantas/.test(await page.evaluate((f) => document.querySelector(f + ' [data-fn-diet-name]').textContent, FN)), nv.join(' | '));
   const sc3 = await page.evaluate((f) => [...document.querySelector(f + ' [data-fn-stepcount]').querySelectorAll('.fn-sc__s')].map((b) => b.textContent.replace(/\s+/g, ' ').trim() + ':' + (b.classList.contains('is-done') ? 'done' : '') + (b.classList.contains('is-on') ? 'on' : '')), FN);
-  ok('the step counter lists the three steps: the first two marked completed, the current one highlighted', sc3.length === 3 && /done/.test(sc3[0]) && /done/.test(sc3[1]) && /on/.test(sc3[2]) && /✓/.test(sc3[1]), sc3.join(' | '));
+  ok('the step counter lists the four steps (sign in, how it works, plan and diet, your week): the first three completed, the current one highlighted', sc3.length === 4 && /done/.test(sc3[0]) && /done/.test(sc3[1]) && /done/.test(sc3[2]) && /on/.test(sc3[3]) && /✓/.test(sc3[2]), sc3.join(' | '));
   await page.evaluate((f) => document.querySelector(f + ' [data-wk-swap="1:0"]').click(), FN); await page.waitForTimeout(400);
   await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); const cur = document.querySelectorAll(f + ' .fn-wk__card')[1].querySelector('.fn-wk__name').textContent; [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].find((c) => c.offsetParent && c.getAttribute('data-tier') === 'selecto' && c.getAttribute('data-title') !== cur).querySelector('[data-pick]').click(); }, FN); await page.waitForTimeout(500);
   const editedWeek = await names();
-  await page.evaluate((f) => [...document.querySelector(f + ' [data-fn-stepcount]').querySelectorAll('.fn-sc__s')][1].click(), FN); await page.waitForTimeout(500);
+  await page.evaluate((f) => [...document.querySelector(f + ' [data-fn-stepcount]').querySelectorAll('.fn-sc__s')][2].click(), FN); await page.waitForTimeout(500);
   ok('clicking a completed step in the counter goes back to it (plan and diet)', (await page.evaluate((f) => document.querySelector(f).getAttribute('data-step'), FN)) === '1');
   await page.evaluate((f) => document.querySelector(f + ' [data-fn-go-next]').click(), FN); await page.waitForTimeout(700);
   ok('going back and forward again keeps the edited week (nothing is reset)', (await names()).join('|') === editedWeek.join('|'), (await names()).join(' | '));

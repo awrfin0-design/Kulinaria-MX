@@ -4319,3 +4319,40 @@ body .funnel:not([data-step="0"]):not(.funnel--teaser) .funnel__stepcount,body .
 .hero--intro .hero__ctl{position:relative !important;left:auto !important;bottom:auto !important;translate:none !important;margin:clamp(14px,2.4svh,24px) auto 0 !important;justify-content:center;width:auto !important;align-self:start}
 .hero--intro{padding-bottom:clamp(20px,3svh,36px) !important;align-content:start}
 @media (max-width:760px){.hero--intro .hero__cubebox{height:calc(100svh - var(--hdr) - 84px) !important}}
+
+/* v132: "Como funciona" step: three steps and the money, nothing else */
+.fn-hw{display:grid;gap:clamp(18px,3vw,30px);max-width:880px;margin:6px auto 0;padding:clamp(20px,3.2vw,36px);border:1px solid var(--line);border-radius:28px;background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 7%,var(--bg-raised)),var(--bg-raised))}
+.fn-hw__head{text-align:center}
+.fn-hw__head h3{margin:0 0 6px;font:500 clamp(1.7rem,3.4vw,2.6rem)/1.1 var(--font-display);color:var(--text)}
+.fn-hw__head p{margin:0;font-size:.9rem;color:var(--text-muted)}
+.fn-hw__steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,1.6vw,18px)}
+.fn-hw__steps li{display:grid;gap:6px;align-content:start;justify-items:center;text-align:center;padding:18px 14px;border:1px solid var(--line);border-radius:20px;background:var(--bg-raised)}
+.fn-hw__steps b{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--on-accent,#fff);font:700 .9rem var(--font-body)}
+.fn-hw__steps strong{font:600 1.05rem var(--font-display);color:var(--text)}
+.fn-hw__steps span{font-size:.8rem;line-height:1.4;color:var(--text-muted)}
+.fn-hw__money{display:grid;gap:10px;padding:clamp(14px,2vw,22px);border:1px solid color-mix(in srgb,var(--accent) 55%,var(--line));border-radius:20px}
+.fn-hw__money h4{margin:0;font:700 .7rem var(--font-label);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.fn-hw__money ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.fn-hw__money li{display:grid;grid-template-columns:minmax(96px,auto) 1fr;gap:14px;align-items:baseline;font-size:.88rem;color:var(--text-muted)}
+.fn-hw__money li b{font:600 1.25rem var(--font-display);color:var(--text)}
+.fn-hw__money p{margin:0;padding-top:10px;border-top:1px dashed var(--line);font-size:.8rem;color:var(--text-muted)}
+.fn-hw__go{justify-self:center;min-width:min(100%,340px);justify-content:center;padding:16px 24px}
+@media (max-width:760px){
+  .fn-hw{margin:6px 16px 0;padding:20px 16px;border-radius:24px;gap:16px}
+  .fn-hw__steps{grid-template-columns:1fr;gap:8px}
+  .fn-hw__steps li{grid-template-columns:auto 1fr;grid-template-rows:auto auto;justify-items:start;text-align:left;column-gap:14px;row-gap:2px;padding:12px 14px;border-radius:16px}
+  .fn-hw__steps b{grid-row:1 / span 2;align-self:center}
+  .fn-hw__money li{grid-template-columns:1fr;gap:0}
+  .fn-hw__go{width:100%}
+}
+/* v133: the instructions step grows with its content and stays compact */
+body .funnel[data-step="0"]:not(.funnel--teaser) :is(.funnel__stage,.funnel__panel,.funnel__main,.step.is-on){height:auto !important;min-height:0 !important;max-height:none !important;overflow:visible !important}
+.fn-hw{gap:14px;padding:clamp(16px,2.2vw,26px) clamp(18px,3vw,32px)}
+.fn-hw__head h3{font-size:clamp(1.5rem,2.6vw,2.1rem)}
+.fn-hw__steps li{padding:12px 12px;gap:4px}
+.fn-hw__steps b{width:30px;height:30px}
+.fn-hw__money{gap:8px;padding:12px 18px}
+.fn-hw__money ul{gap:6px}
+.fn-hw__money li b{font-size:1.1rem}
+.fn-hw__money p{padding-top:8px}
+.fn-hw__go{padding:14px 24px}

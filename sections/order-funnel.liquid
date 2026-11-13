@@ -11,7 +11,7 @@
   data-t-meals="{{ 'funnel.meals_of' | t }}" data-t-meal-one="{{ 'funnel.meal_one' | t }}" data-t-empty="{{ 'funnel.summary_empty' | t }}"
   data-t-need-meals="{{ 'funnel.need_meals' | t }}" data-t-full="{{ 'funnel.meals_full' | t }}" data-t-need-info="{{ 'funnel.need_info' | t }}"
   data-t-add="{{ 'funnel.add' | t }}" data-t-remembered="{{ 'funnel.remembered' | t }}" data-t-saved="{{ 'funnel.saved' | t }}"
-  data-t-step-of="{{ 'funnel.step_of' | t }}" data-t-block-name="{{ 'funnel.plan_block' | t }}" data-t-week-name="{{ 'funnel.plan_week' | t }}"
+  data-t-step-of="{{ 'funnel.step_of' | t }}" data-t-s-how="{{ 'funnel.s_how' | t }}" data-t-block-name="{{ 'funnel.plan_block' | t }}" data-t-week-name="{{ 'funnel.plan_week' | t }}"
   data-t-per-week="{{ 'funnel.per_week_each' | t }}" data-t-weeks-x="{{ 'funnel.weeks_x' | t }}" data-t-per-meal="{{ 'funnel.per_meal' | t }}"
   data-t-all-lines="{{ 'funnel.all_categories' | t }}" data-t-prop-dishes="{{ 'funnel.prop_dishes' | t }}" data-t-prop-meals="{{ 'funnel.prop_meals' | t }}"
   data-t-prop-tier="{{ 'funnel.prop_tier' | t }}" data-t-prop-length="{{ 'funnel.prop_length' | t }}" data-t-length-block="{{ 'funnel.length_block' | t }}" data-t-length-week="{{ 'funnel.length_week' | t }}"
@@ -85,6 +85,28 @@
             </aside>
           </section>
           {%- endunless -%}
+          {%- if customer -%}
+          {%- assign hw_u1 = upg.variants[0].price | default: 7000 | money_without_trailing_zeros -%}
+          {%- assign hw_u3 = upg.variants[2].price | default: 21000 | money_without_trailing_zeros -%}
+          <section class="fn-hw" data-fn-how>
+            <header class="fn-hw__head"><h3>{{ 'funnel.how_t' | t }}</h3><p>{{ 'funnel.how_s' | t }}</p></header>
+            <ol class="fn-hw__steps">
+              <li><b>1</b><strong>{{ 'funnel.how_a' | t }}</strong><span>{{ 'funnel.how_a_s' | t }}</span></li>
+              <li><b>2</b><strong>{{ 'funnel.how_b' | t }}</strong><span>{{ 'funnel.how_b_s' | t }}</span></li>
+              <li><b>3</b><strong>{{ 'funnel.how_c' | t }}</strong><span>{{ 'funnel.how_c_s' | t }}</span></li>
+            </ol>
+            <div class="fn-hw__money">
+              <h4>{{ 'funnel.how_m_t' | t }}</h4>
+              <ul>
+                <li><b>{{ st_blk_m }}</b><span>{{ 'funnel.how_m1' | t | replace: '[w]', st_bwk_m }}</span></li>
+                <li><b>{{ st_bwk_m }}</b><span>{{ 'funnel.how_m2' | t }}</span></li>
+                <li><b>+{{ hw_u1 }}&ndash;{{ hw_u3 }}</b><span>{{ 'funnel.how_m3' | t }}</span></li>
+              </ul>
+              <p>{{ 'funnel.how_m4' | t | replace: '[t]', st_week_m }}</p>
+            </div>
+            <button class="btn btn--gold fn-hw__go" type="button" data-fn-how-go>{{ 'funnel.how_go' | t }} &rarr;</button>
+          </section>
+          {%- endif -%}
           {%- capture r_bn %}{% render 'plan-price', tier: 'selecto', kind: 'block' %}{% endcapture -%}
           {%- capture r_wn %}{% render 'plan-price', tier: 'selecto', kind: 'week' %}{% endcapture -%}
           {%- capture r_mn %}{% render 'plan-price', tier: 'selecto', kind: 'meal' %}{% endcapture -%}

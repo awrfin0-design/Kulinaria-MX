@@ -1370,7 +1370,8 @@
       st.rulesOk = false;                                         // read from its own key only (never from the saved selection)
       try { if (localStorage.getItem(RULES_KEY)) st.rulesOk = true; } catch (e) {}
       var acctOn = !!$('#kx-account'), kxGuide = false; try { kxGuide = location.protocol === 'file:' && localStorage.getItem('kx-test-guide') === '1'; } catch (e) {}
-      st.rulesOk = !!(acctOn || (location.protocol === 'file:' && !kxGuide));      // an account is the condition to start an order (the local preview skips it for tests)
+      if (!acctOn) st.rulesOk = (location.protocol === 'file:' && !kxGuide);          // a guest always starts at the sign-in screen (the local preview skips it for tests)
+      else if (kxGuide) st.rulesOk = false;                                          // signed in: the instructions once, then straight to plan + diet
       st.sv = 4;
       // steps 1 and 2 before the builder: sign in, then the questionnaire (shown until both are done; the local preview can skip it for tests)
       var gate = $('[data-fn-gate]', holder), signedIn = !!$('#kx-account'), onbDone = isOnboarded(), skipGate = false;
@@ -1729,10 +1730,11 @@
         var sb = $('[data-fn-s-block]', holder); if (sb) { sb.hidden = false; sb.textContent = st.plan === 'block' ? fill(T_('weeks-x'), { p: money(priceOf(tierEl(), st.plan) / WEEKS), w: WEEKS }) : fill(T_('per-week'), { p: money(planTotal()) }); }
         var sc = $('[data-fn-stepcount]', holder);
         if (sc) {
-          var vis = [0, 1, 3], pos = st.step === 3 ? 2 : st.step;
-          sc.innerHTML = '<span class="fn-sc__n">' + esc(T_('step-of').replace('{n}', pos + 1).replace('{t}', 3)) + '</span><span class="fn-sc__steps">' + vis.map(function (s2, k2) {
-            var lab = (dots[s2] && dots[s2].textContent.replace(/^\s*\d+/, '').trim()) || '', done = k2 < pos, on = s2 === st.step;
-            return '<button type="button" class="fn-sc__s' + (done ? ' is-done' : '') + (on ? ' is-on' : '') + '" data-fn-step-jump="' + s2 + '"' + (on ? ' aria-current="step"' : '') + '>' + (done ? '&#10003; ' : '') + esc(lab) + '</button>';
+          var items = [{ k: 'in', s: 0, lab: (dots[0] && dots[0].textContent.replace(/^\s*\d+/, '').trim()) || '' }, { k: 'how', s: 0, lab: T_('s-how') }, { k: 'plan', s: 1, lab: (dots[1] && dots[1].textContent.replace(/^\s*\d+/, '').trim()) || '' }, { k: 'week', s: 3, lab: (dots[3] && dots[3].textContent.replace(/^\s*\d+/, '').trim()) || '' }];
+          var pos = st.step === 3 ? 3 : (st.step === 0 ? (acctOn ? 1 : 0) : 2);
+          sc.innerHTML = '<span class="fn-sc__n">' + esc(T_('step-of').replace('{n}', pos + 1).replace('{t}', 4)) + '</span><span class="fn-sc__steps">' + items.map(function (it, k2) {
+            var done = k2 < pos, on = k2 === pos;
+            return '<button type="button" class="fn-sc__s' + (done ? ' is-done' : '') + (on ? ' is-on' : '') + '" data-fn-step-jump="' + it.s + '" data-fn-kind="' + it.k + '"' + (on ? ' aria-current="step"' : '') + '>' + (done ? '&#10003; ' : '') + esc(it.lab) + '</button>';
           }).join('') + '</span>';
         }
         var rn = $('[data-fn-renew]', holder); if (rn) { var hasPlan = !!tierEl().getAttribute('data-selling-plan'); rn.hidden = !(hasPlan && st.plan === 'block'); var box = $('[data-fn-renew-box]', holder); if (box) box.checked = st.renew; }
@@ -1745,7 +1747,7 @@
         steps.forEach(function (s, k) { s.classList.toggle('is-on', k === st.step); });
         paintCats(); paintPresets(); paintWk(); paintPicker();
         dots.forEach(function (d, k) { d.classList.toggle('is-on', k === st.step); d.classList.toggle('is-done', k < st.step); d.classList.toggle('is-locked', k > st.reach); d.setAttribute('aria-disabled', k > st.reach ? 'true' : 'false'); });
-        if (bar) bar.style.transform = 'scaleX(' + (((st.step === 3 ? 3 : st.step + 1) / 3)) + ')';
+        if (bar) bar.style.transform = 'scaleX(' + (((st.step === 3 ? 4 : (st.step === 0 ? (acctOn ? 2 : 1) : 3)) / 4)) + ')';
         var last = st.step === steps.length - 1;
         if (prev) prev.hidden = st.step === 0;
         if (next) { next.hidden = last; next.disabled = (st.step === 1 && !st.catPicked); }
@@ -1802,6 +1804,7 @@
         var t = e.target; if (!t || !t.closest) return;
         var cb = t.closest('[data-cat-choice]');
         if (cb) { st.cat = cb.getAttribute('data-cat-choice'); st.catPicked = true; try { localStorage.setItem('kx_dietpick', st.cat); } catch (x) {} persist(); render(); return; }
+        if (t.closest('[data-fn-how-go]')) { st.rulesOk = true; try { localStorage.setItem(RULES_KEY, '1'); } catch (x) {} setReach(1); persist(); go(1); return; }
         var ca = t.closest('[data-fn-cats-arrow]');
         if (ca) { var rail = $('[data-fn-cats]', holder); if (rail) rail.scrollBy({ left: (+ca.getAttribute('data-fn-cats-arrow')) * Math.max(200, rail.clientWidth * 0.7), behavior: REDUCE ? 'auto' : 'smooth' }); return; }
         var pb = t.closest('[data-fn-preset-pick]');
@@ -1929,7 +1932,7 @@
           applyPreset(buildPresetSets()[0] || []); return;
         }
         var sj = t.closest('[data-fn-step-jump]');
-        if (sj) { var n2 = +sj.getAttribute('data-fn-step-jump'); if ((n2 === 0 && acctOn) || n2 === st.step) return; go(n2); return; }
+        if (sj) { var n2 = +sj.getAttribute('data-fn-step-jump'), kd = sj.getAttribute('data-fn-kind'); if ((kd === 'in' && acctOn) || (kd === 'how' && !acctOn) || (n2 === st.step && (kd === 'plan' || kd === 'week' || (kd === 'in' && !acctOn) || (kd === 'how' && acctOn)))) return; go(n2); return; }
         var sb = t.closest('[data-fn-sum-toggle]');
         if (sb) { var asd = sb.closest('.funnel__aside'); if (asd) { var on2 = asd.classList.toggle('is-open'); sb.setAttribute('aria-expanded', on2 ? 'true' : 'false'); } }
       });
