@@ -23,7 +23,7 @@
           <span class="hero__rule" aria-hidden="true"></span>
           <h1>{{ tx_s_heading | escape }}{%- if tx_s_heading_em != blank %} <em>{{ tx_s_heading_em | escape }}</em>{% endif -%}</h1>
           {%- if tx_s_text != blank -%}<p class="hero__sub">{{ tx_s_text }}</p>{%- endif -%}
-          {% render 'service-badge', class: 'svc-badge--hero' %}
+          {% render 'service-badge', class: 'svc-badge--hero', hero: true %}
     
           {%- if section.settings.show_countdown -%}
             <p><span class="countdown" data-cutoff>{{ 'cutoff.orders_close_in' | t }} <strong data-cutoff-value>…</strong></span></p>
@@ -75,7 +75,7 @@
       <span class="hero__rule" aria-hidden="true"></span>
       <h1>{{ tx_s_heading | escape }}{%- if tx_s_heading_em != blank %} <em>{{ tx_s_heading_em | escape }}</em>{% endif -%}</h1>
       {%- if tx_s_text != blank -%}<p class="hero__sub">{{ tx_s_text }}</p>{%- endif -%}
-      {% render 'service-badge', class: 'svc-badge--hero' %}
+      {% render 'service-badge', class: 'svc-badge--hero', hero: true %}
 
       {%- if section.settings.show_countdown -%}
         <p><span class="countdown" data-cutoff>{{ 'cutoff.orders_close_in' | t }} <strong data-cutoff-value>…</strong></span></p>
@@ -100,12 +100,12 @@
 {
   "name": "Hero",
   "settings": [
-    { "type": "text", "id": "heading", "label": "Título (parte en tipografía normal)", "default": "Una semana, servida como" },
-    { "type": "text", "id": "heading_em", "label": "Título (parte en cursiva de marca)", "default": "una pieza de autor." },
-    { "type": "text", "id": "text", "label": "Subtítulo", "default": "Platillos preparados por chefs, adaptados a tu estilo de vida." },
-    { "type": "text", "id": "button_label", "label": "Botón principal", "default": "Haz tu pedido" },
+    { "type": "text", "id": "heading", "label": "Título (parte en tipografía normal)", "default": "Alta cocina adaptable a tu estilo de vida." },
+    { "type": "text", "id": "heading_em", "label": "Título (parte en cursiva de marca)", "default": "" },
+    { "type": "text", "id": "text", "label": "Subtítulo", "default": "" },
+    { "type": "text", "id": "button_label", "label": "Botón principal", "default": "Diseñar mi plan" },
     { "type": "url", "id": "button_link", "label": "Enlace del botón principal" },
-    { "type": "text", "id": "button2_label", "label": "Enlace secundario", "default": "Ver los especiales de la semana" },
+    { "type": "text", "id": "button2_label", "label": "Enlace secundario", "default": "" },
     { "type": "url", "id": "button2_link", "label": "Enlace secundario (URL)" },
     { "type": "checkbox", "id": "show_countdown", "label": "Mostrar cuenta regresiva de cierre", "default": false },
     { "type": "range", "id": "slide_seconds", "label": "Segundos por diapositiva", "min": 3, "max": 12, "step": 1, "default": 4, "info": "Segundos que se ve cada diapositiva. El carrusel empieza cuando el video de introducción termina (una sola vez)." },

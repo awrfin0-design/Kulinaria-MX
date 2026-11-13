@@ -612,6 +612,7 @@
     "results_for": "Resultados para \""
   },
   "service": {
+    "badge_hero": "Disponible exclusivamente en la Zona Metropolitana de Puebla y Lomas de Angelópolis.",
     "area": "Puebla y su área metropolitana",
     "badge": "Por ahora entregamos solo en Puebla y su área metropolitana.",
     "form_note": "Por ahora entregamos solo en Puebla y su zona metropolitana (CP 72xxx). ¿Vives fuera? Escríbenos y te avisamos.",
@@ -2072,6 +2073,8 @@
     "88b60ca66b33": "Conocer la alianza",
     "e3cd2977fa49": "¿Sabías que…?",
     "7499cefd5f80": "Comer de autor desde $180 por platillo",
-    "a07bb9e6d5ad": "Cada platillo se cocina al fuego, llega en vidrio y se revisa contra tus alergias antes de salir. Tú no te preocupas por tu nutrición."
+    "a07bb9e6d5ad": "Cada platillo se cocina al fuego, llega en vidrio y se revisa contra tus alergias antes de salir. Tú no te preocupas por tu nutrición.",
+    "25bda508a2f4": "Alta cocina adaptable a tu estilo de vida.",
+    "1667d24381ec": "Diseñar mi plan"
   }
 }

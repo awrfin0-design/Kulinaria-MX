@@ -612,6 +612,7 @@
     "results_for": "Results for \""
   },
   "service": {
+    "badge_hero": "Available exclusively in the Puebla metropolitan area and Lomas de Angelópolis.",
     "area": "Puebla and its metropolitan area",
     "badge": "For now we deliver only in Puebla and its metropolitan area.",
     "form_note": "For now we deliver only in Puebla and its metro area (postal codes 72xxx). Live elsewhere? Write to us.",
@@ -2072,6 +2073,8 @@
     "88b60ca66b33": "See the partnership",
     "e3cd2977fa49": "Did you know…?",
     "7499cefd5f80": "Signature dining from $180 a dish",
-    "a07bb9e6d5ad": "Every dish is fire-cooked, arrives in glass and is checked against your allergies before it leaves. You don't have to worry about your nutrition."
+    "a07bb9e6d5ad": "Every dish is fire-cooked, arrives in glass and is checked against your allergies before it leaves. You don't have to worry about your nutrition.",
+    "25bda508a2f4": "Haute cuisine that adapts to your lifestyle.",
+    "1667d24381ec": "Design my plan"
   }
 }

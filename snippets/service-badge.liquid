@@ -1,2 +1,2 @@
 {%- comment -%} One line saying where we deliver. Param: class (extra class) {%- endcomment -%}
-<p class="svc-badge {{ class }}"><span class="svc-badge__pin" aria-hidden="true"></span>{{ 'service.badge' | t }}</p>
+<p class="svc-badge {{ class }}"><span class="svc-badge__pin" aria-hidden="true"></span>{% if hero %}{{ 'service.badge_hero' | t }}{% else %}{{ 'service.badge' | t }}{% endif %}</p>
