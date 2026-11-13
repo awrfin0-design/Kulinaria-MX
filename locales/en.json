@@ -613,13 +613,13 @@
   },
   "service": {
     "badge_hero": "Available exclusively in the Puebla metropolitan area and Lomas de Angelópolis.",
-    "area": "Puebla and its metropolitan area",
-    "badge": "For now we deliver only in Puebla and its metropolitan area.",
-    "form_note": "For now we deliver only in Puebla and its metro area (postal codes 72xxx). Live elsewhere? Write to us.",
-    "out": "We don't reach that postal code yet: for now we deliver only in Puebla and its metro area. Write to us and we'll tell you when we do.",
-    "cart_note": "Delivery only in Puebla and its metropolitan area.",
+    "area": "Puebla metropolitan area and Lomas de Angelópolis",
+    "badge": "For now we deliver only in the Puebla metropolitan area and Lomas de Angelópolis.",
+    "form_note": "For now we deliver only in the Puebla metropolitan area and Lomas de Angelópolis (postal codes 72xxx). Live elsewhere? Write to us.",
+    "out": "We don't reach that postal code yet: for now we deliver only in the Puebla metropolitan area and Lomas de Angelópolis. Write to us and we'll tell you when we do.",
+    "cart_note": "Delivery only in the Puebla metropolitan area and Lomas de Angelópolis.",
     "faq_t": "Where do you deliver?",
-    "faq_p": "For now we deliver only in Puebla and its metro area. Live elsewhere? Write to us."
+    "faq_p": "For now we deliver only in the Puebla metropolitan area and Lomas de Angelópolis. Live elsewhere? Write to us."
   },
   "theme": {
     "to_dark": "Switch to dark mode",
@@ -2090,6 +2090,7 @@
     "7499cefd5f80": "Signature dining from $180 a dish",
     "a07bb9e6d5ad": "Every dish is fire-cooked, arrives in glass and is checked against your allergies before it leaves. You don't have to worry about your nutrition.",
     "25bda508a2f4": "Haute cuisine that adapts to your lifestyle.",
-    "1667d24381ec": "Design my plan"
+    "1667d24381ec": "Design my plan",
+    "5e3e62548de1": "We deliver in the Puebla metropolitan area and Lomas de Angelópolis"
   }
 }

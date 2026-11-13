@@ -613,13 +613,13 @@
   },
   "service": {
     "badge_hero": "Disponible exclusivamente en la Zona Metropolitana de Puebla y Lomas de Angelópolis.",
-    "area": "Puebla y su área metropolitana",
-    "badge": "Por ahora entregamos solo en Puebla y su área metropolitana.",
-    "form_note": "Por ahora entregamos solo en Puebla y su zona metropolitana (CP 72xxx). ¿Vives fuera? Escríbenos y te avisamos.",
-    "out": "Aún no llegamos a ese código postal: por ahora entregamos solo en Puebla y su zona metropolitana. Escríbenos y te avisamos cuando lleguemos.",
-    "cart_note": "Entregas solo en Puebla y su área metropolitana.",
+    "area": "Zona Metropolitana de Puebla y Lomas de Angelópolis",
+    "badge": "Por ahora entregamos solo en la Zona Metropolitana de Puebla y Lomas de Angelópolis.",
+    "form_note": "Por ahora entregamos solo en la Zona Metropolitana de Puebla y Lomas de Angelópolis (CP 72xxx). ¿Vives fuera? Escríbenos y te avisamos.",
+    "out": "Aún no llegamos a ese código postal: por ahora entregamos solo en la Zona Metropolitana de Puebla y Lomas de Angelópolis. Escríbenos y te avisamos cuando lleguemos.",
+    "cart_note": "Entregas solo en la Zona Metropolitana de Puebla y Lomas de Angelópolis.",
     "faq_t": "¿Dónde entregan?",
-    "faq_p": "Por ahora entregamos solo en Puebla y su zona metropolitana. ¿Vives en otra ciudad? Escríbenos y te avisamos."
+    "faq_p": "Por ahora entregamos solo en la Zona Metropolitana de Puebla y Lomas de Angelópolis. ¿Vives en otra ciudad? Escríbenos y te avisamos."
   },
   "theme": {
     "to_dark": "Activar modo oscuro",
@@ -2090,6 +2090,7 @@
     "7499cefd5f80": "Comer de autor desde $180 por platillo",
     "a07bb9e6d5ad": "Cada platillo se cocina al fuego, llega en vidrio y se revisa contra tus alergias antes de salir. Tú no te preocupas por tu nutrición.",
     "25bda508a2f4": "Alta cocina adaptable a tu estilo de vida.",
-    "1667d24381ec": "Diseñar mi plan"
+    "1667d24381ec": "Diseñar mi plan",
+    "5e3e62548de1": "Entregamos en la Zona Metropolitana de Puebla y Lomas de Angelópolis"
   }
 }

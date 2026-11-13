@@ -27,7 +27,7 @@
         "s3": { "type": "slide", "settings": { "tag": "Entrenadores", "heading": "Entrenadores aliados", "text": "Recomienda Kulinaria a tus clientes y gana bonos, ropa deportiva y estatus.", "button_label": "Ser entrenador aliado", "button_link": "/pages/embajadores-entrenadores", "art": "air-steak-dark" } },
         "s4": { "type": "slide", "settings": { "tag": "Aliados", "heading": "Gimnasios y marcas que cocinan con nosotros", "text": "Súmate como gimnasio aliado y ofrece a tus socios comida de autor lista para la semana.", "button_label": "Conocer la alianza", "button_link": "/pages/embajadores-gimnasios", "art": "containers" } },
         "s5": { "type": "slide", "settings": { "tag": "¿Sabías que…?", "heading": "Comer de autor desde $180 por platillo", "text": "Cada platillo se cocina al fuego, llega en vidrio y se revisa contra tus alergias antes de salir. Tú no te preocupas por tu nutrición.", "button_label": "Ver el menú", "button_link": "/collections/menu-semanal", "art": "flames" } },
-        "s6": { "type": "slide", "settings": { "tag": "Aviso", "heading": "Entregamos en Puebla y su zona metropolitana", "text": "Pedidos hasta el sábado a las 10:00 AM, en envases de vidrio reutilizables.", "button_label": "Cómo funciona", "button_link": "/pages/ciclo-y-politicas", "art": "air-glass" } }
+        "s6": { "type": "slide", "settings": { "tag": "Aviso", "heading": "Entregamos en la Zona Metropolitana de Puebla y Lomas de Angelópolis", "text": "Pedidos hasta el sábado a las 10:00 AM, en envases de vidrio reutilizables.", "button_label": "Cómo funciona", "button_link": "/pages/ciclo-y-politicas", "art": "air-glass" } }
       },
       "block_order": ["s1", "s2", "s3", "s4", "s5", "s6"]
     },
