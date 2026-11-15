@@ -106,14 +106,18 @@ ok('deep link ?dieta=vegano opens the Veggie group (vegetarian + vegan dishes on
 
 // ---- home diet chip deep-links into the filtered menu without reload
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(100);
-ok('home: the lifestyle chips are one multi-select dropdown that starts on "all"', await page.evaluate(() => { const d = document.querySelector('[data-page="home"] .dd--multi'); return !!d && d.querySelectorAll('.dd__opt').length >= 5 && /Todos|All/.test(d.querySelector('.dd__val').textContent); }));
-await page.click('[data-page="home"] .dd--multi .dd__btn'); await page.click('[data-page="home"] .dd--multi .dd__opt[data-value="sin-gluten"]'); await page.waitForTimeout(250);
-ok('home: ticking an option keeps the list open (several can be ticked) and the button names it', await page.evaluate(() => { const d = document.querySelector('[data-page="home"] .dd--multi'); return !d.querySelector('.dd__list').hidden && /gluten/i.test(d.querySelector('.dd__val').textContent) && d.querySelector('.dd__opt[data-value="sin-gluten"]').getAttribute('aria-selected') === 'true'; }));
-await page.keyboard.press('Escape'); await page.waitForTimeout(150);
-{ const n = await page.$$eval('[data-page="home"] [data-dc-grid] [data-dish]:not(.is-hidden)', (e) => e.map((x) => x.dataset.diets)); ok('home chips filter the dishes listed right below them (5 gluten-free dishes this week)', n.length === 5 && n.every((d) => d.split('|').includes('sin-gluten')), n.length + ' shown');
-  await page.evaluate(() => document.querySelector('[data-page="home"] [data-dchip="vegano"]').click()); await page.waitForTimeout(200);
-  const n2 = await page.$$eval('[data-page="home"] [data-dc-grid] [data-dish]:not(.is-hidden)', (e) => e.length);
-  ok('a second chip narrows the list (gluten-free AND vegan) and the count line follows', n2 > 0 && n2 < 5 && /\d/.test(await page.$eval('[data-page="home"] [data-dc-count]', (e) => e.textContent)), String(n2)); }
+const HC = '[data-page="home"]';
+ok('home "Filtra el menú": the diet question and the diet pills come first, the dishes are hidden', await page.evaluate((h) => { const body = document.querySelector(h + ' [data-dc-body]'), ask = document.querySelector(h + ' [data-dc-ask]'); return !!body && body.hidden && getComputedStyle(body).display === 'none' && !ask.hidden && document.querySelectorAll(h + ' [data-dchip]').length >= 6; }, HC));
+await page.evaluate((h) => document.querySelector(h + ' [data-dchip="sin-gluten"]').click(), HC); await page.waitForTimeout(250);
+{ const n = await page.$$eval(HC + ' [data-dc-grid] [data-dish]:not(.is-hidden)', (e) => e.map((x) => x.dataset.diets));
+  ok('clicking a diet reveals the dishes of that diet (gluten-free: 5 this week) and hides the question', n.length === 5 && n.every((d) => d.split('|').includes('sin-gluten')) && await page.evaluate((h) => !document.querySelector(h + ' [data-dc-body]').hidden && document.querySelector(h + ' [data-dc-ask]').hidden, HC), n.length + ' shown');
+  await page.evaluate((h) => document.querySelector(h + ' [data-dchip="vegano"]').click(), HC); await page.waitForTimeout(200);
+  const n2 = await page.$$eval(HC + ' [data-dc-grid] [data-dish]:not(.is-hidden)', (e) => e.length);
+  ok('a second diet narrows the list (gluten-free AND vegan) and the count line follows', n2 > 0 && n2 < 5 && /\d/.test(await page.$eval(HC + ' [data-dc-count]', (e) => e.textContent)), String(n2));
+  await page.evaluate((h) => document.querySelector(h + ' [data-dchip="all"]').click(), HC); await page.waitForTimeout(200);
+  ok('"Todos los platillos" shows everything and clears the other diets', await page.evaluate((h) => document.querySelectorAll(h + ' [data-dc-grid] [data-dish]:not(.is-hidden)').length >= 9 && document.querySelectorAll(h + ' [data-dchip][aria-pressed="true"]').length === 1, HC));
+  await page.evaluate((h) => document.querySelector(h + ' [data-dchip="all"]').click(), HC); await page.waitForTimeout(200);
+  ok('unticking the last choice hides the dishes again', await page.evaluate((h) => document.querySelector(h + ' [data-dc-body]').hidden && !document.querySelector(h + ' [data-dc-ask]').hidden, HC)); }
 
 // ---- allergy profile blocks dishes + product page alert
 await page.goto(`${URL0}#/pg/perfil`); await page.waitForTimeout(100);

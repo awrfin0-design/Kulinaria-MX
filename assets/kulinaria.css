@@ -4356,3 +4356,14 @@ body .funnel[data-step="0"]:not(.funnel--teaser) :is(.funnel__stage,.funnel__pan
 .fn-hw__money li b{font-size:1.1rem}
 .fn-hw__money p{padding-top:8px}
 .fn-hw__go{padding:14px 24px}
+
+/* v134: home "Filtra el menu": choose a diet first (visible pills), dishes appear after */
+.dc-ask{margin:0 0 14px;font:500 clamp(1.05rem,1.8vw,1.35rem)/1.2 var(--font-display);color:var(--text)}
+.dc-ask[hidden],.dc-body[hidden]{display:none !important}
+.dc-chips{display:flex;flex-wrap:wrap;gap:10px}
+.dc-chips .chip{padding:11px 20px;font-size:.88rem}
+.dc-chips .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent,#fff)}
+.dc-body{animation:dc-in .45s var(--ease)}
+@keyframes dc-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (max-width:760px){body .dc-chips{flex-wrap:nowrap;overflow-x:auto}.dc-ask{font-size:1.1rem}}
+@media (prefers-reduced-motion:reduce){.dc-body{animation:none}}

@@ -4387,6 +4387,17 @@ body .funnel[data-step="0"]:not(.funnel--teaser) :is(.funnel__stage,.funnel__pan
 .fn-hw__money p{padding-top:8px}
 .fn-hw__go{padding:14px 24px}
 
+/* v134: home "Filtra el menu": choose a diet first (visible pills), dishes appear after */
+.dc-ask{margin:0 0 14px;font:500 clamp(1.05rem,1.8vw,1.35rem)/1.2 var(--font-display);color:var(--text)}
+.dc-ask[hidden],.dc-body[hidden]{display:none !important}
+.dc-chips{display:flex;flex-wrap:wrap;gap:10px}
+.dc-chips .chip{padding:11px 20px;font-size:.88rem}
+.dc-chips .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent,#fff)}
+.dc-body{animation:dc-in .45s var(--ease)}
+@keyframes dc-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (max-width:760px){body .dc-chips{flex-wrap:nowrap;overflow-x:auto}.dc-ask{font-size:1.1rem}}
+@media (prefers-reduced-motion:reduce){.dc-body{animation:none}}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -5745,9 +5756,12 @@ Fuego</span>
   <div class="container">
     <div class="section__head"><span class="eyebrow">Enfoque nutricional</span><h2>Filtra el menú según tu <em>estilo de vida</em></h2>
     </div>
-    <div class="chips" data-dchips data-dropdown="multi" data-dd-label="Enfoque nutricional" data-dd-all="Todos" data-dd-n="{n} seleccionados" data-dd-clear="Limpiar"><button class="chip" type="button" data-dchip="keto" aria-pressed="false" >Keto</button><button class="chip" type="button" data-dchip="sin-gluten" aria-pressed="false" >Libre de gluten</button><button class="chip" type="button" data-dchip="vegetariano" aria-pressed="false" >Vegetariano</button><button class="chip" type="button" data-dchip="vegano" aria-pressed="false" >Basado en plantas / Vegano</button><button class="chip" type="button" data-dchip="bajo-calorias" aria-pressed="false" >Bajas calorías</button><button class="chip" type="button" data-dchip="bajo-carbos" aria-pressed="false" >Bajos carbohidratos</button><button class="chip" type="button" data-dchip="alto-proteina" aria-pressed="false" >Alta proteína / Rendimiento</button></div>
-    <p class="dc-count" data-dc-count data-t="[n] platillos" aria-live="polite"></p>
-    <div class="dc-grid" data-dc-grid><article class="dish" data-dish data-has-detail
+    <p class="dc-ask" data-dc-ask>¿Qué tipo de dieta buscas?</p>
+    <div class="chips dc-chips" data-dchips role="group" aria-label="Enfoque nutricional">
+      <button class="chip" type="button" data-dchip="all" aria-pressed="false">Todos los platillos</button><button class="chip" type="button" data-dchip="keto" aria-pressed="false" >Keto</button><button class="chip" type="button" data-dchip="sin-gluten" aria-pressed="false" >Libre de gluten</button><button class="chip" type="button" data-dchip="vegetariano" aria-pressed="false" >Vegetariano</button><button class="chip" type="button" data-dchip="vegano" aria-pressed="false" >Basado en plantas / Vegano</button><button class="chip" type="button" data-dchip="bajo-calorias" aria-pressed="false" >Bajas calorías</button><button class="chip" type="button" data-dchip="bajo-carbos" aria-pressed="false" >Bajos carbohidratos</button><button class="chip" type="button" data-dchip="alto-proteina" aria-pressed="false" >Alta proteína / Rendimiento</button></div>
+    <div class="dc-body" data-dc-body hidden>
+      <p class="dc-count" data-dc-count data-t="[n] platillos" aria-live="polite"></p>
+      <div class="dc-grid" data-dc-grid><article class="dish" data-dish data-has-detail
   data-category="diario-premium" data-tier="selecto"
   data-diets="keto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
   <a class="dish__media surface-walnut" data-tilt-card href="#/p/pollo-a-las-hierbas" aria-label="Pollo a las hierbas con puré rústico"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Pollo a las hierbas con puré rústico" loading="lazy"><span class="dish__pill" aria-hidden="true">Ver ficha</span></a>
@@ -6000,9 +6014,10 @@ Fuego</span>
 
   <div class="dish__blocked" role="note"><div><strong>No apto para tu perfil</strong>Contiene un ingrediente que declaraste como alergia.</div></div>
 </article></div>
-    <p class="dc-empty" data-dc-empty hidden>Ningún platillo de esta semana cumple con todos esos filtros. Quita alguno.</p>
-    <p class="btn-row"><a class="arrow-link" href="#/menu"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+      <p class="dc-empty" data-dc-empty hidden>Ningún platillo de esta semana cumple con todos esos filtros. Quita alguno.</p>
+      <p class="btn-row"><a class="arrow-link" href="#/menu"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Ver todo el menú</a></p>
+    </div>
   </div>
 </section>
 
@@ -16079,9 +16094,12 @@ Pago digital, sin efectivo</li></ul>
   <div class="container">
     <div class="section__head"><span class="eyebrow">Nutritional focus</span><h2>Filter the menu to <em>fit your lifestyle</em></h2>
     </div>
-    <div class="chips" data-dchips data-dropdown="multi" data-dd-label="Nutritional focus" data-dd-all="All" data-dd-n="{n} selected" data-dd-clear="Clear"><button class="chip" type="button" data-dchip="keto" aria-pressed="false" >Keto</button><button class="chip" type="button" data-dchip="sin-gluten" aria-pressed="false" >Gluten-free</button><button class="chip" type="button" data-dchip="vegetariano" aria-pressed="false" >Vegetarian</button><button class="chip" type="button" data-dchip="vegano" aria-pressed="false" >Plant-based / Vegan</button><button class="chip" type="button" data-dchip="bajo-calorias" aria-pressed="false" >Low calorie</button><button class="chip" type="button" data-dchip="bajo-carbos" aria-pressed="false" >Low carb</button><button class="chip" type="button" data-dchip="alto-proteina" aria-pressed="false" >High protein / Performance</button></div>
-    <p class="dc-count" data-dc-count data-t="[n] dishes" aria-live="polite"></p>
-    <div class="dc-grid" data-dc-grid><article class="dish" data-dish data-has-detail
+    <p class="dc-ask" data-dc-ask>What kind of diet are you after?</p>
+    <div class="chips dc-chips" data-dchips role="group" aria-label="Nutritional focus">
+      <button class="chip" type="button" data-dchip="all" aria-pressed="false">All dishes</button><button class="chip" type="button" data-dchip="keto" aria-pressed="false" >Keto</button><button class="chip" type="button" data-dchip="sin-gluten" aria-pressed="false" >Gluten-free</button><button class="chip" type="button" data-dchip="vegetariano" aria-pressed="false" >Vegetarian</button><button class="chip" type="button" data-dchip="vegano" aria-pressed="false" >Plant-based / Vegan</button><button class="chip" type="button" data-dchip="bajo-calorias" aria-pressed="false" >Low calorie</button><button class="chip" type="button" data-dchip="bajo-carbos" aria-pressed="false" >Low carb</button><button class="chip" type="button" data-dchip="alto-proteina" aria-pressed="false" >High protein / Performance</button></div>
+    <div class="dc-body" data-dc-body hidden>
+      <p class="dc-count" data-dc-count data-t="[n] dishes" aria-live="polite"></p>
+      <div class="dc-grid" data-dc-grid><article class="dish" data-dish data-has-detail
   data-category="diario-premium" data-tier="selecto"
   data-diets="keto" data-allergens="Lácteos" data-ingredients="Pollo|Papa|Mantequilla|Hierbas finas">
   <a class="dish__media surface-walnut" data-tilt-card href="#/p/pollo-a-las-hierbas" aria-label="Herb chicken with rustic mash"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-dish-0.webp" alt="Herb chicken with rustic mash" loading="lazy"><span class="dish__pill" aria-hidden="true">View dish</span></a>
@@ -16334,9 +16352,10 @@ Pago digital, sin efectivo</li></ul>
 
   <div class="dish__blocked" role="note"><div><strong>Not suitable for your profile</strong>Contains an ingredient you declared as an allergy.</div></div>
 </article></div>
-    <p class="dc-empty" data-dc-empty hidden>No dish this week matches all those filters. Remove one.</p>
-    <p class="btn-row"><a class="arrow-link" href="#/menu"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+      <p class="dc-empty" data-dc-empty hidden>No dish this week matches all those filters. Remove one.</p>
+      <p class="btn-row"><a class="arrow-link" href="#/menu"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>See the full menu</a></p>
+    </div>
   </div>
 </section>
 
@@ -27128,14 +27147,21 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
 
   function initDietChips() {
     var root = $('[data-dchips]'); if (!root) return;
-    var scope = root.closest('section'), grid = $('[data-dc-grid]', scope), cnt = $('[data-dc-count]', scope), empty = $('[data-dc-empty]', scope);
+    var scope = root.closest('section'), grid = $('[data-dc-grid]', scope), cnt = $('[data-dc-count]', scope), empty = $('[data-dc-empty]', scope), body = $('[data-dc-body]', scope), ask = $('[data-dc-ask]', scope);
     var run = function () {
-      var on = $$('[data-dchip][aria-pressed="true"]', root).map(function (b) { return b.getAttribute('data-dchip'); }), n = 0;
+      var all = $('[data-dchip="all"][aria-pressed="true"]', root), on = $$('[data-dchip][aria-pressed="true"]', root).map(function (b) { return b.getAttribute('data-dchip'); }).filter(function (x) { return x !== 'all'; }), n = 0;
+      var open = !!all || on.length > 0;                                   // first choose, then see: the dishes stay hidden until a diet (or "all") is picked
+      if (body) body.hidden = !open; if (ask) ask.hidden = open;
       $$('[data-dish]', grid).forEach(function (c) { var d = (c.getAttribute('data-diets') || '').split('|'), ok = on.every(function (x) { return d.indexOf(x) > -1; }); c.classList.toggle('is-hidden', !ok); if (ok) n++; });
       if (cnt) cnt.textContent = String(cnt.getAttribute('data-t') || '').replace('[n]', n);
       if (empty) empty.hidden = n > 0;
     };
-    root.addEventListener('click', function (e) { var b = e.target.closest('[data-dchip]'); if (!b) return; b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); run(); });
+    root.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-dchip]'); if (!b) return;
+      var on = b.getAttribute('aria-pressed') !== 'true', isAll = b.getAttribute('data-dchip') === 'all';
+      if (on) $$('[data-dchip]', root).forEach(function (x) { if (isAll ? x !== b : x.getAttribute('data-dchip') === 'all') x.setAttribute('aria-pressed', 'false'); });   // "all" and a specific diet exclude each other
+      b.setAttribute('aria-pressed', on ? 'true' : 'false'); run();
+    });
     run();
   }
 

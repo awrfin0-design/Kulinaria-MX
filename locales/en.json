@@ -237,6 +237,8 @@
     "vegetariano": "Vegetarian"
   },
   "dietchips": {
+    "ask": "What kind of diet are you after?",
+    "todos": "All dishes",
     "empty": "No dish this week matches all those filters. Remove one.",
     "all": "See the full menu",
     "count": "[n] dishes"

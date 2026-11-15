@@ -914,14 +914,21 @@
 
   function initDietChips() {
     var root = $('[data-dchips]'); if (!root) return;
-    var scope = root.closest('section'), grid = $('[data-dc-grid]', scope), cnt = $('[data-dc-count]', scope), empty = $('[data-dc-empty]', scope);
+    var scope = root.closest('section'), grid = $('[data-dc-grid]', scope), cnt = $('[data-dc-count]', scope), empty = $('[data-dc-empty]', scope), body = $('[data-dc-body]', scope), ask = $('[data-dc-ask]', scope);
     var run = function () {
-      var on = $$('[data-dchip][aria-pressed="true"]', root).map(function (b) { return b.getAttribute('data-dchip'); }), n = 0;
+      var all = $('[data-dchip="all"][aria-pressed="true"]', root), on = $$('[data-dchip][aria-pressed="true"]', root).map(function (b) { return b.getAttribute('data-dchip'); }).filter(function (x) { return x !== 'all'; }), n = 0;
+      var open = !!all || on.length > 0;                                   // first choose, then see: the dishes stay hidden until a diet (or "all") is picked
+      if (body) body.hidden = !open; if (ask) ask.hidden = open;
       $$('[data-dish]', grid).forEach(function (c) { var d = (c.getAttribute('data-diets') || '').split('|'), ok = on.every(function (x) { return d.indexOf(x) > -1; }); c.classList.toggle('is-hidden', !ok); if (ok) n++; });
       if (cnt) cnt.textContent = String(cnt.getAttribute('data-t') || '').replace('[n]', n);
       if (empty) empty.hidden = n > 0;
     };
-    root.addEventListener('click', function (e) { var b = e.target.closest('[data-dchip]'); if (!b) return; b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); run(); });
+    root.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-dchip]'); if (!b) return;
+      var on = b.getAttribute('aria-pressed') !== 'true', isAll = b.getAttribute('data-dchip') === 'all';
+      if (on) $$('[data-dchip]', root).forEach(function (x) { if (isAll ? x !== b : x.getAttribute('data-dchip') === 'all') x.setAttribute('aria-pressed', 'false'); });   // "all" and a specific diet exclude each other
+      b.setAttribute('aria-pressed', on ? 'true' : 'false'); run();
+    });
     run();
   }
 

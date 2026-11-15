@@ -237,6 +237,8 @@
     "vegetariano": "Vegetariano"
   },
   "dietchips": {
+    "ask": "¿Qué tipo de dieta buscas?",
+    "todos": "Todos los platillos",
     "empty": "Ningún platillo de esta semana cumple con todos esos filtros. Quita alguno.",
     "all": "Ver todo el menú",
     "count": "[n] platillos"
