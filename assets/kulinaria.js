@@ -2376,7 +2376,8 @@
     var box = cube.parentNode, faces = $$('.hero__face', cube), n = faces.length; if (n < 3) return;     // faces[0] = the video, the rest = highlights
     var dots = $$('[data-hs-dot]', hero), dur = Math.max(3, Math.min(12, +cube.getAttribute('data-interval') || 4)) * 1000;
     var video = $('[data-hero-video]', hero), tg = $('[data-media-toggle]', hero), canPlay = !!video && !REDUCE && !SAVE;
-    var cur = 0, timer = 0, held = false, away = false, userPaused = false, busy = false, vidSafe = 0;
+    var cur = 0, timer = 0, held = false, away = false, userPaused = false, busy = false, vidSafe = 0, videoDone = false;   // the intro video is shown ONCE; after it the loop is the highlights only
+    var wrapIdx = function (k) { if (cur > 0 || videoDone) { if (k < 1) return n - 1; if (k > n - 1) return 1; return k; } return ((k % n) + n) % n; };
     $$('img', cube).forEach(function (im) { im.loading = 'eager'; });
     hero.classList.add('is-carousel');
     var size = function () { box.style.setProperty('--hc-w', Math.round(box.getBoundingClientRect().width) + 'px'); };
@@ -2388,7 +2389,7 @@
     var vidMs = function () { return ((video && video.duration && isFinite(video.duration)) ? video.duration : 12) * 1000; };
     var restartBar = function () { hero.style.setProperty('--hs-dur', (cur === 0 && canPlay ? vidMs() : dur) + 'ms'); hero.classList.remove('hs-run'); void hero.offsetWidth; if (!REDUCE) hero.classList.add('hs-run'); };
     var turn = function (k, dir) {                                   // dir 1: the cube turns left (next); -1: back
-      k = ((k % n) + n) % n; if (busy || k === cur) return false;
+      k = wrapIdx(k); if (busy || k === cur) return false;
       var from = faces[cur], to = faces[k];
       if (REDUCE) { from.classList.remove('is-cur'); to.classList.add('is-cur'); cur = k; mark(); return true; }
       busy = true; size();
@@ -2404,6 +2405,7 @@
       var onEnd = function (e) { if (e.target === cube && e.propertyName === 'transform') done(); };
       cube.addEventListener('transitionend', onEnd); fb = setTimeout(done, 1500);
       cur = k; mark();
+      if (from === faces[0] && !videoDone) { videoDone = true; if (dots[0]) dots[0].hidden = true; }
       if (k === 0 && canPlay) { try { video.currentTime = 0; } catch (e) {} playVideo(video); }      // back to the video: it plays again from the start
       return true;
     };

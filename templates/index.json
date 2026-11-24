@@ -22,14 +22,80 @@
         "slide_seconds": 4
       },
       "blocks": {
-        "s1": { "type": "slide", "settings": { "tag": "Esta semana", "heading": "El menú de la semana ya está listo", "text": "Elige tu dieta y arma tu semana en minutos.", "button_label": "Haz tu pedido", "button_link": "/pages/pedido", "art": "air-steak" } },
-        "s2": { "type": "slide", "settings": { "tag": "Evento", "heading": "Chef privado en tu casa", "text": "Una cena de autor para tu mesa o tu evento, cocinada frente a ti.", "button_label": "Conocer la Carta", "button_link": "/pages/carta-kulinaria", "art": "air-chef" } },
-        "s3": { "type": "slide", "settings": { "tag": "Entrenadores", "heading": "Entrenadores aliados", "text": "Recomienda Kulinaria a tus clientes y gana bonos, ropa deportiva y estatus.", "button_label": "Ser entrenador aliado", "button_link": "/pages/embajadores-entrenadores", "art": "air-steak-dark" } },
-        "s4": { "type": "slide", "settings": { "tag": "Aliados", "heading": "Gimnasios y marcas que cocinan con nosotros", "text": "Súmate como gimnasio aliado y ofrece a tus socios comida de autor lista para la semana.", "button_label": "Conocer la alianza", "button_link": "/pages/embajadores-gimnasios", "art": "containers" } },
-        "s5": { "type": "slide", "settings": { "tag": "¿Sabías que…?", "heading": "Comer de autor desde $180 por platillo", "text": "Cada platillo se cocina al fuego, llega en vidrio y se revisa contra tus alergias antes de salir. Tú no te preocupas por tu nutrición.", "button_label": "Ver el menú", "button_link": "/collections/menu-semanal", "art": "flames" } },
-        "s6": { "type": "slide", "settings": { "tag": "Aviso", "heading": "Entregamos en la Zona Metropolitana de Puebla y Lomas de Angelópolis", "text": "Pedidos hasta el sábado a las 10:00 AM, en envases de vidrio reutilizables.", "button_label": "Cómo funciona", "button_link": "/pages/ciclo-y-politicas", "art": "air-glass" } }
+        "s1": {
+          "type": "slide",
+          "settings": {
+            "layout": "photo-left",
+            "tag": "Embajadoras Kulinaria • Estilo de vida",
+            "heading": "Transforma tu mente. Conquista tu físico.",
+            "text": "Tu nutrición abre la puerta a nuestro círculo privado. Entrena, compite y vive experiencias deportivas exclusivas junto a quienes lideran el cambio.",
+            "list_title": "Experiencias y comunidad",
+            "badge": "KFW · Arte en movimiento",
+            "strip_title": "Próximos eventos • Exclusivo Familia Kulinaria",
+            "strip_link_label": "Ver más fechas +",
+            "art": "hs-emb",
+            "strip_link": "/pages/calendario",
+            "bullets": "Eventos deportivos y activaciones exclusivas\nEntrenamientos grupales y retos fitness\nAcceso VIP a la comunidad Kulinaria",
+            "cards": "photo:hs-tenis|Clínica de tenis|Coach: Jessica|Mié 26 Nov|\nphoto:hs-circuito|Circuito funcional|Coach: Paulina|Sáb 29 Nov|\nphoto:hs-rodada|Rodada nocturna|Coach: Ren Jiménez|Mié 03 Dic|\nphoto:hs-padel|Torneo de pádel|Coach: Anny|Sáb 06 Dic|",
+            "cta_title": "Acceso Familia Kulinaria",
+            "cta_text": "Adquiere tu bloque de 4 semanas para desbloquear ubicaciones, horarios y ser parte de nuestra comunidad exclusiva.",
+            "cta_label": "Empezar mi bloque",
+            "cta_link": "/pages/pedido"
+          }
+        },
+        "s2": {
+          "type": "slide",
+          "settings": {
+            "layout": "photo-right",
+            "tag": "Beneficio exclusivo • Familia Kulinaria",
+            "heading": "Tu nutrición adaptable, respaldada por expertos.",
+            "foot": "Ángel Otero • Licenciado en Nutrición (Campeón Mr. México y Mr. Puebla) | Kasa Kulinaria.",
+            "strip_title": "Nuestros planes de nutrición adaptables",
+            "strip_link_label": "Explora nuestro enfoque integral en nutrición y bienestar +",
+            "art": "hs-nutri",
+            "strip_link": "/pages/ayuda",
+            "bullets": "kidney|Atención de Ángel Otero, Lic. en Nutrición (Mr. México y Mr. Puebla)\nclip|Plan 100% adaptable a tu estilo de vida y objetivos\napple|Enfoque integral basado en tu salud y resultados",
+            "button_label": "Reservar consulta",
+            "button_link": "/pages/ayuda",
+            "cards": "scale|Plan de pérdida de peso.|Programa enfocado en la quema de grasa y hábitos saludables.||\ndumbbell|Plan de aumento de masa muscular.|Nutrición para el crecimiento muscular y fuerza.||\nrun|Nutrición deportiva de élite.|Optimización del rendimiento para atletas competitivos.||\nshield|Programa de salud integral.|Enfoque general para el bienestar y vitalidad a largo plazo.||\ncalendar|Consulta individual.|Sesión privada con Ángel Otero para metas específicas.||"
+          }
+        },
+        "s3": {
+          "type": "slide",
+          "settings": {
+            "layout": "tiers",
+            "tag": "Beneficios exclusivos • Compromiso Kulinaria",
+            "heading": "Multiplica tu inversión. Desbloquea recompensas.",
+            "text": "Elige tu plan por adelantado y obtén consultas, cortes, prendas y acceso VIP de regalo.",
+            "strip_title": "Ecosistema de aliados Kulinaria • Tus llaves de acceso",
+            "strip_link_label": "Desbloquea todo el ecosistema con tu plan Kulinaria +",
+            "strip_link": "/pages/embajadores",
+            "cards": "doctor|Ángel Otero||Reclamar beneficio|/pages/ayuda\nshirt|KFW Fitness Wear||Ver recompensas|/pages/pedido\nbarber|Magnate Barbería||Canjear cupón|/pages/embajadores\nusers|+20 Entrenadores||Ver entrenadores|/pages/embajadores-entrenadores\ndumbbell|Gimnasios Hermanos||Ver sedes|/pages/embajadores-gimnasios\nstar|Salones & Eventos VIP||Explorar ahora|/pages/carta-kulinaria",
+            "plans": "1 Bloque (4 Semanas)|Inicio Inteligente||Consulta Nutricional con Ángel Otero, Lic. en Nutrición: $850 MXN → $699 MXN (Ahorras $151);;Elige un regalo: 1 artículo (límite de valor $449) de la tienda KFW o 1 corte cortesía de Magnate Barbería|Elegir mi ahorro|/pages/pedido\n2 Bloques (8 Semanas)|Transformación Total|La más elegida|Consulta Ángel Otero, Lic. en Nutrición: $850 MXN → ¡Gratis!;;Artículo Oficial KFW (prenda, gorra o tumbler): $449 MXN → ¡Gratis!;;2 Experiencias y Eventos VIP con Embajadores: $398 MXN → ¡Gratis!|Obtener $997 en regalos y descuentos|/pages/pedido\n3 Bloques (12 Semanas)|Estilo de Vida Completo|Nivel VIP|Consulta Ángel Otero, Lic. en Nutrición: $850 MXN → ¡Gratis!;;Gratis: Kit Completo KFW Merch;;VIP Pass: eventos exclusivos con modelos y entrenadores;;Cortesías: Magnate Barbería y salones de belleza aliados|Desbloquear mi pase VIP|/pages/pedido"
+          }
+        },
+        "s4": {
+          "type": "slide",
+          "settings": {
+            "layout": "photo-left",
+            "tag": "Carta Kulinaria • Cenas íntimas",
+            "heading": "Tu mesa privada. Nuestro chef ejecutivo.",
+            "text": "Vive una velada gastronómica exclusiva a puerta cerrada, diseñada a la medida para ti y tus invitados.",
+            "list_title": "Lo que incluye la experiencia",
+            "list2_title": "Ocasiones especiales",
+            "list2_text": "Cenas románticas, aniversarios, cumpleaños y cenas de compromiso.",
+            "strip_title": "Modalidades Carta Kulinaria • Experiencias a la medida",
+            "art": "hs-chef",
+            "bullets": "Menú de degustación personalizado (3 a 5 tiempos)\nInsumos premium, cristalería y limpieza total",
+            "cards": "photo:hs-cenas|Cenas íntimas|Chef ejecutivo a puerta cerrada.||/pages/carta-cenas-romanticas\nphoto:hs-reuniones|Reuniones sociales|Celebraciones privadas con servicio total.||/pages/carta-kulinaria\nphoto:hs-corporativo|Eventos corporativos|Catering ejecutivo y experiencias de marca.||/pages/carta-kulinaria\ncalendar|Logística integral|Planeación de menú, tiempos y personal on-site.||/pages/carta-chef-privado",
+            "cta_title": "Reserva tu fecha",
+            "cta_text": "Consulta disponibilidad y diseña tu menú con nuestros chefs.",
+            "cta_label": "Cotizar evento",
+            "cta_link": "/pages/carta-cotizacion"
+          }
+        }
       },
-      "block_order": ["s1", "s2", "s3", "s4", "s5", "s6"]
+      "block_order": ["s1", "s2", "s3", "s4"]
     },
     "funnel": {
       "type": "order-funnel",

@@ -9,6 +9,23 @@
   assign art_m = 'photo-' | append: art | append: '-m.webp'
 -%}
 <section class="hero hero--{{ size }} hero--intro tone-dark" data-scroll data-hero {{ section.shopify_attributes }}>
+  <svg class="hx__sprite" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+    <symbol id="hi-kidney" viewBox="0 0 48 48"><path d="M20 9c-7 0-12 6-12 14 0 9 6 14 12 14 3 0 4-2 4-5V14c0-3-1-5-4-5z M28 9c7 0 12 6 12 14 0 9-6 14-12 14-3 0-4-2-4-5V14c0-3 1-5 4-5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
+    <symbol id="hi-clip" viewBox="0 0 48 48"><rect x="11" y="8" width="26" height="33" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M18 8h12v5H18zM17 22h14M17 29h14M17 36h8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="hi-apple" viewBox="0 0 48 48"><path d="M24 15c-6-4-14 0-14 9 0 8 5 17 10 17 2 0 3-1 4-1s2 1 4 1c5 0 10-9 10-17 0-9-8-13-14-9z M24 15c0-4 2-7 6-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="hi-scale" viewBox="0 0 48 48"><rect x="8" y="10" width="32" height="28" rx="5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15 20a9 9 0 0 1 18 0M24 20l4-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="hi-dumbbell" viewBox="0 0 48 48"><path d="M6 19v10M12 14v20M36 14v20M42 19v10M12 24h24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+    <symbol id="hi-run" viewBox="0 0 48 48"><circle cx="29" cy="9" r="4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M24 18l-7 5 3 4 6-3 4 6-5 10M24 18l9 4 5-3M20 27l-8 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="hi-shield" viewBox="0 0 48 48"><path d="M24 6l15 5v11c0 9-6 16-15 20-9-4-15-11-15-20V11z M17 24l5 5 9-10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="hi-calendar" viewBox="0 0 48 48"><rect x="8" y="10" width="32" height="30" rx="4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M8 19h32M16 6v8M32 6v8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="31" cy="30" r="5" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
+    <symbol id="hi-doctor" viewBox="0 0 48 48"><circle cx="24" cy="15" r="7" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M10 41c0-8 6-13 14-13s14 5 14 13M20 28l4 8 4-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="hi-shirt" viewBox="0 0 48 48"><path d="M17 8l-10 6 4 8 5-2v20h16V20l5 2 4-8-10-6c-1 4-4 6-7 6s-6-2-7-6z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
+    <symbol id="hi-barber" viewBox="0 0 48 48"><rect x="18" y="6" width="12" height="36" rx="5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M18 16l12-5M18 24l12-5M18 32l12-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="hi-users" viewBox="0 0 48 48"><circle cx="18" cy="16" r="6" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="33" cy="19" r="5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M6 40c0-8 5-12 12-12s12 4 12 12M31 28c6 0 11 3 11 10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="hi-star" viewBox="0 0 48 48"><path d="M24 6l5.5 11.5L42 19l-9 9 2.2 12.8L24 34.8 12.8 40.8 15 28 6 19l12.5-1.5z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
+    <symbol id="hi-ticket" viewBox="0 0 48 48"><path d="M6 15h36v7a3 3 0 0 0 0 6v7H6v-7a3 3 0 0 0 0-6z M30 15v20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></symbol>
+    <symbol id="hi-house" viewBox="0 0 48 48"><path d="M7 22L24 8l17 14M12 20v20h24V20M20 40V28h8v12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs></svg>
   {%- if section.blocks.size > 1 -%}
   <div class="hero__cubebox" data-hero-box>
     <div class="hero__cube" data-hero-cube data-interval="{{ section.settings.slide_seconds | default: 4 }}" role="region" aria-roledescription="carousel" aria-label="{{ 'hero.slides' | t }}">
@@ -41,18 +58,99 @@
       </div>
     
     {%- for block in section.blocks -%}
-      {%- capture tx_tag -%}{% render 'tx', s: block.settings.tag %}{%- endcapture -%}
-      {%- capture tx_h -%}{% render 'tx', s: block.settings.heading %}{%- endcapture -%}
-      {%- capture tx_p -%}{% render 'tx', s: block.settings.text %}{%- endcapture -%}
-      {%- capture tx_b -%}{% render 'tx', s: block.settings.button_label %}{%- endcapture -%}
-      <article class="hs hero__face container" role="group" aria-roledescription="slide" aria-label="{{ forloop.index }} / {{ section.blocks.size }}" aria-hidden="true" {{ block.shopify_attributes }}>
-        <div class="hs__media">{% render 'photo', image: block.settings.image, art: block.settings.art, alt: '', class: 'hs__img', width: 1000 %}</div>
-        <div class="hs__copy">
-          {%- if tx_tag != blank -%}<span class="hs__tag">{{ tx_tag }}</span>{%- endif -%}
-          <h2>{{ tx_h }}</h2>
-          {%- if tx_p != blank -%}<p>{{ tx_p }}</p>{%- endif -%}
-          {%- if tx_b != blank -%}<a class="arrow-link" href="{{ block.settings.button_link | default: '/pages/pedido' }}"><span class="arrow-link__c">{% render 'icon', name: 'arrow' %}</span>{{ tx_b }}</a>{%- endif -%}
+      {%- assign bs = block.settings -%}
+      {%- capture tx_tag -%}{% render 'tx', s: bs.tag %}{%- endcapture -%}
+      {%- capture tx_h -%}{% render 'tx', s: bs.heading %}{%- endcapture -%}
+      {%- capture tx_p -%}{% render 'tx', s: bs.text %}{%- endcapture -%}
+      {%- capture tx_b -%}{% render 'tx', s: bs.button_label %}{%- endcapture -%}
+      {%- capture tx_lt -%}{% render 'tx', s: bs.list_title %}{%- endcapture -%}
+      {%- capture tx_l2t -%}{% render 'tx', s: bs.list2_title %}{%- endcapture -%}
+      {%- capture tx_l2 -%}{% render 'tx', s: bs.list2_text %}{%- endcapture -%}
+      {%- capture tx_foot -%}{% render 'tx', s: bs.foot %}{%- endcapture -%}
+      {%- capture tx_badge -%}{% render 'tx', s: bs.badge %}{%- endcapture -%}
+      {%- capture tx_st -%}{% render 'tx', s: bs.strip_title %}{%- endcapture -%}
+      {%- capture tx_sl -%}{% render 'tx', s: bs.strip_link_label %}{%- endcapture -%}
+      {%- assign bullets = bs.bullets | newline_to_br | split: '<br />' -%}
+      {%- assign cards = bs.cards | newline_to_br | split: '<br />' -%}
+      {%- assign plans = bs.plans | newline_to_br | split: '<br />' -%}
+      <article data-no-wordmark class="hs hero__face container hx hx--{{ bs.layout | default: 'photo-left' }}" role="group" aria-roledescription="slide" aria-label="{{ forloop.index }} / {{ section.blocks.size }}" aria-hidden="true" {{ block.shopify_attributes }}>
+        {%- if bs.layout == 'tiers' -%}
+        <div class="hx__main hx__main--tiers">
+          <header class="hx__head">
+            {%- if tx_tag != blank -%}<span class="hx__tag">{{ tx_tag }}</span>{%- endif -%}
+            <h2 class="hx__h">{{ tx_h }}</h2>
+            {%- if tx_p != blank -%}<p class="hx__p">{{ tx_p }}</p>{%- endif -%}
+          </header>
+          <div class="hx__plans">
+            {%- for ln in plans -%}{%- assign ln = ln | strip -%}{%- if ln != blank -%}
+              {%- assign pf = ln | split: '|' -%}
+              {%- assign p_t_src = pf[0] | strip -%}{%- capture p_t -%}{% render 'tx', s: p_t_src %}{%- endcapture -%}
+              {%- assign p_s_src = pf[1] | strip -%}{%- capture p_s -%}{% render 'tx', s: p_s_src %}{%- endcapture -%}
+              {%- assign p_bd_src = pf[2] | strip -%}{%- capture p_bd -%}{% render 'tx', s: p_bd_src %}{%- endcapture -%}
+              {%- assign p_bt_src = pf[4] | strip -%}{%- capture p_bt -%}{% render 'tx', s: p_bt_src %}{%- endcapture -%}
+              {%- assign p_items = pf[3] | split: ';;' -%}
+              <article class="hx__plan{% if pf[2] != blank %} has-badge{% endif %}">
+                {%- if p_bd != blank -%}<span class="hx__pbadge">{{ p_bd }}</span>{%- endif -%}
+                <h3>{{ p_t }}</h3><p class="hx__psub">{{ p_s }}</p>
+                <ul>{%- for it in p_items -%}{%- assign it_t = it | strip -%}{%- if it_t != blank -%}<li>{% render 'tx', s: it_t %}</li>{%- endif -%}{%- endfor -%}</ul>
+                {%- if p_bt != blank -%}<a class="hx__pbtn" href="{{ pf[5] | strip | default: '/pages/pedido' }}">{{ p_bt }}</a>{%- endif -%}
+              </article>
+            {%- endif -%}{%- endfor -%}
+          </div>
         </div>
+        {%- else -%}
+        <div class="hx__main">
+          <div class="hx__photo">
+            {% render 'photo', image: bs.image, art: bs.art, alt: '', class: 'hx__img', width: 1200 %}
+            {%- if tx_badge != blank -%}<span class="hx__badge">{{ tx_badge }}</span>{%- endif -%}
+          </div>
+          <div class="hx__copy">
+            {%- if tx_tag != blank -%}<span class="hx__tag">{{ tx_tag }}</span>{%- endif -%}
+            <h2 class="hx__h">{{ tx_h }}</h2>
+            {%- if tx_p != blank -%}<p class="hx__p">{{ tx_p }}</p>{%- endif -%}
+            {%- if tx_lt != blank -%}<h3 class="hx__lt">{{ tx_lt }}</h3>{%- endif -%}
+            <ul class="hx__list">
+              {%- for ln in bullets -%}{%- assign ln = ln | strip -%}{%- if ln != blank -%}
+                {%- assign bf = ln | split: '|' -%}
+                {%- if bf.size > 1 -%}<li class="has-ico"><svg class="hx__ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#hi-{{ bf[0] | strip }}"/></svg>{%- assign bf1 = bf[1] | strip -%}<span>{% render 'tx', s: bf1 %}</span></li>
+                {%- else -%}<li>{% render 'tx', s: ln %}</li>{%- endif -%}
+              {%- endif -%}{%- endfor -%}
+            </ul>
+            {%- if tx_l2t != blank -%}<h3 class="hx__lt hx__lt--2">{{ tx_l2t }}</h3>{%- endif -%}
+            {%- if tx_l2 != blank -%}<p class="hx__p hx__p--2">{{ tx_l2 }}</p>{%- endif -%}
+            {%- if tx_b != blank -%}<a class="hx__btn" href="{{ bs.button_link | default: '/pages/pedido' }}">{{ tx_b }}</a>{%- endif -%}
+            {%- if tx_foot != blank -%}<p class="hx__foot">{{ tx_foot }}</p>{%- endif -%}
+          </div>
+        </div>
+        {%- endif -%}
+        {%- if bs.cards != blank -%}
+        <div class="hx__strip">
+          <div class="hx__striphead">
+            <span>{{ tx_st }}</span>
+            {%- if tx_sl != blank -%}<a href="{{ bs.strip_link | default: '/pages/pedido' }}">{{ tx_sl }}</a>{%- endif -%}
+          </div>
+          <div class="hx__cards">
+            {%- for ln in cards -%}{%- assign ln = ln | strip -%}{%- if ln != blank -%}
+              {%- assign cf = ln | split: '|' -%}
+              {%- assign ck = cf[0] | strip -%}
+              {%- assign c_t_src = cf[1] | strip -%}{%- capture c_t -%}{% render 'tx', s: c_t_src %}{%- endcapture -%}
+              {%- assign c_s_src = cf[2] | strip -%}{%- capture c_s -%}{% render 'tx', s: c_s_src %}{%- endcapture -%}
+              {%- assign c_b_src = cf[3] | strip -%}{%- capture c_b -%}{% render 'tx', s: c_b_src %}{%- endcapture -%}
+              <a class="hx__card" href="{{ cf[4] | strip | default: '#' }}"{% unless cf[4] != blank %} tabindex="-1" aria-disabled="true"{% endunless %}>
+                {%- if ck contains 'photo:' -%}{%- assign pk = ck | remove: 'photo:' -%}<span class="hx__cphoto"><img src="{{ 'photo-' | append: pk | append: '.webp' | asset_url }}" alt="" loading="eager" width="240" height="160"></span>
+                {%- else -%}<span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#hi-{{ ck }}"/></svg></span>{%- endif -%}
+                <span class="hx__ctext"><strong>{{ c_t }}</strong>{%- if c_s != blank -%}<small>{{ c_s }}</small>{%- endif -%}{%- if c_b != blank -%}<em>{{ c_b }}</em>{%- endif -%}</span>
+              </a>
+            {%- endif -%}{%- endfor -%}
+            {%- if bs.cta_title != blank -%}
+              {%- capture cta_t -%}{% render 'tx', s: bs.cta_title %}{%- endcapture -%}
+              {%- capture cta_x -%}{% render 'tx', s: bs.cta_text %}{%- endcapture -%}
+              {%- capture cta_l -%}{% render 'tx', s: bs.cta_label %}{%- endcapture -%}
+              <div class="hx__card hx__card--cta"><strong>{{ cta_t }}</strong>{%- if cta_x != blank -%}<small>{{ cta_x }}</small>{%- endif -%}<a class="hx__cbtn" href="{{ bs.cta_link | default: '/pages/pedido' }}">{{ cta_l }}</a></div>
+            {%- endif -%}
+          </div>
+        </div>
+        {%- endif -%}
       </article>
     {%- endfor -%}
     </div>
@@ -111,19 +209,39 @@
     { "type": "range", "id": "slide_seconds", "label": "Segundos por diapositiva", "min": 3, "max": 12, "step": 1, "default": 4, "info": "Segundos que se ve cada diapositiva. El carrusel empieza cuando el video de introducción termina (una sola vez)." },
     { "type": "text", "id": "video_url", "label": "Video propio (URL .mp4 cuadrado, opcional)", "info": "Vacío = el video de intro de la marca (video-hero-intro.mp4 en Assets)." }
   ],
-  "max_blocks": 10,
+  "max_blocks": 8,
   "blocks": [
     {
       "type": "slide",
       "name": "Diapositiva",
       "settings": [
-        { "type": "text", "id": "tag", "label": "Etiqueta (Evento, Aviso, Temporada…)", "default": "Evento" },
+        { "type": "select", "id": "layout", "label": "Diseño", "default": "photo-left", "options": [
+          { "value": "photo-left", "label": "Foto a la izquierda + tarjetas" },
+          { "value": "photo-right", "label": "Foto a la derecha + tarjetas" },
+          { "value": "tiers", "label": "Planes (3 tarjetas) + tarjetas" }
+        ] },
+        { "type": "text", "id": "tag", "label": "Etiqueta superior", "default": "Evento" },
         { "type": "text", "id": "heading", "label": "Título", "default": "Chef privado en tu casa" },
-        { "type": "textarea", "id": "text", "label": "Texto corto", "default": "Una cena de autor para tu mesa o tu evento." },
-        { "type": "text", "id": "button_label", "label": "Botón", "default": "Conocer más" },
+        { "type": "textarea", "id": "text", "label": "Texto", "default": "" },
+        { "type": "text", "id": "list_title", "label": "Título de la lista", "default": "" },
+        { "type": "textarea", "id": "bullets", "label": "Lista (una línea por punto)", "info": "Con ícono: ícono|texto. Íconos: kidney, clip, apple, scale, dumbbell, run, shield, calendar, doctor, shirt, barber, users, star, ticket, house." },
+        { "type": "text", "id": "list2_title", "label": "Segundo título", "default": "" },
+        { "type": "textarea", "id": "list2_text", "label": "Segundo texto", "default": "" },
+        { "type": "text", "id": "button_label", "label": "Botón", "default": "" },
         { "type": "url", "id": "button_link", "label": "Enlace del botón" },
-        { "type": "image_picker", "id": "image", "label": "Foto (cuadrada, opcional)" },
-        { "type": "text", "id": "art", "label": "Foto del tema si no subes una", "info": "Claves: air-steak, air-chef, air-romance, air-bowl, air-breakfast, air-glass, air-fish, dinner, containers, flames.", "default": "air-chef" }
+        { "type": "text", "id": "foot", "label": "Línea pequeña bajo el botón", "default": "" },
+        { "type": "image_picker", "id": "image", "label": "Foto (opcional)" },
+        { "type": "text", "id": "art", "label": "Foto del tema si no subes una", "info": "Clave de assets/photo-<clave>.webp: hs-emb, hs-nutri, hs-chef, air-steak, air-chef…", "default": "hs-emb" },
+        { "type": "text", "id": "badge", "label": "Sello sobre la foto", "default": "" },
+        { "type": "textarea", "id": "plans", "label": "Planes (solo diseño «Planes»)", "info": "Una línea por plan: Título|Subtítulo|Insignia|punto 1;;punto 2;;punto 3|Botón|/enlace" },
+        { "type": "text", "id": "strip_title", "label": "Título de la franja de tarjetas", "default": "" },
+        { "type": "text", "id": "strip_link_label", "label": "Enlace de la franja", "default": "" },
+        { "type": "url", "id": "strip_link", "label": "Enlace de la franja (URL)" },
+        { "type": "textarea", "id": "cards", "label": "Tarjetas de la franja", "info": "Una línea por tarjeta: ícono o photo:clave|Título|Subtítulo|Botón|/enlace" },
+        { "type": "text", "id": "cta_title", "label": "Tarjeta destacada: título", "default": "" },
+        { "type": "text", "id": "cta_text", "label": "Tarjeta destacada: texto", "default": "" },
+        { "type": "text", "id": "cta_label", "label": "Tarjeta destacada: botón", "default": "" },
+        { "type": "url", "id": "cta_link", "label": "Tarjeta destacada: enlace" }
       ]
     }
   ],
