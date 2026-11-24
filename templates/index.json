@@ -95,7 +95,12 @@
           }
         }
       },
-      "block_order": ["s1", "s2", "s3", "s4"]
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ]
     },
     "funnel": {
       "type": "order-funnel",
@@ -181,18 +186,6 @@
         "d5",
         "d6"
       ]
-    },
-    "dishes": {
-      "type": "featured-dishes",
-      "settings": {
-        "eyebrow": "Especiales de la semana",
-        "heading": "Esta semana *en Kulinaria*",
-        "text": "Variedad gourmet para toda tu semana.",
-        "collection": "menu-semanal",
-        "limit": 6,
-        "button_label": "Ver el menú completo",
-        "layout": "rail"
-      }
     },
     "tiers": {
       "type": "tiers",
@@ -503,8 +496,9 @@
       "type": "welcome-video",
       "settings": {
         "eyebrow": "Bienvenido",
-        "heading": "Conoce *Kulinaria*",
-        "text": "Quiénes somos y cómo cocinamos."
+        "heading": "Hola, bienvenidos",
+        "text": "Alta cocina adaptable a tu estilo de vida.",
+        "art": "hs-welcome"
       }
     },
     "marquee": {
@@ -567,44 +561,6 @@
         "m6"
       ]
     },
-    "glass": {
-      "type": "showcase",
-      "settings": {
-        "eyebrow": "Envases de vidrio",
-        "heading": "Hecho para tu refrigerador, pensado *para tu semana*",
-        "text": "<p>Cada platillo llega en vidrio de alta calidad que conserva el sabor y se puede reutilizar. Solo calienta y disfruta.</p>",
-        "badge": "Envases de vidrio",
-        "button_label": "Ver los especiales de la semana",
-        "button_link": "/collections/menu-semanal",
-        "art": "containers",
-        "reverse": false
-      },
-      "blocks": {
-        "p1": {
-          "type": "point",
-          "settings": {
-            "text": "Reutilizable"
-          }
-        },
-        "p2": {
-          "type": "point",
-          "settings": {
-            "text": "Listos para calentar en minutos"
-          }
-        },
-        "p3": {
-          "type": "point",
-          "settings": {
-            "text": "Ingredientes y alérgenos declarados en cada platillo"
-          }
-        }
-      },
-      "block_order": [
-        "p1",
-        "p2",
-        "p3"
-      ]
-    },
     "band": {
       "type": "media-band",
       "settings": {
@@ -652,6 +608,131 @@
         "video": "chef",
         "video_main": true
       }
+    },
+    "trainers": {
+      "type": "trainers-showcase",
+      "settings": {
+        "eyebrow": "Equipo campeón Kulinaria",
+        "heading": "Los mejores entrenadores de tu ciudad.",
+        "text": "Al unirte a Kulinaria, obtienes acceso exclusivo para entrenar de forma personalizada con nuestros atletas campeones.",
+        "list_title": "Palmarés de nuestro equipo",
+        "bullets": "1x|Campeón Mundial IFBB Elite Pro\n2x|Mr. México Absoluto\n1x|Campeón North American\n1x|Subcampeón Atlanta Pro\n1x|3er Lugar Pittsburgh Pro",
+        "link_label": "Ver todos los logros +",
+        "cta_title": "Roster élite de entrenadores",
+        "cta_text": "Explora a todos nuestros atletas y entrenadores certificados para elegir al ideal para tus metas.",
+        "cta_label": "Elegir a mi entrenador",
+        "art": "tr-duo"
+      },
+      "blocks": {
+        "t0": {
+          "type": "trainer",
+          "settings": {
+            "name": "Carla",
+            "role": "IFBB Elite Pro.",
+            "spec": "Especialista en recomposición corporal.",
+            "place": "Club Lomas · 2.4 km",
+            "art": "tr-carla"
+          }
+        },
+        "t1": {
+          "type": "trainer",
+          "settings": {
+            "name": "Ramón",
+            "role": "Mr. México.",
+            "spec": "Preparación física de alto rendimiento.",
+            "place": "La Vista · 3.5 km",
+            "art": "tr-ramon"
+          }
+        },
+        "t2": {
+          "type": "trainer",
+          "settings": {
+            "name": "Elena",
+            "role": "Trainer cert.",
+            "spec": "Entrenamiento funcional y fuerza.",
+            "place": "Cholula · 5.1 km",
+            "art": "tr-elena"
+          }
+        },
+        "t3": {
+          "type": "trainer",
+          "settings": {
+            "name": "Fernando",
+            "role": "Mr. México.",
+            "spec": "Hipertrofia y acondicionamiento.",
+            "place": "Zavaleta · 4.2 km",
+            "art": "tr-fernando"
+          }
+        },
+        "t4": {
+          "type": "trainer",
+          "settings": {
+            "name": "Jaime",
+            "role": "IFBB Elite Pro.",
+            "spec": "Atleta de élite y asesoría integral.",
+            "place": "Angelópolis · 1.8 km",
+            "art": "tr-jaime"
+          }
+        }
+      },
+      "block_order": [
+        "t0",
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ]
+    },
+    "kfw": {
+      "type": "kfw-showcase",
+      "settings": {
+        "eyebrow": "KFW • Kulinaria Fitness Wear",
+        "heading": "Viste la disciplina. Domina tu estilo.",
+        "text": "Indumentaria deportiva de alto rendimiento diseñada para cada entrenamiento.",
+        "button_label": "Explorar colección",
+        "strip_title": "Colección oficial KFW",
+        "art": "kfw-duo"
+      },
+      "blocks": {
+        "k0": {
+          "type": "product",
+          "settings": {
+            "title": "Enterizos & tops",
+            "text": "Prendas integrales y de soporte para mujer.",
+            "art": "kfw-tops"
+          }
+        },
+        "k1": {
+          "type": "product",
+          "settings": {
+            "title": "Compresión & joggers",
+            "text": "Ajuste inteligente para máximo rendimiento.",
+            "art": "kfw-joggers"
+          }
+        },
+        "k2": {
+          "type": "product",
+          "settings": {
+            "title": "Hoodies & shorts",
+            "text": "Versatilidad y confort antes y después.",
+            "art": "kfw-hoodie"
+          }
+        },
+        "k3": {
+          "type": "product",
+          "settings": {
+            "title": "Gorras & botellas",
+            "text": "Accesorios técnicos e hidratación premium.",
+            "art": "kfw-cap"
+          }
+        }
+      },
+      "block_order": [
+        "k0",
+        "k1",
+        "k2",
+        "k3"
+      ]
     }
   },
   "order": [
@@ -659,8 +740,8 @@
     "welcome",
     "marquee",
     "funnel",
-    "dishes",
-    "glass",
+    "trainers",
+    "kfw",
     "band",
     "tiers",
     "chef",

@@ -1,0 +1,62 @@
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
+{%- capture tx_s_btn -%}{% render 'tx', s: section.settings.button_label %}{%- endcapture -%}
+{%- capture tx_s_st -%}{% render 'tx', s: section.settings.strip_title %}{%- endcapture -%}
+<section class="section kf" data-no-wordmark {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="kf__main">
+      <div class="kf__copy">
+        {%- if tx_s_eyebrow != blank -%}<span class="kf__tag">{{ tx_s_eyebrow }}</span>{%- endif -%}
+        <h2 class="kf__h">{{ tx_s_heading }}</h2>
+        {%- if tx_s_text != blank -%}<p class="kf__p">{{ tx_s_text }}</p>{%- endif -%}
+        {%- if tx_s_btn != blank -%}<a class="kf__btn" href="{{ section.settings.button_link | default: '/collections/kulinaria-store' }}">{{ tx_s_btn }}</a>{%- endif -%}
+      </div>
+      <div class="kf__photo">{% render 'photo', image: section.settings.image, art: section.settings.art, alt: '', class: 'kf__img', width: 1400 %}</div>
+    </div>
+    <div class="kf__strip">
+      <h3 class="kf__st">{{ tx_s_st }}</h3>
+      <div class="kf__cards">
+        {%- for block in section.blocks -%}{%- assign bs = block.settings -%}
+          {%- capture tx_t -%}{% render 'tx', s: bs.title %}{%- endcapture -%}
+          {%- capture tx_x -%}{% render 'tx', s: bs.text %}{%- endcapture -%}
+          <a class="kf__card" href="{{ bs.link | default: '/collections/kulinaria-store' }}" {{ block.shopify_attributes }}>
+            <span class="kf__cph">{% render 'photo', image: bs.image, art: bs.art, alt: '', class: '', width: 400 %}</span>
+            <span class="kf__ctext"><strong>{{ tx_t }}</strong><small>{{ tx_x }}</small></span>
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "KFW · Fitness Wear",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "KFW • Kulinaria Fitness Wear" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Viste la disciplina. Domina tu estilo." },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Indumentaria deportiva de alto rendimiento diseñada para cada entrenamiento." },
+    { "type": "text", "id": "button_label", "label": "Botón", "default": "Explorar colección" },
+    { "type": "url", "id": "button_link", "label": "Enlace del botón" },
+    { "type": "image_picker", "id": "image", "label": "Foto principal (opcional)" },
+    { "type": "text", "id": "art", "label": "Foto del tema si no subes una", "default": "kfw-duo" },
+    { "type": "text", "id": "strip_title", "label": "Título de la colección", "default": "Colección oficial KFW" }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Categoría / producto",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Nombre", "default": "Enterizos & tops" },
+        { "type": "text", "id": "text", "label": "Texto", "default": "Prendas integrales y de soporte para mujer." },
+        { "type": "image_picker", "id": "image", "label": "Foto (opcional)" },
+        { "type": "text", "id": "art", "label": "Foto del tema", "default": "kfw-tops" },
+        { "type": "url", "id": "link", "label": "Enlace" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [{ "name": "KFW · Fitness Wear" }]
+}
+{% endschema %}

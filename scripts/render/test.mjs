@@ -267,7 +267,8 @@ const card = '[data-page="home"] .fg--grid .card';
 if (await page.$(card)) { await page.hover(card, { position: { x: 60, y: 40 } }); await page.waitForTimeout(200);
   ok('card spotlight follows the pointer', (await page.$eval(card, (e) => e.style.getPropertyValue('--mx'))) !== ''); }
 
-// carousel
+// carousel (the dishes carousel is no longer on the home page: only checked where it exists)
+if (await page.$('[data-page="home"] [data-rail]')) {
 await page.evaluate(() => { const r = document.querySelector('[data-page="home"] [data-rail]'); window.scrollTo(0, r.getBoundingClientRect().top + window.scrollY - 150); }); await page.waitForTimeout(600);
 const rs = '[data-page="home"] [data-rail]';
 ok('carousel: prev disabled at start, next enabled', (await page.$eval(`${rs} [data-rail-prev]`, (e) => e.disabled)) && !(await page.$eval(`${rs} [data-rail-next]`, (e) => e.disabled)));
@@ -279,6 +280,7 @@ await page.mouse.move(bb.x + 200, bb.y); await page.mouse.down(); await page.mou
 ok('carousel: drag with the mouse scrolls the track', (await page.$eval(`${rs} .rail__track`, (e) => e.scrollLeft)) !== sl0);
 await page.$eval(`${rs} .rail__track`, (e) => { e.scrollLeft = e.scrollWidth; }); await page.waitForTimeout(900);
 ok('carousel: cards reveal as they scroll into view', (await page.$$eval(`${rs} .dish.reveal:not(.is-in)`, (e) => e.length)) === 0);
+}
 
 // sticky filter pill on the menu + sticky media on product page
 await page.goto(`${URL0}#/menu`); await page.waitForTimeout(300);
@@ -1369,6 +1371,19 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(`${URL0}#/pg/circulo-privado`); await page.reload(); await page.waitForTimeout(1200);
   ok('private circle on a phone: one column, nothing wider than the screen', await page.evaluate((c) => document.documentElement.scrollWidth <= innerWidth + 1 && getComputedStyle(document.querySelector(c + ' .circle__grid')).gridTemplateColumns.split(' ').length === 1, CR));
+  await page.setViewportSize({ width: 1440, height: 860 });
+
+  // ---- home sections: welcome photo (2), order portal (3), trainers (4), KFW (5)
+  await page.setViewportSize({ width: 1440, height: 860 });
+  await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1300);
+  const hs = await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'), secs = [...pg.querySelectorAll('.shopify-section')].map((e) => e.firstElementChild && e.firstElementChild.className); const w = pg.querySelector('.welcome-video'), tr = pg.querySelector('.tr'), kf = pg.querySelector('.kf'); const idx = (el) => secs.findIndex((c) => c === el.className); return { welcome: !!w && !!w.querySelector('img.welcome-video__photo') && !w.querySelector('video'), funnel: !!pg.querySelector('[data-funnel]'), order: [idx(w), idx(pg.querySelector('[data-funnel]').closest('section')), idx(tr), idx(kf)], trainers: tr ? tr.querySelectorAll('.tr__card:not(.tr__card--cta)').length : 0, trTxt: tr ? tr.textContent.replace(/\s+/g, ' ') : '', kfCards: kf ? kf.querySelectorAll('.kf__card').length : 0, kfTxt: kf ? kf.textContent.replace(/\s+/g, ' ') : '', dishesGone: !pg.querySelector('.rail'), glassGone: !pg.querySelector('.showcase--glass') }; });
+  ok('home section 2: the welcome frame shows the photo (no video) in the same frame', hs.welcome);
+  ok('home order: welcome frame, order portal, trainers, KFW (the dishes rail is gone)', hs.order[0] < hs.order[1] && hs.order[1] < hs.order[2] && hs.order[2] < hs.order[3] && hs.dishesGone, JSON.stringify(hs.order));
+  ok('home section 4 keeps the mockup content: champion team, palmarés, five trainers with zone and distance, elite roster card', hs.trainers === 5 && /Los mejores entrenadores de tu ciudad/.test(hs.trTxt) && /Campeón Mundial IFBB Elite Pro/.test(hs.trTxt) && /Carla/.test(hs.trTxt) && /Jaime/.test(hs.trTxt) && /Angelópolis · 1\.8 km/.test(hs.trTxt) && /Elegir a mi entrenador/.test(hs.trTxt), hs.trTxt.slice(0, 160));
+  ok('home section 5 keeps the mockup content: KFW headline, explore button and the four collection cards', hs.kfCards === 4 && /Viste la disciplina/.test(hs.kfTxt) && /Explorar colección/.test(hs.kfTxt) && /Enterizos/.test(hs.kfTxt) && /Gorras/.test(hs.kfTxt), hs.kfTxt.slice(0, 160));
+  ok('home sections 4 and 5: links work (roster -> trainers page, collection -> the store)', await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'); return /entrenadores/.test(pg.querySelector('.tr__cbtn').getAttribute('href')) && /tienda|kulinaria-store|store/.test(pg.querySelector('.kf__btn').getAttribute('href')); }));
+  await page.setViewportSize({ width: 390, height: 844 }); await page.reload(); await page.waitForTimeout(1300);
+  ok('home sections 4 and 5 on a phone: nothing wider than the screen, trainer cards swipe', await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1 && getComputedStyle(document.querySelector('[data-page="home"] .tr__cards')).overflowX === 'auto'));
   await page.setViewportSize({ width: 1440, height: 860 });
 
   // ---- phones: nothing wider than the screen, the total bar is inside the screen
