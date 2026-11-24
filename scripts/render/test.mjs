@@ -381,7 +381,7 @@ ok('every page and subpage has a page header with breadcrumbs', noHead.length ==
 await page.goto(`${URL0}#/pg/embajadores-gimnasios`); await page.waitForTimeout(150);
 ok('subpages show the family sub-navigation with the current page marked', (await page.$$eval('[data-page="pg/embajadores-gimnasios"] .page-head__sub a', (a) => a.length)) >= 6 && (await page.$eval('[data-page="pg/embajadores-gimnasios"] .page-head__sub a[aria-current="page"]', (a) => /Gimnasios/.test(a.textContent))));
 // Miro coverage: sections that must exist
-const must = { 'home': ['.hero', '.marquee', '[data-funnel]', '[data-rail]', '.tier-ladder', '.diet-chips, .chips', '.plan-card', '.accordion', '.cta-banner'],
+const must = { 'home': ['.hero', '.marquee', '[data-funnel]', '.tr', '.kf', '.tier-ladder', '.diet-chips, .chips', '.plan-card', '.accordion', '.cta-banner'],
   'pg/planes': ['.plan-card', '.tier-ladder', '.accordion'], 'pg/ayuda': ['form'], 'pg/terminos': ['.legal h3'], 'pg/carta-cotizacion': ['form'],
   'pg/embajadores-solicitar': ['form'], 'pg/checkout': ['.card'], 'pg/cuenta-semana': ['[data-cutoff]'], 'pg/cuenta-pausas': ['[data-mypause]'], 'pg/cuenta-monedero': ['.hub__card'] };
 const lacking = [];
