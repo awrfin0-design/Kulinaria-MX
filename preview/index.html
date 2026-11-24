@@ -4525,6 +4525,67 @@ a.hx__card[href]:not([aria-disabled]):hover{border-color:var(--accent);backgroun
   .hx__pbadge{top:-1px}
 }
 
+/* v139: Circulo privado: same cards, pills and spacing as the rest of the site */
+.circle__head{max-width:46rem;margin:0 0 clamp(18px,3vw,30px)}
+.circle__head h2{margin:8px 0 8px;font:400 clamp(1.9rem,3.6vw,3rem)/1.08 var(--font-display);letter-spacing:-.01em;color:var(--text)}
+.circle__head p{margin:0;font-size:.95rem;line-height:1.5;color:var(--text-muted)}
+.circle__gate{display:flex;align-items:center;gap:14px;margin:0 0 clamp(16px,2.4vw,24px);padding:14px 18px;border:1px solid var(--accent);border-radius:20px;background:color-mix(in srgb,var(--accent) 8%,var(--bg-raised))}
+.circle__gate[hidden],.circle__welcome[hidden]{display:none !important}
+.circle__gate.is-nudge{animation:circ-nudge .5s var(--ease)}
+@keyframes circ-nudge{0%,100%{transform:none}30%{transform:translateX(-5px)}60%{transform:translateX(5px)}}
+.circle__gateico{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--accent);color:var(--on-accent,#fff)}
+.circle__gateico svg{width:20px;height:20px}
+.circle__gatetxt{display:grid;gap:2px;min-width:0;flex:1}
+.circle__gatetxt strong{font:600 1rem var(--font-display);color:var(--text)}
+.circle__gatetxt span{font-size:.82rem;line-height:1.4;color:var(--text-muted)}
+.circle__gatebtn{flex:none;white-space:nowrap}
+.circle__welcome{margin:0 0 clamp(16px,2.4vw,24px);padding:12px 18px;border:1px solid var(--line);border-radius:16px;font-size:.88rem;color:var(--text-muted)}
+.circle__filters{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 clamp(16px,2.4vw,26px)}
+.circle__pill{padding:10px 20px;border:1px solid var(--line);border-radius:999px;background:none;color:var(--text);font:500 .86rem var(--font-body);cursor:pointer;transition:border-color .2s,background .2s}
+.circle__pill:hover{border-color:var(--accent)}
+.circle__pill.is-on{border-color:var(--accent);background:var(--accent);color:var(--on-accent,#fff)}
+.circle__grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.6vw,22px)}
+.circle__card[hidden]{display:none !important}
+.circle__card{position:relative;display:grid;gap:12px;align-content:start;padding:clamp(14px,1.6vw,20px);border:1px solid var(--line);border-radius:18px;background:var(--bg-raised);color:var(--text)}
+.circle__top{display:flex;align-items:center;gap:12px}
+.circle__av{flex:none;display:grid;place-items:center;width:56px;height:56px;border-radius:14px;overflow:hidden;background:var(--bg-deep);color:var(--accent)}
+.circle__av img{width:100%;height:100%;object-fit:cover}
+.circle__av svg{width:60%;height:60%}
+.circle__tt{display:grid;gap:3px;min-width:0}
+.circle__sport{font:700 .6rem var(--font-label);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.circle__tt h3{margin:0;font:600 1.02rem/1.2 var(--font-display);color:var(--text)}
+.circle__meta{display:grid;gap:5px;margin:0}
+.circle__meta div{display:grid;grid-template-columns:5.2em 1fr;gap:8px;font-size:.78rem;line-height:1.35}
+.circle__meta dt{color:var(--text-muted)}
+.circle__meta dd{margin:0;color:var(--text);font-weight:500}
+.circle__spots{justify-self:start;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);font:700 .64rem var(--font-label);letter-spacing:.08em;text-transform:uppercase}
+.circle__book{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px 14px;border:1px solid var(--accent);border-radius:999px;background:var(--accent);color:var(--on-accent,#fff);font:700 .74rem var(--font-label);letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.circle__locklbl{display:none;align-items:center;gap:6px}
+.circle__locklbl svg{width:14px;height:14px}
+.circle__lock{position:absolute;top:12px;right:12px;display:none;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;backdrop-filter:blur(4px)}
+.circle__lock svg{width:15px;height:15px}
+/* locked preview: readable but clearly not available (a lock hovers over every card) */
+.circle.is-locked .circle__card{border-style:dashed}
+.circle.is-locked .circle__top,.circle.is-locked .circle__meta{opacity:.62}
+.circle.is-locked .circle__lock{display:grid}
+.circle.is-locked .circle__booklbl{display:none}
+.circle.is-locked .circle__locklbl{display:inline-flex}
+.circle.is-locked .circle__book{background:none;color:var(--text-muted);border-color:var(--line);cursor:pointer}
+.circle.is-locked .circle__card::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,transparent 55%,color-mix(in srgb,var(--bg-base) 55%,transparent));pointer-events:none}
+.circle.is-locked .circle__card:hover .circle__lock{background:var(--accent);color:var(--on-accent,#fff)}
+.circle__card.is-sent{border-color:var(--accent)}
+.circle__card.is-sent .circle__book{background:none;color:var(--accent);cursor:default}
+.circle__note{margin:clamp(14px,2vw,22px) 0 0;font-size:.78rem;color:var(--text-muted)}
+@media (max-width:1100px){.circle__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){
+  .circle__grid{grid-template-columns:1fr;gap:10px}
+  .circle__gate{flex-wrap:wrap;padding:14px;gap:10px}.circle__gatebtn{width:100%;justify-content:center}
+  .circle__filters{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:calc(var(--pad,16px) * -1);padding:2px var(--pad,16px) 6px}
+  .circle__filters::-webkit-scrollbar{display:none}.circle__pill{flex:none}
+  .circle__card{grid-template-columns:1fr;padding:14px}
+}
+@media (prefers-reduced-motion:reduce){.circle__gate.is-nudge{animation:none}}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -4786,7 +4847,7 @@ Fuego</span>
               <a class="sitemap__top" href="#/pg/planes"><span>02</span>Planes</a><ul class="sitemap__sub"><li><a href="#/pg/plan-bloque">Bloque de 4 semanas</a></li><li><a href="#/pg/plan-prueba">Semana de prueba</a></li><li><a href="#/pg/niveles-y-precios">Niveles y precios</a></li><li><a href="#/pg/ciclo-y-politicas">Ciclo y políticas</a></li></ul></div><div class="sitemap__group" style="--i:2">
               <a class="sitemap__top" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida"><span>03</span>Registro y checkout</a><ul class="sitemap__sub"><li><a href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Crear cuenta</a></li><li><a href="#/pg/checkout">Checkout y contrato</a></li><li><a href="#/pg/confirmacion">Confirmación</a></li><li><a href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Iniciar sesión</a></li></ul></div><div class="sitemap__group" style="--i:3">
               <a class="sitemap__top" href="#/cuenta"><span>04</span>Mi cuenta</a><ul class="sitemap__sub"><li><a href="#/pg/cuenta-semana">Mi semana</a></li><li><a href="#/pg/cuenta-pausas">Pausar entregas</a></li><li><a href="#/pg/cuenta-monedero">Monedero</a></li><li><a href="#/pg/cuenta-perfil">Alergias y gustos</a></li><li><a href="#/pg/cuenta-referidos">Mis referidos</a></li><li><a href="#/pg/cuenta-pedidos">Pedidos y facturas</a></li><li><a href="#/pg/cuenta-entregas">Entregas y envases</a></li><li><a href="#/cuenta">Direcciones</a></li></ul></div><div class="sitemap__group" style="--i:4">
-              <a class="sitemap__top" href="#/pg/embajadores"><span>05</span>Embajadores</a><ul class="sitemap__sub"><li><a href="#/pg/embajadores-entrenadores">Entrenadores</a></li><li><a href="#/pg/embajadores-clientes">Clientes referidos</a></li><li><a href="#/pg/embajadores-gimnasios">Gimnasios aliados</a></li><li><a href="#/pg/embajadores-directorio">Directorio</a></li><li><a href="#/pg/embajadores-reglas">Reglas de alianza</a></li><li><a href="#/pg/embajadores-solicitar">Solicitar código</a></li></ul></div><div class="sitemap__group" style="--i:5">
+              <a class="sitemap__top" href="#/pg/embajadores"><span>05</span>Embajadores</a><ul class="sitemap__sub"><li><a href="#/pg/embajadores-entrenadores">Entrenadores</a></li><li><a href="#/pg/embajadores-clientes">Clientes referidos</a></li><li><a href="#/pg/embajadores-gimnasios">Gimnasios aliados</a></li><li><a href="#/pg/embajadores-directorio">Directorio</a></li><li><a href="#/pg/circulo-privado">Círculo privado</a></li><li><a href="#/pg/embajadores-reglas">Reglas de alianza</a></li><li><a href="#/pg/embajadores-solicitar">Solicitar código</a></li></ul></div><div class="sitemap__group" style="--i:5">
               <a class="sitemap__top" href="#/pg/carta-kulinaria"><span>06</span>Carta Kulinaria</a><ul class="sitemap__sub"><li><a href="#/pg/carta-chef-privado">Chef privado</a></li><li><a href="#/pg/carta-cenas-romanticas">Cenas románticas</a></li><li><a href="#/pg/carta-galeria">Galería de eventos</a></li><li><a href="#/pg/carta-cotizacion">Cotización privada</a></li></ul></div><div class="sitemap__group" style="--i:6">
               <a class="sitemap__top" href="#/tienda"><span>07</span>Kulinaria Store</a><ul class="sitemap__sub"><li><a href="#/p/playera-oficial-kulinaria">Playera Oficial Kulinaria</a></li><li><a href="#/p/vaso-mezclador-premium">Vaso mezclador (shaker) premium Kulinaria</a></li></ul></div><div class="sitemap__group" style="--i:7">
               <a class="sitemap__top" href="#/pg/nosotros"><span>08</span>Nosotros</a><ul class="sitemap__sub"><li><a href="#/pg/nosotros-historia">Historia y fundador</a></li><li><a href="#/pg/nosotros-equipo">Equipo de cocina</a></li><li><a href="#/pg/nosotros-calidad">Calidad y envases</a></li></ul></div><div class="sitemap__group" style="--i:8">
@@ -4894,7 +4955,7 @@ Fuego</span>
               <a class="sitemap__top" href="#/pg/planes"><span>02</span>Plans</a><ul class="sitemap__sub"><li><a href="#/pg/plan-bloque">4-week block</a></li><li><a href="#/pg/plan-prueba">Trial week</a></li><li><a href="#/pg/niveles-y-precios">Levels and prices</a></li><li><a href="#/pg/ciclo-y-politicas">Cycle and policies</a></li></ul></div><div class="sitemap__group" style="--i:2">
               <a class="sitemap__top" href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida"><span>03</span>Sign-up and checkout</a><ul class="sitemap__sub"><li><a href="#/registro?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Create account</a></li><li><a href="#/pg/checkout">Checkout and contract</a></li><li><a href="#/pg/confirmacion">Confirmation</a></li><li><a href="#/login?return_url=%2Fpages%2Fbienvenida&return_to=%2Fpages%2Fbienvenida">Sign in</a></li></ul></div><div class="sitemap__group" style="--i:3">
               <a class="sitemap__top" href="#/cuenta"><span>04</span>My account</a><ul class="sitemap__sub"><li><a href="#/pg/cuenta-semana">My week</a></li><li><a href="#/pg/cuenta-pausas">Pause deliveries</a></li><li><a href="#/pg/cuenta-monedero">Wallet</a></li><li><a href="#/pg/cuenta-perfil">Allergies & tastes</a></li><li><a href="#/pg/cuenta-referidos">My referrals</a></li><li><a href="#/pg/cuenta-pedidos">Orders & invoices</a></li><li><a href="#/pg/cuenta-entregas">Deliveries & containers</a></li><li><a href="#/cuenta">Addresses</a></li></ul></div><div class="sitemap__group" style="--i:4">
-              <a class="sitemap__top" href="#/pg/embajadores"><span>05</span>Ambassadors</a><ul class="sitemap__sub"><li><a href="#/pg/embajadores-entrenadores">Trainers</a></li><li><a href="#/pg/embajadores-clientes">Referred clients</a></li><li><a href="#/pg/embajadores-gimnasios">Partner gyms</a></li><li><a href="#/pg/embajadores-directorio">Directory</a></li><li><a href="#/pg/embajadores-reglas">Partnership rules</a></li><li><a href="#/pg/embajadores-solicitar">Request a code</a></li></ul></div><div class="sitemap__group" style="--i:5">
+              <a class="sitemap__top" href="#/pg/embajadores"><span>05</span>Ambassadors</a><ul class="sitemap__sub"><li><a href="#/pg/embajadores-entrenadores">Trainers</a></li><li><a href="#/pg/embajadores-clientes">Referred clients</a></li><li><a href="#/pg/embajadores-gimnasios">Partner gyms</a></li><li><a href="#/pg/embajadores-directorio">Directory</a></li><li><a href="#/pg/circulo-privado">Círculo privado</a></li><li><a href="#/pg/embajadores-reglas">Partnership rules</a></li><li><a href="#/pg/embajadores-solicitar">Request a code</a></li></ul></div><div class="sitemap__group" style="--i:5">
               <a class="sitemap__top" href="#/pg/carta-kulinaria"><span>06</span>Kulinaria Carta</a><ul class="sitemap__sub"><li><a href="#/pg/carta-chef-privado">Private chef</a></li><li><a href="#/pg/carta-cenas-romanticas">Romantic dinners</a></li><li><a href="#/pg/carta-galeria">Event gallery</a></li><li><a href="#/pg/carta-cotizacion">Private quote</a></li></ul></div><div class="sitemap__group" style="--i:6">
               <a class="sitemap__top" href="#/tienda"><span>07</span>Kulinaria Store</a><ul class="sitemap__sub"><li><a href="#/p/playera-oficial-kulinaria">Official Kulinaria Tee</a></li><li><a href="#/p/vaso-mezclador-premium">Kulinaria premium shaker cup</a></li></ul></div><div class="sitemap__group" style="--i:7">
               <a class="sitemap__top" href="#/pg/nosotros"><span>08</span>About us</a><ul class="sitemap__sub"><li><a href="#/pg/nosotros-historia">History and founder</a></li><li><a href="#/pg/nosotros-equipo">Kitchen team</a></li><li><a href="#/pg/nosotros-calidad">Quality and containers</a></li></ul></div><div class="sitemap__group" style="--i:8">
@@ -4955,7 +5016,7 @@ Fuego</span>
           <div class="hx__copy"><span class="hx__tag">Embajadoras Kulinaria • Estilo de vida</span><h2 class="hx__h">Transforma tu mente. Conquista tu físico.</h2><p class="hx__p">Tu nutrición abre la puerta a nuestro círculo privado. Entrena, compite y vive experiencias deportivas exclusivas junto a quienes lideran el cambio.</p><h3 class="hx__lt">Experiencias y comunidad</h3><ul class="hx__list"><li>Eventos deportivos y activaciones exclusivas</li><li>Entrenamientos grupales y retos fitness</li><li>Acceso VIP a la comunidad Kulinaria</li></ul></div>
         </div><div class="hx__strip">
           <div class="hx__striphead">
-            <span>Próximos eventos • Exclusivo Familia Kulinaria</span><a href="#/pg/calendario">Ver más fechas +</a></div>
+            <span>Próximos eventos • Exclusivo Familia Kulinaria</span><a href="#/pg/circulo-privado">Ver más fechas +</a></div>
           <div class="hx__cards"><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-tenis.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Clínica de tenis</strong><small>Coach: Jessica</small><em>Mié 26 Nov</em></span>
               </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-circuito.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Circuito funcional</strong><small>Coach: Paulina</small><em>Sáb 29 Nov</em></span>
               </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-rodada.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Rodada nocturna</strong><small>Coach: Ren Jiménez</small><em>Mié 03 Dic</em></span>
@@ -12330,6 +12391,196 @@ Pago digital, sin efectivo</li></ul>
 
 </div>
     </div>
+<div data-page="pg/circulo-privado" data-template="page" data-title="Círculo privado" hidden>
+      <div id="pg-circulo-privado--shopify-section-head" class="shopify-section"><header class="page-head" >
+  <div class="page-head__photo">
+    <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-emb.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
+    <div class="container">
+      <div class="page-head__copy">
+        <nav class="page-head__crumbs" aria-label="Ruta de navegación">
+          <a href="#/home">Inicio</a><i aria-hidden="true">/</i><a href="#/pg/embajadores">Embajadores</a><i aria-hidden="true">/</i><span>Comunidad</span></nav>
+        <span class="hero__rule" aria-hidden="true"></span><h1>El círculo <em>privado</em></h1><p class="hero__sub">Clases con nuestras embajadoras.</p><div class="hero__cta">
+            <a class="arrow-link" href="#/pg/pedido"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+</span>Empezar mi bloque</a></div></div>
+    </div>
+  </div></header>
+
+
+</div><div id="pg-circulo-privado--shopify-section-classes" class="shopify-section"><section class="section circle" data-circle data-price="600" data-endpoint="" data-name="" data-email="ramon@ejemplo.com" data-t-sent="Solicitud enviada ✓" data-t-count="[n] clases" >
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+    <symbol id="pg-circulo-privado--cs-padel" viewBox="0 0 48 48"><ellipse cx="22" cy="19" rx="12" ry="14" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M22 33v10M18 43h8M17 14h.1M22 12h.1M27 14h.1M19 20h.1M25 20h.1M22 27h.1" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle cx="38" cy="36" r="4" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
+    <symbol id="pg-circulo-privado--cs-tenis" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M11 14c8 3 8 17 0 20M37 14c-8 3-8 17 0 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="pg-circulo-privado--cs-ciclismo" viewBox="0 0 48 48"><circle cx="12" cy="32" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="36" cy="32" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 32l7-14h12l5 14M19 18l7 14h10M17 14h6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="pg-circulo-privado--cs-basketball" viewBox="0 0 48 48"><circle cx="24" cy="24" r="16" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M8 24h32M24 8v32M12 12c6 6 6 18 0 24M36 12c-6 6-6 18 0 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="pg-circulo-privado--cs-running" viewBox="0 0 48 48"><circle cx="29" cy="9" r="4" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M24 18l-7 5 3 4 6-3 4 6-5 10M24 18l9 4 5-3M20 27l-8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="pg-circulo-privado--cs-funcional" viewBox="0 0 48 48"><path d="M6 19v10M12 14v20M36 14v20M42 19v10M12 24h24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></symbol>
+    <symbol id="pg-circulo-privado--cs-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  </defs></svg>
+  <div class="container">
+    <header class="circle__head"><span class="eyebrow">Comunidad</span><h2>El círculo privado.</h2><p>Clases y experiencias deportivas con nuestras embajadoras, solo para clientes del bloque de 4 semanas.</p></header>
+
+    <div class="circle__gate" data-circle-gate hidden>
+      <span class="circle__gateico"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+      <div class="circle__gatetxt"><strong>Vista previa del círculo privado</strong><span>Las clases son exclusivas para clientes con un bloque de 4 semanas activo. Cada clase cuesta $600.</span></div>
+      <a class="btn btn--gold circle__gatebtn" href="#/pg/pedido">Empezar mi bloque</a>
+    </div>
+    <p class="circle__welcome" data-circle-welcome hidden>Bienvenido de vuelta. Tus accesos están activos: elige tu experiencia y aparta tu lugar.</p>
+
+    <div class="circle__filters" role="group" aria-label="Deporte" data-circle-filters>
+      <button class="circle__pill is-on" type="button" data-sport="all" aria-pressed="true">Todas (<span data-circle-all>12</span>)</button><button class="circle__pill" type="button" data-sport="padel" aria-pressed="false">Pádel</button><button class="circle__pill" type="button" data-sport="tenis" aria-pressed="false">Tenis</button><button class="circle__pill" type="button" data-sport="ciclismo" aria-pressed="false">Ciclismo</button><button class="circle__pill" type="button" data-sport="basketball" aria-pressed="false">Basketball</button><button class="circle__pill" type="button" data-sport="running" aria-pressed="false">Running</button><button class="circle__pill" type="button" data-sport="funcional" aria-pressed="false">Funcional</button></div>
+
+    <div class="circle__grid" data-circle-grid><article class="circle__card" data-sport="padel" data-class="Torneo Relámpago de Pádel" data-when="Sáb 29 Nov 09:00 AM" data-venue="Club Pádel Lomas" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-padel.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Pádel</span><h3>Torneo Relámpago de Pádel</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Anfitriona</dt><dd>Ren Jiménez</dd></div>
+            <div><dt>Fecha</dt><dd>Sáb 29 Nov</dd></div>
+            <div><dt>Hora</dt><dd>09:00 AM</dd></div>
+            <div><dt>Sede</dt><dd>Club Pádel Lomas</dd></div>
+          </dl><span class="circle__spots">3 cupos</span><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Apartar lugar · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>Con bloque de 4 semanas</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="tenis" data-class="Clínica de Tenis de Alto Impacto" data-when="Dom 30 Nov 10:30 AM" data-venue="Raqueta Club" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-tenis.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Tenis</span><h3>Clínica de Tenis de Alto Impacto</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Anfitriona</dt><dd>Anny De Vasquez</dd></div>
+            <div><dt>Fecha</dt><dd>Dom 30 Nov</dd></div>
+            <div><dt>Hora</dt><dd>10:30 AM</dd></div>
+            <div><dt>Sede</dt><dd>Raqueta Club</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Apartar lugar · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>Con bloque de 4 semanas</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="ciclismo" data-class="Rodada Nocturna de Ritmo" data-when="Mié 03 Dic 08:00 PM" data-venue="Andares" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-rodada.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Ciclismo</span><h3>Rodada Nocturna de Ritmo</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Anfitriona</dt><dd>BeccaQueen</dd></div>
+            <div><dt>Fecha</dt><dd>Mié 03 Dic</dd></div>
+            <div><dt>Hora</dt><dd>08:00 PM</dd></div>
+            <div><dt>Sede</dt><dd>Andares</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Apartar lugar · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>Con bloque de 4 semanas</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="basketball" data-class="Reta Privada de Basketball" data-when="Jue 04 Dic 07:30 PM" data-venue="Arena Norte" >
+          <div class="circle__top">
+            <span class="circle__av"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#pg-circulo-privado--cs-basketball"/></svg></span>
+            <div class="circle__tt"><span class="circle__sport">Basketball</span><h3>Reta Privada de Basketball</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Anfitriona</dt><dd>Anny De Vasquez</dd></div>
+            <div><dt>Fecha</dt><dd>Jue 04 Dic</dd></div>
+            <div><dt>Hora</dt><dd>07:30 PM</dd></div>
+            <div><dt>Sede</dt><dd>Arena Norte</dd></div>
+          </dl><span class="circle__spots">5 cupos</span><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Apartar lugar · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>Con bloque de 4 semanas</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="running" data-class="Trail Matutino de Running" data-when="Lun 08 Dic 07:00 AM" data-venue="Parque Central" >
+          <div class="circle__top">
+            <span class="circle__av"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#pg-circulo-privado--cs-running"/></svg></span>
+            <div class="circle__tt"><span class="circle__sport">Running</span><h3>Trail Matutino de Running</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Anfitriona</dt><dd>BeccaQueen</dd></div>
+            <div><dt>Fecha</dt><dd>Lun 08 Dic</dd></div>
+            <div><dt>Hora</dt><dd>07:00 AM</dd></div>
+            <div><dt>Sede</dt><dd>Parque Central</dd></div>
+          </dl><span class="circle__spots">4 cupos</span><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Apartar lugar · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>Con bloque de 4 semanas</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="funcional" data-class="Circuito Funcional Total Body" data-when="Mar 09 Dic 06:00 PM" data-venue="Fitness Studio Zona 10" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-circuito.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Funcional</span><h3>Circuito Funcional Total Body</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Anfitriona</dt><dd>Ren Jiménez</dd></div>
+            <div><dt>Fecha</dt><dd>Mar 09 Dic</dd></div>
+            <div><dt>Hora</dt><dd>06:00 PM</dd></div>
+            <div><dt>Sede</dt><dd>Fitness Studio Zona 10</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Apartar lugar · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>Con bloque de 4 semanas</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="padel" data-class="Torneo de Pádel para Principiantes" data-when="Sáb 13 Dic 09:00 AM" data-venue="Club Pádel Lomas" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-padel.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Pádel</span><h3>Torneo de Pádel para Principiantes</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Anfitriona</dt><dd>Ren Jiménez</dd></div>
+            <div><dt>Fecha</dt><dd>Sáb 13 Dic</dd></div>
+            <div><dt>Hora</dt><dd>09:00 AM</dd></div>
+            <div><dt>Sede</dt><dd>Club Pádel Lomas</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Apartar lugar · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>Con bloque de 4 semanas</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="tenis" data-class="Clínica de Tenis Signature" data-when="Dom 14 Dic 10:30 AM" data-venue="Raqueta Club" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-tenis.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Tenis</span><h3>Clínica de Tenis Signature</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Anfitriona</dt><dd>Anny De Vasquez</dd></div>
+            <div><dt>Fecha</dt><dd>Dom 14 Dic</dd></div>
+            <div><dt>Hora</dt><dd>10:30 AM</dd></div>
+            <div><dt>Sede</dt><dd>Raqueta Club</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Apartar lugar · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>Con bloque de 4 semanas</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="ciclismo" data-class="Sesión de Ciclismo de Ritmo de Élite" data-when="Mié 17 Dic 08:00 PM" data-venue="Circuito Andares" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-rodada.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Ciclismo</span><h3>Sesión de Ciclismo de Ritmo de Élite</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Anfitriona</dt><dd>BeccaQueen</dd></div>
+            <div><dt>Fecha</dt><dd>Mié 17 Dic</dd></div>
+            <div><dt>Hora</dt><dd>08:00 PM</dd></div>
+            <div><dt>Sede</dt><dd>Circuito Andares</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Apartar lugar · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>Con bloque de 4 semanas</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="funcional" data-class="Funcional Reserve Trail" data-when="Jue 18 Dic 07:00 AM" data-venue="Parque Central" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-circuito.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Funcional</span><h3>Funcional Reserve Trail</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Anfitriona</dt><dd>Ren Jiménez</dd></div>
+            <div><dt>Fecha</dt><dd>Jue 18 Dic</dd></div>
+            <div><dt>Hora</dt><dd>07:00 AM</dd></div>
+            <div><dt>Sede</dt><dd>Parque Central</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Apartar lugar · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>Con bloque de 4 semanas</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="basketball" data-class="Basketball Reserve Reta" data-when="Mar 23 Dic 07:30 PM" data-venue="Arena Norte" >
+          <div class="circle__top">
+            <span class="circle__av"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#pg-circulo-privado--cs-basketball"/></svg></span>
+            <div class="circle__tt"><span class="circle__sport">Basketball</span><h3>Basketball Reserve Reta</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Anfitriona</dt><dd>Anny De Vasquez</dd></div>
+            <div><dt>Fecha</dt><dd>Mar 23 Dic</dd></div>
+            <div><dt>Hora</dt><dd>07:30 PM</dd></div>
+            <div><dt>Sede</dt><dd>Arena Norte</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Apartar lugar · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>Con bloque de 4 semanas</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="padel" data-class="Torneo de Pádel Signature" data-when="Sáb 27 Dic 09:00 AM" data-venue="Club Pádel Lomas" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-padel.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Pádel</span><h3>Torneo de Pádel Signature</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Anfitriona</dt><dd>Ren Jiménez</dd></div>
+            <div><dt>Fecha</dt><dd>Sáb 27 Dic</dd></div>
+            <div><dt>Hora</dt><dd>09:00 AM</dd></div>
+            <div><dt>Sede</dt><dd>Club Pádel Lomas</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Apartar lugar · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>Con bloque de 4 semanas</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article></div>
+    <p class="circle__note">Cada clase cuesta $600. Te confirmamos tu lugar por correo; el cobro se hace al confirmar.</p>
+  </div>
+</section>
+
+
+</div>
+    </div>
 <div data-page="pg/embajadores-reglas" data-template="page" data-title="Reglas de alianza" hidden>
       <div id="pg-embajadores-reglas--shopify-section-head" class="shopify-section"><header class="page-head" >
   <div class="page-head__photo">
@@ -15302,7 +15553,7 @@ Pago digital, sin efectivo</li></ul>
 
 </div>
     </div>
-<div data-page="indice" data-title="Índice de páginas" hidden><section class="section"><div class="container"><div class="section__head"><span class="eyebrow">Todas las páginas</span><h1>Índice de páginas</h1></div><ul class="menu-overlay__more" style="list-style:none"><li><a href="#/home">Home</a></li><li><a href="#/menu">Especiales de la semana</a></li><li><a href="#/tienda">Kulinaria Store</a></li><li><a href="#/p/salmon-costra-almendras">Ficha de platillo</a></li><li><a href="#/pg/planes">Planes</a></li><li><a href="#/pg/plan-bloque">Bloque de 4 semanas</a></li><li><a href="#/pg/plan-prueba">Semana de prueba</a></li><li><a href="#/pg/niveles-y-precios">Niveles y precios</a></li><li><a href="#/pg/ciclo-y-politicas">Ciclo y políticas</a></li><li><a href="#/pg/embajadores">Embajadores</a></li><li><a href="#/pg/embajadores-entrenadores">Entrenadores</a></li><li><a href="#/pg/embajadores-clientes">Clientes referidos</a></li><li><a href="#/pg/embajadores-gimnasios">Gimnasios aliados</a></li><li><a href="#/pg/embajadores-directorio">Directorio</a></li><li><a href="#/pg/embajadores-reglas">Reglas de alianza</a></li><li><a href="#/pg/embajadores-solicitar">Solicitar código</a></li><li><a href="#/pg/carta-kulinaria">Carta Kulinaria</a></li><li><a href="#/pg/carta-chef-privado">Chef privado</a></li><li><a href="#/pg/carta-cenas-romanticas">Cenas románticas</a></li><li><a href="#/pg/carta-galeria">Galería de eventos</a></li><li><a href="#/pg/carta-cotizacion">Cotización privada</a></li><li><a href="#/pg/nosotros">Nosotros</a></li><li><a href="#/pg/nosotros-historia">Historia y fundador</a></li><li><a href="#/pg/nosotros-equipo">Equipo de cocina</a></li><li><a href="#/pg/nosotros-calidad">Calidad y envases</a></li><li><a href="#/pg/filosofia">Filosofía</a></li><li><a href="#/pg/ayuda">Ayuda y legales</a></li><li><a href="#/pg/terminos">Contrato y términos</a></li><li><a href="#/pg/privacidad">Aviso de privacidad</a></li><li><a href="#/pg/checkout">Checkout y contrato</a></li><li><a href="#/pg/confirmacion">Confirmación</a></li><li><a href="#/pg/cuenta-semana">Mi semana</a></li><li><a href="#/pg/cuenta-pausas">Pausar entregas</a></li><li><a href="#/pg/cuenta-monedero">Monedero</a></li><li><a href="#/pg/cuenta-perfil">Alergias y gustos</a></li><li><a href="#/pg/cuenta-referidos">Mis referidos</a></li><li><a href="#/pg/cuenta-pedidos">Pedidos y facturas</a></li><li><a href="#/pg/cuenta-entregas">Entregas y envases</a></li><li><a href="#/pg/pedido">Armar mi pedido</a></li><li><a href="#/pg/calendario">Calendario del menú</a></li><li><a href="#/pg/perfil">Mi perfil de alergias</a></li><li><a href="#/pg/bienvenida">Bienvenida</a></li><li><a href="#/carrito">Mi selección</a></li><li><a href="#/cuenta">Mi cuenta</a></li><li><a href="#/login">Iniciar sesión</a></li><li><a href="#/registro">Crear cuenta</a></li><li><a href="#/direcciones">Mis direcciones</a></li><li><a href="#/pedido">Pedido #1001</a></li><li><a href="#/reset">Restablecer contraseña</a></li><li><a href="#/buscar">Buscar</a></li><li><a href="#/404">Página no encontrada</a></li></ul></div></section></div></template>
+<div data-page="indice" data-title="Índice de páginas" hidden><section class="section"><div class="container"><div class="section__head"><span class="eyebrow">Todas las páginas</span><h1>Índice de páginas</h1></div><ul class="menu-overlay__more" style="list-style:none"><li><a href="#/home">Home</a></li><li><a href="#/menu">Especiales de la semana</a></li><li><a href="#/tienda">Kulinaria Store</a></li><li><a href="#/p/salmon-costra-almendras">Ficha de platillo</a></li><li><a href="#/pg/planes">Planes</a></li><li><a href="#/pg/plan-bloque">Bloque de 4 semanas</a></li><li><a href="#/pg/plan-prueba">Semana de prueba</a></li><li><a href="#/pg/niveles-y-precios">Niveles y precios</a></li><li><a href="#/pg/ciclo-y-politicas">Ciclo y políticas</a></li><li><a href="#/pg/embajadores">Embajadores</a></li><li><a href="#/pg/embajadores-entrenadores">Entrenadores</a></li><li><a href="#/pg/embajadores-clientes">Clientes referidos</a></li><li><a href="#/pg/embajadores-gimnasios">Gimnasios aliados</a></li><li><a href="#/pg/embajadores-directorio">Directorio</a></li><li><a href="#/pg/circulo-privado">Círculo privado</a></li><li><a href="#/pg/embajadores-reglas">Reglas de alianza</a></li><li><a href="#/pg/embajadores-solicitar">Solicitar código</a></li><li><a href="#/pg/carta-kulinaria">Carta Kulinaria</a></li><li><a href="#/pg/carta-chef-privado">Chef privado</a></li><li><a href="#/pg/carta-cenas-romanticas">Cenas románticas</a></li><li><a href="#/pg/carta-galeria">Galería de eventos</a></li><li><a href="#/pg/carta-cotizacion">Cotización privada</a></li><li><a href="#/pg/nosotros">Nosotros</a></li><li><a href="#/pg/nosotros-historia">Historia y fundador</a></li><li><a href="#/pg/nosotros-equipo">Equipo de cocina</a></li><li><a href="#/pg/nosotros-calidad">Calidad y envases</a></li><li><a href="#/pg/filosofia">Filosofía</a></li><li><a href="#/pg/ayuda">Ayuda y legales</a></li><li><a href="#/pg/terminos">Contrato y términos</a></li><li><a href="#/pg/privacidad">Aviso de privacidad</a></li><li><a href="#/pg/checkout">Checkout y contrato</a></li><li><a href="#/pg/confirmacion">Confirmación</a></li><li><a href="#/pg/cuenta-semana">Mi semana</a></li><li><a href="#/pg/cuenta-pausas">Pausar entregas</a></li><li><a href="#/pg/cuenta-monedero">Monedero</a></li><li><a href="#/pg/cuenta-perfil">Alergias y gustos</a></li><li><a href="#/pg/cuenta-referidos">Mis referidos</a></li><li><a href="#/pg/cuenta-pedidos">Pedidos y facturas</a></li><li><a href="#/pg/cuenta-entregas">Entregas y envases</a></li><li><a href="#/pg/pedido">Armar mi pedido</a></li><li><a href="#/pg/calendario">Calendario del menú</a></li><li><a href="#/pg/perfil">Mi perfil de alergias</a></li><li><a href="#/pg/bienvenida">Bienvenida</a></li><li><a href="#/carrito">Mi selección</a></li><li><a href="#/cuenta">Mi cuenta</a></li><li><a href="#/login">Iniciar sesión</a></li><li><a href="#/registro">Crear cuenta</a></li><li><a href="#/direcciones">Mis direcciones</a></li><li><a href="#/pedido">Pedido #1001</a></li><li><a href="#/reset">Restablecer contraseña</a></li><li><a href="#/buscar">Buscar</a></li><li><a href="#/404">Página no encontrada</a></li></ul></div></section></div></template>
 <template data-l="en"><div data-page="home" data-template="index" data-title="Home" hidden>
       <div id="home--shopify-section-hero" class="shopify-section"><section class="hero hero--10 hero--intro tone-dark" data-scroll data-hero >
   <svg class="hx__sprite" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
@@ -15339,7 +15590,7 @@ Pago digital, sin efectivo</li></ul>
           <div class="hx__copy"><span class="hx__tag">Kulinaria ambassadors • Lifestyle</span><h2 class="hx__h">Transform your mind. Conquer your physique.</h2><p class="hx__p">Your nutrition opens the door to our private circle. Train, compete and live exclusive sports experiences alongside those who lead the change.</p><h3 class="hx__lt">Experiences and community</h3><ul class="hx__list"><li>Sports events and exclusive activations</li><li>Group training and fitness challenges</li><li>VIP access to the Kulinaria community</li></ul></div>
         </div><div class="hx__strip">
           <div class="hx__striphead">
-            <span>Upcoming events • Kulinaria Family exclusive</span><a href="#/pg/calendario">See more dates +</a></div>
+            <span>Upcoming events • Kulinaria Family exclusive</span><a href="#/pg/circulo-privado">See more dates +</a></div>
           <div class="hx__cards"><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-tenis.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Tennis clinic</strong><small>Coach: Jessica</small><em>Wed 26 Nov</em></span>
               </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-circuito.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Functional circuit</strong><small>Coach: Paulina</small><em>Sat 29 Nov</em></span>
               </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-rodada.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Night ride</strong><small>Coach: Ren Jiménez</small><em>Wed 03 Dec</em></span>
@@ -22714,6 +22965,196 @@ Digital payment, no cash</li></ul>
 
 </div>
     </div>
+<div data-page="pg/circulo-privado" data-template="page" data-title="Círculo privado" hidden>
+      <div id="pg-circulo-privado--shopify-section-head" class="shopify-section"><header class="page-head" >
+  <div class="page-head__photo">
+    <div class="page-head__bg" aria-hidden="true"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-emb.webp" width="1200" height="800" alt="" class="" loading="eager" fetchpriority="high" decoding="async"></div>
+    <div class="container">
+      <div class="page-head__copy">
+        <nav class="page-head__crumbs" aria-label="Breadcrumb">
+          <a href="#/home">Home</a><i aria-hidden="true">/</i><a href="#/pg/embajadores">Ambassadors</a><i aria-hidden="true">/</i><span>Community</span></nav>
+        <span class="hero__rule" aria-hidden="true"></span><h1>The <em>private</em> circle</h1><p class="hero__sub">Classes with our ambassadors.</p><div class="hero__cta">
+            <a class="arrow-link" href="#/pg/pedido"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+</span>Start my block</a></div></div>
+    </div>
+  </div></header>
+
+
+</div><div id="pg-circulo-privado--shopify-section-classes" class="shopify-section"><section class="section circle" data-circle data-price="600" data-endpoint="" data-name="" data-email="ramon@ejemplo.com" data-t-sent="Request sent ✓" data-t-count="[n] classes" >
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+    <symbol id="pg-circulo-privado--cs-padel" viewBox="0 0 48 48"><ellipse cx="22" cy="19" rx="12" ry="14" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M22 33v10M18 43h8M17 14h.1M22 12h.1M27 14h.1M19 20h.1M25 20h.1M22 27h.1" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle cx="38" cy="36" r="4" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
+    <symbol id="pg-circulo-privado--cs-tenis" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M11 14c8 3 8 17 0 20M37 14c-8 3-8 17 0 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="pg-circulo-privado--cs-ciclismo" viewBox="0 0 48 48"><circle cx="12" cy="32" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="36" cy="32" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 32l7-14h12l5 14M19 18l7 14h10M17 14h6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="pg-circulo-privado--cs-basketball" viewBox="0 0 48 48"><circle cx="24" cy="24" r="16" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M8 24h32M24 8v32M12 12c6 6 6 18 0 24M36 12c-6 6-6 18 0 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="pg-circulo-privado--cs-running" viewBox="0 0 48 48"><circle cx="29" cy="9" r="4" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M24 18l-7 5 3 4 6-3 4 6-5 10M24 18l9 4 5-3M20 27l-8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="pg-circulo-privado--cs-funcional" viewBox="0 0 48 48"><path d="M6 19v10M12 14v20M36 14v20M42 19v10M12 24h24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></symbol>
+    <symbol id="pg-circulo-privado--cs-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  </defs></svg>
+  <div class="container">
+    <header class="circle__head"><span class="eyebrow">Community</span><h2>The private circle.</h2><p>Sports classes and experiences with our ambassadors, only for 4-week block customers.</p></header>
+
+    <div class="circle__gate" data-circle-gate hidden>
+      <span class="circle__gateico"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+      <div class="circle__gatetxt"><strong>Private circle preview</strong><span>Classes are exclusive to customers with an active 4-week block. Each class costs $600.</span></div>
+      <a class="btn btn--gold circle__gatebtn" href="#/pg/pedido">Start my block</a>
+    </div>
+    <p class="circle__welcome" data-circle-welcome hidden>Welcome back. Your access is active: pick your experience and reserve your spot.</p>
+
+    <div class="circle__filters" role="group" aria-label="Sport" data-circle-filters>
+      <button class="circle__pill is-on" type="button" data-sport="all" aria-pressed="true">All (<span data-circle-all>12</span>)</button><button class="circle__pill" type="button" data-sport="padel" aria-pressed="false">Padel</button><button class="circle__pill" type="button" data-sport="tenis" aria-pressed="false">Tennis</button><button class="circle__pill" type="button" data-sport="ciclismo" aria-pressed="false">Cycling</button><button class="circle__pill" type="button" data-sport="basketball" aria-pressed="false">Basketball</button><button class="circle__pill" type="button" data-sport="running" aria-pressed="false">Running</button><button class="circle__pill" type="button" data-sport="funcional" aria-pressed="false">Functional</button></div>
+
+    <div class="circle__grid" data-circle-grid><article class="circle__card" data-sport="padel" data-class="Lightning Padel Tournament" data-when="Sat 29 Nov 09:00 AM" data-venue="Club Pádel Lomas" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-padel.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Padel</span><h3>Lightning Padel Tournament</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Host</dt><dd>Ren Jiménez</dd></div>
+            <div><dt>Date</dt><dd>Sat 29 Nov</dd></div>
+            <div><dt>Time</dt><dd>09:00 AM</dd></div>
+            <div><dt>Venue</dt><dd>Club Pádel Lomas</dd></div>
+          </dl><span class="circle__spots">3 spots</span><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Reserve a spot · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>With a 4-week block</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="tenis" data-class="High-Impact Tennis Clinic" data-when="Sun 30 Nov 10:30 AM" data-venue="Raqueta Club" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-tenis.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Tennis</span><h3>High-Impact Tennis Clinic</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Host</dt><dd>Anny De Vasquez</dd></div>
+            <div><dt>Date</dt><dd>Sun 30 Nov</dd></div>
+            <div><dt>Time</dt><dd>10:30 AM</dd></div>
+            <div><dt>Venue</dt><dd>Raqueta Club</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Reserve a spot · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>With a 4-week block</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="ciclismo" data-class="Night Pace Ride" data-when="Wed 03 Dec 08:00 PM" data-venue="Andares" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-rodada.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Cycling</span><h3>Night Pace Ride</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Host</dt><dd>BeccaQueen</dd></div>
+            <div><dt>Date</dt><dd>Wed 03 Dec</dd></div>
+            <div><dt>Time</dt><dd>08:00 PM</dd></div>
+            <div><dt>Venue</dt><dd>Andares</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Reserve a spot · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>With a 4-week block</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="basketball" data-class="Private Basketball Game" data-when="Thu 04 Dec 07:30 PM" data-venue="Arena Norte" >
+          <div class="circle__top">
+            <span class="circle__av"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#pg-circulo-privado--cs-basketball"/></svg></span>
+            <div class="circle__tt"><span class="circle__sport">Basketball</span><h3>Private Basketball Game</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Host</dt><dd>Anny De Vasquez</dd></div>
+            <div><dt>Date</dt><dd>Thu 04 Dec</dd></div>
+            <div><dt>Time</dt><dd>07:30 PM</dd></div>
+            <div><dt>Venue</dt><dd>Arena Norte</dd></div>
+          </dl><span class="circle__spots">5 spots</span><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Reserve a spot · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>With a 4-week block</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="running" data-class="Morning Trail Run" data-when="Mon 08 Dec 07:00 AM" data-venue="Central Park" >
+          <div class="circle__top">
+            <span class="circle__av"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#pg-circulo-privado--cs-running"/></svg></span>
+            <div class="circle__tt"><span class="circle__sport">Running</span><h3>Morning Trail Run</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Host</dt><dd>BeccaQueen</dd></div>
+            <div><dt>Date</dt><dd>Mon 08 Dec</dd></div>
+            <div><dt>Time</dt><dd>07:00 AM</dd></div>
+            <div><dt>Venue</dt><dd>Central Park</dd></div>
+          </dl><span class="circle__spots">4 spots</span><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Reserve a spot · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>With a 4-week block</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="funcional" data-class="Total Body Functional Circuit" data-when="Tue 09 Dec 06:00 PM" data-venue="Fitness Studio Zone 10" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-circuito.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Functional</span><h3>Total Body Functional Circuit</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Host</dt><dd>Ren Jiménez</dd></div>
+            <div><dt>Date</dt><dd>Tue 09 Dec</dd></div>
+            <div><dt>Time</dt><dd>06:00 PM</dd></div>
+            <div><dt>Venue</dt><dd>Fitness Studio Zone 10</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Reserve a spot · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>With a 4-week block</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="padel" data-class="Padel Tournament for Beginners" data-when="Sat 13 Dec 09:00 AM" data-venue="Club Pádel Lomas" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-padel.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Padel</span><h3>Padel Tournament for Beginners</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Host</dt><dd>Ren Jiménez</dd></div>
+            <div><dt>Date</dt><dd>Sat 13 Dec</dd></div>
+            <div><dt>Time</dt><dd>09:00 AM</dd></div>
+            <div><dt>Venue</dt><dd>Club Pádel Lomas</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Reserve a spot · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>With a 4-week block</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="tenis" data-class="Signature Tennis Clinic" data-when="Sun 14 Dec 10:30 AM" data-venue="Raqueta Club" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-tenis.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Tennis</span><h3>Signature Tennis Clinic</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Host</dt><dd>Anny De Vasquez</dd></div>
+            <div><dt>Date</dt><dd>Sun 14 Dec</dd></div>
+            <div><dt>Time</dt><dd>10:30 AM</dd></div>
+            <div><dt>Venue</dt><dd>Raqueta Club</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Reserve a spot · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>With a 4-week block</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="ciclismo" data-class="Elite Pace Cycling Session" data-when="Wed 17 Dec 08:00 PM" data-venue="Circuito Andares" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-rodada.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Cycling</span><h3>Elite Pace Cycling Session</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Host</dt><dd>BeccaQueen</dd></div>
+            <div><dt>Date</dt><dd>Wed 17 Dec</dd></div>
+            <div><dt>Time</dt><dd>08:00 PM</dd></div>
+            <div><dt>Venue</dt><dd>Circuito Andares</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Reserve a spot · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>With a 4-week block</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="funcional" data-class="Reserve Functional Trail" data-when="Thu 18 Dec 07:00 AM" data-venue="Central Park" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-circuito.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Functional</span><h3>Reserve Functional Trail</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Host</dt><dd>Ren Jiménez</dd></div>
+            <div><dt>Date</dt><dd>Thu 18 Dec</dd></div>
+            <div><dt>Time</dt><dd>07:00 AM</dd></div>
+            <div><dt>Venue</dt><dd>Central Park</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Reserve a spot · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>With a 4-week block</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="basketball" data-class="Reserve Basketball Game" data-when="Tue 23 Dec 07:30 PM" data-venue="Arena Norte" >
+          <div class="circle__top">
+            <span class="circle__av"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#pg-circulo-privado--cs-basketball"/></svg></span>
+            <div class="circle__tt"><span class="circle__sport">Basketball</span><h3>Reserve Basketball Game</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Host</dt><dd>Anny De Vasquez</dd></div>
+            <div><dt>Date</dt><dd>Tue 23 Dec</dd></div>
+            <div><dt>Time</dt><dd>07:30 PM</dd></div>
+            <div><dt>Venue</dt><dd>Arena Norte</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Reserve a spot · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>With a 4-week block</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article><article class="circle__card" data-sport="padel" data-class="Signature Padel Tournament" data-when="Sat 27 Dec 09:00 AM" data-venue="Club Pádel Lomas" >
+          <div class="circle__top">
+            <span class="circle__av"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-padel.webp" alt="" loading="lazy" width="60" height="60"></span>
+            <div class="circle__tt"><span class="circle__sport">Padel</span><h3>Signature Padel Tournament</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>Host</dt><dd>Ren Jiménez</dd></div>
+            <div><dt>Date</dt><dd>Sat 27 Dec</dd></div>
+            <div><dt>Time</dt><dd>09:00 AM</dd></div>
+            <div><dt>Venue</dt><dd>Club Pádel Lomas</dd></div>
+          </dl><button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">Reserve a spot · $600</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#pg-circulo-privado--cs-lock"/></svg>With a 4-week block</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#pg-circulo-privado--cs-lock"/></svg></span>
+        </article></div>
+    <p class="circle__note">Each class costs $600. We confirm your spot by email; you are charged on confirmation.</p>
+  </div>
+</section>
+
+
+</div>
+    </div>
 <div data-page="pg/embajadores-reglas" data-template="page" data-title="Reglas de alianza" hidden>
       <div id="pg-embajadores-reglas--shopify-section-head" class="shopify-section"><header class="page-head" >
   <div class="page-head__photo">
@@ -25686,7 +26127,7 @@ Digital payment, no cash</li></ul>
 
 </div>
     </div>
-<div data-page="indice" data-title="Page index" hidden><section class="section"><div class="container"><div class="section__head"><span class="eyebrow">All pages</span><h1>Page index</h1></div><ul class="menu-overlay__more" style="list-style:none"><li><a href="#/home">Home</a></li><li><a href="#/menu">Weekly specials</a></li><li><a href="#/tienda">Kulinaria Store</a></li><li><a href="#/p/salmon-costra-almendras">Dish page</a></li><li><a href="#/pg/planes">Plans</a></li><li><a href="#/pg/plan-bloque">4-week block</a></li><li><a href="#/pg/plan-prueba">Trial week</a></li><li><a href="#/pg/niveles-y-precios">Levels and prices</a></li><li><a href="#/pg/ciclo-y-politicas">Cycle and policies</a></li><li><a href="#/pg/embajadores">Ambassadors</a></li><li><a href="#/pg/embajadores-entrenadores">Trainers</a></li><li><a href="#/pg/embajadores-clientes">Referred clients</a></li><li><a href="#/pg/embajadores-gimnasios">Partner gyms</a></li><li><a href="#/pg/embajadores-directorio">Directory</a></li><li><a href="#/pg/embajadores-reglas">Partnership rules</a></li><li><a href="#/pg/embajadores-solicitar">Request a code</a></li><li><a href="#/pg/carta-kulinaria">Kulinaria Carta</a></li><li><a href="#/pg/carta-chef-privado">Private chef</a></li><li><a href="#/pg/carta-cenas-romanticas">Romantic dinners</a></li><li><a href="#/pg/carta-galeria">Event gallery</a></li><li><a href="#/pg/carta-cotizacion">Private quote</a></li><li><a href="#/pg/nosotros">About us</a></li><li><a href="#/pg/nosotros-historia">History and founder</a></li><li><a href="#/pg/nosotros-equipo">Kitchen team</a></li><li><a href="#/pg/nosotros-calidad">Quality and containers</a></li><li><a href="#/pg/filosofia">Philosophy</a></li><li><a href="#/pg/ayuda">Help & legal</a></li><li><a href="#/pg/terminos">Contract and terms</a></li><li><a href="#/pg/privacidad">Privacy notice</a></li><li><a href="#/pg/checkout">Checkout and contract</a></li><li><a href="#/pg/confirmacion">Confirmation</a></li><li><a href="#/pg/cuenta-semana">My week</a></li><li><a href="#/pg/cuenta-pausas">Pause deliveries</a></li><li><a href="#/pg/cuenta-monedero">Wallet</a></li><li><a href="#/pg/cuenta-perfil">Allergies & tastes</a></li><li><a href="#/pg/cuenta-referidos">My referrals</a></li><li><a href="#/pg/cuenta-pedidos">Orders & invoices</a></li><li><a href="#/pg/cuenta-entregas">Deliveries & containers</a></li><li><a href="#/pg/pedido">Build my order</a></li><li><a href="#/pg/calendario">Menu calendar</a></li><li><a href="#/pg/perfil">My allergy profile</a></li><li><a href="#/pg/bienvenida">Welcome</a></li><li><a href="#/carrito">My selection</a></li><li><a href="#/cuenta">My account</a></li><li><a href="#/login">Sign in</a></li><li><a href="#/registro">Create account</a></li><li><a href="#/direcciones">My addresses</a></li><li><a href="#/pedido">Order #1001</a></li><li><a href="#/reset">Reset password</a></li><li><a href="#/buscar">Search</a></li><li><a href="#/404">Page not found</a></li></ul></div></section></div></template></main>
+<div data-page="indice" data-title="Page index" hidden><section class="section"><div class="container"><div class="section__head"><span class="eyebrow">All pages</span><h1>Page index</h1></div><ul class="menu-overlay__more" style="list-style:none"><li><a href="#/home">Home</a></li><li><a href="#/menu">Weekly specials</a></li><li><a href="#/tienda">Kulinaria Store</a></li><li><a href="#/p/salmon-costra-almendras">Dish page</a></li><li><a href="#/pg/planes">Plans</a></li><li><a href="#/pg/plan-bloque">4-week block</a></li><li><a href="#/pg/plan-prueba">Trial week</a></li><li><a href="#/pg/niveles-y-precios">Levels and prices</a></li><li><a href="#/pg/ciclo-y-politicas">Cycle and policies</a></li><li><a href="#/pg/embajadores">Ambassadors</a></li><li><a href="#/pg/embajadores-entrenadores">Trainers</a></li><li><a href="#/pg/embajadores-clientes">Referred clients</a></li><li><a href="#/pg/embajadores-gimnasios">Partner gyms</a></li><li><a href="#/pg/embajadores-directorio">Directory</a></li><li><a href="#/pg/circulo-privado">Círculo privado</a></li><li><a href="#/pg/embajadores-reglas">Partnership rules</a></li><li><a href="#/pg/embajadores-solicitar">Request a code</a></li><li><a href="#/pg/carta-kulinaria">Kulinaria Carta</a></li><li><a href="#/pg/carta-chef-privado">Private chef</a></li><li><a href="#/pg/carta-cenas-romanticas">Romantic dinners</a></li><li><a href="#/pg/carta-galeria">Event gallery</a></li><li><a href="#/pg/carta-cotizacion">Private quote</a></li><li><a href="#/pg/nosotros">About us</a></li><li><a href="#/pg/nosotros-historia">History and founder</a></li><li><a href="#/pg/nosotros-equipo">Kitchen team</a></li><li><a href="#/pg/nosotros-calidad">Quality and containers</a></li><li><a href="#/pg/filosofia">Philosophy</a></li><li><a href="#/pg/ayuda">Help & legal</a></li><li><a href="#/pg/terminos">Contract and terms</a></li><li><a href="#/pg/privacidad">Privacy notice</a></li><li><a href="#/pg/checkout">Checkout and contract</a></li><li><a href="#/pg/confirmacion">Confirmation</a></li><li><a href="#/pg/cuenta-semana">My week</a></li><li><a href="#/pg/cuenta-pausas">Pause deliveries</a></li><li><a href="#/pg/cuenta-monedero">Wallet</a></li><li><a href="#/pg/cuenta-perfil">Allergies & tastes</a></li><li><a href="#/pg/cuenta-referidos">My referrals</a></li><li><a href="#/pg/cuenta-pedidos">Orders & invoices</a></li><li><a href="#/pg/cuenta-entregas">Deliveries & containers</a></li><li><a href="#/pg/pedido">Build my order</a></li><li><a href="#/pg/calendario">Menu calendar</a></li><li><a href="#/pg/perfil">My allergy profile</a></li><li><a href="#/pg/bienvenida">Welcome</a></li><li><a href="#/carrito">My selection</a></li><li><a href="#/cuenta">My account</a></li><li><a href="#/login">Sign in</a></li><li><a href="#/registro">Create account</a></li><li><a href="#/direcciones">My addresses</a></li><li><a href="#/pedido">Order #1001</a></li><li><a href="#/reset">Reset password</a></li><li><a href="#/buscar">Search</a></li><li><a href="#/404">Page not found</a></li></ul></div></section></div></template></main>
 
     <template data-l="es"><div id="shopify-section-footer" class="shopify-section shopify-section-group-footer-group"><footer class="site-footer tone-dark" >
   <div class="container">
@@ -27483,6 +27924,36 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       .catch(function () { cb(null); });
   }
 
+  /* ---------- private circle (classes): everybody can preview; booking needs an active 4-week block ---------- */
+  function initCircle() {
+    var root = $('[data-circle]'); if (!root) return;
+    var gate = $('[data-circle-gate]', root), welcome = $('[data-circle-welcome]', root), cards = $$('.circle__card', root), pills = $$('[data-sport]', $('[data-circle-filters]', root));
+    var member = false;
+    var paint = function () {
+      root.classList.toggle('is-member', member); root.classList.toggle('is-locked', !member);
+      if (gate) gate.hidden = member; if (welcome) welcome.hidden = !member;
+      cards.forEach(function (c) { var b = $('[data-circle-book]', c); if (b) { b.setAttribute('aria-disabled', member ? 'false' : 'true'); b.tabIndex = member ? 0 : -1; } });
+    };
+    paint();
+    loadCredits(function (c) { member = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); paint(); });
+    pills.forEach(function (p) {
+      p.addEventListener('click', function () {
+        var sp = p.getAttribute('data-sport');
+        pills.forEach(function (x) { var on = x === p; x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+        cards.forEach(function (c) { c.hidden = !(sp === 'all' || c.getAttribute('data-sport') === sp); });
+      });
+    });
+    root.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-circle-book]'); if (!b) return;
+      var card = b.closest('.circle__card');
+      if (!member) { if (gate) { gate.hidden = false; gate.classList.remove('is-nudge'); void gate.offsetWidth; gate.classList.add('is-nudge'); gate.scrollIntoView({ block: 'center', behavior: REDUCE ? 'auto' : 'smooth' }); } return; }
+      if (card.classList.contains('is-sent')) return;
+      var ep = root.getAttribute('data-endpoint'), name = root.getAttribute('data-name') || '', email = root.getAttribute('data-email') || '';
+      try { if (ep && email) fetch(ep, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'lead', kind: 'general', name: name || email, email: email, phone: '', fields: { tipo: 'clase del círculo privado', clase: card.getAttribute('data-class'), cuando: card.getAttribute('data-when'), sede: card.getAttribute('data-venue'), precio: root.getAttribute('data-price') } }) }); } catch (x) {}
+      card.classList.add('is-sent'); b.setAttribute('aria-disabled', 'true'); var l = $('.circle__booklbl', b); if (l) l.textContent = root.getAttribute('data-t-sent') || '✓';
+    });
+  }
+
   /* ---------- "Mi semana": signed-in customers choose up to 5 meals per covered week; empty days are not delivered ---------- */
   function initMyWeek() {
     var root = $('[data-myweek]'); if (!root) return;
@@ -29043,7 +29514,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
     [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile, initDietGate,
-      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initFire, initTilt, initPeek].forEach(run);
+      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initCircle, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
   });

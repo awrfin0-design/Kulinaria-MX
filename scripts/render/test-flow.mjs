@@ -242,6 +242,32 @@ await page.goto(URL0);
   ok('hero on a phone: the cube works at phone width, the item fits and its controls are inside the screen', await page.evaluate((h) => { const e = document.querySelector(h), c = e.querySelector('.hero__ctl').getBoundingClientRect(), on = e.querySelector('.hs.is-cur').getBoundingClientRect(); return document.documentElement.scrollWidth <= innerWidth + 1 && c.right <= innerWidth + 1 && on.right <= innerWidth + 1 && on.width > 300; }, HR));
   await page.setViewportSize({ width: 1440, height: 900 });
 
+  // ---- private circle: everybody can preview the classes, only a 4-week block opens them
+  await page.setViewportSize({ width: 1440, height: 860 });
+  const CR = '[data-page="pg/circulo-privado"]';
+  await base(); await page.evaluate(() => localStorage.setItem('kx-test-orders', '0'));
+  await page.goto(`${URL0}#/pg/circulo-privado`); await page.reload(); await page.waitForTimeout(1200);
+  const cl = await page.evaluate((c) => { const r = document.querySelector(c + ' [data-circle]'); const card = r.querySelector('.circle__card'); return { locked: r.classList.contains('is-locked'), cards: r.querySelectorAll('.circle__card').length, gate: !r.querySelector('[data-circle-gate]').hidden, lockIcons: [...r.querySelectorAll('.circle__lock')].filter((x) => getComputedStyle(x).display !== 'none').length, bookTxt: card.querySelector('[data-circle-book]').innerText, price: /600/.test(r.innerText), detail: /Ren Jiménez/.test(card.innerText) && /09:00/.test(card.innerText), pills: [...r.querySelectorAll('[data-circle-filters] [data-sport]')].map((x) => x.getAttribute('data-sport')).join() }; }, CR);
+  ok('private circle (no block): 12 classes are visible as a preview with a lock on every card and the $600 price', cl.locked && cl.cards === 12 && cl.gate && cl.lockIcons === 12 && cl.price && cl.detail, JSON.stringify(cl));
+  ok('private circle: the sport filters are there (Todas + pádel, tenis, ciclismo, basketball, running, funcional)', cl.pills === 'all,padel,tenis,ciclismo,basketball,running,funcional', cl.pills);
+  await page.evaluate((c) => document.querySelector(c + ' [data-circle-book]').click(), CR); await page.waitForTimeout(300);
+  ok('private circle: a locked card does not book anything and the banner points to "Empezar mi bloque"', await page.evaluate((c) => !document.querySelector(c + ' .circle__card.is-sent') && /pedido/.test(document.querySelector(c + ' .circle__gatebtn').getAttribute('href')), CR));
+  await page.evaluate((c) => document.querySelector(c + ' [data-circle-filters] [data-sport="tenis"]').click(), CR); await page.waitForTimeout(200);
+  ok('private circle: the tennis filter shows only the 2 tennis classes', (await page.evaluate((c) => [...document.querySelectorAll(c + ' .circle__card:not([hidden])')].map((x) => x.getAttribute('data-sport')), CR)).join() === 'tenis,tenis');
+  await page.evaluate(() => localStorage.setItem('kx-test-orders', '2'));
+  await page.reload(); await page.waitForTimeout(1200);
+  const cm = await page.evaluate((c) => { const r = document.querySelector(c + ' [data-circle]'); return { member: r.classList.contains('is-member'), gate: r.querySelector('[data-circle-gate]').hidden, welcome: !r.querySelector('[data-circle-welcome]').hidden, lockIcons: [...r.querySelectorAll('.circle__lock')].filter((x) => getComputedStyle(x).display !== 'none').length, book: getComputedStyle(r.querySelector('.circle__booklbl')).display !== 'none' }; }, CR);
+  ok('private circle (active 4-week block): the locks and the banner are gone and "Apartar lugar" is enabled', cm.member && cm.gate && cm.welcome && cm.lockIcons === 0 && cm.book, JSON.stringify(cm));
+  await page.evaluate((c) => document.querySelector(c + ' [data-circle-book]').click(), CR); await page.waitForTimeout(250);
+  ok('private circle: a member reserving a class marks the card as requested', await page.evaluate((c) => { const k = document.querySelector(c + ' .circle__card.is-sent'); return !!k && /enviada/i.test(k.innerText); }, CR));
+  await page.evaluate(() => localStorage.setItem('kx-test-orders', '0'));
+  await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1200);
+  ok('the ambassadors slide of the hero links to the private circle ("Ver más fechas")', await page.evaluate(() => /circulo-privado/.test(document.querySelector('[data-page="home"] .hs .hx__striphead a').getAttribute('href'))));
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`${URL0}#/pg/circulo-privado`); await page.reload(); await page.waitForTimeout(1200);
+  ok('private circle on a phone: one column, nothing wider than the screen', await page.evaluate((c) => document.documentElement.scrollWidth <= innerWidth + 1 && getComputedStyle(document.querySelector(c + ' .circle__grid')).gridTemplateColumns.split(' ').length === 1, CR));
+  await page.setViewportSize({ width: 1440, height: 860 });
+
   // ---- phones: nothing wider than the screen, the total bar is inside the screen
   await page.setViewportSize({ width: 390, height: 844 });
   await base({ guest: true }); await open(true);

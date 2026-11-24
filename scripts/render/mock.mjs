@@ -100,7 +100,7 @@ export function makeStore(ROOT, lang = 'es', tr = (x) => x) {
       link('Planes', '/pages/planes', sub('plan-bloque', 'plan-prueba', 'niveles-y-precios', 'ciclo-y-politicas')),
       link('Registro y checkout', '/account/register', [['Crear cuenta', '/account/register'], ...sub('checkout', 'confirmacion'), ['Iniciar sesión', '/account/login']]),
       link('Mi cuenta', '/account', [...sub('cuenta-semana', 'cuenta-pausas', 'cuenta-monedero', 'cuenta-perfil', 'cuenta-referidos', 'cuenta-pedidos', 'cuenta-entregas'), ['Direcciones', '/account/addresses']]),
-      link('Embajadores', '/pages/embajadores', sub('embajadores-entrenadores', 'embajadores-clientes', 'embajadores-gimnasios', 'embajadores-directorio', 'embajadores-reglas', 'embajadores-solicitar')),
+      link('Embajadores', '/pages/embajadores', sub('embajadores-entrenadores', 'embajadores-clientes', 'embajadores-gimnasios', 'embajadores-directorio', 'circulo-privado', 'embajadores-reglas', 'embajadores-solicitar')),
       link('Carta Kulinaria', '/pages/carta-kulinaria', sub('carta-chef-privado', 'carta-cenas-romanticas', 'carta-galeria', 'carta-cotizacion')),
       link('Kulinaria Store', '/collections/kulinaria-store', [['Playera Oficial Kulinaria', '/products/playera-oficial-kulinaria'], ['Vaso mezclador (shaker) premium Kulinaria', '/products/vaso-mezclador-premium']]),
       link('Nosotros', '/pages/nosotros', sub('nosotros-historia', 'nosotros-equipo', 'nosotros-calidad')),

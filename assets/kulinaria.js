@@ -1031,6 +1031,36 @@
       .catch(function () { cb(null); });
   }
 
+  /* ---------- private circle (classes): everybody can preview; booking needs an active 4-week block ---------- */
+  function initCircle() {
+    var root = $('[data-circle]'); if (!root) return;
+    var gate = $('[data-circle-gate]', root), welcome = $('[data-circle-welcome]', root), cards = $$('.circle__card', root), pills = $$('[data-sport]', $('[data-circle-filters]', root));
+    var member = false;
+    var paint = function () {
+      root.classList.toggle('is-member', member); root.classList.toggle('is-locked', !member);
+      if (gate) gate.hidden = member; if (welcome) welcome.hidden = !member;
+      cards.forEach(function (c) { var b = $('[data-circle-book]', c); if (b) { b.setAttribute('aria-disabled', member ? 'false' : 'true'); b.tabIndex = member ? 0 : -1; } });
+    };
+    paint();
+    loadCredits(function (c) { member = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); paint(); });
+    pills.forEach(function (p) {
+      p.addEventListener('click', function () {
+        var sp = p.getAttribute('data-sport');
+        pills.forEach(function (x) { var on = x === p; x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+        cards.forEach(function (c) { c.hidden = !(sp === 'all' || c.getAttribute('data-sport') === sp); });
+      });
+    });
+    root.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-circle-book]'); if (!b) return;
+      var card = b.closest('.circle__card');
+      if (!member) { if (gate) { gate.hidden = false; gate.classList.remove('is-nudge'); void gate.offsetWidth; gate.classList.add('is-nudge'); gate.scrollIntoView({ block: 'center', behavior: REDUCE ? 'auto' : 'smooth' }); } return; }
+      if (card.classList.contains('is-sent')) return;
+      var ep = root.getAttribute('data-endpoint'), name = root.getAttribute('data-name') || '', email = root.getAttribute('data-email') || '';
+      try { if (ep && email) fetch(ep, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'lead', kind: 'general', name: name || email, email: email, phone: '', fields: { tipo: 'clase del círculo privado', clase: card.getAttribute('data-class'), cuando: card.getAttribute('data-when'), sede: card.getAttribute('data-venue'), precio: root.getAttribute('data-price') } }) }); } catch (x) {}
+      card.classList.add('is-sent'); b.setAttribute('aria-disabled', 'true'); var l = $('.circle__booklbl', b); if (l) l.textContent = root.getAttribute('data-t-sent') || '✓';
+    });
+  }
+
   /* ---------- "Mi semana": signed-in customers choose up to 5 meals per covered week; empty days are not delivered ---------- */
   function initMyWeek() {
     var root = $('[data-myweek]'); if (!root) return;
@@ -2591,7 +2621,7 @@
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
     [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile, initDietGate,
-      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initFire, initTilt, initPeek].forEach(run);
+      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initCircle, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
   });
