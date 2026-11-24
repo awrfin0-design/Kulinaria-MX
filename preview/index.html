@@ -4640,6 +4640,79 @@ a.hx__card[href]:not([aria-disabled]):hover{border-color:var(--accent);backgroun
   .tr__list li{font-size:.9rem}
 }
 
+/* v141: hero rewards layout (rows + benefit tiles), request dialog, sport highlight on the circle page */
+.hx__main--rewards{display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,2svh,22px);min-height:0}
+.hx__main--rewards .hx__head{display:grid;gap:clamp(6px,1.2svh,12px);justify-items:center;text-align:center}
+.hx__main--rewards .hx__h{font-size:clamp(1.6rem,min(3.4vw,5.6svh),3.1rem);max-width:30ch}
+.hx__main--rewards .hx__p{max-width:44rem}
+.hx__tag--pill{padding:7px 16px;border:1px solid var(--accent);border-radius:999px}
+.hx__main--rewards .hx__btn{justify-self:center}
+.hx__rows{list-style:none;margin:0 auto;padding:clamp(8px,1.4svh,14px);display:grid;gap:clamp(6px,1.1svh,10px);width:min(100%,64rem);border:1px solid var(--hx-line);border-radius:20px;background:var(--hx-glass)}
+.hx__rows li{display:grid;grid-template-columns:minmax(150px,.42fr) 1fr;gap:clamp(10px,2vw,24px);align-items:center;padding:clamp(8px,1.4svh,13px) clamp(12px,1.6vw,20px);border:1px solid var(--hx-line);border-radius:14px;background:rgba(255,255,255,.03)}
+.hx__rows li.is-top{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.hx__rows strong{font:700 clamp(.74rem,1.7svh,.92rem) var(--font-label);letter-spacing:.06em;text-transform:uppercase;color:#fff}
+.hx__rows span{font-size:clamp(.74rem,1.7svh,.92rem);line-height:1.4;color:rgba(245,245,245,.86)}
+.hx--rewards .hx__cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
+.hx--rewards .hx__card{flex-direction:column;text-align:center;justify-content:center;gap:4px}
+.hx--rewards .hx__ctext{justify-items:center;text-align:center}
+@media (max-height:760px) and (min-width:761px){.hx__rows li:nth-child(1) span{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}.hx--rewards .hx__ctext small{display:none}}
+@media (max-width:760px){
+  .hx__main--rewards{justify-content:flex-start;overflow:hidden;gap:8px}
+  .hx__main--rewards .hx__h{font-size:clamp(1.2rem,5.6vw,1.5rem)}
+  .hx__main--rewards .hx__p{-webkit-line-clamp:2;text-align:center}
+  .hx__rows{padding:6px;gap:6px}.hx__rows li{grid-template-columns:1fr;gap:2px;padding:8px 10px}
+  .hx__rows strong,.hx__rows span{font-size:.7rem}
+  .hx--rewards .hx__cards{display:flex}.hx--rewards .hx__card{flex:0 0 clamp(120px,34vw,150px);flex-direction:column}
+}
+a.hx__card[href^="dialog:"],a.hx__pbtn[href^="dialog:"],a.hx__btn[href^="dialog:"]{cursor:pointer}
+/* request dialog (outside the hero) */
+.hxd[hidden]{display:none !important}
+.hxd{position:fixed;inset:0;z-index:2100;display:grid;place-items:center;padding:14px}
+.hxd__bg{position:absolute;inset:0;background:rgba(0,0,0,.66);backdrop-filter:blur(4px)}
+.hxd__box{position:relative;width:min(480px,100%);max-height:calc(100svh - 28px);overflow:auto;scrollbar-width:none;padding:clamp(18px,3vw,28px);border:1px solid var(--accent);border-radius:22px;background:var(--bg-raised);color:var(--text);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.hxd__box::-webkit-scrollbar{display:none}
+.hxd__x{position:absolute;top:8px;right:12px;width:34px;height:34px;border:0;background:none;color:var(--text);font-size:1.6rem;line-height:1;cursor:pointer}
+.hxd__form{display:grid;gap:10px}.hxd__form[hidden]{display:none}
+.hxd h3{margin:0;padding-right:30px;font:600 clamp(1.3rem,2.4vw,1.6rem) var(--font-display)}
+.hxd__chip{margin:0;justify-self:start;padding:5px 12px;border-radius:999px;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);font:700 .72rem var(--font-label);letter-spacing:.06em}
+.hxd__chip[hidden]{display:none}
+.hxd__s{margin:0;font-size:.82rem;color:var(--text-muted)}
+.hxd label{display:grid;gap:4px;font-size:.7rem;font-weight:600;color:var(--text-muted)}
+.hxd input[type=text],.hxd input[type=tel],.hxd input[type=email],.hxd textarea{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg-base);color:var(--text);font:400 .88rem var(--font-body)}
+.hxd textarea{resize:none}
+.hxd__row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.hxd__consent{display:flex !important;align-items:flex-start;gap:8px;font-weight:400 !important;font-size:.76rem !important}
+.hxd__err{margin:0;padding:8px 12px;border-radius:10px;background:color-mix(in srgb,#c0392b 16%,transparent);font-size:.8rem}
+.hxd__go{justify-content:center;padding:13px}
+.hxd__ok{display:grid;gap:10px;justify-items:center;text-align:center;padding:12px 0}.hxd__ok[hidden]{display:none}
+.hxd__ok b{display:grid;place-items:center;width:50px;height:50px;border-radius:50%;background:var(--accent);color:var(--on-accent,#fff);font-size:1.4rem}
+.hxd__ok p{margin:0;font-size:.88rem;color:var(--text-muted)}
+html.hx-dlg-open{overflow:hidden}
+@media (max-width:560px){.hxd__row{grid-template-columns:1fr}}
+.circle__card.is-hit{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent),0 14px 36px color-mix(in srgb,var(--accent) 30%,transparent)}
+/* v142: the plans and rewards slides fit short screens */
+.hero--intro .hx--tiers.hs.hx,.hero--intro .hx--rewards.hs.hx{padding-top:clamp(14px,2.4svh,28px) !important}
+.hx__main--rewards{gap:clamp(6px,1.2svh,14px)}
+.hx__main--rewards .hx__h{font-size:clamp(1.4rem,min(2.8vw,4.6svh),2.6rem)}
+.hx__main--rewards .hx__p{font-size:clamp(.78rem,1.7svh,.98rem);line-height:1.4}
+.hx__rows{padding:clamp(6px,1svh,10px);gap:clamp(4px,.8svh,8px)}
+.hx__rows li{padding:clamp(5px,1svh,9px) clamp(12px,1.6vw,20px)}
+.hx__main--rewards .hx__btn{padding:clamp(8px,1.4svh,12px) 24px}
+.hx--tiers .hx__head .hx__h{font-size:clamp(1.3rem,min(2.6vw,4.2svh),2.4rem)}
+.hx--tiers .hx__plans{gap:clamp(8px,1.2vw,18px)}
+.hx--tiers .hx__plan{padding:clamp(8px,1.4svh,14px) clamp(10px,1.2vw,16px)}
+@media (max-height:780px) and (min-width:761px){.hx--rewards .hx__p,.hx--tiers .hx__head .hx__p{display:none}.hx--tiers .hx__plan li:nth-child(n+3){display:none}}
+
+/* v143: kind-specific request forms */
+.hxd__g{display:grid;gap:10px}.hxd__g[hidden],[data-hxd-common][hidden],.hxd__go[hidden]{display:none !important}
+.hxd select,.hxd input[type=date],.hxd input[type=number]{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg-base);color:var(--text);font:400 .88rem var(--font-body)}
+.hxd__code{display:grid;gap:4px;justify-items:center;padding:18px;border:2px dashed var(--accent);border-radius:16px;text-align:center}
+.hxd__code span{font:700 .64rem var(--font-label);letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+.hxd__code b{font:700 1.8rem var(--font-display);letter-spacing:.08em;color:var(--accent)}
+.hxd__code small{font-size:.76rem;color:var(--text-muted)}
+.hxd__lock{display:grid;gap:12px;justify-items:center;text-align:center;padding:10px 0}.hxd__lock p{margin:0;font-size:.88rem;color:var(--text-muted)}
+.hxd__box{width:min(520px,100%)}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -5064,64 +5137,77 @@ Fuego</span>
 <div class="hero__cta"><a class="arrow-link" href="#/pg/planes" data-order-cta data-returning-label="Elegir mi semana"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Diseñar mi plan</a></div>
         </div>
-      </div><article data-no-wordmark class="hs hero__face container hx hx--photo-left" role="group" aria-roledescription="slide" aria-label="1 / 4" aria-hidden="true" ><div class="hx__main">
+      </div><article data-no-wordmark class="hs hero__face container hx hx--photo-left" role="group" aria-roledescription="slide" aria-label="1 / 5" aria-hidden="true" ><div class="hx__main">
           <div class="hx__photo">
             <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-emb.webp" width="1200" height="800" alt="" class="hx__img" loading="lazy" decoding="async"><span class="hx__badge">KFW · Arte en movimiento</span></div>
           <div class="hx__copy"><span class="hx__tag">Embajadoras Kulinaria • Estilo de vida</span><h2 class="hx__h">Transforma tu mente. Conquista tu físico.</h2><p class="hx__p">Tu nutrición abre la puerta a nuestro círculo privado. Entrena, compite y vive experiencias deportivas exclusivas junto a quienes lideran el cambio.</p><h3 class="hx__lt">Experiencias y comunidad</h3><ul class="hx__list"><li>Eventos deportivos y activaciones exclusivas</li><li>Entrenamientos grupales y retos fitness</li><li>Acceso VIP a la comunidad Kulinaria</li></ul></div>
         </div><div class="hx__strip">
           <div class="hx__striphead">
             <span>Próximos eventos • Exclusivo Familia Kulinaria</span><a href="#/pg/circulo-privado">Ver más fechas +</a></div>
-          <div class="hx__cards"><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-tenis.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Clínica de tenis</strong><small>Coach: Jessica</small><em>Mié 26 Nov</em></span>
-              </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-circuito.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Circuito funcional</strong><small>Coach: Paulina</small><em>Sáb 29 Nov</em></span>
-              </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-rodada.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Rodada nocturna</strong><small>Coach: Ren Jiménez</small><em>Mié 03 Dic</em></span>
-              </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-padel.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Torneo de pádel</strong><small>Coach: Anny</small><em>Sáb 06 Dic</em></span>
-              </a><div class="hx__card hx__card--cta"><strong>Acceso Familia Kulinaria</strong><small>Adquiere tu bloque de 4 semanas para desbloquear ubicaciones, horarios y ser parte de nuestra comunidad exclusiva.</small><a class="hx__cbtn" href="#/pg/pedido">Empezar mi bloque</a></div></div>
-        </div></article><article data-no-wordmark class="hs hero__face container hx hx--photo-right" role="group" aria-roledescription="slide" aria-label="2 / 4" aria-hidden="true" ><div class="hx__main">
+          <div class="hx__cards"><a class="hx__card" href="#/pg/circulo-privado?deporte=tenis"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-tenis.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Clínica de tenis</strong><small>Coach: Jessica</small><em>Mié 26 Nov</em></span>
+              </a><a class="hx__card" href="#/pg/circulo-privado?deporte=funcional"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-circuito.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Circuito funcional</strong><small>Coach: Paulina</small><em>Sáb 29 Nov</em></span>
+              </a><a class="hx__card" href="#/pg/circulo-privado?deporte=ciclismo"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-rodada.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Rodada nocturna</strong><small>Coach: Ren Jiménez</small><em>Mié 03 Dic</em></span>
+              </a><a class="hx__card" href="#/pg/circulo-privado?deporte=padel"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-padel.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Torneo de pádel</strong><small>Coach: Anny</small><em>Sáb 06 Dic</em></span>
+              </a><div class="hx__card hx__card--cta"><strong>Acceso Familia Kulinaria</strong><small>Adquiere tu bloque de 4 semanas para desbloquear ubicaciones, horarios y ser parte de nuestra comunidad exclusiva.</small><a class="hx__cbtn" href="#/pg/pedido?plan=block">Empezar mi bloque</a></div></div>
+        </div></article><article data-no-wordmark class="hs hero__face container hx hx--photo-right" role="group" aria-roledescription="slide" aria-label="2 / 5" aria-hidden="true" ><div class="hx__main">
           <div class="hx__photo">
             <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-nutri.webp" width="1200" height="800" alt="" class="hx__img" loading="lazy" decoding="async"></div>
-          <div class="hx__copy"><span class="hx__tag">Beneficio exclusivo • Familia Kulinaria</span><h2 class="hx__h">Tu nutrición adaptable, respaldada por expertos.</h2><ul class="hx__list"><li class="has-ico"><svg class="hx__ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-kidney"/></svg><span>Atención de Ángel Otero, Lic. en Nutrición (Mr. México y Mr. Puebla)</span></li><li class="has-ico"><svg class="hx__ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-clip"/></svg><span>Plan 100% adaptable a tu estilo de vida y objetivos</span></li><li class="has-ico"><svg class="hx__ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-apple"/></svg><span>Enfoque integral basado en tu salud y resultados</span></li></ul><a class="hx__btn" href="#/pg/ayuda">Reservar consulta</a><p class="hx__foot">Ángel Otero • Licenciado en Nutrición (Campeón Mr. México y Mr. Puebla) | Kasa Kulinaria.</p></div>
+          <div class="hx__copy"><span class="hx__tag">Beneficio exclusivo • Familia Kulinaria</span><h2 class="hx__h">Tu nutrición adaptable, respaldada por expertos.</h2><ul class="hx__list"><li class="has-ico"><svg class="hx__ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-kidney"/></svg><span>Atención de Ángel Otero, Lic. en Nutrición (Mr. México y Mr. Puebla)</span></li><li class="has-ico"><svg class="hx__ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-clip"/></svg><span>Plan 100% adaptable a tu estilo de vida y objetivos</span></li><li class="has-ico"><svg class="hx__ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-apple"/></svg><span>Enfoque integral basado en tu salud y resultados</span></li></ul><a class="hx__btn" href="dialog:consulta~Consulta nutricional con Ángel Otero">Reservar consulta</a><p class="hx__foot">Ángel Otero • Licenciado en Nutrición (Campeón Mr. México y Mr. Puebla) | Kasa Kulinaria.</p></div>
         </div><div class="hx__strip">
           <div class="hx__striphead">
-            <span>Nuestros planes de nutrición adaptables</span><a href="#/pg/ayuda">Explora nuestro enfoque integral en nutrición y bienestar +</a></div>
-          <div class="hx__cards"><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-scale"/></svg></span><span class="hx__ctext"><strong>Plan de pérdida de peso.</strong><small>Programa enfocado en la quema de grasa y hábitos saludables.</small></span>
-              </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-dumbbell"/></svg></span><span class="hx__ctext"><strong>Plan de aumento de masa muscular.</strong><small>Nutrición para el crecimiento muscular y fuerza.</small></span>
-              </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-run"/></svg></span><span class="hx__ctext"><strong>Nutrición deportiva de élite.</strong><small>Optimización del rendimiento para atletas competitivos.</small></span>
-              </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-shield"/></svg></span><span class="hx__ctext"><strong>Programa de salud integral.</strong><small>Enfoque general para el bienestar y vitalidad a largo plazo.</small></span>
-              </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-calendar"/></svg></span><span class="hx__ctext"><strong>Consulta individual.</strong><small>Sesión privada con Ángel Otero para metas específicas.</small></span>
+            <span>Nuestros planes de nutrición adaptables</span><a href="#/pg/filosofia">Explora nuestro enfoque integral en nutrición y bienestar +</a></div>
+          <div class="hx__cards"><a class="hx__card" href="dialog:consulta~Plan de pérdida de peso"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-scale"/></svg></span><span class="hx__ctext"><strong>Plan de pérdida de peso.</strong><small>Programa enfocado en la quema de grasa y hábitos saludables.</small></span>
+              </a><a class="hx__card" href="dialog:consulta~Plan de aumento de masa muscular"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-dumbbell"/></svg></span><span class="hx__ctext"><strong>Plan de aumento de masa muscular.</strong><small>Nutrición para el crecimiento muscular y fuerza.</small></span>
+              </a><a class="hx__card" href="dialog:consulta~Nutrición deportiva de élite"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-run"/></svg></span><span class="hx__ctext"><strong>Nutrición deportiva de élite.</strong><small>Optimización del rendimiento para atletas competitivos.</small></span>
+              </a><a class="hx__card" href="dialog:consulta~Programa de salud integral"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-shield"/></svg></span><span class="hx__ctext"><strong>Programa de salud integral.</strong><small>Enfoque general para el bienestar y vitalidad a largo plazo.</small></span>
+              </a><a class="hx__card" href="dialog:consulta~Consulta individual"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-calendar"/></svg></span><span class="hx__ctext"><strong>Consulta individual.</strong><small>Sesión privada con Ángel Otero para metas específicas.</small></span>
               </a></div>
-        </div></article><article data-no-wordmark class="hs hero__face container hx hx--tiers" role="group" aria-roledescription="slide" aria-label="3 / 4" aria-hidden="true" ><div class="hx__main hx__main--tiers">
+        </div></article><article data-no-wordmark class="hs hero__face container hx hx--tiers" role="group" aria-roledescription="slide" aria-label="3 / 5" aria-hidden="true" ><div class="hx__main hx__main--tiers">
           <header class="hx__head"><span class="hx__tag">Beneficios exclusivos • Compromiso Kulinaria</span><h2 class="hx__h">Multiplica tu inversión. Desbloquea recompensas.</h2><p class="hx__p">Elige tu plan por adelantado y obtén consultas, cortes, prendas y acceso VIP de regalo.</p></header>
           <div class="hx__plans"><article class="hx__plan"><h3>1 Bloque (4 Semanas)</h3><p class="hx__psub">Inicio Inteligente</p>
-                <ul><li>Consulta Nutricional con Ángel Otero, Lic. en Nutrición: $850 MXN → $699 MXN (Ahorras $151)</li><li>Elige un regalo: 1 artículo (límite de valor $449) de la tienda KFW o 1 corte cortesía de Magnate Barbería</li></ul><a class="hx__pbtn" href="#/pg/pedido">Elegir mi ahorro</a></article><article class="hx__plan has-badge"><span class="hx__pbadge">La más elegida</span><h3>2 Bloques (8 Semanas)</h3><p class="hx__psub">Transformación Total</p>
-                <ul><li>Consulta Ángel Otero, Lic. en Nutrición: $850 MXN → ¡Gratis!</li><li>Artículo Oficial KFW (prenda, gorra o tumbler): $449 MXN → ¡Gratis!</li><li>2 Experiencias y Eventos VIP con Embajadores: $398 MXN → ¡Gratis!</li></ul><a class="hx__pbtn" href="#/pg/pedido">Obtener $997 en regalos y descuentos</a></article><article class="hx__plan has-badge"><span class="hx__pbadge">Nivel VIP</span><h3>3 Bloques (12 Semanas)</h3><p class="hx__psub">Estilo de Vida Completo</p>
-                <ul><li>Consulta Ángel Otero, Lic. en Nutrición: $850 MXN → ¡Gratis!</li><li>Gratis: Kit Completo KFW Merch</li><li>VIP Pass: eventos exclusivos con modelos y entrenadores</li><li>Cortesías: Magnate Barbería y salones de belleza aliados</li></ul><a class="hx__pbtn" href="#/pg/pedido">Desbloquear mi pase VIP</a></article></div>
+                <ul><li>Consulta Nutricional con Ángel Otero, Lic. en Nutrición: $850 MXN → $699 MXN (Ahorras $151)</li><li>Elige un regalo: 1 artículo (límite de valor $449) de la tienda KFW o 1 corte cortesía de Magnate Barbería</li></ul><a class="hx__pbtn" href="#/pg/pedido?plan=block">Elegir mi ahorro</a></article><article class="hx__plan has-badge"><span class="hx__pbadge">La más elegida</span><h3>2 Bloques (8 Semanas)</h3><p class="hx__psub">Transformación Total</p>
+                <ul><li>Consulta Ángel Otero, Lic. en Nutrición: $850 MXN → ¡Gratis!</li><li>Artículo Oficial KFW (prenda, gorra o tumbler): $449 MXN → ¡Gratis!</li><li>2 Experiencias y Eventos VIP con Embajadores: $398 MXN → ¡Gratis!</li></ul><a class="hx__pbtn" href="dialog:plan~Plan de 2 bloques (8 semanas)">Obtener $997 en regalos y descuentos</a></article><article class="hx__plan has-badge"><span class="hx__pbadge">Nivel VIP</span><h3>3 Bloques (12 Semanas)</h3><p class="hx__psub">Estilo de Vida Completo</p>
+                <ul><li>Consulta Ángel Otero, Lic. en Nutrición: $850 MXN → ¡Gratis!</li><li>Gratis: Kit Completo KFW Merch</li><li>VIP Pass: eventos exclusivos con modelos y entrenadores</li><li>Cortesías: Magnate Barbería y salones de belleza aliados</li></ul><a class="hx__pbtn" href="dialog:plan~Plan de 3 bloques (12 semanas)">Desbloquear mi pase VIP</a></article></div>
         </div><div class="hx__strip">
           <div class="hx__striphead">
             <span>Ecosistema de aliados Kulinaria • Tus llaves de acceso</span><a href="#/pg/embajadores">Desbloquea todo el ecosistema con tu plan Kulinaria +</a></div>
-          <div class="hx__cards"><a class="hx__card" href="#/pg/ayuda"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-doctor"/></svg></span><span class="hx__ctext"><strong>Ángel Otero</strong><em>Reclamar beneficio</em></span>
-              </a><a class="hx__card" href="#/pg/pedido"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-shirt"/></svg></span><span class="hx__ctext"><strong>KFW Fitness Wear</strong><em>Ver recompensas</em></span>
-              </a><a class="hx__card" href="#/pg/embajadores"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-barber"/></svg></span><span class="hx__ctext"><strong>Magnate Barbería</strong><em>Canjear cupón</em></span>
+          <div class="hx__cards"><a class="hx__card" href="dialog:consulta~Beneficio: consulta con Ángel Otero"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-doctor"/></svg></span><span class="hx__ctext"><strong>Ángel Otero</strong><em>Reclamar beneficio</em></span>
+              </a><a class="hx__card" href="#/tienda"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-shirt"/></svg></span><span class="hx__ctext"><strong>KFW Fitness Wear</strong><em>Ver recompensas</em></span>
+              </a><a class="hx__card" href="dialog:cupon~Cupón Magnate Barbería"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-barber"/></svg></span><span class="hx__ctext"><strong>Magnate Barbería</strong><em>Canjear cupón</em></span>
               </a><a class="hx__card" href="#/pg/embajadores-entrenadores"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-users"/></svg></span><span class="hx__ctext"><strong>+20 Entrenadores</strong><em>Ver entrenadores</em></span>
               </a><a class="hx__card" href="#/pg/embajadores-gimnasios"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-dumbbell"/></svg></span><span class="hx__ctext"><strong>Gimnasios Hermanos</strong><em>Ver sedes</em></span>
-              </a><a class="hx__card" href="#/pg/carta-kulinaria"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-star"/></svg></span><span class="hx__ctext"><strong>Salones & Eventos VIP</strong><em>Explorar ahora</em></span>
+              </a><a class="hx__card" href="#/pg/circulo-privado"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-star"/></svg></span><span class="hx__ctext"><strong>Salones & Eventos VIP</strong><em>Explorar ahora</em></span>
               </a></div>
-        </div></article><article data-no-wordmark class="hs hero__face container hx hx--photo-left" role="group" aria-roledescription="slide" aria-label="4 / 4" aria-hidden="true" ><div class="hx__main">
+        </div></article><article data-no-wordmark class="hs hero__face container hx hx--rewards" role="group" aria-roledescription="slide" aria-label="4 / 5" aria-hidden="true" ><div class="hx__main hx__main--rewards">
+          <header class="hx__head"><span class="hx__tag hx__tag--pill">Beneficios exclusivos • Pago inmediato por bloque</span><h2 class="hx__h">Multiplica tus resultados y desbloquea recompensas.</h2><p class="hx__p">Al asegurar 1, 2 o 3 bloques de 4 semanas, accedes automáticamente a descuentos directos, merch oficial KFW y beneficios en toda nuestra red de aliados.</p><a class="hx__btn" href="#/pg/pedido?plan=block">Desbloquear descuentos</a></header>
+          <ol class="hx__rows"><li><strong>1 Bloque (4 semanas)</strong><span>Consulta nutricional en $699 MXN (Ahorras $151) + Cupones aliados.</span></li><li><strong>2 Bloques (8 semanas)</strong><span>Descuento preferencial + Prenda Merch KFW + Tarifas en coaches.</span></li><li class="is-top"><strong>3 Bloques (12 semanas)</strong><span>Consulta nutricional GRATIS + Kit Merch KFW + Pase VIP a experiencias.</span></li></ol>
+        </div><div class="hx__strip">
+          <div class="hx__striphead">
+            <span>Tu red de aliados Kulinaria</span><a href="#/pg/embajadores">Ver todos los beneficios +</a></div>
+          <div class="hx__cards"><a class="hx__card" href="dialog:consulta~Nutrición de casa"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-house"/></svg></span><span class="hx__ctext"><strong>Nutrición de casa</strong><small>Consultas preferenciales o sin costo.</small></span>
+              </a><a class="hx__card" href="#/tienda"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-shirt"/></svg></span><span class="hx__ctext"><strong>Merch oficial KFW</strong><small>Ropa deportiva de regalo en tienda.</small></span>
+              </a><a class="hx__card" href="#/pg/embajadores-entrenadores"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-users"/></svg></span><span class="hx__ctext"><strong>+20 Entrenadores</strong><small>Tarifas exclusivas de entrenamiento.</small></span>
+              </a><a class="hx__card" href="#/pg/embajadores-gimnasios"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-dumbbell"/></svg></span><span class="hx__ctext"><strong>Gimnasios hermanos</strong><small>Precios especiales en +15 sedes.</small></span>
+              </a><a class="hx__card" href="dialog:cupon~Magnate Barbería & Belleza"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-barber"/></svg></span><span class="hx__ctext"><strong>Magnate Barbería & Belleza</strong><small>Cortes de cortesía y tratamientos.</small></span>
+              </a><a class="hx__card" href="#/pg/circulo-privado"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-ticket"/></svg></span><span class="hx__ctext"><strong>Experiencias VIP</strong><small>Acceso gratuito a eventos con modelos.</small></span>
+              </a></div>
+        </div></article><article data-no-wordmark class="hs hero__face container hx hx--photo-left" role="group" aria-roledescription="slide" aria-label="5 / 5" aria-hidden="true" ><div class="hx__main">
           <div class="hx__photo">
             <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-chef.webp" width="1200" height="800" alt="" class="hx__img" loading="lazy" decoding="async"></div>
           <div class="hx__copy"><span class="hx__tag">Carta Kulinaria • Cenas íntimas</span><h2 class="hx__h">Tu mesa privada. Nuestro chef ejecutivo.</h2><p class="hx__p">Vive una velada gastronómica exclusiva a puerta cerrada, diseñada a la medida para ti y tus invitados.</p><h3 class="hx__lt">Lo que incluye la experiencia</h3><ul class="hx__list"><li>Menú de degustación personalizado (3 a 5 tiempos)</li><li>Insumos premium, cristalería y limpieza total</li></ul><h3 class="hx__lt hx__lt--2">Ocasiones especiales</h3><p class="hx__p hx__p--2">Cenas románticas, aniversarios, cumpleaños y cenas de compromiso.</p></div>
         </div><div class="hx__strip">
           <div class="hx__striphead">
             <span>Modalidades Carta Kulinaria • Experiencias a la medida</span></div>
-          <div class="hx__cards"><a class="hx__card" href="#/pg/carta-cenas-romanticas"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-cenas.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Cenas íntimas</strong><small>Chef ejecutivo a puerta cerrada.</small></span>
-              </a><a class="hx__card" href="#/pg/carta-kulinaria"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-reuniones.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Reuniones sociales</strong><small>Celebraciones privadas con servicio total.</small></span>
-              </a><a class="hx__card" href="#/pg/carta-kulinaria"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-corporativo.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Eventos corporativos</strong><small>Catering ejecutivo y experiencias de marca.</small></span>
-              </a><a class="hx__card" href="#/pg/carta-chef-privado"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-calendar"/></svg></span><span class="hx__ctext"><strong>Logística integral</strong><small>Planeación de menú, tiempos y personal on-site.</small></span>
-              </a><div class="hx__card hx__card--cta"><strong>Reserva tu fecha</strong><small>Consulta disponibilidad y diseña tu menú con nuestros chefs.</small><a class="hx__cbtn" href="#/pg/carta-cotizacion">Cotizar evento</a></div></div>
+          <div class="hx__cards"><a class="hx__card" href="dialog:evento~Cena íntima"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-cenas.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Cenas íntimas</strong><small>Chef ejecutivo a puerta cerrada.</small></span>
+              </a><a class="hx__card" href="dialog:evento~Reunión social"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-reuniones.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Reuniones sociales</strong><small>Celebraciones privadas con servicio total.</small></span>
+              </a><a class="hx__card" href="dialog:evento~Evento corporativo"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-corporativo.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Eventos corporativos</strong><small>Catering ejecutivo y experiencias de marca.</small></span>
+              </a><a class="hx__card" href="dialog:evento~Logística integral"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-calendar"/></svg></span><span class="hx__ctext"><strong>Logística integral</strong><small>Planeación de menú, tiempos y personal on-site.</small></span>
+              </a><div class="hx__card hx__card--cta"><strong>Reserva tu fecha</strong><small>Consulta disponibilidad y diseña tu menú con nuestros chefs.</small><a class="hx__cbtn" href="dialog:evento~">Cotizar evento</a></div></div>
         </div></article></div>
   </div>
   <div class="hero__ctl container" data-hs-ctl>
     <div class="hero__dots" role="group">
-      <button class="hero__dot is-on" type="button" data-hs-dot="0" aria-label="Ir a la diapositiva 1"><i></i></button><button class="hero__dot" type="button" data-hs-dot="1" aria-label="Ir a la diapositiva 2"><i></i></button><button class="hero__dot" type="button" data-hs-dot="2" aria-label="Ir a la diapositiva 3"><i></i></button><button class="hero__dot" type="button" data-hs-dot="3" aria-label="Ir a la diapositiva 4"><i></i></button><button class="hero__dot" type="button" data-hs-dot="4" aria-label="Ir a la diapositiva 5"><i></i></button></div>
+      <button class="hero__dot is-on" type="button" data-hs-dot="0" aria-label="Ir a la diapositiva 1"><i></i></button><button class="hero__dot" type="button" data-hs-dot="1" aria-label="Ir a la diapositiva 2"><i></i></button><button class="hero__dot" type="button" data-hs-dot="2" aria-label="Ir a la diapositiva 3"><i></i></button><button class="hero__dot" type="button" data-hs-dot="3" aria-label="Ir a la diapositiva 4"><i></i></button><button class="hero__dot" type="button" data-hs-dot="4" aria-label="Ir a la diapositiva 5"><i></i></button><button class="hero__dot" type="button" data-hs-dot="5" aria-label="Ir a la diapositiva 6"><i></i></button></div>
   </div><button class="hero__toggle" type="button" data-media-toggle aria-pressed="false" aria-label="Pausar video"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="8" y1="5" x2="8" y2="19"/><line x1="16" y1="5" x2="16" y2="19"/></svg>
 </button>
   <span class="hero__scroll" aria-hidden="true"><i></i>Desliza</span>
@@ -5791,22 +5877,22 @@ Fuego</span>
       <div class="tr__copy"><span class="tr__tag">Equipo campeón Kulinaria</span><h2 class="tr__h">Los mejores entrenadores de tu ciudad.</h2><p class="tr__p">Al unirte a Kulinaria, obtienes acceso exclusivo para entrenar de forma personalizada con nuestros atletas campeones.</p><h3 class="tr__lt">Palmarés de nuestro equipo</h3><ul class="tr__list"><li><b>1x</b> <span>Campeón Mundial IFBB Elite Pro</span></li><li><b>2x</b> <span>Mr. México Absoluto</span></li><li><b>1x</b> <span>Campeón North American</span></li><li><b>1x</b> <span>Subcampeón Atlanta Pro</span></li><li><b>1x</b> <span>3er Lugar Pittsburgh Pro</span></li></ul><a class="tr__link" href="#/pg/embajadores-entrenadores">Ver todos los logros +</a></div>
     </div>
     <div class="tr__strip">
-      <div class="tr__cards"><a class="tr__card" href="#/pg/embajadores-entrenadores" >
+      <div class="tr__cards"><a class="tr__card" href="dialog:entrenador~Carla" >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-carla.webp" width="1200" height="800" alt="Carla" class="" loading="lazy" decoding="async"></span>
             <span class="tr__ctext"><strong>Carla</strong><em>IFBB Elite Pro.</em><small>Especialista en recomposición corporal.</small><b>Club Lomas · 2.4 km</b></span>
-          </a><a class="tr__card" href="#/pg/embajadores-entrenadores" >
+          </a><a class="tr__card" href="dialog:entrenador~Ramón" >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-ramon.webp" width="1200" height="800" alt="Ramón" class="" loading="lazy" decoding="async"></span>
             <span class="tr__ctext"><strong>Ramón</strong><em>Mr. México.</em><small>Preparación física de alto rendimiento.</small><b>La Vista · 3.5 km</b></span>
-          </a><a class="tr__card" href="#/pg/embajadores-entrenadores" >
+          </a><a class="tr__card" href="dialog:entrenador~Elena" >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-elena.webp" width="1200" height="800" alt="Elena" class="" loading="lazy" decoding="async"></span>
             <span class="tr__ctext"><strong>Elena</strong><em>Trainer cert.</em><small>Entrenamiento funcional y fuerza.</small><b>Cholula · 5.1 km</b></span>
-          </a><a class="tr__card" href="#/pg/embajadores-entrenadores" >
+          </a><a class="tr__card" href="dialog:entrenador~Fernando" >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-fernando.webp" width="1200" height="800" alt="Fernando" class="" loading="lazy" decoding="async"></span>
             <span class="tr__ctext"><strong>Fernando</strong><em>Mr. México.</em><small>Hipertrofia y acondicionamiento.</small><b>Zavaleta · 4.2 km</b></span>
-          </a><a class="tr__card" href="#/pg/embajadores-entrenadores" >
+          </a><a class="tr__card" href="dialog:entrenador~Jaime" >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-jaime.webp" width="1200" height="800" alt="Jaime" class="" loading="lazy" decoding="async"></span>
             <span class="tr__ctext"><strong>Jaime</strong><em>IFBB Elite Pro.</em><small>Atleta de élite y asesoría integral.</small><b>Angelópolis · 1.8 km</b></span>
-          </a><div class="tr__card tr__card--cta"><strong>Roster élite de entrenadores</strong><small>Explora a todos nuestros atletas y entrenadores certificados para elegir al ideal para tus metas.</small><a class="tr__cbtn" href="#/pg/embajadores-entrenadores">Elegir a mi entrenador</a></div>
+          </a><div class="tr__card tr__card--cta"><strong>Roster élite de entrenadores</strong><small>Explora a todos nuestros atletas y entrenadores certificados para elegir al ideal para tus metas.</small><a class="tr__cbtn" href="dialog:entrenador~">Elegir a mi entrenador</a></div>
       </div>
     </div>
   </div>
@@ -15495,64 +15581,77 @@ Pago digital, sin efectivo</li></ul>
 <div class="hero__cta"><a class="arrow-link" href="#/pg/planes" data-order-cta data-returning-label="Choose my week"><span class="arrow-link__c"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
 </span>Design my plan</a></div>
         </div>
-      </div><article data-no-wordmark class="hs hero__face container hx hx--photo-left" role="group" aria-roledescription="slide" aria-label="1 / 4" aria-hidden="true" ><div class="hx__main">
+      </div><article data-no-wordmark class="hs hero__face container hx hx--photo-left" role="group" aria-roledescription="slide" aria-label="1 / 5" aria-hidden="true" ><div class="hx__main">
           <div class="hx__photo">
             <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-emb.webp" width="1200" height="800" alt="" class="hx__img" loading="lazy" decoding="async"><span class="hx__badge">KFW · Art in motion</span></div>
           <div class="hx__copy"><span class="hx__tag">Kulinaria ambassadors • Lifestyle</span><h2 class="hx__h">Transform your mind. Conquer your physique.</h2><p class="hx__p">Your nutrition opens the door to our private circle. Train, compete and live exclusive sports experiences alongside those who lead the change.</p><h3 class="hx__lt">Experiences and community</h3><ul class="hx__list"><li>Sports events and exclusive activations</li><li>Group training and fitness challenges</li><li>VIP access to the Kulinaria community</li></ul></div>
         </div><div class="hx__strip">
           <div class="hx__striphead">
             <span>Upcoming events • Kulinaria Family exclusive</span><a href="#/pg/circulo-privado">See more dates +</a></div>
-          <div class="hx__cards"><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-tenis.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Tennis clinic</strong><small>Coach: Jessica</small><em>Wed 26 Nov</em></span>
-              </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-circuito.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Functional circuit</strong><small>Coach: Paulina</small><em>Sat 29 Nov</em></span>
-              </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-rodada.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Night ride</strong><small>Coach: Ren Jiménez</small><em>Wed 03 Dec</em></span>
-              </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-padel.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Padel tournament</strong><small>Coach: Anny</small><em>Sat 06 Dec</em></span>
-              </a><div class="hx__card hx__card--cta"><strong>Kulinaria Family access</strong><small>Get your 4-week block to unlock locations, schedules and join our exclusive community.</small><a class="hx__cbtn" href="#/pg/pedido">Start my block</a></div></div>
-        </div></article><article data-no-wordmark class="hs hero__face container hx hx--photo-right" role="group" aria-roledescription="slide" aria-label="2 / 4" aria-hidden="true" ><div class="hx__main">
+          <div class="hx__cards"><a class="hx__card" href="#/pg/circulo-privado?deporte=tenis"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-tenis.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Tennis clinic</strong><small>Coach: Jessica</small><em>Wed 26 Nov</em></span>
+              </a><a class="hx__card" href="#/pg/circulo-privado?deporte=funcional"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-circuito.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Functional circuit</strong><small>Coach: Paulina</small><em>Sat 29 Nov</em></span>
+              </a><a class="hx__card" href="#/pg/circulo-privado?deporte=ciclismo"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-rodada.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Night ride</strong><small>Coach: Ren Jiménez</small><em>Wed 03 Dec</em></span>
+              </a><a class="hx__card" href="#/pg/circulo-privado?deporte=padel"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-padel.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Padel tournament</strong><small>Coach: Anny</small><em>Sat 06 Dec</em></span>
+              </a><div class="hx__card hx__card--cta"><strong>Kulinaria Family access</strong><small>Get your 4-week block to unlock locations, schedules and join our exclusive community.</small><a class="hx__cbtn" href="#/pg/pedido?plan=block">Start my block</a></div></div>
+        </div></article><article data-no-wordmark class="hs hero__face container hx hx--photo-right" role="group" aria-roledescription="slide" aria-label="2 / 5" aria-hidden="true" ><div class="hx__main">
           <div class="hx__photo">
             <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-nutri.webp" width="1200" height="800" alt="" class="hx__img" loading="lazy" decoding="async"></div>
-          <div class="hx__copy"><span class="hx__tag">Exclusive benefit • Kulinaria Family</span><h2 class="hx__h">Your adaptable nutrition, backed by experts.</h2><ul class="hx__list"><li class="has-ico"><svg class="hx__ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-kidney"/></svg><span>Care from Ángel Otero, BSc in Nutrition (Mr. México and Mr. Puebla)</span></li><li class="has-ico"><svg class="hx__ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-clip"/></svg><span>Plan 100% adaptable to your lifestyle and goals</span></li><li class="has-ico"><svg class="hx__ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-apple"/></svg><span>Holistic approach based on your health and results</span></li></ul><a class="hx__btn" href="#/pg/ayuda">Book a consultation</a><p class="hx__foot">Ángel Otero • BSc in Nutrition (Mr. México and Mr. Puebla champion) | Kasa Kulinaria.</p></div>
+          <div class="hx__copy"><span class="hx__tag">Exclusive benefit • Kulinaria Family</span><h2 class="hx__h">Your adaptable nutrition, backed by experts.</h2><ul class="hx__list"><li class="has-ico"><svg class="hx__ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-kidney"/></svg><span>Care from Ángel Otero, BSc in Nutrition (Mr. México and Mr. Puebla)</span></li><li class="has-ico"><svg class="hx__ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-clip"/></svg><span>Plan 100% adaptable to your lifestyle and goals</span></li><li class="has-ico"><svg class="hx__ico" viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-apple"/></svg><span>Holistic approach based on your health and results</span></li></ul><a class="hx__btn" href="dialog:consulta~Consulta nutricional con Ángel Otero">Book a consultation</a><p class="hx__foot">Ángel Otero • BSc in Nutrition (Mr. México and Mr. Puebla champion) | Kasa Kulinaria.</p></div>
         </div><div class="hx__strip">
           <div class="hx__striphead">
-            <span>Our adaptable nutrition plans</span><a href="#/pg/ayuda">Explore our holistic approach to nutrition and wellness +</a></div>
-          <div class="hx__cards"><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-scale"/></svg></span><span class="hx__ctext"><strong>Weight-loss plan.</strong><small>Program focused on fat burning and healthy habits.</small></span>
-              </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-dumbbell"/></svg></span><span class="hx__ctext"><strong>Muscle-gain plan.</strong><small>Nutrition for muscle growth and strength.</small></span>
-              </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-run"/></svg></span><span class="hx__ctext"><strong>Elite sports nutrition.</strong><small>Performance optimization for competitive athletes.</small></span>
-              </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-shield"/></svg></span><span class="hx__ctext"><strong>Comprehensive health program.</strong><small>General approach to long-term wellbeing and vitality.</small></span>
-              </a><a class="hx__card" href="#" tabindex="-1" aria-disabled="true"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-calendar"/></svg></span><span class="hx__ctext"><strong>Individual consultation.</strong><small>Private session with Ángel Otero for specific goals.</small></span>
+            <span>Our adaptable nutrition plans</span><a href="#/pg/filosofia">Explore our holistic approach to nutrition and wellness +</a></div>
+          <div class="hx__cards"><a class="hx__card" href="dialog:consulta~Plan de pérdida de peso"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-scale"/></svg></span><span class="hx__ctext"><strong>Weight-loss plan.</strong><small>Program focused on fat burning and healthy habits.</small></span>
+              </a><a class="hx__card" href="dialog:consulta~Plan de aumento de masa muscular"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-dumbbell"/></svg></span><span class="hx__ctext"><strong>Muscle-gain plan.</strong><small>Nutrition for muscle growth and strength.</small></span>
+              </a><a class="hx__card" href="dialog:consulta~Nutrición deportiva de élite"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-run"/></svg></span><span class="hx__ctext"><strong>Elite sports nutrition.</strong><small>Performance optimization for competitive athletes.</small></span>
+              </a><a class="hx__card" href="dialog:consulta~Programa de salud integral"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-shield"/></svg></span><span class="hx__ctext"><strong>Comprehensive health program.</strong><small>General approach to long-term wellbeing and vitality.</small></span>
+              </a><a class="hx__card" href="dialog:consulta~Consulta individual"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-calendar"/></svg></span><span class="hx__ctext"><strong>Individual consultation.</strong><small>Private session with Ángel Otero for specific goals.</small></span>
               </a></div>
-        </div></article><article data-no-wordmark class="hs hero__face container hx hx--tiers" role="group" aria-roledescription="slide" aria-label="3 / 4" aria-hidden="true" ><div class="hx__main hx__main--tiers">
+        </div></article><article data-no-wordmark class="hs hero__face container hx hx--tiers" role="group" aria-roledescription="slide" aria-label="3 / 5" aria-hidden="true" ><div class="hx__main hx__main--tiers">
           <header class="hx__head"><span class="hx__tag">Exclusive benefits • Kulinaria commitment</span><h2 class="hx__h">Multiply your investment. Unlock rewards.</h2><p class="hx__p">Choose your plan upfront and get consultations, haircuts, apparel and VIP access as gifts.</p></header>
           <div class="hx__plans"><article class="hx__plan"><h3>1 Block (4 Weeks)</h3><p class="hx__psub">Smart Start</p>
-                <ul><li>Nutrition consultation with Ángel Otero, BSc in Nutrition: $850 MXN → $699 MXN (You save $151)</li><li>Choose a gift: 1 item (value limit $449) from the KFW store or 1 complimentary cut at Magnate Barbería</li></ul><a class="hx__pbtn" href="#/pg/pedido">Choose my saving</a></article><article class="hx__plan has-badge"><span class="hx__pbadge">Most popular</span><h3>2 Blocks (8 Weeks)</h3><p class="hx__psub">Total Transformation</p>
-                <ul><li>Ángel Otero consultation, BSc in Nutrition: $850 MXN → Free!</li><li>Official KFW item (apparel, cap or tumbler): $449 MXN → Free!</li><li>2 VIP experiences and events with Ambassadors: $398 MXN → Free!</li></ul><a class="hx__pbtn" href="#/pg/pedido">Get $997 in gifts and discounts</a></article><article class="hx__plan has-badge"><span class="hx__pbadge">VIP Level</span><h3>3 Blocks (12 Weeks)</h3><p class="hx__psub">Complete Lifestyle</p>
-                <ul><li>Ángel Otero consultation, BSc in Nutrition: $850 MXN → Free!</li><li>Free: Complete KFW Merch Kit</li><li>VIP Pass: exclusive events with models and trainers</li><li>Courtesies: Magnate Barbería and partner beauty salons</li></ul><a class="hx__pbtn" href="#/pg/pedido">Unlock my VIP pass</a></article></div>
+                <ul><li>Nutrition consultation with Ángel Otero, BSc in Nutrition: $850 MXN → $699 MXN (You save $151)</li><li>Choose a gift: 1 item (value limit $449) from the KFW store or 1 complimentary cut at Magnate Barbería</li></ul><a class="hx__pbtn" href="#/pg/pedido?plan=block">Choose my saving</a></article><article class="hx__plan has-badge"><span class="hx__pbadge">Most popular</span><h3>2 Blocks (8 Weeks)</h3><p class="hx__psub">Total Transformation</p>
+                <ul><li>Ángel Otero consultation, BSc in Nutrition: $850 MXN → Free!</li><li>Official KFW item (apparel, cap or tumbler): $449 MXN → Free!</li><li>2 VIP experiences and events with Ambassadors: $398 MXN → Free!</li></ul><a class="hx__pbtn" href="dialog:plan~Plan de 2 bloques (8 semanas)">Get $997 in gifts and discounts</a></article><article class="hx__plan has-badge"><span class="hx__pbadge">VIP Level</span><h3>3 Blocks (12 Weeks)</h3><p class="hx__psub">Complete Lifestyle</p>
+                <ul><li>Ángel Otero consultation, BSc in Nutrition: $850 MXN → Free!</li><li>Free: Complete KFW Merch Kit</li><li>VIP Pass: exclusive events with models and trainers</li><li>Courtesies: Magnate Barbería and partner beauty salons</li></ul><a class="hx__pbtn" href="dialog:plan~Plan de 3 bloques (12 semanas)">Unlock my VIP pass</a></article></div>
         </div><div class="hx__strip">
           <div class="hx__striphead">
             <span>Kulinaria partner ecosystem • Your access keys</span><a href="#/pg/embajadores">Unlock the whole ecosystem with your Kulinaria plan +</a></div>
-          <div class="hx__cards"><a class="hx__card" href="#/pg/ayuda"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-doctor"/></svg></span><span class="hx__ctext"><strong>Ángel Otero</strong><em>Claim benefit</em></span>
-              </a><a class="hx__card" href="#/pg/pedido"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-shirt"/></svg></span><span class="hx__ctext"><strong>KFW Fitness Wear</strong><em>See rewards</em></span>
-              </a><a class="hx__card" href="#/pg/embajadores"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-barber"/></svg></span><span class="hx__ctext"><strong>Magnate Barbería</strong><em>Redeem coupon</em></span>
+          <div class="hx__cards"><a class="hx__card" href="dialog:consulta~Beneficio: consulta con Ángel Otero"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-doctor"/></svg></span><span class="hx__ctext"><strong>Ángel Otero</strong><em>Claim benefit</em></span>
+              </a><a class="hx__card" href="#/tienda"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-shirt"/></svg></span><span class="hx__ctext"><strong>KFW Fitness Wear</strong><em>See rewards</em></span>
+              </a><a class="hx__card" href="dialog:cupon~Cupón Magnate Barbería"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-barber"/></svg></span><span class="hx__ctext"><strong>Magnate Barbería</strong><em>Redeem coupon</em></span>
               </a><a class="hx__card" href="#/pg/embajadores-entrenadores"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-users"/></svg></span><span class="hx__ctext"><strong>+20 Trainers</strong><em>See trainers</em></span>
               </a><a class="hx__card" href="#/pg/embajadores-gimnasios"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-dumbbell"/></svg></span><span class="hx__ctext"><strong>Partner Gyms</strong><em>See locations</em></span>
-              </a><a class="hx__card" href="#/pg/carta-kulinaria"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-star"/></svg></span><span class="hx__ctext"><strong>Salons & VIP Events</strong><em>Explore now</em></span>
+              </a><a class="hx__card" href="#/pg/circulo-privado"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-star"/></svg></span><span class="hx__ctext"><strong>Salons & VIP Events</strong><em>Explore now</em></span>
               </a></div>
-        </div></article><article data-no-wordmark class="hs hero__face container hx hx--photo-left" role="group" aria-roledescription="slide" aria-label="4 / 4" aria-hidden="true" ><div class="hx__main">
+        </div></article><article data-no-wordmark class="hs hero__face container hx hx--rewards" role="group" aria-roledescription="slide" aria-label="4 / 5" aria-hidden="true" ><div class="hx__main hx__main--rewards">
+          <header class="hx__head"><span class="hx__tag hx__tag--pill">Exclusive benefits • Immediate payment per block</span><h2 class="hx__h">Multiply your results and unlock rewards.</h2><p class="hx__p">By securing 1, 2 or 3 blocks of 4 weeks, you automatically get direct discounts, official KFW merch and benefits across our whole partner network.</p><a class="hx__btn" href="#/pg/pedido?plan=block">Unlock discounts</a></header>
+          <ol class="hx__rows"><li><strong>1 Block (4 weeks)</strong><span>Nutrition consultation for $699 MXN (You save $151) + partner coupons.</span></li><li><strong>2 Blocks (8 weeks)</strong><span>Preferential discount + KFW merch garment + coach rates.</span></li><li class="is-top"><strong>3 Blocks (12 weeks)</strong><span>FREE nutrition consultation + KFW merch kit + VIP pass to experiences.</span></li></ol>
+        </div><div class="hx__strip">
+          <div class="hx__striphead">
+            <span>Your Kulinaria partner network</span><a href="#/pg/embajadores">See all benefits +</a></div>
+          <div class="hx__cards"><a class="hx__card" href="dialog:consulta~Nutrición de casa"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-house"/></svg></span><span class="hx__ctext"><strong>In-house nutrition</strong><small>Preferential or free consultations.</small></span>
+              </a><a class="hx__card" href="#/tienda"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-shirt"/></svg></span><span class="hx__ctext"><strong>Official KFW merch</strong><small>Sportswear as a gift in store.</small></span>
+              </a><a class="hx__card" href="#/pg/embajadores-entrenadores"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-users"/></svg></span><span class="hx__ctext"><strong>+20 Trainers</strong><small>Exclusive training rates.</small></span>
+              </a><a class="hx__card" href="#/pg/embajadores-gimnasios"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-dumbbell"/></svg></span><span class="hx__ctext"><strong>Sister gyms</strong><small>Special prices at 15+ locations.</small></span>
+              </a><a class="hx__card" href="dialog:cupon~Magnate Barbería & Belleza"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-barber"/></svg></span><span class="hx__ctext"><strong>Magnate Barbería & Beauty</strong><small>Complimentary cuts and treatments.</small></span>
+              </a><a class="hx__card" href="#/pg/circulo-privado"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-ticket"/></svg></span><span class="hx__ctext"><strong>VIP experiences</strong><small>Free access to events with models.</small></span>
+              </a></div>
+        </div></article><article data-no-wordmark class="hs hero__face container hx hx--photo-left" role="group" aria-roledescription="slide" aria-label="5 / 5" aria-hidden="true" ><div class="hx__main">
           <div class="hx__photo">
             <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-chef.webp" width="1200" height="800" alt="" class="hx__img" loading="lazy" decoding="async"></div>
           <div class="hx__copy"><span class="hx__tag">Carta Kulinaria • Intimate dinners</span><h2 class="hx__h">Your private table. Our executive chef.</h2><p class="hx__p">Live an exclusive behind-closed-doors dining evening, tailored for you and your guests.</p><h3 class="hx__lt">What the experience includes</h3><ul class="hx__list"><li>Personalised tasting menu (3 to 5 courses)</li><li>Premium ingredients, glassware and full cleanup</li></ul><h3 class="hx__lt hx__lt--2">Special occasions</h3><p class="hx__p hx__p--2">Romantic dinners, anniversaries, birthdays and engagement dinners.</p></div>
         </div><div class="hx__strip">
           <div class="hx__striphead">
             <span>Carta Kulinaria formats • Tailored experiences</span></div>
-          <div class="hx__cards"><a class="hx__card" href="#/pg/carta-cenas-romanticas"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-cenas.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Intimate dinners</strong><small>Executive chef behind closed doors.</small></span>
-              </a><a class="hx__card" href="#/pg/carta-kulinaria"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-reuniones.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Social gatherings</strong><small>Private celebrations with full service.</small></span>
-              </a><a class="hx__card" href="#/pg/carta-kulinaria"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-corporativo.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Corporate events</strong><small>Executive catering and brand experiences.</small></span>
-              </a><a class="hx__card" href="#/pg/carta-chef-privado"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-calendar"/></svg></span><span class="hx__ctext"><strong>Full logistics</strong><small>Menu planning, timing and on-site staff.</small></span>
-              </a><div class="hx__card hx__card--cta"><strong>Book your date</strong><small>Check availability and design your menu with our chefs.</small><a class="hx__cbtn" href="#/pg/carta-cotizacion">Request a quote</a></div></div>
+          <div class="hx__cards"><a class="hx__card" href="dialog:evento~Cena íntima"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-cenas.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Intimate dinners</strong><small>Executive chef behind closed doors.</small></span>
+              </a><a class="hx__card" href="dialog:evento~Reunión social"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-reuniones.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Social gatherings</strong><small>Private celebrations with full service.</small></span>
+              </a><a class="hx__card" href="dialog:evento~Evento corporativo"><span class="hx__cphoto"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-hs-corporativo.webp" alt="" loading="eager" width="240" height="160"></span><span class="hx__ctext"><strong>Corporate events</strong><small>Executive catering and brand experiences.</small></span>
+              </a><a class="hx__card" href="dialog:evento~Logística integral"><span class="hx__cico"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#home--hi-calendar"/></svg></span><span class="hx__ctext"><strong>Full logistics</strong><small>Menu planning, timing and on-site staff.</small></span>
+              </a><div class="hx__card hx__card--cta"><strong>Book your date</strong><small>Check availability and design your menu with our chefs.</small><a class="hx__cbtn" href="dialog:evento~">Request a quote</a></div></div>
         </div></article></div>
   </div>
   <div class="hero__ctl container" data-hs-ctl>
     <div class="hero__dots" role="group">
-      <button class="hero__dot is-on" type="button" data-hs-dot="0" aria-label="Go to slide 1"><i></i></button><button class="hero__dot" type="button" data-hs-dot="1" aria-label="Go to slide 2"><i></i></button><button class="hero__dot" type="button" data-hs-dot="2" aria-label="Go to slide 3"><i></i></button><button class="hero__dot" type="button" data-hs-dot="3" aria-label="Go to slide 4"><i></i></button><button class="hero__dot" type="button" data-hs-dot="4" aria-label="Go to slide 5"><i></i></button></div>
+      <button class="hero__dot is-on" type="button" data-hs-dot="0" aria-label="Go to slide 1"><i></i></button><button class="hero__dot" type="button" data-hs-dot="1" aria-label="Go to slide 2"><i></i></button><button class="hero__dot" type="button" data-hs-dot="2" aria-label="Go to slide 3"><i></i></button><button class="hero__dot" type="button" data-hs-dot="3" aria-label="Go to slide 4"><i></i></button><button class="hero__dot" type="button" data-hs-dot="4" aria-label="Go to slide 5"><i></i></button><button class="hero__dot" type="button" data-hs-dot="5" aria-label="Go to slide 6"><i></i></button></div>
   </div><button class="hero__toggle" type="button" data-media-toggle aria-pressed="false" aria-label="Pause video"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="8" y1="5" x2="8" y2="19"/><line x1="16" y1="5" x2="16" y2="19"/></svg>
 </button>
   <span class="hero__scroll" aria-hidden="true"><i></i>Scroll</span>
@@ -16222,22 +16321,22 @@ Pago digital, sin efectivo</li></ul>
       <div class="tr__copy"><span class="tr__tag">Kulinaria champion team</span><h2 class="tr__h">The best trainers in your city.</h2><p class="tr__p">By joining Kulinaria you get exclusive access to train one-on-one with our champion athletes.</p><h3 class="tr__lt">Our team's record</h3><ul class="tr__list"><li><b>1x</b> <span>IFBB Elite Pro World Champion</span></li><li><b>2x</b> <span>Mr. México Overall</span></li><li><b>1x</b> <span>North American Champion</span></li><li><b>1x</b> <span>Atlanta Pro runner-up</span></li><li><b>1x</b> <span>3rd place Pittsburgh Pro</span></li></ul><a class="tr__link" href="#/pg/embajadores-entrenadores">See all achievements +</a></div>
     </div>
     <div class="tr__strip">
-      <div class="tr__cards"><a class="tr__card" href="#/pg/embajadores-entrenadores" >
+      <div class="tr__cards"><a class="tr__card" href="dialog:entrenador~Carla" >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-carla.webp" width="1200" height="800" alt="Carla" class="" loading="lazy" decoding="async"></span>
             <span class="tr__ctext"><strong>Carla</strong><em>IFBB Elite Pro.</em><small>Body recomposition specialist.</small><b>Club Lomas · 2.4 km</b></span>
-          </a><a class="tr__card" href="#/pg/embajadores-entrenadores" >
+          </a><a class="tr__card" href="dialog:entrenador~Ramón" >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-ramon.webp" width="1200" height="800" alt="Ramón" class="" loading="lazy" decoding="async"></span>
             <span class="tr__ctext"><strong>Ramón</strong><em>Mr. México.</em><small>High-performance physical preparation.</small><b>La Vista · 3.5 km</b></span>
-          </a><a class="tr__card" href="#/pg/embajadores-entrenadores" >
+          </a><a class="tr__card" href="dialog:entrenador~Elena" >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-elena.webp" width="1200" height="800" alt="Elena" class="" loading="lazy" decoding="async"></span>
             <span class="tr__ctext"><strong>Elena</strong><em>Certified trainer.</em><small>Functional and strength training.</small><b>Cholula · 5.1 km</b></span>
-          </a><a class="tr__card" href="#/pg/embajadores-entrenadores" >
+          </a><a class="tr__card" href="dialog:entrenador~Fernando" >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-fernando.webp" width="1200" height="800" alt="Fernando" class="" loading="lazy" decoding="async"></span>
             <span class="tr__ctext"><strong>Fernando</strong><em>Mr. México.</em><small>Hypertrophy and conditioning.</small><b>Zavaleta · 4.2 km</b></span>
-          </a><a class="tr__card" href="#/pg/embajadores-entrenadores" >
+          </a><a class="tr__card" href="dialog:entrenador~Jaime" >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-jaime.webp" width="1200" height="800" alt="Jaime" class="" loading="lazy" decoding="async"></span>
             <span class="tr__ctext"><strong>Jaime</strong><em>IFBB Elite Pro.</em><small>Elite athlete and all-round coaching.</small><b>Angelópolis · 1.8 km</b></span>
-          </a><div class="tr__card tr__card--cta"><strong>Elite trainer roster</strong><small>Explore all our athletes and certified trainers to pick the right one for your goals.</small><a class="tr__cbtn" href="#/pg/embajadores-entrenadores">Choose my trainer</a></div>
+          </a><div class="tr__card tr__card--cta"><strong>Elite trainer roster</strong><small>Explore all our athletes and certified trainers to pick the right one for your goals.</small><a class="tr__cbtn" href="dialog:entrenador~">Choose my trainer</a></div>
       </div>
     </div>
   </div>
@@ -26031,6 +26130,108 @@ Digital payment, no cash</li></ul>
       </div>
     </div></template>
 
+    <template data-l="es"><div class="hxd" data-hx-dialog hidden role="dialog" aria-modal="true" aria-labelledby="hxd-t" data-endpoint="" data-price="600"
+  data-t-consulta="Reservar consulta" data-t-plan="Quiero este plan" data-t-cupon="Canjear cupón" data-t-evento="Diseña tu evento privado" data-t-entrenador="Elige a tu entrenador" data-t-clase="Apartar lugar"
+  data-s-consulta="Elige tu objetivo y un horario; te confirmamos la cita." data-s-evento="Cuéntanos tu idea y te enviamos una propuesta a la medida." data-s-entrenador="Dinos tu meta y te conectamos con el entrenador ideal." data-s-clase="Aparta tu lugar; te confirmamos por correo. Cada clase cuesta $600." data-s-plan="Déjanos tus datos y te contactamos para confirmar." data-s-cupon="Déjanos tus datos y te contactamos para confirmar."
+  data-t-cupsend="Enviarme mi cupón" data-t-err="Revisa tu nombre, tu correo y la casilla de aceptación." data-t-sent="Solicitud enviada ✓" data-login="/account/login?return_url=%2F&return_to=%2F">
+  <div class="hxd__bg" data-hxd-close></div>
+  <div class="hxd__box">
+    <button class="hxd__x" type="button" data-hxd-close aria-label="Cerrar">&times;</button>
+    <form class="hxd__form" data-hxd-form novalidate>
+      <h3 id="hxd-t" data-hxd-title></h3>
+      <p class="hxd__chip" data-hxd-chip></p>
+      <p class="hxd__s" data-hxd-sub></p>
+      <div class="hxd__g" data-for="consulta">
+        <label>Objetivo<select name="objetivo"><option value="Plan de pérdida de peso">Plan de pérdida de peso</option><option value="Plan de aumento de masa muscular">Plan de aumento de masa muscular</option><option value="Nutrición deportiva de élite">Nutrición deportiva de élite</option><option value="Programa de salud integral">Programa de salud integral</option><option value="Consulta individual">Consulta individual</option></select></label>
+        <div class="hxd__row"><label>Modalidad<select name="modalidad"><option value="Presencial">Presencial</option><option value="Videollamada">Videollamada</option></select></label><label>Día preferido<select name="dia"><option value="Lunes">Lunes</option><option value="Martes">Martes</option><option value="Miércoles">Miércoles</option><option value="Jueves">Jueves</option><option value="Viernes">Viernes</option><option value="Sábado">Sábado</option></select></label></div>
+        <label>Horario<select name="horario"><option value="Mañana">Mañana</option><option value="Tarde">Tarde</option><option value="Noche">Noche</option></select></label>
+      </div>
+      <div class="hxd__g" data-for="plan"><label>Fecha de inicio<input type="date" name="fecha_inicio" data-min-today></label></div>
+      <div class="hxd__g" data-for="evento">
+        <div class="hxd__row"><label>Tipo de evento<select name="tipo_evento"><option value="Cena íntima">Cena íntima</option><option value="Reunión social">Reunión social</option><option value="Evento corporativo">Evento corporativo</option><option value="Logística integral">Logística integral</option><option value="Otro">Otro</option></select></label><label>Fecha<input type="date" name="fecha" data-min-today></label></div>
+        <div class="hxd__row"><label>Invitados<input type="number" name="invitados" min="2" max="500" value="8"></label><label>Tiempos del menú<select name="tiempos"><option value="3 tiempos">3 tiempos</option><option value="4 tiempos">4 tiempos</option><option value="5 tiempos">5 tiempos</option></select></label></div>
+        <label>Presupuesto aproximado<select name="presupuesto"><option value="Hasta $15,000">Hasta $15,000</option><option value="$15,000 – $30,000">$15,000 – $30,000</option><option value="$30,000 – $60,000">$30,000 – $60,000</option><option value="Más de $60,000">Más de $60,000</option></select></label>
+        <label>Ciudad o lugar<input type="text" name="lugar" maxlength="120"></label>
+        <label>Alergias o restricciones<input type="text" name="alergias" maxlength="160"></label>
+      </div>
+      <div class="hxd__g" data-for="entrenador">
+        <label>Entrenador<select name="entrenador"><option value="">El que mejor me convenga</option><option value="Carla">Carla</option><option value="Ramón">Ramón</option><option value="Elena">Elena</option><option value="Fernando">Fernando</option><option value="Jaime">Jaime</option></select></label>
+        <div class="hxd__row"><label>Meta<select name="meta"><option value="Pérdida de peso">Pérdida de peso</option><option value="Masa muscular">Masa muscular</option><option value="Rendimiento deportivo">Rendimiento deportivo</option><option value="Salud y bienestar">Salud y bienestar</option></select></label><label>Modalidad<select name="modalidad_ent"><option value="Presencial">Presencial</option><option value="Videollamada">Videollamada</option></select></label></div>
+        <div class="hxd__row"><label>Días por semana<select name="dias_semana"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label><label>Zona<input type="text" name="zona" maxlength="80"></label></div>
+      </div>
+      <div class="hxd__g" data-for="clase">
+        <label>Lugares<select name="lugares"><option>1</option><option>2</option><option>3</option><option>4</option></select></label>
+      </div>
+      <div class="hxd__g hxd__coupon" data-for="cupon">
+        <div class="hxd__code" data-hxd-coupon hidden><span>Tu cupón</span><b data-hxd-code></b><small>Preséntalo en el establecimiento. Válido mientras tu bloque de 4 semanas esté activo.</small></div>
+        <div class="hxd__lock" data-hxd-couponlock hidden><p>Los cupones son para clientes con un bloque de 4 semanas activo.</p><a class="btn btn--gold" href="#/pg/pedido?plan=block">Empezar mi bloque</a></div>
+      </div>
+      <div class="hxd__row" data-hxd-common><label>Tu nombre<input type="text" name="name" autocomplete="name" required value=""></label><label>Correo<input type="email" name="email" autocomplete="email" required value="ramon@ejemplo.com"></label></div>
+      <label data-hxd-common>WhatsApp<input type="tel" name="phone" autocomplete="tel" placeholder="222 123 4567"></label>
+      <label data-hxd-common>Notas (opcional)<textarea name="notas" rows="2" maxlength="500"></textarea></label>
+      <label class="check hxd__consent" data-hxd-common><input type="checkbox" name="consent" required> <span>Acepto que me contacten sobre esta solicitud.</span></label>
+      <p class="hxd__err" data-hxd-err role="alert" hidden></p>
+      <button class="btn btn--gold hxd__go" type="submit" data-hxd-go>Enviar solicitud</button>
+    </form>
+    <div class="hxd__ok" data-hxd-ok hidden>
+      <b aria-hidden="true">&#10003;</b>
+      <h3>¡Recibido!</h3>
+      <p>Te contactamos muy pronto para confirmar.</p>
+      <button class="btn btn--outline" type="button" data-hxd-close>Cerrar</button>
+    </div>
+  </div>
+</div></template><template data-l="en"><div class="hxd" data-hx-dialog hidden role="dialog" aria-modal="true" aria-labelledby="hxd-t" data-endpoint="" data-price="600"
+  data-t-consulta="Book a consultation" data-t-plan="I want this plan" data-t-cupon="Redeem coupon" data-t-evento="Design your private event" data-t-entrenador="Choose your trainer" data-t-clase="Reserve your spot"
+  data-s-consulta="Pick your goal and a time; we'll confirm the appointment." data-s-evento="Tell us your idea and we'll send you a tailored proposal." data-s-entrenador="Tell us your goal and we'll connect you with the right trainer." data-s-clase="Reserve your spot; we'll confirm by email. Each class costs $600." data-s-plan="Leave your details and we'll contact you to confirm." data-s-cupon="Leave your details and we'll contact you to confirm."
+  data-t-cupsend="Email me my coupon" data-t-err="Check your name, email and the consent box." data-t-sent="Request sent ✓" data-login="/account/login?return_url=%2F&return_to=%2F">
+  <div class="hxd__bg" data-hxd-close></div>
+  <div class="hxd__box">
+    <button class="hxd__x" type="button" data-hxd-close aria-label="Close">&times;</button>
+    <form class="hxd__form" data-hxd-form novalidate>
+      <h3 id="hxd-t" data-hxd-title></h3>
+      <p class="hxd__chip" data-hxd-chip></p>
+      <p class="hxd__s" data-hxd-sub></p>
+      <div class="hxd__g" data-for="consulta">
+        <label>Goal<select name="objetivo"><option value="Weight-loss plan">Weight-loss plan</option><option value="Muscle-gain plan">Muscle-gain plan</option><option value="Elite sports nutrition">Elite sports nutrition</option><option value="Comprehensive health program">Comprehensive health program</option><option value="Individual consultation">Individual consultation</option></select></label>
+        <div class="hxd__row"><label>Format<select name="modalidad"><option value="In person">In person</option><option value="Video call">Video call</option></select></label><label>Preferred day<select name="dia"><option value="Monday">Monday</option><option value="Tuesday">Tuesday</option><option value="Wednesday">Wednesday</option><option value="Thursday">Thursday</option><option value="Friday">Friday</option><option value="Saturday">Saturday</option></select></label></div>
+        <label>Time<select name="horario"><option value="Morning">Morning</option><option value="Afternoon">Afternoon</option><option value="Evening">Evening</option></select></label>
+      </div>
+      <div class="hxd__g" data-for="plan"><label>Start date<input type="date" name="fecha_inicio" data-min-today></label></div>
+      <div class="hxd__g" data-for="evento">
+        <div class="hxd__row"><label>Event type<select name="tipo_evento"><option value="Intimate dinner">Intimate dinner</option><option value="Social gathering">Social gathering</option><option value="Corporate event">Corporate event</option><option value="Full logistics">Full logistics</option><option value="Other">Other</option></select></label><label>Date<input type="date" name="fecha" data-min-today></label></div>
+        <div class="hxd__row"><label>Guests<input type="number" name="invitados" min="2" max="500" value="8"></label><label>Menu courses<select name="tiempos"><option value="3 courses">3 courses</option><option value="4 courses">4 courses</option><option value="5 courses">5 courses</option></select></label></div>
+        <label>Approximate budget<select name="presupuesto"><option value="Up to $15,000">Up to $15,000</option><option value="$15,000 – $30,000">$15,000 – $30,000</option><option value="$30,000 – $60,000">$30,000 – $60,000</option><option value="Over $60,000">Over $60,000</option></select></label>
+        <label>City or venue<input type="text" name="lugar" maxlength="120"></label>
+        <label>Allergies or restrictions<input type="text" name="alergias" maxlength="160"></label>
+      </div>
+      <div class="hxd__g" data-for="entrenador">
+        <label>Trainer<select name="entrenador"><option value="">Whoever suits me best</option><option value="Carla">Carla</option><option value="Ramón">Ramón</option><option value="Elena">Elena</option><option value="Fernando">Fernando</option><option value="Jaime">Jaime</option></select></label>
+        <div class="hxd__row"><label>Goal<select name="meta"><option value="Weight loss">Weight loss</option><option value="Muscle gain">Muscle gain</option><option value="Sports performance">Sports performance</option><option value="Health and wellness">Health and wellness</option></select></label><label>Format<select name="modalidad_ent"><option value="In person">In person</option><option value="Video call">Video call</option></select></label></div>
+        <div class="hxd__row"><label>Days per week<select name="dias_semana"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label><label>Area<input type="text" name="zona" maxlength="80"></label></div>
+      </div>
+      <div class="hxd__g" data-for="clase">
+        <label>Spots<select name="lugares"><option>1</option><option>2</option><option>3</option><option>4</option></select></label>
+      </div>
+      <div class="hxd__g hxd__coupon" data-for="cupon">
+        <div class="hxd__code" data-hxd-coupon hidden><span>Your coupon</span><b data-hxd-code></b><small>Show it at the venue. Valid while your 4-week block is active.</small></div>
+        <div class="hxd__lock" data-hxd-couponlock hidden><p>Coupons are for customers with an active 4-week block.</p><a class="btn btn--gold" href="#/pg/pedido?plan=block">Start my block</a></div>
+      </div>
+      <div class="hxd__row" data-hxd-common><label>Your name<input type="text" name="name" autocomplete="name" required value=""></label><label>Email<input type="email" name="email" autocomplete="email" required value="ramon@ejemplo.com"></label></div>
+      <label data-hxd-common>WhatsApp<input type="tel" name="phone" autocomplete="tel" placeholder="222 123 4567"></label>
+      <label data-hxd-common>Notes (optional)<textarea name="notas" rows="2" maxlength="500"></textarea></label>
+      <label class="check hxd__consent" data-hxd-common><input type="checkbox" name="consent" required> <span>I agree to be contacted about this request.</span></label>
+      <p class="hxd__err" data-hxd-err role="alert" hidden></p>
+      <button class="btn btn--gold hxd__go" type="submit" data-hxd-go>Send request</button>
+    </form>
+    <div class="hxd__ok" data-hxd-ok hidden>
+      <b aria-hidden="true">&#10003;</b>
+      <h3>Received!</h3>
+      <p>We'll contact you very soon to confirm.</p>
+      <button class="btn btn--outline" type="button" data-hxd-close>Close</button>
+    </div>
+  </div>
+</div></template>
+
     <template data-l="es"><div class="dish-panel" data-dish-panel hidden>
       <div class="dish-panel__scrim" data-dp-close></div>
       <aside class="dish-panel__sheet" role="dialog" aria-modal="true" aria-label="Ver detalles" tabindex="-1">
@@ -27692,6 +27893,55 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       .catch(function () { cb(null); });
   }
 
+  /* ---------- request dialog (whole site): href="dialog:<kind>~<what>" opens a form with the fields of that kind; it goes to the sheet (Solicitudes) ---------- */
+  function initHeroDialog() {
+    var dlg = $('[data-hx-dialog]'); if (!dlg) return;
+    var form = $('[data-hxd-form]', dlg), okBox = $('[data-hxd-ok]', dlg), title = $('[data-hxd-title]', dlg), chip = $('[data-hxd-chip]', dlg), sub = $('[data-hxd-sub]', dlg), err = $('[data-hxd-err]', dlg), go = $('[data-hxd-go]', dlg);
+    var kind = '', what = '', member = false, code = '';
+    var LEAD = { evento: 'carta' };
+    var show = function (on) { dlg.hidden = !on; document.documentElement.classList.toggle('hx-dlg-open', on); document.dispatchEvent(new CustomEvent('kx:hxdlg')); if (on) { var f = $('[name=name]', dlg); if (f) setTimeout(function () { f.focus(); }, 30); } };
+    var pick = function (name, text) { var s = $('select[name="' + name + '"]', dlg); if (!s || !text) return; var t = norm(text); for (var i = 0; i < s.options.length; i++) { var o = norm(s.options[i].text); if (o && (o.indexOf(t) === 0 || t.indexOf(o) === 0)) { s.selectedIndex = i; return; } } };
+    var couponCode = function () { var a = acct(), c = a ? parseInt(a.cid, 10) : 0; return 'KMAG-' + ((c || 0) ? c.toString(36).toUpperCase().slice(-5) : 'XXXXX'); };
+    var open = function (k, w) {
+      kind = k || 'consulta'; what = (w || '').trim();
+      $$('.hxd__g', dlg).forEach(function (g) { g.hidden = g.getAttribute('data-for').split(' ').indexOf(kind) < 0; });
+      if (title) title.textContent = dlg.getAttribute('data-t-' + kind) || dlg.getAttribute('data-t-consulta') || '';
+      if (sub) sub.textContent = dlg.getAttribute('data-s-' + kind) || '';
+      if (chip) { chip.textContent = what; chip.hidden = !what; }
+      $$('[data-min-today]', dlg).forEach(function (i) { i.min = mxIso(new Date()); });
+      if (kind === 'consulta') pick('objetivo', what); if (kind === 'evento') pick('tipo_evento', what); if (kind === 'entrenador') { var s = $('select[name=entrenador]', dlg); if (s) s.value = what; }
+      var cp = kind === 'cupon', cpBox = $('[data-hxd-coupon]', dlg), cpLock = $('[data-hxd-couponlock]', dlg);
+      var apply = function () {
+        if (!cp) { $$('[data-hxd-common]', dlg).forEach(function (x) { x.hidden = false; }); if (go) go.hidden = false; return; }
+        code = couponCode(); var cd = $('[data-hxd-code]', dlg); if (cd) cd.textContent = code;
+        if (cpBox) cpBox.hidden = !member; if (cpLock) cpLock.hidden = member;
+        $$('[data-hxd-common]', dlg).forEach(function (x) { x.hidden = !member; }); if (go) { go.hidden = !member; go.textContent = dlg.getAttribute('data-t-cupsend') || go.textContent; }
+      };
+      if (cp) { member = false; apply(); loadCredits(function (c) { member = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); apply(); }); } else apply();
+      if (form) form.hidden = false; if (okBox) okBox.hidden = true; if (err) err.hidden = true; show(true);
+    };
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href^="dialog:"]');
+      if (a) { e.preventDefault(); var v = a.getAttribute('href').slice(7).split('~'); open(v[0], v.slice(1).join('~')); return; }
+      if (e.target.closest && e.target.closest('[data-hxd-close]') && !dlg.hidden) show(false);
+    });
+    document.addEventListener('kx:open-dialog', function (e) { var d = e.detail || {}; open(d.kind, d.what); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !dlg.hidden) show(false); });
+    if (form) form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = ($('[name=name]', form).value || '').trim(), email = ($('[name=email]', form).value || '').trim();
+      if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !$('[name=consent]', form).checked) { if (err) { err.textContent = dlg.getAttribute('data-t-err'); err.hidden = false; } return; }
+      var fields = { tipo: kind, interes: what, origen: location.hash.replace(/^#\//, '') || location.pathname };
+      $$('.hxd__g:not([hidden]) [name]', dlg).forEach(function (x) { if ((x.value || '').trim()) fields[x.name] = x.value.trim(); });
+      if (($('[name=notas]', form).value || '').trim()) fields.notas = $('[name=notas]', form).value.trim();
+      if (kind === 'cupon') fields.cupon = code;
+      var ep = dlg.getAttribute('data-endpoint');
+      try { if (ep) fetch(ep, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'lead', kind: LEAD[kind] || 'general', name: name, email: email, phone: ($('[name=phone]', form).value || '').trim(), fields: fields }) }); } catch (x) {}
+      form.hidden = true; if (okBox) okBox.hidden = false;
+      document.dispatchEvent(new CustomEvent('kx:hxd-sent', { detail: { kind: kind, what: what } }));
+    });
+  }
+
   /* ---------- private circle (classes): everybody can preview; booking needs an active 4-week block ---------- */
   function initCircle() {
     var root = $('[data-circle]'); if (!root) return;
@@ -27704,6 +27954,10 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     };
     paint();
     loadCredits(function (c) { member = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); paint(); });
+    var pickSport = function (sp, hit) {
+      var p0 = pills.filter(function (x) { return x.getAttribute('data-sport') === sp; })[0]; if (!p0) return;
+      p0.click(); if (hit) { var c0 = cards.filter(function (c) { return !c.hidden; })[0]; if (c0) { c0.classList.add('is-hit'); setTimeout(function () { c0.classList.remove('is-hit'); }, 2600); var g0 = $('[data-circle-filters]', root); if (g0) setTimeout(function () { g0.scrollIntoView({ block: 'start', behavior: REDUCE ? 'auto' : 'smooth' }); }, 120); } }
+    };
     pills.forEach(function (p) {
       p.addEventListener('click', function () {
         var sp = p.getAttribute('data-sport');
@@ -27711,14 +27965,14 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
         cards.forEach(function (c) { c.hidden = !(sp === 'all' || c.getAttribute('data-sport') === sp); });
       });
     });
+    document.addEventListener('kx:hxd-sent', function (e) { if (!e.detail || e.detail.kind !== 'clase') return; cards.forEach(function (c) { if ((e.detail.what || '').indexOf(c.getAttribute('data-class')) === 0) { c.classList.add('is-sent'); var l = $('.circle__booklbl', c); if (l) l.textContent = root.getAttribute('data-t-sent') || '✓'; var bb = $('[data-circle-book]', c); if (bb) bb.setAttribute('aria-disabled', 'true'); } }); });
+    try { var qs0 = location.search || (location.hash.indexOf('?') > -1 ? location.hash.slice(location.hash.indexOf('?')) : ''), sp0 = new URLSearchParams(qs0).get('deporte'); if (sp0) pickSport(sp0, true); } catch (e0) {}
     root.addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('[data-circle-book]'); if (!b) return;
       var card = b.closest('.circle__card');
       if (!member) { if (gate) { gate.hidden = false; gate.classList.remove('is-nudge'); void gate.offsetWidth; gate.classList.add('is-nudge'); gate.scrollIntoView({ block: 'center', behavior: REDUCE ? 'auto' : 'smooth' }); } return; }
       if (card.classList.contains('is-sent')) return;
-      var ep = root.getAttribute('data-endpoint'), name = root.getAttribute('data-name') || '', email = root.getAttribute('data-email') || '';
-      try { if (ep && email) fetch(ep, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'lead', kind: 'general', name: name || email, email: email, phone: '', fields: { tipo: 'clase del círculo privado', clase: card.getAttribute('data-class'), cuando: card.getAttribute('data-when'), sede: card.getAttribute('data-venue'), precio: root.getAttribute('data-price') } }) }); } catch (x) {}
-      card.classList.add('is-sent'); b.setAttribute('aria-disabled', 'true'); var l = $('.circle__booklbl', b); if (l) l.textContent = root.getAttribute('data-t-sent') || '✓';
+      document.dispatchEvent(new CustomEvent('kx:open-dialog', { detail: { kind: 'clase', what: card.getAttribute('data-class') + ' · ' + card.getAttribute('data-when') + ' · ' + card.getAttribute('data-venue') + ' · $' + root.getAttribute('data-price') } }));
     });
   }
 
@@ -29102,7 +29356,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
     };
     var tick = function () {
       clearTimeout(timer); clearTimeout(vidSafe);
-      var pause = held || away || userPaused || REDUCE;
+      var pause = held || away || userPaused || REDUCE || document.documentElement.classList.contains('hx-dlg-open');
       if (pause) { hero.classList.remove('hs-run'); return; }
       restartBar();
       if (cur === 0 && canPlay) {                                  // the video item lasts until the video has played once (safety: its length + 2s)
@@ -29121,6 +29375,7 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       setTimeout(function () { if (cur === 0 && (video.paused || video.readyState < 2)) next(); }, 9000);    // autoplay blocked / still loading: never leave the hero static
     } else setTimeout(function () { if (cur === 0) next(); }, 600);
     mark(); tick();
+    document.addEventListener('kx:hxdlg', function () { tick(); });
     var hold = function (v) { held = v; tick(); };
     // no pause on a resting mouse (it would freeze the hero); only keyboard focus inside it pauses, and a touch holds it for a moment
     hero.addEventListener('focusin', function (e) { try { if (e.target.matches && e.target.matches(':focus-visible')) hold(true); } catch (x) {} }); hero.addEventListener('focusout', function () { hold(false); });
@@ -29282,11 +29537,11 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
     [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile, initDietGate,
-      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initCircle, initFire, initTilt, initPeek].forEach(run);
+      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initHeroDialog, initCircle, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
   });
 })();
 </script>
-  </body>
+</body>
 </html>

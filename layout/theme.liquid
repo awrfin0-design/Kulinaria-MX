@@ -125,6 +125,7 @@
       </div>
     </div>
 
+    {% render 'request-dialog' %}
     <div class="dish-panel" data-dish-panel hidden>
       <div class="dish-panel__scrim" data-dp-close></div>
       <aside class="dish-panel__sheet" role="dialog" aria-modal="true" aria-label="{{ 'dish.details' | t }}" tabindex="-1">
@@ -150,5 +151,5 @@
       <script src="{{ 'kulinaria-admin.js' | asset_url }}" defer></script>
     {%- endif -%}
     <script src="{{ 'kulinaria.js' | asset_url }}" defer></script>
-  </body>
+</body>
 </html>

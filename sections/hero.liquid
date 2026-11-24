@@ -73,6 +73,7 @@
       {%- assign bullets = bs.bullets | newline_to_br | split: '<br />' -%}
       {%- assign cards = bs.cards | newline_to_br | split: '<br />' -%}
       {%- assign plans = bs.plans | newline_to_br | split: '<br />' -%}
+      {%- assign rows = bs.rows | newline_to_br | split: '<br />' -%}
       <article data-no-wordmark class="hs hero__face container hx hx--{{ bs.layout | default: 'photo-left' }}" role="group" aria-roledescription="slide" aria-label="{{ forloop.index }} / {{ section.blocks.size }}" aria-hidden="true" {{ block.shopify_attributes }}>
         {%- if bs.layout == 'tiers' -%}
         <div class="hx__main hx__main--tiers">
@@ -97,6 +98,24 @@
               </article>
             {%- endif -%}{%- endfor -%}
           </div>
+        </div>
+        {%- elsif bs.layout == 'rewards' -%}
+        <div class="hx__main hx__main--rewards">
+          <header class="hx__head">
+            {%- if tx_tag != blank -%}<span class="hx__tag hx__tag--pill">{{ tx_tag }}</span>{%- endif -%}
+            <h2 class="hx__h">{{ tx_h }}</h2>
+            {%- if tx_p != blank -%}<p class="hx__p">{{ tx_p }}</p>{%- endif -%}
+            {%- if tx_b != blank -%}<a class="hx__btn" href="{{ bs.button_link | default: '/pages/pedido?plan=block' }}">{{ tx_b }}</a>{%- endif -%}
+          </header>
+          <ol class="hx__rows">
+            {%- for ln in rows -%}{%- assign ln = ln | strip -%}{%- if ln != blank -%}
+              {%- assign rf = ln | split: '|' -%}
+              {%- assign r_t_src = rf[0] | strip -%}{%- assign r_x_src = rf[1] | strip -%}
+              {%- capture r_t -%}{% render 'tx', s: r_t_src %}{%- endcapture -%}
+              {%- capture r_x -%}{% render 'tx', s: r_x_src %}{%- endcapture -%}
+              <li{% if forloop.last %} class="is-top"{% endif %}><strong>{{ r_t }}</strong><span>{{ r_x }}</span></li>
+            {%- endif -%}{%- endfor -%}
+          </ol>
         </div>
         {%- else -%}
         <div class="hx__main">
@@ -218,7 +237,8 @@
         { "type": "select", "id": "layout", "label": "Diseño", "default": "photo-left", "options": [
           { "value": "photo-left", "label": "Foto a la izquierda + tarjetas" },
           { "value": "photo-right", "label": "Foto a la derecha + tarjetas" },
-          { "value": "tiers", "label": "Planes (3 tarjetas) + tarjetas" }
+          { "value": "tiers", "label": "Planes (3 tarjetas) + tarjetas" },
+          { "value": "rewards", "label": "Recompensas (filas) + tarjetas" }
         ] },
         { "type": "text", "id": "tag", "label": "Etiqueta superior", "default": "Evento" },
         { "type": "text", "id": "heading", "label": "Título", "default": "Chef privado en tu casa" },
@@ -233,6 +253,7 @@
         { "type": "image_picker", "id": "image", "label": "Foto (opcional)" },
         { "type": "text", "id": "art", "label": "Foto del tema si no subes una", "info": "Clave de assets/photo-<clave>.webp: hs-emb, hs-nutri, hs-chef, air-steak, air-chef…", "default": "hs-emb" },
         { "type": "text", "id": "badge", "label": "Sello sobre la foto", "default": "" },
+        { "type": "textarea", "id": "rows", "label": "Filas (solo diseño «Recompensas»)", "info": "Una línea por fila: Título|Texto. La última se destaca." },
         { "type": "textarea", "id": "plans", "label": "Planes (solo diseño «Planes»)", "info": "Una línea por plan: Título|Subtítulo|Insignia|punto 1;;punto 2;;punto 3|Botón|/enlace" },
         { "type": "text", "id": "strip_title", "label": "Título de la franja de tarjetas", "default": "" },
         { "type": "text", "id": "strip_link_label", "label": "Enlace de la franja", "default": "" },

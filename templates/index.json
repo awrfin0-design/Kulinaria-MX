@@ -36,11 +36,11 @@
             "art": "hs-emb",
             "strip_link": "/pages/circulo-privado",
             "bullets": "Eventos deportivos y activaciones exclusivas\nEntrenamientos grupales y retos fitness\nAcceso VIP a la comunidad Kulinaria",
-            "cards": "photo:hs-tenis|Clínica de tenis|Coach: Jessica|Mié 26 Nov|\nphoto:hs-circuito|Circuito funcional|Coach: Paulina|Sáb 29 Nov|\nphoto:hs-rodada|Rodada nocturna|Coach: Ren Jiménez|Mié 03 Dic|\nphoto:hs-padel|Torneo de pádel|Coach: Anny|Sáb 06 Dic|",
+            "cards": "photo:hs-tenis|Clínica de tenis|Coach: Jessica|Mié 26 Nov|/pages/circulo-privado?deporte=tenis\nphoto:hs-circuito|Circuito funcional|Coach: Paulina|Sáb 29 Nov|/pages/circulo-privado?deporte=funcional\nphoto:hs-rodada|Rodada nocturna|Coach: Ren Jiménez|Mié 03 Dic|/pages/circulo-privado?deporte=ciclismo\nphoto:hs-padel|Torneo de pádel|Coach: Anny|Sáb 06 Dic|/pages/circulo-privado?deporte=padel",
             "cta_title": "Acceso Familia Kulinaria",
             "cta_text": "Adquiere tu bloque de 4 semanas para desbloquear ubicaciones, horarios y ser parte de nuestra comunidad exclusiva.",
             "cta_label": "Empezar mi bloque",
-            "cta_link": "/pages/pedido"
+            "cta_link": "/pages/pedido?plan=block"
           }
         },
         "s2": {
@@ -53,11 +53,11 @@
             "strip_title": "Nuestros planes de nutrición adaptables",
             "strip_link_label": "Explora nuestro enfoque integral en nutrición y bienestar +",
             "art": "hs-nutri",
-            "strip_link": "/pages/ayuda",
+            "strip_link": "/pages/filosofia",
             "bullets": "kidney|Atención de Ángel Otero, Lic. en Nutrición (Mr. México y Mr. Puebla)\nclip|Plan 100% adaptable a tu estilo de vida y objetivos\napple|Enfoque integral basado en tu salud y resultados",
             "button_label": "Reservar consulta",
-            "button_link": "/pages/ayuda",
-            "cards": "scale|Plan de pérdida de peso.|Programa enfocado en la quema de grasa y hábitos saludables.||\ndumbbell|Plan de aumento de masa muscular.|Nutrición para el crecimiento muscular y fuerza.||\nrun|Nutrición deportiva de élite.|Optimización del rendimiento para atletas competitivos.||\nshield|Programa de salud integral.|Enfoque general para el bienestar y vitalidad a largo plazo.||\ncalendar|Consulta individual.|Sesión privada con Ángel Otero para metas específicas.||"
+            "button_link": "dialog:consulta~Consulta nutricional con Ángel Otero",
+            "cards": "scale|Plan de pérdida de peso.|Programa enfocado en la quema de grasa y hábitos saludables.||dialog:consulta~Plan de pérdida de peso\ndumbbell|Plan de aumento de masa muscular.|Nutrición para el crecimiento muscular y fuerza.||dialog:consulta~Plan de aumento de masa muscular\nrun|Nutrición deportiva de élite.|Optimización del rendimiento para atletas competitivos.||dialog:consulta~Nutrición deportiva de élite\nshield|Programa de salud integral.|Enfoque general para el bienestar y vitalidad a largo plazo.||dialog:consulta~Programa de salud integral\ncalendar|Consulta individual.|Sesión privada con Ángel Otero para metas específicas.||dialog:consulta~Consulta individual"
           }
         },
         "s3": {
@@ -70,8 +70,8 @@
             "strip_title": "Ecosistema de aliados Kulinaria • Tus llaves de acceso",
             "strip_link_label": "Desbloquea todo el ecosistema con tu plan Kulinaria +",
             "strip_link": "/pages/embajadores",
-            "cards": "doctor|Ángel Otero||Reclamar beneficio|/pages/ayuda\nshirt|KFW Fitness Wear||Ver recompensas|/pages/pedido\nbarber|Magnate Barbería||Canjear cupón|/pages/embajadores\nusers|+20 Entrenadores||Ver entrenadores|/pages/embajadores-entrenadores\ndumbbell|Gimnasios Hermanos||Ver sedes|/pages/embajadores-gimnasios\nstar|Salones & Eventos VIP||Explorar ahora|/pages/carta-kulinaria",
-            "plans": "1 Bloque (4 Semanas)|Inicio Inteligente||Consulta Nutricional con Ángel Otero, Lic. en Nutrición: $850 MXN → $699 MXN (Ahorras $151);;Elige un regalo: 1 artículo (límite de valor $449) de la tienda KFW o 1 corte cortesía de Magnate Barbería|Elegir mi ahorro|/pages/pedido\n2 Bloques (8 Semanas)|Transformación Total|La más elegida|Consulta Ángel Otero, Lic. en Nutrición: $850 MXN → ¡Gratis!;;Artículo Oficial KFW (prenda, gorra o tumbler): $449 MXN → ¡Gratis!;;2 Experiencias y Eventos VIP con Embajadores: $398 MXN → ¡Gratis!|Obtener $997 en regalos y descuentos|/pages/pedido\n3 Bloques (12 Semanas)|Estilo de Vida Completo|Nivel VIP|Consulta Ángel Otero, Lic. en Nutrición: $850 MXN → ¡Gratis!;;Gratis: Kit Completo KFW Merch;;VIP Pass: eventos exclusivos con modelos y entrenadores;;Cortesías: Magnate Barbería y salones de belleza aliados|Desbloquear mi pase VIP|/pages/pedido"
+            "cards": "doctor|Ángel Otero||Reclamar beneficio|dialog:consulta~Beneficio: consulta con Ángel Otero\nshirt|KFW Fitness Wear||Ver recompensas|/collections/kulinaria-store\nbarber|Magnate Barbería||Canjear cupón|dialog:cupon~Cupón Magnate Barbería\nusers|+20 Entrenadores||Ver entrenadores|/pages/embajadores-entrenadores\ndumbbell|Gimnasios Hermanos||Ver sedes|/pages/embajadores-gimnasios\nstar|Salones & Eventos VIP||Explorar ahora|/pages/circulo-privado",
+            "plans": "1 Bloque (4 Semanas)|Inicio Inteligente||Consulta Nutricional con Ángel Otero, Lic. en Nutrición: $850 MXN → $699 MXN (Ahorras $151);;Elige un regalo: 1 artículo (límite de valor $449) de la tienda KFW o 1 corte cortesía de Magnate Barbería|Elegir mi ahorro|/pages/pedido?plan=block\n2 Bloques (8 Semanas)|Transformación Total|La más elegida|Consulta Ángel Otero, Lic. en Nutrición: $850 MXN → ¡Gratis!;;Artículo Oficial KFW (prenda, gorra o tumbler): $449 MXN → ¡Gratis!;;2 Experiencias y Eventos VIP con Embajadores: $398 MXN → ¡Gratis!|Obtener $997 en regalos y descuentos|dialog:plan~Plan de 2 bloques (8 semanas)\n3 Bloques (12 Semanas)|Estilo de Vida Completo|Nivel VIP|Consulta Ángel Otero, Lic. en Nutrición: $850 MXN → ¡Gratis!;;Gratis: Kit Completo KFW Merch;;VIP Pass: eventos exclusivos con modelos y entrenadores;;Cortesías: Magnate Barbería y salones de belleza aliados|Desbloquear mi pase VIP|dialog:plan~Plan de 3 bloques (12 semanas)"
           }
         },
         "s4": {
@@ -87,11 +87,27 @@
             "strip_title": "Modalidades Carta Kulinaria • Experiencias a la medida",
             "art": "hs-chef",
             "bullets": "Menú de degustación personalizado (3 a 5 tiempos)\nInsumos premium, cristalería y limpieza total",
-            "cards": "photo:hs-cenas|Cenas íntimas|Chef ejecutivo a puerta cerrada.||/pages/carta-cenas-romanticas\nphoto:hs-reuniones|Reuniones sociales|Celebraciones privadas con servicio total.||/pages/carta-kulinaria\nphoto:hs-corporativo|Eventos corporativos|Catering ejecutivo y experiencias de marca.||/pages/carta-kulinaria\ncalendar|Logística integral|Planeación de menú, tiempos y personal on-site.||/pages/carta-chef-privado",
+            "cards": "photo:hs-cenas|Cenas íntimas|Chef ejecutivo a puerta cerrada.||dialog:evento~Cena íntima\nphoto:hs-reuniones|Reuniones sociales|Celebraciones privadas con servicio total.||dialog:evento~Reunión social\nphoto:hs-corporativo|Eventos corporativos|Catering ejecutivo y experiencias de marca.||dialog:evento~Evento corporativo\ncalendar|Logística integral|Planeación de menú, tiempos y personal on-site.||dialog:evento~Logística integral",
             "cta_title": "Reserva tu fecha",
             "cta_text": "Consulta disponibilidad y diseña tu menú con nuestros chefs.",
             "cta_label": "Cotizar evento",
-            "cta_link": "/pages/carta-cotizacion"
+            "cta_link": "dialog:evento~"
+          }
+        },
+        "s5": {
+          "type": "slide",
+          "settings": {
+            "layout": "rewards",
+            "tag": "Beneficios exclusivos • Pago inmediato por bloque",
+            "heading": "Multiplica tus resultados y desbloquea recompensas.",
+            "text": "Al asegurar 1, 2 o 3 bloques de 4 semanas, accedes automáticamente a descuentos directos, merch oficial KFW y beneficios en toda nuestra red de aliados.",
+            "button_label": "Desbloquear descuentos",
+            "button_link": "/pages/pedido?plan=block",
+            "rows": "1 Bloque (4 semanas)|Consulta nutricional en $699 MXN (Ahorras $151) + Cupones aliados.\n2 Bloques (8 semanas)|Descuento preferencial + Prenda Merch KFW + Tarifas en coaches.\n3 Bloques (12 semanas)|Consulta nutricional GRATIS + Kit Merch KFW + Pase VIP a experiencias.",
+            "cards": "house|Nutrición de casa|Consultas preferenciales o sin costo.||dialog:consulta~Nutrición de casa\nshirt|Merch oficial KFW|Ropa deportiva de regalo en tienda.||/collections/kulinaria-store\nusers|+20 Entrenadores|Tarifas exclusivas de entrenamiento.||/pages/embajadores-entrenadores\ndumbbell|Gimnasios hermanos|Precios especiales en +15 sedes.||/pages/embajadores-gimnasios\nbarber|Magnate Barbería & Belleza|Cortes de cortesía y tratamientos.||dialog:cupon~Magnate Barbería & Belleza\nticket|Experiencias VIP|Acceso gratuito a eventos con modelos.||/pages/circulo-privado",
+            "strip_title": "Tu red de aliados Kulinaria",
+            "strip_link": "/pages/embajadores",
+            "strip_link_label": "Ver todos los beneficios +"
           }
         }
       },
@@ -99,6 +115,7 @@
         "s1",
         "s2",
         "s3",
+        "s5",
         "s4"
       ]
     },
@@ -621,7 +638,8 @@
         "cta_title": "Roster élite de entrenadores",
         "cta_text": "Explora a todos nuestros atletas y entrenadores certificados para elegir al ideal para tus metas.",
         "cta_label": "Elegir a mi entrenador",
-        "art": "tr-duo"
+        "art": "tr-duo",
+        "cta_link": "dialog:entrenador~"
       },
       "blocks": {
         "t0": {
@@ -631,7 +649,8 @@
             "role": "IFBB Elite Pro.",
             "spec": "Especialista en recomposición corporal.",
             "place": "Club Lomas · 2.4 km",
-            "art": "tr-carla"
+            "art": "tr-carla",
+            "link": "dialog:entrenador~Carla"
           }
         },
         "t1": {
@@ -641,7 +660,8 @@
             "role": "Mr. México.",
             "spec": "Preparación física de alto rendimiento.",
             "place": "La Vista · 3.5 km",
-            "art": "tr-ramon"
+            "art": "tr-ramon",
+            "link": "dialog:entrenador~Ramón"
           }
         },
         "t2": {
@@ -651,7 +671,8 @@
             "role": "Trainer cert.",
             "spec": "Entrenamiento funcional y fuerza.",
             "place": "Cholula · 5.1 km",
-            "art": "tr-elena"
+            "art": "tr-elena",
+            "link": "dialog:entrenador~Elena"
           }
         },
         "t3": {
@@ -661,7 +682,8 @@
             "role": "Mr. México.",
             "spec": "Hipertrofia y acondicionamiento.",
             "place": "Zavaleta · 4.2 km",
-            "art": "tr-fernando"
+            "art": "tr-fernando",
+            "link": "dialog:entrenador~Fernando"
           }
         },
         "t4": {
@@ -671,7 +693,8 @@
             "role": "IFBB Elite Pro.",
             "spec": "Atleta de élite y asesoría integral.",
             "place": "Angelópolis · 1.8 km",
-            "art": "tr-jaime"
+            "art": "tr-jaime",
+            "link": "dialog:entrenador~Jaime"
           }
         }
       },

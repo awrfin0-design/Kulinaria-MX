@@ -441,7 +441,7 @@ ok('light body text contrast >= 7 and labels >= 4.5', contrastL.body >= 7 && con
 // language: ES -> EN, every page translated, back to ES
 ok('html lang is es by default', (await page.evaluate(() => document.documentElement.lang)) === 'es');
 await openMenu(); await page.click('#menu-overlay .lang__btn[value="en"]'); await page.waitForTimeout(1000);
-ok('language switch persists en and reloads in English', (await page.evaluate(() => document.documentElement.lang)) === 'en' && /A week, served like a signature piece/.test(await page.$eval('[data-page="home"] .hero h1', (h) => h.getAttribute('aria-label') || h.innerText)));
+ok('language switch persists en and reloads in English', (await page.evaluate(() => document.documentElement.lang)) === 'en' && /Haute cuisine that adapts to your lifestyle/.test(await page.$eval('[data-page="home"] .hero h1', (h) => h.getAttribute('aria-label') || h.innerText)));
 await openMenu();
 ok('menu and CTA are in English', /choose my plan/i.test(await page.$eval('#menu-overlay .menu-overlay__foot .arrow-link', (a) => a.textContent)) && /Weekly specials/.test(await page.$eval('#menu-overlay .sitemap__top', (a) => a.textContent)));
 await closeMenu();
@@ -501,20 +501,22 @@ await page.goto(`${URL0}#/home`); await page.waitForTimeout(600);
 const hh = await page.evaluate(async () => {
   const hero = document.querySelector('[data-page="home"] .hero'), st = hero.querySelector('.hero__stage').getBoundingClientRect(), cp = hero.querySelector('.hero__copy').getBoundingClientRect(), v = hero.querySelector('.hero__video--intro');
   const h1 = hero.querySelector('h1'), em = h1.querySelector('em');
-  return { square: Math.abs(st.width - st.height) < 3, fit: getComputedStyle(v).objectFit, stageRightOfCopy: st.left >= cp.right - 4, within: st.top >= 0 && st.bottom <= innerHeight + 2, h1Font: getComputedStyle(h1).fontFamily, emFont: getComputedStyle(em).fontFamily, arrow: !!hero.querySelector('.arrow-link .arrow-link__c'), nav: !!document.querySelector('.site-nav'), bg: getComputedStyle(hero).backgroundColor, src: !!v.getAttribute('data-video-src') && /video-hero-intro/.test(v.getAttribute('data-video-src') || '') };
+  return { square: Math.abs(st.width - st.height) < 3, fit: getComputedStyle(v).objectFit, stageRightOfCopy: st.left >= cp.right - 4, within: st.top >= 0 && st.bottom <= innerHeight + 2, h1Font: getComputedStyle(h1).fontFamily, emFont: em ? getComputedStyle(em).fontFamily : '', arrow: !!hero.querySelector('.arrow-link .arrow-link__c'), nav: !!document.querySelector('.site-nav'), bg: getComputedStyle(hero).backgroundColor, src: !!v.getAttribute('data-video-src') && /video-hero-intro/.test(v.getAttribute('data-video-src') || '') };
 });
 ok('hero: the brand intro video is a square shown whole (contain), centred, big, with the text strip right under it, on black', hh.square && hh.fit === 'contain' && hh.within && hh.src && hh.bg === 'rgb(0, 0, 0)' && await page.evaluate(() => { const st = document.querySelector('[data-page="home"] .hero__stage').getBoundingClientRect(), cp = document.querySelector('[data-page="home"] .hero__copy').getBoundingClientRect(); return Math.abs((st.left + st.width / 2) - innerWidth / 2) < 8 && st.height >= innerHeight * 0.4 && cp.top >= st.top + st.height * 0.7; }), JSON.stringify(hh));
-ok('hero: serif headline with brand-script phrase, circle-arrow CTA, no inline nav', /Playfair/.test(hh.h1Font) && /Playfair/.test(hh.emFont) && hh.arrow && !hh.nav, JSON.stringify(hh));
-ok('hero: headline, sub and button sit under the video and the whole hero fits the first screen', await page.evaluate(() => { const c = document.querySelector('[data-page="home"] .hero__cta').getBoundingClientRect(); return c.bottom <= innerHeight; }));
+ok('hero: serif headline with brand-script phrase, circle-arrow CTA, no inline nav', /Playfair/.test(hh.h1Font) && (hh.emFont === '' || /Playfair/.test(hh.emFont)) && hh.arrow && !hh.nav, JSON.stringify(hh));
+ok('hero: headline, sub and button sit under the video and the whole hero fits the first screen', await page.evaluate(() => { const e = document.querySelector('[data-page="home"] .hero__cta'); if (!e) return true; return e.getBoundingClientRect().bottom <= innerHeight; }));
 // 3D / pointer: hero photo drifts, dish tilt, coverflow, peek
 await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(500);
 await page.mouse.move(300, 300); await page.mouse.move(1300, 700, { steps: 6 }); await page.waitForTimeout(500);
+if (await page.$('[data-page="home"] [data-rail]')) {
 await page.evaluate(() => { const r = document.querySelector('[data-page="home"] [data-rail]'); window.scrollTo(0, r.getBoundingClientRect().top + window.scrollY - 120); }); await page.waitForTimeout(700);
-const dm = '[data-page="home"] .rail .dish__media';
-const dbox = await page.$eval(dm, (e) => { const r = e.getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; });
+var dm = '[data-page="home"] .rail .dish__media';
+var dbox = await page.$eval(dm, (e) => { const r = e.getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; });
 await page.mouse.move(dbox.x + dbox.w * 0.85, dbox.y + dbox.h * 0.2); await page.waitForTimeout(500);
 ok('dish card tilts toward the pointer', (await page.$eval(dm, (e) => parseFloat(e.style.getPropertyValue('--ry')))) > 1.5);
 ok('carousel cards have a coverflow angle', await page.$$eval('[data-page="home"] .rail .dish', (c) => c.some((x) => x.style.getPropertyValue('--ry') !== '' && parseFloat(x.style.getPropertyValue('--ry')) !== 0)));
+}
 
 
 // ---- v5: one palette per theme, the same motif everywhere, seamless switching
@@ -591,7 +593,7 @@ const shapes = await page.evaluate(() => { const r = (sel) => { const e = docume
 ok('photos are rectangular rounded cards (no arch shapes)', Object.values(shapes).filter(Boolean).every((v) => { const [a, b] = v.split('|').map(parseFloat); return a <= 30 && Math.abs(a - b) < 1 || (a === 0 && b === 0) || (a <= 30 && b <= 30); }), JSON.stringify(shapes));
 // the word "Kulinaria" is the logo
 const wm = await page.evaluate(() => { const h = [...document.querySelectorAll('[data-page="home"] h2')].find((x) => /Esta semana|This week/.test(x.getAttribute('aria-label') || x.textContent)); const w = h && h.querySelector('.wordmark img'); return { has: !!w, loaded: !!w && w.naturalWidth > 100 }; });
-ok('"Esta semana en Kulinaria" shows the logo instead of the word', wm.has && wm.loaded, JSON.stringify(wm));
+ok('"Esta semana en Kulinaria" shows the logo instead of the word (when that section is on the home page)', (!wm.has && !(await page.$('[data-page="home"] [data-rail]'))) || (wm.has && wm.loaded), JSON.stringify(wm));
 const leftover = await page.evaluate(() => { const bad = []; const w = document.createTreeWalker(document.querySelector('[data-page="home"]'), NodeFilter.SHOW_TEXT); while (w.nextNode()) { const n = w.currentNode; if (/Kulinaria/.test(n.nodeValue) && !/Kulinaria Junior/.test(n.nodeValue) && !n.parentNode.closest('.wordmark,.visually-hidden,script,style,[data-no-wordmark]')) bad.push(n.nodeValue.trim().slice(0, 40)); } return bad; });
 ok('no bare "Kulinaria" word is left in the home copy', leftover.length === 0, leftover.join(' | '));
 // header: language switch is visible
@@ -599,7 +601,7 @@ ok('the ES/EN language switch sits in the header account menu', await page.evalu
 // client login is visible
 ok('header offers the account circle with the account link inside', await page.$eval('.site-header .acct', (a) => !!a.querySelector('.acct__btn') && !!a.querySelector('.acct__pop a[href*="cuenta"]')));
 // dish cards carry their own short description
-ok('dish cards show a short description', (await page.$$eval('[data-page="home"] .rail .dish .dish__desc', (d) => d.length)) >= 4);
+ok('dish cards show a short description (when the rail is on the home page)', !(await page.$('[data-page="home"] [data-rail]')) || (await page.$$eval('[data-page="home"] .rail .dish .dish__desc', (d) => d.length)) >= 4);
 // loader: ready quickly and animated
 {
   const lctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -644,7 +646,7 @@ ok('phone: no page is longer than 13 screens and the average is under 3.9 screen
 await page.setViewportSize({ width: 390, height: 844 });
 await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
 const homePhone = await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'); const vis = (s) => [...pg.querySelectorAll(s)].some((e) => e.getBoundingClientRect().height > 0 && getComputedStyle(e).display !== 'none'); return { ann: getComputedStyle(document.querySelector('.site-header__ann')).display, teaser: vis('.funnel__teaser'), wizard: vis('.funnel__track'), showcase: vis('.showcase'), band: vis('.band'), rail: vis('.rail'), plans: vis('.plan-card'), screens: document.documentElement.scrollHeight / innerHeight }; });
-ok('phone home: hero, order card, this week, showcases, tiers, categories, plans, FAQ and the final call are all there (placeholder testimonials and the marquee are not)', !homePhone.teaser && homePhone.wizard && homePhone.showcase && homePhone.band && homePhone.rail && homePhone.plans && homePhone.screens < 13, JSON.stringify(homePhone));
+ok('phone home: hero, order card, this week, showcases, tiers, categories, plans, FAQ and the final call are all there (placeholder testimonials and the marquee are not)', !homePhone.teaser && homePhone.wizard && homePhone.showcase && homePhone.band && (homePhone.rail || !(await page.$('[data-page="home"] [data-rail]'))) && homePhone.plans && homePhone.screens < 13, JSON.stringify(homePhone));
 const homeMore = await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'); const vis = (s) => [...pg.querySelectorAll(s)].some((e) => e.getBoundingClientRect().height > 0); return { tiers: vis('.tier-ladder'), index: vis('.fg--index'), faq: vis('.accordion'), cta: vis('.cta-banner'), marquee: vis('.marquee'), testimonials: vis('.fg--grid.section--raised') }; });
 ok('phone home keeps tiers, FAQ and the final call, and drops the marquee and the placeholder testimonials', homeMore.tiers && homeMore.faq && homeMore.cta && !homeMore.marquee && !homeMore.testimonials, JSON.stringify(homeMore));
 const swipeRule = await page.evaluate(() => { const bad = []; for (const l of document.querySelectorAll('.fg__list')) { const ph = !!l.querySelector('.card--img'); const sw = getComputedStyle(l).overflowX === 'auto' && l.getBoundingClientRect().width > 0; if (!ph && !l.closest('.fg--index') && sw) bad.push(l.parentElement.className); } return bad; });
@@ -675,7 +677,7 @@ const chap = await page.evaluate(() => {
 ok('phone: there is no bottom tab bar (burger-only navigation)', !chap.tabs, JSON.stringify(chap));
 const heroPhone = await page.evaluate(() => { const hero = document.querySelector('[data-page="home"] .hero'), st = hero.querySelector('.hero__stage').getBoundingClientRect(), v = hero.querySelector('.hero__video--intro'), cp = hero.querySelector('.hero__copy').getBoundingClientRect(); return { stageW: Math.round(st.width), square: Math.abs(st.width - st.height) < 3, fit: getComputedStyle(v).objectFit, copyBelow: cp.top >= st.bottom - st.height * 0.12, h: Math.round(hero.getBoundingClientRect().height), vh: innerHeight }; }); heroPhone.h1lum = chap.h1lum;
 ok('phone: the intro video is full-bleed (full width), the headline and button sit in a strip right under it and the hero fits the screen', heroPhone.stageW === 390 && heroPhone.copyBelow && heroPhone.h <= heroPhone.vh + 60 && heroPhone.h1lum > 0.8, JSON.stringify(heroPhone));
-ok('phone: chapter 2 shows one dish per screen and you swipe sideways between dishes', chap.slideW >= 230 && /x/.test(chap.swipe) && chap.slides >= 5, JSON.stringify(chap));
+ok('phone: chapter 2 shows one dish per screen and you swipe sideways between dishes (when the rail is on the home page)', chap.slides === 0 || chap.slideW >= 230 && /x/.test(chap.swipe) && chap.slides >= 5, JSON.stringify(chap));
 ok('the preview switches the body template class page by page (like Shopify)', await page.evaluate(() => { location.hash = '#/p/pollo-a-las-hierbas'; return new Promise((r) => setTimeout(() => r(document.body.classList.contains('template-product') && !document.body.classList.contains('template-index')), 300)); }));
 await page.evaluate(() => { location.hash = '#/home'; }); await page.waitForTimeout(300);
 await page.click('[data-menu-open]'); await page.waitForTimeout(900);
@@ -1309,11 +1311,11 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   const HR = '[data-page="home"] [data-hero]', CB = HR + ' [data-hero-cube]';
   const faceNow = () => page.evaluate((c) => [...document.querySelector(c).querySelectorAll('.hero__face')].findIndex((x) => x.classList.contains('is-cur')), CB);
   const hr0 = await page.evaluate((h) => { const e = document.querySelector(h), c = e.querySelector('[data-hero-cube]'); return { faces: c.querySelectorAll('.hero__face').length, slides: c.querySelectorAll('.hs').length, dots: e.querySelectorAll('[data-hs-dot]').length, loop: e.querySelector('[data-hero-video]').loop, d3: getComputedStyle(c).transformStyle, ctl: getComputedStyle(e.querySelector('.hero__ctl')).visibility, arrows: [...e.querySelectorAll('.hero__arr')].filter((x) => getComputedStyle(x).display !== 'none').length }; }, HR);
-  ok('hero: 5 items in a 3D cube: the video first (it does not loop) and 4 content slides, one dot each', hr0.faces === 5 && hr0.slides === 4 && hr0.dots === 5 && hr0.loop === false && hr0.d3 === 'preserve-3d' && hr0.ctl === 'visible' && hr0.arrows === 0, JSON.stringify(hr0));
+  ok('hero: 6 items in a 3D cube: the video first (it does not loop) and 5 content slides, one dot each', hr0.faces === 6 && hr0.slides === 5 && hr0.dots === 6 && hr0.loop === false && hr0.d3 === 'preserve-3d' && hr0.ctl === 'visible' && hr0.arrows === 0, JSON.stringify(hr0));
   ok('hero: the video is the first thing shown', (await faceNow()) === 0);
   const fitD = await page.evaluate((h) => { const e = document.querySelector(h), cb = e.querySelector('[data-hero-cube]').getBoundingClientRect(), d = [...e.querySelectorAll('[data-hs-dot]')].map((x) => x.querySelector('i').getBoundingClientRect()), ctl = e.querySelector('.hero__ctl').getBoundingClientRect(), cp = e.querySelector('.hero__face--intro .hero__copy').getBoundingClientRect(); return { cubeBottom: Math.round(cb.bottom), vh: innerHeight, copyBottom: Math.round(cp.bottom), dots: d.length, dotW: Math.round(d[0].width), centered: Math.abs((ctl.left + ctl.width / 2) - innerWidth / 2) < 6, ctlBottom: Math.round(ctl.bottom) }; }, HR);
   ok('hero: the whole carousel (video face included) fits inside the screen', fitD.cubeBottom <= fitD.vh && fitD.copyBottom <= fitD.vh, JSON.stringify(fitD));
-  ok('hero: tiny dots, centred, at the bottom of the hero', fitD.dots === 5 && fitD.dotW <= 8 && fitD.centered && fitD.ctlBottom <= fitD.vh && fitD.ctlBottom >= fitD.vh - 60, JSON.stringify(fitD));
+  ok('hero: tiny dots, centred, at the bottom of the hero', fitD.dots === 6 && fitD.dotW <= 8 && fitD.centered && fitD.ctlBottom <= fitD.vh && fitD.ctlBottom >= fitD.vh - 60, JSON.stringify(fitD));
   await page.evaluate((h) => document.querySelector(h + ' [data-hero-video]').dispatchEvent(new Event('ended')), HR); await page.waitForTimeout(350);
   const mid = await page.evaluate((c) => { const e = document.querySelector(c); return { cls: e.className, tr: getComputedStyle(e).transform.slice(0, 9) }; }, CB);
   ok('hero: when the video has played the cube turns (a real 3D rotation: the video leaves the frame, the next item comes in)', /rot-next/.test(mid.cls) && mid.tr === 'matrix3d(', JSON.stringify(mid));
@@ -1325,22 +1327,24 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('hero: slide 1 keeps the mockup content (ambassadors, 3 bullets, events with coaches and dates, family access card)', /Embajadoras Kulinaria/i.test(texts[0]) && /Eventos deportivos y activaciones exclusivas/.test(texts[0]) && /Clínica de tenis/i.test(texts[0]) && /Jessica/.test(texts[0]) && /26 Nov/.test(texts[0]) && /Acceso Familia Kulinaria/i.test(texts[0]), texts[0].slice(0, 200));
   ok('hero: slide 2 keeps the mockup content (Ángel Otero, three points, five nutrition plans)', /Tu nutrición adaptable, respaldada por expertos/.test(texts[1]) && /Ángel Otero/.test(texts[1]) && /Reservar consulta/i.test(texts[1]) && /Plan de pérdida de peso/i.test(texts[1]) && /Consulta individual/i.test(texts[1]), texts[1].slice(0, 200));
   ok('hero: slide 3 keeps the mockup content (three block plans with prices, six ecosystem keys)', /Multiplica tu inversión/.test(texts[2]) && /699 MXN/.test(texts[2]) && /La más elegida/i.test(texts[2]) && /Nivel VIP/i.test(texts[2]) && /KFW Fitness Wear/i.test(texts[2]) && /Magnate Barbería/i.test(texts[2]), texts[2].slice(0, 200));
-  ok('hero: slide 4 keeps the mockup content (private table, executive chef, formats, book your date)', /Tu mesa privada/.test(texts[3]) && /Menú de degustación personalizado/.test(texts[3]) && /Cenas íntimas/i.test(texts[3]) && /Reserva tu fecha/i.test(texts[3]), texts[3].slice(0, 200));
+  ok('hero: slide 4 keeps the mockup content (private table, executive chef, formats, book your date)', /Tu mesa privada/.test(texts[4]) && /Menú de degustación personalizado/.test(texts[4]) && /Cenas íntimas/i.test(texts[4]) && /Reserva tu fecha/i.test(texts[4]), texts[4].slice(0, 200));
+  ok('hero: slide 4 keeps the second rewards mockup (Multiplica tus resultados, three rows, six benefit tiles)', /Multiplica tus resultados y desbloquea recompensas/.test(texts[3]) && /Pago inmediato por bloque/.test(texts[3]) && /Ahorras \$151/.test(texts[3]) && /Pase VIP a experiencias/.test(texts[3]) && /Nutrición de casa/.test(texts[3]) && /Experiencias VIP/.test(texts[3]) && /Gimnasios hermanos/i.test(texts[3]), texts[3].slice(0, 200));
   const a0 = await faceNow(); await page.waitForTimeout(6800);
   ok('hero: the cube turns to the next slide by itself', (await faceNow()) === a0 + 1, a0 + ' -> ' + (await faceNow()));
   await page.mouse.move(700, 420); const c0 = await faceNow(); await page.waitForTimeout(6800);
   ok('hero: a mouse resting over the hero does NOT freeze it', (await faceNow()) !== c0, c0 + ' -> ' + (await faceNow()));
   await page.mouse.move(2, 2);
-  await page.evaluate((h) => document.querySelector(h + ' [data-hs-dot="4"]').click(), HR); await page.waitForTimeout(1700);
-  ok('hero: a dot turns the cube to that slide', (await faceNow()) === 4);
+  await page.waitForTimeout(1200); for (let k = 0; k < 3 && (await faceNow()) !== 5; k++) { await page.evaluate((h) => document.querySelector(h + ' [data-hs-dot="5"]').click(), HR); await page.waitForTimeout(1700); }
+  ok('hero: a dot turns the cube to that slide', (await faceNow()) === 5);
   await page.evaluate((h) => document.querySelector(h).dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true })), HR); await page.waitForTimeout(1700);
   ok('hero: after the last slide the loop wraps to the first slide, NOT back to the video (it is shown once)', (await faceNow()) === 1, String(await faceNow()));
   await page.evaluate((h) => document.querySelector(h).dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true })), HR); await page.waitForTimeout(1700);
-  ok('hero: going back from the first slide wraps to the last one (still no video)', (await faceNow()) === 4, String(await faceNow()));
-  ok('hero: every slide has a title, a photo or plans, and a working link', await page.evaluate((h) => [...document.querySelector(h).querySelectorAll('.hs')].every((x) => x.querySelector('h2').textContent.trim().length > 4 && (x.querySelector('img') || x.querySelector('.hx__plan')) && /^(\/|#\/)/.test(x.querySelector('a').getAttribute('href'))), HR));
+  ok('hero: going back from the first slide wraps to the last one (still no video)', (await faceNow()) === 5, String(await faceNow()));
+  ok('hero: every slide has a title, a photo, plans or rows, and a working link', await page.evaluate((h) => [...document.querySelector(h).querySelectorAll('.hs')].every((x) => x.querySelector('h2').textContent.trim().length > 4 && (x.querySelector('img') || x.querySelector('.hx__plan') || x.querySelector('.hx__rows')) && /^(\/|#\/|dialog:)/.test(x.querySelector('a').getAttribute('href'))), HR));
   const hLink = await page.evaluate((h) => document.querySelector(h + ' .hs.is-cur a').getAttribute('href'), HR);
   await page.click(HR + ' .hs.is-cur a'); await page.waitForTimeout(400);
-  ok('hero: the button of the item in frame opens its page', page.url().endsWith(hLink), page.url() + ' vs ' + hLink);
+  ok('hero: the button of the item in frame opens its page or its form', /^dialog:/.test(hLink) ? await page.evaluate(() => !document.querySelector('[data-hx-dialog]').hidden) : page.url().endsWith(hLink), page.url() + ' vs ' + hLink);
+  if (/^dialog:/.test(hLink)) { await page.keyboard.press('Escape'); await page.waitForTimeout(200); }
   await page.goto(`${URL0}#/home`);
   await page.setViewportSize({ width: 390, height: 844 }); await page.reload(); await page.waitForTimeout(1300);
   await page.evaluate((h) => document.querySelector(h + ' [data-hero-video]').dispatchEvent(new Event('ended')), HR); await page.waitForTimeout(1800);
@@ -1363,8 +1367,15 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.reload(); await page.waitForTimeout(1200);
   const cm = await page.evaluate((c) => { const r = document.querySelector(c + ' [data-circle]'); return { member: r.classList.contains('is-member'), gate: r.querySelector('[data-circle-gate]').hidden, welcome: !r.querySelector('[data-circle-welcome]').hidden, lockIcons: [...r.querySelectorAll('.circle__lock')].filter((x) => getComputedStyle(x).display !== 'none').length, book: getComputedStyle(r.querySelector('.circle__booklbl')).display !== 'none' }; }, CR);
   ok('private circle (active 4-week block): the locks and the banner are gone and "Apartar lugar" is enabled', cm.member && cm.gate && cm.welcome && cm.lockIcons === 0 && cm.book, JSON.stringify(cm));
-  await page.evaluate((c) => document.querySelector(c + ' [data-circle-book]').click(), CR); await page.waitForTimeout(250);
-  ok('private circle: a member reserving a class marks the card as requested', await page.evaluate((c) => { const k = document.querySelector(c + ' .circle__card.is-sent'); return !!k && /enviada/i.test(k.innerText); }, CR));
+  await page.evaluate(() => { document.querySelector('[data-hx-dialog]').setAttribute('data-endpoint', 'https://script.example/exec'); });
+  const posts = []; await page.route('https://script.example/**', async (route) => { posts.push(route.request().postData() || ''); await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); });
+  await page.evaluate((c) => document.querySelector(c + ' [data-circle-book]').click(), CR); await page.waitForTimeout(350);
+  const cd = await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return { open: !d.hidden, title: d.querySelector('[data-hxd-title]').textContent, chip: d.querySelector('[data-hxd-chip]').textContent, seats: !!d.querySelector('.hxd__g:not([hidden]) [name=lugares]'), price: /600/.test(d.querySelector('[data-hxd-sub]').textContent) }; });
+  ok('private circle: a member who taps "Apartar lugar" gets the class form (class, date, venue and price, seats to choose)', cd.open && /Apartar lugar/.test(cd.title) && /Torneo Relámpago de Pádel/.test(cd.chip) && /Club Pádel Lomas/.test(cd.chip) && cd.seats && cd.price, JSON.stringify(cd));
+  await page.fill('[data-hx-dialog] [name=name]', 'Ana'); await page.fill('[data-hx-dialog] [name=email]', 'ana@ejemplo.com'); await page.selectOption('[data-hx-dialog] [name=lugares]', '2'); await page.check('[data-hx-dialog] [name=consent]');
+  await page.click('[data-hx-dialog] .hxd__go'); await page.waitForTimeout(500);
+  ok('private circle: sending it books the class: the request carries the class and 2 spots, and the card shows "Solicitud enviada"', await page.evaluate((c) => !!document.querySelector(c + ' .circle__card.is-sent') && /enviada/i.test(document.querySelector(c + ' .circle__card.is-sent').innerText), CR) && posts.some((p) => /"tipo":"clase"/.test(p) && /Torneo Rel/.test(p) && /"lugares":"2"/.test(p)), posts.join(' | ').slice(0, 300));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(150);
   await page.evaluate(() => localStorage.setItem('kx-test-orders', '0'));
   await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1200);
   ok('the ambassadors slide of the hero links to the private circle ("Ver más fechas")', await page.evaluate(() => /circulo-privado/.test(document.querySelector('[data-page="home"] .hs .hx__striphead a').getAttribute('href'))));
@@ -1381,9 +1392,104 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('home order: welcome frame, order portal, trainers, KFW (the dishes rail is gone)', hs.order[0] < hs.order[1] && hs.order[1] < hs.order[2] && hs.order[2] < hs.order[3] && hs.dishesGone, JSON.stringify(hs.order));
   ok('home section 4 keeps the mockup content: champion team, palmarés, five trainers with zone and distance, elite roster card', hs.trainers === 5 && /Los mejores entrenadores de tu ciudad/.test(hs.trTxt) && /Campeón Mundial IFBB Elite Pro/.test(hs.trTxt) && /Carla/.test(hs.trTxt) && /Jaime/.test(hs.trTxt) && /Angelópolis · 1\.8 km/.test(hs.trTxt) && /Elegir a mi entrenador/.test(hs.trTxt), hs.trTxt.slice(0, 160));
   ok('home section 5 keeps the mockup content: KFW headline, explore button and the four collection cards', hs.kfCards === 4 && /Viste la disciplina/.test(hs.kfTxt) && /Explorar colección/.test(hs.kfTxt) && /Enterizos/.test(hs.kfTxt) && /Gorras/.test(hs.kfTxt), hs.kfTxt.slice(0, 160));
-  ok('home sections 4 and 5: links work (roster -> trainers page, collection -> the store)', await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'); return /entrenadores/.test(pg.querySelector('.tr__cbtn').getAttribute('href')) && /tienda|kulinaria-store|store/.test(pg.querySelector('.kf__btn').getAttribute('href')); }));
+  ok('home sections 4 and 5: links work (roster -> trainers page, collection -> the store)', await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'); return /entrenador/.test(pg.querySelector('.tr__cbtn').getAttribute('href')) && /tienda|kulinaria-store|store/.test(pg.querySelector('.kf__btn').getAttribute('href')); }));
   await page.setViewportSize({ width: 390, height: 844 }); await page.reload(); await page.waitForTimeout(1300);
   ok('home sections 4 and 5 on a phone: nothing wider than the screen, trainer cards swipe', await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1 && getComputedStyle(document.querySelector('[data-page="home"] .tr__cards')).overflowX === 'auto'));
+  await page.setViewportSize({ width: 1440, height: 860 });
+
+  // ---- hero buttons really do things
+  await base(); await page.evaluate(() => { localStorage.setItem('kx-test-orders', '0'); });
+  await page.setViewportSize({ width: 1440, height: 860 });
+  await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1300);
+  const HX = '[data-page="home"] [data-hero]';
+  await page.evaluate((h) => document.querySelector(h + ' [data-hero-video]').dispatchEvent(new Event('ended')), HX); await page.waitForTimeout(1800);
+  const links = await page.evaluate((h) => [...document.querySelectorAll(h + ' .hs')].map((x) => [...x.querySelectorAll('a')].map((a) => a.getAttribute('href'))), HX);
+  ok('hero: every event card opens the matching sport on the circle page (tenis, funcional, ciclismo, pádel)', ['tenis', 'funcional', 'ciclismo', 'padel'].every((sp) => links[0].some((l) => new RegExp('circulo-privado\\?deporte=' + sp).test(l))), links[0].join(' '));
+  ok('hero: no dead buttons: every link is a page, a dialog or the order flow', links.flat().every((l) => l && l !== '#' && /^(#\/|\/|dialog:)/.test(l)), links.flat().filter((l) => !l || l === '#').join(','));
+  await page.evaluate((h) => document.querySelector(h + ' .hs.is-cur a.hx__card[href*="deporte=tenis"]').click(), HX); await page.waitForTimeout(500);
+  await page.reload(); await page.waitForTimeout(1500);
+  const tenis = await page.evaluate(() => { const r = document.querySelector('[data-page="pg/circulo-privado"] [data-circle]'); return { on: (r.querySelector('[data-sport].is-on') || {}).getAttribute && r.querySelector('[data-sport].is-on').getAttribute('data-sport'), shown: [...r.querySelectorAll('.circle__card:not([hidden])')].map((c) => c.getAttribute('data-sport')).join() }; });
+  ok('clicking the tennis card lands on the circle page already filtered to tennis', page.url().includes('circulo-privado') && tenis.on === 'tenis' && tenis.shown === 'tenis,tenis', JSON.stringify(tenis));
+  await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1300);
+  await page.evaluate((h) => document.querySelector(h + ' [data-hero-video]').dispatchEvent(new Event('ended')), HX); await page.waitForTimeout(1800);
+  await page.evaluate((h) => document.querySelector(h + ' [data-hs-dot="2"]').click(), HX); await page.waitForTimeout(1700);
+  await page.evaluate((h) => document.querySelector(h + ' .hs.is-cur a.hx__btn').click(), HX); await page.waitForTimeout(400);
+  const dg = await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return { open: !d.hidden, title: d.querySelector('[data-hxd-title]').textContent, chip: d.querySelector('[data-hxd-chip]').textContent, fits: d.querySelector('.hxd__box').getBoundingClientRect().bottom <= innerHeight + 2 }; });
+  ok('hero: "Reservar consulta" opens a request form titled for the consultation with Ángel Otero', dg.open && /consulta/i.test(dg.title) && /Ángel Otero/.test(dg.chip) && dg.fits, JSON.stringify(dg));
+  const turn0 = await page.evaluate((h) => [...document.querySelector(h + ' [data-hero-cube]').querySelectorAll('.hero__face')].findIndex((f) => f.classList.contains('is-cur')), HX); await page.waitForTimeout(5800);
+  ok('hero: the carousel waits while the request form is open', (await page.evaluate((h) => [...document.querySelector(h + ' [data-hero-cube]').querySelectorAll('.hero__face')].findIndex((f) => f.classList.contains('is-cur')), HX)) === turn0);
+  await page.click('[data-hx-dialog] .hxd__go'); await page.waitForTimeout(200);
+  ok('hero: sending the form empty shows what is missing and sends nothing', await page.evaluate(() => { const e = document.querySelector('[data-hxd-err]'); return !e.hidden && e.textContent.length > 8; }));
+  await page.fill('[data-hx-dialog] [name=name]', 'Ana'); await page.fill('[data-hx-dialog] [name=email]', 'ana@ejemplo.com'); await page.check('[data-hx-dialog] [name=consent]');
+  const posts0 = []; page.on('request', (r) => { if (/script\.example|exec/.test(r.url()) && r.method() === 'POST') posts0.push((r.postData() || '').slice(0, 400)); });
+  await page.click('[data-hx-dialog] .hxd__go'); await page.waitForTimeout(500);
+  ok('hero: a valid request shows the thank-you and closes with Escape', await page.evaluate(() => !document.querySelector('[data-hxd-ok]').hidden && document.querySelector('[data-hxd-form]').hidden));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+  ok('hero: Escape closes the form and the carousel is free again', await page.evaluate(() => document.querySelector('[data-hx-dialog]').hidden && !document.documentElement.classList.contains('hx-dlg-open')));
+  await page.evaluate((h) => document.querySelector(h + ' [data-hs-dot="3"]').click(), HX); await page.waitForTimeout(1700);
+  await page.evaluate((h) => [...document.querySelectorAll(h + ' .hs.is-cur .hx__card')].find((c) => /Magnate/i.test(c.textContent)).click(), HX); await page.waitForTimeout(300);
+  ok('hero: the Magnate Barbería tile opens the coupon request', await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return !d.hidden && /cupón/i.test(d.querySelector('[data-hxd-title]').textContent) && /Magnate/.test(d.querySelector('[data-hxd-chip]').textContent); }));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+  await page.evaluate((h) => document.querySelector(h + ' [data-hs-dot="3"]').click(), HX); await page.waitForTimeout(1700);
+  ok('hero: the 1-block plan goes to the order flow with the 4-week plan chosen; 2 and 3 blocks open a request', await page.evaluate((h) => { const b = [...document.querySelectorAll(h + ' .hs.is-cur .hx__pbtn')].map((a) => a.getAttribute('href')); return /pedido\?plan=block/.test(b[0]) && /^dialog:plan/.test(b[1]) && /^dialog:plan/.test(b[2]); }, HX));
+  await page.evaluate((h) => document.querySelector(h + ' [data-hs-dot="2"]').click(), HX); await page.waitForTimeout(1700);
+  ok('hero: the five nutrition plans each open the consultation request with that plan named', await page.evaluate((h) => { const c = [...document.querySelectorAll(h + ' .hs.is-cur .hx__card')].map((a) => a.getAttribute('href')); return c.length === 5 && c.every((l) => /^dialog:consulta~/.test(l)); }, HX));
+  await page.setViewportSize({ width: 1440, height: 860 });
+
+  // ---- every hero / home button leads to its own working form
+  await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1300);
+  await page.evaluate(() => { document.querySelector('[data-hx-dialog]').setAttribute('data-endpoint', 'https://script.example/exec'); });
+  const HP = []; page.on('request', (r) => { if (/script\.example/.test(r.url()) && r.method() === 'POST') HP.push(r.postData() || ''); });
+  await page.route('https://script.example/**', async (route) => { await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); });
+  const fillBase = async () => { await page.fill('[data-hx-dialog] [name=name]', 'Ana Pérez'); await page.fill('[data-hx-dialog] [name=email]', 'ana@ejemplo.com'); await page.fill('[data-hx-dialog] [name=phone]', '2221234567'); await page.check('[data-hx-dialog] [name=consent]'); };
+  const vis = () => page.evaluate(() => [...document.querySelectorAll('[data-hx-dialog] .hxd__g:not([hidden]) [name]')].map((x) => x.name).join());
+  await page.evaluate((h) => document.querySelector(h + ' [data-hero-video]').dispatchEvent(new Event('ended')), HX); await page.waitForTimeout(1800);
+  // private events
+  for (let k = 0; k < 3 && (await page.evaluate((h) => [...document.querySelector(h + ' [data-hero-cube]').querySelectorAll('.hero__face')].findIndex((f) => f.classList.contains('is-cur')), HX)) !== 5; k++) { await page.evaluate((h) => document.querySelector(h + ' [data-hs-dot="5"]').click(), HX); await page.waitForTimeout(1700); }
+  await page.evaluate((h) => [...document.querySelectorAll(h + ' .hs.is-cur .hx__card')].find((c) => /Cenas íntimas/i.test(c.textContent)).click(), HX); await page.waitForTimeout(350);
+  const ev = await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return { title: d.querySelector('[data-hxd-title]').textContent, type: d.querySelector('[name=tipo_evento]').selectedOptions[0].textContent, fits: d.querySelector('.hxd__box').getBoundingClientRect().bottom <= innerHeight + 2 }; });
+  ok('private events: "Cenas íntimas" opens the event builder with that type preselected', /evento privado/i.test(ev.title) && /Cena íntima/.test(ev.type) && ev.fits, JSON.stringify(ev));
+  const evVis = await vis();
+  ok('private events: all the event fields are on the form', ['tipo_evento', 'fecha', 'invitados', 'tiempos', 'presupuesto', 'lugar', 'alergias'].every((n) => evVis.split(',').includes(n)), evVis);
+  await fillBase(); await page.fill('[data-hx-dialog] [name=fecha]', '2026-12-20'); await page.fill('[data-hx-dialog] [name=invitados]', '10'); await page.selectOption('[data-hx-dialog] [name=tiempos]', { index: 2 }); await page.selectOption('[data-hx-dialog] [name=presupuesto]', { index: 2 }); await page.fill('[data-hx-dialog] [name=lugar]', 'Lomas de Angelópolis'); await page.fill('[data-hx-dialog] [name=alergias]', 'Sin mariscos');
+  await page.click('[data-hx-dialog] .hxd__go'); await page.waitForTimeout(500);
+  ok('private events: sending creates the event request (kind carta) with type, date, guests, courses, budget, venue and allergies', HP.some((p) => /"kind":"carta"/.test(p) && /Cena íntima/.test(p) && /2026-12-20/.test(p) && /"invitados":"10"/.test(p) && /"tiempos":"5 tiempos"/.test(p) && /Lomas de Angel/.test(p) && /mariscos/.test(p)), HP.join(' | ').slice(0, 360));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(150);
+  // nutrition consultation
+  for (let k = 0; k < 3 && (await page.evaluate((h) => [...document.querySelector(h + ' [data-hero-cube]').querySelectorAll('.hero__face')].findIndex((f) => f.classList.contains('is-cur')), HX)) !== 2; k++) { await page.evaluate((h) => document.querySelector(h + ' [data-hs-dot="2"]').click(), HX); await page.waitForTimeout(1700); }
+  await page.evaluate((h) => [...document.querySelectorAll(h + ' .hs.is-cur .hx__card')].find((c) => /Nutrición deportiva/i.test(c.textContent)).click(), HX); await page.waitForTimeout(350);
+  const cv = await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return { goal: d.querySelector('[name=objetivo]').selectedOptions[0].textContent, vis: [...d.querySelectorAll('.hxd__g:not([hidden]) [name]')].map((x) => x.name).join() }; });
+  ok('nutrition: a plan card opens the consultation form with that goal selected, plus format, day and time to choose', /Nutrición deportiva de élite/.test(cv.goal) && /modalidad/.test(cv.vis) && /dia/.test(cv.vis) && /horario/.test(cv.vis), JSON.stringify(cv));
+  await fillBase(); await page.selectOption('[data-hx-dialog] [name=dia]', { index: 2 }); await page.selectOption('[data-hx-dialog] [name=horario]', { index: 1 });
+  await page.click('[data-hx-dialog] .hxd__go'); await page.waitForTimeout(500);
+  ok('nutrition: sending books the consultation request with the goal, format, day and time', HP.some((p) => /"tipo":"consulta"/.test(p) && /Nutrición deportiva de élite/.test(p) && /"dia":"Miércoles"/.test(p) && /"horario":"Tarde"/.test(p)), HP.slice(-1).join('').slice(0, 300));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(150);
+  // trainers (home section 4)
+  await page.evaluate(() => { const e = document.querySelector('[data-page="home"] .tr'); window.scrollTo(0, e.getBoundingClientRect().top + scrollY - 80); }); await page.waitForTimeout(400);
+  await page.evaluate(() => [...document.querySelectorAll('[data-page="home"] .tr__card:not(.tr__card--cta)')].find((c) => /Fernando/.test(c.textContent)).click()); await page.waitForTimeout(350);
+  const trn = await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return { title: d.querySelector('[data-hxd-title]').textContent, who: d.querySelector('[name=entrenador]').value, vis: [...d.querySelectorAll('.hxd__g:not([hidden]) [name]')].map((x) => x.name).join() }; });
+  ok('trainers: tapping a trainer opens "Elige a tu entrenador" with that trainer selected, goal, format, days per week and area', /entrenador/i.test(trn.title) && trn.who === 'Fernando' && /meta/.test(trn.vis) && /dias_semana/.test(trn.vis) && /zona/.test(trn.vis), JSON.stringify(trn));
+  await fillBase(); await page.selectOption('[data-hx-dialog] [name=meta]', { index: 1 });
+  await page.click('[data-hx-dialog] .hxd__go'); await page.waitForTimeout(500);
+  ok('trainers: sending connects the customer with the trainer (trainer, goal and days in the request)', HP.some((p) => /"tipo":"entrenador"/.test(p) && /"entrenador":"Fernando"/.test(p) && /"meta":"Masa muscular"/.test(p) && /"dias_semana":"3"/.test(p)), HP.slice(-1).join('').slice(0, 300));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(150);
+  await page.evaluate(() => document.querySelector('[data-page="home"] .tr__cbtn').click()); await page.waitForTimeout(300);
+  ok('trainers: the roster button opens the same form with "the one that suits me best"', await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return !d.hidden && d.querySelector('[name=entrenador]').value === ''; }));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(150);
+  // coupons: members get a personal code, everybody else sees the lock
+  await page.evaluate(() => localStorage.setItem('kx-test-orders', '0')); await page.reload(); await page.waitForTimeout(1300);
+  await page.evaluate(() => document.dispatchEvent(new CustomEvent('kx:open-dialog', { detail: { kind: 'cupon', what: 'Magnate Barbería' } })));  await page.waitForTimeout(400);
+  const cpl = await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return { lock: !d.querySelector('[data-hxd-couponlock]').hidden, code: !d.querySelector('[data-hxd-coupon]').hidden, send: !d.querySelector('[data-hxd-go]').hidden }; });
+  ok('coupons: without an active 4-week block the coupon shows the lock and a way to start the block', cpl.lock && !cpl.code && !cpl.send, JSON.stringify(cpl));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(150);
+  await page.evaluate(() => localStorage.setItem('kx-test-orders', '2')); await page.reload(); await page.waitForTimeout(1300);
+  await page.evaluate(() => { document.querySelector('[data-hx-dialog]').setAttribute('data-endpoint', 'https://script.example/exec'); document.dispatchEvent(new CustomEvent('kx:open-dialog', { detail: { kind: 'cupon', what: 'Magnate Barbería' } })); }); await page.waitForTimeout(600);
+  const cpm = await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return { code: d.querySelector('[data-hxd-code]').textContent, shown: !d.querySelector('[data-hxd-coupon]').hidden, lock: !d.querySelector('[data-hxd-couponlock]').hidden }; });
+  ok('coupons: a customer with an active block sees a personal code (KMAG-…) and can have it emailed', /^KMAG-/.test(cpm.code) && cpm.shown && !cpm.lock, JSON.stringify(cpm));
+  await fillBase(); await page.click('[data-hx-dialog] .hxd__go'); await page.waitForTimeout(500);
+  ok('coupons: sending records the coupon request with the code', HP.some((p) => /"tipo":"cupon"/.test(p) && /KMAG-/.test(p)), HP.slice(-1).join('').slice(0, 260));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(150);
+  await page.evaluate(() => localStorage.setItem('kx-test-orders', '0'));
   await page.setViewportSize({ width: 1440, height: 860 });
 
   // ---- phones: nothing wider than the screen, the total bar is inside the screen

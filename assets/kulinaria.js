@@ -1031,6 +1031,55 @@
       .catch(function () { cb(null); });
   }
 
+  /* ---------- request dialog (whole site): href="dialog:<kind>~<what>" opens a form with the fields of that kind; it goes to the sheet (Solicitudes) ---------- */
+  function initHeroDialog() {
+    var dlg = $('[data-hx-dialog]'); if (!dlg) return;
+    var form = $('[data-hxd-form]', dlg), okBox = $('[data-hxd-ok]', dlg), title = $('[data-hxd-title]', dlg), chip = $('[data-hxd-chip]', dlg), sub = $('[data-hxd-sub]', dlg), err = $('[data-hxd-err]', dlg), go = $('[data-hxd-go]', dlg);
+    var kind = '', what = '', member = false, code = '';
+    var LEAD = { evento: 'carta' };
+    var show = function (on) { dlg.hidden = !on; document.documentElement.classList.toggle('hx-dlg-open', on); document.dispatchEvent(new CustomEvent('kx:hxdlg')); if (on) { var f = $('[name=name]', dlg); if (f) setTimeout(function () { f.focus(); }, 30); } };
+    var pick = function (name, text) { var s = $('select[name="' + name + '"]', dlg); if (!s || !text) return; var t = norm(text); for (var i = 0; i < s.options.length; i++) { var o = norm(s.options[i].text); if (o && (o.indexOf(t) === 0 || t.indexOf(o) === 0)) { s.selectedIndex = i; return; } } };
+    var couponCode = function () { var a = acct(), c = a ? parseInt(a.cid, 10) : 0; return 'KMAG-' + ((c || 0) ? c.toString(36).toUpperCase().slice(-5) : 'XXXXX'); };
+    var open = function (k, w) {
+      kind = k || 'consulta'; what = (w || '').trim();
+      $$('.hxd__g', dlg).forEach(function (g) { g.hidden = g.getAttribute('data-for').split(' ').indexOf(kind) < 0; });
+      if (title) title.textContent = dlg.getAttribute('data-t-' + kind) || dlg.getAttribute('data-t-consulta') || '';
+      if (sub) sub.textContent = dlg.getAttribute('data-s-' + kind) || '';
+      if (chip) { chip.textContent = what; chip.hidden = !what; }
+      $$('[data-min-today]', dlg).forEach(function (i) { i.min = mxIso(new Date()); });
+      if (kind === 'consulta') pick('objetivo', what); if (kind === 'evento') pick('tipo_evento', what); if (kind === 'entrenador') { var s = $('select[name=entrenador]', dlg); if (s) s.value = what; }
+      var cp = kind === 'cupon', cpBox = $('[data-hxd-coupon]', dlg), cpLock = $('[data-hxd-couponlock]', dlg);
+      var apply = function () {
+        if (!cp) { $$('[data-hxd-common]', dlg).forEach(function (x) { x.hidden = false; }); if (go) go.hidden = false; return; }
+        code = couponCode(); var cd = $('[data-hxd-code]', dlg); if (cd) cd.textContent = code;
+        if (cpBox) cpBox.hidden = !member; if (cpLock) cpLock.hidden = member;
+        $$('[data-hxd-common]', dlg).forEach(function (x) { x.hidden = !member; }); if (go) { go.hidden = !member; go.textContent = dlg.getAttribute('data-t-cupsend') || go.textContent; }
+      };
+      if (cp) { member = false; apply(); loadCredits(function (c) { member = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); apply(); }); } else apply();
+      if (form) form.hidden = false; if (okBox) okBox.hidden = true; if (err) err.hidden = true; show(true);
+    };
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href^="dialog:"]');
+      if (a) { e.preventDefault(); var v = a.getAttribute('href').slice(7).split('~'); open(v[0], v.slice(1).join('~')); return; }
+      if (e.target.closest && e.target.closest('[data-hxd-close]') && !dlg.hidden) show(false);
+    });
+    document.addEventListener('kx:open-dialog', function (e) { var d = e.detail || {}; open(d.kind, d.what); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !dlg.hidden) show(false); });
+    if (form) form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = ($('[name=name]', form).value || '').trim(), email = ($('[name=email]', form).value || '').trim();
+      if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !$('[name=consent]', form).checked) { if (err) { err.textContent = dlg.getAttribute('data-t-err'); err.hidden = false; } return; }
+      var fields = { tipo: kind, interes: what, origen: location.hash.replace(/^#\//, '') || location.pathname };
+      $$('.hxd__g:not([hidden]) [name]', dlg).forEach(function (x) { if ((x.value || '').trim()) fields[x.name] = x.value.trim(); });
+      if (($('[name=notas]', form).value || '').trim()) fields.notas = $('[name=notas]', form).value.trim();
+      if (kind === 'cupon') fields.cupon = code;
+      var ep = dlg.getAttribute('data-endpoint');
+      try { if (ep) fetch(ep, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'lead', kind: LEAD[kind] || 'general', name: name, email: email, phone: ($('[name=phone]', form).value || '').trim(), fields: fields }) }); } catch (x) {}
+      form.hidden = true; if (okBox) okBox.hidden = false;
+      document.dispatchEvent(new CustomEvent('kx:hxd-sent', { detail: { kind: kind, what: what } }));
+    });
+  }
+
   /* ---------- private circle (classes): everybody can preview; booking needs an active 4-week block ---------- */
   function initCircle() {
     var root = $('[data-circle]'); if (!root) return;
@@ -1043,6 +1092,10 @@
     };
     paint();
     loadCredits(function (c) { member = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); paint(); });
+    var pickSport = function (sp, hit) {
+      var p0 = pills.filter(function (x) { return x.getAttribute('data-sport') === sp; })[0]; if (!p0) return;
+      p0.click(); if (hit) { var c0 = cards.filter(function (c) { return !c.hidden; })[0]; if (c0) { c0.classList.add('is-hit'); setTimeout(function () { c0.classList.remove('is-hit'); }, 2600); var g0 = $('[data-circle-filters]', root); if (g0) setTimeout(function () { g0.scrollIntoView({ block: 'start', behavior: REDUCE ? 'auto' : 'smooth' }); }, 120); } }
+    };
     pills.forEach(function (p) {
       p.addEventListener('click', function () {
         var sp = p.getAttribute('data-sport');
@@ -1050,14 +1103,14 @@
         cards.forEach(function (c) { c.hidden = !(sp === 'all' || c.getAttribute('data-sport') === sp); });
       });
     });
+    document.addEventListener('kx:hxd-sent', function (e) { if (!e.detail || e.detail.kind !== 'clase') return; cards.forEach(function (c) { if ((e.detail.what || '').indexOf(c.getAttribute('data-class')) === 0) { c.classList.add('is-sent'); var l = $('.circle__booklbl', c); if (l) l.textContent = root.getAttribute('data-t-sent') || '✓'; var bb = $('[data-circle-book]', c); if (bb) bb.setAttribute('aria-disabled', 'true'); } }); });
+    try { var qs0 = location.search || (location.hash.indexOf('?') > -1 ? location.hash.slice(location.hash.indexOf('?')) : ''), sp0 = new URLSearchParams(qs0).get('deporte'); if (sp0) pickSport(sp0, true); } catch (e0) {}
     root.addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('[data-circle-book]'); if (!b) return;
       var card = b.closest('.circle__card');
       if (!member) { if (gate) { gate.hidden = false; gate.classList.remove('is-nudge'); void gate.offsetWidth; gate.classList.add('is-nudge'); gate.scrollIntoView({ block: 'center', behavior: REDUCE ? 'auto' : 'smooth' }); } return; }
       if (card.classList.contains('is-sent')) return;
-      var ep = root.getAttribute('data-endpoint'), name = root.getAttribute('data-name') || '', email = root.getAttribute('data-email') || '';
-      try { if (ep && email) fetch(ep, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'lead', kind: 'general', name: name || email, email: email, phone: '', fields: { tipo: 'clase del círculo privado', clase: card.getAttribute('data-class'), cuando: card.getAttribute('data-when'), sede: card.getAttribute('data-venue'), precio: root.getAttribute('data-price') } }) }); } catch (x) {}
-      card.classList.add('is-sent'); b.setAttribute('aria-disabled', 'true'); var l = $('.circle__booklbl', b); if (l) l.textContent = root.getAttribute('data-t-sent') || '✓';
+      document.dispatchEvent(new CustomEvent('kx:open-dialog', { detail: { kind: 'clase', what: card.getAttribute('data-class') + ' · ' + card.getAttribute('data-when') + ' · ' + card.getAttribute('data-venue') + ' · $' + root.getAttribute('data-price') } }));
     });
   }
 
@@ -2441,7 +2494,7 @@
     };
     var tick = function () {
       clearTimeout(timer); clearTimeout(vidSafe);
-      var pause = held || away || userPaused || REDUCE;
+      var pause = held || away || userPaused || REDUCE || document.documentElement.classList.contains('hx-dlg-open');
       if (pause) { hero.classList.remove('hs-run'); return; }
       restartBar();
       if (cur === 0 && canPlay) {                                  // the video item lasts until the video has played once (safety: its length + 2s)
@@ -2460,6 +2513,7 @@
       setTimeout(function () { if (cur === 0 && (video.paused || video.readyState < 2)) next(); }, 9000);    // autoplay blocked / still loading: never leave the hero static
     } else setTimeout(function () { if (cur === 0) next(); }, 600);
     mark(); tick();
+    document.addEventListener('kx:hxdlg', function () { tick(); });
     var hold = function (v) { held = v; tick(); };
     // no pause on a resting mouse (it would freeze the hero); only keyboard focus inside it pauses, and a touch holds it for a moment
     hero.addEventListener('focusin', function (e) { try { if (e.target.matches && e.target.matches(':focus-visible')) hold(true); } catch (x) {} }); hero.addEventListener('focusout', function () { hold(false); });
@@ -2621,7 +2675,7 @@
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
     [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile, initDietGate,
-      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initCircle, initFire, initTilt, initPeek].forEach(run);
+      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initHeroDialog, initCircle, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
   });
