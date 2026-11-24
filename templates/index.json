@@ -40,7 +40,7 @@
             "cta_title": "Acceso Familia Kulinaria",
             "cta_text": "Adquiere tu bloque de 4 semanas para desbloquear ubicaciones, horarios y ser parte de nuestra comunidad exclusiva.",
             "cta_label": "Empezar mi bloque",
-            "cta_link": "/pages/pedido?plan=block"
+            "cta_link": "/pages/circulo-privado"
           }
         },
         "s2": {
@@ -71,7 +71,7 @@
             "strip_link_label": "Desbloquea todo el ecosistema con tu plan Kulinaria +",
             "strip_link": "/pages/embajadores",
             "cards": "doctor|Ángel Otero||Reclamar beneficio|dialog:consulta~Beneficio: consulta con Ángel Otero\nshirt|KFW Fitness Wear||Ver recompensas|/collections/kulinaria-store\nbarber|Magnate Barbería||Canjear cupón|dialog:cupon~Cupón Magnate Barbería\nusers|+20 Entrenadores||Ver entrenadores|/pages/embajadores-entrenadores\ndumbbell|Gimnasios Hermanos||Ver sedes|/pages/embajadores-gimnasios\nstar|Salones & Eventos VIP||Explorar ahora|/pages/circulo-privado",
-            "plans": "1 Bloque (4 Semanas)|Inicio Inteligente||Consulta Nutricional con Ángel Otero, Lic. en Nutrición: $850 MXN → $699 MXN (Ahorras $151);;Elige un regalo: 1 artículo (límite de valor $449) de la tienda KFW o 1 corte cortesía de Magnate Barbería|Elegir mi ahorro|/pages/pedido?plan=block\n2 Bloques (8 Semanas)|Transformación Total|La más elegida|Consulta Ángel Otero, Lic. en Nutrición: $850 MXN → ¡Gratis!;;Artículo Oficial KFW (prenda, gorra o tumbler): $449 MXN → ¡Gratis!;;2 Experiencias y Eventos VIP con Embajadores: $398 MXN → ¡Gratis!|Obtener $997 en regalos y descuentos|dialog:plan~Plan de 2 bloques (8 semanas)\n3 Bloques (12 Semanas)|Estilo de Vida Completo|Nivel VIP|Consulta Ángel Otero, Lic. en Nutrición: $850 MXN → ¡Gratis!;;Gratis: Kit Completo KFW Merch;;VIP Pass: eventos exclusivos con modelos y entrenadores;;Cortesías: Magnate Barbería y salones de belleza aliados|Desbloquear mi pase VIP|dialog:plan~Plan de 3 bloques (12 semanas)"
+            "plans": "1 Bloque (4 Semanas)|Inicio Inteligente||Consulta Nutricional con Ángel Otero, Lic. en Nutrición: ~$850 MXN~ → *$699 MXN* (Ahorras $151);;*Elige un regalo:* 1 artículo (límite de valor $449) de la tienda KFW o 1 corte cortesía de Magnate Barbería|Elegir mi ahorro|/pages/pedido?plan=block\n2 Bloques (8 Semanas)|Transformación Total|La más elegida|Consulta Ángel Otero, Lic. en Nutrición: ~$850 MXN~ → *¡Gratis!*;;Artículo Oficial KFW (prenda, gorra o tumbler): ~$449 MXN~ → *¡Gratis!*;;2 Experiencias y Eventos VIP con Embajadores: ~$398 MXN~ → *¡Gratis!*|Obtener $997 en regalos y descuentos|dialog:plan~Plan de 2 bloques (8 semanas)\n3 Bloques (12 Semanas)|Estilo de Vida Completo|Nivel VIP|Consulta Ángel Otero, Lic. en Nutrición: ~$850 MXN~ → *¡Gratis!*;;*Gratis:* Kit completo KFW Merch;;*VIP Pass:* eventos exclusivos con modelos y entrenadores;;*Cortesías:* Magnate Barbería y salones de belleza aliados|Desbloquear mi pase VIP|dialog:plan~Plan de 3 bloques (12 semanas)"
           }
         },
         "s4": {
@@ -90,8 +90,8 @@
             "cards": "photo:hs-cenas|Cenas íntimas|Chef ejecutivo a puerta cerrada.||dialog:evento~Cena íntima\nphoto:hs-reuniones|Reuniones sociales|Celebraciones privadas con servicio total.||dialog:evento~Reunión social\nphoto:hs-corporativo|Eventos corporativos|Catering ejecutivo y experiencias de marca.||dialog:evento~Evento corporativo\ncalendar|Logística integral|Planeación de menú, tiempos y personal on-site.||dialog:evento~Logística integral",
             "cta_title": "Reserva tu fecha",
             "cta_text": "Consulta disponibilidad y diseña tu menú con nuestros chefs.",
-            "cta_label": "Cotizar evento",
-            "cta_link": "dialog:evento~"
+            "cta_label": "Reservar fecha",
+            "cta_link": "dialog:evento~Solo reservar fecha"
           }
         },
         "s5": {
@@ -109,9 +109,24 @@
             "strip_link": "/pages/embajadores",
             "strip_link_label": "Ver todos los beneficios +"
           }
+        },
+        "s0": {
+          "type": "slide",
+          "settings": {
+            "layout": "banner",
+            "art": "air-steak",
+            "heading": "Cero compras. Cero cocina. Cero estrés.",
+            "text": "Elige tu ciclo de 4 semanas y recibe tus platillos frescos directamente en casa.",
+            "button_label": "Diseñar mi plan",
+            "button_link": "/pages/pedido?plan=block",
+            "strip_title": "Por qué Kulinaria",
+            "cards": "calendar|100% adaptable|Tu ciclo de 4 semanas, a tu medida.||\nbarber|Alta cocina|Platillos de autor, listos para disfrutar.||\nshield|Sin complicaciones|Cero compras, cero cocina, cero estrés.||/pages/planes",
+            "tag": ""
+          }
         }
       },
       "block_order": [
+        "s0",
         "s1",
         "s2",
         "s3",

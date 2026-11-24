@@ -147,6 +147,21 @@
       },
       {
         "type": "text",
+        "id": "event_busy_dates",
+        "label": "Calendario de eventos privados: fechas NO disponibles",
+        "info": "Fechas separadas por coma, formato AAAA-MM-DD. Ej: 2026-12-24,2026-12-31"
+      },
+      {
+        "type": "range",
+        "id": "event_lead_days",
+        "label": "Días mínimos de anticipación para un evento",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "default": 3
+      },
+      {
+        "type": "text",
         "id": "cta_label",
         "label": "Texto del botón principal",
         "default": "Elegir mi plan"

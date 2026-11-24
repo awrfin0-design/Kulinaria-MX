@@ -1,0 +1,10 @@
+{%- comment -%}Marks inside hero texts: ~struck price~ and *highlight*. Usage: render 'hx-mark', s: text{%- endcomment -%}
+{%- assign mk_parts = s | split: '~' -%}
+{%- for mp in mk_parts -%}
+  {%- assign mk_odd = forloop.index | modulo: 2 -%}
+  {%- if mk_odd == 0 -%}<s>{{ mp }}</s>
+  {%- else -%}
+    {%- assign mk_b = mp | split: '*' -%}
+    {%- for bp in mk_b -%}{%- assign mk_bo = forloop.index | modulo: 2 -%}{%- if mk_bo == 0 -%}<b>{{ bp }}</b>{%- else -%}{{ bp }}{%- endif -%}{%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}

@@ -1040,6 +1040,31 @@
     var show = function (on) { dlg.hidden = !on; document.documentElement.classList.toggle('hx-dlg-open', on); document.dispatchEvent(new CustomEvent('kx:hxdlg')); if (on) { var f = $('[name=name]', dlg); if (f) setTimeout(function () { f.focus(); }, 30); } };
     var pick = function (name, text) { var s = $('select[name="' + name + '"]', dlg); if (!s || !text) return; var t = norm(text); for (var i = 0; i < s.options.length; i++) { var o = norm(s.options[i].text); if (o && (o.indexOf(t) === 0 || t.indexOf(o) === 0)) { s.selectedIndex = i; return; } } };
     var couponCode = function () { var a = acct(), c = a ? parseInt(a.cid, 10) : 0; return 'KMAG-' + ((c || 0) ? c.toString(36).toUpperCase().slice(-5) : 'XXXXX'); };
+    // availability calendar for private events (busy dates come from the theme settings; the last days before today are closed too)
+    var cal = $('[data-hxd-cal]', dlg), calIn = cal && $('input[name=fecha]', cal), calGrid = cal && $('[data-hxd-calgrid]', cal), calLbl = cal && $('[data-hxd-callbl]', cal), calPick = cal && $('[data-hxd-calpick]', cal);
+    var busyOf = function () { return (dlg.getAttribute('data-busy') || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean); }, lead = parseInt(dlg.getAttribute('data-lead'), 10); if (isNaN(lead)) lead = 3;
+    var WD = (dlg.getAttribute('data-wd') || 'L,M,M,J,V,S,D').split(','), MN = (dlg.getAttribute('data-months') || '').split(','), calY = 0, calM = 0;
+    var isoOf = function (y, m, d) { return y + '-' + (m + 1 < 10 ? '0' : '') + (m + 1) + '-' + (d < 10 ? '0' : '') + d; };
+    var drawCal = function () {
+      if (!calGrid) return;
+      var first = new Date(calY, calM, 1), pad = (first.getDay() + 6) % 7, days = new Date(calY, calM + 1, 0).getDate(), today = new Date(), t0 = new Date(today.getFullYear(), today.getMonth(), today.getDate() + lead), html = '', busyList = busyOf();
+      WD.forEach(function (w) { html += '<span class="hxd__wd">' + w + '</span>'; });
+      for (var p = 0; p < pad; p++) html += '<span></span>';
+      for (var d = 1; d <= days; d++) {
+        var iso = isoOf(calY, calM, d), off = new Date(calY, calM, d) < t0 || busyList.indexOf(iso) > -1, on = calIn && calIn.value === iso;
+        html += '<button type="button" class="hxd__day' + (off ? ' is-busy' : ' is-free') + (on ? ' is-on' : '') + '" data-d="' + iso + '"' + (off ? ' disabled' : '') + ' aria-pressed="' + (on ? 'true' : 'false') + '">' + d + '</button>';
+      }
+      calGrid.innerHTML = html; if (calLbl) calLbl.textContent = (MN[calM] || '') + ' ' + calY;
+      var prev = $('[data-hxd-calnav="-1"]', cal); if (prev) prev.disabled = (calY === today.getFullYear() && calM <= today.getMonth());
+    };
+    if (cal) cal.addEventListener('click', function (e) {
+      var nav = e.target.closest('[data-hxd-calnav]'), day = e.target.closest('.hxd__day');
+      if (nav && !nav.disabled) { calM += parseInt(nav.getAttribute('data-hxd-calnav'), 10); if (calM < 0) { calM = 11; calY--; } if (calM > 11) { calM = 0; calY++; } drawCal(); return; }
+      if (day && !day.disabled) {
+        calIn.value = day.getAttribute('data-d'); var q = calIn.value.split('-'), lbl = parseInt(q[2], 10) + ' ' + (MN[parseInt(q[1], 10) - 1] || '') + ' ' + q[0];
+        if (calPick) calPick.textContent = dlg.getAttribute('data-t-chosen') + ' ' + lbl; drawCal();
+      }
+    });
     var open = function (k, w) {
       kind = k || 'consulta'; what = (w || '').trim();
       $$('.hxd__g', dlg).forEach(function (g) { g.hidden = g.getAttribute('data-for').split(' ').indexOf(kind) < 0; });
@@ -1047,6 +1072,7 @@
       if (sub) sub.textContent = dlg.getAttribute('data-s-' + kind) || '';
       if (chip) { chip.textContent = what; chip.hidden = !what; }
       $$('[data-min-today]', dlg).forEach(function (i) { i.min = mxIso(new Date()); });
+      if (cal) { var nw = new Date(); calY = nw.getFullYear(); calM = nw.getMonth(); calIn.value = ''; if (calPick) calPick.textContent = dlg.getAttribute('data-t-pick') || ''; drawCal(); }
       if (kind === 'consulta') pick('objetivo', what); if (kind === 'evento') pick('tipo_evento', what); if (kind === 'entrenador') { var s = $('select[name=entrenador]', dlg); if (s) s.value = what; }
       var cp = kind === 'cupon', cpBox = $('[data-hxd-coupon]', dlg), cpLock = $('[data-hxd-couponlock]', dlg);
       var apply = function () {
@@ -1069,6 +1095,7 @@
       e.preventDefault();
       var name = ($('[name=name]', form).value || '').trim(), email = ($('[name=email]', form).value || '').trim();
       if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !$('[name=consent]', form).checked) { if (err) { err.textContent = dlg.getAttribute('data-t-err'); err.hidden = false; } return; }
+      if (kind === 'evento' && calIn && !calIn.value) { if (err) { err.textContent = dlg.getAttribute('data-t-date'); err.hidden = false; } return; }
       var fields = { tipo: kind, interes: what, origen: location.hash.replace(/^#\//, '') || location.pathname };
       $$('.hxd__g:not([hidden]) [name]', dlg).forEach(function (x) { if ((x.value || '').trim()) fields[x.name] = x.value.trim(); });
       if (($('[name=notas]', form).value || '').trim()) fields.notas = $('[name=notas]', form).value.trim();
@@ -2465,6 +2492,21 @@
     hero.classList.add('is-carousel');
     var size = function () { box.style.setProperty('--hc-w', Math.round(box.getBoundingClientRect().width) + 'px'); };
     size(); window.addEventListener('resize', size);
+    // the carousel is as tall as its tallest slide (never shorter than the screen): nothing is hidden or cut on laptops
+    var fitT = 0, hs = [];
+    var setH = function (k) { if (hs[k]) box.style.setProperty('--hc-h', hs[k] + 'px'); };
+    var fit = function () {
+      box.style.removeProperty('--hc-h'); var def = box.offsetHeight; hs = [def];
+      hero.classList.add('hx-measure');
+      faces.forEach(function (f, x) { if (x > 0) hs[x] = Math.max(def, Math.ceil(f.offsetHeight + 6)); });
+      hero.classList.remove('hx-measure');
+      setH(cur);
+    };
+    var fitSoon = function () { clearTimeout(fitT); fitT = setTimeout(fit, 120); };
+    fit(); window.addEventListener('resize', fitSoon); window.addEventListener('load', fitSoon);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitSoon);
+    $$('img', cube).forEach(function (im) { if (!im.complete) im.addEventListener('load', fitSoon); });
+    document.addEventListener('kx:lang', fitSoon);
     var mark = function () {
       faces.forEach(function (f, x) { if (x === cur) f.removeAttribute('aria-hidden'); else f.setAttribute('aria-hidden', 'true'); });
       dots.forEach(function (d, x) { d.classList.toggle('is-on', x === cur); if (x === cur) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current'); });
@@ -2474,8 +2516,8 @@
     var turn = function (k, dir) {                                   // dir 1: the cube turns left (next); -1: back
       k = wrapIdx(k); if (busy || k === cur) return false;
       var from = faces[cur], to = faces[k];
-      if (REDUCE) { from.classList.remove('is-cur'); to.classList.add('is-cur'); cur = k; mark(); return true; }
-      busy = true; size();
+      if (REDUCE) { from.classList.remove('is-cur'); to.classList.add('is-cur'); cur = k; mark(); setH(cur); return true; }
+      busy = true; size(); if (hs.length) box.style.setProperty('--hc-h', Math.max(hs[cur] || 0, hs[k] || 0) + 'px');
       var rot = dir > 0 ? 'rot-next' : 'rot-prev';
       from.classList.add('is-out'); to.classList.add(dir > 0 ? 'is-nxt' : 'is-prv'); void cube.offsetWidth; cube.classList.add(rot);
       var fb = 0, done = function () {
@@ -2483,7 +2525,7 @@
         cube.style.transition = 'none';
         from.classList.remove('is-cur', 'is-out'); to.classList.remove('is-nxt', 'is-prv'); to.classList.add('is-cur');
         cube.classList.remove(rot); void cube.offsetWidth; cube.style.transition = '';
-        busy = false;
+        setH(cur); busy = false;
       };
       var onEnd = function (e) { if (e.target === cube && e.propertyName === 'transform') done(); };
       cube.addEventListener('transitionend', onEnd); fb = setTimeout(done, 1500);
