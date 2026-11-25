@@ -37,8 +37,7 @@
       {
         "type": "url",
         "id": "instagram_url",
-        "label": "Instagram",
-        "default": "https://www.instagram.com/kulinariamx"
+        "label": "Instagram"
       },
       {
         "type": "url",
@@ -253,8 +252,7 @@
       {
         "type": "url",
         "id": "agency_url",
-        "label": "Enlace de la agencia",
-        "default": "https://vellumandquill.com"
+        "label": "Enlace de la agencia"
       }
     ]
   },
