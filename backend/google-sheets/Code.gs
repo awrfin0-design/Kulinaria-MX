@@ -764,8 +764,14 @@ function loadLeads_() {
   return sh.getRange(2, 1, sh.getLastRow() - 1, 8).getValues().map(function (r) { return { date: r[0] instanceof Date ? r[0].toISOString() : String(r[0]), kind: String(r[1]), name: String(r[2]), email: String(r[3]), phone: String(r[4]), detail: String(r[5]), status: String(r[6]) || 'Nueva', id: String(r[7]) }; }).filter(function (x) { return x.id; }).reverse();
 }
 function leadAdd_(b) {
-  var kind = /^(embajador|carta|general)$/.test(String(b.kind)) ? String(b.kind) : 'general', name = String(b.name || '').trim().slice(0, 100), email = String(b.email || '').trim().toLowerCase().slice(0, 120), phone = String(b.phone || '').trim().slice(0, 40);
+  var kind = /^(embajador|carta|general|consulta|plan|entrenador|clase|cupon|sede|gimnasio)$/.test(String(b.kind)) ? String(b.kind) : 'general', name = String(b.name || '').trim().slice(0, 100), email = String(b.email || '').trim().toLowerCase().slice(0, 120), phone = String(b.phone || '').trim().slice(0, 40);
   if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { ok: false, error: 'bad_lead' };
+  // member-only requests (classes, nutrition consults, trainers, coupons): the sender must prove an active 4-week block. Script property GATED_KINDS (default below) lists them; empty = open to all.
+  var gp = PropertiesService.getScriptProperties().getProperty('GATED_KINDS'), gated = (gp == null ? 'clase,consulta,entrenador,cupon' : gp).split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+  if (gated.indexOf(kind) > -1) {
+    var okM = false; try { okM = !!(b.cid && b.token && profileTokenOk_(b.cid, b.token)); if (okM) { var cr = creditsFor_(b.cid); okM = !!(cr && cr.hasPlan && cr.plan === 'block'); } } catch (eM) { okM = false; }
+    if (!okM) return { ok: false, error: 'members_only' };
+  }
   var cache = CacheService.getScriptCache(), ck = 'lead:' + kind + ':' + email;
   if (cache.get(ck)) return { ok: true, duplicate: true };           // the same person sending the same kind of request twice in a minute
   cache.put(ck, '1', 60);

@@ -146,6 +146,13 @@
       },
       {
         "type": "text",
+        "id": "gated_requests",
+        "label": "Solicitudes solo para clientes con bloque de 4 semanas activo",
+        "info": "Tipos separados por coma: clase, consulta, entrenador, cupon. Déjalos vacíos de la lista para abrirlos a todos. También se valida en el servidor.",
+        "default": "clase,consulta,entrenador,cupon"
+      },
+      {
+        "type": "text",
         "id": "event_busy_dates",
         "label": "Calendario de eventos privados: fechas NO disponibles",
         "info": "Fechas separadas por coma, formato AAAA-MM-DD. Ej: 2026-12-24,2026-12-31"

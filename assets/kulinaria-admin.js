@@ -207,7 +207,7 @@
 
   var STR = {
     es: { title: 'Panel de administración', demo: 'Datos de demostración. Conecta el Google Sheet (docs/admin.md) para ver los pedidos reales.', tabs: ['Resumen', 'Lista de compras', 'Recetas', 'Pedidos', 'Descuentos', 'Finanzas', 'Entregas', 'Solicitudes'],
-      lTitle: 'Solicitudes', lNone: 'Aún no hay solicitudes.', lKinds: { embajador: 'Embajador', carta: 'Evento / Carta', general: 'Contacto' }, lStates: ['Nueva', 'En proceso', 'Atendida'], lNew: 'nuevas', lMakeCode: 'Crear código de descuento', lWa: 'WhatsApp', lMail: 'Correo', lDemo: 'Conecta el Google Sheet para ver las solicitudes.',
+      lTitle: 'Solicitudes', lNone: 'Aún no hay solicitudes.', lKinds: { embajador: 'Embajador', carta: 'Evento privado', general: 'Contacto', consulta: 'Consulta nutrición', plan: 'Plan 2-3 bloques', entrenador: 'Entrenador', clase: 'Clase (círculo)', cupon: 'Cupón', sede: 'Sede / zona', gimnasio: 'Gimnasio aliado' }, lAll: 'Todas', lStates: ['Nueva', 'En proceso', 'Atendida'], lNew: 'nuevas', lMakeCode: 'Crear código de descuento', lWa: 'WhatsApp', lMail: 'Correo', lDemo: 'Conecta el Google Sheet para ver las solicitudes.',
       oPeople: 'personas', oMonthTitle: 'Pedidos del mes', oSee: 'ver detalle',
       eEmpty: 'Conectado al Google Sheet. Las entregas aparecerán aquí cuando haya el primer pedido pagado de un plan.', eNotes: 'Notas de cocina', eTitle: 'Entregas', eNone: 'Sin entregas este día.', eMeals: 'comidas', eStops: 'paradas', eTotal: 'Total del día', eWho: 'Para', eHolder: 'Cuenta', ePhone: 'Teléfono', eAddr: 'Dirección', eAllergy: 'Alergias', eDislike: 'No le gusta', eCook: 'Platillos a cocinar ese día', eDemo: 'Conecta el Google Sheet para ver las entregas reales.', eDays: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'], eAuto: 'repite la selección anterior', oWho: 'Cliente', oContact: 'Contacto', oPlanTxt: 'Plan', oWeekly: 'Qué pidió, semana por semana', oPaid: 'Pagado', oUnpaid: 'Pendiente de pago', oNoDish: '—', oPaused: 'Semanas en pausa', oFor: 'Para',
       errReload: 'No se pudieron actualizar los datos (el script tardó o falló). Tu sesión sigue abierta.', retry: 'Reintentar',
@@ -222,7 +222,7 @@
       key: 'Contraseña de administración', keyHelp: 'Es la clave ADMIN_KEY que configuraste en el Apps Script.', enter: 'Entrar', badKey: 'Contraseña incorrecta.', loading: 'Cargando…', error: 'No se pudieron cargar los datos', lock: 'Cerrar sesión',
       noRecipes: 'Aún no hay recetas.', cooking: 'Para cocinar', buyList: 'Ver lista de compras', thisWeek: 'Esta semana', nextWeek: 'Próxima semana' },
     en: { title: 'Admin panel', demo: 'Demo data. Connect the Google Sheet (docs/admin.md) to see real orders.', tabs: ['Summary', 'Shopping list', 'Recipes', 'Orders', 'Discounts', 'Finance', 'Deliveries', 'Requests'],
-      lTitle: 'Requests', lNone: 'No requests yet.', lKinds: { embajador: 'Ambassador', carta: 'Event / Carta', general: 'Contact' }, lStates: ['Nueva', 'En proceso', 'Atendida'], lNew: 'new', lMakeCode: 'Create discount code', lWa: 'WhatsApp', lMail: 'E-mail', lDemo: 'Connect the Google Sheet to see the requests.',
+      lTitle: 'Requests', lNone: 'No requests yet.', lKinds: { embajador: 'Ambassador', carta: 'Private event', general: 'Contact', consulta: 'Nutrition consult', plan: '2-3 block plan', entrenador: 'Trainer', clase: 'Class (circle)', cupon: 'Coupon', sede: 'Gym / area', gimnasio: 'Partner gym' }, lAll: 'All', lStates: ['Nueva', 'En proceso', 'Atendida'], lNew: 'new', lMakeCode: 'Create discount code', lWa: 'WhatsApp', lMail: 'E-mail', lDemo: 'Connect the Google Sheet to see the requests.',
       oPeople: 'people', oMonthTitle: 'Orders this month', oSee: 'see detail',
       eEmpty: 'Connected to the Google Sheet. Deliveries will show up here once there is a first paid plan order.', eNotes: 'Kitchen notes', eTitle: 'Deliveries', eNone: 'No deliveries this day.', eMeals: 'meals', eStops: 'stops', eTotal: 'Day total', eWho: 'For', eHolder: 'Account', ePhone: 'Phone', eAddr: 'Address', eAllergy: 'Allergies', eDislike: 'Dislikes', eCook: 'Dishes to cook that day', eDemo: 'Connect the Google Sheet to see the real deliveries.', eDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], eAuto: 'repeats the previous selection', oWho: 'Client', oContact: 'Contact', oPlanTxt: 'Plan', oWeekly: 'What they ordered, week by week', oPaid: 'Paid', oUnpaid: 'Payment pending', oNoDish: '—', oPaused: 'Paused weeks', oFor: 'For',
       errReload: 'The data could not be refreshed (the script was slow or failed). Your session is still open.', retry: 'Retry',
@@ -415,7 +415,10 @@
     function viewLeads() {
       var L = S.data && S.data.leads; if (!L) return '<p class="adm-demo">' + T.lDemo + '</p>';
       if (!L.length) return '<p class="adm-empty">' + T.lNone + '</p>';
-      return '<div class="adm-orders" data-leads>' + L.map(function (x) {
+      var kinds = {}; L.forEach(function (x) { kinds[x.kind] = (kinds[x.kind] || 0) + 1; });
+      var fk = S.leadF && kinds[S.leadF] ? S.leadF : '';
+      var chips = '<div class="adm-chips" role="group" data-lead-filters><button type="button" class="' + (!fk ? 'is-on' : '') + '" data-lead-f="">' + T.lAll + ' (' + L.length + ')</button>' + Object.keys(kinds).map(function (k) { var open = L.filter(function (x) { return x.kind === k && x.status === 'Nueva'; }).length; return '<button type="button" class="' + (fk === k ? 'is-on' : '') + '" data-lead-f="' + esc(k) + '">' + esc(T.lKinds[k] || k) + ' (' + kinds[k] + (open ? ' · ' + open + ' ' + T.lNew : '') + ')</button>'; }).join('') + '</div>';
+      return chips + '<div class="adm-orders" data-leads>' + L.filter(function (x) { return !fk || x.kind === fk; }).map(function (x) {
         var d = new Date(x.date), digits = String(x.phone || '').replace(/\D/g, ''), wa = digits ? 'https://wa.me/' + (digits.length === 10 ? '52' + digits : digits) : '';
         return '<article class="adm-card adm-lead" data-lead-id="' + esc(x.id) + '"><header><b class="adm-order__who">' + esc(x.name) + '</b> <span class="adm-lead__kind">' + esc(T.lKinds[x.kind] || x.kind) + '</span><span class="adm-order__meta">' + d.getDate() + ' ' + MONTHS[lang][d.getMonth()].slice(0, 3) + '</span></header>' +
           '<p class="adm-order__c"><a href="mailto:' + esc(x.email) + '">' + esc(x.email) + '</a>' + (x.phone ? ' · ' + esc(x.phone) : '') + (wa ? ' · <a href="' + wa + '" target="_blank" rel="noopener">' + T.lWa + '</a>' : '') + '</p>' +
@@ -431,6 +434,7 @@
     }
 
     el.addEventListener('click', function (e) {
+      var lf = e.target.closest && e.target.closest('[data-lead-f]'); if (lf) { S.leadF = lf.getAttribute('data-lead-f'); render(); return; }
       var t = e.target.closest('button'); if (!t) return;
       if (t.hasAttribute('data-tab')) { S.tab = +t.getAttribute('data-tab'); render(); if (S.tab === 4 && S.disc === null) dLoad(); return; }
       if (t.hasAttribute('data-dgen')) { var cf = el.querySelector('[data-discform] [name=code]'), w = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', c2 = 'KUL'; for (var gi = 0; gi < 5; gi++) c2 += w.charAt(Math.floor(Math.random() * w.length)); cf.value = c2; return; }

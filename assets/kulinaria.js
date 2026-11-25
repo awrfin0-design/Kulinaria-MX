@@ -1036,7 +1036,7 @@
     var dlg = $('[data-hx-dialog]'); if (!dlg) return;
     var form = $('[data-hxd-form]', dlg), okBox = $('[data-hxd-ok]', dlg), title = $('[data-hxd-title]', dlg), chip = $('[data-hxd-chip]', dlg), sub = $('[data-hxd-sub]', dlg), err = $('[data-hxd-err]', dlg), go = $('[data-hxd-go]', dlg);
     var kind = '', what = '', member = false, code = '';
-    var LEAD = { evento: 'carta', gimnasio: 'embajador' };
+    var LEAD = { evento: 'carta' };
     var show = function (on) { dlg.hidden = !on; document.documentElement.classList.toggle('hx-dlg-open', on); document.dispatchEvent(new CustomEvent('kx:hxdlg')); if (on) { var f = $('[name=name]', dlg); if (f) setTimeout(function () { f.focus(); }, 30); } };
     var pick = function (name, text) { var s = $('select[name="' + name + '"]', dlg); if (!s || !text) return; var t = norm(text); for (var i = 0; i < s.options.length; i++) { var o = norm(s.options[i].text); if (o && (o.indexOf(t) === 0 || t.indexOf(o) === 0)) { s.selectedIndex = i; return; } } };
     var couponCode = function () { var a = acct(), c = a ? parseInt(a.cid, 10) : 0; return 'KMAG-' + ((c || 0) ? c.toString(36).toUpperCase().slice(-5) : 'XXXXX'); };
@@ -1075,6 +1075,8 @@
       if (cal) { var nw = new Date(); calY = nw.getFullYear(); calM = nw.getMonth(); calIn.value = ''; if (calPick) calPick.textContent = dlg.getAttribute('data-t-pick') || ''; drawCal(); }
       if (kind === 'sede') { var sd = $('[name=sede]', dlg); if (sd) sd.value = what; }
       if (kind === 'consulta') pick('objetivo', what); if (kind === 'evento') pick('tipo_evento', what); if (kind === 'entrenador') { var s = $('select[name=entrenador]', dlg); if (s) s.value = what; }
+      var gatedKinds = (dlg.getAttribute('data-gated') || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean), needM = kind !== 'cupon' && gatedKinds.indexOf(kind) > -1, gateBox = $('[data-hxd-gate]', dlg);
+      if (gateBox) gateBox.hidden = true;
       var cp = kind === 'cupon', cpBox = $('[data-hxd-coupon]', dlg), cpLock = $('[data-hxd-couponlock]', dlg);
       var apply = function () {
         if (!cp) { $$('[data-hxd-common]', dlg).forEach(function (x) { x.hidden = false; }); if (go) go.hidden = false; return; }
@@ -1082,7 +1084,14 @@
         if (cpBox) cpBox.hidden = !member; if (cpLock) cpLock.hidden = member;
         $$('[data-hxd-common]', dlg).forEach(function (x) { x.hidden = !member; }); if (go) { go.hidden = !member; go.textContent = dlg.getAttribute('data-t-cupsend') || go.textContent; }
       };
-      if (cp) { member = false; apply(); loadCredits(function (c) { member = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); apply(); }); } else apply();
+      var applyNeed = function () {
+        var lock = !member; if (gateBox) gateBox.hidden = !lock;
+        $$('.hxd__g', dlg).forEach(function (g) { g.hidden = lock || g.getAttribute('data-for').split(' ').indexOf(kind) < 0; });
+        $$('[data-hxd-common]', dlg).forEach(function (x) { x.hidden = lock; }); if (go) go.hidden = lock;
+      };
+      if (cp) { member = false; apply(); loadCredits(function (c) { member = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); apply(); }); }
+      else if (needM) { member = false; applyNeed(); loadCredits(function (c) { member = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); applyNeed(); }); }
+      else apply();
       if (form) form.hidden = false; if (okBox) okBox.hidden = true; if (err) err.hidden = true; show(true);
     };
     document.addEventListener('click', function (e) {
@@ -1102,7 +1111,7 @@
       if (($('[name=notas]', form).value || '').trim()) fields.notas = $('[name=notas]', form).value.trim();
       if (kind === 'cupon') fields.cupon = code;
       var ep = dlg.getAttribute('data-endpoint');
-      try { if (ep) fetch(ep, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'lead', kind: LEAD[kind] || 'general', name: name, email: email, phone: ($('[name=phone]', form).value || '').trim(), fields: fields }) }); } catch (x) {}
+      try { if (ep) fetch(ep, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'lead', cid: (acct() || {}).cid || '', token: (acct() || {}).token || '', kind: LEAD[kind] || kind, name: name, email: email, phone: ($('[name=phone]', form).value || '').trim(), fields: fields }) }); } catch (x) {}
       form.hidden = true; if (okBox) okBox.hidden = false;
       document.dispatchEvent(new CustomEvent('kx:hxd-sent', { detail: { kind: kind, what: what } }));
     });
@@ -1629,7 +1638,7 @@
           li.appendChild(b); li.appendChild(x); li.appendChild(x2); li.appendChild(ed); weekBox.appendChild(li);
         }
       };
-      var macroOf = function (pid) { var d = pid && byPid(pid); if (!d) return null; return { k: +d.getAttribute('data-kcal') || 0, p: +d.getAttribute('data-protein') || 0, c: +d.getAttribute('data-carbs') || 0, f: +d.getAttribute('data-fat') || 0 }; };
+      var macroOf = function (pid) { var d = pid && byPid(pid); if (!d) return null; return { k: +d.getAttribute('data-kcal') || 0, p: +d.getAttribute('data-protein') || 0, c: +d.getAttribute('data-carbs') || 0, f: +d.getAttribute('data-fat') || 0, fi: +d.getAttribute('data-fiber') || 0, su: +d.getAttribute('data-sugar') || 0, so: +d.getAttribute('data-sodium') || 0 }; };
       var dayMacros = function (i) { var t = { k: 0, p: 0, c: 0, f: 0, n: 0 }; [st.days[i], st.days2[i]].forEach(function (pid) { var m = macroOf(pid); if (m) { t.k += m.k; t.p += m.p; t.c += m.c; t.f += m.f; t.n++; } }); return t; };
       var paintMacros = function () {
         var box = $('[data-fn-macros]', holder); if (!box) return;
@@ -2252,6 +2261,25 @@
         var im = $('img', d), src = im ? (im.currentSrc || im.src) : '';
         return '<li class="fn-sm__day"><h5>' + esc(dayLabel(i).split(' ')[0]) + '</h5><div><span class="fn-sm__ph" style="background-image:url(&quot;' + esc(src) + '&quot;)"></span><p>' + parts.join(' ') + '</p></div></li>';
       };
+      var nutriHtml = function () {
+        var rows = [], T0 = { k: 0, p: 0, c: 0, f: 0, fi: 0, su: 0, so: 0 }, tot = Object.assign({}, T0), nd = 0, have = { fi: false, su: false, so: false };
+        var add = function (a, m) { Object.keys(T0).forEach(function (k) { a[k] += m[k] || 0; }); };
+        var lbl = function (x) { return Math.round(x).toLocaleString(cfg.lang === 'en' ? 'en-US' : 'es-MX'); };
+        for (var i = 0; i < MEALS; i++) { var row = Object.assign({}, T0), n = 0; [st.days[i], st.days2[i]].forEach(function (p) { var m = p && macroOf(p); if (m) { add(row, m); n++; } }); if (n) { rows.push({ n: dayLabel(i).split(' ')[0], r: row }); add(tot, row); nd++; } }
+        var we = Object.assign({}, T0), wn = 0; st.we.forEach(function (w) { var m = w.on && w.pid && macroOf(w.pid); if (m) { add(we, m); wn++; } });
+        if (wn) { rows.push({ n: w2('nut_we'), r: we }); add(tot, we); }
+        if (!rows.length) return '';
+        rows.forEach(function (x) { ['fi', 'su', 'so'].forEach(function (k) { if (x.r[k] > 0) have[k] = true; }); });
+        var cols = [['k', 'kcal'], ['p', w2('nut_p') + ' g'], ['c', w2('nut_c') + ' g'], ['f', w2('nut_f') + ' g']].concat(have.fi ? [['fi', w2('nut_fiber')]] : [], have.su ? [['su', w2('nut_sugar')]] : [], have.so ? [['so', w2('nut_sodium')]] : []);
+        var cell = function (x, k) { return '<td>' + lbl(x[k]) + '</td>'; };
+        var body = rows.map(function (x) { return '<tr><th>' + esc(x.n) + '</th>' + cols.map(function (c) { return cell(x.r, c[0]); }).join('') + '</tr>'; }).join('');
+        var avg = {}; Object.keys(T0).forEach(function (k) { avg[k] = nd ? (tot[k] - we[k]) / nd : 0; });
+        var kP = tot.p * 4, kC = tot.c * 4, kF = tot.f * 9, kS = (kP + kC + kF) || 1, pc = function (v) { return Math.round(v / kS * 100); };
+        return '<section class="fn-sm__nut"><h4>' + esc(w2('nut_t')) + '</h4><div class="fn-sm__tw"><table><thead><tr><th>' + esc(w2('nut_day')) + '</th>' + cols.map(function (c) { return '<th>' + esc(c[1]) + '</th>'; }).join('') + '</tr></thead><tbody>' + body
+          + '</tbody><tfoot><tr><th>' + esc(w2('nut_avg')) + '</th>' + cols.map(function (c) { return cell(avg, c[0]); }).join('') + '</tr><tr class="is-total"><th>' + esc(w2('nut_total')) + '</th>' + cols.map(function (c) { return cell(tot, c[0]); }).join('') + '</tr></tfoot></table></div>'
+          + '<p class="fn-sm__split"><b>' + esc(w2('nut_split')) + '</b><i class="fn-sm__bar"><u style="width:' + pc(kP) + '%"></u><u style="width:' + pc(kC) + '%"></u><u style="width:' + pc(kF) + '%"></u></i><span>' + esc(w2('nut_p')) + ' ' + pc(kP) + '% · ' + esc(w2('nut_c')) + ' ' + pc(kC) + '% · ' + esc(w2('nut_f')) + ' ' + pc(kF) + '%</span></p>'
+          + '<p class="fn-sm__fine">' + esc(w2('nut_note')) + (have.fi || have.su || have.so ? '' : ' ' + esc(w2('nut_micro'))) + '</p></section>';
+      };
       var openSum = function () {
         ensureV2(); mdSum = mdSum || mkModal('fn-md--sum'); var box = $('[data-md-box]', mdSum);
         var n = count(), lines = [], dh = '';
@@ -2268,7 +2296,7 @@
         var snacks = dishes.filter(function (d) { return inGroup(d, 'snacks-postres') && !d.classList.contains('is-blocked'); });
         var pickX = sumXOpen ? '<div class="fn-sm__xpick">' + (snacks.length ? '' : '<p class="fn-ct__none">' + esc(w2('cat_none')) + '</p>') + snacks.map(function (d) { var im = $('img', d), src = im ? (im.currentSrc || im.src) : ''; return '<button type="button" data-sm-xadd="' + d.getAttribute('data-pid') + '"><span style="background-image:url(&quot;' + esc(src) + '&quot;)"></span><b>' + esc(lab(d)) + '</b><small>' + esc(money(dishPrice(d))) + '</small></button>'; }).join('') + '</div>' : '';
         box.innerHTML = '<button class="fn-sm__back" type="button" data-md-close>&lsaquo; ' + esc(w2('sm_back')) + '</button><header class="fn-sm__head"><h3>' + esc(w2('sm_t')) + '</h3><p>' + esc(w2('sm_s')) + '</p></header>'
-          + '<div class="fn-sm__grid"><section class="fn-sm__days"><h4>' + esc(w2('sm_detail', { n: n + wen })) + '</h4><ul>' + dh + '</ul></section>'
+          + '<div class="fn-sm__grid"><section class="fn-sm__days"><h4>' + esc(w2('sm_detail', { n: n + wen })) + '</h4><ul>' + dh + '</ul>' + nutriHtml() + '</section>'
           + '<aside class="fn-sm__break"><h4>' + esc(w2('sm_break')) + '</h4><ul class="fn-sm__lines">' + lines.join('') + '</ul>'
           + '<h5>' + esc(w2('sm_x')) + '</h5><ul class="fn-sm__lines fn-sm__lines--x">' + (xh || '<li class="is-sub"><span>' + esc(w2('sm_none')) + '</span></li>') + '</ul>'
           + '<button class="fn-sm__xadd" type="button" data-sm-xtoggle>' + esc(w2('sm_xadd')) + '</button>' + pickX

@@ -4960,3 +4960,22 @@ html.fn-md-open{overflow:hidden}
 .fn-wk .fn-wk__card,.fn-we{flex-basis:clamp(176px,14.4vw,212px) !important}
 .fn-wk .fn-wk__slot.is-empty{min-height:150px}
 @media (max-width:860px){.fn-wk .fn-wk__card,.fn-we{flex-basis:min(76vw,300px) !important}}
+
+/* v151: nutrition table in the weekly tally */
+.fn-sm__nut{margin-top:16px;padding:14px;border:1.5px solid rgba(255,255,255,.25);border-radius:16px;background:#101010}
+.fn-sm__nut h4{margin:0 0 10px;font:600 1.05rem var(--font-heading);color:#fff}
+.fn-sm__tw{overflow-x:auto}
+.fn-sm__nut table{width:100%;border-collapse:collapse;font-size:.8rem;color:#e8e8e8}
+.fn-sm__nut th,.fn-sm__nut td{padding:6px 8px;text-align:right;border-bottom:1px solid rgba(255,255,255,.12);white-space:nowrap}
+.fn-sm__nut th:first-child{text-align:left;font-weight:600;color:#fff}
+.fn-sm__nut thead th{font:700 .66rem var(--font-label);letter-spacing:.06em;text-transform:uppercase;color:#a9a9a9}
+.fn-sm__nut tr.is-total th,.fn-sm__nut tr.is-total td{color:#ffb47a;font-weight:700;border-bottom:0}
+.fn-sm__split{display:grid;gap:6px;margin:12px 0 0;font-size:.78rem;color:#cfcfcf}
+.fn-sm__bar{display:flex;height:8px;border-radius:6px;overflow:hidden;background:#222}
+.fn-sm__bar u{display:block;height:100%}.fn-sm__bar u:nth-child(1){background:#ff6200}.fn-sm__bar u:nth-child(2){background:#ffb47a}.fn-sm__bar u:nth-child(3){background:#8d8d8d}
+.fn-sm__fine{margin:10px 0 0;font-size:.72rem;color:#9a9a9a}
+
+.kf__logo{display:block;width:clamp(120px,14vw,180px);height:auto;margin:0 0 10px}
+.hx__badge--kfw{display:inline-flex;align-items:center;gap:8px;padding:6px 12px}
+.hx__badge--kfw img{height:26px;width:auto}
+.hx__badge--kfw span{font:600 .62rem var(--font-label);letter-spacing:.14em;text-transform:uppercase;color:#fff}

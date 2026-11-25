@@ -39,7 +39,7 @@
     {%- if card_text != blank -%}<p class="dish__desc">{{ card_text }}</p>{%- endif -%}
     {%- if mf.calories.value or mf.carbs.value -%}
       <p class="dish__facts">
-        {%- if mf.calories.value %}{{ mf.calories.value }} kcal{% endif -%}
+        {%- if mf.calories.value %}{{ mf.calories.value }} kcal {{ 'wk2.per_plate' | t }}{% endif -%}
         {%- if mf.calories.value and mf.carbs.value %} · {% endif -%}
         {%- if mf.carbs.value %}{{ mf.carbs.value }} {{ 'dish.carbs_g' | t }}{% endif -%}
       </p>

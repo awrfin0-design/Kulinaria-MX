@@ -102,3 +102,6 @@
 
 .adm-lead__kind{padding:3px 10px;border-radius:999px;background:var(--accent-wash);color:var(--accent);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .adm-lead__detail{margin:8px 0;padding:10px 12px;border-radius:12px;background:var(--bg-base);font-size:.92rem;line-height:1.5}
+.adm-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.adm-chips button{padding:8px 14px;border:1px solid var(--line,#ccc);border-radius:999px;background:transparent;color:inherit;font:600 .8rem system-ui,sans-serif;cursor:pointer}
+.adm-chips button.is-on{background:#ff6200;border-color:#ff6200;color:#fff}

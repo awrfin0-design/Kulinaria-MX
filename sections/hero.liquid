@@ -131,7 +131,7 @@
         <div class="hx__main">
           <div class="hx__photo">
             {% render 'photo', image: bs.image, art: bs.art, alt: '', class: 'hx__img', width: 1200 %}
-            {%- if tx_badge != blank -%}<span class="hx__badge">{{ tx_badge }}</span>{%- endif -%}
+            {%- if tx_badge != blank -%}{%- if tx_badge contains 'KFW' -%}{%- assign bdg = tx_badge | split: '·' -%}<span class="hx__badge hx__badge--kfw"><img src="{{ 'logo-kfw.webp' | asset_url }}" width="64" height="36" alt="KFW">{%- if bdg[1] != blank -%}<span>{{ bdg[1] | strip }}</span>{%- endif -%}</span>{%- else -%}<span class="hx__badge">{{ tx_badge }}</span>{%- endif -%}{%- endif -%}
           </div>
           <div class="hx__copy">
             {%- if tx_tag != blank -%}<span class="hx__tag">{{ tx_tag }}</span>{%- endif -%}
