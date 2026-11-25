@@ -1,0 +1,24 @@
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const { chromium } = require('playwright');
+const b = await chromium.launch({ args: ['--use-gl=swiftshader','--enable-webgl','--ignore-gpu-blocklist'] });
+const TH = process.argv[2] || 'fuego', W = +process.argv[3] || 1440, H = +process.argv[4] || 900, TAG = process.argv[5] || 'x';
+const ctx = await b.newContext({ viewport: { width: W, height: H } }); const p = await ctx.newPage();
+p.on('pageerror', e => console.log('PE', String(e.stack).slice(0,300)));
+await p.addInitScript((t) => { localStorage.setItem('kx-lang','es'); sessionStorage.setItem('kx-seen','1'); localStorage.setItem('kx-theme', t); localStorage.setItem('kulinaria_onboarded','1'); localStorage.setItem('kx-test-orders','0'); localStorage.setItem('kx_dietpick','all'); sessionStorage.setItem('kx_newplan','1'); }, TH);
+await p.goto('file:///home/user/Kulinaria-MX/preview/index.html#/pg/pedido'); await p.reload(); await p.waitForTimeout(1800);
+const F = '[data-page="pg/pedido"] [data-funnel]';
+await p.evaluate((f) => document.querySelector(f + ' [data-cat-choice="keto-low-carb"]').click(), F); await p.waitForTimeout(300);
+for (let k = 0; k < 4; k++) { const st = await p.evaluate((f) => document.querySelector(f).getAttribute('data-step'), F); if (st === '3') break;
+  await p.evaluate((f) => { const a = document.querySelector(f + ' .step.is-on [data-fn-go-next], ' + f + ' .step.is-on [data-fn-rules-next], ' + f + ' .step.is-on [data-fn-how-go]'); if (a) a.click(); }, F); await p.waitForTimeout(900); }
+const shot = async (n) => { await p.waitForTimeout(500); await p.screenshot({ path: `/tmp/wk3-${TAG}-${n}.png` }); };
+await p.evaluate((f) => document.querySelector(f + ' [data-bd-cust="0"]').click(), F); await shot('cust');
+await p.keyboard.press('Escape');
+await p.evaluate((f) => document.querySelector(f + ' [data-bd-comp="1"]').click(), F); await shot('comp');
+await p.keyboard.press('Escape');
+await p.evaluate((f) => document.querySelector(f + ' [data-we-on="0"]').click(), F); await p.waitForTimeout(300);
+await p.evaluate((f) => document.querySelector(f + ' [data-ct-pick]').click(), F); await p.waitForTimeout(300);
+await p.evaluate((f) => { const e = document.querySelector(f + ' .fn-we.is-on'); e.scrollIntoView({ block: 'center', inline: 'center' }); }, F); await shot('we');
+await p.evaluate((f) => document.querySelector(f + ' [data-fn-finish]').click(), F); await shot('sum');
+await p.evaluate(() => document.querySelector('[data-sm-xtoggle]').click()); await shot('sum2');
+await b.close();

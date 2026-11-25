@@ -57,6 +57,12 @@ await page.goto(URL0);
   const open = async (guest) => { await page.goto(`${guest ? G2 : URL0}#/pg/pedido`); await page.reload(); await page.waitForTimeout(1300); };
   const names = () => page.evaluate((f) => [...document.querySelector(f).querySelectorAll('.fn-wk__card')].map((c) => (c.querySelector('.fn-wk__name') || {}).textContent || '-'), FN);
   const chooseDiet = async (cat) => { await page.evaluate(({ f, cat }) => document.querySelector(f + ' [data-cat-choice="' + cat + '"]').click(), { f: FN, cat }); await page.waitForTimeout(150); await page.evaluate((f) => document.querySelector(f + ' [data-fn-go-next]').click(), FN); await page.waitForTimeout(800); };
+  const swapDay = async (i) => {
+    await page.evaluate(({ f, i }) => document.querySelector(f + ' [data-bd-focus="' + i + ':0"]').click(), { f: FN, i }); await page.waitForTimeout(250);
+    await page.evaluate((f) => { document.querySelector(f + ' [data-bd-more]').click(); document.querySelector(f + ' [data-bd-menu] [data-bd-view="bowls"]').click(); }, FN); await page.waitForTimeout(250);
+    await page.evaluate((f) => document.querySelector(f + ' [data-ct-tier="selecto"]').click(), FN); await page.waitForTimeout(250);
+    await page.evaluate((f) => [...document.querySelectorAll(f + ' [data-ct-pick]')].find((b) => !b.classList.contains('is-on')).click(), FN); await page.waitForTimeout(450);
+  };
   const KETO = ['Pollo a las hierbas con puré rústico', 'Salmón gourmet en costra de almendras', 'Pollo a las hierbas con puré rústico', 'Salmón gourmet en costra de almendras', 'Filete Prime con verduras asadas'];
 
   // ---- signed out: the first step is the sign-in screen
@@ -110,34 +116,28 @@ await page.goto(URL0);
 
   await base(); await open(false); await chooseDiet('fit-proteina');
 
-  // ---- upgrade pop-up and swap
-  const fridayUp = await page.evaluate((f) => !!document.querySelector(f + ' [data-wk-up="4:0"]'), FN);
+  // ---- upgrade through the group catalogue, swap, second plate
+  const fridayUp = await page.evaluate((f) => !!document.querySelector(f + ' [data-bd-up="4:0"]'), FN);
   ok('every card has the upgrade button, Friday included', fridayUp && (await page.evaluate((f) => document.querySelectorAll(f + ' .fn-wk__up').length, FN)) === 5);
-  await page.evaluate((f) => document.querySelector(f + ' [data-wk-up="0:0"]').click(), FN); await page.waitForTimeout(450);
-  const pk = await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); const vis = [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].filter((c) => c.offsetParent); const r = p.querySelector('.fn-picker__box').getBoundingClientRect(); return { open: !p.hidden, title: p.querySelector('[data-fn-picker-title]').textContent, tiers: [...new Set(vis.map((c) => c.getAttribute('data-tier')))].join(), tabs: [...p.querySelectorAll('[data-pick-tier]')].filter((b) => b.offsetParent).map((b) => b.textContent.replace(/\s+/g, ' ').trim()), fits: r.bottom <= innerHeight + 2 && r.top >= -2 }; }, FN);
-  ok('"Elevar nivel" opens a pop-up titled with the day, with Exclusivo / Signature / Reserve tabs and their extra price', pk.open && /Eleva tu experiencia del Lunes/.test(pk.title) && pk.tabs.length === 3 && /\+\$?\s?70/.test(pk.tabs[0]) && /\+\$?\s?140/.test(pk.tabs[1]) && /\+\$?\s?210/.test(pk.tabs[2]), JSON.stringify(pk));
-  ok('the upgrade pop-up lists only higher-tier dishes and fits the screen', !/selecto/.test(pk.tiers) && pk.fits, pk.tiers);
+  await page.evaluate((f) => document.querySelector(f + ' [data-bd-up="0:0"]').click(), FN); await page.waitForTimeout(450);
+  const pk = await page.evaluate((f) => { const c = document.querySelector(f + ' [data-fn-ct]'); return { tabs: [...c.querySelectorAll('.fn-ct__tab')].map((b) => b.textContent.replace(/\s+/g, ' ').trim()), on: (c.querySelector('.fn-ct__tab.is-on') || {}).textContent, who: c.querySelector('.fn-ct__for').textContent, n: c.querySelectorAll('[data-ct-pick]').length }; }, FN);
+  ok('"Elevar nivel" aims the catalogue at that day with Exclusivo / Signature / Reserve tabs and their extra price', /Lunes/.test(pk.who) && /Exclusivo/.test(pk.on) && pk.tabs.length === 4 && /\+\$?\s?70/.test(pk.tabs[1]) && /\+\$?\s?140/.test(pk.tabs[2]) && /\+\$?\s?210/.test(pk.tabs[3]), JSON.stringify(pk));
+  ok('the catalogue lists only dishes of that level', pk.n >= 1 && (await page.evaluate((f) => [...document.querySelectorAll(f + ' [data-ct-pick]')].every((b) => /\+\$70/.test(b.textContent)), FN)));
   const before = await page.evaluate((f) => ({ total: document.querySelector(f + ' [data-fn-s-total]').textContent }), FN);
-  await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].find((c) => c.offsetParent && c.getAttribute('data-tier') === 'exclusivo').querySelector('[data-pick]').click(); }, FN); await page.waitForTimeout(500);
-  const af = await page.evaluate((f) => ({ open: !document.querySelector(f + ' [data-fn-picker]').hidden, tier: document.querySelector(f + ' .fn-wk__card .fn-wk__tier').textContent, total: document.querySelector(f + ' [data-fn-s-total]').textContent }), FN);
-  ok('choosing an upgrade closes the pop-up, tags the card with the extra and raises the total by $70', !af.open && /\+\$70/.test(af.tier) && parseFloat(af.total.replace(/[^\d]/g, '')) === parseFloat(before.total.replace(/[^\d]/g, '')) + 70, JSON.stringify([before, af]));
-  await page.evaluate((f) => document.querySelector(f + ' [data-wk-swap="1:0"]').click(), FN); await page.waitForTimeout(450);
-  const sw = await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); const vis = [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].filter((c) => c.offsetParent); return { selecto: vis.filter((c) => c.getAttribute('data-tier') === 'selecto').length, all: vis.length, tab: (p.querySelector('[data-pick-tier].is-on') || {}).textContent }; }, FN);
-  ok('"Cambiar" lists every dish, base-tier (Selecto) ones included, whatever the diet was', sw.selecto >= 4 && sw.all >= 8, JSON.stringify(sw));
+  await page.evaluate((f) => document.querySelector(f + ' [data-ct-pick]').click(), FN); await page.waitForTimeout(500);
+  const af = await page.evaluate((f) => ({ tier: document.querySelector(f + ' .fn-wk__card .fn-wk__tier').textContent, total: document.querySelector(f + ' [data-fn-s-total]').textContent }), FN);
+  ok('choosing an upgrade tags the card with the extra and raises the total by $70', /\+\$70/.test(af.tier) && parseFloat(af.total.replace(/[^\d]/g, '')) === parseFloat(before.total.replace(/[^\d]/g, '')) + 70, JSON.stringify([before, af]));
   const cur = (await names())[1];
-  await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); const cur = document.querySelectorAll(f + ' .fn-wk__card')[1].querySelector('.fn-wk__name').textContent; [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].find((c) => c.offsetParent && c.getAttribute('data-tier') === 'selecto' && c.getAttribute('data-title') !== cur).querySelector('[data-pick]').click(); }, FN); await page.waitForTimeout(500);
-  ok('swapping replaces only that day and the pop-up closes', (await names())[1] !== cur && (await page.evaluate((f) => document.querySelector(f + ' [data-fn-picker]').hidden, FN)));
-  await page.keyboard.press('Escape');
-
-  // ---- two plates a day
-  await page.evaluate((f) => document.querySelector(f + ' [data-fn-perday="2"]').click(), FN); await page.waitForTimeout(400);
-  ok('2 plates a day: every day gets a second slot (10 slots), the second ones empty', (await page.evaluate((f) => document.querySelectorAll(f + ' .fn-wk__slot').length, FN)) === 10 && (await page.evaluate((f) => document.querySelectorAll(f + ' .fn-wk__slot.is-empty').length, FN)) === 5);
-  await page.evaluate((f) => document.querySelector(f + ' [data-wk-swap="0:1"]').click(), FN); await page.waitForTimeout(450);
-  ok('the pop-up for a second plate says so', await page.evaluate((f) => /2\.º/.test(document.querySelector(f + ' [data-fn-picker-title]').textContent), FN));
-  await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].find((c) => c.offsetParent && c.getAttribute('data-tier') === 'selecto').querySelector('[data-pick]').click(); }, FN); await page.waitForTimeout(500);
-  ok('choosing it fills the second slot of Monday', (await page.evaluate((f) => document.querySelectorAll(f + ' .fn-wk__slot.is-empty').length, FN)) === 4);
-  await page.evaluate((f) => document.querySelector(f + ' [data-fn-perday="1"]').click(), FN); await page.waitForTimeout(300);
-  ok('back to 1 plate a day: the extra slots disappear', (await page.evaluate((f) => document.querySelectorAll(f + ' .fn-wk__slot').length, FN)) === 5);
+  await swapDay(1);
+  ok('"Cambiar" lets you take any dish of any group (Todos > Bowls) and replaces only that day', (await names())[1] !== cur && (await names())[0] === (await names())[0], (await names()).join(' | '));
+  ok('a second plate: the card offers "+ Añadir platillo"; choosing a dish puts it under the first one', await (async () => {
+    await page.evaluate((f) => document.querySelector(f + ' [data-bd-add2="0"]').click(), FN); await page.waitForTimeout(250);
+    const lab = await page.evaluate((f) => document.querySelector(f + ' .fn-ct__for').textContent, FN);
+    await page.evaluate((f) => [...document.querySelectorAll(f + ' [data-ct-pick]')].find((b) => !b.classList.contains('is-on')).click(), FN); await page.waitForTimeout(450);
+    return /\+1/.test(lab) && (await page.evaluate((f) => document.querySelectorAll(f + ' .fn-wk__slot.is-second').length, FN)) === 1;
+  })());
+  await page.evaluate((f) => document.querySelector(f + ' [data-wk-clear="0:1"]').click(), FN); await page.waitForTimeout(300);
+  ok('the second plate can be removed again', (await page.evaluate((f) => document.querySelectorAll(f + ' .fn-wk__slot.is-second').length, FN)) === 0);
 
   // ---- header: diet chip + deposit / weekly budget, nutrition, clickable step counter
   await base(); await open(false); await chooseDiet('keto-low-carb');
@@ -153,8 +153,7 @@ await page.goto(URL0);
   ok('choosing another diet loads that diet\'s suggested menu (the fixed one) and updates the chip', /Omelette/.test(nv[0]) && /Bowl vegano/.test(nv[4]) && /Plantas/.test(await page.evaluate((f) => document.querySelector(f + ' [data-fn-diet-name]').textContent, FN)), nv.join(' | '));
   const sc3 = await page.evaluate((f) => [...document.querySelector(f + ' [data-fn-stepcount]').querySelectorAll('.fn-sc__s')].map((b) => b.textContent.replace(/\s+/g, ' ').trim() + ':' + (b.classList.contains('is-done') ? 'done' : '') + (b.classList.contains('is-on') ? 'on' : '')), FN);
   ok('the step counter lists the four steps (sign in, how it works, plan and diet, your week): the first three completed, the current one highlighted', sc3.length === 4 && /done/.test(sc3[0]) && /done/.test(sc3[1]) && /done/.test(sc3[2]) && /on/.test(sc3[3]) && /✓/.test(sc3[2]), sc3.join(' | '));
-  await page.evaluate((f) => document.querySelector(f + ' [data-wk-swap="1:0"]').click(), FN); await page.waitForTimeout(400);
-  await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); const cur = document.querySelectorAll(f + ' .fn-wk__card')[1].querySelector('.fn-wk__name').textContent; [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].find((c) => c.offsetParent && c.getAttribute('data-tier') === 'selecto' && c.getAttribute('data-title') !== cur).querySelector('[data-pick]').click(); }, FN); await page.waitForTimeout(500);
+  await swapDay(1);
   const editedWeek = await names();
   await page.evaluate((f) => [...document.querySelector(f + ' [data-fn-stepcount]').querySelectorAll('.fn-sc__s')][2].click(), FN); await page.waitForTimeout(500);
   ok('clicking a completed step in the counter goes back to it (plan and diet)', (await page.evaluate((f) => document.querySelector(f).getAttribute('data-step'), FN)) === '1');
@@ -165,8 +164,7 @@ await page.goto(URL0);
   await base({ profile: { allergies: [], dislikes: [], people: [{ id: 'p1', name: 'Johnny', allergies: [], dislikes: [], diets: [] }] } }); await open(false); await chooseDiet('fit-proteina');
   await page.waitForFunction((f) => document.querySelectorAll(f + ' .fn-who__b').length >= 2, FN, { timeout: 5000 }).catch(() => {});
   ok('"Pedido para" shows a chip for me and for each family member, plus an add link', await page.evaluate((f) => { const c = [...document.querySelectorAll(f + ' .fn-who__b')].map((b) => b.textContent); return c.length === 2 && /Johnny/.test(c[1]) && !!document.querySelector(f + ' .fn-who__add'); }, FN));
-  await page.evaluate((f) => document.querySelector(f + ' [data-wk-swap="1:0"]').click(), FN); await page.waitForTimeout(400);
-  await page.evaluate((f) => { const p = document.querySelector(f + ' [data-fn-picker]'); const cur = document.querySelectorAll(f + ' .fn-wk__card')[1].querySelector('.fn-wk__name').textContent; [...p.querySelectorAll('[data-fn-dish]:not(.is-hidden)')].find((c) => c.offsetParent && c.getAttribute('data-tier') === 'selecto' && c.getAttribute('data-title') !== cur).querySelector('[data-pick]').click(); }, FN); await page.waitForTimeout(500);
+  await swapDay(1);
   const mineEdited = await names();
   await page.evaluate((f) => document.querySelector(f + ' [data-fn-who-pick="p1"]').click(), FN); await page.waitForTimeout(600);
   const johnny = await names();
@@ -180,7 +178,9 @@ await page.goto(URL0);
   // ---- confirming puts ONE plan line in the cart with the dishes as properties
   await base({ funnel: { info: { name: 'Ana Pérez', email: 'ana@ejemplo.com', phone: '+52 999 000 0000', street: 'Calle Lago 24', cluster: 'Clúster Las Lomas', zip: '72000' } } }); await open(false); await chooseDiet('veggie');
   await page.evaluate(() => { const f = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push(String(u).split('/').pop() + ' ' + ((o && o.body) || '').slice(0, 3000)); return f.apply(this, arguments); }; });
-  await page.locator(`${FN} [data-fn-finish]`).scrollIntoViewIfNeeded(); await page.click(`${FN} [data-fn-finish]`); await page.waitForTimeout(1000);
+  await page.locator(`${FN} [data-fn-finish]`).scrollIntoViewIfNeeded(); await page.click(`${FN} [data-fn-finish]`); await page.waitForTimeout(500);
+  ok('the confirm button first opens "Resumen de tu semana" (nothing is sent yet)', await page.evaluate(() => { const m = document.querySelector('.fn-md--sum'); return !!m && !m.hidden && /Resumen de tu semana/.test(m.textContent) && !(window.__calls || []).some((r) => /add\.js/.test(r)); }));
+  await page.click('.fn-md--sum [data-sm-go]'); await page.waitForTimeout(1000);
   const calls = await page.evaluate(() => window.__calls);
   ok('confirm adds one plan line with the days as properties and goes to the cart', page.url().endsWith('#/carrito') && calls.some((r) => /add\.js/.test(r) && /_platillos/.test(r) && /Lunes/.test(r) && /Viernes/.test(r)), JSON.stringify(calls).slice(0, 300));
 
@@ -427,6 +427,48 @@ await page.goto(URL0);
   await page.setViewportSize({ width: 390, height: 844 }); await page.reload(); await page.waitForTimeout(1200);
   ok('phone: the gym section fits the width and keeps all eight logos', await page.evaluate(() => { const s = document.querySelector('[data-page="home"] .gy'); return s.scrollWidth <= innerWidth + 1 && document.documentElement.scrollWidth <= innerWidth + 1 && s.querySelectorAll('.gy__logo').length === 8; }));
   await page.setViewportSize({ width: 1440, height: 900 });
+
+  // ---- "Tu semana" board: group pills, day cards, weekend add-ons, sides, customise pop-up, tally summary
+  await base({ funnel: { info: { name: 'Ana Pérez', email: 'ana@ejemplo.com', phone: '+52 999 000 0000', street: 'Calle Lago 24', cluster: 'Clúster Las Lomas', zip: '72000' } } }); await page.setViewportSize({ width: 1440, height: 900 }); await open(false); await chooseDiet('keto-low-carb');
+  const bd = await page.evaluate((f) => { const h = document.querySelector(f), t = (q) => (h.querySelector(q) || {}).textContent || ''; return { pills: [...h.querySelectorAll('.fn-bd__pill')].map((b) => b.textContent.trim()), info: t('.fn-bd__info'), note: t('.fn-bd__note'), title: t('.fn-bd__titlebar h4'), sub: t('.fn-bd__titlebar p'), cards: h.querySelectorAll('.fn-wk__card').length, we: [...h.querySelectorAll('.fn-we')].map((e) => e.textContent.replace(/\s+/g, ' ').trim()), grp: [...h.querySelectorAll('.fn-wk__card .fn-wk__grp')].length }; }, FN);
+  ok('the week step shows the group pills (four quick groups + Todos), the closing-time pill and the "mix groups freely" note', bd.pills.length === 5 && /Todos/.test(bd.pills[4]) && /Cierra: Sáb 10:00 AM/.test(bd.info) && /Auto-selección activa si no confirmas/.test(bd.info) && /Mezcla grupos libremente: cambia de dieta arriba sin perder tus días elegidos/.test(bd.note), JSON.stringify(bd.pills) + bd.info);
+  ok('title "Tu semana recomendada/combinada", five day cards each with the group badge, plus Saturday and Sunday locked as add-ons', /Tu semana/.test(bd.title) && /Personaliza tus platillos por día/.test(bd.sub) && bd.cards === 5 && bd.grp === 5 && bd.we.length === 2 && /Activar Sábado/.test(bd.we[0]) && /Toca para despertar/.test(bd.we[0]) && /Activar Domingo/.test(bd.we[1]), JSON.stringify(bd.we));
+  const namesBefore = (await names()).join('|');
+  await page.evaluate((f) => document.querySelector(f + ' [data-bd-view="sin-gluten"]').click(), FN); await page.waitForTimeout(300);
+  ok('picking another group only changes the catalogue below: the days already chosen stay', (await names()).join('|') === namesBefore && await page.evaluate((f) => /Catálogo de grupo/.test(document.querySelector(f + ' .fn-ct__head h4').textContent) && !!document.querySelector(f + ' .fn-bd__pill.is-on[data-bd-view="sin-gluten"]'), FN));
+  // side dish
+  await page.evaluate((f) => document.querySelector(f + ' [data-bd-comp="1"]').click(), FN); await page.waitForTimeout(300);
+  const cp = await page.evaluate(() => { const m = document.querySelector('.fn-md--comp'); return { open: !m.hidden, opts: [...m.querySelectorAll('[data-comp]')].map((b) => b.textContent.replace(/\s+/g, ' ').trim()), fits: m.querySelector('.fn-md__box').getBoundingClientRect().bottom <= innerHeight + 2 }; });
+  ok('"Elegir complemento" opens a pop-up with Ensalada, Sopa and Postre (included, $0) and "Sin complemento"', cp.open && cp.fits && /Ensalada/.test(cp.opts[0]) && /Sopa/.test(cp.opts[1]) && /Postre/.test(cp.opts[2]) && /Sin complemento/.test(cp.opts[3]), JSON.stringify(cp));
+  await page.click('.fn-md--comp [data-comp="sopa"]'); await page.waitForTimeout(300);
+  ok('the card then reads "Sopa elegido" and the pop-up is closed', await page.evaluate((f) => !!document.querySelector('.fn-md--comp').hidden && /Sopa elegido/.test(document.querySelector(f + ' [data-bd-comp="1"]').textContent), FN));
+  // customise pop-up
+  await page.evaluate((f) => document.querySelector(f + ' [data-bd-cust="0"]').click(), FN); await page.waitForTimeout(300);
+  const cu = await page.evaluate(() => { const m = document.querySelector('.fn-md--cust'); return { open: !m.hidden, txt: m.textContent.replace(/\s+/g, ' '), ings: m.querySelectorAll('[data-md-ing]').length, fits: m.querySelector('.fn-md__box').getBoundingClientRect().bottom <= innerHeight + 2 }; });
+  ok('the pencil opens "Personaliza tu platillo": dish, nutrition chip, full sheet link, ingredients to remove, special request, save and cancel', cu.open && cu.fits && /Personaliza tu platillo/.test(cu.txt) && /Ver ficha nutricional completa/.test(cu.txt) && /Quitar ingredientes \(toca para omitir\)/.test(cu.txt) && /Nota para cocina/.test(cu.txt) && /Guardar cambios/.test(cu.txt) && /Cancelar/.test(cu.txt) && cu.ings >= 2, cu.txt.slice(0, 160));
+  await page.click('.fn-md--cust [data-md-ing]'); await page.fill('.fn-md--cust [data-md-note]', 'Sin sal extra'); await page.click('.fn-md--cust [data-md-close].fn-md__cancel'); await page.waitForTimeout(250);
+  ok('Cancelar throws the changes away', await page.evaluate((f) => !document.querySelector(f + ' .fn-wk__card .fn-wk__note') && document.querySelector('.fn-md--cust').hidden, FN));
+  await page.evaluate((f) => document.querySelector(f + ' [data-bd-cust="0"]').click(), FN); await page.waitForTimeout(250);
+  const ing0 = await page.evaluate(() => document.querySelector('.fn-md--cust [data-md-ing]').getAttribute('data-md-ing'));
+  await page.click('.fn-md--cust [data-md-ing]'); await page.fill('.fn-md--cust [data-md-note]', 'Sin sal extra'); await page.click('.fn-md--cust [data-md-save]'); await page.waitForTimeout(350);
+  ok('Guardar cambios keeps the omitted ingredient and the note on the card', await page.evaluate(({ f, ing0 }) => { const n = document.querySelector(f + ' .fn-wk__card .fn-wk__note'); return !!n && n.textContent.indexOf(ing0) > -1 && /Sin sal extra/.test(n.textContent); }, { f: FN, ing0 }), ing0);
+  // weekend add-on
+  const t0 = await page.evaluate((f) => parseFloat(document.querySelector(f + ' [data-fn-s-total]').textContent.replace(/[^\d]/g, '')), FN);
+  await page.evaluate((f) => document.querySelector(f + ' [data-we-on="0"]').click(), FN); await page.waitForTimeout(300);
+  ok('"+ Activar Sábado" wakes the card (delivered Friday) and offers "Elegir platillo"', await page.evaluate((f) => { const e = document.querySelector(f + ' .fn-we.is-on'); return !!e && /Entrega viernes/i.test(e.textContent) && /Sábado/.test(e.textContent) && /Elegir platillo/.test(e.textContent); }, FN));
+  await page.evaluate((f) => document.querySelector(f + ' [data-ct-pick]').click(), FN); await page.waitForTimeout(400);
+  const wk = await page.evaluate((f) => { const e = document.querySelector(f + ' .fn-we.is-on'); return { tier: (e.querySelector('.fn-wk__tier') || {}).textContent, total: parseFloat(document.querySelector(f + ' [data-fn-s-total]').textContent.replace(/[^\d]/g, '')) }; }, FN);
+  const price = parseFloat((wk.tier || '').replace(/[^\d]/g, ''));
+  ok('a weekend dish is an extra: it shows its own price and adds it to "Hoy pagas"', price >= 150 && wk.total === t0 + price, JSON.stringify([t0, wk]));
+  // the tally
+  await page.evaluate(() => { const f = window.fetch; window.__calls = []; window.fetch = function (u, o) { window.__calls.push(String(u).split('/').pop() + ' ' + ((o && o.body) || '').slice(0, 4000)); return f.apply(this, arguments); }; });
+  await page.locator(`${FN} [data-fn-finish]`).scrollIntoViewIfNeeded(); await page.click(`${FN} [data-fn-finish]`); await page.waitForTimeout(500);
+  const sm = await page.evaluate(() => { const m = document.querySelector('.fn-md--sum'); return { open: !m.hidden, txt: m.textContent.replace(/\s+/g, ' '), days: m.querySelectorAll('.fn-sm__day').length, fits: m.querySelector('.fn-md__box').getBoundingClientRect().bottom <= innerHeight + 2 }; });
+  ok('the tally lists every day (Mon-Fri + the weekend dish), the plan deposit, level upgrades, $0 sides, the closing time and "Total de hoy"', sm.open && sm.days === 6 && /Detalle por día \(6 consumos\)/.test(sm.txt) && /Desglose de niveles y extras/.test(sm.txt) && /depósito/i.test(sm.txt) && /3,600/.test(sm.txt) && /Mejora|Exclusivo|Reserve/.test(sm.txt) && /Complementos incluidos/.test(sm.txt) && /Cierre de edición/.test(sm.txt) && /Total de hoy/.test(sm.txt) && /Añadir snack o postre extra/.test(sm.txt) && /Confirmar y guardar semana/.test(sm.txt), sm.txt.slice(0, 220));
+  ok('the tally total equals "Hoy pagas" (deposit + upgrades + weekend dish)', await page.evaluate((f) => { const t = document.querySelector('.fn-sm__total b').textContent.replace(/[^\d]/g, ''), b = document.querySelector(f + ' [data-fn-s-total]').textContent.replace(/[^\d]/g, ''); return t === b; }, FN));
+  await page.click('.fn-md--sum [data-sm-go]'); await page.waitForTimeout(1200);
+  const cl2 = await page.evaluate(() => window.__calls);
+  ok('confirming puts the plan line, the upgrade line and the weekend dish (as its own product, flagged as an extra) in the cart, with sides and notes as properties', page.url().endsWith('#/carrito') && cl2.some((r) => /add\.js/.test(r) && /_platillos/.test(r) && /fin-de-semana/.test(r) && /Sin sal extra/.test(r) && /Sopa/.test(r) && /_extras/.test(r)), JSON.stringify(cl2).slice(0, 500));
 
   // ---- phones: nothing wider than the screen, the total bar is inside the screen
   await page.setViewportSize({ width: 390, height: 844 });

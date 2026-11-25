@@ -1778,6 +1778,7 @@
       };
       window.addEventListener('resize', fixTopGap); window.setTimeout(fixTopGap, 80); window.setTimeout(fixTopGap, 700);
       var render = function () {
+        if (typeof ensureV2 === 'function') ensureV2();
         // dishes of a lower tier or blocked by the profile cannot stay in the plan; slots are the source of truth
         st.days = st.days.map(function (p) { return p && eligible(byPid(p)) ? p : ''; });
         st.days2 = st.days2.map(function (p, k) { return p && st.days[k] && eligible(byPid(p)) ? p : ''; });
@@ -1844,7 +1845,7 @@
         var upl = $('[data-fn-s-up]', holder); if (upl) { var ex = upgradeExtra(); upl.hidden = !ex; upl.textContent = ex ? fill(T_('up-total'), { p: money(ex), t: money(planTotal() - ex) }) : ''; }
         var emp = $('[data-fn-s-empty]', holder); if (emp) emp.hidden = n > 0;
         var cnt = $('[data-fn-s-count]', holder); if (cnt) cnt.textContent = n ? fill(T_('meals'), { n: n, t: MEALS }) : '';
-        var tot = $('[data-fn-s-total]', holder); if (tot) tot.textContent = money(planTotal());
+        var tot = $('[data-fn-s-total]', holder); if (tot) tot.textContent = money(grandTotal());
         var sb = $('[data-fn-s-block]', holder); if (sb) { sb.hidden = false; sb.textContent = st.plan === 'block' ? fill(T_('weeks-x'), { p: money(priceOf(tierEl(), st.plan) / WEEKS), w: WEEKS }) : fill(T_('per-week'), { p: money(planTotal()) }); }
         var sc = $('[data-fn-stepcount]', holder);
         if (sc) {
@@ -1961,20 +1962,99 @@
       var wkRoot = $('[data-fn-wk]', holder), wkBox = $('[data-fn-wk-cards]', holder), picker = $('[data-fn-picker]', holder), pickerTitle = $('[data-fn-picker-title]', holder);
       var WT = function (k) { return wkRoot ? (wkRoot.getAttribute('data-t-' + k) || '') : ''; }, tierNames = WT('tiers').split(',');
       var tierOf = function (d) { return d ? d.getAttribute('data-tier') || 'selecto' : 'selecto'; };
+      /* ===== week board v2: day cards, weekend add-ons, side dishes, customise pop-up, group catalogue, tally summary ===== */
+      var W2 = {}; try { W2 = JSON.parse((wkRoot && wkRoot.getAttribute('data-w2')) || '{}'); } catch (e) {}
+      var w2 = function (k, rep) { var s = W2[k] || ''; if (rep) Object.keys(rep).forEach(function (r) { s = s.split('[' + r + ']').join(rep[r]); }); return s; };
+      var weNames = (W2.days_we || 'Sábado,Domingo').split(',');
+      var CATS = $$('[data-cat-choice]', holder).map(function (b) { return { id: b.getAttribute('data-cat-choice'), name: (($('strong', b) || {}).textContent || '').trim() }; }).filter(function (c) { return c.id && c.id !== 'all' && c.id !== 'seasonal'; });
+      var catName = function (id) { var c = CATS.filter(function (x) { return x.id === id; })[0]; return c ? c.name : id; };
+      var QUICK = ['al-fuego', 'keto-low-carb', 'sin-gluten', 'veggie'].filter(function (id) { return CATS.some(function (c) { return c.id === id; }); });
+      var ORDER = ['al-fuego', 'keto-low-carb', 'sin-gluten', 'veggie', 'fit-proteina', 'ligero', 'bowls', 'desayunos', 'diario', 'entradas', 'junior', 'snacks-postres'];
+      var grpOfDish = function (d) { for (var k = 0; k < ORDER.length; k++) if (inGroup(d, ORDER[k])) return ORDER[k]; return ''; };
+      var dishPrice = function (d) { return d ? (+d.getAttribute('data-price') || 0) : 0; };
+      var COMPS = ['ensalada', 'sopa', 'postre'];
+      var ensureV2 = function () {
+        if (!Array.isArray(st.comp) || st.comp.length !== MEALS) st.comp = blankDays();
+        if (!Array.isArray(st.we) || st.we.length !== 2) st.we = [{ on: false, pid: '' }, { on: false, pid: '' }];
+        if (!Array.isArray(st.xt)) st.xt = [];
+        if (st.viewFor !== st.cat || !st.view || !CATS.some(function (c) { return c.id === st.view; })) { st.view = (st.cat && st.cat !== 'all' && CATS.some(function (c) { return c.id === st.cat; })) ? st.cat : (QUICK[0] || 'al-fuego'); st.viewFor = st.cat; st.vtier = 'selecto'; }
+        if (!st.vtier) st.vtier = 'selecto';
+        if (typeof st.tgt !== 'string') st.tgt = '';
+        if (st.days2.some(Boolean)) st.perDay = 2;
+      };
+      var extraTotal = function () { var s = 0; (st.we || []).forEach(function (w) { var d = w.on && w.pid && byPid(w.pid); if (d) s += dishPrice(d); }); (st.xt || []).forEach(function (p) { s += dishPrice(byPid(p)); }); return s; };
+      var grandTotal = function () { return planTotal() + extraTotal(); };
+      var svgS = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>';
       var slotHtml = function (i, c) {
         var pid = c ? st.days2[i] : st.days[i], d = pid && byPid(pid), key = i + ':' + c;
-        if (!d) return '<div class="fn-wk__slot is-empty"><button class="fn-wk__add" type="button" data-wk-swap="' + key + '">' + esc(c ? WT('add2') : WT('add1')) + '</button></div>';
+        if (!d) return c ? '' : '<div class="fn-wk__slot is-empty"><button class="fn-wk__add" type="button" data-bd-focus="' + i + ':0">' + esc(WT('add1')) + '</button></div>';
         var im = $('img', d), src = im ? (im.currentSrc || im.src) : '', lv = rank(tierOf(d)), extra = lv ? upg(lv) : 0, m = macroOf(pid) || { k: 0, p: 0, c: 0, f: 0 };
         var wb = $('[data-fn-warnbox]', d), mt = !c ? modsText(i) : '';
-        return '<div class="fn-wk__slot' + (d.classList.contains('is-warned') ? ' has-warn' : '') + (extra ? ' is-up' : '') + '">'
-          + '<div class="fn-wk__img"><button class="fn-wk__imgb" type="button" data-wk-img="' + key + '" aria-label="' + esc(lab(d)) + '" style="background-image:url(&quot;' + esc(src) + '&quot;)"></button>' + (wb ? wb.outerHTML : '') + (c ? '' : '<button class="fn-wk__ed' + (mt ? ' has-note' : '') + '" type="button" data-wk-edit="' + i + '" aria-label="' + esc(WT('edit')) + '">✎</button>') + '</div>'
-          + '<span class="fn-wk__tier fn-wk__tier--' + tierOf(d) + '">' + esc(tierNames[lv] || '') + (extra ? ' · +' + esc(money(extra)) : '') + '</span>'
-          + '<strong class="fn-wk__name">' + esc(lab(d)) + '</strong>'
+        return '<div class="fn-wk__slot' + (d.classList.contains('is-warned') ? ' has-warn' : '') + (extra ? ' is-up' : '') + (c ? ' is-second' : '') + '">'
+          + '<div class="fn-wk__top"><strong class="fn-wk__name">' + esc(lab(d)) + '</strong>' + (c ? '<button class="fn-wk__ed fn-wk__ed--x" type="button" data-wk-clear="' + key + '" aria-label="×">×</button>' : '<button class="fn-wk__ed' + (mt ? ' has-note' : '') + '" type="button" data-bd-cust="' + i + '" aria-label="' + esc(WT('edit')) + '">' + svgS + '</button>') + '</div>'
           + '<span class="fn-wk__m">' + esc(m.k + ' ' + WT('kcal') + ' · ' + WT('mp').charAt(0) + ' ' + m.p + ' · ' + WT('mc').charAt(0) + ' ' + m.c + ' · ' + WT('mf').charAt(0) + ' ' + m.f) + '</span>'
+          + '<span class="fn-wk__tier fn-wk__tier--' + tierOf(d) + '">' + esc(tierNames[lv] || '') + (extra ? ' · +' + esc(money(extra)) : '') + '</span>'
+          + '<div class="fn-wk__img"><button class="fn-wk__imgb" type="button" data-wk-img="' + key + '" aria-label="' + esc(lab(d)) + '" style="background-image:url(&quot;' + esc(src) + '&quot;)"></button>' + (wb ? wb.outerHTML : '') + '<i class="fn-wk__k" aria-hidden="true">K</i></div>'
           + (mt ? '<span class="fn-wk__note">✎ ' + esc(mt) + '</span>' : '')
-          + '<div class="fn-wk__btns">' + (lv < 3 ? '<button class="fn-wk__up" type="button" data-wk-up="' + key + '">★ ' + esc(WT('up')) + '</button>' : '<span class="fn-wk__max">★ ' + esc(WT('max')) + '</span>') + '<button class="fn-wk__swap" type="button" data-wk-swap="' + key + '">' + esc(WT('swap')) + '</button>'
-          + (c ? '<button class="fn-wk__ed fn-wk__ed--x" type="button" data-wk-clear="' + key + '" aria-label="×">×</button>' : '')
-          + '</div></div>';
+          + '<div class="fn-wk__btns">' + (lv < 3 ? '<button class="fn-wk__up" type="button" data-bd-up="' + key + '">★ ' + esc(WT('up')) + '</button>' : '<span class="fn-wk__max">★ ' + esc(WT('max')) + '</span>') + '<button class="fn-wk__swap" type="button" data-bd-focus="' + key + '">' + esc(WT('swap')) + '</button></div>'
+          + '</div>';
+      };
+      var compName = function (k) { return k ? w2(k === 'ensalada' ? 'comp1' : k === 'sopa' ? 'comp2' : 'comp3') : ''; };
+      var cardHtml = function (i) {
+        var d = st.days[i] && byPid(st.days[i]), g = d ? grpOfDish(d) : '', lbl = dayLabel(i), sp = lbl.indexOf(' '), dn = sp > 0 ? lbl.slice(0, sp) : lbl, dd = sp > 0 ? lbl.slice(sp + 1) : '', ck = st.comp[i];
+        return '<li class="fn-wk__card' + (i === st.active && !st.tgt ? ' is-active' : '') + '" data-day="' + i + '">'
+          + (g ? '<span class="fn-wk__grp">' + esc(catName(g)) + '</span>' : '')
+          + '<h4><b>' + esc(dn) + '</b> <small>' + esc(dd) + '</small></h4>' + slotHtml(i, 0) + slotHtml(i, 1)
+          + (d ? '<div class="fn-wk__foot"><button type="button" class="fn-wk__comp' + (ck ? ' is-set' : '') + '" data-bd-comp="' + i + '">' + esc(ck ? w2('comp_set', { c: compName(ck) }) : w2('comp')) + '</button>' + (st.days2[i] ? '' : '<button type="button" class="fn-wk__add2" data-bd-add2="' + i + '">' + esc(w2('add2')) + '</button>') + '</div>' : '')
+          + '</li>';
+      };
+      var bellS = '<svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v3.6L4 15v1h16v-1l-2-3.4V8a6 6 0 0 0-6-6zm-2.2 16a2.2 2.2 0 0 0 4.4 0z"/></svg>';
+      var weHtml = function (k) {
+        var w = st.we[k], d = w.pid && byPid(w.pid), nm = weNames[k] || '';
+        if (!w.on) return '<li class="fn-we is-off"><button type="button" class="fn-we__wake" data-we-on="' + k + '"><span class="fn-we__ico">' + bellS + '</span><b>' + esc(w2('we_on', { d: nm })) + '</b><small>' + esc(w2('we_hint')) + '</small></button></li>';
+        var h = '<li class="fn-we is-on' + (st.tgt === 'we' + k ? ' is-active' : '') + '" data-we="' + k + '"><span class="fn-wk__grp fn-wk__grp--we">' + esc(w2('we_deliv')) + '</span><h4><b>' + esc(nm) + '</b> <button class="fn-we__x" type="button" data-we-off="' + k + '" aria-label="' + esc(w2('we_off')) + '">×</button></h4>';
+        if (!d) return h + '<div class="fn-wk__slot is-empty"><button class="fn-wk__add" type="button" data-bd-focus="we' + k + '">' + esc(w2('we_pick')) + '</button></div></li>';
+        var im = $('img', d), src = im ? (im.currentSrc || im.src) : '', m = macroOf(w.pid) || { k: 0, p: 0, c: 0, f: 0 }, lv = rank(tierOf(d));
+        return h + '<div class="fn-wk__slot"><div class="fn-wk__top"><strong class="fn-wk__name">' + esc(lab(d)) + '</strong></div><span class="fn-wk__m">' + esc(m.k + ' ' + WT('kcal') + ' · ' + WT('mp').charAt(0) + ' ' + m.p) + '</span>'
+          + '<span class="fn-wk__tier fn-wk__tier--' + tierOf(d) + '">' + esc(w2('we_extra')) + ' · ' + esc(money(dishPrice(d))) + '</span>'
+          + '<div class="fn-wk__img"><button class="fn-wk__imgb" type="button" data-bd-focus="we' + k + '" aria-label="' + esc(lab(d)) + '" style="background-image:url(&quot;' + esc(src) + '&quot;)"></button><i class="fn-wk__k" aria-hidden="true">K</i></div>'
+          + '<div class="fn-wk__btns"><button class="fn-wk__swap" type="button" data-bd-focus="we' + k + '">' + esc(WT('swap')) + '</button></div></div></li>';
+      };
+      var cutText = function () {
+        var h = Math.floor(cutoffMin / 60), mn = cutoffMin % 60, h12 = h % 12 || 12, es = cfg.lang !== 'en';
+        return (es ? 'Sáb ' : 'Sat ') + h12 + ':' + (mn < 10 ? '0' : '') + mn + (h < 12 ? ' AM' : ' PM');
+      };
+      var clockS = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+      var topHtml = function () {
+        var pills = QUICK.map(function (id) { return '<button type="button" class="fn-bd__pill' + (st.view === id ? ' is-on' : '') + '" data-bd-view="' + id + '" aria-pressed="' + (st.view === id ? 'true' : 'false') + '">' + esc(catName(id)) + '</button>'; }).join('');
+        var rest = CATS.filter(function (c) { return QUICK.indexOf(c.id) < 0; });
+        var restOn = rest.some(function (c) { return c.id === st.view; });
+        var menu = rest.map(function (c) { return '<button type="button" role="option" class="' + (st.view === c.id ? 'is-on' : '') + '" data-bd-view="' + c.id + '">' + esc(c.name) + '</button>'; }).join('');
+        var groups = {}; st.days.forEach(function (p) { var d = p && byPid(p); if (d) groups[grpOfDish(d)] = 1; });
+        var mixed = Object.keys(groups).length > 1;
+        return '<div class="fn-bd__pills" role="group">' + pills + '<span class="fn-bd__more"><button type="button" class="fn-bd__pill fn-bd__pill--more' + (restOn ? ' is-on' : '') + '" data-bd-more aria-haspopup="listbox" aria-expanded="false">' + esc(restOn ? catName(st.view) : w2('all')) + ' <i aria-hidden="true">&#9662;</i></button><span class="fn-bd__menu" data-bd-menu role="listbox" hidden>' + menu + '</span></span></div>'
+          + '<p class="fn-bd__info">' + clockS + '<span>' + esc(w2('info', { t: cutText() })) + '</span></p><p class="fn-bd__note">' + esc(w2('note')) + '</p>'
+          + '<div class="fn-bd__titlebar"><h4>' + esc(w2('h1')) + ' <em>' + esc(mixed ? w2('h_mix') : w2('h_rec')) + '</em></h4><p>' + esc(w2('sub')) + '</p></div>';
+      };
+      var tgtLabel = function () { if (st.tgt) return weNames[+st.tgt.slice(2)] || ''; var l = dayLabel(st.active); return l.split(' ')[0] + (st.course === 1 ? ' · +1' : ''); };
+      var ctHtml = function () {
+        var cat = st.view, all = dishes.filter(function (d) { return inGroup(d, cat) && eligible(d); }), tiers = ['selecto', 'exclusivo', 'signature', 'reserve'];
+        var cnt0 = function (t) { return all.filter(function (d) { return tierOf(d) === t; }).length; }; if (!cnt0(st.vtier)) { var ft = tiers.filter(function (t) { return cnt0(t); })[0]; if (ft) st.vtier = ft; }
+        var tabs = tiers.map(function (t, n) { var cnt = all.filter(function (d) { return tierOf(d) === t; }).length; return '<button type="button" class="fn-ct__tab' + (st.vtier === t ? ' is-on' : '') + '" data-ct-tier="' + t + '">' + esc(tierNames[n] || t) + ' <b>' + cnt + '</b>' + (n ? ' <small>(+' + esc(money(upg(n))) + ')</small>' : '') + '</button>'; }).join('');
+        var cur = st.tgt ? st.we[+st.tgt.slice(2)].pid : (st.course === 1 ? st.days2[st.active] : st.days[st.active]);
+        var list = all.filter(function (d) { return tierOf(d) === st.vtier; });
+        var items = list.map(function (d) {
+          var im = $('img', d), src = im ? (im.currentSrc || im.src) : '', pid = d.getAttribute('data-pid'), m = macroOf(pid) || { k: 0 }, lv = rank(tierOf(d)), blocked = d.classList.contains('is-blocked');
+          var price = st.tgt ? money(dishPrice(d)) : (lv ? w2('cat_up', { p: money(upg(lv)) }) : '');
+          return '<button type="button" class="fn-ct__d' + (cur === pid ? ' is-on' : '') + (d.classList.contains('is-warned') ? ' has-warn' : '') + '"' + (blocked ? ' disabled' : '') + ' data-ct-pick="' + pid + '"><span class="fn-ct__im" style="background-image:url(&quot;' + esc(src) + '&quot;)"></span><span class="fn-ct__n">' + esc(lab(d)) + '</span><span class="fn-ct__k">' + m.k + ' ' + esc(WT('kcal')) + (price ? ' · <b>' + esc(price) + '</b>' : '') + '</span></button>';
+        }).join('');
+        return '<div class="fn-ct__head"><h4>' + esc(w2('cat_t', { g: catName(cat) })) + '</h4><div class="fn-ct__tabs" role="group">' + tabs + '</div></div><p class="fn-ct__for">' + esc(w2('cat_for', { d: tgtLabel() })) + '</p><div class="fn-ct__rail" data-ct-rail>' + (items || '<p class="fn-ct__none">' + esc(w2('cat_none')) + '</p>') + '</div>';
+      };
+      var assignDish = function (pid) {
+        if (st.tgt) { var k = +st.tgt.slice(2); st.we[k].pid = st.we[k].pid === pid ? '' : pid; }
+        else if (st.course === 1) { if (!st.days[st.active]) { say(T_('need-first')); return; } st.days2[st.active] = st.days2[st.active] === pid ? '' : pid; }
+        else { if (st.days[st.active] !== pid) st.mods[st.active] = { off: [], note: '' }; syncCardToDay(pid, st.active); st.days[st.active] = pid; if (st.active + 1 < MEALS && !st.days[st.active + 1]) st.active += 1; }
+        say(''); persist(); render();
       };
       var wkTabs = $('[data-fn-wk-tabs]', holder), wkTabsOn = function (i) { if (!wkTabs) return; $$('[data-wk-tab]', wkTabs).forEach(function (b) { var on = +b.getAttribute('data-wk-tab') === i; b.classList.toggle('is-on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); }); };
       if (wkBox && wkTabs) {
@@ -1984,9 +2064,15 @@
       var paintWk = function () {
         if (!wkBox || st.step !== 3) return;
         if (wkTabs && !wkTabs.children.length) { wkTabs.innerHTML = dayNames.slice(0, MEALS).map(function (n, i) { return '<button type="button" role="tab" data-wk-tab="' + i + '">' + esc(n) + '</button>'; }).join(''); wkTabsOn(0); }
+        ensureV2(); var fin0 = $('[data-fn-finish]', holder); if (fin0 && W2.review && fin0.textContent !== W2.review) fin0.textContent = W2.review;
         var h = '';
-        for (var i = 0; i < MEALS; i++) h += '<li class="fn-wk__card' + (i === st.active ? ' is-active' : '') + '"><h4>' + esc(dayLabel(i)) + '</h4>' + slotHtml(i, 0) + (st.perDay === 2 ? slotHtml(i, 1) : '') + '</li>';
-        wkBox.innerHTML = h;
+        for (var i = 0; i < MEALS; i++) h += cardHtml(i);
+        h += weHtml(0) + weHtml(1);
+        var keepX = wkBox.scrollLeft; wkBox.innerHTML = h; wkBox.scrollLeft = keepX;
+        var topEl = $('[data-fn-bd-top]', holder); if (topEl) { var oldMenu = $('[data-bd-menu]', topEl), wasOpen = oldMenu && !oldMenu.hidden; topEl.innerHTML = topHtml(); if (wasOpen) { var nm2 = $('[data-bd-menu]', topEl); if (nm2) nm2.hidden = false; } }
+        var ctEl = $('[data-fn-ct]', holder);
+        if (!ctEl) { ctEl = document.createElement('section'); ctEl.className = 'fn-ct'; ctEl.setAttribute('data-fn-ct', ''); wkBox.parentNode.insertBefore(ctEl, wkBox.nextSibling); }
+        var rail0 = $('[data-ct-rail]', ctEl), kx = rail0 ? rail0.scrollLeft : 0; ctEl.innerHTML = ctHtml(); var rail1 = $('[data-ct-rail]', ctEl); if (rail1) rail1.scrollLeft = kx;
         var dnm = $('[data-fn-diet-name]', holder), pnm = $('[data-fn-plan-name]', holder), cbn = $('[data-cat-choice="' + st.cat + '"] strong', holder);
         if (dnm) dnm.textContent = cbn ? cbn.textContent : '';
         if (pnm) { var dep = priceOf(tierEl(), st.plan); pnm.textContent = st.plan === 'block' ? WT('plan-block').replace('[t]', money(dep)).replace('[w]', money(Math.round(dep / 4))) : WT('plan-week').replace('[t]', money(dep)); }
@@ -2116,8 +2202,116 @@
         for (var o = 1; o <= MEALS; o++) { var k = (st.active + o) % MEALS; if (!st.days[k]) { st.active = k; break; } }   // move on to the next empty day
         say(''); persist(); render();
       });
+      /* ---- week board v2: interactions, pop-ups and the tally summary ---- */
+      var mkModal = function (cls) {
+        var m = document.createElement('div'); m.className = 'fn-md ' + (cls || ''); m.hidden = true; m.setAttribute('role', 'dialog'); m.setAttribute('aria-modal', 'true');
+        m.innerHTML = '<div class="fn-md__bg" data-md-close></div><div class="fn-md__box" data-md-box></div>'; document.body.appendChild(m);
+        m.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-md-close]')) mdShow(m, false); });
+        return m;
+      };
+      var mdShow = function (m, on) { m.hidden = !on; document.documentElement.classList.toggle('fn-md-open', !!document.querySelector('.fn-md:not([hidden])')); if (on) { var b = $('button, input', m); } };
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') $$('.fn-md:not([hidden])').forEach(function (m) { mdShow(m, false); }); });
+      var mdCust = null, mdComp = null, mdSum = null;
+      var openCust = function (i) {
+        var d = st.days[i] && byPid(st.days[i]); if (!d) return; mdCust = mdCust || mkModal('fn-md--cust');
+        var box = $('[data-md-box]', mdCust), cur = modsOf(i), draft = { off: (cur.off || []).slice(), note: cur.note || '' };
+        var im = $('img', d), src = im ? (im.currentSrc || im.src) : '', m = macroOf(st.days[i]) || { k: 0, p: 0, c: 0, f: 0 };
+        var ings = (d.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean);
+        var lbl = dayLabel(i).split(' ')[0];
+        box.innerHTML = '<button class="fn-md__x" type="button" data-md-close aria-label="' + esc(w2('close_x')) + '">&times;</button>'
+          + '<div class="fn-md__row"><div class="fn-md__ph"><span style="background-image:url(&quot;' + esc(src) + '&quot;)"></span><button type="button" data-md-sheet>' + esc(w2('sheet_new')) + '</button></div>'
+          + '<div class="fn-md__tt"><h3>' + esc(w2('cust_t')) + '</h3><p>' + esc(lbl + ' · ' + lab(d)) + '</p><span class="fn-md__chip">' + m.k + ' ' + esc(w2('kcal')) + ' · P ' + m.p + ' · C ' + m.c + ' · G ' + m.f + '</span><button type="button" class="fn-md__link" data-md-sheet>' + esc(w2('cust_sheet')) + ' &rarr;</button></div></div>'
+          + (ings.length ? '<h4 class="fn-md__h">' + esc(w2('cust_rm')) + '</h4><div class="fn-md__chips">' + ings.map(function (n) { return '<button type="button" class="fn-md__ing' + (draft.off.indexOf(n) > -1 ? ' is-off' : '') + '" data-md-ing="' + esc(n) + '" aria-pressed="' + (draft.off.indexOf(n) > -1 ? 'true' : 'false') + '">' + esc(n) + ' <i aria-hidden="true">×</i></button>'; }).join('') + '</div>' : '')
+          + '<h4 class="fn-md__h">' + esc(w2('cust_note')) + '</h4><input class="fn-md__in" type="text" maxlength="160" data-md-note placeholder="' + esc(w2('cust_ph')) + '" value="' + esc(draft.note) + '">'
+          + '<button class="fn-md__go" type="button" data-md-save>' + esc(w2('cust_save')) + '</button><button class="fn-md__cancel" type="button" data-md-close>' + esc(w2('cust_cancel')) + '</button>';
+        box.onclick = function (e) {
+          var t = e.target; if (!t.closest) return;
+          var ing = t.closest('[data-md-ing]'); if (ing) { var n = ing.getAttribute('data-md-ing'), k = draft.off.indexOf(n); if (k > -1) draft.off.splice(k, 1); else draft.off.push(n); ing.classList.toggle('is-off', k < 0); ing.setAttribute('aria-pressed', k < 0 ? 'true' : 'false'); return; }
+          if (t.closest('[data-md-sheet]')) { mdShow(mdCust, false); var mb = $('.fn-dish__media', d); if (mb) mb.click(); return; }
+          if (t.closest('[data-md-save]')) { draft.note = ($('[data-md-note]', box).value || '').trim(); st.mods[i] = { off: draft.off, note: draft.note }; mdShow(mdCust, false); persist(); render(); }
+        };
+        mdShow(mdCust, true);
+        var f = $('[data-md-note]', box); if (f && window.innerWidth > 760) setTimeout(function () { f.focus(); }, 40);
+      };
+      var openComp = function (i) {
+        mdComp = mdComp || mkModal('fn-md--comp'); var box = $('[data-md-box]', mdComp), ck = st.comp[i];
+        box.innerHTML = '<button class="fn-md__x" type="button" data-md-close aria-label="' + esc(w2('close_x')) + '">&times;</button><h3>' + esc(w2('comp_t')) + '</h3><p class="fn-md__s">' + esc(w2('comp_s')) + '</p><div class="fn-md__opts">'
+          + COMPS.map(function (k) { return '<button type="button" class="fn-md__opt' + (ck === k ? ' is-on' : '') + '" data-comp="' + k + '"><b>' + esc(compName(k)) + '</b><small>' + esc(money(0)) + '</small></button>'; }).join('')
+          + '<button type="button" class="fn-md__opt fn-md__opt--none' + (!ck ? ' is-on' : '') + '" data-comp=""><b>' + esc(w2('comp_none')) + '</b></button></div>';
+        box.onclick = function (e) { var b = e.target.closest && e.target.closest('[data-comp]'); if (!b) return; st.comp[i] = b.getAttribute('data-comp'); mdShow(mdComp, false); persist(); render(); };
+        mdShow(mdComp, true);
+      };
+      /* tally summary: every day, the level breakdown, weekend dishes and extra snacks, then the final confirmation */
+      var sumXOpen = false;
+      var dayLine = function (i) {
+        var d = st.days[i] && byPid(st.days[i]); if (!d) return '';
+        var parts = [esc(catName(grpOfDish(d))) + ' • ' + esc(lab(d)) + ' <em>[' + esc(tierNames[rank(tierOf(d))] || '') + (rank(tierOf(d)) ? ' +' + esc(money(upg(rank(tierOf(d))))) : '') + ']</em>'];
+        var d2 = st.days2[i] && byPid(st.days2[i]); if (d2) parts.push('+ ' + esc(lab(d2)) + ' <em>[' + esc(tierNames[rank(tierOf(d2))] || '') + ']</em>');
+        if (st.comp[i]) parts.push('+ ' + esc(compName(st.comp[i])));
+        var mt = modsText(i); if (mt) parts.push('<span class="fn-sm__mod">✎ ' + esc(mt) + '</span>');
+        var im = $('img', d), src = im ? (im.currentSrc || im.src) : '';
+        return '<li class="fn-sm__day"><h5>' + esc(dayLabel(i).split(' ')[0]) + '</h5><div><span class="fn-sm__ph" style="background-image:url(&quot;' + esc(src) + '&quot;)"></span><p>' + parts.join(' ') + '</p></div></li>';
+      };
+      var openSum = function () {
+        ensureV2(); mdSum = mdSum || mkModal('fn-md--sum'); var box = $('[data-md-box]', mdSum);
+        var n = count(), lines = [], dh = '';
+        for (var i = 0; i < MEALS; i++) dh += dayLine(i);
+        var wen = 0;
+        st.we.forEach(function (w, k) { var d = w.on && w.pid && byPid(w.pid); if (!d) return; wen++; var im = $('img', d), src = im ? (im.currentSrc || im.src) : ''; dh += '<li class="fn-sm__day fn-sm__day--we"><h5>' + esc(weNames[k]) + ' <small>[' + esc(w2('we_deliv')) + ']</small></h5><div><span class="fn-sm__ph" style="background-image:url(&quot;' + esc(src) + '&quot;)"></span><p>' + esc(lab(d)) + ' <em>[' + esc(w2('we_extra')) + ' ' + esc(money(dishPrice(d))) + ']</em></p></div></li>'; });
+        var base = priceOf(tierEl(), st.plan), wk = st.plan === 'block' ? Math.round(base / WEEKS) : base;
+        lines.push('<li><span>' + esc(st.plan === 'block' ? w2('sm_plan_block') : w2('sm_plan_week')) + (st.plan === 'block' ? ' <small>(' + esc(money(wk)) + ')</small>' : '') + '</span><b>' + esc(money(base)) + '</b></li>');
+        lines.push('<li class="is-sub"><span>' + esc(w2('sm_week')) + ': ' + n + ' / ' + MEALS + '</span><b>' + esc(w2('sm_inc')) + '</b></li>');
+        for (var lv = 1; lv <= 3; lv++) { var c = 0; for (var q = 0; q < MEALS; q++) if (dayLevel(q) === lv) c++; if (c) lines.push('<li><span>' + c + '× ' + esc(tierNames[lv] || '') + ' <small>(+' + esc(money(upg(lv))) + ')</small></span><b>' + esc(money(c * upg(lv))) + '</b></li>'); }
+        lines.push('<li class="is-sub"><span>' + esc(w2('sm_comp')) + '</span><b>' + esc(money(0)) + '</b></li>');
+        st.we.forEach(function (w, k) { var d = w.on && w.pid && byPid(w.pid); if (d) lines.push('<li><span>' + esc(weNames[k]) + ' · ' + esc(lab(d)) + '</span><b>' + esc(money(dishPrice(d))) + '</b></li>'); });
+        var xh = st.xt.map(function (p, k) { var d = byPid(p); return d ? '<li><span>1× ' + esc(lab(d)) + '</span><b>' + esc(money(dishPrice(d))) + '</b><button type="button" data-sm-xdel="' + k + '" aria-label="' + esc(w2('sm_remove')) + '">×</button></li>' : ''; }).join('');
+        var snacks = dishes.filter(function (d) { return inGroup(d, 'snacks-postres') && !d.classList.contains('is-blocked'); });
+        var pickX = sumXOpen ? '<div class="fn-sm__xpick">' + (snacks.length ? '' : '<p class="fn-ct__none">' + esc(w2('cat_none')) + '</p>') + snacks.map(function (d) { var im = $('img', d), src = im ? (im.currentSrc || im.src) : ''; return '<button type="button" data-sm-xadd="' + d.getAttribute('data-pid') + '"><span style="background-image:url(&quot;' + esc(src) + '&quot;)"></span><b>' + esc(lab(d)) + '</b><small>' + esc(money(dishPrice(d))) + '</small></button>'; }).join('') + '</div>' : '';
+        box.innerHTML = '<button class="fn-sm__back" type="button" data-md-close>&lsaquo; ' + esc(w2('sm_back')) + '</button><header class="fn-sm__head"><h3>' + esc(w2('sm_t')) + '</h3><p>' + esc(w2('sm_s')) + '</p></header>'
+          + '<div class="fn-sm__grid"><section class="fn-sm__days"><h4>' + esc(w2('sm_detail', { n: n + wen })) + '</h4><ul>' + dh + '</ul></section>'
+          + '<aside class="fn-sm__break"><h4>' + esc(w2('sm_break')) + '</h4><ul class="fn-sm__lines">' + lines.join('') + '</ul>'
+          + '<h5>' + esc(w2('sm_x')) + '</h5><ul class="fn-sm__lines fn-sm__lines--x">' + (xh || '<li class="is-sub"><span>' + esc(w2('sm_none')) + '</span></li>') + '</ul>'
+          + '<button class="fn-sm__xadd" type="button" data-sm-xtoggle>' + esc(w2('sm_xadd')) + '</button>' + pickX
+          + '<p class="fn-sm__close"><span>' + esc(w2('sm_close')) + '</span><b>' + esc(cutText()) + '</b></p>'
+          + '<p class="fn-sm__total"><span>' + esc(w2('sm_total')) + '</span><b>' + esc(money(grandTotal())) + '</b></p>'
+          + '<button class="fn-md__go fn-sm__go" type="button" data-sm-go>' + esc(w2('sm_confirm')) + '</button></aside></div>';
+        box.onclick = function (e) {
+          var t = e.target; if (!t.closest) return;
+          var xa = t.closest('[data-sm-xadd]'); if (xa) { st.xt.push(xa.getAttribute('data-sm-xadd')); persist(); render(); openSum(); return; }
+          var xd = t.closest('[data-sm-xdel]'); if (xd) { st.xt.splice(+xd.getAttribute('data-sm-xdel'), 1); persist(); render(); openSum(); return; }
+          if (t.closest('[data-sm-xtoggle]')) { sumXOpen = !sumXOpen; openSum(); return; }
+          if (t.closest('[data-sm-go]')) { mdShow(mdSum, false); var nb = $('[data-fn-finish]', holder); if (nb) { nb.setAttribute('data-sm-ok', '1'); nb.click(); } }
+        };
+        mdShow(mdSum, true);
+      };
+      // the main button of the week step first shows the tally; its own confirm button then places the order
+      holder.addEventListener('click', function (e) {
+        var nb = e.target.closest && e.target.closest('[data-fn-finish]');
+        if (!nb || st.step !== 3 || holder.classList.contains('is-gated')) return;
+        if (nb.getAttribute('data-sm-ok')) { nb.removeAttribute('data-sm-ok'); return; }
+        e.preventDefault(); e.stopImmediatePropagation(); if (count() < 1) { say(T_('need-meals')); return; } sumXOpen = false; openSum();
+      }, true);
+      holder.addEventListener('click', function (e) {
+        var t = e.target; if (!t || !t.closest) return;
+        var v = t.closest('[data-bd-view]'); if (v) { st.view = v.getAttribute('data-bd-view'); st.vtier = st.vtier || 'selecto'; var mn = $('[data-bd-menu]', holder); if (mn) mn.hidden = true; persist(); render(); return; }
+        var mo = t.closest('[data-bd-more]'); if (mo) { var mn2 = $('[data-bd-menu]', holder); if (mn2) { mn2.hidden = !mn2.hidden; mo.setAttribute('aria-expanded', mn2.hidden ? 'false' : 'true'); } return; }
+        var tt = t.closest('[data-ct-tier]'); if (tt) { st.vtier = tt.getAttribute('data-ct-tier'); persist(); render(); return; }
+        var cp = t.closest('[data-ct-pick]'); if (cp) { assignDish(cp.getAttribute('data-ct-pick')); return; }
+        var fo = t.closest('[data-bd-focus]');
+        if (fo) { var kk = fo.getAttribute('data-bd-focus'); if (/^we/.test(kk)) { st.tgt = kk; } else { var pp = kk.split(':'); st.tgt = ''; st.active = +pp[0]; st.course = +pp[1] === 1 ? 1 : 0; } persist(); render(); var ct = $('[data-fn-ct]', holder); if (ct && ct.scrollIntoView) ct.scrollIntoView({ behavior: REDUCE ? 'auto' : 'smooth', block: 'nearest' }); return; }
+        var ub = t.closest('[data-bd-up]');
+        if (ub) { var u2 = ub.getAttribute('data-bd-up').split(':'), ui = +u2[0], uc = +u2[1], cd = byPid(uc ? st.days2[ui] : st.days[ui]), nx = ['exclusivo', 'signature', 'reserve'][Math.min(2, rank(tierOf(cd)))]; st.tgt = ''; st.active = ui; st.course = uc; st.vtier = nx; st.view = cd ? (grpOfDish(cd) || st.view) : st.view; persist(); render(); var ct2 = $('[data-fn-ct]', holder); if (ct2 && ct2.scrollIntoView) ct2.scrollIntoView({ behavior: REDUCE ? 'auto' : 'smooth', block: 'nearest' }); return; }
+        var cu = t.closest('[data-bd-cust]'); if (cu) { st.active = +cu.getAttribute('data-bd-cust'); openCust(st.active); return; }
+        var cm = t.closest('[data-bd-comp]'); if (cm) { openComp(+cm.getAttribute('data-bd-comp')); return; }
+        var a2 = t.closest('[data-bd-add2]'); if (a2) { st.tgt = ''; st.active = +a2.getAttribute('data-bd-add2'); st.course = 1; persist(); render(); var ct3 = $('[data-fn-ct]', holder); if (ct3 && ct3.scrollIntoView) ct3.scrollIntoView({ behavior: REDUCE ? 'auto' : 'smooth', block: 'nearest' }); return; }
+        var wo = t.closest('[data-we-on]'); if (wo) { var wk = +wo.getAttribute('data-we-on'); st.we[wk].on = true; st.tgt = 'we' + wk; persist(); render(); return; }
+        var wf = t.closest('[data-we-off]'); if (wf) { var wk2 = +wf.getAttribute('data-we-off'); st.we[wk2] = { on: false, pid: '' }; if (st.tgt === 'we' + wk2) st.tgt = ''; persist(); render(); return; }
+        var cardEl = t.closest('.fn-wk__card'); if (cardEl && !t.closest('button')) { st.tgt = ''; st.course = 0; st.active = +cardEl.getAttribute('data-day'); persist(); render(); return; }
+        var weEl = t.closest('.fn-we.is-on'); if (weEl && !t.closest('button')) { st.tgt = 'we' + weEl.getAttribute('data-we'); persist(); render(); }
+      });
+      document.addEventListener('click', function (e) { var mn3 = $('[data-bd-menu]', holder); if (mn3 && !mn3.hidden && !(e.target.closest && e.target.closest('[data-bd-menu],[data-bd-more]'))) mn3.hidden = true; });
       var reset = $('[data-fn-reset]', holder);
-      if (reset) reset.addEventListener('click', function () { st.qty = {}; st.days = blankDays(); st.days2 = blankDays(); st.course = 0; st.active = 0; if (daysBox) daysBox.removeAttribute('data-built'); st.cat = 'all'; st.diet = 'all'; st.tier = 'selecto'; st.plan = 'block'; st.step = 0; persist(); render(); });
+      if (reset) reset.addEventListener('click', function () { st.qty = {}; st.days = blankDays(); st.days2 = blankDays(); st.course = 0; st.active = 0; if (daysBox) daysBox.removeAttribute('data-built'); st.cat = 'all'; st.diet = 'all'; st.tier = 'selecto'; st.plan = 'block'; st.step = 0; st.comp = null; st.we = null; st.xt = []; st.tgt = ''; persist(); render(); });
 
       // details
       var fields = $$('[data-info]', holder), checks = $$('[data-allergy]', holder), ref = $('[data-fn-ref]', holder);
@@ -2188,6 +2382,17 @@
         var line = { id: parseInt(tb.getAttribute(st.plan === 'block' ? 'data-variant-block' : 'data-variant-week'), 10), quantity: 1, properties: props };
         var sp = tb.getAttribute('data-selling-plan'); if (st.plan === 'block' && st.renew && sp) line.selling_plan = parseInt(sp, 10);
         var lines = [line];
+        ensureV2();
+        var compTxt = st.comp.map(function (ck, k) { return ck ? dayLabel(k).split(' ')[0] + ': ' + compName(ck) : ''; }).filter(Boolean).join(' | '); if (compTxt) { props[w2('sm_comp').split(' (')[0]] = compTxt; props['_complementos'] = compTxt; }
+        st.we.forEach(function (w, k) {
+          var dd = w.on && w.pid && byPid(w.pid), vid = dd && parseInt(dd.getAttribute('data-vid'), 10); if (!dd || !vid) return;
+          var pr = {}; pr[weNames[k] + ' (' + w2('we_deliv') + ')'] = dd.getAttribute('data-title'); pr['_extra'] = 'fin-de-semana'; pr['_para'] = paraId; lines.push({ id: vid, quantity: 1, properties: pr });
+          props[weNames[k]] = dd.getAttribute('data-title') + ' (' + w2('we_extra') + ')';
+        });
+        var xc = {}; st.xt.forEach(function (p) { xc[p] = (xc[p] || 0) + 1; });
+        Object.keys(xc).forEach(function (p) { var dd = byPid(p), vid = dd && parseInt(dd.getAttribute('data-vid'), 10); if (!dd || !vid) return; var pr = { '_extra': 'snack', '_para': paraId }; lines.push({ id: vid, quantity: xc[p], properties: pr }); });
+        var xl = []; st.we.forEach(function (w) { var dd = w.on && w.pid && byPid(w.pid); if (dd) xl.push('1× ' + dd.getAttribute('data-title')); }); Object.keys(xc).forEach(function (p) { var dd = byPid(p); if (dd) xl.push(xc[p] + '× ' + dd.getAttribute('data-title')); });
+        if (xl.length) { props['_platillos'] = (props['_platillos'] ? props['_platillos'] + ' | ' : '') + xl.join(' | '); props['_extras'] = xl.join(' | '); }
         for (var lvl = 1; lvl <= 3; lvl++) {
           var names = []; st.days.forEach(function (q, k) { if (dayLevel(k) !== lvl) return; var c1 = byPid(q), c2 = byPid(st.days2[k]), top = (c1 && levelOf(c1) === lvl) ? c1 : c2; if (top) names.push(top.getAttribute('data-title')); });
           var vid = parseInt(holder.getAttribute('data-upv-' + lvl), 10);
