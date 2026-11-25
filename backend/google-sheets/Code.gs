@@ -55,10 +55,11 @@ function doGet(e) {
   if (params.action === 'profile') return out_(profileGet_(params.cid, params.token));
   if (params.action === 'week') return out_(weekGet_(params.cid, params.token, params.week));
   if (params.action === 'credits') return out_(creditsGet_(params.cid, params.token));
+  if (/^(classes|book|coupon|coupon_check|myres)$/.test(String(params.action || ''))) return out_(circlePublic_(params));
   if (params.action === 'weekset') return out_(weekSet_(params.cid, params.token, { week: params.week, email: params.email, upgrade: params.upgrade, days: String(params.days || '').split('|') }));
   if (params.action === 'pause') return out_(pauseSet_(params.cid, params.token, { mode: params.mode, week: params.week, weeks: String(params.weeks || '').split('|').filter(Boolean), email: params.email }));
   if (/^discount/.test(String(params.action || ''))) return out_(discountApi_(params));
-  if (/^(expense|sample|lead)_/.test(String(params.action || ''))) return out_(adminApi_(params));
+  if (/^(expense|sample|lead|circle)_/.test(String(params.action || ''))) return out_(adminApi_(params));
   if (params.action !== 'admin') return out_({ ok: true, service: 'kulinaria-sheets' });
   var key = PropertiesService.getScriptProperties().getProperty('ADMIN_KEY');
   if (!key || params.key !== key) return out_({ ok: false, error: 'forbidden' });
@@ -156,6 +157,7 @@ function handleOrder_(o) {
   var email = o.email || c.email || a.correo || '';
   var ship = o.shipping_address || {};
   var addr = a.direccion || [ship.address1, ship.address2, ship.city, ship.zip].filter(Boolean).join(', ');
+  try { circleOnOrder_(o, a); } catch (eC) { /* class payment bookkeeping never blocks an order */ }
   // 1. client profile (created/updated from the order's profile attributes)
   upsertCustomer_({ id: c.id, email: email, first_name: c.first_name || (name.split(' ')[0] || ''), last_name: c.last_name || name.split(' ').slice(1).join(' '), phone: c.phone || a.telefono,
     default_address: c.default_address || { address1: addr, city: ship.city, zip: ship.zip }, tags: c.tags, note: c.note, created_at: c.created_at, updated_at: o.updated_at }, a);
@@ -692,6 +694,7 @@ function adminApi_(p) {
   var key = PropertiesService.getScriptProperties().getProperty('ADMIN_KEY');
   if (!key || p.key !== key) return { ok: false, error: 'forbidden' };
   var act = String(p.action), lock = LockService.getScriptLock();
+  if (/^circle_/.test(act)) return circleAdmin_(p);
   if (act === 'expense_new') {
     var date = /^\d{4}-\d{2}-\d{2}$/.test(String(p.date || '')) ? String(p.date) : ymd_(new Date()), amount = Number(p.amount), concept = String(p.concept || '').trim().slice(0, 120), cat = String(p.cat || 'Otros').slice(0, 40);
     if (!concept) return { ok: false, error: 'bad_concept' };
@@ -782,6 +785,7 @@ function leadAdd_(b) {
     var to = PropertiesService.getScriptProperties().getProperty('ALERT_EMAILS');
     if (to) MailApp.sendEmail(to, 'Nueva solicitud (' + kind + ') · ' + name, ['Tipo: ' + kind, 'Nombre: ' + name, 'Correo: ' + email, 'Teléfono: ' + phone, '', detail, '', 'Verla y marcarla como atendida: /pages/admin → Solicitudes'].join('\n'));
   } catch (e) { /* never block the request */ }
+  try { circleLeadNotify_(kind, b, detail); } catch (eN) { /* auto-replies and routing never block the request */ }
   return { ok: true };
 }
 
