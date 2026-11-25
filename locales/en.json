@@ -295,6 +295,20 @@
     "ev3": "Corporate event",
     "ev4": "Full logistics",
     "ev5": "Other",
+    "t_sede": "Choose your gym",
+    "s_sede": "Tell us your area and we suggest the closest gym as your pickup point.",
+    "t_gimnasio": "Join as a partner gym",
+    "s_gimnasio": "Tell us about your gym and we schedule a meeting.",
+    "sd_gym": "Gym (optional)",
+    "sd_zone": "Your area or postal code",
+    "gy_name": "Gym name",
+    "gy_role": "Your role",
+    "gy_r1": "Owner",
+    "gy_r2": "Manager",
+    "gy_r3": "Other",
+    "gy_sites": "Number of locations",
+    "gy_date": "Meeting date",
+    "gy_city": "City or area",
     "ev6": "Just reserve a date",
     "cal_wd": "M,T,W,T,F,S,S",
     "cal_months": "January,February,March,April,May,June,July,August,September,October,November,December",
@@ -748,7 +762,8 @@
     "next": "Next mode",
     "day": "Day",
     "night": "Night",
-    "fuego": "Fuego"
+    "fuego": "Fuego",
+    "llama": "Llama"
   },
   "tier": {
     "exclusivo": "Exclusivo $",
@@ -2422,6 +2437,17 @@
     "370fde40909d": "Signature dishes, ready to enjoy.",
     "ad935ca9e8e1": "No hassle",
     "caf4e6ae8fa5": "Zero shopping, zero cooking, zero stress.",
-    "6352b2c682ce": "Reserve a date"
+    "6352b2c682ce": "Reserve a date",
+    "91d0ca4b8805": "Partner gyms · Strategic network",
+    "e342a854626b": "Partnerships that drive",
+    "1ae482fa7b38": "your performance.",
+    "037a8c7948c8": "More than 15 partner gyms united by a shared vision of community and high performance. Besides our home delivery, you can choose any of these locations as a pickup point for your Kulinaria orders.",
+    "0395ebad6569": "Explore locations",
+    "44d6300ecefc": "Join as a partner gym",
+    "2cd9d891a17a": "Find a gym in my area",
+    "716f6927007c": "Partner your gym",
+    "98f5ab2a5f1c": "Owner or manager? Add your gym to the Kulinaria network.",
+    "38e7fdf5dcba": "Schedule a meeting",
+    "bd4a69bb7715": "Fitness Club"
   }
 }

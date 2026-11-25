@@ -295,6 +295,20 @@
     "ev3": "Evento corporativo",
     "ev4": "Logística integral",
     "ev5": "Otro",
+    "t_sede": "Elige tu sede",
+    "s_sede": "Dinos tu zona y te sugerimos la sede más cercana como punto de entrega.",
+    "t_gimnasio": "Afilia tu gimnasio",
+    "s_gimnasio": "Cuéntanos de tu sede y agendamos una reunión.",
+    "sd_gym": "Sede (opcional)",
+    "sd_zone": "Tu zona o código postal",
+    "gy_name": "Nombre del gimnasio",
+    "gy_role": "Tu cargo",
+    "gy_r1": "Dueño",
+    "gy_r2": "Gerente",
+    "gy_r3": "Otro",
+    "gy_sites": "Número de sedes",
+    "gy_date": "Fecha para la reunión",
+    "gy_city": "Ciudad o zona",
     "ev6": "Solo reservar fecha",
     "cal_wd": "L,M,M,J,V,S,D",
     "cal_months": "Enero,Febrero,Marzo,Abril,Mayo,Junio,Julio,Agosto,Septiembre,Octubre,Noviembre,Diciembre",
@@ -748,7 +762,8 @@
     "next": "Modo siguiente",
     "day": "Día",
     "night": "Noche",
-    "fuego": "Fuego"
+    "fuego": "Fuego",
+    "llama": "Llama"
   },
   "tier": {
     "exclusivo": "Exclusivo $",
@@ -2422,6 +2437,17 @@
     "370fde40909d": "Platillos de autor, listos para disfrutar.",
     "ad935ca9e8e1": "Sin complicaciones",
     "caf4e6ae8fa5": "Cero compras, cero cocina, cero estrés.",
-    "6352b2c682ce": "Reservar fecha"
+    "6352b2c682ce": "Reservar fecha",
+    "91d0ca4b8805": "Gimnasios hermanos · Red estratégica",
+    "e342a854626b": "Alianzas que impulsan",
+    "1ae482fa7b38": "tu rendimiento.",
+    "037a8c7948c8": "Más de 15 gimnasios partners unidos por una misma visión de comunidad y alto desempeño. Además de nuestro servicio a domicilio, puedes elegir cualquiera de estas sedes como punto de entrega para recoger tus pedidos Kulinaria.",
+    "0395ebad6569": "Explorar sedes",
+    "44d6300ecefc": "Afiliar gimnasio",
+    "2cd9d891a17a": "Buscar sede en mi zona",
+    "716f6927007c": "Afilia tu gimnasio",
+    "98f5ab2a5f1c": "¿Dueño o gerente? Suma tu sede a la red Kulinaria.",
+    "38e7fdf5dcba": "Agendar reunión",
+    "bd4a69bb7715": "Fitness Club"
   }
 }

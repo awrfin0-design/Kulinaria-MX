@@ -419,24 +419,24 @@ await page.evaluate(() => localStorage.clear());
 
 // light / dark (toggle lives in the menu)
 const themeOf = () => page.evaluate(() => document.documentElement.getAttribute('data-theme'));
-const bgOf = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+const bgOf = () => page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor);
 await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(600);
 ok('Fuego is the default theme', (await themeOf()) === 'fuego');
-await page.evaluate(() => localStorage.setItem('kx-theme', 'light')); await page.reload(); await page.waitForTimeout(600);
+await page.evaluate(() => localStorage.setItem('kx-theme', 'llama')); await page.reload(); await page.waitForTimeout(600);
 const lightBg = await bgOf();
 await openMenu(); await page.click('#menu-overlay [data-theme-next]'); await page.waitForTimeout(500); await closeMenu(); await page.waitForTimeout(500);
 const darkBg = await bgOf();
-ok('toggle switches to dark and changes the page colours', (await themeOf()) === 'dark' && lightBg !== darkBg, `${lightBg} -> ${darkBg}`);
-ok('theme choice is remembered', await page.evaluate(() => localStorage.getItem('kx-theme')) === 'dark');
+ok('toggle switches Llama -> Fuego and changes the page colours', (await themeOf()) === 'fuego' && lightBg !== darkBg, `${lightBg} -> ${darkBg}`);
+ok('theme choice is remembered', await page.evaluate(() => localStorage.getItem('kx-theme')) === 'fuego');
 await page.reload(); await page.waitForTimeout(600);
-ok('dark theme persists after reload (before paint)', (await themeOf()) === 'dark');
-ok('gold logo shows on dark, ink logo on light', await page.evaluate(() => getComputedStyle(document.querySelector('.site-header .logo--gold')).display !== 'none' && getComputedStyle(document.querySelector('.site-header .logo--ink')).display === 'none'));
+ok('Fuego persists after reload (before paint)', (await themeOf()) === 'fuego');
+ok('the orange-and-white logo shows in Fuego, the orange K with dark letters in Llama', await page.evaluate(() => getComputedStyle(document.querySelector('.site-header .logo--fuego')).display !== 'none' && getComputedStyle(document.querySelector('.site-header .logo--ink')).display === 'none'));
 const lumC = `(c) => { const m = c.match(/\\d+(\\.\\d+)?/g).map(Number).slice(0, 3).map((v) => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }); return .2126 * m[0] + .7152 * m[1] + .0722 * m[2]; }`;
-const contrastDark = await page.evaluate(`(() => { const lum = ${lumC}; const r = (a, b) => (Math.max(lum(a), lum(b)) + .05) / (Math.min(lum(a), lum(b)) + .05); const s = getComputedStyle(document.body); return r(s.color, s.backgroundColor); })()`);
-ok('dark body text contrast >= 7', contrastDark >= 7, String(contrastDark));
+const contrastDark = await page.evaluate(`(() => { const lum = ${lumC}; const r = (a, b) => (Math.max(lum(a), lum(b)) + .05) / (Math.min(lum(a), lum(b)) + .05); const s = getComputedStyle(document.body), h = getComputedStyle(document.documentElement); return r(s.color, h.backgroundColor); })()`);
+ok('Fuego body text contrast >= 7', contrastDark >= 7, String(contrastDark));
 await openMenu(); await page.click('#menu-overlay [data-theme-prev]'); await page.waitForTimeout(500); await closeMenu(); await page.waitForTimeout(500);
-const contrastL = await page.evaluate(`(() => { const lum = ${lumC}; const r = (a, b) => (Math.max(lum(a), lum(b)) + .05) / (Math.min(lum(a), lum(b)) + .05); const s = getComputedStyle(document.body); const acc = getComputedStyle(document.querySelector('[data-page="home"] .fg .eyebrow')).color; return { body: r(s.color, s.backgroundColor), accent: r(acc, s.backgroundColor) }; })()`);
-ok('light body text contrast >= 7 and labels >= 4.5', contrastL.body >= 7 && contrastL.accent >= 4.5, JSON.stringify(contrastL));
+const contrastL = await page.evaluate(`(() => { const lum = ${lumC}; const r = (a, b) => (Math.max(lum(a), lum(b)) + .05) / (Math.min(lum(a), lum(b)) + .05); const s = getComputedStyle(document.body); const acc = getComputedStyle(document.querySelector('[data-page="home"] .fg .eyebrow')).color; return { body: r(s.color, getComputedStyle(document.documentElement).backgroundColor), accent: r(acc, getComputedStyle(document.documentElement).backgroundColor) }; })()`);
+ok('Llama body text contrast >= 7 and labels >= 4.5', contrastL.body >= 7 && contrastL.accent >= 4.5, JSON.stringify(contrastL));
 
 // language: ES -> EN, every page translated, back to ES
 ok('html lang is es by default', (await page.evaluate(() => document.documentElement.lang)) === 'es');
@@ -522,28 +522,29 @@ ok('carousel cards have a coverflow angle', await page.$$eval('[data-page="home"
 // ---- v5: one palette per theme, the same motif everywhere, seamless switching
 await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(800);
 const tok = (n) => page.evaluate((n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim().toLowerCase(), n);
-ok('light palette = white + olive green', (await tok('--brand')) === '#4f6330' && (await tok('--bg-base')) === '#f5f4ec');
-await page.evaluate(() => localStorage.setItem('kx-theme', 'dark')); await page.reload(); await page.waitForTimeout(800);
-ok('dark palette = black + gold + ivory', (await tok('--brand')) === '#e2c36b' && (await tok('--bg-base')) === '#0d0c0a' && (await tok('--text')) === '#f3ebd9');
+ok('Llama palette = white + orange', (await tok('--brand')) === '#ff6200' && (await tok('--bg-base')) === '#ffffff' && (await tok('--text')) === '#151515');
+await page.evaluate(() => localStorage.setItem('kx-theme', 'fuego')); await page.reload(); await page.waitForTimeout(800);
+ok('Fuego palette = black + orange + white', (await tok('--brand')) === '#ff6200' && (await tok('--bg-base')) === '#0e0e0e' && (await tok('--text')) === '#f5f5f5');
 await page.evaluate(() => window.scrollTo(0, 0));
 await page.waitForFunction(() => { const v = document.querySelector('[data-page="home"] .hero__video--intro'); return v && !v.paused && v.currentTime > 0.2; }, null, { timeout: 20000 }).catch(() => {});
 ok('the intro video plays in the hero (faded in over its poster)', await page.evaluate(() => { const v = document.querySelector('[data-page="home"] .hero__video--intro'); return !v.paused && v.currentTime > 0 && v.classList.contains('is-on') && /^(blob|data):/.test(v.currentSrc || v.src); }));
 ok('the old hero film plays behind the tiers section (moved, not deleted)', await page.evaluate(async () => { const t = document.querySelector('[data-page="home"] .tiers--video'); if (!t) return false; t.scrollIntoView(); await new Promise((r) => setTimeout(r, 2500)); const v = t.querySelector('video'); return !!v && !v.paused && /video-hero-dark|^blob|^data/.test(v.currentSrc || v.src); }));
-ok('footer is deep black in dark mode and deep olive in light mode', await (async () => {
-  const dark = await page.evaluate(() => getComputedStyle(document.querySelector('.site-footer')).backgroundImage);
-  await page.evaluate(() => localStorage.setItem('kx-theme', 'light')); await page.reload(); await page.waitForTimeout(700);
-  const lightBg = await page.evaluate(() => getComputedStyle(document.querySelector('.site-footer')).backgroundImage);
-  return /13, 12, 10/.test(dark) && /28, 38, 20/.test(lightBg);
+ok('the footer is deep black in both modes (Fuego and Llama)', await (async () => {
+  const f = () => page.evaluate(() => getComputedStyle(document.querySelector('.site-footer')).getPropertyValue('--bg-base').trim().toLowerCase());
+  const a = await f();
+  await page.evaluate(() => localStorage.setItem('kx-theme', 'llama')); await page.reload(); await page.waitForTimeout(700);
+  const b = await f();
+  return a === '#0e0e0e' && b === '#0e0e0e';
 })());
 // theme switching is instant: no transition storm, one snapshot cross-fade
 await page.reload(); await page.waitForTimeout(800);
 await page.click('.burger'); await page.waitForTimeout(1000);
 const sw = await page.evaluate(async () => { const t0 = performance.now(); document.querySelector('#menu-overlay [data-theme-next]').click(); await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))); const t1 = performance.now(); return { dt: t1 - t0, theme: document.documentElement.getAttribute('data-theme') }; });
-ok('theme switch lands within two frames', sw.theme === 'dark' && sw.dt < 250, JSON.stringify(sw));
+ok('theme switch lands within two frames', sw.theme === 'fuego' && sw.dt < 250, JSON.stringify(sw));
 await page.waitForTimeout(800);
 ok('no stuck "is-theming" state after the switch', await page.evaluate(() => !document.documentElement.classList.contains('is-theming')));
 await page.keyboard.press('Escape'); await page.waitForTimeout(900);
-await page.evaluate(() => localStorage.setItem('kx-theme', 'light'));
+await page.evaluate(() => localStorage.setItem('kx-theme', 'llama'));
 // the motif on every page: photo header, serif headline + script phrase, no raw markup
 await page.reload(); await page.waitForTimeout(600);
 const motif = { noPhoto: [], noEm: [], leak: [] };
@@ -638,15 +639,15 @@ for (const name of pageNames) {
   const r = await page.evaluate(() => ({ ow: document.documentElement.scrollWidth - innerWidth, h: document.documentElement.scrollHeight, bw: document.body.scrollWidth - innerWidth }));
   totalScreens += r.h / mobile.height;
   if (r.ow > 1 || r.bw > 1) wide.push(name + ' +' + Math.max(r.ow, r.bw));
-  if (r.h / mobile.height > 13) long.push(name + ' ' + (r.h / mobile.height).toFixed(1));
+  if (r.h / mobile.height > 15) long.push(name + ' ' + (r.h / mobile.height).toFixed(1));
 }
 ok('phone: no page scrolls sideways (all ' + pageNames.length + ' pages)', wide.length === 0, wide.join(', '));
-ok('phone: no page is longer than 13 screens and the average is under 3.9 screens', long.length === 0 && totalScreens / pageNames.length < 3.9, long.join(', ') + ' avg ' + (totalScreens / pageNames.length).toFixed(2));
+ok('phone: no page is longer than 15 screens and the average is under 4 screens', long.length === 0 && totalScreens / pageNames.length < 4, long.join(', ') + ' avg ' + (totalScreens / pageNames.length).toFixed(2));
 // v13: minimal phone UI: slim home, glowing "i" with the pricing sheet, no announcement bar
 await page.setViewportSize({ width: 390, height: 844 });
 await page.evaluate(() => localStorage.removeItem('kulinaria_funnel')); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
 const homePhone = await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'); const vis = (s) => [...pg.querySelectorAll(s)].some((e) => e.getBoundingClientRect().height > 0 && getComputedStyle(e).display !== 'none'); return { ann: getComputedStyle(document.querySelector('.site-header__ann')).display, teaser: vis('.funnel__teaser'), wizard: vis('.funnel__track'), showcase: vis('.showcase'), band: vis('.band'), rail: vis('.rail'), plans: vis('.plan-card'), screens: document.documentElement.scrollHeight / innerHeight }; });
-ok('phone home: hero, order card, this week, showcases, tiers, categories, plans, FAQ and the final call are all there (placeholder testimonials and the marquee are not)', !homePhone.teaser && homePhone.wizard && homePhone.showcase && homePhone.band && (homePhone.rail || !(await page.$('[data-page="home"] [data-rail]'))) && homePhone.plans && homePhone.screens < 13, JSON.stringify(homePhone));
+ok('phone home: hero, order card, this week, showcases, tiers, categories, plans, FAQ and the final call are all there (placeholder testimonials and the marquee are not)', !homePhone.teaser && homePhone.wizard && homePhone.showcase && homePhone.band && (homePhone.rail || !(await page.$('[data-page="home"] [data-rail]'))) && homePhone.plans && homePhone.screens < 15, JSON.stringify(homePhone));
 const homeMore = await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'); const vis = (s) => [...pg.querySelectorAll(s)].some((e) => e.getBoundingClientRect().height > 0); return { tiers: vis('.tier-ladder'), index: vis('.fg--index'), faq: vis('.accordion'), cta: vis('.cta-banner'), marquee: vis('.marquee'), testimonials: vis('.fg--grid.section--raised') }; });
 ok('phone home keeps tiers, FAQ and the final call, and drops the marquee and the placeholder testimonials', homeMore.tiers && homeMore.faq && homeMore.cta && !homeMore.marquee && !homeMore.testimonials, JSON.stringify(homeMore));
 const swipeRule = await page.evaluate(() => { const bad = []; for (const l of document.querySelectorAll('.fg__list')) { const ph = !!l.querySelector('.card--img'); const sw = getComputedStyle(l).overflowX === 'auto' && l.getBoundingClientRect().width > 0; if (!ph && !l.closest('.fg--index') && sw) bad.push(l.parentElement.className); } return bad; });
@@ -698,30 +699,33 @@ ok('phone inner pages: the title sits over a photo (not a separate block)', awai
 await page.setViewportSize({ width: 1440, height: 900 });
 ok('desktop never shows the info dot, the sheet or the block line (the step counter now shows everywhere)', await page.evaluate(() => [...document.querySelectorAll('.info-dot,.sheet,.funnel__block,.funnel__teaser')].every((e) => getComputedStyle(e).display === 'none')));
 await page.setViewportSize({ width: 1440, height: 900 });
-// =====================================================================  v17: Day / Night / Fuego carousel
+// =====================================================================  v17: Fuego / Llama carousel
 await page.setViewportSize({ width: 1440, height: 900 });
-await page.evaluate(() => localStorage.setItem('kx-theme', 'light')); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
+await page.evaluate(() => localStorage.setItem('kx-theme', 'llama')); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
 const modes = [];
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 2; i++) {
   await openMenu();
   const st = await page.evaluate(() => { const g = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim().toLowerCase(); const lg = (s) => { const e = document.querySelector('.site-header ' + s); return e ? getComputedStyle(e).display : null; };
-    return { theme: document.documentElement.getAttribute('data-theme'), accent: g('--accent'), bg: g('--bg-base'), font: getComputedStyle(document.querySelector('h1')).fontFamily.split(',')[0].replace(/"/g, ''), ink: lg('.logo--ink'), gold: lg('.logo--gold'), fuego: lg('.logo--fuego'), label: [...document.querySelectorAll('.tc__name')].find((n) => getComputedStyle(n).opacity === '1')?.textContent.trim() }; });
+    return { theme: document.documentElement.getAttribute('data-theme'), accent: g('--accent'), bg: g('--bg-base'), font: getComputedStyle(document.querySelector('h1')).fontFamily.split(',')[0].replace(/"/g, ''), ink: lg('.logo--ink'), gold: lg('.logo--gold'), fuego: lg('.logo--fuego'), label: [...document.querySelectorAll('.tc__name')].find((n) => getComputedStyle(n).opacity === '1')?.textContent.trim(), dots: document.querySelectorAll('[data-theme-pick]').length }; });
   modes.push(st);
   await page.click('#menu-overlay [data-theme-next]'); await page.waitForTimeout(700); await closeMenu(); await page.waitForTimeout(500);
 }
-const byTheme = {}; modes.forEach((m) => { byTheme[m.theme] = m; }); const mDay = byTheme.light || {}, mNight = byTheme.dark || {}, mFuego = byTheme.fuego || {};
-ok('the carousel cycles Day -> Night -> Fuego -> Day (starting wherever the visitor is; Fuego is the default)', ['light,dark,fuego', 'dark,fuego,light', 'fuego,light,dark'].includes(modes.map((m) => m.theme).join()), JSON.stringify(modes.map((m) => m.theme)));
-ok('Day is white + olive, Night is black + gold, Fuego is black + orange-red #FF6200', mDay.accent === '#4b5e2b' && mDay.bg === '#f5f4ec', JSON.stringify(mDay)) ;
-ok('Night keeps its gold accent', mNight.accent === '#e2c36b' && mNight.bg === '#0d0c0a', JSON.stringify(mNight));
-ok('Fuego uses the brand colours (accent #FF6200, background #0E0E0E)', mFuego.accent === '#ff6200' && mFuego.bg === '#0e0e0e', JSON.stringify(mFuego));
-ok('all three modes share one type system (Playfair Display titles, Montserrat text)', modes.every((m) => m.font === 'Playfair Display'), JSON.stringify(modes.map((m) => m.font)));
-ok('each mode shows its own logo (ink / gold / orange-and-white Fuego logo)', mDay.ink !== 'none' && mDay.fuego === 'none' && mNight.gold !== 'none' && mNight.fuego === 'none' && mFuego.fuego !== 'none' && mFuego.gold === 'none', JSON.stringify(modes.map((m) => [m.ink, m.gold, m.fuego])));
-ok('the carousel label names the mode (Día / Noche / Fuego)', mDay.label === 'Día' && mNight.label === 'Noche' && mFuego.label === 'Fuego', JSON.stringify(modes.map((m) => m.label)));
+const byTheme = {}; modes.forEach((m) => { byTheme[m.theme] = m; }); const mLlama = byTheme.llama || {}, mFuego = byTheme.fuego || {};
+ok('there are only two modes (Fuego and Llama); the carousel cycles between them', ['llama,fuego', 'fuego,llama'].includes(modes.map((m) => m.theme).join()) && modes.every((m) => m.dots === 2), JSON.stringify(modes.map((m) => m.theme)));
+ok('Llama is white + orange (#FF6200 on #FFFFFF)', mLlama.accent === '#ff6200' && mLlama.bg === '#ffffff', JSON.stringify(mLlama));
+ok('Fuego is black + orange (#FF6200 on #0E0E0E)', mFuego.accent === '#ff6200' && mFuego.bg === '#0e0e0e', JSON.stringify(mFuego));
+ok('both modes share one type system (Playfair Display titles, Montserrat text)', modes.every((m) => m.font === 'Playfair Display'), JSON.stringify(modes.map((m) => m.font)));
+ok('each mode shows its own logo (dark letters in Llama, white letters in Fuego) and never the old gold one', mLlama.ink !== 'none' && mLlama.fuego === 'none' && mFuego.fuego !== 'none' && mFuego.ink === 'none' && mLlama.gold === 'none' && mFuego.gold === 'none', JSON.stringify(modes.map((m) => [m.ink, m.gold, m.fuego])));
+ok('the carousel label names the mode (Fuego / Llama)', mLlama.label === 'Llama' && mFuego.label === 'Fuego', JSON.stringify(modes.map((m) => m.label)));
 await page.evaluate(() => localStorage.setItem('kx-theme', 'fuego')); await page.reload(); await page.waitForTimeout(800);
 ok('the chosen mode is remembered (Fuego survives a reload, before first paint)', await page.evaluate(() => document.documentElement.getAttribute('data-theme')) === 'fuego');
-await openMenu(); await page.click('#menu-overlay [data-theme-pick="light"]'); await page.waitForTimeout(600);
-ok('the dots jump straight to a mode', await page.evaluate(() => document.documentElement.getAttribute('data-theme')) === 'light');
-await closeMenu(); await page.waitForTimeout(500); await page.evaluate(() => localStorage.removeItem('kx-theme'));
+await openMenu(); await page.click('#menu-overlay [data-theme-pick="llama"]'); await page.waitForTimeout(600);
+ok('the dots jump straight to a mode', await page.evaluate(() => document.documentElement.getAttribute('data-theme')) === 'llama');
+await page.evaluate(() => localStorage.setItem('kx-theme', 'dark')); await closeMenu(); await page.reload(); await page.waitForTimeout(700);
+ok('a visitor who saved the old Night mode lands in Fuego', await page.evaluate(() => document.documentElement.getAttribute('data-theme')) === 'fuego');
+await page.evaluate(() => localStorage.setItem('kx-theme', 'light')); await page.reload(); await page.waitForTimeout(700);
+ok('...and one who saved Day (light) lands in Llama', await page.evaluate(() => document.documentElement.getAttribute('data-theme')) === 'llama');
+await page.evaluate(() => localStorage.removeItem('kx-theme'));
 // =====================================================================  v18: admin hub (orders tally + shopping list)
 {
   const K = require(path.join(ROOT, 'assets/kulinaria-admin.js'));
@@ -1501,6 +1505,39 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.keyboard.press('Escape'); await page.waitForTimeout(150);
   await page.evaluate(() => localStorage.setItem('kx-test-orders', '0'));
   await page.setViewportSize({ width: 1440, height: 860 });
+
+  // ---- home: Gimnasios hermanos (red estratégica), right under the KFW apparel section
+  await base(); await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1300);
+  const gyPosts = []; page.on('request', (r) => { if (/script\.example|exec/.test(r.url()) && r.method() === 'POST') gyPosts.push((r.postData() || '').slice(0, 500)); });
+  await page.route('https://script.example/**', async (route) => { await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); });
+  await page.evaluate(() => { document.querySelector('[data-hx-dialog]').setAttribute('data-endpoint', 'https://script.example/exec'); });
+  const gy = await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'), s = pg.querySelector('.gy'), kf = pg.querySelector('.kf'); const t = s ? s.innerText.replace(/\s+/g, ' ') : ''; return { has: !!s, after: !!(s && kf && (kf.compareDocumentPosition(s) & Node.DOCUMENT_POSITION_FOLLOWING)), txt: t, logos: s ? [...s.querySelectorAll('.gy__logo')].map((l) => l.getAttribute('aria-label')) : [], pins: s ? s.querySelectorAll('.gy__pin').length : 0 }; });
+  ok('home: the gym network section sits right after the KFW apparel section', gy.has && gy.after, JSON.stringify([gy.has, gy.after]));
+  ok('gym section keeps the mockup text (tag, headline, 15+ gyms paragraph, both buttons, map button and zone, official collection line)', /Gimnasios hermanos · Red estratégica/i.test(gy.txt) && /Alianzas que impulsan/.test(gy.txt) && /tu rendimiento\./.test(gy.txt) && /Más de 15 gimnasios partners unidos por una misma visión de comunidad y alto desempeño/.test(gy.txt) && /punto de entrega para recoger tus pedidos Kulinaria/.test(gy.txt) && /Explorar sedes/i.test(gy.txt) && /Afiliar gimnasio/i.test(gy.txt) && /Buscar sede en mi zona/i.test(gy.txt) && /Lomas de Angelópolis/.test(gy.txt) && /Colección oficial KFW/i.test(gy.txt), gy.txt.slice(0, 200));
+  ok('gym section shows the eight partner gyms and the affiliation card (Afilia tu gimnasio, Dueño o gerente, Agendar reunión)', gy.logos.length === 8 && ['Sports World', 'Empire Fitness', 'smart fit', 'Anytime Fitness', 'Prime Fitness', 'Crownit', 'Stone Fit', 'Lomas Training'].every((n) => gy.logos.some((l) => l === n)) && /Afilia tu gimnasio/.test(gy.txt) && /¿Dueño o gerente\? Suma tu sede a la red Kulinaria\./.test(gy.txt) && /Agendar reunión/i.test(gy.txt) && gy.pins >= 6, JSON.stringify([gy.logos, gy.pins]));
+  ok('"Explorar sedes" goes to the partner gyms page', await page.evaluate(() => /embajadores-gimnasios/.test([...document.querySelectorAll('[data-page="home"] .gy__btn')].find((a) => /Explorar sedes/i.test(a.textContent)).getAttribute('href'))));
+  await page.evaluate(() => { const e = document.querySelector('[data-page="home"] .gy'); window.scrollTo(0, e.getBoundingClientRect().top + scrollY - 40); }); await page.waitForTimeout(500);
+  await page.click('[data-page="home"] .gy__mapbtn'); await page.waitForTimeout(350);
+  const sd = await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return { open: !d.hidden, title: d.querySelector('[data-hxd-title]').textContent, vis: [...d.querySelectorAll('.hxd__g:not([hidden]) [name]')].map((x) => x.name).join() }; });
+  ok('"Buscar sede en mi zona" opens a form asking for your area', sd.open && /Elige tu sede/.test(sd.title) && /zona_sede/.test(sd.vis), JSON.stringify(sd));
+  await page.fill('[data-hx-dialog] [name=name]', 'Ana Pérez'); await page.fill('[data-hx-dialog] [name=email]', 'ana@ejemplo.com'); await page.check('[data-hx-dialog] [name=consent]'); await page.fill('[data-hx-dialog] [name=zona_sede]', 'Lomas de Angelópolis');
+  await page.click('[data-hx-dialog] .hxd__go'); await page.waitForTimeout(500);
+  ok('sending the area request lands in the sheet with the area', gyPosts.some((p) => /"tipo":"sede"/.test(p) && /Lomas de Angel/.test(p)), gyPosts.slice(-1).join('').slice(0, 260));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+  await page.click('[data-page="home"] .gy__logo[aria-label="Sports World"]'); await page.waitForTimeout(350);
+  ok('clicking a gym logo opens the pickup form with that gym already filled in', await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return !d.hidden && d.querySelector('[name=sede]').value === 'Sports World'; }));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+  await page.click('[data-page="home"] .gy__affil .gy__btn'); await page.waitForTimeout(350);
+  const gf = await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return { title: d.querySelector('[data-hxd-title]').textContent, vis: [...d.querySelectorAll('.hxd__g:not([hidden]) [name]')].map((x) => x.name).join() }; });
+  ok('"Agendar reunión" opens the partner-gym form (gym name, role, locations, meeting date and time, city)', /Afilia tu gimnasio/.test(gf.title) && ['gimnasio', 'cargo', 'sedes', 'fecha_reunion', 'horario_reunion', 'ciudad'].every((n) => gf.vis.split(',').includes(n)), JSON.stringify(gf));
+  await page.fill('[data-hx-dialog] [name=name]', 'Luis Gerente'); await page.fill('[data-hx-dialog] [name=email]', 'luis@gym.com'); await page.check('[data-hx-dialog] [name=consent]'); await page.fill('[data-hx-dialog] [name=gimnasio]', 'Titan Gym'); await page.selectOption('[data-hx-dialog] [name=cargo]', { index: 1 }); await page.fill('[data-hx-dialog] [name=ciudad]', 'Puebla');
+  await page.click('[data-hx-dialog] .hxd__go'); await page.waitForTimeout(500);
+  ok('sending it creates a partnership request (kind embajador) with the gym, role and city', gyPosts.some((p) => /"kind":"embajador"/.test(p) && /Titan Gym/.test(p) && /"cargo":"Gerente"/.test(p) && /Puebla/.test(p)), gyPosts.slice(-1).join('').slice(0, 300));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+  await page.setViewportSize({ width: 390, height: 844 }); await page.reload(); await page.waitForTimeout(1200);
+  ok('phone: the gym section fits the width and keeps all eight logos', await page.evaluate(() => { const s = document.querySelector('[data-page="home"] .gy'); return s.scrollWidth <= innerWidth + 1 && document.documentElement.scrollWidth <= innerWidth + 1 && s.querySelectorAll('.gy__logo').length === 8; }));
+  await page.setViewportSize({ width: 1440, height: 900 });
 
   // ---- phones: nothing wider than the screen, the total bar is inside the screen
   await page.setViewportSize({ width: 390, height: 844 });

@@ -772,6 +772,105 @@
         "k2",
         "k3"
       ]
+    },
+    "gyms": {
+      "type": "gyms-network",
+      "settings": {
+        "tag": "Gimnasios hermanos · Red estratégica",
+        "heading": "Alianzas que impulsan",
+        "heading_em": "tu rendimiento.",
+        "text": "Más de 15 gimnasios partners unidos por una misma visión de comunidad y alto desempeño. Además de nuestro servicio a domicilio, puedes elegir cualquiera de estas sedes como punto de entrega para recoger tus pedidos Kulinaria.",
+        "btn1_label": "Explorar sedes",
+        "btn1_link": "/pages/embajadores-gimnasios",
+        "btn2_label": "Afiliar gimnasio",
+        "btn2_link": "dialog:gimnasio~Afiliar gimnasio",
+        "map_button": "Buscar sede en mi zona",
+        "map_link": "dialog:sede~",
+        "zone": "Lomas de Angelópolis",
+        "logos_title": "Colección oficial KFW",
+        "affil_tag": "Afilia tu gimnasio",
+        "affil_title": "Afilia tu gimnasio",
+        "affil_text": "¿Dueño o gerente? Suma tu sede a la red Kulinaria.",
+        "affil_btn": "Agendar reunión",
+        "affil_link": "dialog:gimnasio~Agendar reunión"
+      },
+      "blocks": {
+        "g0": {
+          "type": "gym",
+          "settings": {
+            "name": "Sports|World",
+            "style": "stack",
+            "glyph": "ring"
+          }
+        },
+        "g1": {
+          "type": "gym",
+          "settings": {
+            "name": "Empire|Fitness",
+            "style": "stack",
+            "glyph": "shield"
+          }
+        },
+        "g2": {
+          "type": "gym",
+          "settings": {
+            "name": "smart|fit",
+            "style": "lower",
+            "glyph": "none"
+          }
+        },
+        "g3": {
+          "type": "gym",
+          "settings": {
+            "name": "Anytime|Fitness",
+            "style": "stack",
+            "glyph": "bolt"
+          }
+        },
+        "g4": {
+          "type": "gym",
+          "settings": {
+            "name": "Prime|Fitness",
+            "style": "italic",
+            "glyph": "p"
+          }
+        },
+        "g5": {
+          "type": "gym",
+          "settings": {
+            "name": "Crownit",
+            "style": "crown",
+            "glyph": "crown",
+            "sub": "Fitness Club"
+          }
+        },
+        "g6": {
+          "type": "gym",
+          "settings": {
+            "name": "Stone Fit",
+            "style": "plain",
+            "glyph": "none"
+          }
+        },
+        "g7": {
+          "type": "gym",
+          "settings": {
+            "name": "Lomas|Training",
+            "style": "stack",
+            "glyph": "none"
+          }
+        }
+      },
+      "block_order": [
+        "g0",
+        "g1",
+        "g2",
+        "g3",
+        "g4",
+        "g5",
+        "g6",
+        "g7"
+      ]
     }
   },
   "order": [
@@ -781,6 +880,7 @@
     "funnel",
     "trainers",
     "kfw",
+    "gyms",
     "band",
     "tiers",
     "chef",

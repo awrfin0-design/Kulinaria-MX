@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#EEE6DA">
     <script>
-      /* Runs before first paint: theme (Fuego by default; Day / Night / Fuego; remembers the visitor's choice), loader (once per session) and the motion failsafe. */
+      /* Runs before first paint: theme (Fuego by default; Fuego / Llama; remembers the visitor's choice), loader (once per session) and the motion failsafe. */
       (function () {
         var d = document.documentElement, theme = 'fuego', seen = false;
         try { theme = localStorage.getItem('kx-theme') || 'fuego'; seen = !!sessionStorage.getItem('kx-seen'); } catch (e) {}
-        d.setAttribute('data-theme', theme === 'dark' || theme === 'fuego' ? theme : 'light');
+        d.setAttribute('data-theme', theme === 'llama' || theme === 'light' ? 'llama' : 'fuego');
         d.className += ' js' + (seen ? ' is-loaded' : ' has-loader');
         setTimeout(function () { d.classList.add('is-loaded'); }, 4500);
         setTimeout(function () { if (!d.classList.contains('motion-ready')) d.classList.add('no-motion'); }, 6000);
@@ -90,6 +90,7 @@
       </div>
     </div>
 
+    <canvas class="bg-wave" data-wave aria-hidden="true"></canvas>
     <div class="bg-fx" aria-hidden="true"><canvas data-particles></canvas></div>
 
     {% sections 'header-group' %}

@@ -185,7 +185,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .nav-toggle{display:none}
 .theme-toggle svg{position:absolute;inset:10px;width:22px;height:22px;transition:rotate .7s var(--ease),opacity .4s,scale .6s var(--ease)}
 .theme-toggle{width:42px;height:42px;padding:0}
-:root[data-theme="light"] .theme-toggle svg:first-of-type{opacity:0;rotate:-90deg;scale:.4}
+:root[data-theme="llama"] .theme-toggle svg:first-of-type{opacity:0;rotate:-90deg;scale:.4}
 :root:is([data-theme="dark"],[data-theme="fuego"]) .theme-toggle svg:last-of-type{opacity:0;rotate:90deg;scale:.4}
 .lang__group{display:inline-flex;padding:3px;border:1px solid var(--line);border-radius:999px;margin-right:4px}
 .lang__btn{font-family:var(--font-label);font-size:.78rem;font-weight:700;letter-spacing:.12em;padding:7px 11px;border-radius:999px;background:none;border:0;color:var(--text-muted);cursor:pointer;transition:background .4s,color .4s}
@@ -1882,12 +1882,12 @@ a.lang__btn{display:inline-block;text-decoration:none}
 .tc__stage{position:relative;width:104px;height:38px;overflow:hidden;touch-action:pan-y;user-select:none}
 .tc__name{position:absolute;inset:0 0 9px 0;display:flex;align-items:center;justify-content:center;gap:6px;font-family:var(--font-label);font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:0;transition:opacity .35s,transform .5s var(--ease)}
 .tc__name svg{width:15px;height:15px;position:static;inset:auto;transform:none;opacity:1}
-:root[data-theme="light"] .tc__name--light,:root[data-theme="dark"] .tc__name--dark,:root[data-theme="fuego"] .tc__name--fuego{opacity:1;transform:none}
-:root[data-theme="light"] .tc__name--dark,:root[data-theme="light"] .tc__name--fuego,:root[data-theme="dark"] .tc__name--fuego{transform:translateX(28px)}
-:root[data-theme="dark"] .tc__name--light,:root[data-theme="fuego"] .tc__name--light,:root[data-theme="fuego"] .tc__name--dark{transform:translateX(-28px)}
+:root[data-theme="llama"] .tc__name--llama,:root[data-theme="fuego"] .tc__name--fuego{opacity:1;transform:none}
+:root[data-theme="llama"] .tc__name--fuego{transform:translateX(28px)}
+:root[data-theme="fuego"] .tc__name--llama{transform:translateX(-28px)}
 .tc__dots{position:absolute;left:50%;bottom:0;transform:translateX(-50%);display:flex;gap:0}
 .tc__dots i{display:block;box-sizing:content-box;width:5px;height:5px;padding:4px 3px;border-radius:5px;background:var(--line);background-clip:content-box;cursor:pointer;transition:width .3s,background .3s}
-:root[data-theme="light"] .tc__dots i[data-theme-pick="light"],:root[data-theme="dark"] .tc__dots i[data-theme-pick="dark"],:root[data-theme="fuego"] .tc__dots i[data-theme-pick="fuego"]{width:14px;background:var(--accent);background-clip:content-box}
+:root[data-theme="llama"] .tc__dots i[data-theme-pick="llama"],:root[data-theme="fuego"] .tc__dots i[data-theme-pick="fuego"]{width:14px;background:var(--accent);background-clip:content-box}
 
 /* ---------- Fuego ---------- */
 :root[data-theme="fuego"],:root[data-theme="fuego"] .tone-dark{
@@ -1942,8 +1942,8 @@ a.lang__btn{display:inline-block;text-decoration:none}
 .hero--intro .hero__toggle{bottom:28px}
 .hero--intro .arrow-link,.hero--intro .text-link{color:#F5F5F5}
 /* the header floats over the black hero: keep it light until it turns solid */
-:root[data-theme="light"] body:has(.hero--intro) .site-header:not(.is-stuck){--text:#F5F5F5;--text-muted:#D6D6D6;--line:rgba(255,255,255,.3)}
-:root[data-theme="light"] body:has(.hero--intro) .site-header:not(.is-stuck) .logo--ink{filter:brightness(0) invert(1)}
+:root[data-theme="llama"] body:has(.hero--intro) .site-header:not(.is-stuck){--text:#F5F5F5;--text-muted:#D6D6D6;--line:rgba(255,255,255,.3)}
+:root[data-theme="llama"] body:has(.hero--intro) .site-header:not(.is-stuck) .logo--ink{filter:brightness(0) invert(1)}
 /* tiers with the old hero film behind */
 .tiers--video{position:relative;overflow:hidden;isolation:isolate;background:#0a0a0a}
 .tiers__bg{position:absolute;inset:0;z-index:-1}
@@ -4717,3 +4717,108 @@ html.hx-dlg-open{overflow:hidden}
 .hx__bcopy .hx__btn{justify-self:center}
 .hero--intro .hero__cubebox{transition:height .45s ease}
 @media (prefers-reduced-motion:reduce){.hero--intro .hero__cubebox{transition:none}}
+
+/* v146: LLAMA = the white + orange mode (replaces Day and Night). FUEGO stays black + orange. */
+:root[data-theme="llama"]{
+  color-scheme:light;
+  --gold:#FF6200; --gold-hi:#FF8A3D; --gold-lo:#D94F00; --on-gold:#FFFFFF; --gold-rgb:255,98,0; --gold-lo-rgb:224,84,0;
+  --bg-base:#FFFFFF; --bg-raised:#FFFFFF; --bg-deep:#FFF3EA; --tint:rgba(255,98,0,.05);
+  --text:#151515; --text-muted:#5B5B5B; --text-accent:#C2410C;
+  --accent:#FF6200; --accent-hi:#D94F00; --accent-lo:#FF8A3D; --ring:rgba(255,98,0,.5); --accent-wash:rgba(255,98,0,.1);
+  --brand:#FF6200; --brand-grad:linear-gradient(120deg,#E05400,#FF6200 50%,#FF8A3D);
+  --brand-foil:linear-gradient(120deg,#C94A00 0%,#FF8A3D 30%,#FF6200 55%,#FFB070 80%,#E05400 100%); --on-brand:#FFFFFF;
+  --border:rgba(21,21,21,.14); --line:rgba(21,21,21,.14); --border-accent:rgba(255,98,0,.5);
+  --panel:rgba(255,255,255,.75); --panel-2:rgba(255,255,255,.95); --glass:rgba(255,255,255,.9);
+  --text-foil:var(--brand-foil); --reserve-bg:linear-gradient(90deg,rgba(255,98,0,.12),transparent 70%);
+  --shadow-card:0 28px 56px -28px rgba(255,98,0,.35),0 8px 24px -16px rgba(0,0,0,.18); --arch:#FF6200;
+  --font-display:"Playfair Display",Georgia,serif; --font-heading:"Playfair Display",Georgia,serif;
+  --font-body:"Montserrat",system-ui,sans-serif; --font-label:"Montserrat",system-ui,sans-serif;
+}
+/* the always-dark blocks (footer, dark bands, hero) are black + orange in Llama, like Fuego */
+:root[data-theme="llama"] .tone-dark{
+  color-scheme:dark;
+  --bg-base:#0E0E0E; --bg-raised:#1A1A1A; --bg-deep:#080808; --tint:rgba(255,255,255,.04);
+  --text:#F5F5F5; --text-muted:#B8B8B8; --text-accent:#FF8A3D;
+  --accent:#FF6200; --accent-hi:#FF8A3D; --accent-lo:#E05400; --ring:rgba(255,98,0,.5); --accent-wash:rgba(255,98,0,.14);
+  --brand:#FF6200; --brand-grad:linear-gradient(120deg,#E05400,#FF6200 50%,#FF8A3D); --on-brand:#FFFFFF;
+  --border:rgba(245,245,245,.14); --line:rgba(245,245,245,.14); --border-accent:rgba(255,98,0,.55);
+  --panel:rgba(255,255,255,.05); --panel-2:rgba(255,255,255,.09); --glass:rgba(14,14,14,.9);
+  --shadow-card:0 30px 60px -20px rgba(0,0,0,.7); color:var(--text);
+}
+:root[data-theme="llama"] body{font-size:16.5px;line-height:1.7}
+:root[data-theme="llama"] h1,:root[data-theme="llama"] h2{font-weight:500;letter-spacing:-.01em}
+:root[data-theme="llama"] h3,:root[data-theme="llama"] h4{font-weight:600}
+:root[data-theme="llama"] :is(h1,h2,h3) em,:root[data-theme="llama"] .hero__copy h1 em,:root[data-theme="llama"] .page-head h1 em,:root[data-theme="llama"] .tagline{font-style:italic;font-weight:500}
+:root[data-theme="llama"] :is(h1,h2) em{color:var(--accent)}
+:root[data-theme="llama"] :is(.eyebrow,.btn,.chip,.tier-badge,.arrow-link,.text-link,.label){font-weight:600}
+:root[data-theme="llama"] .eyebrow{letter-spacing:.18em}
+:root[data-theme="llama"] ::selection{background:#FF6200;color:#fff}
+:root[data-theme="llama"] .tone-dark :is(h1,h2) em{color:#FF8A3D}
+:root[data-theme="llama"] .logo--gold,:root[data-theme="llama"] .logo--cream{display:none}
+/* on white pages the solid buttons are orange with white text */
+:root[data-theme="llama"] .btn--gold,:root[data-theme="llama"] .btn--primary{background:var(--brand-grad);color:#fff}
+:root[data-theme="llama"] .tone-dark .logo--ink{display:none}
+:root[data-theme="llama"] .tone-dark .logo--fuego{display:block}
+
+/* v147: Gimnasios hermanos (red estratégica) */
+.gy{padding-block:clamp(36px,6vw,80px)}
+.gy__top{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(18px,3.4vw,52px);align-items:center;padding:clamp(22px,3.6vw,52px);border-radius:28px;background:radial-gradient(120% 140% at 0% 0%,#2a1a10 0%,#121212 55%,#0b0b0b 100%);color:#f5f5f5;border:1px solid rgba(255,98,0,.28);overflow:hidden}
+.gy__top::before{content:"";position:absolute;left:-120px;bottom:-140px;width:420px;height:420px;background:radial-gradient(closest-side,rgba(255,98,0,.38),transparent);pointer-events:none}
+.gy__copy{position:relative;display:grid;gap:clamp(10px,1.6vw,18px);justify-items:start}
+.gy__tag{display:inline-block;padding:8px 16px;border:1px solid rgba(255,98,0,.7);border-radius:999px;font:600 .7rem var(--font-label);letter-spacing:.14em;text-transform:uppercase;color:#ffb47a}
+.gy__h{margin:0;font:500 clamp(1.9rem,3.6vw,3.1rem)/1.06 var(--font-display);letter-spacing:-.015em;color:#fff}
+.gy__h em{display:block;font-style:normal;font-weight:700;color:#ff6200}
+.gy__p{margin:0;max-width:34rem;font-size:clamp(.9rem,1.2vw,1.02rem);line-height:1.6;color:rgba(245,245,245,.86)}
+.gy__cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
+.gy__btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 26px;border-radius:999px;font:700 .78rem var(--font-label);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:transform .25s var(--ease),box-shadow .25s}
+.gy__btn:hover{transform:translateY(-2px)}
+.gy__btn--solid{background:linear-gradient(120deg,#e05400,#ff6200 55%,#ff8a3d);color:#fff;box-shadow:0 10px 26px -10px rgba(255,98,0,.7)}
+.gy__btn--line{border:1.5px solid rgba(255,255,255,.7);color:#fff;background:rgba(0,0,0,.25)}
+.gy__map{position:relative;min-height:clamp(240px,30vw,340px);border-radius:20px;background:#161616;border:1px solid rgba(255,255,255,.18);box-shadow:0 20px 50px -20px rgba(0,0,0,.8);overflow:hidden;color:#fff}
+.gy__streets{position:absolute;inset:0;width:100%;height:100%;color:#3a3a3a}
+.gy__pin{position:absolute;width:clamp(20px,2.4vw,28px);transform:translate(-50%,-100%);transition:transform .25s var(--ease);color:#ff6200}
+.gy__pin svg{display:block;width:100%;height:auto;fill:#ff6200}.gy__pin circle{fill:#161616}
+.gy__pin:hover{transform:translate(-50%,-112%) scale(1.15)}
+.gy__mapbtn{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);padding:clamp(11px,1.6vw,16px) clamp(18px,2.6vw,34px);border-radius:999px;background:linear-gradient(120deg,#ff7a1a,#ff6200);color:#fff;font:700 clamp(.78rem,1.2vw,1rem) var(--font-label);letter-spacing:.04em;text-decoration:none;white-space:nowrap;box-shadow:0 14px 34px -10px rgba(255,98,0,.8)}
+.gy__zone{position:absolute;left:50%;top:66%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.45);font:500 .82rem var(--font-body);color:#fff;white-space:nowrap}
+.gy__label{display:flex;align-items:center;gap:18px;margin:clamp(22px,3.4vw,40px) 0 18px;font:700 clamp(.8rem,1.4vw,1.05rem) var(--font-label);letter-spacing:.36em;text-transform:uppercase;color:var(--text)}
+.gy__label::before,.gy__label::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--accent))}.gy__label::after{background:linear-gradient(270deg,transparent,var(--accent))}
+.gy__label span{white-space:nowrap}
+.gy__grid{display:grid;grid-template-columns:minmax(0,3.2fr) minmax(0,1fr);gap:clamp(12px,1.6vw,20px);align-items:stretch}
+.gy__logos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1.2vw,14px)}
+.gy__logos li{display:flex}
+.gy__logo{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;min-height:clamp(74px,8vw,104px);padding:12px;border-radius:16px;background:#0e0e0e;border:1px solid rgba(255,255,255,.1);box-shadow:0 12px 30px -16px rgba(0,0,0,.6);color:#fff;text-decoration:none;text-align:left;transition:transform .25s var(--ease),border-color .25s}
+.gy__logo:hover{transform:translateY(-3px);border-color:#ff6200}
+.gy__logo img{max-width:80%;max-height:56px;object-fit:contain;filter:brightness(0) invert(1)}
+.gy__glyph{flex:none;width:clamp(26px,3vw,38px);height:auto}.gy__glyph--top{position:absolute;margin-top:-34px;width:30px}
+.gy__wm{display:grid;line-height:1;text-transform:uppercase;font-family:var(--font-label)}
+.gy__wm b{font-weight:800;letter-spacing:.02em;font-size:clamp(.9rem,1.7vw,1.35rem)}
+.gy__wm small{margin-top:4px;font-size:.5rem;letter-spacing:.2em;font-weight:600}
+.gy__logo--plain .gy__wm b{font-size:clamp(1.1rem,2.2vw,1.7rem)}
+.gy__logo--italic .gy__wm b{font-style:italic;font-weight:900}
+.gy__logo--lower .gy__wm{text-transform:lowercase}.gy__logo--lower .gy__wm b{font-weight:500;font-size:clamp(1.1rem,2.2vw,1.7rem)}.gy__logo--lower .gy__wm b+b{font-weight:800}
+.gy__logo--lower .gy__wm{display:flex;gap:2px;align-items:baseline}
+.gy__logo--crown{flex-direction:column;gap:6px;position:relative;padding-top:20px;text-align:center}
+.gy__logo--crown .gy__wm{text-align:center;justify-items:center}.gy__logo--crown .gy__wm b{font-weight:600;letter-spacing:.08em;font-size:clamp(1rem,1.9vw,1.5rem)}
+.gy__logo--crown .gy__glyph--top{position:static;margin:0;width:28px}
+.gy__affil{display:grid;align-content:center;justify-items:center;gap:12px;padding:clamp(16px,2vw,26px);border-radius:20px;text-align:center;background:linear-gradient(160deg,#1c1c1c,#0b0b0b);border:1px solid rgba(255,98,0,.55);box-shadow:0 18px 40px -20px rgba(255,98,0,.5);color:#fff}
+.gy__atag{padding:7px 16px;border:1px solid rgba(255,98,0,.8);border-radius:999px;font:600 .66rem var(--font-label);letter-spacing:.12em;text-transform:uppercase;color:#ffb47a}
+.gy__ah{margin:0;font-size:clamp(.86rem,1.15vw,1rem);line-height:1.5;color:rgba(255,255,255,.92)}.gy__ah strong{display:block;font-size:1.05em;color:#fff}
+@media (max-width:900px){
+  .gy__top{grid-template-columns:1fr}
+  .gy__grid{grid-template-columns:1fr}
+  .gy__logos{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .gy__label{letter-spacing:.2em}
+}
+
+/* v148: the flowing wave behind the page (Fuego: black + orange, Llama: white + orange) */
+.bg-wave{position:fixed;inset:0;width:100%;height:100%;z-index:-2;pointer-events:none;display:block;background:var(--bg-base)}
+html.has-wave body{background:transparent}
+html.has-wave{background:var(--bg-base)}
+html.has-wave .bg-fx{background:transparent}
+@media print{.bg-wave{display:none}}
+/* v149: Llama: over a bright photo header the logo keeps its orange K and DARK letters; menu icons and the top bar are dark too */
+:root[data-theme="llama"] :is(body:has(.page-head),body:has(.hero:not(.hero--intro))) .site-header:not(.is-stuck){--text:#151515;--text-muted:#3b3b3b;--line:rgba(21,21,21,.22);color:#151515}
+:root[data-theme="llama"] :is(body:has(.page-head),body:has(.hero:not(.hero--intro))) .site-header:not(.is-stuck) .logo{filter:none}
+:root[data-theme="llama"] :is(body:has(.page-head),body:has(.hero:not(.hero--intro))) .site-header:not(.is-stuck) :is(.icon-link,.burger){color:#151515}
+:root[data-theme="llama"] :is(body:has(.page-head),body:has(.hero:not(.hero--intro))) .site-header:not(.is-stuck) .burger span{background:#151515}

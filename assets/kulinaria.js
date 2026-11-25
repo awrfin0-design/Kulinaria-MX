@@ -1036,7 +1036,7 @@
     var dlg = $('[data-hx-dialog]'); if (!dlg) return;
     var form = $('[data-hxd-form]', dlg), okBox = $('[data-hxd-ok]', dlg), title = $('[data-hxd-title]', dlg), chip = $('[data-hxd-chip]', dlg), sub = $('[data-hxd-sub]', dlg), err = $('[data-hxd-err]', dlg), go = $('[data-hxd-go]', dlg);
     var kind = '', what = '', member = false, code = '';
-    var LEAD = { evento: 'carta' };
+    var LEAD = { evento: 'carta', gimnasio: 'embajador' };
     var show = function (on) { dlg.hidden = !on; document.documentElement.classList.toggle('hx-dlg-open', on); document.dispatchEvent(new CustomEvent('kx:hxdlg')); if (on) { var f = $('[name=name]', dlg); if (f) setTimeout(function () { f.focus(); }, 30); } };
     var pick = function (name, text) { var s = $('select[name="' + name + '"]', dlg); if (!s || !text) return; var t = norm(text); for (var i = 0; i < s.options.length; i++) { var o = norm(s.options[i].text); if (o && (o.indexOf(t) === 0 || t.indexOf(o) === 0)) { s.selectedIndex = i; return; } } };
     var couponCode = function () { var a = acct(), c = a ? parseInt(a.cid, 10) : 0; return 'KMAG-' + ((c || 0) ? c.toString(36).toUpperCase().slice(-5) : 'XXXXX'); };
@@ -1073,6 +1073,7 @@
       if (chip) { chip.textContent = what; chip.hidden = !what; }
       $$('[data-min-today]', dlg).forEach(function (i) { i.min = mxIso(new Date()); });
       if (cal) { var nw = new Date(); calY = nw.getFullYear(); calM = nw.getMonth(); calIn.value = ''; if (calPick) calPick.textContent = dlg.getAttribute('data-t-pick') || ''; drawCal(); }
+      if (kind === 'sede') { var sd = $('[name=sede]', dlg); if (sd) sd.value = what; }
       if (kind === 'consulta') pick('objetivo', what); if (kind === 'evento') pick('tipo_evento', what); if (kind === 'entrenador') { var s = $('select[name=entrenador]', dlg); if (s) s.value = what; }
       var cp = kind === 'cupon', cpBox = $('[data-hxd-coupon]', dlg), cpLock = $('[data-hxd-couponlock]', dlg);
       var apply = function () {
@@ -2344,11 +2345,11 @@
     setTimeout(finish, MAX);
   }
 
-  var THEMES = ['light', 'dark', 'fuego'], THEME_COLOR = { light: '#F5F4EC', dark: '#0D0C0A', fuego: '#0E0E0E' };
+  var THEMES = ['fuego', 'llama'], THEME_COLOR = { llama: '#FFFFFF', fuego: '#0E0E0E' };
   function paintTheme(t) {
     root.setAttribute('data-theme', t);
     $$('[data-theme-pick]').forEach(function (d) { d.classList.toggle('on', d.getAttribute('data-theme-pick') === t); });
-    var meta = $('meta[name="theme-color"]'); if (meta) meta.setAttribute('content', THEME_COLOR[t] || THEME_COLOR.light);
+    var meta = $('meta[name="theme-color"]'); if (meta) meta.setAttribute('content', THEME_COLOR[t] || THEME_COLOR.fuego);
     document.dispatchEvent(new CustomEvent('kx:theme', { detail: t }));
   }
   function setTheme(t, persist) {
@@ -2380,11 +2381,65 @@
     });
   }
 
+  // slow flowing waves of light behind everything: black <-> orange (Fuego) and white <-> orange (Llama). WebGL, low resolution, ~30 fps, paused when hidden.
+  function initWave() {
+    var cv = $('[data-wave]'); if (!cv) return;
+    var gl = null; try { gl = cv.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' }) || cv.getContext('experimental-webgl'); } catch (e) {}
+    if (!gl) return;
+    var vs = 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
+    var fs = 'precision mediump float;uniform vec2 R;uniform float T;uniform vec3 A;uniform vec3 B;uniform vec3 C;uniform float K;' +
+      'void main(){vec2 p=gl_FragCoord.xy/R.y;float t=T*.11;vec2 q=p*1.25;' +
+      'for(int i=1;i<4;i++){float f=float(i);q+=vec2(.55/f*sin(f*q.y*1.7+t*1.3+f),.55/f*cos(f*q.x*1.5-t+f*1.7));}' +
+      'float w=.5+.5*sin(q.x*1.6+q.y*1.1+t);' +
+      'float bands=.5+.5*sin((q.x+q.y)*8.0-t*2.0);' +
+      'float g=smoothstep(.12,.95,w);' +
+      'vec3 col=mix(A,B,g*K);col=mix(col,C,smoothstep(.7,1.,w)*K*.6);col+=(B-A)*bands*.03*K*g;' +
+      'gl_FragColor=vec4(col,1.);}';
+    var sh = function (type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null; };
+    var v = sh(gl.VERTEX_SHADER, vs), f = sh(gl.FRAGMENT_SHADER, fs); if (!v || !f) return;
+    var pr = gl.createProgram(); gl.attachShader(pr, v); gl.attachShader(pr, f); gl.linkProgram(pr); if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return;
+    gl.useProgram(pr);
+    var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    var loc = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    var uR = gl.getUniformLocation(pr, 'R'), uT = gl.getUniformLocation(pr, 'T'), uA = gl.getUniformLocation(pr, 'A'), uB = gl.getUniformLocation(pr, 'B'), uC = gl.getUniformLocation(pr, 'C'), uK = gl.getUniformLocation(pr, 'K');
+    var PAL = {
+      fuego: { a: [.055, .055, .055], b: [1, .384, 0], c: [1, .54, .24], k: .24 },
+      llama: { a: [1, 1, 1], b: [1, .86, .74], c: [1, .5, .16], k: .55 }
+    };
+    var cur = null, tgt = PAL.fuego, last = 0, t0 = performance.now(), raf = 0, running = false;
+    var pal = function () { return PAL[root.getAttribute('data-theme')] || PAL.fuego; };
+    var mix = function (x, y, k) { return x + (y - x) * k; };
+    var fade = function () { if (!cur) { cur = { a: tgt.a.slice(), b: tgt.b.slice(), c: tgt.c.slice(), k: tgt.k }; return; } for (var i = 0; i < 3; i++) { cur.a[i] = mix(cur.a[i], tgt.a[i], .08); cur.b[i] = mix(cur.b[i], tgt.b[i], .08); cur.c[i] = mix(cur.c[i], tgt.c[i], .08); } cur.k = mix(cur.k, tgt.k, .08); };
+    var size = function () {
+      var sc = window.innerWidth < 761 ? 0.3 : 0.34, w = Math.max(160, Math.round(window.innerWidth * sc)), h = Math.max(120, Math.round(window.innerHeight * sc));
+      if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
+    };
+    var draw = function (now) {
+      tgt = pal(); fade(); size();
+      gl.uniform2f(uR, cv.width, cv.height); gl.uniform1f(uT, REDUCE ? 4 : (now - t0) / 1000);
+      gl.uniform3fv(uA, cur.a); gl.uniform3fv(uB, cur.b); gl.uniform3fv(uC, cur.c); gl.uniform1f(uK, cur.k);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    };
+    var loop = function (now) {
+      raf = 0; if (!running) return;
+      if (now - last > 33) { last = now; draw(now); }
+      raf = requestAnimationFrame(loop);
+    };
+    var start = function () { if (running || REDUCE) return; running = true; raf = requestAnimationFrame(loop); };
+    var stop = function () { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; };
+    document.documentElement.classList.add('has-wave');
+    draw(performance.now()); draw(performance.now());
+    window.addEventListener('resize', function () { draw(performance.now()); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
+    document.addEventListener('kx:theme', function () { if (REDUCE) { for (var i = 0; i < 12; i++) draw(performance.now()); } });
+    start();
+  }
+
   // gold dust drifting over the wood background
   function initParticles() {
     var c = $('[data-particles]'); if (!c || !c.getContext) return;
     var ctx = c.getContext('2d'), W = 0, H = 0, dpr = Math.min(2, window.devicePixelRatio || 1), ps = [], mx = -999, my = -999, running = false;
-    var dark = function () { var t = root.getAttribute('data-theme'); return t === 'dark' || t === 'fuego'; };
+    var dark = function () { return root.getAttribute('data-theme') === 'fuego'; };
     var size = function () { W = c.clientWidth; H = c.clientHeight; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); };
     var make = function (fresh) { return { x: Math.random() * W, y: fresh ? Math.random() * H : H + 20, r: 0.7 + Math.random() * 2.1, vy: 0.12 + Math.random() * 0.4, ph: Math.random() * 6.28, a: 0.25 + Math.random() * 0.6 }; };
     var N = function () { return Math.max(18, Math.min(72, Math.round(window.innerWidth / 24))); };
@@ -2716,7 +2771,7 @@
   // each init runs on its own: one failing module must never stop the others (e.g. the logo wordmark)
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
-    [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile, initDietGate,
+    [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initWave, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile, initDietGate,
       initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initHeroDialog, initCircle, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
