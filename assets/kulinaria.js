@@ -983,10 +983,17 @@
       var fl = $('[data-dd-flag]', content);
       if (fl) { if (rep.length) { fl.hidden = false; fl.className = 'dd__flag is-hard'; fl.textContent = reportText(rep); } else if (soft.length) { fl.hidden = false; fl.className = 'dd__flag is-soft'; fl.textContent = dislikeText(p, tagsO, ingsO, soft); } else fl.hidden = true; }
     };
+    var pickLbl = pick ? pick.textContent : '';
+    var trainerGate = function (card) {       // trainer / class panel: contact and booking only for customers with an active 4-week block
+      var lk = $('[data-tp-lock]', content), op = $('[data-tp-open]', content); if (!lk || !op) return;
+      var cb = card && $('[data-circle-book]', card);
+      loadCredits(function (c) { var m = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); lk.hidden = m; op.hidden = !m; if (cb) pick.hidden = !(m && !cb.disabled && cb.getAttribute('aria-disabled') !== 'true'); });
+    };
     var open = function (card) {
       var det = $('[data-dish-detail]', card); if (!det) return;
-      content.innerHTML = det.innerHTML; var cp = $('[data-fn-price]', card), dp = $('.dd__price', content); if (cp && dp && dp.firstChild) dp.firstChild.textContent = cp.textContent; full.setAttribute('href', det.getAttribute('data-url') || '#'); sheet.setAttribute('aria-label', det.getAttribute('data-title') || '');
-      flagPanel(card); current = card; var btn = $('[data-pick]', card); pick.hidden = !(card.hasAttribute('data-fn-dish') && btn && !card.classList.contains('is-blocked'));
+      content.innerHTML = det.innerHTML; var cp = $('[data-fn-price]', card), dp = $('.dd__price', content); if (cp && dp && dp.firstChild) dp.firstChild.textContent = cp.textContent; full.setAttribute('href', det.getAttribute('data-url') || '#'); full.hidden = !det.getAttribute('data-url'); sheet.setAttribute('aria-label', det.getAttribute('data-title') || '');
+      flagPanel(card); current = card; var btn = $('[data-pick]', card), cbk = $('[data-circle-book]', card); pick.hidden = !(card.hasAttribute('data-fn-dish') && btn && !card.classList.contains('is-blocked'));
+      pick.textContent = cbk ? (($('.circle__booklbl', cbk) || {}).textContent || pickLbl) : pickLbl; trainerGate(card);
       last = document.activeElement; clearTimeout(timer); panel.hidden = false; document.documentElement.classList.add('has-dish-panel');
       content.scrollTop = 0; sheet.scrollTop = 0;
       requestAnimationFrame(function () { requestAnimationFrame(function () { panel.classList.add('is-open'); }); }); sheet.focus({ preventScroll: true });
@@ -999,18 +1006,19 @@
     document.addEventListener('click', function (e) {
       var t = e.target; if (!t || !t.closest) return;
       if (t.closest('[data-dp-close]')) { close(); return; }
-      if (t.closest('[data-dp-pick]')) { var b = current && $('[data-pick]', current); close(); if (b) b.click(); return; }
+      if (t.closest('a[href^="dialog:"]') && panel.contains(t)) { close(); return; }   // a request button inside the panel: close the panel, the dialog handler opens the form
+      if (t.closest('[data-dp-pick]')) { var b = current && ($('[data-pick]', current) || $('[data-circle-book]', current)); close(); if (b) b.click(); return; }
       if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
       var wbtn = t.closest('[data-fn-warnbtn]');
       if (wbtn) { e.preventDefault(); var bx = wbtn.closest('[data-fn-warnbox]'), on = !bx.classList.contains('is-open'); $$('[data-fn-warnbox].is-open').forEach(function (x) { x.classList.remove('is-open'); var b3 = $('[data-fn-warnbtn]', x); if (b3) b3.setAttribute('aria-expanded', 'false'); }); bx.classList.toggle('is-open', on); wbtn.setAttribute('aria-expanded', on ? 'true' : 'false'); return; }
       if (!t.closest('[data-fn-warnbox]')) $$('[data-fn-warnbox].is-open').forEach(function (x) { x.classList.remove('is-open'); });
-      var hit = t.closest('.dish__media, .dish__title a, .dish__go, .fn-dish__media, .fn-dish__title');
+      var hit = t.closest('.dish__media, .dish__title a, .dish__go, .fn-dish__media, .fn-dish__title, [data-tr-card]');
       if (!hit) { var cc = t.closest('[data-has-detail]'); if (cc && !t.closest('a, button, input, select, textarea, label, .fn-warnbox, .fn-note, .fn-mods, [data-fn-note]')) hit = cc; }
       if (!hit || t.closest('[data-pick], button')) return;
       var card = hit.closest('[data-has-detail]'); if (!card) return;
       e.preventDefault(); open(card);
     });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) close(); if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.hasAttribute && e.target.hasAttribute('data-tr-card')) { e.preventDefault(); open(e.target); } });
   }
 
   /* ---------- plan credits: weeks left, meals planned and which weeks can still be chosen (asked from the Sheet; signed-in customers only) ---------- */
@@ -1148,12 +1156,16 @@
       if (c.status === 'Confirmada') return { cls: 'is-ok', txt: T('confirmed') };
       var need = Math.max(0, c.min - c.taken); return { cls: 'is-pend', txt: need ? T('need', { n: need }) : T('pending', { m: c.min }) };
     };
+    var descs = {}; try { descs = JSON.parse(root.getAttribute('data-descs') || '{}'); } catch (e) { descs = {}; }
     var cardHtml = function (c) {
       var sp = SPORTS.indexOf(c.sport) > -1 ? c.sport : 'funcional', tpl = root.getAttribute('data-art-tpl') || '', img = c.art && tpl ? tpl.replace('photo-hs-tenis.webp', 'photo-' + c.art + '.webp') : '', st = statusOf(c);
       var spots = c.full ? T('full') + (c.waiting ? ' · ' + T('wait-n', { n: c.waiting }) : '') : T('left', { n: c.left });
-      return '<article class="circle__card" data-sport="' + esc2(sp) + '" data-key="' + esc2(c.key) + '" data-class="' + esc2(c.title) + '" data-when="' + esc2(whenOf(c) + ' ' + c.time) + '" data-venue="' + esc2(c.venue) + '">'
+      var dsc = c.desc || descs[sp] || '', whenTxt = whenOf(c);
+      return '<article class="circle__card" data-has-detail data-sport="' + esc2(sp) + '" data-key="' + esc2(c.key) + '" data-class="' + esc2(c.title) + '" data-when="' + esc2(whenOf(c) + ' ' + c.time) + '" data-venue="' + esc2(c.venue) + '">'
         + '<div class="circle__top"><span class="circle__av">' + (img ? '<img src="' + esc2(img) + '" alt="" loading="lazy" width="60" height="60">' : '<svg viewBox="0 0 48 48" aria-hidden="true"><use href="#cs-' + esc2(sp) + '"/></svg>') + '</span><div class="circle__tt"><span class="circle__sport">' + esc2(SN[SPORTS.indexOf(sp)] || sp) + '</span><h3>' + esc2(c.title) + '</h3></div></div>'
         + '<dl class="circle__meta"><div><dt>' + esc2(root.getAttribute('data-t-host') || 'Coach') + '</dt><dd>' + esc2(c.coach) + '</dd></div><div><dt>' + esc2(root.getAttribute('data-t-date') || 'Fecha') + '</dt><dd>' + esc2(whenOf(c)) + '</dd></div><div><dt>' + esc2(root.getAttribute('data-t-time') || 'Hora') + '</dt><dd>' + esc2(c.time) + '</dd></div><div><dt>' + esc2(root.getAttribute('data-t-venue') || 'Sede') + '</dt><dd>' + esc2(c.venue) + '</dd></div></dl>'
+        + (dsc ? '<p class="circle__desc">' + esc2(dsc) + '</p>' : '')
+        + '<div data-dish-detail data-url="" data-title="' + esc2(c.title) + '" hidden><div class="dd__body tp"><span class="tp__role">' + esc2(SN[SPORTS.indexOf(sp)] || sp) + '</span><h2 class="dd__title">' + esc2(c.title) + '</h2><p class="tp__place">' + esc2(whenTxt + ' · ' + c.time + ' · ' + c.venue) + '</p><h3 class="dd__h">' + esc2(root.getAttribute('data-t-about') || '') + '</h3><p class="dd__desc">' + esc2(dsc) + '</p><dl class="tp__meta"><div><dt>' + esc2(root.getAttribute('data-t-host') || 'Coach') + '</dt><dd>' + esc2(c.coach) + '</dd></div><div><dt>' + esc2(root.getAttribute('data-t-venue') || 'Sede') + '</dt><dd>' + esc2(c.venue) + '</dd></div></dl><div class="tp__lock" data-tp-lock><p>' + esc2(root.getAttribute('data-t-locks') || '') + '</p><a class="btn btn--gold" href="/pages/pedido?plan=block">' + esc2(root.getAttribute('data-t-cta') || '') + '</a></div><div class="tp__open" data-tp-open hidden></div></div></div>'
         + '<span class="circle__spots circle__live ' + st.cls + '">' + esc2(st.txt) + '</span><span class="circle__spots">' + esc2(spots) + '</span>'
         + '<button class="circle__book" type="button" data-circle-book' + (c.status === 'Cancelada' ? ' disabled' : '') + '><span class="circle__booklbl">' + esc2(root.getAttribute('data-t-book') || 'Reservar') + ' · ' + (c.price ? esc2(money0(c.price)) : esc2(T('no-pay'))) + '</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#cs-lock"/></svg>' + esc2(root.getAttribute('data-t-locked') || '') + '</span></button>'
         + '<span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#cs-lock"/></svg></span></article>';

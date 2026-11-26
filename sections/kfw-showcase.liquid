@@ -17,7 +17,21 @@
     </div>
     <div class="kf__strip">
       <h3 class="kf__st">{{ tx_s_st }}</h3>
-      <div class="kf__cards">
+      {%- assign kf_col = section.settings.collection | default: collections['kulinaria-store'] -%}
+      {%- assign kf_n = 0 -%}
+      {%- if kf_col != blank -%}{%- assign kf_n = kf_col.products.size -%}{%- endif -%}
+      <div class="kf__cards{% if kf_n > 0 %} kf__cards--live{% endif %}" data-kf-cards>
+        {%- if kf_n > 0 -%}
+          {%- for product in kf_col.products limit: section.settings.limit -%}
+            <a class="kf__card kf__card--p" href="{{ product.url }}" data-kf-product>
+              <span class="kf__cph">
+                {%- if product.featured_image -%}<img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" loading="lazy" width="600" height="{{ 600 | divided_by: product.featured_image.aspect_ratio | round }}">{%- else -%}{% render 'photo', image: blank, art: 'kfw-duo', alt: '', class: '', width: 400 %}{%- endif -%}
+                {%- unless product.available -%}<em class="kf__flag">{{ 'kfw.sold_out' | t }}</em>{%- elsif product.compare_at_price > product.price -%}<em class="kf__flag kf__flag--sale">{{ 'kfw.sale' | t }}</em>{%- endunless -%}
+              </span>
+              <span class="kf__ctext"><strong>{{ product.title }}</strong>{%- if product.type != blank -%}<small>{{ product.type }}</small>{%- endif -%}<b class="kf__price">{%- if product.price_varies -%}{{ 'kfw.from' | t }} {% endif -%}{{ product.price | money_without_trailing_zeros }}{%- if product.compare_at_price > product.price -%} <s>{{ product.compare_at_price | money_without_trailing_zeros }}</s>{%- endif -%}</b></span>
+            </a>
+          {%- endfor -%}
+        {%- else -%}
         {%- for block in section.blocks -%}{%- assign bs = block.settings -%}
           {%- capture tx_t -%}{% render 'tx', s: bs.title %}{%- endcapture -%}
           {%- capture tx_x -%}{% render 'tx', s: bs.text %}{%- endcapture -%}
@@ -26,6 +40,7 @@
             <span class="kf__ctext"><strong>{{ tx_t }}</strong><small>{{ tx_x }}</small></span>
           </a>
         {%- endfor -%}
+        {%- endif -%}
       </div>
     </div>
   </div>
@@ -42,7 +57,9 @@
     { "type": "url", "id": "button_link", "label": "Enlace del botón" },
     { "type": "image_picker", "id": "image", "label": "Foto principal (opcional)" },
     { "type": "text", "id": "art", "label": "Foto del tema si no subes una", "default": "kfw-duo" },
-    { "type": "text", "id": "strip_title", "label": "Título de la colección", "default": "Colección oficial KFW" }
+    { "type": "text", "id": "strip_title", "label": "Título de la colección", "default": "Colección oficial KFW" },
+    { "type": "collection", "id": "collection", "label": "Colección de productos KFW", "info": "Cada producto que agregues a esta colección (chamarras, tops, joggers…) aparece aquí como tarjeta con foto, nombre y precio. Si está vacía se muestran las tarjetas de abajo." },
+    { "type": "range", "id": "limit", "label": "Máximo de productos", "min": 4, "max": 24, "step": 1, "default": 12 }
   ],
   "blocks": [
     {

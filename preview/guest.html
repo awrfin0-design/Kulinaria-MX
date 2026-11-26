@@ -5066,6 +5066,46 @@ button.fn-wk__grp:hover{background:#ff6200;color:#fff;border-color:#ff6200}
 .fn-wk .fn-wk__card h4{min-height:1.6em;align-items:baseline}
 .fn-wk .fn-wk__img{flex:none}
 
+/* v157: loading screen: a flame that draws itself, the K, slow waves of heat. Fuego = black + orange, Llama = white + orange. */
+.loader{background:radial-gradient(ellipse at 50% 38%,#26140a 0,#0b0b0b 62%) !important;color:#f5f5f5;overflow:hidden}
+:root[data-theme="llama"] .loader{background:radial-gradient(ellipse at 50% 38%,#fff1e6 0,#ffffff 64%) !important;color:#151515}
+.loader::before{display:none !important}
+.loader__waves{position:absolute;inset:-20%;pointer-events:none;filter:blur(40px);opacity:.9}
+.loader__waves i{position:absolute;border-radius:50%;background:radial-gradient(closest-side,rgba(255,98,0,.55),transparent);animation:lw-drift 9s ease-in-out infinite alternate}
+.loader__waves i:nth-child(1){left:8%;top:30%;width:46vmax;height:46vmax}
+.loader__waves i:nth-child(2){right:4%;top:46%;width:38vmax;height:38vmax;animation-duration:11s;animation-delay:-3s;background:radial-gradient(closest-side,rgba(255,138,61,.45),transparent)}
+.loader__waves i:nth-child(3){left:32%;top:-6%;width:30vmax;height:30vmax;animation-duration:13s;animation-delay:-6s;background:radial-gradient(closest-side,rgba(224,84,0,.4),transparent)}
+:root[data-theme="llama"] .loader__waves i{opacity:.55}
+@keyframes lw-drift{0%{transform:translate(-6%,4%) scale(.9)}100%{transform:translate(8%,-6%) scale(1.15)}}
+.loader__stage{position:relative;display:grid;place-items:center;width:clamp(150px,22vw,210px);aspect-ratio:3/4}
+.loader__flame{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.lf__outer{fill:none;stroke:url(#lf-g);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:520;stroke-dashoffset:520;animation:lf-draw 1.5s cubic-bezier(.6,0,.2,1) .1s forwards}
+.lf__glow{fill:rgba(255,98,0,.16);stroke:none;opacity:0;filter:blur(7px);animation:lf-glow 2.4s ease-in-out 1.1s infinite alternate}
+.lf__inner{fill:url(#lf-g);opacity:0;transform-origin:50% 100%;animation:lf-fill .9s ease 1s forwards,lf-flick 1.8s ease-in-out 1.9s infinite alternate}
+@keyframes lf-draw{to{stroke-dashoffset:0}}
+@keyframes lf-fill{to{opacity:.92}}
+@keyframes lf-glow{0%{opacity:.35}100%{opacity:1}}
+@keyframes lf-flick{0%{transform:scale(1,1)}100%{transform:scale(.94,1.06)}}
+.loader__k{position:relative;z-index:2;display:grid;place-items:center;width:46%;margin-top:26%;animation:lk-in .8s ease .9s both}
+.loader__k .logo,.loader__k img{width:100%;height:auto;filter:drop-shadow(0 0 14px rgba(255,98,0,.55))}
+@keyframes lk-in{from{opacity:0;transform:translateY(8px) scale(.9)}to{opacity:1;transform:none}}
+.loader__tag{font:500 clamp(1.4rem,2.8vw,2rem) var(--font-display);letter-spacing:.02em;color:inherit;margin:0;opacity:0;animation:lk-in .8s ease 1.3s forwards}
+.loader__bar{background:rgba(128,128,128,.28) !important}.loader__bar i{background:linear-gradient(90deg,#e05400,#ff6200,#ff8a3d) !important}
+.loader__pct{font:600 .72rem var(--font-label);letter-spacing:.18em;color:inherit;opacity:.7}
+@media (prefers-reduced-motion:reduce){.loader__waves i,.lf__glow,.lf__inner{animation:none}.lf__outer{animation:none;stroke-dashoffset:0}.lf__inner{opacity:.92}.loader__k,.loader__tag{animation:none;opacity:1}}
+
+/* v158: trainer profile panel */
+.tr__card[data-tr-card]{cursor:pointer}.tr__card[data-tr-card]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tr__more{display:inline-block;margin-top:8px;font:600 .7rem var(--font-label);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-style:normal}
+.tp__media{aspect-ratio:4/5}.tp__media img{object-position:50% 20%}
+.tp__role{display:inline-block;font:700 .72rem var(--font-label);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.tp__place{margin:0;color:var(--text-muted);font-size:.9rem}
+.tp__acc{list-style:none;margin:0;padding:0;display:grid;gap:8px}.tp__acc li{position:relative;padding-left:22px;line-height:1.4}.tp__acc li::before{content:"";position:absolute;left:0;top:.45em;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px color-mix(in srgb,var(--accent) 60%,transparent)}
+.tp__ig,.tp__row{display:flex;align-items:center;gap:8px;padding:12px 16px;border:1px solid var(--line);border-radius:14px;color:var(--text);text-decoration:none;margin-bottom:8px}
+.tp__ig b{color:var(--accent);font-weight:600}.tp__ig:hover,.tp__row:hover{border-color:var(--accent)}
+.tp__lock{padding:16px;border:1px dashed var(--border-accent);border-radius:14px;background:var(--accent-wash)}.tp__lock p{margin:0 0 12px;font-size:.9rem;line-height:1.45}
+.tp__open{display:grid;gap:0}.tp__open .btn{margin-top:6px;justify-content:center}
+
 
 [data-page]:not([hidden]){animation:pageIn .9s var(--ease) both}
 @keyframes pageIn{from{opacity:0;translate:0 16px}}
@@ -5225,12 +5265,16 @@ button.fn-wk__grp:hover{background:#ff6200;color:#fff;border-color:#ff6200}
     <template data-l="es"><a class="skip-link" href="#main">Saltar al contenido</a></template><template data-l="en"><a class="skip-link" href="#main">Skip to content</a></template>
 
     <template data-l="es"><div class="loader" id="loader" role="status" aria-label="Cargando Kulinaria MX">
+      <div class="loader__waves" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="loader__inner">
         <div class="loader__stage" aria-hidden="true">
-          <span class="loader__orbit loader__orbit--a"><svg viewBox="0 0 24 24"><path d="M12 2C6 6 4 12 6 20c8-1 14-7 14-14-3-1-6-.7-8-4z" fill="currentColor"/></svg></span>
-          <span class="loader__orbit loader__orbit--b"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="currentColor" opacity=".5"/></svg></span>
-          <span class="loader__orbit loader__orbit--c"><svg viewBox="0 0 24 24"><path d="M12 2c1 6 8 8 8 15a8 8 0 0 1-16 0c0-3 2-5 3.500-7 .5 2 1.500 3 3 3.500C9.500 8.500 10.500 5 12 2z" fill="currentColor"/></svg></span>
-          <span class="loader__ring"><i></i><img class="logo logo--mark" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-mark.webp" width="356" height="363"
+          <svg class="loader__flame" viewBox="0 0 120 160" focusable="false">
+            <defs><linearGradient id="lf-g" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#E05400"/><stop offset=".55" stop-color="#FF6200"/><stop offset="1" stop-color="#FFB070"/></linearGradient></defs>
+            <path class="lf__glow" d="M60 6C57 40 18 58 18 104a42 42 0 0 0 84 0c0-32-22-46-29-74-4 10-8 19-13 28-4-15-4-35 0-52z"/>
+            <path class="lf__outer" d="M60 6C57 40 18 58 18 104a42 42 0 0 0 84 0c0-32-22-46-29-74-4 10-8 19-13 28-4-15-4-35 0-52z"/>
+            <path class="lf__inner" d="M60 66c-2 20-22 30-22 52a22 22 0 0 0 44 0c0-18-14-26-18-44-2 6-4 10-8 14-2-8-1-16 4-22z"/>
+          </svg>
+          <span class="loader__k"><img class="logo logo--mark" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-mark.webp" width="356" height="363"
   alt="Kulinaria MX" decoding="async"></span>
         </div>
         <p class="loader__tag">Arte del fuego</p>
@@ -5238,12 +5282,16 @@ button.fn-wk__grp:hover{background:#ff6200;color:#fff;border-color:#ff6200}
         <span class="loader__pct" aria-hidden="true"><b data-loader-pct>0</b>%</span>
       </div>
     </div></template><template data-l="en"><div class="loader" id="loader" role="status" aria-label="Loading Kulinaria MX">
+      <div class="loader__waves" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="loader__inner">
         <div class="loader__stage" aria-hidden="true">
-          <span class="loader__orbit loader__orbit--a"><svg viewBox="0 0 24 24"><path d="M12 2C6 6 4 12 6 20c8-1 14-7 14-14-3-1-6-.7-8-4z" fill="currentColor"/></svg></span>
-          <span class="loader__orbit loader__orbit--b"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="currentColor" opacity=".5"/></svg></span>
-          <span class="loader__orbit loader__orbit--c"><svg viewBox="0 0 24 24"><path d="M12 2c1 6 8 8 8 15a8 8 0 0 1-16 0c0-3 2-5 3.500-7 .5 2 1.500 3 3 3.500C9.500 8.500 10.500 5 12 2z" fill="currentColor"/></svg></span>
-          <span class="loader__ring"><i></i><img class="logo logo--mark" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-mark.webp" width="356" height="363"
+          <svg class="loader__flame" viewBox="0 0 120 160" focusable="false">
+            <defs><linearGradient id="lf-g" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#E05400"/><stop offset=".55" stop-color="#FF6200"/><stop offset="1" stop-color="#FFB070"/></linearGradient></defs>
+            <path class="lf__glow" d="M60 6C57 40 18 58 18 104a42 42 0 0 0 84 0c0-32-22-46-29-74-4 10-8 19-13 28-4-15-4-35 0-52z"/>
+            <path class="lf__outer" d="M60 6C57 40 18 58 18 104a42 42 0 0 0 84 0c0-32-22-46-29-74-4 10-8 19-13 28-4-15-4-35 0-52z"/>
+            <path class="lf__inner" d="M60 66c-2 20-22 30-22 52a22 22 0 0 0 44 0c0-18-14-26-18-44-2 6-4 10-8 14-2-8-1-16 4-22z"/>
+          </svg>
+          <span class="loader__k"><img class="logo logo--mark" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="logo-mark.webp" width="356" height="363"
   alt="Kulinaria MX" decoding="async"></span>
         </div>
         <p class="loader__tag">Arte del fuego</p>
@@ -6244,22 +6292,97 @@ Llama</span>
       <div class="tr__copy"><span class="tr__tag">Equipo campeón Kulinaria</span><h2 class="tr__h">Los mejores entrenadores de tu ciudad.</h2><p class="tr__p">Al unirte a Kulinaria, obtienes acceso exclusivo para entrenar de forma personalizada con nuestros atletas campeones.</p><h3 class="tr__lt">Palmarés de nuestro equipo</h3><ul class="tr__list"><li><b>1x</b> <span>Campeón Mundial IFBB Elite Pro</span></li><li><b>2x</b> <span>Mr. México Absoluto</span></li><li><b>1x</b> <span>Campeón North American</span></li><li><b>1x</b> <span>Subcampeón Atlanta Pro</span></li><li><b>1x</b> <span>3er Lugar Pittsburgh Pro</span></li></ul><a class="tr__link" href="#/pg/embajadores-entrenadores">Ver todos los logros +</a></div>
     </div>
     <div class="tr__strip">
-      <div class="tr__cards"><a class="tr__card" href="dialog:entrenador~Carla" >
+      <div class="tr__cards"><div class="tr__card" role="button" tabindex="0" data-has-detail data-tr-card >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-carla.webp" width="1200" height="800" alt="Carla" class="" loading="lazy" decoding="async"></span>
-            <span class="tr__ctext"><strong>Carla</strong><em>IFBB Elite Pro.</em><small>Especialista en recomposición corporal.</small><b>Club Lomas · 2.4 km</b></span>
-          </a><a class="tr__card" href="dialog:entrenador~Ramón" >
+            <span class="tr__ctext"><strong>Carla</strong><em>IFBB Elite Pro.</em><small>Especialista en recomposición corporal.</small><b>Club Lomas · 2.4 km</b><i class="tr__more">Ver perfil</i></span>
+            <div data-dish-detail data-url="" data-title="Carla" hidden>
+              <div class="dd__media tp__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-carla.webp" width="1200" height="800" alt="Carla" class="" loading="lazy" decoding="async"></div>
+              <div class="dd__body tp">
+                <span class="tp__role">IFBB Elite Pro.</span>
+                <h2 class="dd__title">Carla</h2>
+                <p class="tp__place">Club Lomas · 2.4 km</p>
+                <h3 class="dd__h">Especialidad</h3>
+                <p class="dd__desc">Especialista en recomposición corporal.</p><p class="dd__desc">Especialista en recomposición corporal: pierde grasa y gana músculo sin dietas extremas.</p><h3 class="dd__h">Logros</h3>
+                <ul class="tp__acc"><li>Profesional IFBB Elite Pro</li><li>Entrenadora certificada en nutrición deportiva</li></ul><h3 class="dd__h">Cómo entrena</h3><p class="dd__desc">Fuerza progresiva tres días por semana, cardio inteligente y revisión mensual de medidas. Todo alineado con tu plan Kulinaria.</p><h3 class="dd__h">Contacto</h3>
+                <a class="tp__ig" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram <b>@kulinaria.mx</b></a>
+                <div class="tp__lock" data-tp-lock><p>El contacto directo con los entrenadores es exclusivo para clientes con un bloque de 4 semanas activo.</p><a class="btn btn--gold" href="#/pg/pedido?plan=block">Empezar mi bloque</a></div>
+                <div class="tp__open" data-tp-open hidden><a class="btn btn--gold" href="dialog:entrenador~Carla">Contactar a Carla</a>
+                </div>
+              </div>
+            </div>
+          </div><div class="tr__card" role="button" tabindex="0" data-has-detail data-tr-card >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-ramon.webp" width="1200" height="800" alt="Ramón" class="" loading="lazy" decoding="async"></span>
-            <span class="tr__ctext"><strong>Ramón</strong><em>Mr. México.</em><small>Preparación física de alto rendimiento.</small><b>La Vista · 3.5 km</b></span>
-          </a><a class="tr__card" href="dialog:entrenador~Elena" >
+            <span class="tr__ctext"><strong>Ramón</strong><em>Mr. México.</em><small>Preparación física de alto rendimiento.</small><b>La Vista · 3.5 km</b><i class="tr__more">Ver perfil</i></span>
+            <div data-dish-detail data-url="" data-title="Ramón" hidden>
+              <div class="dd__media tp__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-ramon.webp" width="1200" height="800" alt="Ramón" class="" loading="lazy" decoding="async"></div>
+              <div class="dd__body tp">
+                <span class="tp__role">Mr. México.</span>
+                <h2 class="dd__title">Ramón</h2>
+                <p class="tp__place">La Vista · 3.5 km</p>
+                <h3 class="dd__h">Especialidad</h3>
+                <p class="dd__desc">Preparación física de alto rendimiento.</p><p class="dd__desc">Preparación física de alto rendimiento para quien quiere llevar su nivel más lejos.</p><h3 class="dd__h">Logros</h3>
+                <ul class="tp__acc"><li>Mr. México</li><li>Preparador físico de atletas</li></ul><h3 class="dd__h">Cómo entrena</h3><p class="dd__desc">Bloques de potencia e hipertrofia con periodización clara y control de carga semana a semana.</p><h3 class="dd__h">Contacto</h3>
+                <a class="tp__ig" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram <b>@kulinaria.mx</b></a>
+                <div class="tp__lock" data-tp-lock><p>El contacto directo con los entrenadores es exclusivo para clientes con un bloque de 4 semanas activo.</p><a class="btn btn--gold" href="#/pg/pedido?plan=block">Empezar mi bloque</a></div>
+                <div class="tp__open" data-tp-open hidden><a class="btn btn--gold" href="dialog:entrenador~Ramón">Contactar a Ramón</a>
+                </div>
+              </div>
+            </div>
+          </div><div class="tr__card" role="button" tabindex="0" data-has-detail data-tr-card >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-elena.webp" width="1200" height="800" alt="Elena" class="" loading="lazy" decoding="async"></span>
-            <span class="tr__ctext"><strong>Elena</strong><em>Trainer cert.</em><small>Entrenamiento funcional y fuerza.</small><b>Cholula · 5.1 km</b></span>
-          </a><a class="tr__card" href="dialog:entrenador~Fernando" >
+            <span class="tr__ctext"><strong>Elena</strong><em>Trainer cert.</em><small>Entrenamiento funcional y fuerza.</small><b>Cholula · 5.1 km</b><i class="tr__more">Ver perfil</i></span>
+            <div data-dish-detail data-url="" data-title="Elena" hidden>
+              <div class="dd__media tp__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-elena.webp" width="1200" height="800" alt="Elena" class="" loading="lazy" decoding="async"></div>
+              <div class="dd__body tp">
+                <span class="tp__role">Trainer cert.</span>
+                <h2 class="dd__title">Elena</h2>
+                <p class="tp__place">Cholula · 5.1 km</p>
+                <h3 class="dd__h">Especialidad</h3>
+                <p class="dd__desc">Entrenamiento funcional y fuerza.</p><p class="dd__desc">Entrenamiento funcional y fuerza para moverte mejor y con confianza.</p><h3 class="dd__h">Logros</h3>
+                <ul class="tp__acc"><li>Entrenadora certificada</li><li>Funcional y fuerza</li></ul><h3 class="dd__h">Cómo entrena</h3><p class="dd__desc">Circuitos funcionales y fuerza base, con progresión pensada para cualquier nivel.</p><h3 class="dd__h">Contacto</h3>
+                <a class="tp__ig" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram <b>@kulinaria.mx</b></a>
+                <div class="tp__lock" data-tp-lock><p>El contacto directo con los entrenadores es exclusivo para clientes con un bloque de 4 semanas activo.</p><a class="btn btn--gold" href="#/pg/pedido?plan=block">Empezar mi bloque</a></div>
+                <div class="tp__open" data-tp-open hidden><a class="btn btn--gold" href="dialog:entrenador~Elena">Contactar a Elena</a>
+                </div>
+              </div>
+            </div>
+          </div><div class="tr__card" role="button" tabindex="0" data-has-detail data-tr-card >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-fernando.webp" width="1200" height="800" alt="Fernando" class="" loading="lazy" decoding="async"></span>
-            <span class="tr__ctext"><strong>Fernando</strong><em>Mr. México.</em><small>Hipertrofia y acondicionamiento.</small><b>Zavaleta · 4.2 km</b></span>
-          </a><a class="tr__card" href="dialog:entrenador~Jaime" >
+            <span class="tr__ctext"><strong>Fernando</strong><em>Mr. México.</em><small>Hipertrofia y acondicionamiento.</small><b>Zavaleta · 4.2 km</b><i class="tr__more">Ver perfil</i></span>
+            <div data-dish-detail data-url="" data-title="Fernando" hidden>
+              <div class="dd__media tp__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-fernando.webp" width="1200" height="800" alt="Fernando" class="" loading="lazy" decoding="async"></div>
+              <div class="dd__body tp">
+                <span class="tp__role">Mr. México.</span>
+                <h2 class="dd__title">Fernando</h2>
+                <p class="tp__place">Zavaleta · 4.2 km</p>
+                <h3 class="dd__h">Especialidad</h3>
+                <p class="dd__desc">Hipertrofia y acondicionamiento.</p><p class="dd__desc">Hipertrofia y acondicionamiento con técnica cuidada.</p><h3 class="dd__h">Logros</h3>
+                <ul class="tp__acc"><li>Mr. México</li><li>Especialista en hipertrofia</li></ul><h3 class="dd__h">Cómo entrena</h3><p class="dd__desc">Rutinas por grupo muscular, énfasis en técnica y recuperación, coordinadas con tu nutrición.</p><h3 class="dd__h">Contacto</h3>
+                <a class="tp__ig" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram <b>@kulinaria.mx</b></a>
+                <div class="tp__lock" data-tp-lock><p>El contacto directo con los entrenadores es exclusivo para clientes con un bloque de 4 semanas activo.</p><a class="btn btn--gold" href="#/pg/pedido?plan=block">Empezar mi bloque</a></div>
+                <div class="tp__open" data-tp-open hidden><a class="btn btn--gold" href="dialog:entrenador~Fernando">Contactar a Fernando</a>
+                </div>
+              </div>
+            </div>
+          </div><div class="tr__card" role="button" tabindex="0" data-has-detail data-tr-card >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-jaime.webp" width="1200" height="800" alt="Jaime" class="" loading="lazy" decoding="async"></span>
-            <span class="tr__ctext"><strong>Jaime</strong><em>IFBB Elite Pro.</em><small>Atleta de élite y asesoría integral.</small><b>Angelópolis · 1.8 km</b></span>
-          </a><div class="tr__card tr__card--cta"><strong>Roster élite de entrenadores</strong><small>Explora a todos nuestros atletas y entrenadores certificados para elegir al ideal para tus metas.</small><a class="tr__cbtn" href="dialog:entrenador~">Elegir a mi entrenador</a></div>
+            <span class="tr__ctext"><strong>Jaime</strong><em>IFBB Elite Pro.</em><small>Atleta de élite y asesoría integral.</small><b>Angelópolis · 1.8 km</b><i class="tr__more">Ver perfil</i></span>
+            <div data-dish-detail data-url="" data-title="Jaime" hidden>
+              <div class="dd__media tp__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-jaime.webp" width="1200" height="800" alt="Jaime" class="" loading="lazy" decoding="async"></div>
+              <div class="dd__body tp">
+                <span class="tp__role">IFBB Elite Pro.</span>
+                <h2 class="dd__title">Jaime</h2>
+                <p class="tp__place">Angelópolis · 1.8 km</p>
+                <h3 class="dd__h">Especialidad</h3>
+                <p class="dd__desc">Atleta de élite y asesoría integral.</p><p class="dd__desc">Atleta de élite que ofrece asesoría integral de entrenamiento y alimentación.</p><h3 class="dd__h">Logros</h3>
+                <ul class="tp__acc"><li>Profesional IFBB Elite Pro</li><li>Asesoría integral</li></ul><h3 class="dd__h">Cómo entrena</h3><p class="dd__desc">Planes completos de entrenamiento y comida, con seguimiento cercano y metas por etapas.</p><h3 class="dd__h">Contacto</h3>
+                <a class="tp__ig" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram <b>@kulinaria.mx</b></a>
+                <div class="tp__lock" data-tp-lock><p>El contacto directo con los entrenadores es exclusivo para clientes con un bloque de 4 semanas activo.</p><a class="btn btn--gold" href="#/pg/pedido?plan=block">Empezar mi bloque</a></div>
+                <div class="tp__open" data-tp-open hidden><a class="btn btn--gold" href="dialog:entrenador~Jaime">Contactar a Jaime</a>
+                </div>
+              </div>
+            </div>
+          </div><div class="tr__card tr__card--cta"><strong>Roster élite de entrenadores</strong><small>Explora a todos nuestros atletas y entrenadores certificados para elegir al ideal para tus metas.</small><a class="tr__cbtn" href="dialog:entrenador~">Elegir a mi entrenador</a></div>
       </div>
     </div>
   </div>
@@ -16039,22 +16162,97 @@ Pago digital, sin efectivo</li></ul>
       <div class="tr__copy"><span class="tr__tag">Kulinaria champion team</span><h2 class="tr__h">The best trainers in your city.</h2><p class="tr__p">By joining Kulinaria you get exclusive access to train one-on-one with our champion athletes.</p><h3 class="tr__lt">Our team's record</h3><ul class="tr__list"><li><b>1x</b> <span>IFBB Elite Pro World Champion</span></li><li><b>2x</b> <span>Mr. México Overall</span></li><li><b>1x</b> <span>North American Champion</span></li><li><b>1x</b> <span>Atlanta Pro runner-up</span></li><li><b>1x</b> <span>3rd place Pittsburgh Pro</span></li></ul><a class="tr__link" href="#/pg/embajadores-entrenadores">See all achievements +</a></div>
     </div>
     <div class="tr__strip">
-      <div class="tr__cards"><a class="tr__card" href="dialog:entrenador~Carla" >
+      <div class="tr__cards"><div class="tr__card" role="button" tabindex="0" data-has-detail data-tr-card >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-carla.webp" width="1200" height="800" alt="Carla" class="" loading="lazy" decoding="async"></span>
-            <span class="tr__ctext"><strong>Carla</strong><em>IFBB Elite Pro.</em><small>Body recomposition specialist.</small><b>Club Lomas · 2.4 km</b></span>
-          </a><a class="tr__card" href="dialog:entrenador~Ramón" >
+            <span class="tr__ctext"><strong>Carla</strong><em>IFBB Elite Pro.</em><small>Body recomposition specialist.</small><b>Club Lomas · 2.4 km</b><i class="tr__more">View profile</i></span>
+            <div data-dish-detail data-url="" data-title="Carla" hidden>
+              <div class="dd__media tp__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-carla.webp" width="1200" height="800" alt="Carla" class="" loading="lazy" decoding="async"></div>
+              <div class="dd__body tp">
+                <span class="tp__role">IFBB Elite Pro.</span>
+                <h2 class="dd__title">Carla</h2>
+                <p class="tp__place">Club Lomas · 2.4 km</p>
+                <h3 class="dd__h">Specialty</h3>
+                <p class="dd__desc">Body recomposition specialist.</p><p class="dd__desc">Body-recomposition specialist: lose fat and build muscle without extreme diets.</p><h3 class="dd__h">Accolades</h3>
+                <ul class="tp__acc"><li>IFBB Elite Pro professional</li><li>Certified sports-nutrition coach</li></ul><h3 class="dd__h">How they train</h3><p class="dd__desc">Progressive strength three days a week, smart cardio and a monthly measurement check-in. Everything aligned with your Kulinaria plan.</p><h3 class="dd__h">Contact</h3>
+                <a class="tp__ig" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram <b>@kulinaria.mx</b></a>
+                <div class="tp__lock" data-tp-lock><p>Direct contact with trainers is exclusive to customers with an active 4-week block.</p><a class="btn btn--gold" href="#/pg/pedido?plan=block">Start my block</a></div>
+                <div class="tp__open" data-tp-open hidden><a class="btn btn--gold" href="dialog:entrenador~Carla">Contact Carla</a>
+                </div>
+              </div>
+            </div>
+          </div><div class="tr__card" role="button" tabindex="0" data-has-detail data-tr-card >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-ramon.webp" width="1200" height="800" alt="Ramón" class="" loading="lazy" decoding="async"></span>
-            <span class="tr__ctext"><strong>Ramón</strong><em>Mr. México.</em><small>High-performance physical preparation.</small><b>La Vista · 3.5 km</b></span>
-          </a><a class="tr__card" href="dialog:entrenador~Elena" >
+            <span class="tr__ctext"><strong>Ramón</strong><em>Mr. México.</em><small>High-performance physical preparation.</small><b>La Vista · 3.5 km</b><i class="tr__more">View profile</i></span>
+            <div data-dish-detail data-url="" data-title="Ramón" hidden>
+              <div class="dd__media tp__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-ramon.webp" width="1200" height="800" alt="Ramón" class="" loading="lazy" decoding="async"></div>
+              <div class="dd__body tp">
+                <span class="tp__role">Mr. México.</span>
+                <h2 class="dd__title">Ramón</h2>
+                <p class="tp__place">La Vista · 3.5 km</p>
+                <h3 class="dd__h">Specialty</h3>
+                <p class="dd__desc">High-performance physical preparation.</p><p class="dd__desc">High-performance physical preparation for those who want to take their level further.</p><h3 class="dd__h">Accolades</h3>
+                <ul class="tp__acc"><li>Mr. México</li><li>Athlete conditioning coach</li></ul><h3 class="dd__h">How they train</h3><p class="dd__desc">Power and hypertrophy blocks with clear periodisation and week-by-week load control.</p><h3 class="dd__h">Contact</h3>
+                <a class="tp__ig" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram <b>@kulinaria.mx</b></a>
+                <div class="tp__lock" data-tp-lock><p>Direct contact with trainers is exclusive to customers with an active 4-week block.</p><a class="btn btn--gold" href="#/pg/pedido?plan=block">Start my block</a></div>
+                <div class="tp__open" data-tp-open hidden><a class="btn btn--gold" href="dialog:entrenador~Ramón">Contact Ramón</a>
+                </div>
+              </div>
+            </div>
+          </div><div class="tr__card" role="button" tabindex="0" data-has-detail data-tr-card >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-elena.webp" width="1200" height="800" alt="Elena" class="" loading="lazy" decoding="async"></span>
-            <span class="tr__ctext"><strong>Elena</strong><em>Certified trainer.</em><small>Functional and strength training.</small><b>Cholula · 5.1 km</b></span>
-          </a><a class="tr__card" href="dialog:entrenador~Fernando" >
+            <span class="tr__ctext"><strong>Elena</strong><em>Certified trainer.</em><small>Functional and strength training.</small><b>Cholula · 5.1 km</b><i class="tr__more">View profile</i></span>
+            <div data-dish-detail data-url="" data-title="Elena" hidden>
+              <div class="dd__media tp__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-elena.webp" width="1200" height="800" alt="Elena" class="" loading="lazy" decoding="async"></div>
+              <div class="dd__body tp">
+                <span class="tp__role">Certified trainer.</span>
+                <h2 class="dd__title">Elena</h2>
+                <p class="tp__place">Cholula · 5.1 km</p>
+                <h3 class="dd__h">Specialty</h3>
+                <p class="dd__desc">Functional and strength training.</p><p class="dd__desc">Functional training and strength to move better and with confidence.</p><h3 class="dd__h">Accolades</h3>
+                <ul class="tp__acc"><li>Certified trainer</li><li>Functional and strength</li></ul><h3 class="dd__h">How they train</h3><p class="dd__desc">Functional circuits and base strength, with progression for any level.</p><h3 class="dd__h">Contact</h3>
+                <a class="tp__ig" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram <b>@kulinaria.mx</b></a>
+                <div class="tp__lock" data-tp-lock><p>Direct contact with trainers is exclusive to customers with an active 4-week block.</p><a class="btn btn--gold" href="#/pg/pedido?plan=block">Start my block</a></div>
+                <div class="tp__open" data-tp-open hidden><a class="btn btn--gold" href="dialog:entrenador~Elena">Contact Elena</a>
+                </div>
+              </div>
+            </div>
+          </div><div class="tr__card" role="button" tabindex="0" data-has-detail data-tr-card >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-fernando.webp" width="1200" height="800" alt="Fernando" class="" loading="lazy" decoding="async"></span>
-            <span class="tr__ctext"><strong>Fernando</strong><em>Mr. México.</em><small>Hypertrophy and conditioning.</small><b>Zavaleta · 4.2 km</b></span>
-          </a><a class="tr__card" href="dialog:entrenador~Jaime" >
+            <span class="tr__ctext"><strong>Fernando</strong><em>Mr. México.</em><small>Hypertrophy and conditioning.</small><b>Zavaleta · 4.2 km</b><i class="tr__more">View profile</i></span>
+            <div data-dish-detail data-url="" data-title="Fernando" hidden>
+              <div class="dd__media tp__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-fernando.webp" width="1200" height="800" alt="Fernando" class="" loading="lazy" decoding="async"></div>
+              <div class="dd__body tp">
+                <span class="tp__role">Mr. México.</span>
+                <h2 class="dd__title">Fernando</h2>
+                <p class="tp__place">Zavaleta · 4.2 km</p>
+                <h3 class="dd__h">Specialty</h3>
+                <p class="dd__desc">Hypertrophy and conditioning.</p><p class="dd__desc">Hypertrophy and conditioning with careful technique.</p><h3 class="dd__h">Accolades</h3>
+                <ul class="tp__acc"><li>Mr. México</li><li>Hypertrophy specialist</li></ul><h3 class="dd__h">How they train</h3><p class="dd__desc">Muscle-group routines, emphasis on technique and recovery, coordinated with your nutrition.</p><h3 class="dd__h">Contact</h3>
+                <a class="tp__ig" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram <b>@kulinaria.mx</b></a>
+                <div class="tp__lock" data-tp-lock><p>Direct contact with trainers is exclusive to customers with an active 4-week block.</p><a class="btn btn--gold" href="#/pg/pedido?plan=block">Start my block</a></div>
+                <div class="tp__open" data-tp-open hidden><a class="btn btn--gold" href="dialog:entrenador~Fernando">Contact Fernando</a>
+                </div>
+              </div>
+            </div>
+          </div><div class="tr__card" role="button" tabindex="0" data-has-detail data-tr-card >
             <span class="tr__cph"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-jaime.webp" width="1200" height="800" alt="Jaime" class="" loading="lazy" decoding="async"></span>
-            <span class="tr__ctext"><strong>Jaime</strong><em>IFBB Elite Pro.</em><small>Elite athlete and all-round coaching.</small><b>Angelópolis · 1.8 km</b></span>
-          </a><div class="tr__card tr__card--cta"><strong>Elite trainer roster</strong><small>Explore all our athletes and certified trainers to pick the right one for your goals.</small><a class="tr__cbtn" href="dialog:entrenador~">Choose my trainer</a></div>
+            <span class="tr__ctext"><strong>Jaime</strong><em>IFBB Elite Pro.</em><small>Elite athlete and all-round coaching.</small><b>Angelópolis · 1.8 km</b><i class="tr__more">View profile</i></span>
+            <div data-dish-detail data-url="" data-title="Jaime" hidden>
+              <div class="dd__media tp__media"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-asset="photo-tr-jaime.webp" width="1200" height="800" alt="Jaime" class="" loading="lazy" decoding="async"></div>
+              <div class="dd__body tp">
+                <span class="tp__role">IFBB Elite Pro.</span>
+                <h2 class="dd__title">Jaime</h2>
+                <p class="tp__place">Angelópolis · 1.8 km</p>
+                <h3 class="dd__h">Specialty</h3>
+                <p class="dd__desc">Elite athlete and all-round coaching.</p><p class="dd__desc">Elite athlete offering integrated training and nutrition guidance.</p><h3 class="dd__h">Accolades</h3>
+                <ul class="tp__acc"><li>IFBB Elite Pro professional</li><li>Integrated coaching</li></ul><h3 class="dd__h">How they train</h3><p class="dd__desc">Complete training and meal plans with close follow-up and stage goals.</p><h3 class="dd__h">Contact</h3>
+                <a class="tp__ig" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram <b>@kulinaria.mx</b></a>
+                <div class="tp__lock" data-tp-lock><p>Direct contact with trainers is exclusive to customers with an active 4-week block.</p><a class="btn btn--gold" href="#/pg/pedido?plan=block">Start my block</a></div>
+                <div class="tp__open" data-tp-open hidden><a class="btn btn--gold" href="dialog:entrenador~Jaime">Contact Jaime</a>
+                </div>
+              </div>
+            </div>
+          </div><div class="tr__card tr__card--cta"><strong>Elite trainer roster</strong><small>Explore all our athletes and certified trainers to pick the right one for your goals.</small><a class="tr__cbtn" href="dialog:entrenador~">Choose my trainer</a></div>
       </div>
     </div>
   </div>
@@ -26980,10 +27178,14 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       var fl = $('[data-dd-flag]', content);
       if (fl) { if (rep.length) { fl.hidden = false; fl.className = 'dd__flag is-hard'; fl.textContent = reportText(rep); } else if (soft.length) { fl.hidden = false; fl.className = 'dd__flag is-soft'; fl.textContent = dislikeText(p, tagsO, ingsO, soft); } else fl.hidden = true; }
     };
+    var trainerGate = function () {       // trainer profile: contact details only for customers with an active 4-week block
+      var lk = $('[data-tp-lock]', content), op = $('[data-tp-open]', content); if (!lk || !op) return;
+      loadCredits(function (c) { var m = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); lk.hidden = m; op.hidden = !m; });
+    };
     var open = function (card) {
       var det = $('[data-dish-detail]', card); if (!det) return;
-      content.innerHTML = det.innerHTML; var cp = $('[data-fn-price]', card), dp = $('.dd__price', content); if (cp && dp && dp.firstChild) dp.firstChild.textContent = cp.textContent; full.setAttribute('href', det.getAttribute('data-url') || '#'); sheet.setAttribute('aria-label', det.getAttribute('data-title') || '');
-      flagPanel(card); current = card; var btn = $('[data-pick]', card); pick.hidden = !(card.hasAttribute('data-fn-dish') && btn && !card.classList.contains('is-blocked'));
+      content.innerHTML = det.innerHTML; var cp = $('[data-fn-price]', card), dp = $('.dd__price', content); if (cp && dp && dp.firstChild) dp.firstChild.textContent = cp.textContent; full.setAttribute('href', det.getAttribute('data-url') || '#'); full.hidden = !det.getAttribute('data-url'); sheet.setAttribute('aria-label', det.getAttribute('data-title') || '');
+      flagPanel(card); trainerGate(); current = card; var btn = $('[data-pick]', card); pick.hidden = !(card.hasAttribute('data-fn-dish') && btn && !card.classList.contains('is-blocked'));
       last = document.activeElement; clearTimeout(timer); panel.hidden = false; document.documentElement.classList.add('has-dish-panel');
       content.scrollTop = 0; sheet.scrollTop = 0;
       requestAnimationFrame(function () { requestAnimationFrame(function () { panel.classList.add('is-open'); }); }); sheet.focus({ preventScroll: true });
@@ -27001,13 +27203,13 @@ window.KX_RECIPES = {"version":1,"dishes":{"pollo-a-las-hierbas":{"title":"Pollo
       var wbtn = t.closest('[data-fn-warnbtn]');
       if (wbtn) { e.preventDefault(); var bx = wbtn.closest('[data-fn-warnbox]'), on = !bx.classList.contains('is-open'); $$('[data-fn-warnbox].is-open').forEach(function (x) { x.classList.remove('is-open'); var b3 = $('[data-fn-warnbtn]', x); if (b3) b3.setAttribute('aria-expanded', 'false'); }); bx.classList.toggle('is-open', on); wbtn.setAttribute('aria-expanded', on ? 'true' : 'false'); return; }
       if (!t.closest('[data-fn-warnbox]')) $$('[data-fn-warnbox].is-open').forEach(function (x) { x.classList.remove('is-open'); });
-      var hit = t.closest('.dish__media, .dish__title a, .dish__go, .fn-dish__media, .fn-dish__title');
+      var hit = t.closest('.dish__media, .dish__title a, .dish__go, .fn-dish__media, .fn-dish__title, [data-tr-card]');
       if (!hit) { var cc = t.closest('[data-has-detail]'); if (cc && !t.closest('a, button, input, select, textarea, label, .fn-warnbox, .fn-note, .fn-mods, [data-fn-note]')) hit = cc; }
       if (!hit || t.closest('[data-pick], button')) return;
       var card = hit.closest('[data-has-detail]'); if (!card) return;
       e.preventDefault(); open(card);
     });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) close(); if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.hasAttribute && e.target.hasAttribute('data-tr-card')) { e.preventDefault(); open(e.target); } });
   }
 
   /* ---------- plan credits: weeks left, meals planned and which weeks can still be chosen (asked from the Sheet; signed-in customers only) ---------- */

@@ -1475,7 +1475,8 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.keyboard.press('Escape'); await page.waitForTimeout(150);
   // trainers (home section 4)
   await page.evaluate(() => { const e = document.querySelector('[data-page="home"] .tr'); window.scrollTo(0, e.getBoundingClientRect().top + scrollY - 80); }); await page.waitForTimeout(400);
-  await page.evaluate(() => [...document.querySelectorAll('[data-page="home"] .tr__card:not(.tr__card--cta)')].find((c) => /Fernando/.test(c.textContent)).click()); await page.waitForTimeout(350);
+  await page.evaluate(() => [...document.querySelectorAll('[data-page="home"] .tr__card:not(.tr__card--cta)')].find((c) => /Fernando/.test(c.textContent)).click()); await page.waitForTimeout(500);
+  await page.evaluate(() => document.querySelector('[data-dp-content] a[href^="dialog:entrenador"]').click()); await page.waitForTimeout(450);
   const trn = await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return { title: d.querySelector('[data-hxd-title]').textContent, who: d.querySelector('[name=entrenador]').value, vis: [...d.querySelectorAll('.hxd__g:not([hidden]) [name]')].map((x) => x.name).join() }; });
   ok('trainers: tapping a trainer opens "Elige a tu entrenador" with that trainer selected, goal, format, days per week and area', /entrenador/i.test(trn.title) && trn.who === 'Fernando' && /meta/.test(trn.vis) && /dias_semana/.test(trn.vis) && /zona/.test(trn.vis), JSON.stringify(trn));
   await fillBase(); await page.selectOption('[data-hx-dialog] [name=meta]', { index: 1 });
@@ -1682,6 +1683,58 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.click('#adm-c [data-tab="10"]'); await page.waitForTimeout(300);
   await page.fill('#adm-c [data-dir-form="trainer"] [name=name]', 'Ramón'); await page.fill('#adm-c [data-dir-form="trainer"] [name=email]', 'ramon@x.com'); await page.click('#adm-c [data-dir-save="trainer"]'); await page.waitForTimeout(300);
   ok('admin "Directorio": trainers and partner gyms are listed and can be added (their e-mail receives the requests)', admCalls.some((c) => c.action === 'circle_dir_save' && c.tab === 'trainer' && c.name === 'Ramón' && c.email === 'ramon@x.com') && await page.evaluate(() => /Carla/.test(document.querySelector('#adm-c [data-trainers]').textContent) && /Sports World/.test(document.querySelector('#adm-c [data-gyms]').textContent)));
+
+  // ---- v157/158: loader theme + trainer profile panel
+  {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    for (const th of ['fuego', 'llama']) {
+      await page.evaluate((t) => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); localStorage.setItem('kx-theme', t); localStorage.setItem('kx-test-orders', '0'); }, th);
+      await page.goto(URL0 + '#/home'); await page.reload(); await page.waitForTimeout(250);
+      const L = await page.evaluate(() => { const l = document.getElementById('loader'); if (!l) return null; const cs = getComputedStyle(l); return { bg: cs.backgroundImage, color: cs.color, flame: !!l.querySelector('.loader__flame'), k: !!l.querySelector('.loader__k'), bar: !!l.querySelector('[data-loader-bar]'), pct: !!l.querySelector('[data-loader-pct]') }; });
+      ok('loader (' + th + '): flame + K mark + progress bar, themed background', L && L.flame && L.k && L.bar && L.pct && /gradient/.test(L.bg), JSON.stringify(L));
+    }
+    await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx-seen', '1'); localStorage.setItem('kx-test-orders', '0'); });
+    await page.goto(URL0 + '#/home'); await page.reload(); await page.waitForTimeout(900);
+    const n = await page.evaluate(() => document.querySelectorAll('[data-tr-card]').length);
+    ok('trainers: every trainer card is a button that opens a profile', n >= 5, String(n));
+    await page.evaluate(() => document.querySelector('[data-tr-card]').scrollIntoView({ block: 'center' })); await page.waitForTimeout(300);
+    await page.evaluate(() => document.querySelector('[data-tr-card]').click()); await page.waitForTimeout(700);
+    const tp = await page.evaluate(() => { const p = document.querySelector('[data-dish-panel]'); const c = p.querySelector('[data-dp-content]'); return { open: !p.hidden, name: (c.querySelector('.dd__title') || {}).textContent, acc: c.querySelectorAll('.tp__acc li').length, heads: [...c.querySelectorAll('.dd__h')].map((h) => h.textContent.trim()), ig: (c.querySelector('.tp__ig') || {}).href || '', lockShown: !!c.querySelector('[data-tp-lock]') && !c.querySelector('[data-tp-lock]').hidden, contactHidden: c.querySelector('[data-tp-open]').hidden, full: !p.querySelector('[data-dp-full]').hidden }; });
+    ok('trainer panel: name, accolades, specialty, how they train, Instagram placeholder link', tp.open && tp.name && tp.acc >= 2 && tp.heads.length >= 4 && /instagram\.com/.test(tp.ig) && !tp.full, JSON.stringify(tp));
+    ok('trainer panel: contact is locked for someone without a 4-week block (with the "Empezar mi bloque" call to action)', tp.lockShown && tp.contactHidden, JSON.stringify(tp));
+    await page.keyboard.press('Escape'); await page.waitForTimeout(500);
+    await page.evaluate(() => localStorage.setItem('kx-test-orders', '2'));
+    await page.reload(); await page.waitForTimeout(900);
+    await page.evaluate(() => document.querySelector('[data-tr-card]').scrollIntoView({ block: 'center' })); await page.waitForTimeout(300);
+    await page.evaluate(() => document.querySelector('[data-tr-card]').click()); await page.waitForTimeout(800);
+    const tm = await page.evaluate(() => { const c = document.querySelector('[data-dp-content]'); return { lock: c.querySelector('[data-tp-lock]').hidden, open: !c.querySelector('[data-tp-open]').hidden, btn: ((c.querySelector('[data-tp-open] a[href^="dialog:entrenador"]') || {}).getAttribute || (() => ''))('href') }; });
+    ok('trainer panel: a block member sees the contact button (opens the trainer request)', tm.lock && tm.open && /dialog:entrenador~/.test(tm.btn || ''), JSON.stringify(tm));
+    await page.keyboard.press('Escape'); await page.waitForTimeout(400);
+  }
+
+  // ---- v159/160: class descriptions + panel, KFW cards
+  {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const CR2 = '[data-page="pg/circulo-privado"]';
+    await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx-seen', '1'); localStorage.setItem('kx-test-orders', '0'); });
+    await page.goto(`${URL0}#/pg/circulo-privado`); await page.reload(); await page.waitForTimeout(1200);
+    const cd = await page.evaluate((c) => [...document.querySelectorAll(c + ' .circle__card')].map((x) => ((x.querySelector('.circle__desc') || {}).textContent || '').trim().length), CR2);
+    ok('classes: every class card carries a description', cd.length >= 4 && cd.every((n) => n > 30), JSON.stringify(cd));
+    await page.evaluate((c) => document.querySelector(c + ' .circle__card .circle__top').click(), CR2); await page.waitForTimeout(700);
+    const cp = await page.evaluate(() => { const p = document.querySelector('[data-dish-panel]'), c = p.querySelector('[data-dp-content]'); return { open: !p.hidden, title: (c.querySelector('.dd__title') || {}).textContent, about: [...c.querySelectorAll('.dd__h')].map((h) => h.textContent).join('|'), desc: ((c.querySelector('.dd__desc') || {}).textContent || '').length, lock: !c.querySelector('[data-tp-lock]').hidden, pickHidden: p.querySelector('[data-dp-pick]').hidden }; });
+    ok('class panel: description, coach and venue; locked (no booking button) without a 4-week block', cp.open && cp.title && /Sobre esta clase/.test(cp.about) && cp.desc > 30 && cp.lock && cp.pickHidden, JSON.stringify(cp));
+    await page.keyboard.press('Escape'); await page.waitForTimeout(500);
+    await page.evaluate(() => localStorage.setItem('kx-test-orders', '2')); await page.reload(); await page.waitForTimeout(1200);
+    await page.evaluate((c) => document.querySelector(c + ' .circle__card .circle__top').click(), CR2); await page.waitForTimeout(800);
+    const cm = await page.evaluate(() => { const p = document.querySelector('[data-dish-panel]'), c = p.querySelector('[data-dp-content]'); return { lock: c.querySelector('[data-tp-lock]').hidden, pickHidden: p.querySelector('[data-dp-pick]').hidden, label: p.querySelector('[data-dp-pick]').textContent }; });
+    ok('class panel: a block member can book straight from the panel', cm.lock && !cm.pickHidden && /Reservar/.test(cm.label), JSON.stringify(cm));
+    await page.evaluate(() => document.querySelector('[data-dp-pick]').click()); await page.waitForTimeout(500);
+    ok('...and it opens the booking form for that class', await page.evaluate(() => !document.querySelector('[data-hx-dialog]').hidden));
+    await page.keyboard.press('Escape'); await page.waitForTimeout(300);
+    await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1000);
+    const kf = await page.evaluate(() => { const k = document.querySelector('[data-page="home"] .kf'); return { cards: k.querySelectorAll('.kf__card').length, col: !!k.querySelector('[data-kf-cards]') }; });
+    ok('KFW: the section shows its cards (store products when the collection has them, theme cards otherwise)', kf.col && kf.cards >= 4, JSON.stringify(kf));
+  }
 
   // ---- phones: nothing wider than the screen, the total bar is inside the screen
   await page.setViewportSize({ width: 390, height: 844 });

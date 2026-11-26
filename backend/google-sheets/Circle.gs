@@ -23,7 +23,7 @@
  */
 
 var CIRCLE_SHEETS = {
-  Clases: ['Clave', 'Deporte', 'Título', 'Coach', 'Fecha (AAAA-MM-DD)', 'Hora (HH:MM)', 'Sede', 'Cupo', 'Mínimo', 'Precio', 'Estado', 'Foto', 'Límite (horas antes)', 'Recordatorio enviado'],
+  Clases: ['Clave', 'Deporte', 'Título', 'Coach', 'Fecha (AAAA-MM-DD)', 'Hora (HH:MM)', 'Sede', 'Cupo', 'Mínimo', 'Precio', 'Estado', 'Foto', 'Límite (horas antes)', 'Recordatorio enviado', 'Descripción'],
   Reservas: ['ID', 'Fecha', 'Clase', 'Nombre', 'Correo', 'Teléfono', 'Lugares', 'Estado', 'CID', 'Pago', 'Idioma', 'RSVP'],
   Cupones: ['Código', 'Aliado', 'Nombre', 'Correo', 'CID', 'Emitido', 'Vence', 'Estado', 'Canjes', 'Último canje'],
   Entrenadores: ['Nombre', 'Rol', 'Zona', 'Correo', 'WhatsApp', 'Activo'],
@@ -60,7 +60,7 @@ function cTimeStr_(v) { return v instanceof Date ? Utilities.formatDate(v, CIRCL
 function cClass_(r) {
   var date = cDateStr_(r[4]), time = cTimeStr_(r[5]) || '09:00', start = null;
   try { start = Utilities.parseDate(date + ' ' + time, CIRCLE_TZ, 'yyyy-MM-dd HH:mm'); } catch (e) { start = null; }
-  return { key: cStr_(r[0]), sport: cStr_(r[1]), title: cStr_(r[2]), coach: cStr_(r[3]), date: date, time: time, venue: cStr_(r[6]), cap: Number(r[7]) || 0, min: Number(r[8]) || 0, price: Number(r[9]) || 0, status: cStr_(r[10]) || 'Abierta', art: cStr_(r[11]), limit: r[12] === '' ? 24 : Number(r[12]), reminded: cStr_(r[13]), start: start };
+  return { key: cStr_(r[0]), sport: cStr_(r[1]), title: cStr_(r[2]), coach: cStr_(r[3]), date: date, time: time, venue: cStr_(r[6]), cap: Number(r[7]) || 0, min: Number(r[8]) || 0, price: Number(r[9]) || 0, status: cStr_(r[10]) || 'Abierta', art: cStr_(r[11]), limit: r[12] === '' ? 24 : Number(r[12]), reminded: cStr_(r[13]), desc: cStr_(r[14]).slice(0, 600), start: start };
 }
 function cRes_(r) { return { id: cStr_(r[0]), at: r[1] instanceof Date ? r[1].toISOString() : cStr_(r[1]), cls: cStr_(r[2]), name: cStr_(r[3]), email: cStr_(r[4]).toLowerCase(), phone: cStr_(r[5]), seats: Number(r[6]) || 1, status: cStr_(r[7]), cid: cStr_(r[8]), paid: cStr_(r[9]), lang: cStr_(r[10]) || 'es', rsvp: cStr_(r[11]) }; }
 function cClasses_() { return cRows_('Clases').map(cClass_).filter(function (c) { return c.key; }); }
@@ -108,7 +108,7 @@ function circleClassesPublic_() {
   var now = new Date(), res = cReservas_();
   return cClasses_().filter(function (c) { return c.start && c.start.getTime() > now.getTime() - 3600000 && c.status !== 'Archivada'; }).sort(function (a, b) { return a.start - b.start; }).map(function (c) {
     var taken = cTaken_(c.key, res), left = Math.max(0, c.cap - taken), wait = res.filter(function (r) { return r.cls === c.key && r.status === 'En espera'; }).length;
-    return { key: c.key, sport: c.sport, title: c.title, coach: c.coach, date: c.date, time: c.time, venue: c.venue, cap: c.cap, min: c.min, price: c.price, status: c.status, art: c.art, taken: taken, left: left, full: left === 0, waiting: wait, limit: c.limit, deadline: c.start ? new Date(c.start.getTime() - c.limit * 3600000).toISOString() : '' };
+    return { key: c.key, sport: c.sport, title: c.title, coach: c.coach, date: c.date, time: c.time, venue: c.venue, cap: c.cap, min: c.min, price: c.price, status: c.status, art: c.art, desc: c.desc, taken: taken, left: left, full: left === 0, waiting: wait, limit: c.limit, deadline: c.start ? new Date(c.start.getTime() - c.limit * 3600000).toISOString() : '' };
   });
 }
 function circleBook_(p) {
@@ -273,8 +273,8 @@ function circleAdmin_(p) {
   try {
     if (act === 'circle_class_save') {
       var key = cStr_(p.ckey) || (cStr_(p.sport || 'clase') + '-' + cStr_(p.date)), row = cFindRow_('Clases', 1, key), sh = cSheet_('Clases');
-      var vals = [key, cStr_(p.sport), cStr_(p.title), cStr_(p.coach), cStr_(p.date), cStr_(p.time) || '09:00', cStr_(p.venue), Number(p.cap) || 10, Number(p.min) || 1, Number(p.price) || 0, cStr_(p.status) || 'Abierta', cStr_(p.art), p.limit === '' || p.limit == null ? 24 : Number(p.limit), ''];
-      if (row) { vals[13] = sh.getRange(row, 14).getValue(); sh.getRange(row, 1, 1, 14).setValues([vals]); } else sh.getRange(sh.getLastRow() + 1, 1, 1, 14).setValues([vals]);
+      var vals = [key, cStr_(p.sport), cStr_(p.title), cStr_(p.coach), cStr_(p.date), cStr_(p.time) || '09:00', cStr_(p.venue), Number(p.cap) || 10, Number(p.min) || 1, Number(p.price) || 0, cStr_(p.status) || 'Abierta', cStr_(p.art), p.limit === '' || p.limit == null ? 24 : Number(p.limit), '', cStr_(p.desc).slice(0, 600)];
+      if (row) { vals[13] = sh.getRange(row, 14).getValue(); sh.getRange(row, 1, 1, 15).setValues([vals]); } else sh.getRange(sh.getLastRow() + 1, 1, 1, 15).setValues([vals]);
       sh.getRange(row || sh.getLastRow(), 5).setNumberFormat('@'); return circleAdminData_();
     }
     if (act === 'circle_class_cancel') {

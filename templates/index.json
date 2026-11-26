@@ -369,6 +369,9 @@
             "spec": "Especialista en recomposición corporal.",
             "place": "Club Lomas · 2.4 km",
             "art": "tr-carla",
+            "bio": "Especialista en recomposición corporal: pierde grasa y gana músculo sin dietas extremas.",
+            "accolades": "Profesional IFBB Elite Pro\nEntrenadora certificada en nutrición deportiva",
+            "train": "Fuerza progresiva tres días por semana, cardio inteligente y revisión mensual de medidas. Todo alineado con tu plan Kulinaria.",
             "link": "dialog:entrenador~Carla"
           }
         },
@@ -380,6 +383,9 @@
             "spec": "Preparación física de alto rendimiento.",
             "place": "La Vista · 3.5 km",
             "art": "tr-ramon",
+            "bio": "Preparación física de alto rendimiento para quien quiere llevar su nivel más lejos.",
+            "accolades": "Mr. México\nPreparador físico de atletas",
+            "train": "Bloques de potencia e hipertrofia con periodización clara y control de carga semana a semana.",
             "link": "dialog:entrenador~Ramón"
           }
         },
@@ -391,6 +397,9 @@
             "spec": "Entrenamiento funcional y fuerza.",
             "place": "Cholula · 5.1 km",
             "art": "tr-elena",
+            "bio": "Entrenamiento funcional y fuerza para moverte mejor y con confianza.",
+            "accolades": "Entrenadora certificada\nFuncional y fuerza",
+            "train": "Circuitos funcionales y fuerza base, con progresión pensada para cualquier nivel.",
             "link": "dialog:entrenador~Elena"
           }
         },
@@ -402,6 +411,9 @@
             "spec": "Hipertrofia y acondicionamiento.",
             "place": "Zavaleta · 4.2 km",
             "art": "tr-fernando",
+            "bio": "Hipertrofia y acondicionamiento con técnica cuidada.",
+            "accolades": "Mr. México\nEspecialista en hipertrofia",
+            "train": "Rutinas por grupo muscular, énfasis en técnica y recuperación, coordinadas con tu nutrición.",
             "link": "dialog:entrenador~Fernando"
           }
         },
@@ -413,6 +425,9 @@
             "spec": "Atleta de élite y asesoría integral.",
             "place": "Angelópolis · 1.8 km",
             "art": "tr-jaime",
+            "bio": "Atleta de élite que ofrece asesoría integral de entrenamiento y alimentación.",
+            "accolades": "Profesional IFBB Elite Pro\nAsesoría integral",
+            "train": "Planes completos de entrenamiento y comida, con seguimiento cercano y metas por etapas.",
             "link": "dialog:entrenador~Jaime"
           }
         }
@@ -433,6 +448,7 @@
         "text": "Indumentaria deportiva de alto rendimiento diseñada para cada entrenamiento.",
         "button_label": "Explorar colección",
         "strip_title": "Colección oficial KFW",
+        "collection": "kulinaria-store",
         "art": "kfw-duo"
       },
       "blocks": {

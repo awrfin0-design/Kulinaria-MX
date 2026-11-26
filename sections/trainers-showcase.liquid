@@ -31,10 +31,38 @@
           {%- capture tx_r -%}{% render 'tx', s: bs.role %}{%- endcapture -%}
           {%- capture tx_sp -%}{% render 'tx', s: bs.spec %}{%- endcapture -%}
           {%- capture tx_pl -%}{% render 'tx', s: bs.place %}{%- endcapture -%}
-          <a class="tr__card" href="{{ bs.link | default: section.settings.cta_link | default: '/pages/embajadores-entrenadores' }}" {{ block.shopify_attributes }}>
+          {%- capture tx_bio -%}{% render 'tx', s: bs.bio %}{%- endcapture -%}
+          {%- capture tx_tr -%}{% render 'tx', s: bs.train %}{%- endcapture -%}
+          {%- assign acc = bs.accolades | newline_to_br | split: '<br />' -%}
+          {%- assign ig = bs.instagram | default: 'https://www.instagram.com/' -%}
+          <div class="tr__card" role="button" tabindex="0" data-has-detail data-tr-card {{ block.shopify_attributes }}>
             <span class="tr__cph">{% render 'photo', image: bs.image, art: bs.art, alt: bs.name, class: '', width: 400 %}</span>
-            <span class="tr__ctext"><strong>{{ bs.name }}</strong><em>{{ tx_r }}</em><small>{{ tx_sp }}</small><b>{{ tx_pl }}</b></span>
-          </a>
+            <span class="tr__ctext"><strong>{{ bs.name }}</strong><em>{{ tx_r }}</em><small>{{ tx_sp }}</small><b>{{ tx_pl }}</b><i class="tr__more">{{ 'trainer.view' | t }}</i></span>
+            <div data-dish-detail data-url="" data-title="{{ bs.name | escape }}" hidden>
+              <div class="dd__media tp__media">{% render 'photo', image: bs.image, art: bs.art, alt: bs.name, class: '', width: 800 %}</div>
+              <div class="dd__body tp">
+                <span class="tp__role">{{ tx_r }}</span>
+                <h2 class="dd__title">{{ bs.name }}</h2>
+                <p class="tp__place">{{ tx_pl }}</p>
+                <h3 class="dd__h">{{ 'trainer.specialty' | t }}</h3>
+                <p class="dd__desc">{{ tx_sp }}</p>
+                {%- if tx_bio != blank -%}<p class="dd__desc">{{ tx_bio }}</p>{%- endif -%}
+                <h3 class="dd__h">{{ 'trainer.accolades' | t }}</h3>
+                <ul class="tp__acc">
+                  {%- for ln in acc -%}{%- assign ln = ln | strip -%}{%- if ln != blank -%}<li>{% render 'tx', s: ln %}</li>{%- endif -%}{%- endfor -%}
+                </ul>
+                {%- if tx_tr != blank -%}<h3 class="dd__h">{{ 'trainer.how' | t }}</h3><p class="dd__desc">{{ tx_tr }}</p>{%- endif -%}
+                <h3 class="dd__h">{{ 'trainer.contact' | t }}</h3>
+                <a class="tp__ig" href="{{ ig }}" target="_blank" rel="noopener">{{ 'trainer.instagram' | t }} <b>{{ bs.handle | default: '@kulinaria.mx' }}</b></a>
+                <div class="tp__lock" data-tp-lock><p>{{ 'trainer.locked' | t }}</p><a class="btn btn--gold" href="/pages/pedido?plan=block">{{ 'hxd.cp_cta' | t }}</a></div>
+                <div class="tp__open" data-tp-open hidden>
+                  {%- if bs.phone != blank -%}<a class="tp__row" href="tel:{{ bs.phone | replace: ' ', '' }}">{{ bs.phone }}</a>{%- endif -%}
+                  {%- if bs.email != blank -%}<a class="tp__row" href="mailto:{{ bs.email }}">{{ bs.email }}</a>{%- endif -%}
+                  <a class="btn btn--gold" href="dialog:entrenador~{{ bs.name }}">{{ 'trainer.reach' | t: name: bs.name }}</a>
+                </div>
+              </div>
+            </div>
+          </div>
         {%- endfor -%}
         <div class="tr__card tr__card--cta"><strong>{{ tx_s_ct }}</strong><small>{{ tx_s_cx }}</small><a class="tr__cbtn" href="{{ section.settings.cta_link | default: '/pages/embajadores-entrenadores' }}">{{ tx_s_cl }}</a></div>
       </div>
@@ -71,6 +99,13 @@
         { "type": "text", "id": "place", "label": "Zona y distancia", "default": "Club Lomas · 2.4 km" },
         { "type": "image_picker", "id": "image", "label": "Foto (opcional)" },
         { "type": "text", "id": "art", "label": "Foto del tema", "default": "tr-carla" },
+        { "type": "textarea", "id": "bio", "label": "Perfil (panel lateral)", "default": "Atleta y entrenador en Puebla. Combina su experiencia en competencia con un enfoque práctico para el día a día." },
+        { "type": "textarea", "id": "accolades", "label": "Logros (una línea por logro)", "default": "Campeón nacional\nAtleta profesional certificado" },
+        { "type": "textarea", "id": "train", "label": "Cómo entrena", "default": "Sesiones personalizadas de fuerza y acondicionamiento, con seguimiento semanal y ajustes según tu plan de comidas." },
+        { "type": "text", "id": "handle", "label": "Usuario de Instagram (texto)", "default": "@kulinaria.mx" },
+        { "type": "text", "id": "instagram", "label": "Instagram (URL)" },
+        { "type": "text", "id": "phone", "label": "Teléfono / WhatsApp (solo clientes con bloque)" },
+        { "type": "text", "id": "email", "label": "Correo (solo clientes con bloque)" },
         { "type": "text", "id": "link", "label": "Enlace" }
       ]
     }

@@ -34,6 +34,7 @@
         "c0": {
           "type": "class",
           "settings": {
+            "desc": "Partidos y ejercicios guiados de pádel en pareja: saque, bandeja y juego en pared. Para todos los niveles; la clase se adapta al grupo.",
             "sport": "padel",
             "title": "Torneo Relámpago de Pádel",
             "host": "Ren Jiménez",
@@ -47,6 +48,7 @@
         "c1": {
           "type": "class",
           "settings": {
+            "desc": "Clínica de tenis con técnica de derecha y revés, saque y juego de puntos. Traemos las pelotas; tú trae tu raqueta y ganas.",
             "sport": "tenis",
             "title": "Clínica de Tenis de Alto Impacto",
             "host": "Anny De Vasquez",
@@ -60,6 +62,7 @@
         "c2": {
           "type": "class",
           "settings": {
+            "desc": "Rodada guiada en grupo con ritmo cómodo y regreso acompañado. Trae tu bici, casco e hidratación.",
             "sport": "ciclismo",
             "title": "Rodada Nocturna de Ritmo",
             "host": "BeccaQueen",
@@ -73,6 +76,7 @@
         "c3": {
           "type": "class",
           "settings": {
+            "desc": "Sesión de basketball con calentamiento, fundamentos y partido corto. Ideal para convivir y moverte.",
             "sport": "basketball",
             "title": "Reta Privada de Basketball",
             "host": "Anny De Vasquez",
@@ -86,6 +90,7 @@
         "c4": {
           "type": "class",
           "settings": {
+            "desc": "Carrera grupal con calentamiento, ritmos por nivel y enfriamiento. Todos terminan juntos.",
             "sport": "running",
             "title": "Trail Matutino de Running",
             "host": "BeccaQueen",
@@ -99,6 +104,7 @@
         "c5": {
           "type": "class",
           "settings": {
+            "desc": "Entrenamiento funcional en grupo: fuerza, movilidad y acondicionamiento con progresiones para cada nivel.",
             "sport": "funcional",
             "title": "Circuito Funcional Total Body",
             "host": "Ren Jiménez",
@@ -112,6 +118,7 @@
         "c6": {
           "type": "class",
           "settings": {
+            "desc": "Partidos y ejercicios guiados de pádel en pareja: saque, bandeja y juego en pared. Para todos los niveles; la clase se adapta al grupo.",
             "sport": "padel",
             "title": "Torneo de Pádel para Principiantes",
             "host": "Ren Jiménez",
@@ -125,6 +132,7 @@
         "c7": {
           "type": "class",
           "settings": {
+            "desc": "Clínica de tenis con técnica de derecha y revés, saque y juego de puntos. Traemos las pelotas; tú trae tu raqueta y ganas.",
             "sport": "tenis",
             "title": "Clínica de Tenis Signature",
             "host": "Anny De Vasquez",
@@ -138,6 +146,7 @@
         "c8": {
           "type": "class",
           "settings": {
+            "desc": "Rodada guiada en grupo con ritmo cómodo y regreso acompañado. Trae tu bici, casco e hidratación.",
             "sport": "ciclismo",
             "title": "Sesión de Ciclismo de Ritmo de Élite",
             "host": "BeccaQueen",
@@ -151,6 +160,7 @@
         "c9": {
           "type": "class",
           "settings": {
+            "desc": "Entrenamiento funcional en grupo: fuerza, movilidad y acondicionamiento con progresiones para cada nivel.",
             "sport": "funcional",
             "title": "Funcional Reserve Trail",
             "host": "Ren Jiménez",
@@ -164,6 +174,7 @@
         "c10": {
           "type": "class",
           "settings": {
+            "desc": "Sesión de basketball con calentamiento, fundamentos y partido corto. Ideal para convivir y moverte.",
             "sport": "basketball",
             "title": "Basketball Reserve Reta",
             "host": "Anny De Vasquez",
@@ -177,6 +188,7 @@
         "c11": {
           "type": "class",
           "settings": {
+            "desc": "Partidos y ejercicios guiados de pádel en pareja: saque, bandeja y juego en pared. Para todos los niveles; la clase se adapta al grupo.",
             "sport": "padel",
             "title": "Torneo de Pádel Signature",
             "host": "Ren Jiménez",
