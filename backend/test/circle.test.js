@@ -24,7 +24,8 @@ const ctx = {
   LockService: { getScriptLock: () => ({ waitLock() {}, releaseLock() {} }) },
   CacheService: { getScriptCache: () => ({ get: () => null, put() {} }) },
   MailApp: { sendEmail: (m) => mails.push(m) },
-  ScriptApp: { getProjectTriggers: () => triggers, deleteTrigger() {}, newTrigger: (f) => ({ timeBased: () => ({ everyHours: () => ({ create: () => triggers.push({ getHandlerFunction: () => f }) }) }) }) },
+  HtmlService: { createHtmlOutput: (h) => ({ html: h, setTitle() { return this; } }) },
+  ScriptApp: { getService: () => ({ getUrl: () => 'https://script.google.com/macros/s/X/exec' }), getProjectTriggers: () => triggers, deleteTrigger() {}, newTrigger: (f) => ({ timeBased: () => ({ everyHours: () => ({ create: () => triggers.push({ getHandlerFunction: () => f }) }) }) }) },
   ContentService: { createTextOutput: (s) => ({ s, setMimeType() { return this; } }), MimeType: { JSON: 1 } },
   Utilities: {
     formatDate: (d, tz, f) => { const p = (n) => String(n).padStart(2, '0'); const z = new Date(d.getTime() - 6 * 3600000); const iso = `${z.getUTCFullYear()}-${p(z.getUTCMonth() + 1)}-${p(z.getUTCDate())}`; if (f === 'yyyy-MM-dd') return iso; if (f === 'HH:mm') return `${p(z.getUTCHours())}:${p(z.getUTCMinutes())}`; return `${iso} ${p(z.getUTCHours())}:${p(z.getUTCMinutes())}`; },
@@ -50,7 +51,7 @@ adm({ action: 'circle_class_save', ckey: 'padel-x', sport: 'padel', title: 'Torn
 adm({ action: 'circle_class_save', ckey: 'tenis-y', sport: 'tenis', title: 'Clínica de Tenis', coach: 'Jess', date: iso(3), time: '09:00', venue: 'Raqueta', cap: 5, min: 4, price: 600, limit: 24 });
 const lst = get({ action: 'classes' });
 ok('the public list shows both classes with seats and no personal data', lst.classes.length >= 2 && lst.classes.find((c) => c.key === 'padel-x').left === 3 && !JSON.stringify(lst).includes('@'), lst.classes[0]);
-const book1 = (cid, cls, seats, email) => get({ action: 'book', cid: String(cid), token: 'tok' + cid, cls, seats: String(seats), name: 'Ana', email: email || 'ana@x.com', phone: '1' });
+const book1 = (cid, cls, seats, email) => get({ action: 'book', cid: String(cid), token: 'tok' + cid, cls, seats: String(seats), name: 'Ana', last: 'Pérez', email: email || 'ana@x.com', phone: '1' });
 ok('a visitor without a block cannot book (members only)', get({ action: 'book', cid: '2', token: 'tok2', cls: 'padel-x', seats: '1', name: 'Bob', email: 'b@x.com' }).error === 'members_only');
 ok('a forged token cannot book', get({ action: 'book', cid: '1', token: 'bad', cls: 'padel-x', seats: '1', name: 'Bob', email: 'b@x.com' }).error === 'members_only');
 const b1 = book1(1, 'padel-x', 2, 'ana@x.com');
@@ -78,7 +79,8 @@ ok('the waiting list stays waiting while the class is still full', rs(b3.id)[7] 
 // a seat frees up: the waiting list is promoted
 get({ action: 'circle_res_set', key: 'k', id: b1.id, status: 'Cancelada' });
 mails.length = 0; run('circleTick()');
-ok('the first run inside 24 h reminds the confirmed people', mails.some((m) => /mañana/.test(m.subject)));
+var firstRsvp = mails.find((m) => /RSVP final/.test(m.subject)) || { htmlBody: '' };
+ok('the first run inside 24 h sends the one final RSVP e-mail (with the one-click link) to the confirmed people', mails.some((m) => /RSVP final/.test(m.subject) && /action=rsvp&id=/.test(m.htmlBody)));
 ok('when a seat is freed the waiting list is promoted automatically and told', rs(b3.id)[7] === 'Confirmada' && mails.some((m) => m.to === 'luis@x.com' && /confirmado/.test(m.htmlBody)), rs(b3.id));
 // payment: a Shopify order carrying the reservation id marks the seat as paid
 run('handleOrder_ = handleOrder_;');
@@ -88,7 +90,23 @@ ok('the paid order marks the reservation Pagado and e-mails the receipt (owner i
 const b5 = book1(4, 'padel-x', 1, 'eva2@x.com');
 setStart('padel-x', 5); mails.length = 0; run('circleTick()');
 ok('unpaid confirmed seats are released PAY_HOURS before the class (the paid ones stay)', rs(b5.id)[7] === 'Cancelada' && rs(b3.id)[7] === 'Confirmada');
-ok('the 24 h reminder is sent only once (it already went out at the previous run)', !mails.some((m) => /mañana/.test(m.subject)) && sheets.Clases.rows.find((r) => r[0] === 'padel-x')[13] === 'sí');
+ok('the final RSVP is sent only once (it already went out at the previous run)', !mails.some((m) => /RSVP final/.test(m.subject)) && sheets.Clases.rows.find((r) => r[0] === 'padel-x')[13] === 'sí');
+// RSVP: the one-click link marks the reservation and rejects a forged one
+const rsvpMail = firstRsvp;
+const lm = (rsvpMail.htmlBody.match(/action=rsvp&id=([^&"]+)&t=([0-9a-f]+)/) || []);
+const doRsvp = (id, t) => run('circleRsvpPage_({ id: ' + JSON.stringify(id) + ', t: ' + JSON.stringify(t) + ' })').html;
+ok('a forged RSVP link is refused', /No pudimos registrar/.test(doRsvp(lm[1] || 'x', 'deadbeef')));
+ok('the real RSVP link marks "Sí" and thanks the person', /te esperamos/.test(doRsvp(lm[1], lm[2])) && sheets.Reservas.rows.find((r) => r[0] === lm[1])[11] === 'Sí');
+// names: first name + last name + e-mail are required to book
+members[7] = { hasPlan: true, plan: 'block' }; vm.runInContext('creditsFor_ = function (cid) { return ' + JSON.stringify(members) + '[cid] || { hasPlan: false }; };', ctx);
+adm({ action: 'circle_class_save', ckey: 'five-z', sport: 'funcional', title: 'Circuito', coach: 'Paulina', date: iso(3), time: '09:00', venue: 'Gym', cap: 20, min: 6, price: 600, limit: 24 });
+ok('booking without a last name is refused', get({ action: 'book', cid: '7', token: 'tok7', cls: 'five-z', seats: '1', name: 'Eva', email: 'e@x.com' }).error === 'bad_name');
+ok('booking without a valid e-mail is refused', get({ action: 'book', cid: '7', token: 'tok7', cls: 'five-z', seats: '1', name: 'Eva', last: 'Soto', email: 'nope' }).error === 'bad_contact');
+ok('the full name (first + last) is what is stored', (() => { const r = get({ action: 'book', cid: '7', token: 'tok7', cls: 'five-z', seats: '1', name: 'Eva', last: 'Soto', email: 'eva5@x.com' }); return r.ok && sheets.Reservas.rows.find((x) => x[0] === r.id)[3] === 'Eva Soto'; })());
+// 5 people or fewer (minimum 6): the class does not go and everybody gets the cancellation e-mail
+for (let i = 1; i < 5; i++) get({ action: 'book', cid: '7', token: 'tok7', cls: 'five-z', seats: '1', name: 'P' + i + 'x', last: 'Lopez', email: 'p' + i + '@x.com' });
+setStart('five-z', 20); mails.length = 0; run('circleTick()');
+ok('with 5 people (minimum 6) the class is cancelled and all 5 get the automatic cancellation e-mail, nobody is charged', cls('five-z') === 'Cancelada' && mails.filter((m) => /clase cancelada/.test(m.subject)).length === 5 && sheets.Reservas.rows.filter((r) => r[2] === 'five-z' && r[7] === 'Cancelada').length === 5);
 // coupons
 const c1 = get({ action: 'coupon', cid: '1', token: 'tok1', partner: 'magnate', email: 'ana@x.com', name: 'Ana' });
 ok('a member gets a personal partner code, stored and e-mailed', c1.ok && /^KMAG-[0-9A-Z]+$/.test(c1.code) && sheets.Cupones.rows.length === 2 && mails.some((m) => m.to === 'ana@x.com' && m.htmlBody.indexOf(c1.code) > -1), c1);

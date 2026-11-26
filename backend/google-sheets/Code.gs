@@ -55,6 +55,7 @@ function doGet(e) {
   if (params.action === 'profile') return out_(profileGet_(params.cid, params.token));
   if (params.action === 'week') return out_(weekGet_(params.cid, params.token, params.week));
   if (params.action === 'credits') return out_(creditsGet_(params.cid, params.token));
+  if (params.action === 'rsvp') return circleRsvpPage_(params);
   if (/^(classes|book|coupon|coupon_check|myres)$/.test(String(params.action || ''))) return out_(circlePublic_(params));
   if (params.action === 'weekset') return out_(weekSet_(params.cid, params.token, { week: params.week, email: params.email, upgrade: params.upgrade, days: String(params.days || '').split('|') }));
   if (params.action === 'pause') return out_(pauseSet_(params.cid, params.token, { mode: params.mode, week: params.week, weeks: String(params.weeks || '').split('|').filter(Boolean), email: params.email }));

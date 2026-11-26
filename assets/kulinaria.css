@@ -5016,3 +5016,22 @@ button.fn-wk__grp:hover{background:#ff6200;color:#fff;border-color:#ff6200}
   .fn-cr__stage{grid-template-columns:minmax(0,.55fr) minmax(0,2.2fr) minmax(0,.55fr);padding:0 26px;gap:6px}
   .fn-cr__n b,.fn-cr__n small{display:none}.fn-cr__n{padding:6px}
 }
+
+/* v155: micronutrients in the weekly tally */
+.fn-sm__micro{margin-top:14px}.fn-sm__micro h5{margin:0 0 8px;font:700 .78rem var(--font-body);color:#fff}
+.fn-sm__micro ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.fn-sm__micro li{display:grid;grid-template-columns:minmax(80px,1fr) minmax(70px,.8fr) minmax(70px,1.4fr) 40px;gap:8px;align-items:center;font-size:.78rem;color:#e4e4e4}
+.fn-sm__micro li b{font-weight:600;color:#fff;text-align:right}.fn-sm__micro li em{font-style:normal;color:#ffb47a;text-align:right}
+.fn-sm__vd{display:block;height:6px;border-radius:5px;background:#222;overflow:hidden}.fn-sm__vd u{display:block;height:100%;background:linear-gradient(90deg,#e05400,#ff8a3d)}
+
+/* v156: every day card has the same rows at the same heights (names reserve 3 lines, one-line nutrition, fixed chip row, equal buttons) */
+.fn-wk .fn-wk__top{min-height:calc(1.22em * 3);align-items:flex-start}
+.fn-wk .fn-wk__name{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;min-height:calc(1.22em * 3);line-height:1.22}
+.fn-wk .fn-wk__ed{align-self:flex-start}
+.fn-wk .fn-wk__m{display:block;min-height:1.3em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fn-wk .fn-wk__tier{min-height:26px;display:inline-flex;align-items:center;box-sizing:border-box}
+.fn-wk .fn-wk__slot>.fn-wk__tier{align-self:flex-start}
+.fn-wk .fn-wk__up,.fn-wk .fn-wk__swap,.fn-wk .fn-wk__max,.fn-wk__comp,.fn-wk__add2,.fn-wk .fn-wk__add{box-sizing:border-box;min-height:40px;display:flex;align-items:center;justify-content:center;line-height:1.1}
+.fn-wk .fn-wk__max{border:1px dashed rgba(255,255,255,.28);border-radius:999px;color:#9a9a9a;font:600 .76rem var(--font-body)}
+.fn-wk .fn-wk__card h4{min-height:1.6em;align-items:baseline}
+.fn-wk .fn-wk__img{flex:none}

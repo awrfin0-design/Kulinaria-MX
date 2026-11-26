@@ -1107,13 +1107,14 @@
       var name = ($('[name=name]', form).value || '').trim(), email = ($('[name=email]', form).value || '').trim();
       if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !$('[name=consent]', form).checked) { if (err) { err.textContent = dlg.getAttribute('data-t-err'); err.hidden = false; } return; }
       if (kind === 'evento' && calIn && !calIn.value) { if (err) { err.textContent = dlg.getAttribute('data-t-date'); err.hidden = false; } return; }
+      if (kind === 'clase' && ((($('[name=apellido]', form) || {}).value || '').trim().length < 2 || name.length < 2)) { if (err) { err.textContent = dlg.getAttribute('data-t-last'); err.hidden = false; } return; }
       var fields = { tipo: kind, interes: what, origen: location.hash.replace(/^#\//, '') || location.pathname };
       $$('.hxd__g:not([hidden]) [name]', dlg).forEach(function (x) { if ((x.value || '').trim()) fields[x.name] = x.value.trim(); });
       if (($('[name=notas]', form).value || '').trim()) fields.notas = $('[name=notas]', form).value.trim();
       if (kind === 'cupon') fields.cupon = code;
       var ep = dlg.getAttribute('data-endpoint');
       if (kind === 'clase' && ep && ckey) {                  // a real booking: the sheet answers with the state (pending / waiting list / full)
-        var ac = acct() || {}, q = { action: 'book', cid: ac.cid || '', token: ac.token || '', cls: ckey, seats: ($('[name=lugares]', form) || {}).value || '1', name: name, email: email, phone: ($('[name=phone]', form).value || '').trim(), lang: cfg.lang === 'en' ? 'en' : 'es' };
+        var ac = acct() || {}, q = { action: 'book', cid: ac.cid || '', token: ac.token || '', cls: ckey, last: (($('[name=apellido]', form) || {}).value || '').trim(), seats: ($('[name=lugares]', form) || {}).value || '1', name: name, email: email, phone: ($('[name=phone]', form).value || '').trim(), lang: cfg.lang === 'en' ? 'en' : 'es' };
         if (go) go.disabled = true;
         fetch(ep + (ep.indexOf('?') > -1 ? '&' : '?') + Object.keys(q).map(function (k) { return k + '=' + encodeURIComponent(q[k]); }).join('&'))
           .then(function (r) { return r.json(); })
@@ -1689,7 +1690,7 @@
           li.appendChild(b); li.appendChild(x); li.appendChild(x2); li.appendChild(ed); weekBox.appendChild(li);
         }
       };
-      var macroOf = function (pid) { var d = pid && byPid(pid); if (!d) return null; return { k: +d.getAttribute('data-kcal') || 0, p: +d.getAttribute('data-protein') || 0, c: +d.getAttribute('data-carbs') || 0, f: +d.getAttribute('data-fat') || 0, fi: +d.getAttribute('data-fiber') || 0, su: +d.getAttribute('data-sugar') || 0, so: +d.getAttribute('data-sodium') || 0 }; };
+      var macroOf = function (pid) { var d = pid && byPid(pid); if (!d) return null; return { k: +d.getAttribute('data-kcal') || 0, p: +d.getAttribute('data-protein') || 0, c: +d.getAttribute('data-carbs') || 0, f: +d.getAttribute('data-fat') || 0, fi: +d.getAttribute('data-fiber') || 0, su: +d.getAttribute('data-sugar') || 0, so: +d.getAttribute('data-sodium') || 0, ca: +d.getAttribute('data-calcium') || 0, fe: +d.getAttribute('data-iron') || 0, k2: +d.getAttribute('data-potassium') || 0, mg: +d.getAttribute('data-magnesium') || 0, vc: +d.getAttribute('data-vitc') || 0, va: +d.getAttribute('data-vita') || 0 }; };
       var dayMacros = function (i) { var t = { k: 0, p: 0, c: 0, f: 0, n: 0 }; [st.days[i], st.days2[i]].forEach(function (pid) { var m = macroOf(pid); if (m) { t.k += m.k; t.p += m.p; t.c += m.c; t.f += m.f; t.n++; } }); return t; };
       var paintMacros = function () {
         var box = $('[data-fn-macros]', holder); if (!box) return;
@@ -2378,8 +2379,15 @@
         var im = $('img', d), src = im ? (im.currentSrc || im.src) : '';
         return '<li class="fn-sm__day"><h5>' + esc(dayLabel(i).split(' ')[0]) + '</h5><div><span class="fn-sm__ph" style="background-image:url(&quot;' + esc(src) + '&quot;)"></span><p>' + parts.join(' ') + '</p></div></li>';
       };
+      // micronutrients: daily average of the weekday plates against the daily reference value (only the ones the dish sheets include)
+      var MICRO = [['fi', 'mi_fi', 'g', 28, 1], ['su', 'mi_su', 'g', 50, 1], ['so', 'mi_so', 'mg', 2300, 0], ['ca', 'mi_ca', 'mg', 1000, 0], ['fe', 'mi_fe', 'mg', 18, 1], ['k2', 'mi_k', 'mg', 3500, 0], ['mg', 'mi_mg', 'mg', 400, 0], ['vc', 'mi_vc', 'mg', 90, 1], ['va', 'mi_va', 'mcg', 900, 0]];
+      var microHtml = function (tot, we, nd) {
+        var rowsM = MICRO.map(function (m) { var v = nd ? (tot[m[0]] - we[m[0]]) / nd : 0; return v > 0 ? { n: w2(m[1]), v: v, u: m[2], vd: Math.round(v / m[3] * 100), dec: m[4] } : null; }).filter(Boolean);
+        if (!rowsM.length) return '<p class="fn-sm__fine">' + esc(w2('micro_none')) + '</p>';
+        return '<div class="fn-sm__micro"><h5>' + esc(w2('micro_t')) + ' · ' + esc(w2('micro_vd')) + '</h5><ul>' + rowsM.map(function (r) { return '<li><span>' + esc(r.n) + '</span><b>' + (r.dec ? r.v.toFixed(1) : Math.round(r.v)) + ' ' + r.u + '</b><i class="fn-sm__vd"><u style="width:' + Math.min(100, r.vd) + '%"></u></i><em>' + r.vd + '%</em></li>'; }).join('') + '</ul></div>';
+      };
       var nutriHtml = function () {
-        var rows = [], T0 = { k: 0, p: 0, c: 0, f: 0, fi: 0, su: 0, so: 0 }, tot = Object.assign({}, T0), nd = 0, have = { fi: false, su: false, so: false };
+        var rows = [], T0 = { k: 0, p: 0, c: 0, f: 0, fi: 0, su: 0, so: 0, ca: 0, fe: 0, k2: 0, mg: 0, vc: 0, va: 0 }, tot = Object.assign({}, T0), nd = 0, have = { fi: false, su: false, so: false };
         var add = function (a, m) { Object.keys(T0).forEach(function (k) { a[k] += m[k] || 0; }); };
         var lbl = function (x) { return Math.round(x).toLocaleString(cfg.lang === 'en' ? 'en-US' : 'es-MX'); };
         for (var i = 0; i < MEALS; i++) { var row = Object.assign({}, T0), n = 0; [st.days[i], st.days2[i]].forEach(function (p) { var m = p && macroOf(p); if (m) { add(row, m); n++; } }); if (n) { rows.push({ n: dayLabel(i).split(' ')[0], r: row }); add(tot, row); nd++; } }
@@ -2395,6 +2403,7 @@
         return '<section class="fn-sm__nut"><h4>' + esc(w2('nut_t')) + '</h4><div class="fn-sm__tw"><table><thead><tr><th>' + esc(w2('nut_day')) + '</th>' + cols.map(function (c) { return '<th>' + esc(c[1]) + '</th>'; }).join('') + '</tr></thead><tbody>' + body
           + '</tbody><tfoot><tr><th>' + esc(w2('nut_avg')) + '</th>' + cols.map(function (c) { return cell(avg, c[0]); }).join('') + '</tr><tr class="is-total"><th>' + esc(w2('nut_total')) + '</th>' + cols.map(function (c) { return cell(tot, c[0]); }).join('') + '</tr></tfoot></table></div>'
           + '<p class="fn-sm__split"><b>' + esc(w2('nut_split')) + '</b><i class="fn-sm__bar"><u style="width:' + pc(kP) + '%"></u><u style="width:' + pc(kC) + '%"></u><u style="width:' + pc(kF) + '%"></u></i><span>' + esc(w2('nut_p')) + ' ' + pc(kP) + '% · ' + esc(w2('nut_c')) + ' ' + pc(kC) + '% · ' + esc(w2('nut_f')) + ' ' + pc(kF) + '%</span></p>'
+          + microHtml(tot, we, nd)
           + '<p class="fn-sm__fine">' + esc(w2('nut_note')) + (have.fi || have.su || have.so ? '' : ' ' + esc(w2('nut_micro'))) + '</p></section>';
       };
       var openSum = function () {

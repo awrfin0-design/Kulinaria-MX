@@ -2,7 +2,7 @@
 <div class="hxd" data-hx-dialog hidden role="dialog" aria-modal="true" aria-labelledby="hxd-t" data-endpoint="{{ shop.metafields.kulinaria.sheet_url.value | escape }}" data-price="600" data-gated="{{ settings.gated_requests | default: 'clase,consulta,entrenador,cupon' | escape }}" data-busy="{{ settings.event_busy_dates | escape }}" data-lead="{{ settings.event_lead_days | default: 3 }}" data-wd="{{ 'hxd.cal_wd' | t }}" data-months="{{ 'hxd.cal_months' | t }}" data-t-date="{{ 'hxd.err_date' | t }}" data-t-chosen="{{ 'hxd.cal_chosen' | t }}" data-t-pick="{{ 'hxd.cal_pick' | t }}"
   data-t-consulta="{{ 'hxd.t_consulta' | t }}" data-t-plan="{{ 'hxd.t_plan' | t }}" data-t-cupon="{{ 'hxd.t_cupon' | t }}" data-t-evento="{{ 'hxd.t_evento' | t }}" data-t-entrenador="{{ 'hxd.t_entrenador' | t }}" data-t-clase="{{ 'hxd.t_clase' | t }}" data-t-sede="{{ 'hxd.t_sede' | t }}" data-t-gimnasio="{{ 'hxd.t_gimnasio' | t }}" data-s-sede="{{ 'hxd.s_sede' | t }}" data-s-gimnasio="{{ 'hxd.s_gimnasio' | t }}"
   data-s-consulta="{{ 'hxd.s_consulta' | t }}" data-s-evento="{{ 'hxd.s_evento' | t }}" data-s-entrenador="{{ 'hxd.s_entrenador' | t }}" data-s-clase="{{ 'hxd.s_clase' | t }}" data-s-plan="{{ 'hxd.s' | t }}" data-s-cupon="{{ 'hxd.s' | t }}"
-  data-t-cupsend="{{ 'hxd.cp_send' | t }}" data-t-err="{{ 'hxd.err' | t }}" data-t-bk-pend="{{ 'circle.booked' | t }}" data-t-bk-wait="{{ 'circle.booked_wait' | t }}" data-t-bk-conf="{{ 'circle.booked_conf' | t }}" data-t-sent="{{ 'circle.sent' | t }}" data-login="{% render 'login-url', back: request.path %}">
+  data-t-cupsend="{{ 'hxd.cp_send' | t }}" data-t-err="{{ 'hxd.err' | t }}" data-t-last="{{ 'hxd.err_last' | t }}" data-t-bk-pend="{{ 'circle.booked' | t }}" data-t-bk-wait="{{ 'circle.booked_wait' | t }}" data-t-bk-conf="{{ 'circle.booked_conf' | t }}" data-t-sent="{{ 'circle.sent' | t }}" data-login="{% render 'login-url', back: request.path %}">
   <div class="hxd__bg" data-hxd-close></div>
   <div class="hxd__box">
     <button class="hxd__x" type="button" data-hxd-close aria-label="{{ 'hxd.close' | t }}">&times;</button>
@@ -47,6 +47,7 @@
         <label>{{ 'hxd.gy_city' | t }}<input type="text" name="ciudad" maxlength="80"></label>
       </div>
       <div class="hxd__g" data-for="clase">
+        <label>{{ 'hxd.last' | t }}<input type="text" name="apellido" maxlength="60" autocomplete="family-name"></label>
         <label>{{ 'hxd.cl_seats' | t }}<select name="lugares"><option>1</option><option>2</option><option>3</option><option>4</option></select></label>
       </div>
       <div class="hxd__g hxd__coupon" data-for="cupon">

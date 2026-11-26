@@ -12,7 +12,7 @@
  *   PAY_HOURS         hours before the class when an unpaid seat is released (default 12)
  *   COUPON_PREFIXES   JSON, partner key -> code prefix, e.g. {"magnate":"KMAG","kfw":"KKFW"}  (optional)
  *
- * Rules (change them in the Clases tab, per class):
+ * Rules (change them in the Clases tab, per class). Default: with 5 people or fewer (Mínimo = 6) the class does not go and everybody is told by e-mail.
  *   - A class opens with a capacity (Cupo) and a minimum (Mínimo) of seats. Members book (Reservas = Pendiente).
  *   - At the confirmation deadline (Límite = hours before the start) the hourly timer looks at the seats:
  *       seats >= Mínimo  -> class Confirmada, every Pendiente reservation becomes Confirmada, people get the payment link
@@ -24,7 +24,7 @@
 
 var CIRCLE_SHEETS = {
   Clases: ['Clave', 'Deporte', 'Título', 'Coach', 'Fecha (AAAA-MM-DD)', 'Hora (HH:MM)', 'Sede', 'Cupo', 'Mínimo', 'Precio', 'Estado', 'Foto', 'Límite (horas antes)', 'Recordatorio enviado'],
-  Reservas: ['ID', 'Fecha', 'Clase', 'Nombre', 'Correo', 'Teléfono', 'Lugares', 'Estado', 'CID', 'Pago', 'Idioma'],
+  Reservas: ['ID', 'Fecha', 'Clase', 'Nombre', 'Correo', 'Teléfono', 'Lugares', 'Estado', 'CID', 'Pago', 'Idioma', 'RSVP'],
   Cupones: ['Código', 'Aliado', 'Nombre', 'Correo', 'CID', 'Emitido', 'Vence', 'Estado', 'Canjes', 'Último canje'],
   Entrenadores: ['Nombre', 'Rol', 'Zona', 'Correo', 'WhatsApp', 'Activo'],
   Gimnasios: ['Nombre', 'Zona', 'Dirección', 'Contacto', 'Correo', 'Teléfono', 'Punto de entrega', 'Activo']
@@ -62,7 +62,7 @@ function cClass_(r) {
   try { start = Utilities.parseDate(date + ' ' + time, CIRCLE_TZ, 'yyyy-MM-dd HH:mm'); } catch (e) { start = null; }
   return { key: cStr_(r[0]), sport: cStr_(r[1]), title: cStr_(r[2]), coach: cStr_(r[3]), date: date, time: time, venue: cStr_(r[6]), cap: Number(r[7]) || 0, min: Number(r[8]) || 0, price: Number(r[9]) || 0, status: cStr_(r[10]) || 'Abierta', art: cStr_(r[11]), limit: r[12] === '' ? 24 : Number(r[12]), reminded: cStr_(r[13]), start: start };
 }
-function cRes_(r) { return { id: cStr_(r[0]), at: r[1] instanceof Date ? r[1].toISOString() : cStr_(r[1]), cls: cStr_(r[2]), name: cStr_(r[3]), email: cStr_(r[4]).toLowerCase(), phone: cStr_(r[5]), seats: Number(r[6]) || 1, status: cStr_(r[7]), cid: cStr_(r[8]), paid: cStr_(r[9]), lang: cStr_(r[10]) || 'es' }; }
+function cRes_(r) { return { id: cStr_(r[0]), at: r[1] instanceof Date ? r[1].toISOString() : cStr_(r[1]), cls: cStr_(r[2]), name: cStr_(r[3]), email: cStr_(r[4]).toLowerCase(), phone: cStr_(r[5]), seats: Number(r[6]) || 1, status: cStr_(r[7]), cid: cStr_(r[8]), paid: cStr_(r[9]), lang: cStr_(r[10]) || 'es', rsvp: cStr_(r[11]) }; }
 function cClasses_() { return cRows_('Clases').map(cClass_).filter(function (c) { return c.key; }); }
 function cReservas_() { return cRows_('Reservas').map(cRes_).filter(function (r) { return r.id; }); }
 function cTaken_(key, reservas) { return (reservas || cReservas_()).filter(function (r) { return r.cls === key && /^(Pendiente|Confirmada)$/.test(r.status); }).reduce(function (a, r) { return a + r.seats; }, 0); }
@@ -113,8 +113,9 @@ function circleClassesPublic_() {
 }
 function circleBook_(p) {
   if (!circleMember_(p.cid, p.token)) return { ok: false, error: 'members_only' };
-  var name = cStr_(p.name).slice(0, 100), email = cStr_(p.email).toLowerCase().slice(0, 120), phone = cStr_(p.phone).slice(0, 40), seats = Math.max(1, Math.min(4, parseInt(p.seats, 10) || 1)), lang = p.lang === 'en' ? 'en' : 'es';
-  if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { ok: false, error: 'bad_contact' };
+  var first = cStr_(p.name).slice(0, 60), last = cStr_(p.last).slice(0, 60), name = (first + ' ' + last).trim(), email = cStr_(p.email).toLowerCase().slice(0, 120), phone = cStr_(p.phone).slice(0, 40), seats = Math.max(1, Math.min(4, parseInt(p.seats, 10) || 1)), lang = p.lang === 'en' ? 'en' : 'es';
+  if (first.length < 2 || last.length < 2) return { ok: false, error: 'bad_name' };
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { ok: false, error: 'bad_contact' };
   var lock = LockService.getScriptLock(); lock.waitLock(20000);
   try {
     var cls = cClasses_().filter(function (c) { return c.key === String(p.cls); })[0];
@@ -124,7 +125,7 @@ function circleBook_(p) {
     if (dup) return { ok: true, duplicate: true, state: dup.status, id: dup.id };
     var left = cls.cap - cTaken_(cls.key, res), state = left >= seats ? (cls.status === 'Confirmada' ? 'Confirmada' : 'Pendiente') : 'En espera';
     var id = 'r' + new Date().getTime().toString(36) + Math.random().toString(36).slice(2, 5), sh = cSheet_('Reservas');
-    sh.getRange(sh.getLastRow() + 1, 1, 1, 11).setValues([[id, new Date(), cls.key, name, email, phone, seats, state, String(p.cid), cls.price ? 'Pendiente' : '—', lang]]);
+    sh.getRange(sh.getLastRow() + 1, 1, 1, 12).setValues([[id, new Date(), cls.key, name, email, phone, seats, state, String(p.cid), cls.price ? 'Pendiente' : '—', lang, '']]);
     var rr = { id: id, name: name, email: email, seats: seats, lang: lang, status: state };
     cMailBook_(rr, cls, state);
     var o = cProp_('ALERT_EMAILS', ''); if (o) cMail_(o, 'Nueva reserva · ' + cls.title, '<p><b>' + name + '</b> (' + email + (phone ? ', ' + phone : '') + ') · ' + seats + ' lugar(es) · <b>' + state + '</b><br>' + cls.title + ' · ' + cWhen_(cls) + '<br>Lugares tomados: ' + (cTaken_(cls.key) ) + ' / ' + cls.cap + ' (mínimo ' + cls.min + ')</p>', false);
@@ -176,7 +177,12 @@ function circleTick() {
         // reminder 24 h before
         if (c.status === 'Confirmada' && hours <= 24 && !c.reminded) {
           sh.getRange(row, 14).setValue('sí');
-          res.filter(function (x) { return x.cls === c.key && x.status === 'Confirmada'; }).forEach(function (x) { cMail_(x.email, cTxt_(x.lang, 'Kulinaria · mañana tu clase', 'Kulinaria · your class is tomorrow'), cTxt_(x.lang, '<p>Hola ' + x.name + ', te esperamos en <b>' + c.title + '</b>: ' + cWhen_(c) + ', ' + c.venue + '. Coach ' + c.coach + '.</p>', '<p>Hi ' + x.name + ', see you at <b>' + c.title + '</b>: ' + cWhen_(c) + ', ' + c.venue + '. Coach ' + c.coach + '.</p>'), false); });
+          res.filter(function (x) { return x.cls === c.key && x.status === 'Confirmada'; }).forEach(function (x) {
+            var rsvp = cRsvpLink_(x.id), unpaid = c.price && x.paid === 'Pendiente', pl = unpaid ? cPayLink_(x, c) : '';
+            cMail_(x.email, cTxt_(x.lang, 'Kulinaria · RSVP final: ' + c.title, 'Kulinaria · final RSVP: ' + c.title),
+              cTxt_(x.lang, '<p>Hola ' + x.name + ', mañana es <b>' + c.title + '</b>: ' + cWhen_(c) + ', ' + c.venue + '. Coach ' + c.coach + '.</p><p><b>Confirma tu asistencia (RSVP final):</b> <a href="' + rsvp + '">Sí, voy</a></p>' + (unpaid ? '<p>Tu lugar aún está sin pagar' + (pl ? ': <a href="' + pl + '">pagar ahora</a>' : '') + '. Lo liberamos ' + payH + ' h antes de la clase.</p>' : ''),
+                '<p>Hi ' + x.name + ', <b>' + c.title + '</b> is tomorrow: ' + cWhen_(c) + ', ' + c.venue + '. Coach ' + c.coach + '.</p><p><b>Confirm you are coming (final RSVP):</b> <a href="' + rsvp + '">Yes, I am going</a></p>' + (unpaid ? '<p>Your seat is not paid yet' + (pl ? ': <a href="' + pl + '">pay now</a>' : '') + '. We release it ' + payH + ' h before the class.</p>' : '')), false);
+          });
         }
       }
     });
@@ -185,6 +191,24 @@ function circleTick() {
 function circleSetRes_(id, status, paid) {
   var row = cFindRow_('Reservas', 1, id); if (!row) return false; var sh = cSheet_('Reservas');
   if (status) sh.getRange(row, 8).setValue(status); if (paid) sh.getRange(row, 10).setValue(paid); return true;
+}
+function cSign_(id) {
+  var secret = cProp_('PROFILE_SECRET', 'kulinaria');
+  return Utilities.computeHmacSha256Signature('rsvp:' + id, secret).map(function (b) { return ('0' + (b & 0xff).toString(16)).slice(-2); }).join('').slice(0, 24);
+}
+function cRsvpLink_(id) {
+  var base = cProp_('WEBAPP_URL', ''); try { if (!base) base = ScriptApp.getService().getUrl(); } catch (e) {}
+  return base + (base.indexOf('?') > -1 ? '&' : '?') + 'action=rsvp&id=' + encodeURIComponent(id) + '&t=' + cSign_(id);
+}
+/** One-click final RSVP from the e-mail. Returns a small HTML page (not JSON). */
+function circleRsvpPage_(p) {
+  var ok = false, title = '', id = cStr_(p.id);
+  if (id && cStr_(p.t) === cSign_(id)) {
+    var r = cReservas_().filter(function (x) { return x.id === id; })[0];
+    if (r && r.status === 'Confirmada') { var row = cFindRow_('Reservas', 1, id); if (row) { cSheet_('Reservas').getRange(row, 12).setValue('Sí'); ok = true; var c = cClasses_().filter(function (k) { return k.key === r.cls; })[0]; title = c ? c.title + ' · ' + cWhen_(c) : ''; } }
+  }
+  var html = '<div style="font-family:Arial,sans-serif;max-width:480px;margin:60px auto;text-align:center"><h2 style="color:#ff6200">Kulinaria</h2>' + (ok ? '<h3>¡Listo, te esperamos!</h3><p>' + title + '</p>' : '<h3>No pudimos registrar tu RSVP</h3><p>La clase ya no está confirmada o el enlace venció. Escríbenos y lo resolvemos.</p>') + '</div>';
+  return HtmlService.createHtmlOutput(html).setTitle('Kulinaria · RSVP');
 }
 /** Called by Code.gs when a Shopify order carries the cart attribute reserva=<id>: the seat is paid. */
 function circleOnOrder_(o, a) {
