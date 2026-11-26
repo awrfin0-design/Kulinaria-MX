@@ -446,6 +446,13 @@ await page.goto(URL0);
   const namesBefore = (await names()).join('|');
   await page.evaluate((f) => document.querySelector(f + ' [data-bd-view="sin-gluten"]').click(), FN); await page.waitForTimeout(300);
   ok('picking another group only changes the catalogue below: the days already chosen stay', (await names()).join('|') === namesBefore && await page.evaluate((f) => /Catálogo de grupo/.test(document.querySelector(f + ' .fn-ct__head h4').textContent) && !!document.querySelector(f + ' .fn-bd__pill.is-on[data-bd-view="sin-gluten"]'), FN));
+  // the category badge on a day card is a button: it opens the categories and shows that menu in the catalogue
+  await page.evaluate((f) => document.querySelector(f + ' [data-bd-grp="1"]').click(), FN); await page.waitForTimeout(250);
+  const gm = await page.evaluate((f) => { const m = document.querySelector(f + ' [data-bd-gmenu="1"]'); return { open: !m.hidden, n: m.querySelectorAll('[data-bd-gpick]').length, badge: document.querySelector(f + ' [data-bd-grp="1"]').textContent.trim() }; }, FN);
+  ok('the category badge of a day card is clickable and lists every category', gm.open && gm.n === 12, JSON.stringify(gm));
+  await page.evaluate((f) => document.querySelector(f + ' [data-bd-gpick="1:bowls"]').click(), FN); await page.waitForTimeout(400);
+  const gc = await page.evaluate((f) => ({ cat: document.querySelector(f + ' .fn-ct__head h4').textContent, who: document.querySelector(f + ' .fn-ct__for').textContent, n: document.querySelectorAll(f + ' [data-ct-pick]').length, on: document.querySelector(f + ' .fn-bd__pill.is-on, .fn-bd__pill--more.is-on') !== null }), FN);
+  ok('choosing a category from the badge shows that group in the catalogue at the bottom, aimed at that day, without touching the chosen days', /Bowls/i.test(gc.cat) && /Martes/.test(gc.who) && gc.n >= 1 && (await names()).join('|') === namesBefore, JSON.stringify(gc));
   // side dish
   await page.evaluate((f) => document.querySelector(f + ' [data-bd-comp="1"]').click(), FN); await page.waitForTimeout(300);
   const cp = await page.evaluate(() => { const m = document.querySelector('.fn-md--comp'); return { open: !m.hidden, opts: [...m.querySelectorAll('[data-comp]')].map((b) => b.textContent.replace(/\s+/g, ' ').trim()), fits: m.querySelector('.fn-md__box').getBoundingClientRect().bottom <= innerHeight + 2 }; });
@@ -481,6 +488,64 @@ await page.goto(URL0);
   await page.click('.fn-md--sum [data-sm-go]'); await page.waitForTimeout(1200);
   const cl2 = await page.evaluate(() => window.__calls);
   ok('confirming puts the plan line, the upgrade line and the weekend dish (as its own product, flagged as an extra) in the cart, with sides and notes as properties', page.url().endsWith('#/carrito') && cl2.some((r) => /add\.js/.test(r) && /_platillos/.test(r) && /fin-de-semana/.test(r) && /Sin sal extra/.test(r) && /Sopa/.test(r) && /_extras/.test(r)), JSON.stringify(cl2).slice(0, 500));
+
+  // ---- circle page: live classes, seats and real booking answers from the sheet backend
+  await base(); await page.evaluate(() => localStorage.setItem('kx-test-orders', '2')); await page.setViewportSize({ width: 1440, height: 900 });
+  const live = [
+    { key: 'tenis-a', sport: 'tenis', title: 'Clínica de Tenis', coach: 'Jessica', date: '2026-12-10', time: '09:00', venue: 'Raqueta Club', cap: 12, min: 6, price: 600, status: 'Abierta', art: '', taken: 3, left: 9, full: false, waiting: 0, limit: 24 },
+    { key: 'padel-b', sport: 'padel', title: 'Torneo de Pádel', coach: 'Anny', date: '2026-12-12', time: '10:00', venue: 'Club Padel', cap: 8, min: 4, price: 600, status: 'Confirmada', art: '', taken: 8, left: 0, full: true, waiting: 2, limit: 24 },
+    { key: 'run-c', sport: 'running', title: 'Rodada de 10K', coach: 'Ren', date: '2026-12-14', time: '07:00', venue: 'Parque', cap: 20, min: 5, price: 0, status: 'Cancelada', art: '', taken: 0, left: 20, full: false, waiting: 0, limit: 24 }];
+  const bookCalls = []; let bookState = 'Pendiente';
+  await page.route('https://script.example/**', async (route) => { const u = new URL(route.request().url()), q = Object.fromEntries(u.searchParams); let body = { ok: true };
+    if (q.action === 'classes') body = { ok: true, classes: live }; else if (q.action === 'book') { bookCalls.push(q); body = { ok: true, state: bookState, id: 'r1', left: 5 }; } else if (q.action === 'coupon') body = { ok: true, code: 'KMAG-SRV42', partner: 'magnate', expires: '2099-01-01' };
+    await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(body) }); });
+  await page.goto(`${URL0}#/pg/circulo-privado`); await page.reload(); await page.waitForTimeout(1200);
+  await page.evaluate(() => { document.querySelector('[data-circle]').setAttribute('data-endpoint', 'https://script.example/exec'); document.querySelector('[data-hx-dialog]').setAttribute('data-endpoint', 'https://script.example/exec'); document.dispatchEvent(new CustomEvent('kx:circle-refresh')); }); await page.waitForTimeout(700);
+  const lv = await page.evaluate(() => { const cs = [...document.querySelectorAll('[data-page="pg/circulo-privado"] .circle__card')]; return { n: cs.length, keys: cs.map((c) => c.getAttribute('data-key')).join(), txt: cs.map((c) => c.textContent.replace(/\s+/g, ' ')), dis: cs.map((c) => c.querySelector('[data-circle-book]').disabled), pills: [...document.querySelectorAll('[data-page="pg/circulo-privado"] [data-circle-filters] [data-sport]:not([hidden])')].map((p) => p.getAttribute('data-sport')).join() }; });
+  ok('the circle page shows the classes of the sheet (not the typed ones), with seats left, full + waiting list, status and the price', lv.n === 3 && lv.keys === 'tenis-a,padel-b,run-c' && /Quedan 9 lugares/.test(lv.txt[0]) && /Faltan 3 para confirmar/.test(lv.txt[0]) && /Llena/.test(lv.txt[1]) && /En espera: 2/.test(lv.txt[1]) && /Clase confirmada/.test(lv.txt[1]) && /\$600/.test(lv.txt[0]), JSON.stringify([lv.txt[1].slice(0, 220)]));
+  ok('a cancelled class cannot be booked and the sport pills only list the sports that have classes', lv.dis[2] === true && lv.pills === 'all,padel,tenis,running' || lv.pills.split(',').sort().join() === 'all,padel,running,tenis', lv.pills);
+  await page.evaluate(() => document.querySelector('[data-page="pg/circulo-privado"] .circle__card[data-key="tenis-a"] [data-circle-book]').click()); await page.waitForTimeout(400);
+  await page.fill('[data-hx-dialog] [name=name]', 'Ana Pérez'); await page.fill('[data-hx-dialog] [name=email]', 'ana@ejemplo.com'); await page.check('[data-hx-dialog] [name=consent]'); await page.selectOption('[data-hx-dialog] [name=lugares]', '2');
+  await page.click('[data-hx-dialog] .hxd__go'); await page.waitForTimeout(600);
+  ok('booking asks the sheet for the class key and seats, and tells the member it is a request to be confirmed by e-mail (nothing charged)', bookCalls.length === 1 && bookCalls[0].cls === 'tenis-a' && bookCalls[0].seats === '2' && bookCalls[0].email === 'ana@ejemplo.com' && await page.evaluate(() => { const o = document.querySelector('[data-hxd-ok]'); return !o.hidden && /te confirmamos por correo/.test(o.textContent) && /no se cobra nada/i.test(o.textContent); }), JSON.stringify(bookCalls));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+  bookState = 'En espera';
+  await page.evaluate(() => document.querySelector('[data-page="pg/circulo-privado"] .circle__card[data-key="padel-b"] [data-circle-book]').click()); await page.waitForTimeout(400);
+  await page.fill('[data-hx-dialog] [name=name]', 'Luis'); await page.fill('[data-hx-dialog] [name=email]', 'luis@ejemplo.com'); await page.check('[data-hx-dialog] [name=consent]'); await page.click('[data-hx-dialog] .hxd__go'); await page.waitForTimeout(600);
+  ok('a full class answers "lista de espera"', await page.evaluate(() => /lista de espera/.test(document.querySelector('[data-hxd-ok]').textContent)));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+  await page.evaluate(() => document.dispatchEvent(new CustomEvent('kx:open-dialog', { detail: { kind: 'cupon', what: 'Cupón Magnate Barbería' } }))); await page.waitForTimeout(600);
+  ok('the coupon code shown is the one issued by the sheet (not a made-up one)', await page.evaluate(() => document.querySelector('[data-hxd-code]').textContent === 'KMAG-SRV42'));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(150);
+
+  // ---- admin hub: classes (capacity + reservations), coupons, trainer / gym directory
+  await base(); await page.setViewportSize({ width: 1280, height: 900 }); await page.evaluate(() => sessionStorage.setItem('kx-admin-key', 'adm'));
+  const admCalls = [];
+  const cdata = { ok: true, classes: [{ key: 'tenis-a', sport: 'tenis', title: 'Clínica de Tenis', coach: 'Jessica', date: '2026-12-10', time: '09:00', venue: 'Raqueta Club', cap: 12, min: 6, price: 600, status: 'Abierta', limit: 24, taken: 3 }, { key: 'padel-b', sport: 'padel', title: 'Torneo de Pádel', coach: 'Anny', date: '2026-12-12', time: '10:00', venue: 'Club', cap: 8, min: 4, price: 600, status: 'Confirmada', limit: 24, taken: 8 }],
+    reservas: [{ id: 'r1', cls: 'tenis-a', name: 'Ana', email: 'ana@x.com', phone: '999', seats: 2, status: 'Pendiente', paid: 'Pendiente' }],
+    coupons: [{ code: 'KMAG-ABC12', partner: 'magnate', name: 'Ana', email: 'ana@x.com', expires: '2099-01-01', status: 'Activo', uses: 0 }], trainers: [{ name: 'Carla', role: 'IFBB', zone: 'Lomas', email: 'c@x.com', phone: '1', active: 'Sí' }], gyms: [{ name: 'Sports World', zone: 'Angelópolis', address: '', contact: '', email: 'sw@x.com', phone: '', pickup: 'Sí', active: 'Sí' }] };
+  await page.route('https://script.example/**', async (route) => { const q = Object.fromEntries(new URL(route.request().url()).searchParams); admCalls.push(q);
+    const body = q.action === 'admin' ? { ok: true, orders: [], clients: [], recipes: null, finance: { orders: [], expenses: [] }, leads: [] } : q.action === 'coupon_check' ? { ok: true, valid: q.code === 'KMAG-ABC12', partner: 'magnate', expires: '2099-01-01' } : /^circle_/.test(q.action) ? cdata : { ok: true };
+    await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(body) }); });
+  await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
+  await page.evaluate(() => { const d = document.createElement('div'); d.id = 'adm-c'; d.setAttribute('data-endpoint', 'https://script.example/exec'); d.setAttribute('data-lang', 'es'); document.body.appendChild(d); window.KXAdmin.mount(d); });
+  await page.waitForSelector('#adm-c [data-tab="8"]', { timeout: 8000 }); await page.click('#adm-c [data-tab="8"]'); await page.waitForTimeout(500);
+  const ac = await page.evaluate(() => ({ cards: document.querySelectorAll('#adm-c .adm-class').length, txt: document.querySelector('#adm-c [data-classes]').textContent.replace(/\s+/g, ' '), res: document.querySelectorAll('#adm-c [data-res-status]').length, form: !!document.querySelector('#adm-c [data-class-form]') }));
+  ok('admin "Clases": every class shows seats taken / capacity, the minimum, its status and its reservations; there is a form to add or edit a class', ac.cards === 2 && /3 \/ 12/.test(ac.txt) && /Mínimo para confirmar: 6/.test(ac.txt) && /Confirmada/.test(ac.txt) && ac.res === 1 && ac.form, JSON.stringify(ac));
+  await page.selectOption('#adm-c [data-res-status="r1"]', 'Confirmada'); await page.waitForTimeout(400);
+  ok('changing a reservation state in the hub calls the sheet (which e-mails the member)', admCalls.some((c) => c.action === 'circle_res_set' && c.id === 'r1' && c.status === 'Confirmada'));
+  await page.fill('#adm-c [data-class-form] [name=title]', 'Circuito funcional'); await page.fill('#adm-c [data-class-form] [name=date]', '2026-12-20'); await page.fill('#adm-c [data-class-form] [name=cap]', '15'); await page.fill('#adm-c [data-class-form] [name=min]', '5'); await page.click('#adm-c [data-c-save]'); await page.waitForTimeout(400);
+  ok('saving the form creates/updates the class (title, date, capacity, minimum, price, hours before) in the sheet', admCalls.some((c) => c.action === 'circle_class_save' && c.title === 'Circuito funcional' && c.date === '2026-12-20' && c.cap === '15' && c.min === '5' && c.limit === '24'), JSON.stringify(admCalls.slice(-1)));
+  await page.evaluate(() => { window.confirm = () => true; }); await page.click('#adm-c [data-c-cancel="tenis-a"]'); await page.waitForTimeout(300);
+  ok('cancelling a class from the hub goes to the sheet (it e-mails everybody booked)', admCalls.some((c) => c.action === 'circle_class_cancel' && c.ckey === 'tenis-a'));
+  await page.click('#adm-c [data-tab="9"]'); await page.waitForTimeout(300);
+  await page.fill('#adm-c [data-cp-form] [name=code]', 'KMAG-ABC12'); await page.click('#adm-c [data-cp-check]'); await page.waitForTimeout(400);
+  ok('admin "Cupones": checking a code says VÁLIDO with the partner and expiry; the list shows who has which code', await page.evaluate(() => /VÁLIDO/.test(document.querySelector('#adm-c [data-cp-result]').textContent) && /KMAG-ABC12/.test(document.querySelector('#adm-c [data-coupons]').textContent)));
+  await page.click('#adm-c [data-cp-redeem="KMAG-ABC12"]'); await page.waitForTimeout(300);
+  ok('"Canjear" registers the redemption', admCalls.some((c) => c.action === 'circle_coupon_redeem' && c.code === 'KMAG-ABC12'));
+  await page.click('#adm-c [data-tab="10"]'); await page.waitForTimeout(300);
+  await page.fill('#adm-c [data-dir-form="trainer"] [name=name]', 'Ramón'); await page.fill('#adm-c [data-dir-form="trainer"] [name=email]', 'ramon@x.com'); await page.click('#adm-c [data-dir-save="trainer"]'); await page.waitForTimeout(300);
+  ok('admin "Directorio": trainers and partner gyms are listed and can be added (their e-mail receives the requests)', admCalls.some((c) => c.action === 'circle_dir_save' && c.tab === 'trainer' && c.name === 'Ramón' && c.email === 'ramon@x.com') && await page.evaluate(() => /Carla/.test(document.querySelector('#adm-c [data-trainers]').textContent) && /Sports World/.test(document.querySelector('#adm-c [data-gyms]').textContent)));
 
   // ---- phones: nothing wider than the screen, the total bar is inside the screen
   await page.setViewportSize({ width: 390, height: 844 });

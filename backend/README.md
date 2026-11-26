@@ -40,3 +40,32 @@ Registration creates the customer. To also keep allergies and diets *on the cust
 
 ## What is simulated in the preview
 The HTML preview fakes the cart and checkout. Real saving to Shopify only happens on the live theme; the sheet fills when orders arrive.
+
+
+---
+
+## Círculo privado: clases con cupo, confirmaciones, pagos, cupones y directorio (`Circle.gs`)
+
+**Qué hace**
+- *Clases con cupo y mínimo.* Cada clase tiene cupo, mínimo para confirmarse y "horas antes" para decidir. Los miembros (bloque de 4 semanas activo) reservan; no se cobra nada al reservar.
+- *Confirmación automática.* Cada hora el sistema revisa: si la clase llegó al mínimo pasa a **Confirmada** y se manda el correo con el enlace de pago; si no, se **cancela** y se avisa a todos. Sobre el cupo entran a **lista de espera** y suben solos cuando se libera un lugar.
+- *Pago.* El correo de confirmación trae un enlace al carrito con los lugares (producto "Clase del Círculo Kulinaria", $600). Cuando Shopify manda el pedido, la reserva pasa a **Pagado** (atributo del carrito `reserva`). Los lugares sin pagar se liberan `PAY_HOURS` antes de la clase.
+- *Cupones.* El código se genera en el servidor, solo para miembros, y deja de ser válido cuando termina el bloque. Se verifica y se canjea en el panel (pestaña **Cupones**).
+- *Entrenadores y gimnasios.* Las solicitudes de entrenador / sede se mandan por correo a la persona del directorio (pestaña **Directorio**), con copia al dueño; la persona recibe un acuse. Lo mismo para consulta nutricional (`NUTRI_EMAIL`), planes y eventos.
+- *Correos gratis* con Google (MailApp): ~100 al día en cuenta personal, 1,500 en Workspace. No se necesita Resend ni otro servicio.
+
+**Instalación (una sola vez)**
+1. En el proyecto de Apps Script, reemplaza el contenido de `Code.gs` por el de este repositorio y agrega un archivo nuevo `Circle.gs` con el contenido de `google-sheets/Circle.gs`.
+2. Ejecuta **`circleSetup()`** (autoriza permisos de Hojas, Correo y Activadores). Crea las pestañas `Clases`, `Reservas`, `Cupones`, `Entrenadores`, `Gimnasios` y el activador por hora (`circleTick`).
+3. Project Settings > Script properties, agrega:
+   - `SHOP_URL` = `https://kulinariamx.com`
+   - `CLASS_VARIANT_ID` = `53192044380391`  (producto "Clase del Círculo Kulinaria", $600, ya creado en la tienda)
+   - `ALERT_EMAILS` = correo(s) del dueño (ya existe)
+   - `NUTRI_EMAIL` = correo del nutriólogo (opcional)
+   - `PAY_HOURS` = `12` (opcional)
+   - `GATED_KINDS` = `clase,consulta,entrenador,cupon` (opcional; vacío = abierto a todos)
+4. **Deploy > Manage deployments > editar > New version > Deploy** (la URL no cambia).
+5. En Shopify no hay que cambiar el webhook de pedidos: el pago de una clase llega como un pedido normal.
+6. En `/pages/admin` aparecen las pestañas **Clases**, **Cupones** y **Directorio**. Crea tus clases ahí (o en la pestaña `Clases` del Sheet). La página `/pages/circulo-privado` muestra automáticamente las clases del Sheet con lugares disponibles; si el Sheet está vacío muestra las del editor del tema.
+
+**Prueba sin Google:** `node backend/test/circle.test.js` simula Apps Script y verifica cupo, lista de espera, confirmación / cancelación, pago, cupones y avisos.

@@ -4979,3 +4979,13 @@ html.fn-md-open{overflow:hidden}
 .hx__badge--kfw{display:inline-flex;align-items:center;gap:8px;padding:6px 12px}
 .hx__badge--kfw img{height:26px;width:auto}
 .hx__badge--kfw span{font:600 .62rem var(--font-label);letter-spacing:.14em;text-transform:uppercase;color:#fff}
+
+/* v152: live class status (from the sheet) */
+.circle__live{display:inline-block;margin-bottom:4px;padding:4px 10px;border-radius:999px;font:700 .64rem var(--font-label);letter-spacing:.08em;text-transform:uppercase}
+.circle__live.is-ok{background:rgba(60,170,90,.16);color:#2f9d57}.circle__live.is-pend{background:rgba(255,98,0,.14);color:var(--text-accent)}.circle__live.is-cancel{background:rgba(200,60,60,.16);color:#d1534f}
+
+/* v153: the category badge of a day card is a button with a category menu */
+button.fn-wk__grp{cursor:pointer;font-family:var(--font-label)}
+button.fn-wk__grp i{font-style:normal;margin-left:3px;opacity:.8}
+button.fn-wk__grp:hover{background:#ff6200;color:#fff;border-color:#ff6200}
+.fn-wk__gmenu{top:14px;left:10px;right:auto;max-height:260px;overflow:auto;z-index:40}

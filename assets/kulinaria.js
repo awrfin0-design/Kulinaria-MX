@@ -1035,7 +1035,7 @@
   function initHeroDialog() {
     var dlg = $('[data-hx-dialog]'); if (!dlg) return;
     var form = $('[data-hxd-form]', dlg), okBox = $('[data-hxd-ok]', dlg), title = $('[data-hxd-title]', dlg), chip = $('[data-hxd-chip]', dlg), sub = $('[data-hxd-sub]', dlg), err = $('[data-hxd-err]', dlg), go = $('[data-hxd-go]', dlg);
-    var kind = '', what = '', member = false, code = '';
+    var kind = '', what = '', member = false, code = '', ckey = '';
     var LEAD = { evento: 'carta' };
     var show = function (on) { dlg.hidden = !on; document.documentElement.classList.toggle('hx-dlg-open', on); document.dispatchEvent(new CustomEvent('kx:hxdlg')); if (on) { var f = $('[name=name]', dlg); if (f) setTimeout(function () { f.focus(); }, 30); } };
     var pick = function (name, text) { var s = $('select[name="' + name + '"]', dlg); if (!s || !text) return; var t = norm(text); for (var i = 0; i < s.options.length; i++) { var o = norm(s.options[i].text); if (o && (o.indexOf(t) === 0 || t.indexOf(o) === 0)) { s.selectedIndex = i; return; } } };
@@ -1081,6 +1081,7 @@
       var apply = function () {
         if (!cp) { $$('[data-hxd-common]', dlg).forEach(function (x) { x.hidden = false; }); if (go) go.hidden = false; return; }
         code = couponCode(); var cd = $('[data-hxd-code]', dlg); if (cd) cd.textContent = code;
+        if (member && !apply.asked) { apply.asked = true; var ac2 = acct() || (location.protocol === 'file:' ? { cid: '1', token: 'test' } : null), epc = dlg.getAttribute('data-endpoint'); if (ac2 && epc) fetch(epc + (epc.indexOf('?') > -1 ? '&' : '?') + 'action=coupon&cid=' + encodeURIComponent(ac2.cid) + '&token=' + encodeURIComponent(ac2.token) + '&partner=' + encodeURIComponent(norm(what).replace(/^cupon\s+/, '').split(' ')[0] || 'magnate') + '&lang=' + (cfg.lang === 'en' ? 'en' : 'es')).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok && j.code) { code = j.code; if (cd) cd.textContent = code; } }).catch(function () {}); }
         if (cpBox) cpBox.hidden = !member; if (cpLock) cpLock.hidden = member;
         $$('[data-hxd-common]', dlg).forEach(function (x) { x.hidden = !member; }); if (go) { go.hidden = !member; go.textContent = dlg.getAttribute('data-t-cupsend') || go.textContent; }
       };
@@ -1099,7 +1100,7 @@
       if (a) { e.preventDefault(); var v = a.getAttribute('href').slice(7).split('~'); open(v[0], v.slice(1).join('~')); return; }
       if (e.target.closest && e.target.closest('[data-hxd-close]') && !dlg.hidden) show(false);
     });
-    document.addEventListener('kx:open-dialog', function (e) { var d = e.detail || {}; open(d.kind, d.what); });
+    document.addEventListener('kx:open-dialog', function (e) { var d = e.detail || {}; ckey = d.key || ''; open(d.kind, d.what); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !dlg.hidden) show(false); });
     if (form) form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -1111,7 +1112,21 @@
       if (($('[name=notas]', form).value || '').trim()) fields.notas = $('[name=notas]', form).value.trim();
       if (kind === 'cupon') fields.cupon = code;
       var ep = dlg.getAttribute('data-endpoint');
-      try { if (ep) fetch(ep, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'lead', cid: (acct() || {}).cid || '', token: (acct() || {}).token || '', kind: LEAD[kind] || kind, name: name, email: email, phone: ($('[name=phone]', form).value || '').trim(), fields: fields }) }); } catch (x) {}
+      if (kind === 'clase' && ep && ckey) {                  // a real booking: the sheet answers with the state (pending / waiting list / full)
+        var ac = acct() || {}, q = { action: 'book', cid: ac.cid || '', token: ac.token || '', cls: ckey, seats: ($('[name=lugares]', form) || {}).value || '1', name: name, email: email, phone: ($('[name=phone]', form).value || '').trim(), lang: cfg.lang === 'en' ? 'en' : 'es' };
+        if (go) go.disabled = true;
+        fetch(ep + (ep.indexOf('?') > -1 ? '&' : '?') + Object.keys(q).map(function (k) { return k + '=' + encodeURIComponent(q[k]); }).join('&'))
+          .then(function (r) { return r.json(); })
+          .then(function (j) {
+            if (go) go.disabled = false;
+            if (!j || !j.ok) { if (err) { err.textContent = dlg.getAttribute('data-t-err'); err.hidden = false; } return; }
+            var msg = $('p', okBox); if (msg) msg.textContent = dlg.getAttribute(j.state === 'En espera' ? 'data-t-bk-wait' : (j.state === 'Confirmada' ? 'data-t-bk-conf' : 'data-t-bk-pend')) || dlg.getAttribute('data-t-sent') || '';
+            form.hidden = true; if (okBox) okBox.hidden = false;
+            document.dispatchEvent(new CustomEvent('kx:hxd-sent', { detail: { kind: kind, what: what, state: j.state } })); document.dispatchEvent(new CustomEvent('kx:circle-refresh'));
+          }).catch(function () { if (go) go.disabled = false; if (err) { err.textContent = dlg.getAttribute('data-t-err'); err.hidden = false; } });
+        return;
+      }
+      try { if (ep) fetch(ep, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'lead', lang: cfg.lang === 'en' ? 'en' : 'es', cid: (acct() || {}).cid || '', token: (acct() || {}).token || '', kind: LEAD[kind] || kind, name: name, email: email, phone: ($('[name=phone]', form).value || '').trim(), fields: fields }) }); } catch (x) {}
       form.hidden = true; if (okBox) okBox.hidden = false;
       document.dispatchEvent(new CustomEvent('kx:hxd-sent', { detail: { kind: kind, what: what } }));
     });
@@ -1122,12 +1137,48 @@
     var root = $('[data-circle]'); if (!root) return;
     var gate = $('[data-circle-gate]', root), welcome = $('[data-circle-welcome]', root), cards = $$('.circle__card', root), pills = $$('[data-sport]', $('[data-circle-filters]', root));
     var member = false;
+    var T = function (k, rep) { var s = root.getAttribute('data-t-' + k) || ''; if (rep) Object.keys(rep).forEach(function (r) { s = s.split('[' + r + ']').join(rep[r]); }); return s; };
+    var live = {};   // class key -> live data from the sheet
+    var SPORTS = ['padel', 'tenis', 'ciclismo', 'basketball', 'running', 'funcional'], SN = (root.getAttribute('data-sports') || '').split('|');
+    var ep = root.getAttribute('data-endpoint'), esc2 = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+    var whenOf = function (c) { try { var d = new Date(c.date + 'T' + (c.time || '09:00') + ':00'), s = new Intl.DateTimeFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { weekday: 'short', day: 'numeric', month: 'short' }).format(d).replace('.', ''); return s.charAt(0).toUpperCase() + s.slice(1); } catch (e) { return c.date; } };
+    var statusOf = function (c) {
+      if (c.status === 'Cancelada') return { cls: 'is-cancel', txt: T('cancelled') };
+      if (c.status === 'Confirmada') return { cls: 'is-ok', txt: T('confirmed') };
+      var need = Math.max(0, c.min - c.taken); return { cls: 'is-pend', txt: need ? T('need', { n: need }) : T('pending', { m: c.min }) };
+    };
+    var cardHtml = function (c) {
+      var sp = SPORTS.indexOf(c.sport) > -1 ? c.sport : 'funcional', tpl = root.getAttribute('data-art-tpl') || '', img = c.art && tpl ? tpl.replace('photo-hs-tenis.webp', 'photo-' + c.art + '.webp') : '', st = statusOf(c);
+      var spots = c.full ? T('full') + (c.waiting ? ' · ' + T('wait-n', { n: c.waiting }) : '') : T('left', { n: c.left });
+      return '<article class="circle__card" data-sport="' + esc2(sp) + '" data-key="' + esc2(c.key) + '" data-class="' + esc2(c.title) + '" data-when="' + esc2(whenOf(c) + ' ' + c.time) + '" data-venue="' + esc2(c.venue) + '">'
+        + '<div class="circle__top"><span class="circle__av">' + (img ? '<img src="' + esc2(img) + '" alt="" loading="lazy" width="60" height="60">' : '<svg viewBox="0 0 48 48" aria-hidden="true"><use href="#cs-' + esc2(sp) + '"/></svg>') + '</span><div class="circle__tt"><span class="circle__sport">' + esc2(SN[SPORTS.indexOf(sp)] || sp) + '</span><h3>' + esc2(c.title) + '</h3></div></div>'
+        + '<dl class="circle__meta"><div><dt>' + esc2(root.getAttribute('data-t-host') || 'Coach') + '</dt><dd>' + esc2(c.coach) + '</dd></div><div><dt>' + esc2(root.getAttribute('data-t-date') || 'Fecha') + '</dt><dd>' + esc2(whenOf(c)) + '</dd></div><div><dt>' + esc2(root.getAttribute('data-t-time') || 'Hora') + '</dt><dd>' + esc2(c.time) + '</dd></div><div><dt>' + esc2(root.getAttribute('data-t-venue') || 'Sede') + '</dt><dd>' + esc2(c.venue) + '</dd></div></dl>'
+        + '<span class="circle__spots circle__live ' + st.cls + '">' + esc2(st.txt) + '</span><span class="circle__spots">' + esc2(spots) + '</span>'
+        + '<button class="circle__book" type="button" data-circle-book' + (c.status === 'Cancelada' ? ' disabled' : '') + '><span class="circle__booklbl">' + esc2(root.getAttribute('data-t-book') || 'Reservar') + ' · ' + (c.price ? esc2(money0(c.price)) : esc2(T('no-pay'))) + '</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#cs-lock"/></svg>' + esc2(root.getAttribute('data-t-locked') || '') + '</span></button>'
+        + '<span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#cs-lock"/></svg></span></article>';
+    };
+    var money0 = function (n) { try { return new Intl.NumberFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(n); } catch (e) { return '$' + n; } };
+    var rebuild = function (list) {
+      var grid = $('[data-circle-grid]', root); if (!grid || !list.length) return;
+      live = {}; list.forEach(function (c) { live[c.key] = c; });
+      grid.innerHTML = list.map(cardHtml).join('');
+      cards = $$('.circle__card', root);
+      var used = {}; list.forEach(function (c) { used[c.sport] = 1; });
+      var fl = $('[data-circle-filters]', root); if (fl) { $$('[data-sport]', fl).forEach(function (p) { var s = p.getAttribute('data-sport'); p.hidden = s !== 'all' && !used[s]; }); var all = $('[data-circle-all]', fl); if (all) all.textContent = list.length; }
+      pills = $$('[data-sport]', fl);
+      var on = pills.filter(function (x) { return x.classList.contains('is-on'); })[0]; if (on && on.getAttribute('data-sport') !== 'all') on.click();
+      paint();
+    };
+    var fetchLive = function () {
+      var ep = root.getAttribute('data-endpoint'); if (!ep) return;
+      fetch(ep + (ep.indexOf('?') > -1 ? '&' : '?') + 'action=classes').then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok && j.classes && j.classes.length) rebuild(j.classes); }).catch(function () {});
+    };
     var paint = function () {
       root.classList.toggle('is-member', member); root.classList.toggle('is-locked', !member);
       if (gate) gate.hidden = member; if (welcome) welcome.hidden = !member;
       cards.forEach(function (c) { var b = $('[data-circle-book]', c); if (b) { b.setAttribute('aria-disabled', member ? 'false' : 'true'); b.tabIndex = member ? 0 : -1; } });
     };
-    paint();
+    paint(); fetchLive(); document.addEventListener('kx:circle-refresh', fetchLive);
     loadCredits(function (c) { member = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); paint(); });
     var pickSport = function (sp, hit) {
       var p0 = pills.filter(function (x) { return x.getAttribute('data-sport') === sp; })[0]; if (!p0) return;
@@ -1147,7 +1198,7 @@
       var card = b.closest('.circle__card');
       if (!member) { if (gate) { gate.hidden = false; gate.classList.remove('is-nudge'); void gate.offsetWidth; gate.classList.add('is-nudge'); gate.scrollIntoView({ block: 'center', behavior: REDUCE ? 'auto' : 'smooth' }); } return; }
       if (card.classList.contains('is-sent')) return;
-      document.dispatchEvent(new CustomEvent('kx:open-dialog', { detail: { kind: 'clase', what: card.getAttribute('data-class') + ' · ' + card.getAttribute('data-when') + ' · ' + card.getAttribute('data-venue') + ' · $' + root.getAttribute('data-price') } }));
+      document.dispatchEvent(new CustomEvent('kx:open-dialog', { detail: { kind: 'clase', key: card.getAttribute('data-key') || '', what: card.getAttribute('data-class') + ' · ' + card.getAttribute('data-when') + ' · ' + card.getAttribute('data-venue') + ' · $' + root.getAttribute('data-price') } }));
     });
   }
 
@@ -2012,7 +2063,8 @@
       var cardHtml = function (i) {
         var d = st.days[i] && byPid(st.days[i]), g = d ? grpOfDish(d) : '', lbl = dayLabel(i), sp = lbl.indexOf(' '), dn = sp > 0 ? lbl.slice(0, sp) : lbl, dd = sp > 0 ? lbl.slice(sp + 1) : '', ck = st.comp[i];
         return '<li class="fn-wk__card' + (i === st.active && !st.tgt ? ' is-active' : '') + '" data-day="' + i + '">'
-          + (g ? '<span class="fn-wk__grp">' + esc(catName(g)) + '</span>' : '')
+          + '<button type="button" class="fn-wk__grp" data-bd-grp="' + i + '" aria-haspopup="listbox" aria-expanded="false" title="' + esc(w2('grp_pick')) + '">' + esc(catName(g || st.view)) + ' <i aria-hidden="true">&#9662;</i></button>'
+          + '<span class="fn-bd__menu fn-wk__gmenu" data-bd-gmenu="' + i + '" role="listbox" hidden>' + CATS.map(function (c) { return '<button type="button" role="option" class="' + ((g || st.view) === c.id ? 'is-on' : '') + '" data-bd-gpick="' + i + ':' + c.id + '">' + esc(c.name) + '</button>'; }).join('') + '</span>'
           + '<h4><b>' + esc(dn) + '</b> <small>' + esc(dd) + '</small></h4>' + slotHtml(i, 0) + slotHtml(i, 1)
           + (d ? '<div class="fn-wk__foot"><button type="button" class="fn-wk__comp' + (ck ? ' is-set' : '') + '" data-bd-comp="' + i + '">' + esc(ck ? w2('comp_set', { c: compName(ck) }) : w2('comp')) + '</button>' + (st.days2[i] ? '' : '<button type="button" class="fn-wk__add2" data-bd-add2="' + i + '">' + esc(w2('add2')) + '</button>') + '</div>' : '')
           + '</li>';
@@ -2321,6 +2373,10 @@
       }, true);
       holder.addEventListener('click', function (e) {
         var t = e.target; if (!t || !t.closest) return;
+        var gb = t.closest('[data-bd-grp]');
+        if (gb) { var gi = gb.getAttribute('data-bd-grp'); $$('[data-bd-gmenu]', holder).forEach(function (m) { var open = m.getAttribute('data-bd-gmenu') === gi && m.hidden; m.hidden = !open; }); gb.setAttribute('aria-expanded', 'true'); return; }
+        var gp = t.closest('[data-bd-gpick]');
+        if (gp) { var gv = gp.getAttribute('data-bd-gpick').split(':'); st.tgt = ''; st.course = 0; st.active = +gv[0]; st.view = gv[1]; st.viewFor = st.cat; st.vtier = 'selecto'; persist(); render(); var ctg = $('[data-fn-ct]', holder); if (ctg && ctg.scrollIntoView) ctg.scrollIntoView({ behavior: REDUCE ? 'auto' : 'smooth', block: 'nearest' }); return; }
         var v = t.closest('[data-bd-view]'); if (v) { st.view = v.getAttribute('data-bd-view'); st.vtier = st.vtier || 'selecto'; var mn = $('[data-bd-menu]', holder); if (mn) mn.hidden = true; persist(); render(); return; }
         var mo = t.closest('[data-bd-more]'); if (mo) { var mn2 = $('[data-bd-menu]', holder); if (mn2) { mn2.hidden = !mn2.hidden; mo.setAttribute('aria-expanded', mn2.hidden ? 'false' : 'true'); } return; }
         var tt = t.closest('[data-ct-tier]'); if (tt) { st.vtier = tt.getAttribute('data-ct-tier'); persist(); render(); return; }
@@ -2337,7 +2393,7 @@
         var cardEl = t.closest('.fn-wk__card'); if (cardEl && !t.closest('button')) { st.tgt = ''; st.course = 0; st.active = +cardEl.getAttribute('data-day'); persist(); render(); return; }
         var weEl = t.closest('.fn-we.is-on'); if (weEl && !t.closest('button')) { st.tgt = 'we' + weEl.getAttribute('data-we'); persist(); render(); }
       });
-      document.addEventListener('click', function (e) { var mn3 = $('[data-bd-menu]', holder); if (mn3 && !mn3.hidden && !(e.target.closest && e.target.closest('[data-bd-menu],[data-bd-more]'))) mn3.hidden = true; });
+      document.addEventListener('click', function (e) { if (!(e.target.closest && e.target.closest('[data-bd-grp],[data-bd-gmenu]'))) $$('[data-bd-gmenu]', holder).forEach(function (m) { m.hidden = true; }); var mn3 = $('[data-bd-menu]', holder); if (mn3 && !mn3.hidden && !(e.target.closest && e.target.closest('[data-bd-menu],[data-bd-more]'))) mn3.hidden = true; });
       var reset = $('[data-fn-reset]', holder);
       if (reset) reset.addEventListener('click', function () { st.qty = {}; st.days = blankDays(); st.days2 = blankDays(); st.course = 0; st.active = 0; if (daysBox) daysBox.removeAttribute('data-built'); st.cat = 'all'; st.diet = 'all'; st.tier = 'selecto'; st.plan = 'block'; st.step = 0; st.comp = null; st.we = null; st.xt = []; st.tgt = ''; persist(); render(); });
 

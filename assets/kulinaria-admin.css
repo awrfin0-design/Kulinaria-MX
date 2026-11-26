@@ -105,3 +105,12 @@
 .adm-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
 .adm-chips button{padding:8px 14px;border:1px solid var(--line,#ccc);border-radius:999px;background:transparent;color:inherit;font:600 .8rem system-ui,sans-serif;cursor:pointer}
 .adm-chips button.is-on{background:#ff6200;border-color:#ff6200;color:#fff}
+
+.adm-chipx{display:inline-block;padding:3px 10px;border-radius:999px;background:rgba(0,0,0,.08);font:700 .68rem system-ui,sans-serif;letter-spacing:.04em}
+.adm-chipx.is-ok{background:rgba(60,170,90,.18);color:#2f9d57}.adm-chipx.is-bad{background:rgba(200,60,60,.16);color:#d1534f}.adm-chipx.is-wait{background:rgba(255,98,0,.16);color:#c2410c}
+.adm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:8px 0 12px}
+.adm-f{display:grid;gap:4px;font:600 .72rem system-ui,sans-serif;color:inherit}.adm-f input,.adm-f select{padding:8px 10px;border:1px solid rgba(128,128,128,.4);border-radius:10px;background:transparent;color:inherit;font:400 .88rem system-ui,sans-serif}
+.adm-tbl{width:100%;border-collapse:collapse;margin:8px 0;font-size:.86rem}.adm-tbl td{padding:7px 8px;border-bottom:1px solid rgba(128,128,128,.25);vertical-align:top}
+.adm-check{padding:10px 14px;border-radius:12px;margin:10px 0;font-size:.95rem}.adm-check.is-ok{background:rgba(60,170,90,.16)}.adm-check.is-bad{background:rgba(200,60,60,.14)}
+.adm-dir{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:6px}
+.adm-class,.adm-cform,.adm-dirform{margin-bottom:12px}
