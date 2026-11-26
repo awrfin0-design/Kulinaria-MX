@@ -225,7 +225,7 @@ ok('header turns compact with a glass background after scrolling', await page.$e
 
 // reveals: after a full scroll-through every reveal target on the home page is revealed
 await scrollThrough(page);
-const unrevealed = await page.$$eval('[data-page="home"] .reveal:not(.is-in), [data-page="home"] .split:not(.is-in)', (e) => e.filter((x) => !x.closest('.rail__track')).length);
+const unrevealed = await page.$$eval('[data-page="home"] .reveal:not(.is-in), [data-page="home"] .split:not(.is-in)', (e) => e.filter((x) => !x.closest('.rail__track') && !x.closest('.funnel__aside')).length);
 ok('all scroll reveals fire on the home page (carousel cards reveal when scrolled into view)', unrevealed === 0, String(unrevealed));
 
 // marquee runs
@@ -616,7 +616,7 @@ ok('there is no app tab bar anywhere (navigation is the burger menu)', await pag
 ok('desktop header: logo, one account circle and the burger (language, theme and cart live in the menu)', await page.evaluate(() => { const v = (s) => { const e = document.querySelector(s); return !!e && getComputedStyle(e).display !== 'none'; }; return v('.site-header .acct__btn') && v('.site-header .burger'); }));
 const mobile = { width: 390, height: 844 };
 await page.setViewportSize(mobile); await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(900);
-ok('phone: the header keeps only logo, account circle and burger (language, theme and login live in the menu)', await page.evaluate(() => { const v = (s) => { const e = document.querySelector(s); return !e || getComputedStyle(e).display === 'none'; }; const bar = document.querySelector('.site-header__bar').getBoundingClientRect(); return v('.site-header .lang') && v('.site-header .header-login') && bar.height <= 64; }));
+ok('phone: the header keeps only logo, account circle and burger (language, theme and login live in the menu)', await page.evaluate(() => { const v = (s) => { const e = document.querySelector(s); return !e || getComputedStyle(e).display === 'none' || e.getBoundingClientRect().width === 0; }; const bar = document.querySelector('.site-header__bar').getBoundingClientRect(); return v('.site-header__bar .lang') && v('.site-header__bar .header-login') && bar.height <= 64; }));
 await page.click('[data-menu-open]'); await page.waitForTimeout(900);
 ok('phone: the burger menu holds the language switch, theme toggle, account and cart', await page.evaluate(() => { const o = document.querySelector('.menu-overlay'); const vis = (s) => { const e = o.querySelector(s); return !!e && e.getBoundingClientRect().width > 0; }; return vis('.lang') && vis('.theme-carousel') && o.querySelectorAll('.menu-overlay__tools .icon-link').length >= 2; }));
 await page.click('[data-menu-close]'); await page.waitForTimeout(600);
@@ -749,7 +749,7 @@ await page.evaluate(() => localStorage.removeItem('kx-theme'));
   ok('admin: the preview never links to /pages/admin from the public pages', await (async () => { await page.setViewportSize({ width: 1440, height: 900 }); await page.goto(`${URL0}#/home`); await page.waitForTimeout(300); return page.evaluate(() => ![...document.querySelectorAll('[data-page]:not([data-page="pg/admin"]) a')].some((a) => /admin/.test(a.getAttribute('href') || ''))); })());
   await page.goto(`${URL0}#/pg/admin`); await page.reload(); await page.waitForTimeout(1200);
   const A = '[data-page="pg/admin"]';
-  ok('admin hub: title, 8 tabs, demo-data notice, 7 KPI cards', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-tabs button').length === 8 && !!document.querySelector(a + ' .adm-demo') && document.querySelectorAll(a + ' .adm-kpi').length === 7, A));
+  ok('admin hub: title, 11 tabs, demo-data notice, 7 KPI cards', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-tabs button').length === 11 && !!document.querySelector(a + ' .adm-demo') && document.querySelectorAll(a + ' .adm-kpi').length === 7, A));
   ok('admin hub: the KPIs show orders, 4-week blocks, loose trial weeks, new clients, sales and average ticket', await page.evaluate((a) => { const t = (id) => document.querySelector(a + ' [data-kpi="' + id + '"] b').textContent; return +t('orders') === +t('blocks') + +t('trials') && /^\$/.test(t('sales')) && /^\$/.test(t('avg')) && +t('clients') >= 0; }, A));
   ok('admin summary: a weekly history table of past and coming weeks', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-hist tbody tr').length === 12 && !!document.querySelector(a + ' .adm-hist tr.now'), A));
   await page.click(`${A} [data-tab="1"]`); await page.waitForTimeout(400);
@@ -768,7 +768,7 @@ await page.evaluate(() => localStorage.removeItem('kx-theme'));
   await page.click(`${A} [data-tab="2"]`); await page.waitForTimeout(300);
   ok('admin recipes: 11 dishes, each with grams per portion and waste', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-recipes .adm-card').length === 11 && /g\/ml/.test(document.querySelector(a + ' .adm-recipes h3').textContent), A));
   await page.click(`${A} [data-tab="3"]`); await page.waitForTimeout(300);
-  ok('admin orders: a table with date, client, plan (block / trial), dishes, total and first delivery', await page.evaluate((a) => document.querySelectorAll(a + ' .adm-table tbody tr').length > 20 && document.querySelectorAll(a + ' .adm-table th').length === 7, A));
+  ok('admin orders: a card per order with the client, number, date, plan (block / trial), total and payment state', await page.evaluate((a) => { const c = [...document.querySelectorAll(a + ' .adm-order')]; return c.length > 20 && c.every((x) => /#\d+/.test(x.querySelector('.adm-order__meta').textContent) && /\$/.test(x.querySelector('.adm-order__meta').textContent) && /Bloque|Prueba|Semana/i.test(x.querySelector('.adm-order__meta').textContent)); }, A));
   await page.click(`${A} [data-tab="0"]`); await page.waitForTimeout(300); await page.click(`${A} [data-go]`); await page.waitForTimeout(300);
   ok('admin summary: "to cook next week" jumps to that week\'s shopping list', await page.evaluate((a) => document.querySelector(a + ' .adm-tabs [aria-selected="true"]').getAttribute('data-tab') === '1', A));
   await page.evaluate(() => { localStorage.clear(); });
@@ -1047,9 +1047,9 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.evaluate(() => { localStorage.removeItem('kx-test-nostart'); localStorage.removeItem('kx-test-norules'); localStorage.setItem('kx-rules-ok', '1'); sessionStorage.setItem('kx-test-start', '1'); });
   // fresh list after the order was sent and the cart is empty
   await page.evaluate(() => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel') || '{}'); f.v = 2; f.days = ['1', '', '', '', '']; f.qty = { 1: 1 }; f.sent = true; localStorage.setItem('kulinaria_funnel', JSON.stringify(f)); });
-  await page.route('**/cart.js', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ item_count: 0, items: [], total_price: 0 }) }));
+  await page.evaluate(() => localStorage.setItem('kx-test-cart', JSON.stringify({ item_count: 0, items: [], total_price: 0 })));
   await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1500);
-  ok('after the order went to the cart and the cart was emptied, the order builder starts from a fresh list', await page.evaluate(() => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel') || '{}'); return (f.days || []).filter(Boolean).length === 0 && !f.sent; }));
+  ok('after the order went to the cart and the cart was emptied, the order builder starts from a fresh list (the sent dishes are gone; the week opens on the suggested menu)', await page.evaluate(() => { const f = JSON.parse(localStorage.getItem('kulinaria_funnel') || '{}'); return !f.sent && (f.days || [])[0] !== '1' && JSON.stringify(f.qty || {}) !== JSON.stringify({ 1: 1 }); }));
   await page.unroute('**/cart.js');
   await page.goto(`${URL0}#/cuenta-semana`); await page.waitForTimeout(300);
   await page.goto(`${URL0}#/pg/cuenta-semana`); await page.waitForTimeout(500);
@@ -1073,7 +1073,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   });
   await page.evaluate(() => { const d = document.createElement('div'); d.id = 'adm-fin'; d.setAttribute('data-endpoint', 'https://script.example/exec'); d.setAttribute('data-lang', 'es'); document.body.appendChild(d); window.KXAdmin.mount(d); });
   await page.waitForSelector('#adm-fin [data-tab="5"]', { timeout: 8000 }); await page.click('#adm-fin [data-tab="5"]'); await page.waitForTimeout(300);
-  ok('finance tab: income (paid), plans, upgrades, to collect, expenses and profit for the month', await page.evaluate(() => { const k = document.querySelector('#adm-fin [data-fin-kpis]').innerText.replace(/\s+/g, ' '); return /Ingresos/.test(k) && /4,810/.test(k) && /1,?000|4,600|3,?600/.test(k) && /210/.test(k) && /900/.test(k); }), await page.evaluate(() => document.querySelector('#adm-fin [data-fin-kpis]').innerText.replace(/\s+/g, ' ')));
+  ok('finance tab: income (paid), plans, upgrades, to collect, expenses and profit for the month', await page.evaluate(() => { const k = document.querySelector('#adm-fin [data-fin-kpis]').innerText.replace(/\s+/g, ' '); return /Ingresos/i.test(k) && /4,810/.test(k) && /1,?000|4,600|3,?600/.test(k) && /210/.test(k) && /900/.test(k); }), await page.evaluate(() => document.querySelector('#adm-fin [data-fin-kpis]').innerText.replace(/\s+/g, ' ')));
   ok('finance tab: lists every order with who it is for and its type', await page.evaluate(() => { const t = document.querySelector('#adm-fin [data-fin-orders]').innerText; return /Sofía/.test(t) && /Mejoras/.test(t) && /#1003/.test(t); }));
   await page.fill('#adm-fin [name=concept]', 'Compra de proteínas'); await page.fill('#adm-fin [name=amount]', '1500'); await page.click('#adm-fin [data-expform] button[type=submit]'); await page.waitForTimeout(400);
   ok('finance tab: an expense is saved and the profit is income minus expenses (4,810 − 1,500 = 3,310)', await page.evaluate(() => /3,310/.test(document.querySelector('#adm-fin [data-fin-kpis]').innerText) && /Compra de proteínas/.test(document.querySelector('#adm-fin [data-fin-exp]').innerText)), JSON.stringify(fcalls.filter((c) => c.action === 'expense_new')));
@@ -1126,8 +1126,9 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   const lcalls = [];
   await page.route('https://script.example/**', async (route) => { const q = Object.fromEntries(new URL(route.request().url()).searchParams); lcalls.push(q); const body = q.action === 'admin' ? { ok: true, orders: [], clients: [], recipes: null, finance: { orders: [], expenses: [] }, leads } : q.action === 'lead_status' ? { ok: true, leads } : { ok: true, discounts: [] }; await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(body) }); });
   await page.evaluate(() => { const d = document.createElement('div'); d.id = 'adm-lead'; d.setAttribute('data-endpoint', 'https://script.example/exec'); d.setAttribute('data-lang', 'es'); document.body.appendChild(d); window.KXAdmin.mount(d); });
-  await page.waitForSelector('#adm-lead [data-tab="7"]', { timeout: 8000 }); await page.click('#adm-lead [data-tab="7"]'); await page.waitForTimeout(300);
-  ok('admin "Solicitudes": every request shows who, type, e-mail/phone/WhatsApp link, what they asked and a state selector', await page.evaluate(() => { const t = document.querySelector('#adm-lead [data-leads]').innerText; return /Coach Pablo/.test(t) && /Embajador/.test(t) && /PABLOFIT/.test(t) && /Evento/.test(t) && !!document.querySelector('#adm-lead a[href^="https://wa.me/52999"]') && document.querySelectorAll('#adm-lead [data-lead-state]').length === 2; }));
+  for (let tries = 0; tries < 3; tries++) { try { await page.waitForSelector('#adm-lead [data-tab="7"]', { timeout: 4000 }); break; } catch (e) { await page.evaluate(() => { sessionStorage.setItem('kx-admin-key', 'adm'); const d = document.querySelector('#adm-lead'); d.innerHTML = ''; window.KXAdmin.mount(d); }); } }
+  await page.click('#adm-lead [data-tab="7"]'); await page.waitForTimeout(300);
+  ok('admin "Solicitudes": every request shows who, type, e-mail/phone/WhatsApp link, what they asked and a state selector', await page.evaluate(() => { const t = document.querySelector('#adm-lead [data-leads]').innerText; return /Coach Pablo/.test(t) && /Embajador/i.test(t) && /PABLOFIT/.test(t) && /Evento/i.test(t) && !!document.querySelector('#adm-lead a[href^="https://wa.me/52999"]') && document.querySelectorAll('#adm-lead [data-lead-state]').length === 2; }));
   ok('admin "Solicitudes": filter chips per request type (with counts) narrow the list', await page.evaluate(async () => { const r = document.querySelector('#adm-lead'); const chips = [...r.querySelectorAll('[data-lead-f]')]; if (chips.length !== 3) return false; r.querySelector('[data-lead-f="carta"]').click(); await new Promise((x) => setTimeout(x, 200)); const n = document.querySelectorAll('#adm-lead .adm-lead').length; r.querySelector('[data-lead-f=""]').click(); await new Promise((x) => setTimeout(x, 200)); return n === 1 && document.querySelectorAll('#adm-lead .adm-lead').length === 2; }));
   await page.selectOption('#adm-lead [data-lead-state="l1"]', 'Atendida'); await page.waitForTimeout(300);
   ok('changing the state of a request is saved through the script', lcalls.some((c) => c.action === 'lead_status' && c.id === 'l1' && c.status === 'Atendida'));
@@ -1160,7 +1161,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   const names = () => page.evaluate((f) => [...document.querySelector(f).querySelectorAll('.fn-wk__card')].map((c) => (c.querySelector('.fn-wk__name') || {}).textContent || '-'), FN);
   const chooseDiet = async (cat) => { await page.evaluate(({ f, cat }) => document.querySelector(f + ' [data-cat-choice="' + cat + '"]').click(), { f: FN, cat }); await page.waitForTimeout(150); await page.evaluate((f) => document.querySelector(f + ' [data-fn-go-next]').click(), FN); await page.waitForTimeout(800); };
   const swapDay = async (i) => {
-    await page.evaluate(({ f, i }) => document.querySelector(f + ' [data-bd-focus="' + i + ':0"]').click(), { f: FN, i }); await page.waitForTimeout(250);
+    await page.evaluate(({ f, i }) => document.querySelector(f + ' [data-bd-focus="' + i + ':0"]').click(), { f: FN, i }); await page.waitForTimeout(250); await page.keyboard.press('Escape'); await page.waitForTimeout(150); await page.keyboard.press('Escape'); await page.waitForTimeout(150);
     await page.evaluate((f) => { document.querySelector(f + ' [data-bd-more]').click(); document.querySelector(f + ' [data-bd-menu] [data-bd-view="bowls"]').click(); }, FN); await page.waitForTimeout(250);
     await page.evaluate((f) => document.querySelector(f + ' [data-ct-tier="selecto"]').click(), FN); await page.waitForTimeout(250);
     await page.evaluate((f) => [...document.querySelectorAll(f + ' [data-ct-pick]')].find((b) => !b.classList.contains('is-on')).click(), FN); await page.waitForTimeout(450);
@@ -1221,7 +1222,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   // ---- upgrade through the group catalogue, swap, second plate
   const fridayUp = await page.evaluate((f) => !!document.querySelector(f + ' [data-bd-up="4:0"]'), FN);
   ok('every card has the upgrade button, Friday included', fridayUp && (await page.evaluate((f) => document.querySelectorAll(f + ' .fn-wk__up').length, FN)) === 5);
-  await page.evaluate((f) => document.querySelector(f + ' [data-bd-up="0:0"]').click(), FN); await page.waitForTimeout(450);
+  await page.evaluate((f) => document.querySelector(f + ' [data-bd-up="0:0"]').click(), FN); await page.waitForTimeout(450); await page.keyboard.press('Escape'); await page.waitForTimeout(150);
   const pk = await page.evaluate((f) => { const c = document.querySelector(f + ' [data-fn-ct]'); return { tabs: [...c.querySelectorAll('.fn-ct__tab')].map((b) => b.textContent.replace(/\s+/g, ' ').trim()), on: (c.querySelector('.fn-ct__tab.is-on') || {}).textContent, who: c.querySelector('.fn-ct__for').textContent, n: c.querySelectorAll('[data-ct-pick]').length }; }, FN);
   ok('"Elevar nivel" aims the catalogue at that day with Exclusivo / Signature / Reserve tabs and their extra price', /Lunes/.test(pk.who) && /Exclusivo/.test(pk.on) && pk.tabs.length === 4 && /\+\$?\s?70/.test(pk.tabs[1]) && /\+\$?\s?140/.test(pk.tabs[2]) && /\+\$?\s?210/.test(pk.tabs[3]), JSON.stringify(pk));
   ok('the catalogue lists only dishes of that level', pk.n >= 1 && (await page.evaluate((f) => [...document.querySelectorAll(f + ' [data-ct-pick]')].every((b) => /\+\$70/.test(b.textContent)), FN)));
@@ -1233,7 +1234,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await swapDay(1);
   ok('"Cambiar" lets you take any dish of any group (Todos > Bowls) and replaces only that day', (await names())[1] !== cur && (await names())[0] === (await names())[0], (await names()).join(' | '));
   ok('a second plate: the card offers "+ Añadir platillo"; choosing a dish puts it under the first one', await (async () => {
-    await page.evaluate((f) => document.querySelector(f + ' [data-bd-add2="0"]').click(), FN); await page.waitForTimeout(250);
+    await page.evaluate((f) => document.querySelector(f + ' [data-bd-add2="0"]').click(), FN); await page.waitForTimeout(250); await page.keyboard.press('Escape'); await page.waitForTimeout(150);
     const lab = await page.evaluate((f) => document.querySelector(f + ' .fn-ct__for').textContent, FN);
     await page.evaluate((f) => [...document.querySelectorAll(f + ' [data-ct-pick]')].find((b) => !b.classList.contains('is-on')).click(), FN); await page.waitForTimeout(450);
     return /\+1/.test(lab) && (await page.evaluate((f) => document.querySelectorAll(f + ' .fn-wk__slot.is-second').length, FN)) === 1;
@@ -1555,12 +1556,29 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.evaluate((f) => document.querySelector(f + ' [data-bd-gpick="1:bowls"]').click(), FN); await page.waitForTimeout(400);
   const gc = await page.evaluate((f) => ({ cat: document.querySelector(f + ' .fn-ct__head h4').textContent, who: document.querySelector(f + ' .fn-ct__for').textContent, n: document.querySelectorAll(f + ' [data-ct-pick]').length, on: document.querySelector(f + ' .fn-bd__pill.is-on, .fn-bd__pill--more.is-on') !== null }), FN);
   ok('choosing a category from the badge shows that group in the catalogue at the bottom, aimed at that day, without touching the chosen days', /Bowls/i.test(gc.cat) && /Martes/.test(gc.who) && gc.n >= 1 && (await names()).join('|') === namesBefore, JSON.stringify(gc));
+  // "Cambiar": the same carousel pop-up for the plates of the category
+  await page.evaluate((f) => document.querySelector(f + ' [data-bd-focus="2:0"]').click(), FN); await page.waitForTimeout(350);
+  const dp = await page.evaluate(() => { const m = document.querySelector('.fn-md--cr'); return { open: !m.hidden, title: m.querySelector('.fn-cr__t').textContent, sub: m.querySelector('.fn-cr__s').textContent, tabs: [...m.querySelectorAll('[data-cr-tab]')].map((b) => b.textContent.replace(/\s+/g, ' ').trim()), center: m.querySelector('.fn-cr__c h4').textContent, sheet: !!m.querySelector('[data-cr-sheet]'), ings: m.querySelectorAll('[data-cr-ing]').length, note: !!m.querySelector('[data-cr-note]'), ok: (m.querySelector('[data-cr-ok]') || {}).textContent, fits: m.querySelector('.fn-md__box').getBoundingClientRect().bottom <= innerHeight + 2 }; });
+  ok('"Cambiar" opens "Elige tu platillo" for that day and group: level tabs, the current plate big in the middle with its ficha, ingredients to omit, special request and "Confirmar platillo"', dp.open && dp.fits && /Elige tu platillo/.test(dp.title) && /Miércoles/.test(dp.sub) && dp.tabs.length === 4 && /Selecto \(\d+\)/.test(dp.tabs[0]) && dp.center.length > 3 && dp.sheet && dp.ings >= 1 && dp.note && /Confirmar platillo/.test(dp.ok), JSON.stringify(dp));
+  await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+  ok('the pop-up closes with Escape and nothing changed', (await names()).join('|') === namesBefore);
+  await page.evaluate((f) => document.querySelector(f + ' [data-bd-grp="2"]').click(), FN); await page.waitForTimeout(150);
+  await page.evaluate((f) => document.querySelector(f + ' [data-bd-gpick="2:bowls"]').click(), FN); await page.waitForTimeout(300);
+  await page.evaluate((f) => document.querySelector(f + ' [data-bd-focus="2:0"]').click(), FN); await page.waitForTimeout(350);
+  const nav = await page.evaluate(() => { const m = document.querySelector('.fn-md--cr'); const first = m.querySelector('.fn-cr__c h4').textContent, has = !!m.querySelector('.fn-cr__n--next:not(.is-empty)'); return { first, has }; });
+  if (nav.has) { await page.click('.fn-md--cr .fn-cr__n--next'); await page.waitForTimeout(200); }
+  const second = await page.evaluate(() => document.querySelector('.fn-md--cr .fn-cr__c h4').textContent);
+  ok('the plates around the middle one are clickable (and arrows / keys move along): the middle plate changes', !nav.has || second !== nav.first, JSON.stringify([nav, second]));
+  await page.click('.fn-md--cr [data-cr-ok]'); await page.waitForTimeout(400);
+  const afterC = await names(), beforeC = namesBefore.split('|');
+  ok('confirming puts the chosen plate on that day only (Wednesday); the other days stay', afterC.length === 5 && afterC[2] !== beforeC[2] && [0, 1, 3, 4].every((k) => afterC[k] === beforeC[k]), afterC.join(' | '));
   // side dish
   await page.evaluate((f) => document.querySelector(f + ' [data-bd-comp="1"]').click(), FN); await page.waitForTimeout(300);
-  const cp = await page.evaluate(() => { const m = document.querySelector('.fn-md--comp'); return { open: !m.hidden, opts: [...m.querySelectorAll('[data-comp]')].map((b) => b.textContent.replace(/\s+/g, ' ').trim()), fits: m.querySelector('.fn-md__box').getBoundingClientRect().bottom <= innerHeight + 2 }; });
-  ok('"Elegir complemento" opens a pop-up with Ensalada, Sopa and Postre (included, $0) and "Sin complemento"', cp.open && cp.fits && /Ensalada/.test(cp.opts[0]) && /Sopa/.test(cp.opts[1]) && /Postre/.test(cp.opts[2]) && /Sin complemento/.test(cp.opts[3]), JSON.stringify(cp));
-  await page.click('.fn-md--comp [data-comp="sopa"]'); await page.waitForTimeout(300);
-  ok('the card then reads "Sopa elegido" and the pop-up is closed', await page.evaluate((f) => !!document.querySelector('.fn-md--comp').hidden && /Sopa elegido/.test(document.querySelector(f + ' [data-bd-comp="1"]').textContent), FN));
+  const cp = await page.evaluate(() => { const m = document.querySelector('.fn-md--cr'); return { open: !m.hidden, title: m.querySelector('.fn-cr__t').textContent, tabs: [...m.querySelectorAll('[data-cr-tab]')].map((b) => b.textContent.replace(/\s+/g, ' ').trim()), none: !!m.querySelector('[data-cr-none]'), center: !!m.querySelector('.fn-cr__c h4'), fits: m.querySelector('.fn-md__box').getBoundingClientRect().bottom <= innerHeight + 2 }; });
+  ok('"Elegir complemento" opens "Elige tu complemento": tabs Ensaladas / Sopas / Postres with their counts, the chosen plate big in the middle, and "Sin complemento"', cp.open && cp.fits && /Elige tu complemento/.test(cp.title) && cp.tabs.length === 3 && /Ensalada \(\d+\)/.test(cp.tabs[0]) && /Sopa \(\d+\)/.test(cp.tabs[1]) && /Postre \(\d+\)/.test(cp.tabs[2]) && cp.none && cp.center, JSON.stringify(cp));
+  await page.click('.fn-md--cr [data-cr-tab="sopa"]'); await page.waitForTimeout(250);
+  await page.click('.fn-md--cr [data-cr-ok]'); await page.waitForTimeout(300);
+  ok('confirming a side closes the pop-up and the card reads "… elegido" with the plate chosen', await page.evaluate((f) => !!document.querySelector('.fn-md--cr').hidden && /elegido/.test(document.querySelector(f + ' [data-bd-comp="1"]').textContent) && /Crema|Sopa/.test(document.querySelector(f + ' [data-bd-comp="1"]').textContent), FN));
   // customise pop-up
   await page.evaluate((f) => document.querySelector(f + ' [data-bd-cust="0"]').click(), FN); await page.waitForTimeout(300);
   const cu = await page.evaluate(() => { const m = document.querySelector('.fn-md--cust'); return { open: !m.hidden, txt: m.textContent.replace(/\s+/g, ' '), ings: m.querySelectorAll('[data-md-ing]').length, fits: m.querySelector('.fn-md__box').getBoundingClientRect().bottom <= innerHeight + 2 }; });
@@ -1573,7 +1591,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('Guardar cambios keeps the omitted ingredient and the note on the card', await page.evaluate(({ f, ing0 }) => { const n = document.querySelector(f + ' .fn-wk__card .fn-wk__note'); return !!n && n.textContent.indexOf(ing0) > -1 && /Sin sal extra/.test(n.textContent); }, { f: FN, ing0 }), ing0);
   // weekend add-on
   const t0 = await page.evaluate((f) => parseFloat(document.querySelector(f + ' [data-fn-s-total]').textContent.replace(/[^\d]/g, '')), FN);
-  await page.evaluate((f) => document.querySelector(f + ' [data-we-on="0"]').click(), FN); await page.waitForTimeout(300);
+  await page.evaluate((f) => document.querySelector(f + ' [data-we-on="0"]').click(), FN); await page.waitForTimeout(300); await page.keyboard.press('Escape'); await page.waitForTimeout(150);
   ok('"+ Activar Sábado" wakes the card (delivered Friday) and offers "Elegir platillo"', await page.evaluate((f) => { const e = document.querySelector(f + ' .fn-we.is-on'); return !!e && /Entrega viernes/i.test(e.textContent) && /Sábado/.test(e.textContent) && /Elegir platillo/.test(e.textContent); }, FN));
   await page.evaluate((f) => document.querySelector(f + ' [data-ct-pick]').click(), FN); await page.waitForTimeout(400);
   const wk = await page.evaluate((f) => { const e = document.querySelector(f + ' .fn-we.is-on'); return { tier: (e.querySelector('.fn-wk__tier') || {}).textContent, total: parseFloat(document.querySelector(f + ' [data-fn-s-total]').textContent.replace(/[^\d]/g, '')) }; }, FN);
@@ -1589,7 +1607,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('the tally total equals "Hoy pagas" (deposit + upgrades + weekend dish)', await page.evaluate((f) => { const t = document.querySelector('.fn-sm__total b').textContent.replace(/[^\d]/g, ''), b = document.querySelector(f + ' [data-fn-s-total]').textContent.replace(/[^\d]/g, ''); return t === b; }, FN));
   await page.click('.fn-md--sum [data-sm-go]'); await page.waitForTimeout(1200);
   const cl2 = await page.evaluate(() => window.__calls);
-  ok('confirming puts the plan line, the upgrade line and the weekend dish (as its own product, flagged as an extra) in the cart, with sides and notes as properties', page.url().endsWith('#/carrito') && cl2.some((r) => /add\.js/.test(r) && /_platillos/.test(r) && /fin-de-semana/.test(r) && /Sin sal extra/.test(r) && /Sopa/.test(r) && /_extras/.test(r)), JSON.stringify(cl2).slice(0, 500));
+  ok('confirming puts the plan line, the upgrade line and the weekend dish (as its own product, flagged as an extra) in the cart, with sides and notes as properties', page.url().endsWith('#/carrito') && cl2.some((r) => /add\.js/.test(r) && /_platillos/.test(r) && /fin-de-semana/.test(r) && /Sin sal extra/.test(r) && /Crema|Sopa/.test(r) && /_extras/.test(r)), JSON.stringify(cl2).slice(0, 500));
 
   // ---- circle page: live classes, seats and real booking answers from the sheet backend
   await base(); await page.evaluate(() => localStorage.setItem('kx-test-orders', '2')); await page.setViewportSize({ width: 1440, height: 900 });

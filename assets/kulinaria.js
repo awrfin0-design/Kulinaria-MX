@@ -2037,6 +2037,8 @@
         if (!Array.isArray(st.comp) || st.comp.length !== MEALS) st.comp = blankDays();
         if (!Array.isArray(st.we) || st.we.length !== 2) st.we = [{ on: false, pid: '' }, { on: false, pid: '' }];
         if (!Array.isArray(st.xt)) st.xt = [];
+        if (!Array.isArray(st.compPid) || st.compPid.length !== MEALS) st.compPid = blankDays();
+        if (!Array.isArray(st.compMods) || st.compMods.length !== MEALS) st.compMods = blankDays().map(function () { return { off: [], note: '' }; });
         if (st.viewFor !== st.cat || !st.view || !CATS.some(function (c) { return c.id === st.view; })) { st.view = (st.cat && st.cat !== 'all' && CATS.some(function (c) { return c.id === st.cat; })) ? st.cat : (QUICK[0] || 'al-fuego'); st.viewFor = st.cat; st.vtier = 'selecto'; }
         if (!st.vtier) st.vtier = 'selecto';
         if (typeof st.tgt !== 'string') st.tgt = '';
@@ -2059,14 +2061,14 @@
           + '<div class="fn-wk__btns">' + (lv < 3 ? '<button class="fn-wk__up" type="button" data-bd-up="' + key + '">★ ' + esc(WT('up')) + '</button>' : '<span class="fn-wk__max">★ ' + esc(WT('max')) + '</span>') + '<button class="fn-wk__swap" type="button" data-bd-focus="' + key + '">' + esc(WT('swap')) + '</button></div>'
           + '</div>';
       };
-      var compName = function (k) { return k ? w2(k === 'ensalada' ? 'comp1' : k === 'sopa' ? 'comp2' : 'comp3') : ''; };
+      var compName = function (k, i) { var d = i != null && st.compPid && st.compPid[i] && byPid(st.compPid[i]); if (d) return lab(d); return k ? w2(k === 'ensalada' ? 'comp1' : k === 'sopa' ? 'comp2' : 'comp3') : ''; };
       var cardHtml = function (i) {
         var d = st.days[i] && byPid(st.days[i]), g = d ? grpOfDish(d) : '', lbl = dayLabel(i), sp = lbl.indexOf(' '), dn = sp > 0 ? lbl.slice(0, sp) : lbl, dd = sp > 0 ? lbl.slice(sp + 1) : '', ck = st.comp[i];
         return '<li class="fn-wk__card' + (i === st.active && !st.tgt ? ' is-active' : '') + '" data-day="' + i + '">'
           + '<button type="button" class="fn-wk__grp" data-bd-grp="' + i + '" aria-haspopup="listbox" aria-expanded="false" title="' + esc(w2('grp_pick')) + '">' + esc(catName(g || st.view)) + ' <i aria-hidden="true">&#9662;</i></button>'
           + '<span class="fn-bd__menu fn-wk__gmenu" data-bd-gmenu="' + i + '" role="listbox" hidden>' + CATS.map(function (c) { return '<button type="button" role="option" class="' + ((g || st.view) === c.id ? 'is-on' : '') + '" data-bd-gpick="' + i + ':' + c.id + '">' + esc(c.name) + '</button>'; }).join('') + '</span>'
           + '<h4><b>' + esc(dn) + '</b> <small>' + esc(dd) + '</small></h4>' + slotHtml(i, 0) + slotHtml(i, 1)
-          + (d ? '<div class="fn-wk__foot"><button type="button" class="fn-wk__comp' + (ck ? ' is-set' : '') + '" data-bd-comp="' + i + '">' + esc(ck ? w2('comp_set', { c: compName(ck) }) : w2('comp')) + '</button>' + (st.days2[i] ? '' : '<button type="button" class="fn-wk__add2" data-bd-add2="' + i + '">' + esc(w2('add2')) + '</button>') + '</div>' : '')
+          + (d ? '<div class="fn-wk__foot"><button type="button" class="fn-wk__comp' + (ck ? ' is-set' : '') + '" data-bd-comp="' + i + '">' + esc(ck ? w2('comp_set', { c: compName(ck, i) }) : w2('comp')) + '</button>' + (st.days2[i] ? '' : '<button type="button" class="fn-wk__add2" data-bd-add2="' + i + '">' + esc(w2('add2')) + '</button>') + '</div>' : '')
           + '</li>';
       };
       var bellS = '<svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true"><path d="M12 2a6 6 0 0 0-6 6v3.6L4 15v1h16v-1l-2-3.4V8a6 6 0 0 0-6-6zm-2.2 16a2.2 2.2 0 0 0 4.4 0z"/></svg>';
@@ -2294,7 +2296,70 @@
         mdShow(mdCust, true);
         var f = $('[data-md-note]', box); if (f && window.innerWidth > 760) setTimeout(function () { f.focus(); }, 40);
       };
+      /* ---- carousel pop-up ("Elige tu platillo" / "Elige tu complemento"): category tabs, the chosen plate big in the middle, the ones around it small ---- */
+      var mdCr = null, crKey = null;
+      var itemOf = function (d) { var im = $('img', d), pid = d.getAttribute('data-pid'), m = macroOf(pid) || { k: 0, p: 0, c: 0, f: 0 }; return { pid: pid, d: d, title: lab(d), src: im ? (im.currentSrc || im.src) : '', k: m.k, p: m.p, ings: (d.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean), tier: tierOf(d), warn: d.classList.contains('is-warned') }; };
+      var openCr = function (cfg) {
+        mdCr = mdCr || mkModal('fn-md--cr'); var box = $('[data-md-box]', mdCr);
+        var tab = cfg.tab || (cfg.tabs.filter(function (t) { return t.items.length; })[0] || cfg.tabs[0]).id, idx = 0, drafts = {};
+        var curTab = function () { return cfg.tabs.filter(function (t) { return t.id === tab; })[0]; };
+        var draftOf = function (it) { return drafts[it.pid || it.title] || (drafts[it.pid || it.title] = cfg.draftFor ? cfg.draftFor(it) : { off: [], note: '' }); };
+        var place = function () { var t0 = curTab(), k = t0.items.map(function (x) { return x.pid; }).indexOf(cfg.sel); idx = k > -1 ? k : 0; };
+        place();
+        var paint = function () {
+          var T0 = curTab(), items = T0.items; idx = Math.max(0, Math.min(items.length - 1, idx));
+          var tabsH = cfg.tabs.map(function (t) { return '<button type="button" class="fn-cr__tab' + (t.id === tab ? ' is-on' : '') + '" data-cr-tab="' + esc(t.id) + '">' + esc(t.label) + ' (' + t.items.length + ')</button>'; }).join('');
+          var small = function (it, dir) { return it ? '<button type="button" class="fn-cr__n fn-cr__n--' + dir + '" data-cr-go="' + dir + '"><span class="fn-cr__nim" style="background-image:url(&quot;' + esc(it.src) + '&quot;)"></span><b>' + esc(it.title) + '</b><small>' + it.k + ' ' + esc(w2('kcal')) + '</small></button>' : '<span class="fn-cr__n fn-cr__n--' + dir + ' is-empty"></span>'; };
+          var it = items[idx], center = '';
+          if (it) {
+            var dr = draftOf(it), price = cfg.price ? cfg.price(it) : '';
+            center = '<div class="fn-cr__c"><div class="fn-cr__ph"><span style="background-image:url(&quot;' + esc(it.src) + '&quot;)"></span>' + (it.d ? '<button type="button" data-cr-sheet>' + esc(w2('sheet_new')) + '</button>' : '') + '</div>'
+              + '<h4>' + esc(it.title) + '</h4>' + (it.k ? '<span class="fn-md__chip">' + it.k + ' ' + esc(w2('kcal')) + (it.p ? ' · P ' + it.p : '') + (price ? ' · ' + esc(price) : '') + '</span>' : '')
+              + (it.d ? '<button type="button" class="fn-md__link" data-cr-sheet>' + esc(w2('cust_sheet')) + ' &rarr;</button>' : '')
+              + (cfg.custom && it.ings.length ? '<p class="fn-cr__h">' + esc(w2('cust_rm')) + '</p><div class="fn-md__chips">' + it.ings.map(function (n) { return '<button type="button" class="fn-md__ing' + (dr.off.indexOf(n) > -1 ? ' is-off' : '') + '" data-cr-ing="' + esc(n) + '">' + esc(n) + ' <i aria-hidden="true">×</i></button>'; }).join('') + '</div>' : '')
+              + (cfg.custom ? '<p class="fn-cr__h">' + esc(w2('cust_note')) + '</p><input class="fn-md__in" type="text" maxlength="160" data-cr-note placeholder="' + esc(w2('cust_ph')) + '" value="' + esc(dr.note) + '">' : '') + '</div>';
+          } else center = '<div class="fn-cr__c"><p class="fn-ct__none">' + esc(w2('cat_none')) + '</p></div>';
+          box.innerHTML = '<button class="fn-md__x" type="button" data-md-close aria-label="' + esc(w2('close_x')) + '">&times;</button><h3 class="fn-cr__t">' + esc(cfg.title) + '</h3><p class="fn-cr__s">' + esc(cfg.sub || '') + '</p><div class="fn-cr__tabs" role="tablist">' + tabsH + '</div>'
+            + '<div class="fn-cr__stage" data-cr-stage><button type="button" class="fn-cr__a fn-cr__a--l" data-cr-go="prev" aria-label="‹"' + (idx <= 0 ? ' disabled' : '') + '>&lsaquo;</button>' + small(items[idx - 1], 'prev') + center + small(items[idx + 1], 'next') + '<button type="button" class="fn-cr__a fn-cr__a--r" data-cr-go="next" aria-label="›"' + (idx >= items.length - 1 ? ' disabled' : '') + '>&rsaquo;</button></div>'
+            + '<button class="fn-md__go" type="button" data-cr-ok' + (it ? '' : ' disabled') + '>' + esc(cfg.ok) + '</button>' + (cfg.none ? '<button class="fn-md__cancel" type="button" data-cr-none>' + esc(cfg.none) + '</button>' : '') + '<button class="fn-md__cancel" type="button" data-md-close>' + esc(w2('cust_cancel')) + '</button>';
+        };
+        box.onclick = function (e) {
+          var t = e.target; if (!t.closest) return; var items = curTab().items;
+          var tb = t.closest('[data-cr-tab]'); if (tb) { tab = tb.getAttribute('data-cr-tab'); idx = 0; place(); paint(); return; }
+          var go = t.closest('[data-cr-go]'); if (go) { var dir = go.getAttribute('data-cr-go'); idx += dir === 'next' ? 1 : -1; paint(); return; }
+          var ing = t.closest('[data-cr-ing]'); if (ing) { var d0 = draftOf(items[idx]), n = ing.getAttribute('data-cr-ing'), k = d0.off.indexOf(n); if (k > -1) d0.off.splice(k, 1); else d0.off.push(n); ing.classList.toggle('is-off', k < 0); return; }
+          if (t.closest('[data-cr-sheet]')) { var it0 = items[idx]; if (it0 && it0.d) { mdShow(mdCr, false); var mb = $('.fn-dish__media', it0.d); if (mb) mb.click(); } return; }
+          if (t.closest('[data-cr-none]')) { mdShow(mdCr, false); if (cfg.onNone) cfg.onNone(); return; }
+          if (t.closest('[data-cr-ok]')) { var it1 = items[idx]; if (!it1) return; var dd = draftOf(it1), nf = $('[data-cr-note]', box); if (nf) dd.note = (nf.value || '').trim(); mdShow(mdCr, false); cfg.onOk(it1, dd, tab); }
+        };
+        box.oninput = function (e) { var nf = e.target.closest && e.target.closest('[data-cr-note]'); if (nf) { var it2 = curTab().items[idx]; if (it2) draftOf(it2).note = nf.value; } };
+        // swipe the plates on a phone
+        var sx = null; box.onpointerdown = function (e) { if (e.target.closest && e.target.closest('input,button')) return; sx = e.clientX; };
+        box.onpointerup = function (e) { if (sx === null) return; var dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 40) { idx += dx < 0 ? 1 : -1; paint(); } };
+        crKey = function (e) { if (mdCr.hidden) return; if (e.key === 'ArrowRight') { idx++; paint(); } if (e.key === 'ArrowLeft') { idx--; paint(); } };
+        paint(); mdShow(mdCr, true);
+      };
+      document.addEventListener('keydown', function (e) { if (crKey) crKey(e); });
+      var openDishPicker = function () {
+        var group = st.view, all = dishes.filter(function (d) { return inGroup(d, group) && eligible(d) && !d.classList.contains('is-blocked'); }), tiers = ['selecto', 'exclusivo', 'signature', 'reserve'];
+        var weekend = !!st.tgt, second = !weekend && st.course === 1, day = st.active, k = weekend ? +st.tgt.slice(2) : 0;
+        var cur = weekend ? st.we[k].pid : (second ? st.days2[day] : st.days[day]);
+        var tabs = tiers.map(function (t, n) { return { id: t, label: (tierNames[n] || t) + (n && !weekend ? ' +' + money(upg(n)) : ''), items: all.filter(function (d) { return tierOf(d) === t; }).map(itemOf) }; });
+        openCr({ title: w2('pk_t'), sub: tgtLabel() + ' • ' + catName(group), tabs: tabs, tab: st.vtier, sel: cur, custom: !weekend && !second, ok: w2('pk_ok'),
+          price: function (it) { return weekend ? money(dishPrice(it.d)) : (rank(it.tier) ? '+' + money(upg(rank(it.tier))) : ''); },
+          draftFor: function (it) { var m = !weekend && !second && st.days[day] === it.pid ? modsOf(day) : null; return { off: m ? (m.off || []).slice() : [], note: m ? m.note || '' : '' }; },
+          onOk: function (it, dr, tabId) { st.vtier = tabId; var dayAt = day; assignDish(it.pid); if (!weekend && !second && (dr.off.length || dr.note)) { st.mods[dayAt] = { off: dr.off.slice(), note: dr.note }; persist(); render(); } } });
+      };
       var openComp = function (i) {
+        var KIND_RE = { ensalada: /ensalada|salad/i, sopa: /sopa|crema|caldo|soup|bisque/i, postre: /postre|brownie|pastel|galleta|dessert|helado/i };
+        var pool = dishes.filter(function (d) { return !d.classList.contains('is-blocked') && (inGroup(d, 'entradas') || inGroup(d, 'snacks-postres')); });
+        var tabs = COMPS.map(function (kd) { var its = pool.filter(function (d) { return KIND_RE[kd].test(lab(d)) || KIND_RE[kd].test(d.getAttribute('data-title') || ''); }).map(itemOf); if (!its.length) its = [{ pid: '', title: compName(kd), src: '', k: 0, p: 0, ings: [], synth: true, kind: kd }]; its.forEach(function (x) { x.kind = kd; }); return { id: kd, label: compName(kd), items: its }; });
+        openCr({ title: w2('comp_t'), sub: dayLabel(i).split(' ')[0] + ' • ' + (st.days[i] && byPid(st.days[i]) ? lab(byPid(st.days[i])) : ''), tabs: tabs, tab: st.comp[i] || '', sel: st.compPid[i] || '', custom: true, ok: w2('comp_ok'), none: w2('comp_none'),
+          draftFor: function (it) { var m = st.compPid[i] === it.pid && st.compMods[i] ? st.compMods[i] : null; return { off: m ? (m.off || []).slice() : [], note: m ? m.note || '' : '' }; },
+          onNone: function () { st.comp[i] = ''; st.compPid[i] = ''; st.compMods[i] = { off: [], note: '' }; persist(); render(); },
+          onOk: function (it, dr) { st.comp[i] = it.kind; st.compPid[i] = it.pid || ''; st.compMods[i] = { off: dr.off.slice(), note: dr.note }; persist(); render(); } });
+      };
+      var openCompOld = function (i) {
         mdComp = mdComp || mkModal('fn-md--comp'); var box = $('[data-md-box]', mdComp), ck = st.comp[i];
         box.innerHTML = '<button class="fn-md__x" type="button" data-md-close aria-label="' + esc(w2('close_x')) + '">&times;</button><h3>' + esc(w2('comp_t')) + '</h3><p class="fn-md__s">' + esc(w2('comp_s')) + '</p><div class="fn-md__opts">'
           + COMPS.map(function (k) { return '<button type="button" class="fn-md__opt' + (ck === k ? ' is-on' : '') + '" data-comp="' + k + '"><b>' + esc(compName(k)) + '</b><small>' + esc(money(0)) + '</small></button>'; }).join('')
@@ -2308,7 +2373,7 @@
         var d = st.days[i] && byPid(st.days[i]); if (!d) return '';
         var parts = [esc(catName(grpOfDish(d))) + ' • ' + esc(lab(d)) + ' <em>[' + esc(tierNames[rank(tierOf(d))] || '') + (rank(tierOf(d)) ? ' +' + esc(money(upg(rank(tierOf(d))))) : '') + ']</em>'];
         var d2 = st.days2[i] && byPid(st.days2[i]); if (d2) parts.push('+ ' + esc(lab(d2)) + ' <em>[' + esc(tierNames[rank(tierOf(d2))] || '') + ']</em>');
-        if (st.comp[i]) parts.push('+ ' + esc(compName(st.comp[i])));
+        if (st.comp[i]) parts.push('+ ' + esc(compName(st.comp[i], i)));
         var mt = modsText(i); if (mt) parts.push('<span class="fn-sm__mod">✎ ' + esc(mt) + '</span>');
         var im = $('img', d), src = im ? (im.currentSrc || im.src) : '';
         return '<li class="fn-sm__day"><h5>' + esc(dayLabel(i).split(' ')[0]) + '</h5><div><span class="fn-sm__ph" style="background-image:url(&quot;' + esc(src) + '&quot;)"></span><p>' + parts.join(' ') + '</p></div></li>';
@@ -2382,13 +2447,13 @@
         var tt = t.closest('[data-ct-tier]'); if (tt) { st.vtier = tt.getAttribute('data-ct-tier'); persist(); render(); return; }
         var cp = t.closest('[data-ct-pick]'); if (cp) { assignDish(cp.getAttribute('data-ct-pick')); return; }
         var fo = t.closest('[data-bd-focus]');
-        if (fo) { var kk = fo.getAttribute('data-bd-focus'); if (/^we/.test(kk)) { st.tgt = kk; } else { var pp = kk.split(':'); st.tgt = ''; st.active = +pp[0]; st.course = +pp[1] === 1 ? 1 : 0; } persist(); render(); var ct = $('[data-fn-ct]', holder); if (ct && ct.scrollIntoView) ct.scrollIntoView({ behavior: REDUCE ? 'auto' : 'smooth', block: 'nearest' }); return; }
+        if (fo) { var kk = fo.getAttribute('data-bd-focus'); if (/^we/.test(kk)) { st.tgt = kk; } else { var pp = kk.split(':'); st.tgt = ''; st.active = +pp[0]; st.course = +pp[1] === 1 ? 1 : 0; } persist(); render(); openDishPicker(); return; }
         var ub = t.closest('[data-bd-up]');
-        if (ub) { var u2 = ub.getAttribute('data-bd-up').split(':'), ui = +u2[0], uc = +u2[1], cd = byPid(uc ? st.days2[ui] : st.days[ui]), nx = ['exclusivo', 'signature', 'reserve'][Math.min(2, rank(tierOf(cd)))]; st.tgt = ''; st.active = ui; st.course = uc; st.vtier = nx; st.view = cd ? (grpOfDish(cd) || st.view) : st.view; persist(); render(); var ct2 = $('[data-fn-ct]', holder); if (ct2 && ct2.scrollIntoView) ct2.scrollIntoView({ behavior: REDUCE ? 'auto' : 'smooth', block: 'nearest' }); return; }
+        if (ub) { var u2 = ub.getAttribute('data-bd-up').split(':'), ui = +u2[0], uc = +u2[1], cd = byPid(uc ? st.days2[ui] : st.days[ui]), nx = ['exclusivo', 'signature', 'reserve'][Math.min(2, rank(tierOf(cd)))]; st.tgt = ''; st.active = ui; st.course = uc; st.vtier = nx; st.view = cd ? (grpOfDish(cd) || st.view) : st.view; persist(); render(); openDishPicker(); return; }
         var cu = t.closest('[data-bd-cust]'); if (cu) { st.active = +cu.getAttribute('data-bd-cust'); openCust(st.active); return; }
         var cm = t.closest('[data-bd-comp]'); if (cm) { openComp(+cm.getAttribute('data-bd-comp')); return; }
-        var a2 = t.closest('[data-bd-add2]'); if (a2) { st.tgt = ''; st.active = +a2.getAttribute('data-bd-add2'); st.course = 1; persist(); render(); var ct3 = $('[data-fn-ct]', holder); if (ct3 && ct3.scrollIntoView) ct3.scrollIntoView({ behavior: REDUCE ? 'auto' : 'smooth', block: 'nearest' }); return; }
-        var wo = t.closest('[data-we-on]'); if (wo) { var wk = +wo.getAttribute('data-we-on'); st.we[wk].on = true; st.tgt = 'we' + wk; persist(); render(); return; }
+        var a2 = t.closest('[data-bd-add2]'); if (a2) { st.tgt = ''; st.active = +a2.getAttribute('data-bd-add2'); st.course = 1; persist(); render(); openDishPicker(); return; }
+        var wo = t.closest('[data-we-on]'); if (wo) { var wk = +wo.getAttribute('data-we-on'); st.we[wk].on = true; st.tgt = 'we' + wk; persist(); render(); openDishPicker(); return; }
         var wf = t.closest('[data-we-off]'); if (wf) { var wk2 = +wf.getAttribute('data-we-off'); st.we[wk2] = { on: false, pid: '' }; if (st.tgt === 'we' + wk2) st.tgt = ''; persist(); render(); return; }
         var cardEl = t.closest('.fn-wk__card'); if (cardEl && !t.closest('button')) { st.tgt = ''; st.course = 0; st.active = +cardEl.getAttribute('data-day'); persist(); render(); return; }
         var weEl = t.closest('.fn-we.is-on'); if (weEl && !t.closest('button')) { st.tgt = 'we' + weEl.getAttribute('data-we'); persist(); render(); }
@@ -2467,7 +2532,7 @@
         var sp = tb.getAttribute('data-selling-plan'); if (st.plan === 'block' && st.renew && sp) line.selling_plan = parseInt(sp, 10);
         var lines = [line];
         ensureV2();
-        var compTxt = st.comp.map(function (ck, k) { return ck ? dayLabel(k).split(' ')[0] + ': ' + compName(ck) : ''; }).filter(Boolean).join(' | '); if (compTxt) { props[w2('sm_comp').split(' (')[0]] = compTxt; props['_complementos'] = compTxt; }
+        var compTxt = st.comp.map(function (ck, k) { return ck ? dayLabel(k).split(' ')[0] + ': ' + compName(ck, k) + (st.compMods[k] && (st.compMods[k].off.length || st.compMods[k].note) ? ' (' + (st.compMods[k].off.map(function (x) { return 'sin ' + x; }).concat(st.compMods[k].note ? [st.compMods[k].note] : [])).join(', ') + ')' : '') : ''; }).filter(Boolean).join(' | '); if (compTxt) { props[w2('sm_comp').split(' (')[0]] = compTxt; props['_complementos'] = compTxt; }
         st.we.forEach(function (w, k) {
           var dd = w.on && w.pid && byPid(w.pid), vid = dd && parseInt(dd.getAttribute('data-vid'), 10); if (!dd || !vid) return;
           var pr = {}; pr[weNames[k] + ' (' + w2('we_deliv') + ')'] = dd.getAttribute('data-title'); pr['_extra'] = 'fin-de-semana'; pr['_para'] = paraId; lines.push({ id: vid, quantity: 1, properties: pr });
@@ -2552,7 +2617,7 @@
       applyProfile();
       render();
       // the order was sent to the cart earlier: if the cart has been emptied since (items removed, cart cleared), the next order starts from a fresh list
-      if (st.sent) { try { fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(function (c) { if (c && !c.item_count) { st.days = blankDays(); st.days2 = blankDays(); st.course = 0; st.qty = {}; st.active = 0; st.step = st.rulesOk ? 1 : 0; st.sent = false; persist(); render(); } }).catch(function () {}); } catch (e1) {} }
+      if (st.sent) { try { var tcart = null; try { if (location.protocol === 'file:') tcart = localStorage.getItem('kx-test-cart'); } catch (e0) {} (tcart ? Promise.resolve(JSON.parse(tcart)) : fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); })).then(function (c) { if (c && !c.item_count) { st.days = blankDays(); st.days2 = blankDays(); st.course = 0; st.qty = {}; st.active = 0; st.step = st.rulesOk ? 1 : 0; st.sent = false; persist(); render(); } }).catch(function () {}); } catch (e1) {} }
       // ?plan=block / ?plan=week (from the "Get started" buttons of the plans page): the plan is already chosen, go straight to the meals
       try {
         var qs0 = location.search || (location.hash.indexOf('?') > -1 ? location.hash.slice(location.hash.indexOf('?')) : ''), qp = new URLSearchParams(qs0).get('plan');
