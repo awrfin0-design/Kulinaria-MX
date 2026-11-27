@@ -55,9 +55,8 @@
                 <h3 class="dd__h">{{ 'trainer.contact' | t }}</h3>
                 <a class="tp__ig" href="{{ ig }}" target="_blank" rel="noopener">{{ 'trainer.instagram' | t }} <b>{{ bs.handle | default: '@kulinaria.mx' }}</b></a>
                 <div class="tp__lock" data-tp-lock><p>{{ 'trainer.locked' | t }}</p><a class="btn btn--gold" href="/pages/pedido?plan=block">{{ 'hxd.cp_cta' | t }}</a></div>
-                <div class="tp__open" data-tp-open hidden>
-                  {%- if bs.phone != blank -%}<a class="tp__row" href="tel:{{ bs.phone | replace: ' ', '' }}">{{ bs.phone }}</a>{%- endif -%}
-                  {%- if bs.email != blank -%}<a class="tp__row" href="mailto:{{ bs.email }}">{{ bs.email }}</a>{%- endif -%}
+                <div class="tp__open" data-tp-open data-trainer="{{ bs.name | escape }}" hidden>
+                  <div class="tp__rows" data-tp-rows></div>
                   <a class="btn btn--gold" href="dialog:entrenador~{{ bs.name }}">{{ 'trainer.reach' | t: name: bs.name }}</a>
                 </div>
               </div>
@@ -104,8 +103,6 @@
         { "type": "textarea", "id": "train", "label": "Cómo entrena", "default": "Sesiones personalizadas de fuerza y acondicionamiento, con seguimiento semanal y ajustes según tu plan de comidas." },
         { "type": "text", "id": "handle", "label": "Usuario de Instagram (texto)", "default": "@kulinaria.mx" },
         { "type": "text", "id": "instagram", "label": "Instagram (URL)" },
-        { "type": "text", "id": "phone", "label": "Teléfono / WhatsApp (solo clientes con bloque)" },
-        { "type": "text", "id": "email", "label": "Correo (solo clientes con bloque)" },
         { "type": "text", "id": "link", "label": "Enlace" }
       ]
     }

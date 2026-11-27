@@ -984,10 +984,21 @@
       if (fl) { if (rep.length) { fl.hidden = false; fl.className = 'dd__flag is-hard'; fl.textContent = reportText(rep); } else if (soft.length) { fl.hidden = false; fl.className = 'dd__flag is-soft'; fl.textContent = dislikeText(p, tagsO, ingsO, soft); } else fl.hidden = true; }
     };
     var pickLbl = pick ? pick.textContent : '';
+    var esc2 = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
     var trainerGate = function (card) {       // trainer / class panel: contact and booking only for customers with an active 4-week block
       var lk = $('[data-tp-lock]', content), op = $('[data-tp-open]', content); if (!lk || !op) return;
       var cb = card && $('[data-circle-book]', card);
-      loadCredits(function (c) { var m = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); lk.hidden = m; op.hidden = !m; if (cb) pick.hidden = !(m && !cb.disabled && cb.getAttribute('aria-disabled') !== 'true'); });
+      loadCredits(function (c) {
+        var m = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); lk.hidden = m; op.hidden = !m; if (cb) pick.hidden = !(m && !cb.disabled && cb.getAttribute('aria-disabled') !== 'true');
+        var who = op.getAttribute('data-trainer'), rows = $('[data-tp-rows]', op), a = acct(), dl = $('[data-hx-dialog]'), ep = (dl && dl.getAttribute('data-endpoint')) || (a && a.url) || '';
+        if (m && who && rows && a && ep && !rows.hasAttribute('data-done')) {      // direct contact comes from the Sheet, only for members
+          rows.setAttribute('data-done', '1');
+          fetch(ep + (ep.indexOf('?') > -1 ? '&' : '?') + 'action=trainer&name=' + encodeURIComponent(who) + '&cid=' + encodeURIComponent(a.cid) + '&token=' + encodeURIComponent(a.token))
+            .then(function (r) { return r.json(); })
+            .then(function (j) { if (!j || !j.ok || !j.found) return; var h = ''; if (j.whatsapp) h += '<a class="tp__row" target="_blank" rel="noopener" href="https://wa.me/' + String(j.whatsapp).replace(/\D/g, '') + '">WhatsApp · ' + esc2(j.whatsapp) + '</a>'; if (j.email) h += '<a class="tp__row" href="mailto:' + esc2(j.email) + '">' + esc2(j.email) + '</a>'; rows.innerHTML = h; })
+            .catch(function () {});
+        }
+      });
     };
     var open = function (card) {
       var det = $('[data-dish-detail]', card); if (!det) return;
@@ -1267,7 +1278,7 @@
       var w = weekSel.value; days = ['', '', '', '', '']; say(keepMsg || ''); keepMsg = ''; paint(); if (!w) return;
       var done = function (sel, prev) {
         if (sel) days = slotsOf(sel); else if (prev) { days = slotsOf(prev); if (meals()) say(T_('prev'), false); }
-        else { var dm = defaultMenu((readFunnel() || {}).cat).map(function (h) { var d0 = dishes.filter(function (d) { return d.handle === h; })[0]; return d0 ? d0.title : ''; }); if (dm.some(Boolean)) { days = padFive(dm); say(T_('dflt'), false); } }
+        else { var dm = defaultMenu((readFunnel() || {}).cat).map(function (h) { var d0 = dishes.filter(function (d) { return d.handle === h; })[0]; if (d0 && d0.tier && d0.tier !== 'selecto') d0 = dishes.filter(function (d) { return d.tier === 'selecto'; })[0] || d0; return d0 ? d0.title : ''; }); if (dm.some(Boolean)) { days = padFive(dm); say(T_('dflt'), false); } }
         days = days.map(function (t) { return byTitle(t) ? t : ''; }); paint();
       };
       if (a) fetch(a.url + (a.url.indexOf('?') > -1 ? '&' : '?') + 'action=week&cid=' + encodeURIComponent(a.cid) + '&token=' + encodeURIComponent(a.token) + '&week=' + encodeURIComponent(w))
@@ -1958,16 +1969,27 @@
         var gn = $('[data-fn-go-next]', holder); if (gn) gn.disabled = !st.catPicked;
         $$('[data-cat-choice]', holder).forEach(function (b) { var on = !!st.catPicked && b.getAttribute('data-cat-choice') === st.cat; b.classList.toggle('is-on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
       };
+      // The base plan is always Selecto. Higher levels are paid add-ons the customer chooses: they are never pre-selected.
+      var baseOnly = function (list, cat) {
+        var okd = function (d) { return d && !d.hasAttribute('data-seasonal') && !d.classList.contains('is-warned') && !d.classList.contains('is-blocked'); };
+        var selecto = function (d) { return rank(d.getAttribute('data-tier')) === 0; };
+        var mine = dishes.filter(function (d) { return okd(d) && selecto(d) && inGroup(d, cat); }), any = dishes.filter(function (d) { return okd(d) && selecto(d); }), used = [];
+        return list.map(function (d) {
+          if (d && selecto(d)) { used.push(d); return d; }
+          var pool = mine.length ? mine : any; if (!pool.length) return d;
+          var fresh = pool.filter(function (x) { return used.indexOf(x) < 0; })[0] || pool[used.length % pool.length]; used.push(fresh); return fresh;
+        });
+      };
       var buildPresetSets = function () {
         var fixed = defaultMenu(st.cat).map(function (h) { return dishes.filter(function (d) { return d.getAttribute('data-handle') === h; })[0]; });
-        if (fixed.length >= MEALS && fixed.slice(0, MEALS).every(Boolean)) return [fixed.slice(0, MEALS)];
+        if (fixed.length >= MEALS && fixed.slice(0, MEALS).every(Boolean)) return [baseOnly(fixed.slice(0, MEALS), st.cat)];
         var okd = function (d) { return !d.hasAttribute('data-seasonal'); };                    // fallback (table missing a dish): fixed order, same for everyone
         var byName = function (a, b) { return a.getAttribute('data-handle') > b.getAttribute('data-handle') ? 1 : -1; };
         var inG = dishes.filter(function (d) { return okd(d) && inGroup(d, st.cat); }).sort(function (a, b) { return rank(a.getAttribute('data-tier')) - rank(b.getAttribute('data-tier')) || byName(a, b); });
         if (!inG.length) inG = dishes.filter(okd).sort(byName);
         if (!inG.length) return [[]];
         var out = []; for (var i = 0; i < MEALS; i++) out.push(inG[i % inG.length]);
-        return [out];
+        return [baseOnly(out, st.cat)];
       };
       var paintPresets = function () {
         if (!presetBox || st.step !== 2) return;
@@ -1976,6 +1998,7 @@
         var sub = $('[data-fn-presets-sub]', presetBox); if (sub) sub.textContent = (presetBox.getAttribute('data-t-sub') || '').replace('[c]', cname);
         var okd = function (d) { return !d.hasAttribute('data-seasonal') && !d.classList.contains('is-warned'); };
         var pool = dishes.filter(function (d) { return okd(d) && inGroup(d, st.cat); });
+        var poolBase = pool.filter(function (d) { return rank(d.getAttribute('data-tier')) === 0; }); if (poolBase.length) pool = poolBase;   // ready-made menus use Selecto plates only
         if (pool.length < 2) pool = pool.concat(dishes.filter(function (d) { return okd(d) && pool.indexOf(d) < 0 && rank(d.getAttribute('data-tier')) === 0; }));
         pool.sort(function (a, b) { return rank(a.getAttribute('data-tier')) - rank(b.getAttribute('data-tier')) || (a.getAttribute('data-title') > b.getAttribute('data-title') ? 1 : -1); });
         if (!pool.length) { grid.innerHTML = ''; presetSets = []; return; }
@@ -2074,7 +2097,7 @@
           + '<div class="fn-wk__btns">' + (lv < 3 ? '<button class="fn-wk__up" type="button" data-bd-up="' + key + '">★ ' + esc(WT('up')) + '</button>' : '<span class="fn-wk__max">★ ' + esc(WT('max')) + '</span>') + '<button class="fn-wk__swap" type="button" data-bd-focus="' + key + '">' + esc(WT('swap')) + '</button></div>'
           + '</div>';
       };
-      var compName = function (k, i) { var d = i != null && st.compPid && st.compPid[i] && byPid(st.compPid[i]); if (d) return lab(d); return k ? w2(k === 'ensalada' ? 'comp1' : k === 'sopa' ? 'comp2' : 'comp3') : ''; };
+      var compName = function (k, i) { var d = i != null && st.compPid && st.compPid[i] && byPid(st.compPid[i]); if (d) return lab(d); if (i != null && st.compName && st.compName[i] && st.comp[i] === k) return st.compName[i]; return k ? w2(k === 'ensalada' ? 'comp1' : k === 'sopa' ? 'comp2' : 'comp3') : ''; };
       var cardHtml = function (i) {
         var d = st.days[i] && byPid(st.days[i]), g = d ? grpOfDish(d) : '', lbl = dayLabel(i), sp = lbl.indexOf(' '), dn = sp > 0 ? lbl.slice(0, sp) : lbl, dd = sp > 0 ? lbl.slice(sp + 1) : '', ck = st.comp[i];
         return '<li class="fn-wk__card' + (i === st.active && !st.tgt ? ' is-active' : '') + '" data-day="' + i + '">'
@@ -2314,7 +2337,8 @@
       var itemOf = function (d) { var im = $('img', d), pid = d.getAttribute('data-pid'), m = macroOf(pid) || { k: 0, p: 0, c: 0, f: 0 }; return { pid: pid, d: d, title: lab(d), src: im ? (im.currentSrc || im.src) : '', k: m.k, p: m.p, ings: (d.getAttribute('data-ingredients') || '').split('|').map(function (x) { return x.trim(); }).filter(Boolean), tier: tierOf(d), warn: d.classList.contains('is-warned') }; };
       var openCr = function (cfg) {
         mdCr = mdCr || mkModal('fn-md--cr'); var box = $('[data-md-box]', mdCr);
-        var tab = cfg.tab || (cfg.tabs.filter(function (t) { return t.items.length; })[0] || cfg.tabs[0]).id, idx = 0, drafts = {};
+        var firstFull = (cfg.tabs.filter(function (t) { return t.items.length; })[0] || cfg.tabs[0]).id, wanted = cfg.tabs.filter(function (t) { return t.id === cfg.tab && t.items.length; })[0];
+        var tab = wanted ? wanted.id : firstFull, idx = 0, drafts = {};   // a tab with nothing in it never opens empty
         var curTab = function () { return cfg.tabs.filter(function (t) { return t.id === tab; })[0]; };
         var draftOf = function (it) { return drafts[it.pid || it.title] || (drafts[it.pid || it.title] = cfg.draftFor ? cfg.draftFor(it) : { off: [], note: '' }); };
         var place = function () { var t0 = curTab(), k = t0.items.map(function (x) { return x.pid; }).indexOf(cfg.sel); idx = k > -1 ? k : 0; };
@@ -2366,11 +2390,20 @@
       var openComp = function (i) {
         var KIND_RE = { ensalada: /ensalada|salad/i, sopa: /sopa|crema|caldo|soup|bisque/i, postre: /postre|brownie|pastel|galleta|dessert|helado/i };
         var pool = dishes.filter(function (d) { return !d.classList.contains('is-blocked') && (inGroup(d, 'entradas') || inGroup(d, 'snacks-postres')); });
-        var tabs = COMPS.map(function (kd) { var its = pool.filter(function (d) { return KIND_RE[kd].test(lab(d)) || KIND_RE[kd].test(d.getAttribute('data-title') || ''); }).map(itemOf); if (!its.length) its = [{ pid: '', title: compName(kd), src: '', k: 0, p: 0, ings: [], synth: true, kind: kd }]; its.forEach(function (x) { x.kind = kd; }); return { id: kd, label: compName(kd), items: its }; });
+        var synthImg = function (kd) {   // placeholder picture until the real complement photos exist: dark-to-orange card with a simple line drawing
+          var top = kd === 'ensalada' ? '<path d="M120 150c-10-34 14-58 40-46 6-24 44-26 54-2 22-10 46 8 36 36" /><path d="M170 118c4 12 2 22-4 30M214 112c-4 12-2 24 4 34M250 130c-6 8-8 14-6 20"/>' : kd === 'sopa' ? '<path d="M170 108c-10-14 10-22 0-38M210 108c-10-14 10-22 0-38M250 108c-10-14 10-22 0-38"/>' : '<path d="M150 150c0-30 22-50 50-50s50 20 50 50"/><circle cx="200" cy="88" r="9"/><path d="M200 100v-4"/>';
+          var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b130e"/><stop offset="1" stop-color="#4a2209"/></linearGradient></defs><rect width="400" height="300" fill="url(#g)"/><g fill="none" stroke="#ff7a1a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".9">' + top + '<path d="M110 168h180c0 44-34 76-90 76s-90-32-90-76z"/></g></svg>';
+          return 'data:image/svg+xml,' + encodeURIComponent(svg);
+        };
+        var tabs = COMPS.map(function (kd) {
+          var its = pool.filter(function (d) { return KIND_RE[kd].test(lab(d)) || KIND_RE[kd].test(d.getAttribute('data-title') || ''); }).map(itemOf);
+          (w2(kd === 'ensalada' ? 'comp1_v' : kd === 'sopa' ? 'comp2_v' : 'comp3_v') || compName(kd)).split('|').forEach(function (nm) { if (nm.trim()) its.push({ pid: '', title: nm.trim(), src: synthImg(kd), k: 0, p: 0, ings: [], synth: true, kind: kd }); });
+          its.forEach(function (x) { x.kind = kd; }); return { id: kd, label: compName(kd), items: its };
+        });
         openCr({ title: w2('comp_t'), sub: dayLabel(i).split(' ')[0] + ' • ' + (st.days[i] && byPid(st.days[i]) ? lab(byPid(st.days[i])) : ''), tabs: tabs, tab: st.comp[i] || '', sel: st.compPid[i] || '', custom: true, ok: w2('comp_ok'), none: w2('comp_none'),
           draftFor: function (it) { var m = st.compPid[i] === it.pid && st.compMods[i] ? st.compMods[i] : null; return { off: m ? (m.off || []).slice() : [], note: m ? m.note || '' : '' }; },
-          onNone: function () { st.comp[i] = ''; st.compPid[i] = ''; st.compMods[i] = { off: [], note: '' }; persist(); render(); },
-          onOk: function (it, dr) { st.comp[i] = it.kind; st.compPid[i] = it.pid || ''; st.compMods[i] = { off: dr.off.slice(), note: dr.note }; persist(); render(); } });
+          onNone: function () { st.comp[i] = ''; st.compPid[i] = ''; if (st.compName) st.compName[i] = ''; st.compMods[i] = { off: [], note: '' }; persist(); render(); },
+          onOk: function (it, dr) { st.comp[i] = it.kind; st.compPid[i] = it.pid || ''; if (!it.pid) { st.compName = st.compName || []; st.compName[i] = it.title; } st.compMods[i] = { off: dr.off.slice(), note: dr.note }; persist(); render(); } });
       };
       var openCompOld = function (i) {
         mdComp = mdComp || mkModal('fn-md--comp'); var box = $('[data-md-box]', mdComp), ck = st.comp[i];

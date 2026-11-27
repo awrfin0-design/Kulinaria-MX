@@ -99,7 +99,15 @@ function circlePublic_(p) {
   if (act === 'coupon') return circleCoupon_(p);
   if (act === 'coupon_check') return circleCouponCheck_(p);
   if (act === 'myres') return circleMine_(p);
+  if (act === 'trainer') return circleTrainerContact_(p);
   return { ok: false, error: 'unknown' };
+}
+/* a trainer's direct contact data is only ever sent to a customer with an active 4-week block (it is not in the page source) */
+function circleTrainerContact_(p) {
+  if (!circleMember_(p.cid, p.token)) return { ok: false, error: 'members_only' };
+  var nm = cStr_(p.name).toLowerCase(), t = cRows_('Entrenadores').filter(function (r) { return cStr_(r[0]).toLowerCase() === nm && cStr_(r[5]) !== 'No'; })[0];
+  if (!t) return { ok: true, found: false };
+  return { ok: true, found: true, name: cStr_(t[0]), email: cStr_(t[3]), whatsapp: cStr_(t[4]) };
 }
 function circleMember_(cid, token) {
   try { if (!(cid && token && profileTokenOk_(cid, token))) return false; var cr = creditsFor_(cid); return !!(cr && cr.hasPlan && cr.plan === 'block'); } catch (e) { return false; }

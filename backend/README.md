@@ -55,7 +55,9 @@ The HTML preview fakes the cart and checkout. Real saving to Shopify only happen
 - *Correos gratis* con Google (MailApp): ~100 al día en cuenta personal, 1,500 en Workspace. No se necesita Resend ni otro servicio.
 
 **Instalación (una sola vez)**
-1. En el proyecto de Apps Script, reemplaza el contenido de `Code.gs` por el de este repositorio y agrega un archivo nuevo `Circle.gs` con el contenido de `google-sheets/Circle.gs`.
+1. **Forma más simple:** en el proyecto de Apps Script, reemplaza el contenido de `Code.gs` por el de `google-sheets/KULINARIA-BACKEND-FINAL.gs` (ya incluye `Circle.gs`; si tenías un `Circle.gs` aparte, bórralo). Alternativa: `Code.gs` + `Circle.gs` por separado, con el contenido de este repositorio.
+   - Contacto directo de entrenadores: se guarda en la pestaña `Entrenadores` (Correo, WhatsApp) y solo se entrega a clientes con bloque activo (acción `trainer`); no está en el código de la página.
+   - La pestaña `Clases` ahora tiene la columna `Descripción` (se edita en el admin).
 2. Ejecuta **`circleSetup()`** (autoriza permisos de Hojas, Correo y Activadores). Crea las pestañas `Clases`, `Reservas`, `Cupones`, `Entrenadores`, `Gimnasios` y el activador por hora (`circleTick`).
 3. Project Settings > Script properties, agrega:
    - `SHOP_URL` = `https://kulinariamx.com`

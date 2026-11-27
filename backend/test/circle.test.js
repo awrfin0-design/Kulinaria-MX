@@ -134,6 +134,11 @@ ok('member-only lead kinds are still rejected server-side without a valid accoun
 mails.length = 0;
 run('leadAdd_({ kind: "gimnasio", name: "Luis G", email: "lg@x.com", fields: { tipo: "gimnasio", gimnasio: "Titan" } })');
 ok('a partner-gym application is acknowledged to the applicant', mails.some((m) => m.to === 'lg@x.com' && /recibimos|got your request/.test(m.subject)));
+adm({ action: 'circle_class_save', ckey: 'desc-q', sport: 'tenis', title: 'Con descripción', coach: 'Ren', date: iso(6), time: '10:00', venue: 'Club', cap: 8, min: 6, price: 600, limit: 24, desc: 'Clínica de saque y derecha para todos los niveles.' });
+ok('a class description saved in the admin is shown in the public list', (get({ action: 'classes' }).classes.find((c) => c.key === 'desc-q') || {}).desc === 'Clínica de saque y derecha para todos los niveles.');
+adm({ action: 'circle_dir_save', tab: 'trainer', name: 'Carla', role: 'IFBB', zone: 'Lomas', email: 'carla@x.com', phone: '+52 222 111 2233', active: 'Sí' });
+ok('a trainer\'s direct contact is given to a member with a block', (() => { const r = get({ action: 'trainer', cid: '1', token: 'tok1', name: 'Carla' }); return r.ok && r.found && r.email === 'carla@x.com' && /222/.test(r.whatsapp); })());
+ok('...and never to someone without a block, or with a forged token', get({ action: 'trainer', cid: '2', token: 'tok2', name: 'Carla' }).error === 'members_only' && get({ action: 'trainer', cid: '1', token: 'bad', name: 'Carla' }).error === 'members_only');
 ok('the admin data lists classes, reservations, coupons, trainers and gyms', (() => { const d = get({ action: 'circle_data', key: 'k' }); return d.ok && d.classes.length >= 2 && d.reservas.length >= 3 && d.coupons.length === 1 && d.trainers.length === 1 && d.gyms.length === 1; })());
 ok('admin actions need the key', get({ action: 'circle_data' }).error === 'forbidden');
 console.log(`${pass} passed, ${fail} failed`); process.exit(fail ? 1 : 0);

@@ -1166,7 +1166,8 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
     await page.evaluate((f) => document.querySelector(f + ' [data-ct-tier="selecto"]').click(), FN); await page.waitForTimeout(250);
     await page.evaluate((f) => [...document.querySelectorAll(f + ' [data-ct-pick]')].find((b) => !b.classList.contains('is-on')).click(), FN); await page.waitForTimeout(450);
   };
-  const KETO = ['Pollo a las hierbas con puré rústico', 'Salmón gourmet en costra de almendras', 'Pollo a las hierbas con puré rústico', 'Salmón gourmet en costra de almendras', 'Filete Prime con verduras asadas'];
+  const KETO = ['Pollo a las hierbas con puré rústico', 'Pollo a las hierbas con puré rústico', 'Pollo a las hierbas con puré rústico', 'Pollo a las hierbas con puré rústico', 'Pollo a las hierbas con puré rústico'];
+  const tiersNow = () => page.evaluate((f) => [...document.querySelector(f).querySelectorAll('.fn-wk__slot:not(.is-empty) .fn-wk__tier')].map((e) => e.className.replace(/.*fn-wk__tier--/, '')), FN);
 
   // ---- signed out: the first step is the sign-in screen
   await page.setViewportSize({ width: 1440, height: 860 });
@@ -1191,14 +1192,14 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   const w1 = await page.evaluate((f) => { const h = document.querySelector(f); return { step: h.getAttribute('data-step'), filled: h.querySelectorAll('.fn-wk__slot:not(.is-empty)').length, total: (h.querySelector('[data-fn-s-total]') || {}).textContent, stepcount: (h.querySelector('[data-fn-stepcount]') || {}).textContent }; }, FN);
   const nKeto = await names();
   ok('Continue opens "your week" with the five days already filled', w1.step === '3' && w1.filled === 5, JSON.stringify(w1));
-  ok('the keto menu is the fixed one from the theme settings (same dishes, Monday to Friday)', nKeto.join('|') === KETO.join('|'), nKeto.join(' | '));
-  ok('the total includes the suggested upgrades ($3,600 + $70 + $70 + $210)', /3,950/.test(w1.total || ''), w1.total);
+  ok('the suggested keto menu is the Selecto base: only Selecto dishes, none of the paid levels pre-selected', nKeto.join('|') === KETO.join('|') && (await tiersNow()).every((t) => t === 'selecto'), nKeto.join(' | '));
+  ok('the total is the plain Selecto base ($3,600): no upgrades are added by default', /3,600/.test(w1.total || '') && !/3,[7-9]/.test(w1.total || ''), w1.total);
   ok('the stepper reads "Paso 4 de 4"', /4\D+4/.test(w1.stepcount || ''), w1.stepcount);
   await base({ profile: { allergies: ['Pescado'], dislikes: [], people: [] } }); await open(false); await chooseDiet('keto-low-carb');
   const nAllergic = await names(), warn = await page.evaluate((f) => document.querySelector(f).querySelectorAll('.fn-wk__slot.has-warn').length, FN);
-  ok('a customer allergic to fish gets the SAME keto menu, with warning icons on the salmon days', nAllergic.join('|') === KETO.join('|') && warn >= 2, warn + ' warnings');
+  ok('a customer allergic to fish gets the same Selecto keto menu (no fish in it, so no warnings)', nAllergic.join('|') === KETO.join('|') && warn === 0, warn + ' warnings');
   await base(); await open(false); await chooseDiet('fit-proteina');
-  ok('another category has its own fixed menu (high protein starts with the beef bowl and ends with the skirt steak)', /Bowl de res/.test((await names())[0]) && /Arrachera/.test((await names())[4]));
+  ok('another category is Selecto too (high protein: the beef bowl, every day)', /Bowl de res/.test((await names())[0]) && (await tiersNow()).every((t) => t === 'selecto'));
 
   // ---- step 2 of 4: "how it works" (three steps and the money), shown once to a signed-in customer
   await base(); await page.evaluate(() => { localStorage.setItem('kx-test-guide', '1'); localStorage.removeItem('kx-rules-ok'); });
@@ -1734,6 +1735,31 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
     await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1000);
     const kf = await page.evaluate(() => { const k = document.querySelector('[data-page="home"] .kf'); return { cards: k.querySelectorAll('.kf__card').length, col: !!k.querySelector('[data-kf-cards]') }; });
     ok('KFW: the section shows its cards (store products when the collection has them, theme cards otherwise)', kf.col && kf.cards >= 2, JSON.stringify(kf));
+  }
+
+  // ---- v161: complements always offer several cards to flick through; pickers never open on an empty tab
+  {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await base(); await open(false); await chooseDiet('keto-low-carb');
+    await page.evaluate((f) => document.querySelector(f + ' [data-bd-comp="0"]').click(), FN); await page.waitForTimeout(500);
+    const c1 = await page.evaluate(() => { const m = document.querySelector('.fn-md--cr'); return { open: m && !m.hidden, tabs: [...m.querySelectorAll('.fn-cr__tab')].map((t) => t.textContent.trim()), img: ((m.querySelector('.fn-cr__ph span') || {}).style || {}).backgroundImage || '', next: !m.querySelector('[data-cr-go="next"]').disabled, title: (m.querySelector('.fn-cr__c h4') || {}).textContent }; });
+    ok('complement picker: the salad tab has a picture and several cards (not a single empty placeholder)', c1.open && /ensalada/i.test(c1.tabs[0]) && /\((\d+)\)/.test(c1.tabs[0]) && +/\((\d+)\)/.exec(c1.tabs[0])[1] >= 3 && /data:image|url/.test(c1.img) && c1.next, JSON.stringify(c1));
+    await page.evaluate(() => document.querySelector('.fn-md--cr [data-cr-go="next"]').click()); await page.waitForTimeout(250);
+    const c2 = await page.evaluate(() => (document.querySelector('.fn-md--cr .fn-cr__c h4') || {}).textContent);
+    ok('...and the arrow shuffles to the next one', c2 && c2 !== c1.title, c1.title + ' → ' + c2);
+    await page.evaluate(() => document.querySelector('.fn-md--cr [data-cr-ok]').click()); await page.waitForTimeout(400);
+    const c3 = await page.evaluate((f) => (document.querySelector(f + ' [data-bd-comp="0"]') || {}).textContent, FN);
+    ok('choosing it shows its name on the day card', c3 && c3.indexOf(c2) > -1, c3);
+    for (const tab of ['sopa', 'postre']) {
+      await page.evaluate((f) => document.querySelector(f + ' [data-bd-comp="1"]').click(), FN); await page.waitForTimeout(400);
+      await page.evaluate((t) => document.querySelector('.fn-md--cr [data-cr-tab="' + t + '"]').click(), tab); await page.waitForTimeout(200);
+      const n = await page.evaluate(() => document.querySelectorAll('.fn-md--cr .fn-cr__tab')[0] ? +/\((\d+)\)/.exec([...document.querySelectorAll('.fn-md--cr .fn-cr__tab.is-on')][0].textContent)[1] : 0);
+      ok('complement picker: the ' + tab + ' tab also has several cards', n >= 3, String(n));
+      await page.keyboard.press('Escape'); await page.waitForTimeout(300);
+    }
+    // swapping a dish: the picker opens on a tab that has dishes
+    await page.evaluate((f) => document.querySelector(f + ' [data-bd-focus="0:0"]').click(), FN); await page.waitForTimeout(300);
+    await page.keyboard.press('Escape'); await page.waitForTimeout(200);
   }
 
   // ---- phones: nothing wider than the screen, the total bar is inside the screen
