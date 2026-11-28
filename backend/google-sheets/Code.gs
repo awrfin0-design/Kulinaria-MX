@@ -635,19 +635,21 @@ function allowedMonday_(now) {
  * Shopify counts the uses and stops accepting it afterwards. Needs two script properties: SHOPIFY_STORE (xxxx.myshopify.com) and SHOPIFY_TOKEN
  * (Admin API access token with the scopes read_discounts + write_discounts) OR, for apps made in the Shopify Dev Dashboard, SHOPIFY_CLIENT_ID + SHOPIFY_CLIENT_SECRET; and the ADMIN_KEY password. */
 /** Admin API token: either a fixed SHOPIFY_TOKEN (old custom apps) or SHOPIFY_CLIENT_ID + SHOPIFY_CLIENT_SECRET of an app made in the Dev Dashboard (the token is requested and cached ~23 h) */
+var TOKEN_ERR_ = '';   // why the last token request failed (never contains the secret)
 function shopifyToken_(store) {
   var pr = PropertiesService.getScriptProperties(), fixed = pr.getProperty('SHOPIFY_TOKEN'); if (fixed) return fixed;
-  var id = pr.getProperty('SHOPIFY_CLIENT_ID'), secret = pr.getProperty('SHOPIFY_CLIENT_SECRET'); if (!id || !secret) return '';
+  var id = String(pr.getProperty('SHOPIFY_CLIENT_ID') || '').trim(), secret = String(pr.getProperty('SHOPIFY_CLIENT_SECRET') || '').trim(); if (!id || !secret) { TOKEN_ERR_ = 'falta la propiedad ' + (!id ? 'SHOPIFY_CLIENT_ID' : 'SHOPIFY_CLIENT_SECRET'); return ''; }
   var cache = CacheService.getScriptCache(), hit = cache.get('shopify_token'); if (hit) return hit;
   var res = UrlFetchApp.fetch('https://' + store + '/admin/oauth/access_token', { method: 'post', contentType: 'application/x-www-form-urlencoded', payload: { grant_type: 'client_credentials', client_id: id, client_secret: secret }, muteHttpExceptions: true });
-  var body; try { body = JSON.parse(res.getContentText()); } catch (e) { return ''; }
-  if (!body || !body.access_token) return '';
+  var body; try { body = JSON.parse(res.getContentText()); } catch (e) { TOKEN_ERR_ = 'Shopify respondió HTTP ' + res.getResponseCode() + ' (no es JSON): revisa que SHOPIFY_STORE sea exactamente algo.myshopify.com'; return ''; }
+  if (!body || !body.access_token) { TOKEN_ERR_ = 'Shopify rechazó las credenciales (HTTP ' + res.getResponseCode() + '): ' + JSON.stringify(body).slice(0, 200); return ''; }
   cache.put('shopify_token', body.access_token, 82800);
   return body.access_token;
 }
 function shopifyGql_(query, variables) {
-  var pr = PropertiesService.getScriptProperties(), store = pr.getProperty('SHOPIFY_STORE'), tok = store ? shopifyToken_(store) : '';
-  if (!store || !tok) return { error: 'no_token' };
+  var pr = PropertiesService.getScriptProperties(), store = String(pr.getProperty('SHOPIFY_STORE') || '').trim().replace(/^https?:\/\//, '').replace(/\/+$/, ''), tok = store ? shopifyToken_(store) : '';
+  if (!store) return { error: 'no_token', detail: 'falta la propiedad SHOPIFY_STORE' };
+  if (!tok) return { error: 'no_token', detail: TOKEN_ERR_ };
   var res = UrlFetchApp.fetch('https://' + store + '/admin/api/2025-01/graphql.json', { method: 'post', contentType: 'application/json', headers: { 'X-Shopify-Access-Token': tok }, payload: JSON.stringify({ query: query, variables: variables || {} }), muteHttpExceptions: true });
   var body; try { body = JSON.parse(res.getContentText()); } catch (e) { return { error: 'bad_response' }; }
   if (res.getResponseCode() >= 400 || body.errors) return { error: 'shopify', detail: JSON.stringify(body.errors || body).slice(0, 300) };
