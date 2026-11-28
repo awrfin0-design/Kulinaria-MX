@@ -17,3 +17,8 @@
 3. Webhooks de clientes/pedidos hacia el Apps Script (`backend/shopify/setup.mjs` los crea con el token de una app personalizada).
 4. Valores nutricionales completos (proteína, grasa, fibra, micronutrientes) de cada platillo: plantilla en `backend/dish-nutrition-template.csv`.
 5. Tienda sin contraseña / dominio principal / pagos / envíos / impuestos.
+
+## Actualización (redirecciones y políticas)
+- Redirecciones creadas: `/pages/ambassadors`, `/pages/plans`, `/pages/philosophy`, `/pages/profile`, `/pages/carta` y `/collections/all`.
+- Políticas: no se pudieron crear por API (falta permiso); el texto está en `docs/shopify-policies.md` para pegarlo en Configuración → Políticas.
+- Envíos: la tienda trae la zona «Domestic» (MX) con tarifas por defecto (Estándar $150, Estándar $0, Expreso $195); no son las tarifas de Kulinaria. Ajustar en Configuración → Envíos.
