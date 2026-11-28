@@ -608,7 +608,7 @@ ok('dish cards show a short description (when the rail is on the home page)', !(
 // =====================================================================  v10: weekly calendar and off-menu dishes
 await page.goto(`${URL0}#/menu`); await page.reload(); await page.waitForTimeout(900);
 ok('a dish scheduled for a later week is not on this week\'s menu', await page.evaluate(() => ![...document.querySelectorAll('[data-page="menu"] [data-dish]')].some((d) => /Brownie/.test(d.getAttribute('data-title')))));
-ok('the calendar lists this week and the next 3, with the scheduled dishes in their week', await page.evaluate(() => { const w = [...document.querySelectorAll('[data-page="menu"] .menu-calendar__week')]; const t = (i) => w[i].textContent; return w.length === 4 && w[0].classList.contains('is-now') && !/Brownie/.test(t(0)) && /Brownie/.test(t(1)) && /Batido verde/.test(t(1)) && /Batido verde/.test(t(2)) && !/\{/.test(t(1)); }));
+ok('the calendar lists this week and the next 3, with the scheduled dishes in their week', await page.evaluate(() => { const w = [...document.querySelectorAll('[data-page="menu"] [data-mc-panel]')]; const t = (i) => w[i].textContent; return w.length === 4 && document.querySelector('[data-page="menu"] [data-mc-tab="0"]').classList.contains('is-on') && !/Brownie/.test(t(0)) && /Brownie/.test(t(1)) && /Batido verde/.test(t(1)) && /Batido verde/.test(t(2)) && !/\{/.test(t(1)); }));
 // =====================================================================  v12: phone app mode (desktop untouched)
 await page.setViewportSize({ width: 1440, height: 900 });
 await page.goto(`${URL0}#/home`); await page.waitForTimeout(500);
