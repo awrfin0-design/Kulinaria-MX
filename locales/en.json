@@ -499,6 +499,13 @@
     "sale": "Sale",
     "from": "From"
   },
+  "gymmap": {
+    "all": "Show all locations",
+    "request": "Request pickup here",
+    "near_fail": "We could not find you. Pick a location on the map or tell us your area.",
+    "approx": "Approximate location by area",
+    "title": "Locations in Puebla"
+  },
   "dish": {
     "nutrition": "Nutrition facts",
     "n_calories": "Calories",

@@ -14,7 +14,7 @@ src = set()
 def walk(n, out):
     if isinstance(n, dict):
         for k, v in n.items():
-            if k in ('type', 'art', 'slug', 'tier', 'collection', 'layout', 'columns', 'background', 'link', 'button_link', 'button2_link', 'parent_link', 'next_url', 'image', 'panel') or k.endswith('_link') or k.endswith('_url'): continue
+            if k in ('type', 'art', 'slug', 'tier', 'collection', 'layout', 'columns', 'background', 'link', 'button_link', 'button2_link', 'parent_link', 'next_url', 'image', 'panel', 'locations') or k.endswith('_link') or k.endswith('_url'): continue
             walk(v, out)
     elif isinstance(n, list):
         for v in n: walk(v, out)

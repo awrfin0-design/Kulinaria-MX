@@ -1164,6 +1164,63 @@
     });
   }
 
+
+  /* ---------- partner-gym map: a real map of Puebla (Leaflet + OpenStreetMap/CARTO tiles), pins per chain, filter by chain, "near me" ---------- */
+  function initGymMap() {
+    var root = $('[data-gymmap]'); if (!root) return;
+    var data = []; try { data = JSON.parse(($('[data-gymmap-data]', root) || {}).textContent || '[]'); } catch (e) { data = []; }
+    var cv = $('[data-gymmap-canvas]', root), list = $$('[data-gymmap-list] li'), allBtn = $('[data-gymmap-all]', root), nearBtn = $('[data-gymmap-near]', root);
+    var L = null, map = null, tiles = null, marks = [], filter = '', starting = false;
+    var esc3 = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+    var tileUrl = function () { return 'https://{s}.basemaps.cartocdn.com/' + (document.documentElement.getAttribute('data-theme') === 'llama' ? 'light_all' : 'dark_all') + '/{z}/{x}/{y}{r}.png'; };
+    var pin = '<svg viewBox="0 0 24 32" width="28" height="36" aria-hidden="true"><path fill="#ff6200" stroke="#fff" stroke-width="1.4" d="M12 1C5.9 1 1 5.8 1 11.8 1 19.8 12 31 12 31s11-11.2 11-19.2C23 5.8 18.1 1 12 1z"/><circle cx="12" cy="11.5" r="4" fill="#111"/></svg>';
+    var paintList = function () { list.forEach(function (li) { li.hidden = !!filter && li.getAttribute('data-chain') !== filter; }); if (allBtn) allBtn.hidden = !filter; $$('[data-gymmap-chain]').forEach(function (a) { a.classList.toggle('is-on', !!filter && a.getAttribute('data-gymmap-chain') === filter); }); };
+    var fit = function () { if (!map) return; var vis = marks.filter(function (m) { return !filter || m.d.chain === filter; }); if (!vis.length) return; var b = L.latLngBounds(vis.map(function (m) { return [m.d.lat, m.d.lng]; })); if (vis.length === 1) map.setView(b.getCenter(), 15); else map.fitBounds(b, { padding: [40, 40], maxZoom: 15 }); };
+    var apply = function () {
+      paintList(); if (!map) return;
+      marks.forEach(function (m) { var on = !filter || m.d.chain === filter; if (on) { if (!map.hasLayer(m.m)) m.m.addTo(map); } else if (map.hasLayer(m.m)) map.removeLayer(m.m); });
+      if (filter) fit();
+    };
+    var build = function () {
+      if (map || !window.L) return; L = window.L;
+      map = L.map(cv, { scrollWheelZoom: false, zoomControl: true }).setView([+root.getAttribute('data-lat') || 19.03, +root.getAttribute('data-lng') || -98.24], +root.getAttribute('data-zoom') || 12);
+      tiles = L.tileLayer(tileUrl(), { attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19, subdomains: 'abcd' }).addTo(map);
+      var icon = L.divIcon({ className: 'gy__mk', html: pin, iconSize: [28, 36], iconAnchor: [14, 36], popupAnchor: [0, -32] });
+      data.forEach(function (d) {
+        var pop = '<div class="gy__pop"><strong>' + esc3(d.chain) + '</strong><span>' + esc3(d.sede) + '</span><small>' + esc3(d.addr || d.zone) + '</small><em>' + esc3(root.getAttribute('data-t-approx')) + '</em><a href="dialog:sede~' + esc3(d.chain + ' · ' + d.sede) + '">' + esc3(root.getAttribute('data-t-req')) + '</a></div>';
+        marks.push({ d: d, m: L.marker([d.lat, d.lng], { icon: icon, title: d.chain + ' · ' + d.sede, keyboard: true }).addTo(map).bindPopup(pop) });
+      });
+      new MutationObserver(function () { if (tiles) tiles.setUrl(tileUrl()); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      root.classList.add('is-ready'); apply();
+      setTimeout(function () { map.invalidateSize(); }, 300);
+    };
+    var load = function () {
+      if (starting) return; starting = true;
+      if (window.L) { build(); return; }
+      var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'; document.head.appendChild(css);
+      var sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'; sc.onload = build; sc.onerror = function () { root.classList.add('is-nomap'); };
+      document.head.appendChild(sc);
+    };
+    if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); load(); } }, { rootMargin: '300px' }); io.observe(root); } else load();
+    var setFilter = function (name) { filter = name || ''; load(); apply(); };
+    document.addEventListener('click', function (e) {
+      var ch = e.target.closest && e.target.closest('[data-gymmap-chain]');
+      if (ch && $('[data-gymmap]')) { e.preventDefault(); e.stopPropagation(); var nm = ch.getAttribute('data-gymmap-chain'); setFilter(filter === nm ? '' : nm); root.scrollIntoView({ block: 'center', behavior: REDUCE ? 'auto' : 'smooth' }); return; }
+      var fo = e.target.closest && e.target.closest('[data-gymmap-focus]');
+      if (fo) { var li = fo.closest('li'); load(); var go = function () { if (!map) { setTimeout(go, 200); return; } var mk = marks.filter(function (m) { return Math.abs(m.d.lat - (+li.getAttribute('data-lat'))) < 1e-6 && Math.abs(m.d.lng - (+li.getAttribute('data-lng'))) < 1e-6; })[0]; if (mk) { if (!map.hasLayer(mk.m)) { filter = ''; apply(); } map.setView([mk.d.lat, mk.d.lng], 15); mk.m.openPopup(); } root.scrollIntoView({ block: 'center', behavior: REDUCE ? 'auto' : 'smooth' }); }; go(); return; }
+      if (e.target.closest && e.target.closest('[data-gymmap-all]')) { setFilter(''); if (map) map.setView([+root.getAttribute('data-lat') || 19.03, +root.getAttribute('data-lng') || -98.24], +root.getAttribute('data-zoom') || 12); return; }
+      if (e.target.closest && e.target.closest('[data-gymmap-near]')) {
+        e.preventDefault(); load();
+        var fail = function () { document.dispatchEvent(new CustomEvent('kx:open-dialog', { detail: { kind: 'sede', what: '' } })); };
+        if (!navigator.geolocation) { fail(); return; }
+        navigator.geolocation.getCurrentPosition(function (p) {
+          var go2 = function () { if (!map) { setTimeout(go2, 200); return; } filter = ''; apply(); var best = null, bd = 1e12; marks.forEach(function (m) { var dx = (m.d.lat - p.coords.latitude) * 111, dy = (m.d.lng - p.coords.longitude) * 105, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = m; } }); if (best) { map.setView([best.d.lat, best.d.lng], 14); best.m.openPopup(); } };
+          go2();
+        }, fail, { timeout: 8000 });
+      }
+    }, true);
+  }
+
   /* ---------- private circle (classes): everybody can preview; booking needs an active 4-week block ---------- */
   function initCircle() {
     var root = $('[data-circle]'); if (!root) return;
@@ -3198,7 +3255,7 @@
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
     [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initWave, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile, initDietGate,
-      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initHeroDialog, initCircle, initFire, initTilt, initPeek].forEach(run);
+      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initHeroDialog, initCircle, initGymMap, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
   });

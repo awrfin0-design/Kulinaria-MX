@@ -499,6 +499,13 @@
     "sale": "Oferta",
     "from": "Desde"
   },
+  "gymmap": {
+    "all": "Mostrar todas las sedes",
+    "request": "Solicitar entrega aquí",
+    "near_fail": "No pudimos ubicarte. Elige una sede en el mapa o cuéntanos tu zona.",
+    "approx": "Ubicación aproximada por zona",
+    "title": "Sedes en Puebla"
+  },
   "dish": {
     "nutrition": "Información nutricional",
     "n_calories": "Calorías",

@@ -23,18 +23,39 @@
           {%- if tx_b2 != blank -%}<a class="gy__btn gy__btn--line" href="{{ section.settings.btn2_link | default: 'dialog:gimnasio~Afiliar gimnasio' }}">{{ tx_b2 }}</a>{%- endif -%}
         </div>
       </div>
-      <div class="gy__map" aria-label="{{ tx_mb | escape }}">
-        <svg class="gy__streets" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
-          <g fill="none" stroke="currentColor" stroke-width="1.2" opacity=".5">
-            <path d="M0 40L400 90M0 120L400 150M0 210L400 250M0 280L400 285M40 0L70 300M120 0L170 300M210 0L230 300M300 0L340 300M370 0L390 300"/>
-            <path d="M0 80L400 20M0 170L400 210M60 300L360 0M200 300L400 120" opacity=".6"/>
-          </g>
-        </svg>
-        {%- assign pins = '14,24;47,12;82,18;22,64;74,36;90,62;12,86;36,90;82,88' | split: ';' -%}
-        {%- for pn in pins -%}{%- assign xy = pn | split: ',' -%}<a class="gy__pin" style="left:{{ xy[0] }}%;top:{{ xy[1] }}%" href="dialog:sede~" tabindex="-1" aria-hidden="true"><svg viewBox="0 0 24 32" aria-hidden="true"><path d="M12 0C5.4 0 0 5.3 0 11.8 0 20.5 12 32 12 32s12-11.5 12-20.2C24 5.3 18.6 0 12 0z"/><circle cx="12" cy="11.5" r="4.4"/></svg></a>{%- endfor -%}
-        {%- if tx_mb != blank -%}<a class="gy__mapbtn" href="{{ section.settings.map_link | default: 'dialog:sede~' }}">{{ tx_mb }}</a>{%- endif -%}
+      <div class="gy__map gy__map--live" data-gymmap data-lat="{{ section.settings.map_lat | default: '19.03' }}" data-lng="{{ section.settings.map_lng | default: '-98.24' }}" data-zoom="{{ section.settings.map_zoom | default: 12 }}" data-t-all="{{ 'gymmap.all' | t }}" data-t-req="{{ 'gymmap.request' | t }}" data-t-near-fail="{{ 'gymmap.near_fail' | t }}" data-t-approx="{{ 'gymmap.approx' | t }}">
+        <div class="gy__canvas" data-gymmap-canvas role="application" aria-label="{{ tx_mb | escape }}"></div>
+        <div class="gy__mapui">
+          {%- if tx_mb != blank -%}<button class="gy__mapbtn" type="button" data-gymmap-near>{{ tx_mb }}</button>{%- endif -%}
+          <button class="gy__mapall" type="button" data-gymmap-all hidden>{{ 'gymmap.all' | t }}</button>
+        </div>
         {%- if tx_zone != blank -%}<span class="gy__zone"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>{{ tx_zone }}</span>{%- endif -%}
+        {%- capture gm_json -%}[
+          {%- assign gm_first = true -%}
+          {%- for block in section.blocks -%}
+            {%- assign gm_nm = block.settings.name | split: '|' -%}
+            {%- assign gm_chain = gm_nm | join: ' ' | strip -%}
+            {%- assign gm_lines = block.settings.locations | newline_to_br | split: '<br />' -%}
+            {%- for gm_ln in gm_lines -%}{%- assign gm_f = gm_ln | split: '|' -%}
+              {%- if gm_f.size >= 4 -%}{%- unless gm_first -%},{%- endunless -%}{%- assign gm_first = false -%}{"chain":{{ gm_chain | json }},"sede":{{ gm_f[0] | strip | json }},"zone":{{ gm_f[1] | strip | json }},"lat":{{ gm_f[2] | strip | plus: 0 }},"lng":{{ gm_f[3] | strip | plus: 0 }},"addr":{{ gm_f[4] | strip | json }}}{%- endif -%}
+            {%- endfor -%}
+          {%- endfor -%}
+        ]{%- endcapture -%}
+        <script type="application/json" data-gymmap-data>{{ gm_json }}</script>
       </div>
+    </div>
+
+    <div class="gy__sedes" data-gymmap-list>
+      <h3 class="gy__sedes-t">{{ 'gymmap.title' | t }}</h3>
+      <ul>
+        {%- for block in section.blocks -%}
+          {%- assign gm_nm = block.settings.name | split: '|' -%}{%- assign gm_chain = gm_nm | join: ' ' | strip -%}
+          {%- assign gm_lines = block.settings.locations | newline_to_br | split: '<br />' -%}
+          {%- for gm_ln in gm_lines -%}{%- assign gm_f = gm_ln | split: '|' -%}
+            {%- if gm_f.size >= 4 -%}<li data-chain="{{ gm_chain | escape }}" data-lat="{{ gm_f[2] | strip }}" data-lng="{{ gm_f[3] | strip }}"><button type="button" data-gymmap-focus><b>{{ gm_chain }}</b><span>{{ gm_f[0] | strip }} · {{ gm_f[1] | strip }}</span></button></li>{%- endif -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      </ul>
     </div>
 
     <div class="gy__label"><span>{{ tx_lt }}</span></div>
@@ -46,7 +67,7 @@
           {%- assign nm_a = nm[0] | strip -%}{%- assign nm_b = nm[1] | strip -%}
           {%- assign nm_full = nm_a -%}{%- if nm_b != blank -%}{%- assign nm_full = nm_a | append: ' ' | append: nm_b -%}{%- endif -%}
           <li {{ block.shopify_attributes }}>
-            <a class="gy__logo gy__logo--{{ bs.style | default: 'stack' }}" href="{{ bs.link | default: 'dialog:sede~' }}{%- if bs.link == blank -%}{{ nm_full }}{%- endif -%}" aria-label="{{ nm_full | escape }}">
+            <a class="gy__logo gy__logo--{{ bs.style | default: 'stack' }}" data-gymmap-chain="{{ nm_full | escape }}" href="{{ bs.link | default: 'dialog:sede~' }}{%- if bs.link == blank -%}{{ nm_full }}{%- endif -%}" aria-label="{{ nm_full | escape }}">
               {%- if bs.image != blank -%}
                 <img src="{{ bs.image | image_url: width: 300 }}" alt="{{ nm_full | escape }}" loading="lazy" width="150" height="60">
               {%- else -%}
@@ -90,6 +111,9 @@
     { "type": "text", "id": "map_button", "label": "Botón del mapa", "default": "Buscar sede en mi zona" },
     { "type": "text", "id": "map_link", "label": "Botón del mapa: enlace" },
     { "type": "text", "id": "zone", "label": "Zona mostrada en el mapa", "default": "Lomas de Angelópolis" },
+    { "type": "text", "id": "map_lat", "label": "Mapa: latitud del centro", "default": "19.03" },
+    { "type": "text", "id": "map_lng", "label": "Mapa: longitud del centro", "default": "-98.24" },
+    { "type": "range", "id": "map_zoom", "label": "Mapa: zoom inicial", "min": 9, "max": 15, "step": 1, "default": 12 },
     { "type": "text", "id": "logos_title", "label": "Título sobre los logos", "default": "Colección oficial KFW" },
     { "type": "text", "id": "affil_tag", "label": "Tarjeta de afiliación: etiqueta", "default": "Afilia tu gimnasio" },
     { "type": "text", "id": "affil_title", "label": "Tarjeta de afiliación: título", "default": "Afilia tu gimnasio" },
@@ -105,6 +129,7 @@
       "settings": [
         { "type": "text", "id": "name", "label": "Nombre", "info": "Usa | para dos renglones: Sports|World", "default": "Sports|World" },
         { "type": "text", "id": "sub", "label": "Línea pequeña (opcional)" },
+        { "type": "textarea", "id": "locations", "label": "Sedes en el mapa (una por línea)", "info": "Formato: Sede | Zona | latitud | longitud | dirección. Para obtener las coordenadas: en Google Maps, clic derecho sobre el lugar y toca los números que aparecen." },
         { "type": "select", "id": "style", "label": "Estilo del logo", "default": "stack", "options": [
           { "value": "stack", "label": "Dos renglones" },
           { "value": "italic", "label": "Cursiva" },

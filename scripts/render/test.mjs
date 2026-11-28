@@ -1788,6 +1788,20 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
     await page.keyboard.press('Escape'); await page.waitForTimeout(400);
   }
 
+  // ---- v167: the partner-gym map is a real map (pins with coordinates), chains filter it
+  {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx-seen', '1'); });
+    await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1000);
+    const gm = await page.evaluate(() => { const r = document.querySelector('[data-page="home"] [data-gymmap]'); const d = JSON.parse(r.querySelector('[data-gymmap-data]').textContent); const li = document.querySelectorAll('[data-page="home"] [data-gymmap-list] li').length; return { pins: d.length, list: li, ok: d.every((x) => x.lat > 18.5 && x.lat < 19.5 && x.lng < -97.5 && x.lng > -99), chains: [...new Set(d.map((x) => x.chain))].length, near: !!r.querySelector('[data-gymmap-near]') }; });
+    ok('gym map: 8 chains with 17 pins inside the Puebla area, a list of the same sedes and the "near me" button', gm.pins >= 15 && gm.list === gm.pins && gm.ok && gm.chains === 8 && gm.near, JSON.stringify(gm));
+    await page.evaluate(() => { const a = document.querySelector('[data-page="home"] [data-gymmap-chain="smart fit"]') || [...document.querySelectorAll('[data-page="home"] [data-gymmap-chain]')].find((x) => /smart/i.test(x.getAttribute('data-gymmap-chain'))); a.click(); }); await page.waitForTimeout(400);
+    const f1 = await page.evaluate(() => ({ shown: [...document.querySelectorAll('[data-page="home"] [data-gymmap-list] li:not([hidden])')].map((l) => l.getAttribute('data-chain')), all: !document.querySelector('[data-page="home"] [data-gymmap-all]').hidden }));
+    ok('gym map: tapping a chain shows only its sedes (and a "show all" button)', f1.shown.length >= 2 && f1.shown.every((c) => /smart/i.test(c)) && f1.all, JSON.stringify(f1));
+    await page.evaluate(() => document.querySelector('[data-page="home"] [data-gymmap-all]').click()); await page.waitForTimeout(300);
+    ok('...and "show all" brings every sede back', await page.evaluate(() => document.querySelectorAll('[data-page="home"] [data-gymmap-list] li:not([hidden])').length >= 15));
+  }
+
   // ---- phones: nothing wider than the screen, the total bar is inside the screen
   await page.setViewportSize({ width: 390, height: 844 });
   await base({ guest: true }); await open(true);
