@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "art": "air-glass",
+        "heading": "Mi *selección*",
+        "text": "Revisa tu bloque, tu código de referencia y el contrato antes de pagar."
+      }
+    },
+    "main": {
+      "type": "main-cart",
+      "settings": {}
+    }
+  },
+  "order": [
+    "head",
+    "main"
+  ]
+}
+

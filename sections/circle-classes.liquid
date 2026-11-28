@@ -1,0 +1,118 @@
+{%- capture descs_json -%}{
+{%- assign seen_d = '' -%}{%- assign first_d = true -%}
+{%- for block in section.blocks -%}{%- assign dsp = block.settings.sport -%}{%- unless seen_d contains dsp -%}{%- if block.settings.desc != blank -%}{%- assign seen_d = seen_d | append: dsp | append: ',' -%}{%- unless first_d -%},{%- endunless -%}{%- assign first_d = false -%}{%- capture tx_dd -%}{% render 'tx', s: block.settings.desc %}{%- endcapture -%}{{ dsp | json }}:{{ tx_dd | strip | json }}{%- endif -%}{%- endunless -%}{%- endfor -%}
+}{%- endcapture -%}
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
+{%- assign price = section.settings.price | default: 600 -%}
+{%- assign price_m = price | times: 100 | money_without_trailing_zeros -%}
+<section class="section circle" data-circle data-price="{{ price }}" data-endpoint="{{ shop.metafields.kulinaria.sheet_url.value | escape }}" data-descs="{{ descs_json | escape }}" data-t-about="{{ 'circle.about' | t }}" data-t-cta="{{ 'hxd.cp_cta' | t }}" data-t-locks="{{ 'circle.lock_s' | t | replace: '[p]', price_m | escape }}"{% if customer %} data-name="{{ customer.name | escape }}" data-email="{{ customer.email | escape }}"{% endif %} data-t-sent="{{ 'circle.sent' | t }}" data-t-host="{{ 'circle.host' | t }}" data-t-date="{{ 'circle.date' | t }}" data-t-time="{{ 'circle.time' | t }}" data-t-venue="{{ 'circle.venue' | t }}" data-t-book="{{ 'circle.book' | t }}" data-t-locked="{{ 'circle.locked' | t }}" data-art-tpl="{{ 'photo-hs-tenis.webp' | asset_url }}" data-sports="{{ 'circle.sport_padel' | t }}|{{ 'circle.sport_tenis' | t }}|{{ 'circle.sport_ciclismo' | t }}|{{ 'circle.sport_basketball' | t }}|{{ 'circle.sport_running' | t }}|{{ 'circle.sport_funcional' | t }}" data-t-full="{{ 'circle.full' | t }}" data-t-wait-n="{{ 'circle.wait_n' | t }}" data-t-confirmed="{{ 'circle.confirmed' | t }}" data-t-need="{{ 'circle.need' | t }}" data-t-pending="{{ 'circle.pending' | t }}" data-t-booked="{{ 'circle.booked' | t }}" data-t-booked-wait="{{ 'circle.booked_wait' | t }}" data-t-booked-conf="{{ 'circle.booked_conf' | t }}" data-t-err="{{ 'circle.err' | t }}" data-t-cancelled="{{ 'circle.cancelled' | t }}" data-t-deadline="{{ 'circle.deadline' | t }}" data-t-left="{{ 'circle.left' | t }}" data-t-no-pay="{{ 'circle.no_pay' | t }}" data-t-count="{{ 'circle.count' | t }}" {{ section.shopify_attributes }}>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+    <symbol id="cs-padel" viewBox="0 0 48 48"><ellipse cx="22" cy="19" rx="12" ry="14" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M22 33v10M18 43h8M17 14h.1M22 12h.1M27 14h.1M19 20h.1M25 20h.1M22 27h.1" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle cx="38" cy="36" r="4" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
+    <symbol id="cs-tenis" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M11 14c8 3 8 17 0 20M37 14c-8 3-8 17 0 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="cs-ciclismo" viewBox="0 0 48 48"><circle cx="12" cy="32" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="36" cy="32" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 32l7-14h12l5 14M19 18l7 14h10M17 14h6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="cs-basketball" viewBox="0 0 48 48"><circle cx="24" cy="24" r="16" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M8 24h32M24 8v32M12 12c6 6 6 18 0 24M36 12c-6 6-6 18 0 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="cs-running" viewBox="0 0 48 48"><circle cx="29" cy="9" r="4" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M24 18l-7 5 3 4 6-3 4 6-5 10M24 18l9 4 5-3M20 27l-8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="cs-funcional" viewBox="0 0 48 48"><path d="M6 19v10M12 14v20M36 14v20M42 19v10M12 24h24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></symbol>
+    <symbol id="cs-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  </defs></svg>
+  <div class="container">
+    <header class="circle__head">
+      {%- if tx_s_eyebrow != blank -%}<span class="eyebrow">{{ tx_s_eyebrow }}</span>{%- endif -%}
+      <h2>{{ tx_s_heading }}</h2>
+      {%- if tx_s_text != blank -%}<p>{{ tx_s_text }}</p>{%- endif -%}
+    </header>
+
+    <div class="circle__gate" data-circle-gate hidden>
+      <span class="circle__gateico"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#cs-lock"/></svg></span>
+      <div class="circle__gatetxt"><strong>{{ 'circle.lock_t' | t }}</strong><span>{{ 'circle.lock_s' | t | replace: '[p]', price_m }}</span></div>
+      <a class="btn btn--gold circle__gatebtn" href="{{ section.settings.cta_link | default: '/pages/pedido' }}">{{ 'circle.lock_cta' | t }}</a>
+    </div>
+    <p class="circle__welcome" data-circle-welcome hidden>{{ 'circle.welcome' | t }}</p>
+
+    <div class="circle__filters" role="group" aria-label="{{ 'circle.filters' | t }}" data-circle-filters>
+      <button class="circle__pill is-on" type="button" data-sport="all" aria-pressed="true">{{ 'circle.all' | t }} (<span data-circle-all>{{ section.blocks.size }}</span>)</button>
+      {%- assign seen = '' -%}
+      {%- for block in section.blocks -%}{%- assign sp = block.settings.sport -%}
+        {%- unless seen contains sp -%}{%- assign seen = seen | append: sp | append: ',' -%}{%- assign spk = 'circle.sport_' | append: sp -%}
+          <button class="circle__pill" type="button" data-sport="{{ sp }}" aria-pressed="false">{{ spk | t }}</button>
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="circle__grid" data-circle-grid>
+      {%- for block in section.blocks -%}{%- assign bs = block.settings -%}
+        {%- capture tx_t -%}{% render 'tx', s: bs.title %}{%- endcapture -%}
+        {%- capture tx_v -%}{% render 'tx', s: bs.venue %}{%- endcapture -%}
+        {%- capture tx_d -%}{% render 'tx', s: bs.date %}{%- endcapture -%}
+        {%- assign spk = 'circle.sport_' | append: bs.sport -%}
+        {%- capture tx_desc -%}{% render 'tx', s: bs.desc %}{%- endcapture -%}
+        <article class="circle__card" data-has-detail data-sport="{{ bs.sport }}" data-class="{{ tx_t | escape }}" data-when="{{ tx_d | escape }} {{ bs.time | escape }}" data-venue="{{ tx_v | escape }}" {{ block.shopify_attributes }}>
+          <div class="circle__top">
+            <span class="circle__av">{%- if bs.art != blank -%}<img src="{{ 'photo-' | append: bs.art | append: '.webp' | asset_url }}" alt="" loading="lazy" width="60" height="60">{%- else -%}<svg viewBox="0 0 48 48" aria-hidden="true"><use href="#cs-{{ bs.sport }}"/></svg>{%- endif -%}</span>
+            <div class="circle__tt"><span class="circle__sport">{{ spk | t }}</span><h3>{{ tx_t }}</h3></div>
+          </div>
+          <dl class="circle__meta">
+            <div><dt>{{ 'circle.host' | t }}</dt><dd>{{ bs.host }}</dd></div>
+            <div><dt>{{ 'circle.date' | t }}</dt><dd>{{ tx_d }}</dd></div>
+            <div><dt>{{ 'circle.time' | t }}</dt><dd>{{ bs.time }}</dd></div>
+            <div><dt>{{ 'circle.venue' | t }}</dt><dd>{{ tx_v }}</dd></div>
+          </dl>
+          {%- if tx_desc != blank -%}<p class="circle__desc">{{ tx_desc }}</p>{%- endif -%}
+          <div data-dish-detail data-url="" data-title="{{ tx_t | escape }}" hidden>
+            <div class="dd__body tp">
+              <span class="tp__role">{{ spk | t }}</span>
+              <h2 class="dd__title">{{ tx_t }}</h2>
+              <p class="tp__place">{{ tx_d }} · {{ bs.time }} · {{ tx_v }}</p>
+              <h3 class="dd__h">{{ 'circle.about' | t }}</h3>
+              <p class="dd__desc">{{ tx_desc }}</p>
+              <dl class="tp__meta"><div><dt>{{ 'circle.host' | t }}</dt><dd>{{ bs.host }}</dd></div><div><dt>{{ 'circle.venue' | t }}</dt><dd>{{ tx_v }}</dd></div></dl>
+              <div class="tp__lock" data-tp-lock><p>{{ 'circle.lock_s' | t | replace: '[p]', price_m }}</p><a class="btn btn--gold" href="/pages/pedido?plan=block">{{ 'hxd.cp_cta' | t }}</a></div>
+              <div class="tp__open" data-tp-open hidden></div>
+            </div>
+          </div>
+          {%- if bs.spots != blank -%}<span class="circle__spots">{{ 'circle.spots' | t | replace: '[n]', bs.spots }}</span>{%- endif -%}
+          <button class="circle__book" type="button" data-circle-book><span class="circle__booklbl">{{ 'circle.book' | t }} · {{ price_m }}</span><span class="circle__locklbl"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#cs-lock"/></svg>{{ 'circle.locked' | t }}</span></button>
+          <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#cs-lock"/></svg></span>
+        </article>
+      {%- endfor -%}
+    </div>
+    <p class="circle__note">{{ 'circle.note' | t | replace: '[p]', price_m }}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Círculo privado (clases)",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Familia Kulinaria" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "El círculo privado." },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Clases y experiencias deportivas con nuestras embajadoras, solo para clientes del bloque de 4 semanas." },
+    { "type": "number", "id": "price", "label": "Precio por clase (MXN)", "default": 600 },
+    { "type": "url", "id": "cta_link", "label": "Enlace de «Empezar mi bloque»" }
+  ],
+  "blocks": [
+    {
+      "type": "class",
+      "name": "Clase",
+      "settings": [
+        { "type": "select", "id": "sport", "label": "Deporte", "default": "padel", "options": [
+          { "value": "padel", "label": "Pádel" }, { "value": "tenis", "label": "Tenis" }, { "value": "ciclismo", "label": "Ciclismo" },
+          { "value": "basketball", "label": "Basketball" }, { "value": "running", "label": "Running" }, { "value": "funcional", "label": "Funcional" }
+        ] },
+        { "type": "text", "id": "title", "label": "Nombre de la clase", "default": "Clínica de Tenis" },
+        { "type": "textarea", "id": "desc", "label": "Descripción de la clase", "default": "Clínica de tenis con técnica de derecha y revés, saque y juego de puntos. Traemos las pelotas; tú trae tu raqueta y ganas." },
+        { "type": "text", "id": "host", "label": "Anfitriona / coach", "default": "Anny De Vasquez" },
+        { "type": "text", "id": "date", "label": "Fecha", "default": "Sáb 29 Nov" },
+        { "type": "text", "id": "time", "label": "Hora", "default": "09:00 AM" },
+        { "type": "text", "id": "venue", "label": "Sede", "default": "Raqueta Club" },
+        { "type": "text", "id": "spots", "label": "Cupos restantes (opcional)" },
+        { "type": "text", "id": "art", "label": "Foto del tema (opcional)", "info": "Clave de assets/photo-CLAVE.webp: hs-tenis, hs-padel, hs-circuito, hs-rodada…" }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "presets": [{ "name": "Círculo privado (clases)" }]
+}
+{% endschema %}

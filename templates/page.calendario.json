@@ -1,0 +1,68 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Especiales de la semana",
+        "parent_link": "/collections/menu-semanal",
+        "eyebrow": "Calendario",
+        "heading": "Calendario del *menú*",
+        "text": "Los platillos planeados semana a semana. Cada semana cambian, y aquí los ves con anticipación.",
+        "button_label": "Armar mi pedido",
+        "button_link": "/pages/pedido",
+        "art": "air-breakfast"
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "Especiales de la semana",
+            "link": "/collections/menu-semanal"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Calendario",
+            "link": "/pages/calendario"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Armar mi pedido",
+            "link": "/pages/pedido"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2"
+      ]
+    },
+    "calendar": {
+      "type": "menu-calendar",
+      "settings": {
+        "collection": "menu-semanal",
+        "weeks": 5,
+        "heading": "Platillos de *este mes*",
+        "eyebrow": "Mes",
+        "text": "Esta semana y las próximas cuatro."
+      }
+    }
+  },
+  "order": [
+    "head",
+    "calendar"
+  ]
+}

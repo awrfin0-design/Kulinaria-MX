@@ -1,0 +1,22 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "art": "air-bowl",
+        "heading": "*Buscar* platillos",
+        "text": "Encuentra un platillo por nombre, ingrediente o enfoque.",
+        "eyebrow": "Buscar"
+      }
+    },
+    "main": {
+      "type": "main-search",
+      "settings": {}
+    }
+  },
+  "order": [
+    "head",
+    "main"
+  ]
+}
+

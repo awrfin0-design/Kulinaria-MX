@@ -1,0 +1,113 @@
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
+{%- capture tx_s_lt -%}{% render 'tx', s: section.settings.list_title %}{%- endcapture -%}
+{%- capture tx_s_link -%}{% render 'tx', s: section.settings.link_label %}{%- endcapture -%}
+{%- capture tx_s_ct -%}{% render 'tx', s: section.settings.cta_title %}{%- endcapture -%}
+{%- capture tx_s_cx -%}{% render 'tx', s: section.settings.cta_text %}{%- endcapture -%}
+{%- capture tx_s_cl -%}{% render 'tx', s: section.settings.cta_label %}{%- endcapture -%}
+{%- assign bullets = section.settings.bullets | newline_to_br | split: '<br />' -%}
+<section class="section tr" data-no-wordmark {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="tr__main">
+      <div class="tr__photo">{% render 'photo', image: section.settings.image, art: section.settings.art, alt: '', class: 'tr__img', width: 1400 %}</div>
+      <div class="tr__copy">
+        {%- if tx_s_eyebrow != blank -%}<span class="tr__tag">{{ tx_s_eyebrow }}</span>{%- endif -%}
+        <h2 class="tr__h">{{ tx_s_heading }}</h2>
+        {%- if tx_s_text != blank -%}<p class="tr__p">{{ tx_s_text }}</p>{%- endif -%}
+        {%- if tx_s_lt != blank -%}<h3 class="tr__lt">{{ tx_s_lt }}</h3>{%- endif -%}
+        <ul class="tr__list">
+          {%- for ln in bullets -%}{%- assign ln = ln | strip -%}{%- if ln != blank -%}
+            {%- assign bf = ln | split: '|' -%}
+            {%- if bf.size > 1 -%}{%- assign b_n = bf[0] | strip -%}{%- assign b_t = bf[1] | strip -%}<li><b>{{ b_n }}</b> <span>{% render 'tx', s: b_t %}</span></li>{%- else -%}<li><span>{% render 'tx', s: ln %}</span></li>{%- endif -%}
+          {%- endif -%}{%- endfor -%}
+        </ul>
+        {%- if tx_s_link != blank -%}<a class="tr__link" href="{{ section.settings.link | default: '/pages/embajadores-entrenadores' }}">{{ tx_s_link }}</a>{%- endif -%}
+      </div>
+    </div>
+    <div class="tr__strip">
+      <div class="tr__cards">
+        {%- for block in section.blocks -%}{%- assign bs = block.settings -%}
+          {%- capture tx_r -%}{% render 'tx', s: bs.role %}{%- endcapture -%}
+          {%- capture tx_sp -%}{% render 'tx', s: bs.spec %}{%- endcapture -%}
+          {%- capture tx_pl -%}{% render 'tx', s: bs.place %}{%- endcapture -%}
+          {%- capture tx_bio -%}{% render 'tx', s: bs.bio %}{%- endcapture -%}
+          {%- capture tx_tr -%}{% render 'tx', s: bs.train %}{%- endcapture -%}
+          {%- assign acc = bs.accolades | newline_to_br | split: '<br />' -%}
+          {%- assign ig = bs.instagram | default: 'https://www.instagram.com/' -%}
+          <div class="tr__card" role="button" tabindex="0" data-has-detail data-tr-card {{ block.shopify_attributes }}>
+            <span class="tr__cph">{% render 'photo', image: bs.image, art: bs.art, alt: bs.name, class: '', width: 400 %}</span>
+            <span class="tr__ctext"><strong>{{ bs.name }}</strong><em>{{ tx_r }}</em><small>{{ tx_sp }}</small><b>{{ tx_pl }}</b><i class="tr__more">{{ 'trainer.view' | t }}</i></span>
+            <div data-dish-detail data-url="" data-title="{{ bs.name | escape }}" hidden>
+              <div class="dd__media tp__media">{% render 'photo', image: bs.image, art: bs.art, alt: bs.name, class: '', width: 800 %}</div>
+              <div class="dd__body tp">
+                <span class="tp__role">{{ tx_r }}</span>
+                <h2 class="dd__title">{{ bs.name }}</h2>
+                <p class="tp__place">{{ tx_pl }}</p>
+                <h3 class="dd__h">{{ 'trainer.specialty' | t }}</h3>
+                <p class="dd__desc">{{ tx_sp }}</p>
+                {%- if tx_bio != blank -%}<p class="dd__desc">{{ tx_bio }}</p>{%- endif -%}
+                <h3 class="dd__h">{{ 'trainer.accolades' | t }}</h3>
+                <ul class="tp__acc">
+                  {%- for ln in acc -%}{%- assign ln = ln | strip -%}{%- if ln != blank -%}<li>{% render 'tx', s: ln %}</li>{%- endif -%}{%- endfor -%}
+                </ul>
+                {%- if tx_tr != blank -%}<h3 class="dd__h">{{ 'trainer.how' | t }}</h3><p class="dd__desc">{{ tx_tr }}</p>{%- endif -%}
+                <h3 class="dd__h">{{ 'trainer.contact' | t }}</h3>
+                <a class="tp__ig" href="{{ ig }}" target="_blank" rel="noopener">{{ 'trainer.instagram' | t }} <b>{{ bs.handle | default: '@kulinaria.mx' }}</b></a>
+                <div class="tp__lock" data-tp-lock><p>{{ 'trainer.locked' | t }}</p><a class="btn btn--gold" href="/pages/pedido?plan=block">{{ 'hxd.cp_cta' | t }}</a></div>
+                <div class="tp__open" data-tp-open data-trainer="{{ bs.name | escape }}" hidden>
+                  <div class="tp__rows" data-tp-rows></div>
+                  <a class="btn btn--gold" href="dialog:entrenador~{{ bs.name }}">{{ 'trainer.reach' | t: name: bs.name }}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+        <div class="tr__card tr__card--cta"><strong>{{ tx_s_ct }}</strong><small>{{ tx_s_cx }}</small><a class="tr__cbtn" href="{{ section.settings.cta_link | default: '/pages/embajadores-entrenadores' }}">{{ tx_s_cl }}</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Entrenadores campeones",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Equipo campeón Kulinaria" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Los mejores entrenadores de tu ciudad." },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Al unirte a Kulinaria, obtienes acceso exclusivo para entrenar de forma personalizada con nuestros atletas campeones." },
+    { "type": "text", "id": "list_title", "label": "Título de la lista", "default": "Palmarés de nuestro equipo" },
+    { "type": "textarea", "id": "bullets", "label": "Logros (una línea por logro: 1x|texto)", "default": "1x|Campeón Mundial IFBB Elite Pro\n2x|Mr. México Absoluto\n1x|Campeón North American\n1x|Subcampeón Atlanta Pro\n1x|3er Lugar Pittsburgh Pro" },
+    { "type": "text", "id": "link_label", "label": "Enlace", "default": "Ver todos los logros +" },
+    { "type": "text", "id": "link", "label": "Enlace (URL)" },
+    { "type": "image_picker", "id": "image", "label": "Foto principal (opcional)" },
+    { "type": "text", "id": "art", "label": "Foto del tema si no subes una", "default": "tr-duo" },
+    { "type": "text", "id": "cta_title", "label": "Tarjeta destacada: título", "default": "Roster élite de entrenadores" },
+    { "type": "text", "id": "cta_text", "label": "Tarjeta destacada: texto", "default": "Explora a todos nuestros atletas y entrenadores certificados para elegir al ideal para tus metas." },
+    { "type": "text", "id": "cta_label", "label": "Tarjeta destacada: botón", "default": "Elegir a mi entrenador" },
+    { "type": "text", "id": "cta_link", "label": "Tarjeta destacada: enlace" }
+  ],
+  "blocks": [
+    {
+      "type": "trainer",
+      "name": "Entrenador",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Nombre", "default": "Carla" },
+        { "type": "text", "id": "role", "label": "Título / certificación", "default": "IFBB Elite Pro" },
+        { "type": "text", "id": "spec", "label": "Especialidad", "default": "Especialista en recomposición corporal." },
+        { "type": "text", "id": "place", "label": "Zona y distancia", "default": "Club Lomas · 2.4 km" },
+        { "type": "image_picker", "id": "image", "label": "Foto (opcional)" },
+        { "type": "text", "id": "art", "label": "Foto del tema", "default": "tr-carla" },
+        { "type": "textarea", "id": "bio", "label": "Perfil (panel lateral)", "default": "Atleta y entrenador en Puebla. Combina su experiencia en competencia con un enfoque práctico para el día a día." },
+        { "type": "textarea", "id": "accolades", "label": "Logros (una línea por logro)", "default": "Campeón nacional\nAtleta profesional certificado" },
+        { "type": "textarea", "id": "train", "label": "Cómo entrena", "default": "Sesiones personalizadas de fuerza y acondicionamiento, con seguimiento semanal y ajustes según tu plan de comidas." },
+        { "type": "text", "id": "handle", "label": "Usuario de Instagram (texto)", "default": "@kulinaria.mx" },
+        { "type": "text", "id": "instagram", "label": "Instagram (URL)" },
+        { "type": "text", "id": "link", "label": "Enlace" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [{ "name": "Entrenadores campeones" }]
+}
+{% endschema %}

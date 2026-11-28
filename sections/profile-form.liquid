@@ -1,0 +1,119 @@
+{%- capture tx_disclaimer -%}{% render 'tx', s: settings.allergy_disclaimer %}{%- endcapture -%}
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- capture tx_s_text -%}{% render 'tx', s: section.settings.text %}{%- endcapture -%}
+{%- liquid
+  assign allergy_list = 'Gluten,Lácteos,Frutos secos,Mariscos' | split: ','
+  assign allergy_more = 'Soya,Huevo,Ajonjolí,Pescado,Cacahuate,Nuez,Almendra,Mostaza,Apio,Sulfitos,Maíz,Fresa,Aguacate' | split: ','
+  assign suggest_list = 'Cebolla,Cilantro,Carne de puerco,Pasas,Jitomate,Champiñones' | split: ','
+  assign diet_list = 'Keto,Libre de gluten,Vegetariano,Vegano' | split: ','
+-%}
+<section class="section" {{ section.shopify_attributes }}>
+  <div class="container" style="max-width:860px">
+    <div class="section__head">
+      <span class="eyebrow">{{ tx_s_eyebrow }}</span>
+      <h2>{% render 'headline', text: tx_s_heading %}</h2>
+      <div class="divider-gold"><i></i></div>
+      <p class="lede">{{ tx_s_text }}</p>
+    </div>
+    {%- render 'onboarding-banner' -%}
+    {%- if customer -%}<div class="hub__card" data-hub-profile style="margin-bottom:var(--space-lg)" data-t-none="{{ 'acct.hub_profile_none' | t }}" data-t-allergies="{{ 'acct.hub_allergies' | t }}" data-t-dislikes="{{ 'acct.hub_dislikes' | t }}" data-t-diets="{{ 'acct.hub_diets' | t }}" data-t-people="{{ 'acct.hub_people' | t }}"><h3>{{ 'acct.hub_profile_t' | t }}</h3><div class="hub__list" data-hub-profile-body></div></div>{%- endif -%}
+
+    {%- if customer -%}
+    {%- if customer -%}
+      <div class="panel panel--gold" style="margin-bottom:var(--space-lg)"><h3 style="margin:0 0 6px">{{ 'profile.edit_full_t' | t }}</h3><p class="text-muted" style="margin:0 0 14px">{{ 'profile.edit_full_p' | t }}</p><a class="btn btn--gold" href="/pages/bienvenida?edit=1">{{ 'profile.edit_full_btn' | t }}</a></div>
+    {%- endif -%}
+    <form data-profile-form class="panel panel--gold" novalidate data-t-people-none="{{ 'profile.people_none' | t }}" data-t-people-edit="{{ 'profile.people_edit_btn' | t }}">
+      <h3>{{ 'profile.block1' | t }} <span class="tier-badge tier-badge--exclusivo" style="vertical-align:middle;margin-left:8px">{{ 'profile.critical' | t }}</span></h3>
+      <p class="text-muted">{{ 'profile.block1_text' | t }}</p>
+      <div class="check-grid">
+        {%- for a in allergy_list -%}
+          {%- assign ah = a | handleize -%}{%- assign ak = 'allergen.' | append: ah -%}
+          <label class="check"><input type="checkbox" name="allergy" value="{{ a }}"> <span>{{ ak | t }}</span></label>
+        {%- endfor -%}
+      </div>
+      <div class="field"><label for="allergy-other">{{ 'profile.other_allergies' | t }}</label>
+        <input class="input" id="allergy-other" name="allergy_other" list="allergy-list" placeholder="{{ 'profile.other_placeholder' | t }}">
+        <datalist id="allergy-list">
+          {%- for a in allergy_more -%}<option value="{{ a }}"></option>{%- endfor -%}
+        </datalist></div>
+
+      <hr style="border:0;border-top:1px solid var(--border);margin:var(--space-xl) 0">
+
+      <h3>{{ 'profile.block2' | t }}</h3>
+      <p class="text-muted">{{ 'profile.block2_text' | t }}</p>
+      <div class="tag-input" data-tags><input type="text" data-tag-input placeholder="{{ 'profile.tag_placeholder' | t }}" aria-label="{{ 'profile.add_ingredient' | t }}"></div>
+      <div class="chips" style="margin-top:12px">
+        {%- for s in suggest_list -%}
+          {%- assign sh = s | handleize -%}{%- assign sk = 'allergen.' | append: sh -%}
+          <button class="chip" type="button" data-suggest="{{ s }}">+ {{ sk | t }}</button>
+        {%- endfor -%}
+      </div>
+
+      <hr style="border:0;border-top:1px solid var(--border);margin:var(--space-xl) 0">
+
+      <h3>{{ 'profile.diets' | t }}</h3>
+      <div class="check-grid">
+        {%- for d in diet_list -%}
+          {%- assign dh = d | handleize -%}{%- assign dk = 'diet.' | append: dh -%}
+          <label class="check"><input type="checkbox" name="diet" value="{{ d }}"> <span>{{ dk | t }}</span></label>
+        {%- endfor -%}
+      </div>
+
+      <hr style="border:0;border-top:1px solid var(--border);margin:var(--space-xl) 0">
+      <h3 id="familia">{{ 'profile.people_t' | t }}</h3>
+      <p class="text-muted">{{ 'profile.people_p' | t }}</p>
+      <ul class="people" data-people-list></ul>
+      <button class="btn btn--outline" type="button" data-pe-open>{{ 'profile.people_add' | t }}</button>
+      <div class="pe panel" data-person-editor hidden data-t-new="{{ 'profile.people_add' | t }}" data-t-edit="{{ 'profile.people_edit' | t }}" data-t-remove="{{ 'profile.people_remove' | t }}">
+        <h4 data-pe-title>{{ 'profile.people_add' | t }}</h4>
+        <div class="field"><label for="pe-name">{{ 'profile.people_name' | t }}</label><input class="input" id="pe-name" data-pe-name autocomplete="off"></div>
+        <h5>{{ 'profile.block1' | t }}</h5>
+        <div class="check-grid">
+          {%- for a in allergy_list -%}
+            {%- assign ah = a | handleize -%}{%- assign ak = 'allergen.' | append: ah -%}
+            <label class="check"><input type="checkbox" data-pe-allergy value="{{ a }}"> <span>{{ ak | t }}</span></label>
+          {%- endfor -%}
+        </div>
+        <div class="field"><label for="pe-other">{{ 'profile.other_allergies' | t }}</label><input class="input" id="pe-other" data-pe-other list="allergy-list" placeholder="{{ 'profile.other_placeholder' | t }}"></div>
+        <h5>{{ 'profile.block2' | t }}</h5>
+        <div class="tag-input" data-pe-tags><input type="text" data-pe-tag-input placeholder="{{ 'profile.tag_placeholder' | t }}" aria-label="{{ 'profile.add_ingredient' | t }}"></div>
+        <div class="chips" style="margin-top:8px">
+          {%- for s in suggest_list -%}{%- assign sh = s | handleize -%}{%- assign sk = 'allergen.' | append: sh -%}<button class="chip" type="button" data-pe-suggest="{{ s }}">+ {{ sk | t }}</button>{%- endfor -%}
+        </div>
+        <h5>{{ 'profile.diets' | t }}</h5>
+        <div class="check-grid">
+          {%- for d in diet_list -%}
+            {%- assign dh = d | handleize -%}{%- assign dk = 'diet.' | append: dh -%}
+            <label class="check"><input type="checkbox" data-pe-diet value="{{ d }}"> <span>{{ dk | t }}</span></label>
+          {%- endfor -%}
+        </div>
+        <div class="btn-row" style="margin-top:var(--space-md)"><button class="btn btn--gold" type="button" data-pe-save>{{ 'profile.people_save' | t }}</button><button class="btn btn--ghost" type="button" data-pe-cancel>{{ 'profile.people_cancel' | t }}</button></div>
+      </div>
+
+      <p class="legal-note">{{ tx_disclaimer }}</p>
+      <button class="btn btn--gold" type="submit">{{ 'profile.save' | t }}</button>
+      <p class="alert alert--ok form-msg" data-profile-msg hidden role="status">{{ 'profile.saved' | t }}</p>
+    </form>
+    {%- else -%}
+      <div class="panel panel--gold">
+        <h3>{{ 'myweek.guest_title' | t }}</h3>
+        <p class="text-muted">{{ 'profile.guest' | t }}</p>
+        <div class="btn-row"><a class="btn btn--gold" href="{% render 'login-url', back: '/pages/perfil' %}">{{ 'login.enter' | t }}</a></div>
+      </div>
+    {%- endif -%}
+  </div>
+  {%- if customer -%}<div class="container" style="margin-top:var(--space-lg)"><a class="btn btn--outline" href="{{ routes.account_logout_url }}">{{ 'account.logout_big' | t }}</a></div>{%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Perfil de alergias",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Tu perfil" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Cuéntanos qué no puedes (o no quieres) comer" },
+    { "type": "textarea", "id": "text", "label": "Texto", "default": "Este cuestionario es obligatorio al inscribirte. Evita errores en la cocina y mejora tu experiencia." }
+  ],
+  "presets": [{ "name": "Perfil de alergias" }]
+}
+{% endschema %}

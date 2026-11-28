@@ -1,0 +1,48 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "art": "air-bowl",
+        "heading": "Menú de la *semana*",
+        "text": "Variedad gourmet para toda tu semana.",
+        "eyebrow": "Menú de la semana"
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "layout": "menu"
+      }
+    },
+    "cta": {
+      "type": "cta-banner",
+      "settings": {
+        "heading": "¿Aún no *tienes plan?*",
+        "text": "Elige tu bloque de 4 semanas para ordenar tus platillos cada semana."
+      }
+    },
+    "calendar": {
+      "type": "menu-calendar",
+      "settings": {
+        "collection": "menu-semanal"
+      }
+    }
+  },
+  "order": [
+    "head",
+    "main",
+    "calendar",
+    "cta"
+  ]
+}
+

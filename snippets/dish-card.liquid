@@ -1,0 +1,57 @@
+{%- comment -%}
+  Dish card used in the weekly menu grid, home preview and related dishes.
+  Param: product
+  Metafields (namespace "kulinaria"):
+    tier (single line: selecto|exclusivo|signature|reserve)
+    category (single line slug, e.g. al-fuego-y-mar)
+    allergens (list of single line text), ingredients (list), diets (list of slugs)
+    calories (integer), carbs (integer, grams)
+  One top-down plated photo only — never multiple preparation methods.
+{%- endcomment -%}
+{%- capture mw_state -%}{% render 'menu-week', product: product %}{%- endcapture -%}
+{%- if show_all or mw_state == 'on' -%}
+{%- liquid
+  assign mf = product.metafields.kulinaria
+  assign card_src = mf.card_description.value | default: product.description
+  assign tier = mf.tier.value | default: 'selecto'
+  assign category = mf.category.value | default: product.type | handleize
+  assign allergens = mf.allergens.value | join: '|'
+  assign ingredients = mf.ingredients.value | join: '|'
+  assign diets = mf.diets.value | join: '|'
+-%}
+{%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}{%- capture tx_pdesc -%}{% render 'tx', s: card_src %}{%- endcapture -%}
+{%- assign card_text = tx_pdesc | strip_html | truncate: 90 -%}
+<article class="dish{% if seasonal %} is-hidden is-seasonal{% endif %}" data-dish data-has-detail{% if seasonal %} data-seasonal="true"{% endif %}
+  data-category="{{ category }}" data-tier="{{ tier }}"
+  data-diets="{{ diets }}" data-allergens="{{ allergens | escape }}" data-ingredients="{{ ingredients | escape }}">
+  <a class="dish__media surface-walnut" data-tilt-card href="{{ product.url }}" aria-label="{{ tx_ptitle | escape }}">
+    {%- if product.featured_image -%}
+      {{ product.featured_image | image_url: width: 640 | image_tag: loading: 'lazy', widths: '320, 480, 640', sizes: '(min-width: 1100px) 25vw, 50vw', alt: tx_ptitle }}
+    {%- else -%}
+      <span class="dish__ph surface-slate" aria-hidden="true">{% render 'dish-placeholder', category: category %}</span>
+    {%- endif -%}
+    <span class="dish__pill" aria-hidden="true">{{ 'dish.view' | t }}</span>
+    {%- if seasonal -%}<span class="dish__ribbon">{{ 'season.limited' | t }}{% if mf.season.value != blank %} · {{ mf.season.value }}{% endif %}</span>{%- endif -%}
+  </a>
+  <div class="dish__body">
+    <div>{% render 'tier-badge', tier: tier %}</div>
+    <h3 class="dish__title"><a href="{{ product.url }}">{{ tx_ptitle }}</a></h3>
+    {%- if card_text != blank -%}<p class="dish__desc">{{ card_text }}</p>{%- endif -%}
+    {%- if mf.calories.value or mf.carbs.value -%}
+      <p class="dish__facts">
+        {%- if mf.calories.value %}{{ mf.calories.value }} kcal {{ 'wk2.per_plate' | t }}{% endif -%}
+        {%- if mf.calories.value and mf.carbs.value %} · {% endif -%}
+        {%- if mf.carbs.value %}{{ mf.carbs.value }} {{ 'dish.carbs_g' | t }}{% endif -%}
+      </p>
+    {%- endif -%}
+    <span class="compat" data-compat></span>
+    <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="{{ 'js.warn_label' | t }}"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
+    <div class="dish__meta">
+      <span class="dish__price">{% render 'plan-price', tier: tier, kind: 'meal', money: true %}<small> {{ 'funnel.per_meal' | t }}</small></span>
+      <a class="dish__go" href="{{ product.url }}" aria-label="{{ 'dish.view_of' | t }} {{ tx_ptitle | escape }}">→</a>
+    </div>
+  </div>
+  {% render 'dish-detail', product: product %}
+  <div class="dish__blocked" role="note"><div><strong>{{ 'dish.blocked_title' | t }}</strong>{{ 'dish.blocked_text' | t }}</div></div>
+</article>
+{%- endif -%}

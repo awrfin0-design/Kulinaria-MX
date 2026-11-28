@@ -1,0 +1,503 @@
+{%- capture tx_s_eyebrow -%}{% render 'tx', s: section.settings.eyebrow %}{%- endcapture -%}
+{%- capture tx_s_heading -%}{% render 'tx', s: section.settings.heading %}{%- endcapture -%}
+{%- liquid
+  assign coll = section.settings.collection
+  assign meals_per_week = 5
+  assign plan_coll = collections['planes-semanales']
+-%}
+{%- assign upg = all_products['mejora-de-platillo'] -%}
+<section class="section funnel{% if section.settings.phone_teaser %} funnel--teaser{% endif %}" id="pedido-{{ section.id }}" data-funnel{% if section.settings.phone_teaser %} data-phone-teaser{% endif %} data-cart-url="{{ routes.cart_url }}" data-meals="{{ meals_per_week }}" data-weeks="4"
+  {%- if customer %} data-customer-name="{{ customer.name | escape }}" data-customer-email="{{ customer.email | escape }}"{% endif %}
+  data-t-meals="{{ 'funnel.meals_of' | t }}" data-t-meal-one="{{ 'funnel.meal_one' | t }}" data-t-empty="{{ 'funnel.summary_empty' | t }}"
+  data-t-need-meals="{{ 'funnel.need_meals' | t }}" data-t-full="{{ 'funnel.meals_full' | t }}" data-t-need-info="{{ 'funnel.need_info' | t }}"
+  data-t-add="{{ 'funnel.add' | t }}" data-t-remembered="{{ 'funnel.remembered' | t }}" data-t-saved="{{ 'funnel.saved' | t }}"
+  data-t-step-of="{{ 'funnel.step_of' | t }}" data-t-s-how="{{ 'funnel.s_how' | t }}" data-t-block-name="{{ 'funnel.plan_block' | t }}" data-t-week-name="{{ 'funnel.plan_week' | t }}"
+  data-t-per-week="{{ 'funnel.per_week_each' | t }}" data-t-weeks-x="{{ 'funnel.weeks_x' | t }}" data-t-per-meal="{{ 'funnel.per_meal' | t }}"
+  data-t-all-lines="{{ 'funnel.all_categories' | t }}" data-t-prop-dishes="{{ 'funnel.prop_dishes' | t }}" data-t-prop-meals="{{ 'funnel.prop_meals' | t }}"
+  data-t-prop-tier="{{ 'funnel.prop_tier' | t }}" data-t-prop-length="{{ 'funnel.prop_length' | t }}" data-t-length-block="{{ 'funnel.length_block' | t }}" data-t-length-week="{{ 'funnel.length_week' | t }}"
+  data-t-budget="{{ 'funnel.budget' | t }}" data-t-budget-short="{{ 'funnel.budget_short' | t }}" data-t-budget-x="{{ 'funnel.budget_x' | t }}" data-t-budget-ok="{{ 'funnel.budget_ok' | t }}" data-t-how-open="{{ 'funnel.how_open' | t }}" data-t-pick-day="{{ 'funnel.pick_day' | t }}" data-t-tour-1="{{ 'funnel.tour_1' | t }}" data-t-tour-2="{{ 'funnel.tour_2' | t }}" data-t-tour-2m="{{ 'funnel.tour_2m' | t }}" data-t-tour-3="{{ 'funnel.tour_3' | t }}" data-t-tour-4="{{ 'funnel.tour_4' | t }}" data-t-tour-next="{{ 'funnel.tour_next' | t }}" data-t-tour-done="{{ 'funnel.tour_done' | t }}" data-t-tour-skip="{{ 'funnel.tour_skip' | t }}" data-t-tour-guide="{{ 'funnel.tour_guide' | t }}" data-t-locked="{{ 'funnel.locked' | t }}" data-t-mods-done="{{ 'funnel.mods_done' | t }}" data-t-mods-edit="{{ 'funnel.mods_edit' | t }}" data-t-mods-title="{{ 'funnel.mods_title' | t }}" data-t-mods-hint="{{ 'funnel.mods_hint' | t }}" data-t-mods-note="{{ 'funnel.mods_note' | t }}" data-t-mods-ph="{{ 'funnel.mods_ph' | t }}" data-t-mods-warn="{{ 'funnel.mods_warn' | t }}" data-t-mods-without="{{ 'funnel.mods_without' | t }}" data-t-prop-notes="{{ 'funnel.prop_notes' | t }}" data-t-mods-open="{{ 'funnel.mods_open' | t }}"
+  data-t-para-me="{{ 'funnel.para_me' | t }}" data-t-prop-for="{{ 'funnel.prop_for' | t }}"
+  data-t-renew="{{ 'funnel.renew' | t }}" data-t-days="{{ 'funnel.days' | t }}" data-t-finish="{{ 'funnel.finish' | t }}" data-t-finish-guest="{{ 'funnel.finish_guest' | t }}" data-t-credit="{{ 'funnel.credit' | t }}" data-t-rolled="{{ 'funnel.rolled' | t }}" data-t-pick="{{ 'funnel.pick' | t }}" data-t-picked="{{ 'funnel.picked' | t }}" data-t-pick-for="{{ 'funnel.pick_for' | t }}" data-t-pick2-for="{{ 'funnel.pick2_for' | t }}" data-t-need-first="{{ 'funnel.need_first' | t }}" data-t-macros-empty="{{ 'funnel.m_empty' | t }}" data-t-all-done="{{ 'funnel.all_done' | t }}" data-t-clear-day="{{ 'funnel.clear_day' | t }}" data-t-first="{{ 'funnel.first_delivery' | t }}" data-t-day-empty="{{ 'funnel.day_empty' | t }}" data-t-up-badge="{{ 'funnel.up_badge' | t }}" data-t-up-total="{{ 'funnel.up_total' | t }}"
+  data-t-prop-upgrade="{{ 'funnel.prop_upgrade' | t }}" data-t-need-contract="{{ 'funnel.need_contract' | t }}" data-t-days-missing="{{ 'funnel.days_missing' | t }}"
+  data-upg-1="{{ upg.variants[0].price | divided_by: 100 | default: 70 }}" data-upg-2="{{ upg.variants[1].price | divided_by: 100 | default: 140 }}" data-upg-3="{{ upg.variants[2].price | divided_by: 100 | default: 210 }}"
+  data-upv-1="{{ upg.variants[0].id }}" data-upv-2="{{ upg.variants[1].id }}" data-upv-3="{{ upg.variants[2].id }}" {{ section.shopify_attributes }}>
+  <div class="funnel__teaser container">
+    <div class="funnel__teaser-bg" aria-hidden="true">{% render 'photo', art: 'containers', alt: '' %}</div>
+    <p class="funnel__teaser-kicker">{{ 'funnel.eyebrow' | t }}</p>
+    <h2>{{ 'funnel.teaser_t' | t }} <button class="info-dot" type="button" data-sheet="pricing" aria-label="{{ 'sheet.info' | t }}"><i aria-hidden="true">i</i></button></h2>
+    <p class="funnel__teaser-text">{{ 'funnel.teaser_p' | t }}</p>
+    <ul class="funnel__teaser-facts"><li>{{ 'funnel.teaser_a' | t }}</li><li>{{ 'funnel.teaser_b' | t }}</li><li>{{ 'funnel.teaser_c' | t }}</li></ul>
+    <a class="btn btn--gold btn--block" href="/pages/pedido" data-order-cta data-returning-label="{{ 'funnel.ret_go' | t }}">{{ 'funnel.teaser_cta' | t }}</a>
+  </div>
+  {%- unless section.settings.phone_teaser -%}<div class="funnel__bgphoto" aria-hidden="true">{% render 'photo', art: 'air-steak-dark', alt: '' %}</div>{%- endunless -%}
+  <div class="funnel__track" data-fn-track>
+   <div class="funnel__stage" data-fn-stage>
+    <div class="fn-returning container" data-fn-returning hidden>
+      <h3>{{ 'funnel.ret_t' | t }}</h3>
+      <p data-fn-returning-text></p>
+      <p class="fn-returning__hint">{{ 'funnel.ret_hint' | t }}</p>
+      <div class="fn-returning__row"><a class="btn btn--gold" href="/pages/cuenta-semana">{{ 'funnel.ret_go' | t }} &rarr;</a><button class="text-link" type="button" data-fn-newplan>{{ 'funnel.ret_new' | t }}</button></div>
+    </div>
+    <div class="funnel__top container">
+      <div class="funnel__title">
+        <span class="eyebrow">{{ tx_s_eyebrow }}</span>
+        <h2>{% render 'headline', text: tx_s_heading %}</h2>
+      </div>
+      <ol class="steps__nav" aria-label="{{ 'funnel.steps' | t }}">
+        <li data-fn-dot class="is-on"><span>01</span>{{ 'funnel.s_rules' | t }}</li>
+        <li data-fn-dot><span>02</span>{{ 'funnel.s1' | t }}</li>
+        <li data-fn-dot class="fn-dot--skip"><span>03</span>{{ 'funnel.s_menu' | t }}</li>
+        <li data-fn-dot><span>03</span>{%- if customer -%}{{ 'funnel.s_week2' | t }}{%- else -%}{{ 'funnel.s_week' | t }}{%- endif -%}</li>
+      </ol>
+    </div>
+    <p class="funnel__stepcount" data-fn-stepcount aria-live="polite"></p>
+    <div class="steps__bar funnel__bar" aria-hidden="true"><i data-fn-bar></i></div>
+
+    <div class="funnel__panel container" data-fn-panel>
+      <div class="funnel__main">
+        <fieldset class="step is-on" data-fn-step="0">
+          <legend class="fn-sr">{{ 'funnel.rules_title' | t }}</legend>
+          {%- capture st_meal -%}{% render 'plan-price', tier: 'selecto', kind: 'meal' %}{%- endcapture -%}
+          {%- capture st_week -%}{% render 'plan-price', tier: 'selecto', kind: 'week' %}{%- endcapture -%}
+          {%- assign st_meal_n = st_meal | strip | plus: 0 -%}{%- assign st_week_n = st_week | strip | plus: 0 -%}
+          {%- assign st_meal_m = st_meal_n | times: 100 | money_without_trailing_zeros -%}
+          {%- assign st_day_m = st_week_n | divided_by: 5 | times: 100 | money_without_trailing_zeros -%}
+          {%- assign st_week_m = st_week_n | times: 100 | money_without_trailing_zeros -%}
+          {%- assign st_bwk_m = st_meal_n | times: 5 | times: 100 | money_without_trailing_zeros -%}
+          {%- assign st_blk_m = st_meal_n | times: 20 | times: 100 | money_without_trailing_zeros -%}
+          {%- unless customer -%}
+          <section class="fn-start" data-fn-start>
+            <div class="fn-start__main">
+              <span class="fn-start__flag">{{ 'funnel.start_flag' | t }}</span>
+              <h3 class="fn-start__h">{{ 'funnel.start_h' | t | replace: '[p]', st_meal_m }}</h3>
+              <p class="fn-start__sub">{{ 'funnel.start_sub' | t | replace: '[w]', st_bwk_m }}</p>
+              <ul class="fn-start__list"><li>{{ 'funnel.start_b1' | t }}</li><li>{{ 'funnel.start_b2' | t }}</li><li>{{ 'funnel.start_b3' | t }}</li></ul>
+              <a class="btn btn--gold fn-start__btn" href="{% render 'login-url', back: '/pages/pedido' %}">{{ 'funnel.start_btn' | t }}</a>
+              <p class="fn-start__note">{{ 'funnel.start_note' | t }}</p>
+            </div>
+            <aside class="fn-start__side">
+              <b class="fn-start__sk">{{ 'funnel.start_trial_t' | t }}</b>
+              <p class="fn-start__sp"><strong>{{ st_day_m }}</strong> {{ 'funnel.pl_day' | t }}</p>
+              {%- assign st_bwk_n = st_meal_n | times: 5 -%}{%- assign st_pct = st_week_n | minus: st_bwk_n | times: 100 | divided_by: st_bwk_n | round -%}
+              {%- if st_pct > 0 -%}<small>{{ 'funnel.start_trial_pct' | t | replace: '[p]', st_pct }}</small>{%- endif -%}
+              <small>{{ 'funnel.start_trial_s' | t }}</small>
+              <a class="btn btn--outline fn-start__btn2" href="{% render 'login-url', back: '/pages/pedido' %}">{{ 'funnel.start_trial_btn' | t }}</a>
+            </aside>
+          </section>
+          {%- endunless -%}
+          {%- if customer -%}
+          {%- assign hw_u1 = upg.variants[0].price | default: 7000 | money_without_trailing_zeros -%}
+          {%- assign hw_u3 = upg.variants[2].price | default: 21000 | money_without_trailing_zeros -%}
+          <section class="fn-hw" data-fn-how>
+            <header class="fn-hw__head"><h3>{{ 'funnel.how_t' | t }}</h3><p>{{ 'funnel.how_s' | t }}</p></header>
+            <ol class="fn-hw__steps">
+              <li><b>1</b><strong>{{ 'funnel.how_a' | t }}</strong><span>{{ 'funnel.how_a_s' | t }}</span></li>
+              <li><b>2</b><strong>{{ 'funnel.how_b' | t }}</strong><span>{{ 'funnel.how_b_s' | t }}</span></li>
+              <li><b>3</b><strong>{{ 'funnel.how_c' | t }}</strong><span>{{ 'funnel.how_c_s' | t }}</span></li>
+            </ol>
+            <div class="fn-hw__money">
+              <h4>{{ 'funnel.how_m_t' | t }}</h4>
+              <ul>
+                <li><b>{{ st_blk_m }}</b><span>{{ 'funnel.how_m1' | t | replace: '[w]', st_bwk_m }}</span></li>
+                <li><b>{{ st_bwk_m }}</b><span>{{ 'funnel.how_m2' | t }}</span></li>
+                <li><b>+{{ hw_u1 }}&ndash;{{ hw_u3 }}</b><span>{{ 'funnel.how_m3' | t }}</span></li>
+              </ul>
+              <p>{{ 'funnel.how_m4' | t | replace: '[t]', st_week_m }}</p>
+            </div>
+            <button class="btn btn--gold fn-hw__go" type="button" data-fn-how-go>{{ 'funnel.how_go' | t }} &rarr;</button>
+          </section>
+          {%- endif -%}
+          {%- capture r_bn %}{% render 'plan-price', tier: 'selecto', kind: 'block' %}{% endcapture -%}
+          {%- capture r_wn %}{% render 'plan-price', tier: 'selecto', kind: 'week' %}{% endcapture -%}
+          {%- capture r_mn %}{% render 'plan-price', tier: 'selecto', kind: 'meal' %}{% endcapture -%}
+          {%- assign r_bn = r_bn | strip | plus: 0 -%}{%- assign r_wn = r_wn | strip | plus: 0 -%}{%- assign r_mn = r_mn | strip | plus: 0 -%}
+          {%- assign r_block = r_bn | times: 100 | money_without_trailing_zeros -%}
+          {%- assign r_week = r_wn | times: 100 | money_without_trailing_zeros -%}
+          {%- assign r_meal = r_mn | times: 100 | money_without_trailing_zeros -%}
+          {%- assign r_wk = r_bn | divided_by: 4 | times: 100 | money_without_trailing_zeros -%}
+          <div class="fn-rules" data-fn-rules>
+            <div class="fn-rules__head"><h3 class="fn-rules__title">{{ 'funnel.rules_title' | t }}</h3>{% render 'service-badge' %}</div>
+            <div class="fn-rules__carousel">
+              <button class="fn-arrow fn-arrow--prev" type="button" data-fn-rules-arrow="-1" aria-label="{{ 'funnel.prev_dishes' | t }}">&#8249;</button>
+              <div class="fn-rules__rail" data-fn-rules-rail>
+                {%- comment -%} The guide: four steps for visitors, three once they are signed in (the sign-in step is gone) {%- endcomment -%}
+                <article class="fn-rcard fn-rg">
+                  <p class="fn-rg__lab">{{ 'funnel.rg_l1' | t }}</p>
+                  <p class="fn-rg__p">{{ 'funnel.rg1_p_html' | t }}</p>
+                  <div class="fn-rg__opts"><div class="fn-rg__opt"><p>{{ 'funnel.rg1_a_html' | t }}</p></div><div class="fn-rg__opt"><p>{{ 'funnel.rg1_b_html' | t }}</p></div></div>
+                </article>
+                <article class="fn-rcard fn-rg">
+                  <p class="fn-rg__lab">{{ 'funnel.rg_l2' | t }}</p>
+                  <p class="fn-rg__p">{{ 'funnel.rg2_p' | t }}</p>
+                  <p class="fn-rg__q">{{ 'funnel.rg2_q' | t }}</p>
+                  <p class="fn-rg__note">{{ 'funnel.rg2_n' | t }}</p>
+                </article>
+                <article class="fn-rcard fn-rg fn-rg--ex"{% if customer %} data-fn-rules-last{% endif %}>
+                  <p class="fn-rg__lab">{{ 'funnel.rg_l3' | t }}</p>
+                  <p class="fn-rg__p">{{ 'funnel.rg3_p_html' | t }}</p>
+                  <div class="fn-ex">
+                    <div class="fn-ex__card">
+                      <h5>{{ 'funnel.rg3_c_t' | t }}<small>{{ 'funnel.rg3_c_s' | t }}</small></h5>
+                      <div class="fn-ex__bar"><i class="is-glow">{{ 'funnel.rg3_c_bar' | t }}</i></div>
+                      <p class="fn-ex__m">{{ 'funnel.rg3_c_m' | t }}</p>
+                      <p class="fn-ex__ok"><span aria-hidden="true">&#10003;</span>{{ 'funnel.rg3_c_ok' | t }}</p>
+                    </div>
+                    <div class="fn-ex__card">
+                      <h5>{{ 'funnel.rg3_p_t' | t }}<small>{{ 'funnel.rg3_p_s' | t }}</small></h5>
+                      <div class="fn-ex__bar"><i class="is-base">{{ 'funnel.rg3_p_bar1' | t }}</i><i class="is-extra">{{ 'funnel.rg3_p_bar2' | t }}</i></div>
+                      <p class="fn-ex__m2"><span>{{ 'funnel.rg3_p_m1' | t }}</span><span>{{ 'funnel.rg3_p_m2' | t }}</span></p>
+                      <p class="fn-ex__tot">{{ 'funnel.rg3_p_tot' | t }}</p>
+                      <p class="fn-ex__pay"><span aria-hidden="true">&rarr;</span><b>{{ 'funnel.rg3_p_pay' | t }}</b></p>
+                    </div>
+                  </div>
+                </article>
+                {%- unless customer -%}
+                <article class="fn-rcard fn-rg fn-rg--signin" data-fn-rules-signin data-fn-rules-last>
+                  <p class="fn-rg__lab">{{ 'funnel.rg_l4' | t }}</p>
+                  <div class="fn-su">
+                    <h4>{{ 'funnel.rg4_t' | t }}</h4>
+                    <ul><li>{{ 'funnel.rg4_b1' | t }}</li><li>{{ 'funnel.rg4_b2' | t }}</li><li>{{ 'funnel.rg4_b3' | t }}</li></ul>
+                    <a class="btn btn--gold fn-su__btn" href="{% render 'login-url', back: '/pages/bienvenida' %}">{{ 'login.enter' | t }}</a>
+                  </div>
+                </article>
+                {%- endunless -%}
+                <article class="fn-rcard fn-rcard--final" data-fn-rules-final><b class="fn-rules__n">&#10003;</b><h4>{{ 'funnel.rules_final_t' | t }}</h4><div data-fn-rules-slot></div></article>
+              </div>
+              <button class="fn-arrow fn-arrow--next" type="button" data-fn-rules-arrow="1" aria-label="{{ 'funnel.next_dishes' | t }}">&#8250;</button>
+            </div>
+            <div class="fn-rules__end" data-fn-rules-end>
+              <p class="fn-rules__hint" data-fn-rules-hint>{{ 'funnel.rules_scroll' | t }} &rarr;</p>
+              <label class="check fn-rules__check"><input type="checkbox" data-fn-rules-check disabled> <span>{{ 'funnel.rules_check' | t }}</span></label>
+              <button class="btn btn--gold" type="button" data-fn-rules-next disabled>{{ 'funnel.rules_next' | t }} &rarr;</button>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset class="step" data-fn-step="1">
+          <legend class="fn-sr">{{ 'funnel.s1_title' | t }}</legend>
+          <div class="fn-credit" data-fn-credit hidden><p data-fn-credit-text></p><a class="btn btn--outline btn--sm" href="/pages/cuenta-semana" data-fn-credit-link>{{ 'funnel.credit_cta' | t }}</a></div>
+          <div class="fn-pickgrid">
+            <div class="fn-pickcol">
+              <h3 class="fn-pickh"><b>1</b>{{ 'funnel.p1_h' | t }}</h3>
+              <div class="fn-cats" data-fn-cats role="radiogroup" aria-label="{{ 'funnel.p1_h' | t }}">
+                {%- assign fn_cats = 'keto-low-carb,fit-proteina,veggie,sin-gluten,ligero,al-fuego,bowls,desayunos,diario,entradas,snacks-postres,junior,all' | split: ',' -%}
+                {%- for c in fn_cats -%}{%- assign ck = c | replace: '-', '_' -%}{%- assign ckt = 'funnel.cat_' | append: ck -%}{%- assign cks = ckt | append: '_s' -%}
+                <button class="fn-cat" type="button" role="radio" aria-checked="false" data-cat-choice="{{ c }}">
+                  <span class="fn-cat__tag">{{ 'funnel.cat_sel' | t }} &#9733;</span>
+                  <i class="fn-cat__ico"><svg class="fn-cat__svg" viewBox="0 0 48 48" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+{%- case c -%}
+  {%- when 'keto-low-carb' -%}<path d="M24 5c-5 7-12 12-12 22a12 12 0 0 0 24 0C36 17 29 12 24 5z"/><circle cx="24" cy="29" r="5.5"/>
+  {%- when 'al-fuego' -%}<path d="M25 4c1.5 8 11 12 11 24a12 12 0 0 1-24 0c0-6 3-9 6-12 0 4 2 6 4 7 1-6 1-12 3-19z"/><path d="M24 44c-4 0-6-3-6-6 0-4 4-6 6-10 2 3 6 6 6 10 0 3-2 6-6 6z"/>
+  {%- when 'fit-proteina' -%}<path d="M6 20v8M12 15v18M36 15v18M42 20v8M12 24h24"/>
+  {%- when 'veggie' -%}<path d="M8 40C8 20 20 8 40 8c0 20-12 32-32 32z"/><path d="M8 40 28 20"/>
+  {%- when 'sin-gluten' -%}<path d="M24 42V14M24 14c-5 0-8-3-8-7 5 0 8 3 8 7zM24 14c5 0 8-3 8-7-5 0-8 3-8 7zM24 24c-5 0-8-3-8-7 5 0 8 3 8 7zM24 24c5 0 8-3 8-7-5 0-8 3-8 7zM24 34c-5 0-8-3-8-7 5 0 8 3 8 7zM24 34c5 0 8-3 8-7-5 0-8 3-8 7z"/><path d="M8 8l32 32"/>
+  {%- when 'bowls' -%}<path d="M6 22h36a18 18 0 0 1-36 0z"/><path d="M16 14c0-4 4-4 4-8M26 14c0-4 4-4 4-8"/><path d="M14 42h20"/>
+  {%- when 'desayunos' -%}<path d="M6 34h36"/><path d="M12 34a12 12 0 0 1 24 0"/><path d="M24 12v6M10 18l4 4M38 18l-4 4"/>
+  {%- when 'diario' -%}<rect x="9" y="10" width="30" height="28" rx="4"/><path d="M9 20h30M17 6v8M31 6v8"/><path d="M17 28h6M26 28h6"/>
+  {%- when 'junior' -%}<circle cx="24" cy="24" r="16"/><circle cx="18" cy="21" r="1.6"/><circle cx="30" cy="21" r="1.6"/><path d="M16 29c2 4 14 4 16 0"/>
+  {%- when 'entradas' -%}<path d="M8 28h32c0 7-7 12-16 12S8 35 8 28z"/><path d="M33 7l-6 15"/><ellipse cx="35" cy="10" rx="3" ry="4.5" transform="rotate(22 35 10)"/>
+  {%- when 'snacks-postres' -%}<path d="M12 22h24l-3 18H15z"/><path d="M12 22a12 10 0 0 1 24 0"/><circle cx="24" cy="9" r="2.2"/>
+  {%- when 'ligero' -%}<path d="M8 32a16 16 0 0 1 32 0"/><path d="M24 32l7-10"/><circle cx="24" cy="32" r="2.4"/><path d="M12 41h24"/>
+  {%- else -%}<path d="M24 6l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/><path d="M38 34l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/>
+{%- endcase -%}
+</svg></i>
+                  <strong>{{ ckt | t }}</strong><small>{{ cks | t }}</small>
+                </button>
+                {%- endfor -%}
+              </div>
+              <div class="fn-cats__ctl"><button class="fn-cats__a" type="button" data-fn-cats-arrow="-1" aria-label="{{ 'funnel.prev_dishes' | t }}">&#8249;</button><button class="fn-cats__a" type="button" data-fn-cats-arrow="1" aria-label="{{ 'funnel.next_dishes' | t }}">&#8250;</button><span>{{ 'funnel.cats_hint' | t }}</span></div>
+            </div>
+            <div class="fn-pickcol">
+              <h3 class="fn-pickh"><b>2</b>{{ 'funnel.p2_h' | t }}</h3>
+              <div class="fn-plans" role="radiogroup" aria-label="{{ 'funnel.p2_h' | t }}">
+                <button class="fn-plan" type="button" role="radio" data-plan-choice="block" aria-checked="true">
+                  <span class="fn-plan__tag">{{ 'funnel.pl_block_tag' | t }}</span>
+                  <strong>{{ 'funnel.plan_block' | t }}</strong>
+                  <em class="fn-plan__from">{{ 'funnel.pl_from' | t }} <b>{{ st_meal_m }}</b> {{ 'funnel.pl_day' | t }}</em>
+                  <small>{{ 'funnel.pl_wk' | t | replace: '[w]', st_bwk_m }}</small>
+                  <ul class="fn-plan__ul"><li>{{ 'funnel.pl_b1' | t }}</li><li>{{ 'funnel.pl_b2' | t | replace: '[b]', st_blk_m }}</li><li>{{ 'funnel.pl_b3' | t }}</li></ul>
+                </button>
+                <button class="fn-plan" type="button" role="radio" data-plan-choice="week" aria-checked="false">
+                  <strong>{{ 'funnel.plan_week' | t }}</strong>
+                  <em class="fn-plan__from"><b>{{ st_day_m }}</b> {{ 'funnel.pl_day' | t }}</em>
+                  <small>{{ 'funnel.pl_wk_total' | t | replace: '[w]', st_week_m }}</small>
+                  <ul class="fn-plan__ul"><li>{{ 'funnel.pl_b1' | t }}</li><li>{{ 'funnel.pl_w_b2' | t }}</li></ul>
+                </button>
+              </div>
+              <label class="check fn-renew" data-fn-renew hidden><input type="checkbox" data-fn-renew-box checked> <span>{{ 'funnel.renew' | t }}</span></label>
+            </div>
+          </div>
+          <div class="fn-pickfoot"><button class="text-link" type="button" data-fn-own>{{ 'funnel.own_q' | t }}</button><button class="btn btn--gold fn-pickgo" type="button" data-fn-go-next disabled>{{ 'funnel.go' | t }} &rarr;</button></div>
+        </fieldset>
+
+        <div class="fn-tierdata" data-fn-tierdata hidden aria-hidden="true">
+            {%- liquid
+              assign pp_selecto = nil
+              for pp in plan_coll.products
+                if pp.metafields.kulinaria.tier.value == 'selecto'
+                  assign pp_selecto = pp
+                endif
+              endfor
+            -%}
+            <button class="fn-tier fn-tier--selecto" type="button" role="radio" data-tier-choice="selecto" aria-checked="true"
+              data-week="{% render 'plan-price', tier: 'selecto', kind: 'week' %}" data-block="{% render 'plan-price', tier: 'selecto', kind: 'block' %}" data-meal="{% render 'plan-price', tier: 'selecto', kind: 'meal' %}"
+              data-variant-week="{{ pp_selecto.variants[0].id }}" data-variant-block="{{ pp_selecto.variants[1].id | default: pp_selecto.variants[0].id }}"
+              data-selling-plan="{%- if pp_selecto.selling_plan_groups.size > 0 -%}{{ pp_selecto.selling_plan_groups.first.selling_plans.first.id }}{%- endif -%}" data-name="{{ 'tier.selecto' | t }}">
+              <span class="fn-tier__price" data-fn-tier-price>{% render 'plan-price', tier: 'selecto', kind: 'block', money: true %}<small data-fn-tier-sub></small></span>
+              <strong>{{ 'tier.selecto' | t }}</strong><small>{{ 'funnel.tier_selecto' | t }}</small>
+            </button>
+            {%- liquid
+              assign pp_exclusivo = nil
+              for pp in plan_coll.products
+                if pp.metafields.kulinaria.tier.value == 'exclusivo'
+                  assign pp_exclusivo = pp
+                endif
+              endfor
+            -%}
+            <button class="fn-tier fn-tier--exclusivo" type="button" role="radio" data-tier-choice="exclusivo" aria-checked="false"
+              data-week="{% render 'plan-price', tier: 'exclusivo', kind: 'week' %}" data-block="{% render 'plan-price', tier: 'exclusivo', kind: 'block' %}" data-meal="{% render 'plan-price', tier: 'exclusivo', kind: 'meal' %}"
+              data-variant-week="{{ pp_exclusivo.variants[0].id }}" data-variant-block="{{ pp_exclusivo.variants[1].id | default: pp_exclusivo.variants[0].id }}"
+              data-selling-plan="{%- if pp_exclusivo.selling_plan_groups.size > 0 -%}{{ pp_exclusivo.selling_plan_groups.first.selling_plans.first.id }}{%- endif -%}" data-name="{{ 'tier.exclusivo' | t }}">
+              <span class="fn-tier__price" data-fn-tier-price>{% render 'plan-price', tier: 'exclusivo', kind: 'block', money: true %}<small data-fn-tier-sub></small></span>
+              <strong>{{ 'tier.exclusivo' | t }}</strong><small>{{ 'funnel.tier_exclusivo' | t }}</small>
+            </button>
+            {%- liquid
+              assign pp_signature = nil
+              for pp in plan_coll.products
+                if pp.metafields.kulinaria.tier.value == 'signature'
+                  assign pp_signature = pp
+                endif
+              endfor
+            -%}
+            <button class="fn-tier fn-tier--signature" type="button" role="radio" data-tier-choice="signature" aria-checked="false"
+              data-week="{% render 'plan-price', tier: 'signature', kind: 'week' %}" data-block="{% render 'plan-price', tier: 'signature', kind: 'block' %}" data-meal="{% render 'plan-price', tier: 'signature', kind: 'meal' %}"
+              data-variant-week="{{ pp_signature.variants[0].id }}" data-variant-block="{{ pp_signature.variants[1].id | default: pp_signature.variants[0].id }}"
+              data-selling-plan="{%- if pp_signature.selling_plan_groups.size > 0 -%}{{ pp_signature.selling_plan_groups.first.selling_plans.first.id }}{%- endif -%}" data-name="{{ 'tier.signature' | t }}">
+              <span class="fn-tier__price" data-fn-tier-price>{% render 'plan-price', tier: 'signature', kind: 'block', money: true %}<small data-fn-tier-sub></small></span>
+              <strong>{{ 'tier.signature' | t }}</strong><small>{{ 'funnel.tier_signature' | t }}</small>
+            </button>
+            {%- liquid
+              assign pp_reserve = nil
+              for pp in plan_coll.products
+                if pp.metafields.kulinaria.tier.value == 'reserve'
+                  assign pp_reserve = pp
+                endif
+              endfor
+            -%}
+            <button class="fn-tier fn-tier--reserve" type="button" role="radio" data-tier-choice="reserve" aria-checked="false"
+              data-week="{% render 'plan-price', tier: 'reserve', kind: 'week' %}" data-block="{% render 'plan-price', tier: 'reserve', kind: 'block' %}" data-meal="{% render 'plan-price', tier: 'reserve', kind: 'meal' %}"
+              data-variant-week="{{ pp_reserve.variants[0].id }}" data-variant-block="{{ pp_reserve.variants[1].id | default: pp_reserve.variants[0].id }}"
+              data-selling-plan="{%- if pp_reserve.selling_plan_groups.size > 0 -%}{{ pp_reserve.selling_plan_groups.first.selling_plans.first.id }}{%- endif -%}" data-name="{{ 'tier.reserve' | t }}">
+              <span class="fn-tier__price" data-fn-tier-price>{% render 'plan-price', tier: 'reserve', kind: 'block', money: true %}<small data-fn-tier-sub></small></span>
+              <strong>{{ 'tier.reserve' | t }}</strong><small>{{ 'funnel.tier_reserve' | t }}</small>
+            </button>
+        </div>
+
+
+        <fieldset class="step" data-fn-step="2">
+          <legend class="fn-sr">{{ 'funnel.s_menu' | t }}</legend>
+          <div class="fn-presets" data-fn-presets data-t-kcal="{{ 'funnel.pre_kcal' | t }}" data-t-prot="{{ 'funnel.pre_prot' | t }}" data-t-pick="{{ 'funnel.pre_pick' | t }}" data-t-sub="{{ 'funnel.pre_sub' | t }}">
+            <header class="fn-presets__head"><h3>{{ 'funnel.pre_h' | t }}</h3><p data-fn-presets-sub></p></header>
+            <div class="fn-presets__grid" data-fn-presets-grid></div>
+            <p class="fn-presets__alt"><button class="text-link" type="button" data-fn-go-prev>&lsaquo; {{ 'funnel.fn_back' | t }}</button><button class="text-link" type="button" data-fn-preset-empty>{{ 'funnel.pre_empty' | t }}</button></p>
+          </div>
+        </fieldset>
+        <fieldset class="step" data-fn-step="3">
+          <legend class="fn-sr">{{ 'funnel.s3_title' | t }}</legend>
+    <div class="fn-gate" data-fn-gate data-t-done="{{ 'funnel.gate_done' | t }}" data-t-todo="{{ 'funnel.gate_todo' | t }}" data-t-wait="{{ 'funnel.gate_wait' | t }}" hidden>
+      <div class="fn-gate__frame">
+        <div class="fn-gate__intro">
+          <span class="fn-flame" aria-hidden="true"></span>
+          <p class="eyebrow">{% if customer %}{{ 'funnel.gate_eye2' | t }}{% else %}{{ 'funnel.gate_eye' | t }}{% endif %}</p>
+          <h3>{% if customer %}{{ 'funnel.gate_t2' | t }}{% else %}{{ 'funnel.gate_t' | t }}{% endif %}</h3>
+          <p class="fn-gate__p">{% if customer %}{{ 'funnel.gate_p2' | t }}{% else %}{{ 'funnel.gate_p' | t }}{% endif %}</p>
+          <ul class="fn-gate__perks"><li>{{ 'funnel.gate_b1' | t }}</li><li>{{ 'funnel.gate_b2' | t }}</li><li>{{ 'funnel.gate_b3' | t }}</li></ul>
+        </div>
+        <div class="fn-gate__flow">
+        <ol class="fn-gate__steps">
+          {%- unless customer -%}
+          <li data-fn-gate-s1>
+            <span class="fn-gate__no" aria-hidden="true">01</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>{{ 'funnel.gate_todo' | t }}</span><h4>{{ 'funnel.gate_1' | t }}</h4>
+              <div class="fn-gate__row" data-fn-gate-a1><a class="btn btn--gold" href="{% render 'login-url', back: '/pages/bienvenida' %}">{{ 'login.enter' | t }}</a></div>
+              <p class="fn-gate__hintline" data-fn-gate-note>{{ 'login.enter_note' | t }}</p><p class="fn-gate__ok">{{ 'funnel.gate_done' | t }}</p></div>
+          </li>
+          {%- endunless -%}
+          <li data-fn-gate-s2>
+            <span class="fn-gate__no" aria-hidden="true">02</span>
+            <div class="fn-gate__body"><span class="fn-gate__chip" data-fn-chip>{{ 'funnel.gate_wait' | t }}</span><h4>{{ 'funnel.gate_2' | t }}</h4>
+              <p class="fn-gate__d">{{ 'funnel.gate_2d' | t }}</p>
+              <ul class="fn-gate__cover" aria-label="{{ 'funnel.gate_cover' | t }}"><li>{{ 'onboarding.n1' | t }}</li><li>{{ 'onboarding.n2' | t }}</li><li>{{ 'onboarding.n3' | t }}</li><li>{{ 'onboarding.n4' | t }}</li><li>{{ 'onboarding.n5' | t }}</li></ul>
+              <div class="fn-gate__row" data-fn-gate-a2><a class="btn btn--gold" href="/pages/bienvenida">{{ 'funnel.gate_go' | t }} &rarr;</a><span class="fn-gate__time">{{ 'funnel.gate_time' | t }}</span></div>
+              <p class="fn-gate__ok">{{ 'funnel.gate_done' | t }}</p></div>
+          </li>
+        </ol>
+        </div>
+      </div>
+    </div>
+          {%- capture w2json -%}{"h1":{{ 'wk2.h1' | t | json }},"h_rec":{{ 'wk2.h_rec' | t | json }},"h_mix":{{ 'wk2.h_mix' | t | json }},"sub":{{ 'wk2.sub' | t | json }},"info":{{ 'wk2.info' | t | json }},"note":{{ 'wk2.note' | t | json }},"all":{{ 'wk2.all' | t | json }},"days_we":{{ 'wk2.days_we' | t | json }},"we_on":{{ 'wk2.we_on' | t | json }},"we_hint":{{ 'wk2.we_hint' | t | json }},"we_pick":{{ 'wk2.we_pick' | t | json }},"we_deliv":{{ 'wk2.we_deliv' | t | json }},"we_extra":{{ 'wk2.we_extra' | t | json }},"we_off":{{ 'wk2.we_off' | t | json }},"comp":{{ 'wk2.comp' | t | json }},"comp_set":{{ 'wk2.comp_set' | t | json }},"comp_t":{{ 'wk2.comp_t' | t | json }},"comp_s":{{ 'wk2.comp_s' | t | json }},"comp_none":{{ 'wk2.comp_none' | t | json }},"comp1":{{ 'wk2.comp1' | t | json }},"comp2":{{ 'wk2.comp2' | t | json }},"comp3":{{ 'wk2.comp3' | t | json }},"add2":{{ 'wk2.add2' | t | json }},"cust_t":{{ 'wk2.cust_t' | t | json }},"cust_sheet":{{ 'wk2.cust_sheet' | t | json }},"cust_rm":{{ 'wk2.cust_rm' | t | json }},"cust_note":{{ 'wk2.cust_note' | t | json }},"cust_ph":{{ 'wk2.cust_ph' | t | json }},"cust_save":{{ 'wk2.cust_save' | t | json }},"cust_cancel":{{ 'wk2.cust_cancel' | t | json }},"cat_t":{{ 'wk2.cat_t' | t | json }},"cat_none":{{ 'wk2.cat_none' | t | json }},"cat_for":{{ 'wk2.cat_for' | t | json }},"cat_on":{{ 'wk2.cat_on' | t | json }},"cat_up":{{ 'wk2.cat_up' | t | json }},"sm_back":{{ 'wk2.sm_back' | t | json }},"sm_t":{{ 'wk2.sm_t' | t | json }},"sm_s":{{ 'wk2.sm_s' | t | json }},"sm_detail":{{ 'wk2.sm_detail' | t | json }},"sm_break":{{ 'wk2.sm_break' | t | json }},"sm_plan_block":{{ 'wk2.sm_plan_block' | t | json }},"sm_plan_week":{{ 'wk2.sm_plan_week' | t | json }},"sm_ups":{{ 'wk2.sm_ups' | t | json }},"sm_comp":{{ 'wk2.sm_comp' | t | json }},"sm_we":{{ 'wk2.sm_we' | t | json }},"sm_x":{{ 'wk2.sm_x' | t | json }},"sm_xadd":{{ 'wk2.sm_xadd' | t | json }},"sm_close":{{ 'wk2.sm_close' | t | json }},"sm_total":{{ 'wk2.sm_total' | t | json }},"sm_confirm":{{ 'wk2.sm_confirm' | t | json }},"sm_week":{{ 'wk2.sm_week' | t | json }},"sm_inc":{{ 'wk2.sm_inc' | t | json }},"sm_none":{{ 'wk2.sm_none' | t | json }},"sm_remove":{{ 'wk2.sm_remove' | t | json }},"sm_x_t":{{ 'wk2.sm_x_t' | t | json }},"review":{{ 'wk2.review' | t | json }},"close_x":{{ 'wk2.close_x' | t | json }},"g":{{ 'wk2.g' | t | json }},"kcal":{{ 'wk2.kcal' | t | json }},"sheet_new":{{ 'wk2.sheet_new' | t | json }},"for_now":{{ 'wk2.for_now' | t | json }},"per_plate":{{ 'wk2.per_plate' | t | json }},"nut_t":{{ 'wk2.nut_t' | t | json }},"nut_note":{{ 'wk2.nut_note' | t | json }},"nut_day":{{ 'wk2.nut_day' | t | json }},"nut_avg":{{ 'wk2.nut_avg' | t | json }},"nut_total":{{ 'wk2.nut_total' | t | json }},"nut_split":{{ 'wk2.nut_split' | t | json }},"nut_fiber":{{ 'wk2.nut_fiber' | t | json }},"nut_sugar":{{ 'wk2.nut_sugar' | t | json }},"nut_sodium":{{ 'wk2.nut_sodium' | t | json }},"nut_micro":{{ 'wk2.nut_micro' | t | json }},"nut_p":{{ 'wk2.nut_p' | t | json }},"nut_c":{{ 'wk2.nut_c' | t | json }},"nut_f":{{ 'wk2.nut_f' | t | json }},"nut_we":{{ 'wk2.nut_we' | t | json }},"grp_pick":{{ 'wk2.grp_pick' | t | json }},"pk_t":{{ 'wk2.pk_t' | t | json }},"pk_ok":{{ 'wk2.pk_ok' | t | json }},"comp_ok":{{ 'wk2.comp_ok' | t | json }},"micro_t":{{ 'wk2.micro_t' | t | json }},"micro_vd":{{ 'wk2.micro_vd' | t | json }},"mi_fi":{{ 'wk2.mi_fi' | t | json }},"mi_su":{{ 'wk2.mi_su' | t | json }},"mi_so":{{ 'wk2.mi_so' | t | json }},"mi_ca":{{ 'wk2.mi_ca' | t | json }},"mi_fe":{{ 'wk2.mi_fe' | t | json }},"mi_k":{{ 'wk2.mi_k' | t | json }},"mi_mg":{{ 'wk2.mi_mg' | t | json }},"mi_vc":{{ 'wk2.mi_vc' | t | json }},"mi_va":{{ 'wk2.mi_va' | t | json }},"micro_none":{{ 'wk2.micro_none' | t | json }},"comp1_v":{{ 'wk2.comp1_v' | t | json }},"comp2_v":{{ 'wk2.comp2_v' | t | json }},"comp3_v":{{ 'wk2.comp3_v' | t | json }}}{%- endcapture -%}
+          <section class="fn-wk" data-fn-wk data-w2="{{ w2json | escape }}" data-cut-h="{{ settings.cutoff_hour | default: 10 }}" data-t-plan-block="{{ 'funnel.wk_plan_block' | t }}" data-t-plan-week="{{ 'funnel.wk_plan_week' | t }}" data-t-swap-confirm="{{ 'funnel.diet_swap' | t }}" data-t-nutri-t="{{ 'funnel.nutri_t' | t }}" data-t-nutri-day="{{ 'funnel.nutri_day' | t }}" data-t-nutri-week="{{ 'funnel.m_week' | t }}" data-t-mp="{{ 'funnel.m_p' | t }}" data-t-mc="{{ 'funnel.m_c' | t }}" data-t-mf="{{ 'funnel.m_f' | t }}" data-t-max="{{ 'funnel.tier_max' | t }}" data-t-up="{{ 'funnel.up_btn' | t }}" data-t-swap="{{ 'funnel.swap_btn' | t }}" data-t-add1="{{ 'funnel.add1' | t }}" data-t-add2="{{ 'funnel.add2' | t }}" data-t-pk="{{ 'funnel.pk_t' | t }}" data-t-pk2="{{ 'funnel.pk_t2' | t }}" data-t-pkup="{{ 'funnel.pk_up' | t }}" data-t-kcal="{{ 'funnel.m_kcal' | t }}" data-t-prot="{{ 'funnel.wk_prot' | t }}" data-t-edit="{{ 'funnel.mods_open' | t }}" data-t-tiers="{{ 'tier.selecto' | t }},{{ 'tier.exclusivo' | t }},{{ 'tier.signature' | t }},{{ 'tier.reserve' | t }}">
+            <header class="fn-wk__head">
+              <button class="fn-wk__back" type="button" data-fn-go-prev>&lsaquo; {{ 'funnel.fn_back' | t }}</button>
+              <div><h3>{{ 'funnel.wk_t' | t }}</h3><div class="fn-wk__chips"><button class="fn-wk__chip fn-wk__chip--diet" type="button" data-fn-diet-open aria-haspopup="listbox" aria-expanded="false"><span data-fn-diet-name></span><i aria-hidden="true">&#9662;</i></button><span class="fn-wk__chip" data-fn-plan-name></span><div class="fn-dietmenu" data-fn-dietmenu role="listbox" hidden></div></div></div>
+              <div class="fn-wk__perday" role="group" aria-label="{{ 'funnel.perday_aria' | t }}"><span>{{ 'funnel.perday' | t }}</span><button type="button" class="is-on" data-fn-perday="1" aria-pressed="true">1</button><button type="button" data-fn-perday="2" aria-pressed="false">2</button></div>
+            </header>
+            <div class="fn-bd__top" data-fn-bd-top></div>
+            <div class="fn-who" data-fn-who hidden data-t-for="{{ 'funnel.who' | t }}" data-t-add="{{ 'funnel.who_add' | t }}"></div>
+            <div class="fn-wk__tabs" data-fn-wk-tabs role="tablist"></div>
+            <ol class="fn-wk__cards" data-fn-wk-cards></ol>
+            <div class="fn-wk__nutri" data-fn-wk-nutri hidden></div>
+          </section>
+          <div class="fn-para" data-fn-para-wrap hidden><label for="fn-para-{{ section.id }}">{{ 'funnel.para' | t }}</label><select class="select" id="fn-para-{{ section.id }}" data-fn-para></select><a class="text-link" href="/pages/cuenta-perfil#familia">{{ 'funnel.para_add' | t }}</a></div>
+          <ol class="fn-week" data-fn-week aria-label="{{ 'funnel.days_title' | t }}"></ol>
+          <div class="fn-mods" data-fn-mods hidden></div>
+          <p class="fn-budget" data-fn-budget></p>
+          <p class="fn-mods__tip">✎ {{ 'funnel.mods_open' | t }}</p>
+          {%- assign pk_u1 = upg.variants[0].price | default: 7000 -%}{%- assign pk_u2 = upg.variants[1].price | default: 14000 -%}{%- assign pk_u3 = upg.variants[2].price | default: 21000 -%}
+          <div class="fn-picker" data-fn-picker hidden>
+            <div class="fn-picker__bg" data-fn-picker-close></div>
+            <div class="fn-picker__box" role="dialog" aria-modal="true" aria-labelledby="fn-pk-t-{{ section.id }}">
+              <header class="fn-picker__head">
+                <h3 id="fn-pk-t-{{ section.id }}" data-fn-picker-title></h3>
+                <button class="fn-picker__x" type="button" data-fn-picker-close aria-label="{{ 'funnel.own_close' | t }}">&times;</button>
+              </header>
+              <div class="fn-picker__tabs" role="group" data-fn-picker-tabs>
+                <button type="button" data-pick-tier="">{{ 'funnel.pk_all' | t }}</button>
+                <button type="button" data-pick-tier="selecto">{{ 'tier.selecto' | t }}</button>
+                <button type="button" data-pick-tier="exclusivo">{{ 'tier.exclusivo' | t }} <small>+{{ pk_u1 | money_without_trailing_zeros }}</small></button>
+                <button type="button" data-pick-tier="signature">{{ 'tier.signature' | t }} <small>+{{ pk_u2 | money_without_trailing_zeros }}</small><em class="fn-picker__rec">&#9733; {{ 'funnel.pk_rec' | t }}</em></button>
+                <button type="button" data-pick-tier="reserve">{{ 'tier.reserve' | t }} <small>+{{ pk_u3 | money_without_trailing_zeros }}</small></button>
+              </div>
+              <div class="fn-pickbar">
+            <p class="fn-prompt" data-fn-prompt aria-live="polite"></p>
+                        <div class="fn-course" data-fn-course-group hidden role="group" aria-label="{{ 'funnel.course_aria' | t }}"><button type="button" class="fn-course__b is-on" data-fn-course="0" aria-pressed="true">{{ 'funnel.c1' | t }}</button><button type="button" class="fn-course__b" data-fn-course="1" aria-pressed="false">{{ 'funnel.c2' | t }}</button></div>
+            <button class="text-link fn-repeat" type="button" data-fn-repeat hidden data-t-done="{{ 'funnel.repeat_done' | t }}" data-t-none="{{ 'funnel.repeat_none' | t }}">&#8634; {{ 'funnel.repeat' | t }}</button>
+            <p class="fn-meter" data-fn-meter aria-live="polite"><b data-fn-meter-n>0</b> / {{ meals_per_week }} <span>{{ 'funnel.meals_word' | t }}</span><i data-fn-meter-bar></i></p>
+            <label class="fn-sel"><span class="fn-sr">{{ 'collection.category' | t }}</span>
+              <select class="select" data-fn-cat>
+                <option value="all">{{ 'menu_group.all' | t }}</option>
+                {%- if seasonal_f.products.size > 0 -%}<option value="seasonal">&#10022; {{ 'season.season' | t }}</option>{%- endif -%}
+                {%- assign cats = 'al-fuego,desayunos,bowls,diario,keto-low-carb,fit-proteina,veggie,sin-gluten,ligero,junior,entradas,snacks-postres' | split: ',' -%}
+                {%- for c in cats -%}{%- assign ck = 'menu_group.' | append: c -%}<option value="{{ c }}">{{ ck | t }}</option>{%- endfor -%}
+              </select></label>
+          </div>
+          <div class="fn-carousel">
+            <button class="fn-arrow fn-arrow--prev" type="button" data-fn-arrow="-1" aria-label="{{ 'funnel.prev_dishes' | t }}">&#8249;</button>
+            <div class="fn-dishes" data-fn-grid>
+              {%- for product in coll.products limit: section.settings.limit -%}{% render 'funnel-dish', product: product %}{%- endfor -%}
+              {%- for product in seasonal_f.products limit: 8 -%}{% render 'funnel-dish', product: product, seasonal: true, show_all: true %}{%- endfor -%}
+            </div>
+            <button class="fn-arrow fn-arrow--next" type="button" data-fn-arrow="1" aria-label="{{ 'funnel.next_dishes' | t }}">&#8250;</button>
+            <aside class="fn-macros" data-fn-macros aria-live="polite">
+              <p class="fn-macros__t">{{ 'funnel.macros_t' | t }}<small data-fn-macros-day></small></p>
+              <p class="fn-macros__kcal"><b data-fn-m="kcal">&mdash;</b> <span>{{ 'funnel.m_kcal' | t }}</span></p>
+              <i class="fn-macros__bar" aria-hidden="true"><u data-fn-mb="p"></u><u data-fn-mb="c"></u><u data-fn-mb="f"></u></i>
+              <ul class="fn-macros__l"><li class="is-p"><span>{{ 'funnel.m_p' | t }}</span><b data-fn-m="p">&mdash;</b></li><li class="is-c"><span>{{ 'funnel.m_c' | t }}</span><b data-fn-m="c">&mdash;</b></li><li class="is-f"><span>{{ 'funnel.m_f' | t }}</span><b data-fn-m="f">&mdash;</b></li></ul>
+              <p class="fn-macros__w"><span>{{ 'funnel.m_week' | t }}</span> <b data-fn-m="wk">&mdash;</b> {{ 'funnel.m_kcal' | t }}</p>
+              <p class="fn-macros__h" data-fn-macros-hint>{{ 'funnel.m_empty' | t }}</p>
+            </aside>
+          </div>
+          
+            </div>
+          </div>
+          <p class="alert" data-fn-empty hidden>{{ 'funnel.s3_empty' | t }}</p>
+        </fieldset>
+
+
+        <p class="alert alert--warn" data-fn-error hidden role="alert"></p>
+        <a hidden tabindex="-1" aria-hidden="true" data-fn-login href="{% render 'login-url', back: request.path %}"></a>
+        <a hidden tabindex="-1" aria-hidden="true" data-fn-onb href="/pages/bienvenida"></a>
+      </div>
+
+      <aside class="funnel__aside" aria-live="polite">
+        <button class="fn-sum__toggle" type="button" data-fn-sum-toggle aria-expanded="false">{{ 'funnel.sum_toggle' | t }}</button>
+        <h3>{{ 'funnel.your_order' | t }}</h3>
+        <p class="countdown fn-cut" data-cutoff>{{ 'cutoff.confirm_dishes' | t }} <strong data-cutoff-value>…</strong></p>
+        <dl class="funnel__facts">
+          <div><dt>{{ 'funnel.summary_plan' | t }}</dt><dd data-fn-s-plan>{{ 'funnel.plan_block' | t }}</dd></div>
+          <div><dt>{{ 'funnel.summary_meals' | t }}</dt><dd data-fn-s-meals>0 / {{ meals_per_week }}</dd></div>
+        </dl>
+        <ul class="funnel__list" data-fn-s-list></ul>
+        <p class="text-muted" data-fn-s-empty>{{ 'funnel.summary_empty' | t }}</p>
+        <p class="funnel__upgrades" data-fn-s-up hidden></p>
+        <div class="funnel__total"><span>{{ 'funnel.summary_total' | t }}</span><strong data-fn-s-total>$0</strong></div>
+        <p class="funnel__block" data-fn-s-block hidden></p>
+        <p class="fn-budget fn-budget--aside" data-fn-budget></p>
+        <details class="fn-more"><summary>{{ 'funnel.rec_title' | t }}</summary>
+        <p class="fn-weeknote"><strong data-fn-first></strong> {{ 'funnel.week_note' | t }}</p>
+        <div class="fn-rec"><p data-fn-rec="auto" hidden>{{ 'funnel.rec_auto' | t }}</p><p data-fn-rec="manual" hidden>{{ 'funnel.rec_manual' | t }}</p><p data-fn-rec="week" hidden>{{ 'funnel.rec_week' | t }}</p><p>{{ 'funnel.rec_extra' | t }}</p></div>
+        </details>
+        <p class="text-muted" style="font-size:.85rem;margin:0" data-fn-s-count></p>
+        <div class="fn-actions fn-cta">
+          <span class="fn-links">
+            <button class="text-link" type="button" data-fn-prev hidden>{{ 'funnel.back' | t }}</button>
+            <button class="text-link fn-reset" type="button" data-fn-reset>{{ 'funnel.reset' | t }}</button>
+          </span>
+          <button class="btn btn--gold" type="button" data-fn-next disabled>{{ 'funnel.next' | t }}</button>
+          <button class="btn btn--gold fn-barpick" type="button" data-fn-barpick hidden></button>
+          <a class="btn btn--gold" data-fn-finish href="{{ routes.cart_url }}" hidden>{{ 'funnel.finish' | t }}</a>
+        </div>
+      </aside>
+    </div>
+   </div>
+  </div>
+</section>
+
+<div class="fn-own" data-fn-own-modal hidden role="dialog" aria-modal="true" aria-labelledby="fn-own-t-{{ section.id }}" data-endpoint="{{ shop.metafields.kulinaria.sheet_url.value | escape }}"
+  data-t-err="{{ 'funnel.own_err' | t }}" data-t-sending="{{ 'funnel.own_sending' | t }}">
+  <div class="fn-own__bg" data-own-close></div>
+  <div class="fn-own__box">
+    <button class="fn-own__x" type="button" data-own-close aria-label="{{ 'funnel.own_close' | t }}">&times;</button>
+    <form class="fn-own__form" data-fn-own-form novalidate>
+      <h3 id="fn-own-t-{{ section.id }}">{{ 'funnel.own_t' | t }}</h3>
+      <p class="fn-own__s">{{ 'funnel.own_s' | t }}</p>
+      <label class="fn-own__file" data-own-drop><input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required><span data-own-file-name>{{ 'funnel.own_file' | t }}</span></label>
+      <div class="fn-own__row">
+        <label>{{ 'funnel.own_name' | t }}<input type="text" name="name" autocomplete="name" required value="{{ customer.name | escape }}"></label>
+        <label>{{ 'funnel.own_email' | t }}<input type="email" name="email" autocomplete="email" required value="{{ customer.email | escape }}"></label>
+      </div>
+      <div class="fn-own__row">
+        <label>{{ 'funnel.own_phone' | t }}<input type="tel" name="phone" autocomplete="tel" placeholder="{{ 'funnel.own_phone_ph' | t }}" value="{{ customer.phone | escape }}"></label>
+        <label>{{ 'funnel.own_plan' | t }}<select name="plan"><option value="block">{{ 'funnel.plan_block' | t }}</option><option value="week">{{ 'funnel.plan_week' | t }}</option></select></label>
+      </div>
+      <label>{{ 'funnel.own_notes' | t }}<textarea name="notes" rows="2" maxlength="600" placeholder="{{ 'funnel.own_notes_ph' | t }}"></textarea></label>
+      <label class="check fn-own__consent"><input type="checkbox" name="consent" required> <span>{{ 'funnel.own_consent' | t }}</span></label>
+      <p class="fn-own__err" data-own-err role="alert" hidden></p>
+      <button class="btn btn--gold fn-own__go" type="submit">{{ 'funnel.own_send' | t }}</button>
+    </form>
+    <div class="fn-own__ok" data-fn-own-ok hidden>
+      <b aria-hidden="true">&#10003;</b>
+      <h3>{{ 'funnel.own_ok_t' | t }}</h3>
+      <p>{{ 'funnel.own_ok_p' | t }}</p>
+      <button class="btn btn--outline" type="button" data-own-close>{{ 'funnel.own_close' | t }}</button>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Embudo de pedido",
+  "settings": [
+    { "type": "checkbox", "id": "phone_teaser", "label": "En el teléfono, mostrar solo una tarjeta que lleva al pedido completo", "default": false },
+    { "type": "text", "id": "eyebrow", "label": "Sobretítulo", "default": "Haz tu pedido" },
+    { "type": "text", "id": "heading", "label": "Título (usa *asteriscos* para la parte en cursiva)", "default": "Arma tu pedido en *2 pasos*" },
+    { "type": "textarea", "id": "text", "label": "Texto" },
+    { "type": "collection", "id": "collection", "label": "Colección de los platillos" },
+    { "type": "range", "id": "limit", "label": "Máximo de platillos", "min": 4, "max": 40, "step": 1, "default": 24 }
+  ],
+  "blocks": [
+    {
+      "type": "diet",
+      "name": "Enfoque (dieta)",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Nombre", "default": "Keto" },
+        { "type": "text", "id": "slug", "label": "Código (metacampo diets)", "default": "keto" },
+        { "type": "text", "id": "text", "label": "Descripción corta" },
+        { "type": "select", "id": "art", "label": "Foto del tema", "default": "dish-0", "options": [
+          { "value": "dish-0", "label": "Platillo 1" }, { "value": "dish-1", "label": "Platillo 2" }, { "value": "dish-2", "label": "Platillo 3" }, { "value": "dish-3", "label": "Platillo 4" },
+          { "value": "dish-4", "label": "Platillo 5" }, { "value": "dish-5", "label": "Platillo 6" }, { "value": "dish-6", "label": "Platillo 7" }, { "value": "dish-7", "label": "Platillo 8" } ] }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Embudo de pedido" }]
+}
+{% endschema %}

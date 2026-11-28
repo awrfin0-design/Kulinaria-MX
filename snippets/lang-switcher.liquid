@@ -1,0 +1,26 @@
+{%- comment -%}
+  Language switcher. Uses Shopify's localization form: every language published in
+  Settings → Languages (and Markets) appears automatically. The theme ships ES and EN
+  (locales/es.default.json, locales/en.json); add another file in /locales for more.
+{%- endcomment -%}
+{%- if localization.available_languages.size > 1 -%}
+  {%- form 'localization', class: 'lang' -%}
+    <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+    <div class="lang__group" role="group" aria-label="{{ 'lang.label' | t }}">
+      {%- for language in localization.available_languages -%}
+        <button class="lang__btn" type="submit" name="language_code" value="{{ language.iso_code }}" lang="{{ language.iso_code }}"
+          title="{{ 'lang.switch_to' | t }} {{ language.endonym_name }}"
+          {%- if language.iso_code == localization.language.iso_code %} aria-current="true"{% endif -%}>{{ language.iso_code | upcase }}</button>
+      {%- endfor -%}
+    </div>
+  {%- endform -%}
+{%- else -%}
+  {%- comment -%} Only one language is published yet: still show the switch. "EN" points to /en, which works as soon as English is published in Settings → Languages. {%- endcomment -%}
+  {%- assign ls_cur = localization.language.iso_code | default: request.locale.iso_code | default: 'es' -%}
+  <div class="lang">
+    <div class="lang__group" role="group" aria-label="{{ 'lang.label' | t }}">
+      <a class="lang__btn" href="{{ routes.root_url }}" lang="es"{% if ls_cur == 'es' %} aria-current="true"{% endif %}>ES</a>
+      <a class="lang__btn" href="/en{{ request.path }}" lang="en"{% if ls_cur == 'en' %} aria-current="true"{% endif %}>EN</a>
+    </div>
+  </div>
+{%- endif -%}

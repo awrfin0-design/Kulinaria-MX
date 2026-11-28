@@ -1,0 +1,49 @@
+{%- comment -%}
+  Dish tile used inside the order funnel (steps 2 and 4). Same data attributes as dish-card so allergy blocking applies.
+  Param: product
+{%- endcomment -%}
+{%- capture mw_state -%}{% render 'menu-week', product: product %}{%- endcapture -%}
+{%- if show_all or mw_state == 'on' -%}
+{%- liquid
+  assign mf = product.metafields.kulinaria
+  assign card_src = mf.card_description.value | default: product.description
+  assign tier = mf.tier.value | default: 'selecto'
+  assign category = mf.category.value | default: product.type | handleize
+  assign allergens = mf.allergens.value | join: '|'
+  assign ingredients = mf.ingredients.value | join: '|'
+  assign diets = mf.diets.value | join: '|'
+-%}
+{%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}{%- capture tx_pdesc -%}{% render 'tx', s: card_src %}{%- endcapture -%}
+{%- assign card_text = tx_pdesc | strip_html | truncate: 90 -%}
+{%- capture pm_block -%}{% render 'plan-price', tier: tier, kind: 'meal' %}{%- endcapture -%}{%- capture pm_week_total -%}{% render 'plan-price', tier: tier, kind: 'week' %}{%- endcapture -%}{%- assign pm_week = pm_week_total | plus: 0 | divided_by: 5 -%}
+<article class="fn-dish" data-dish data-has-detail data-fn-dish data-kcal="{{ mf.calories.value | default: 0 }}" data-protein="{{ mf.protein.value | default: 0 }}" data-carbs="{{ mf.carbs.value | default: 0 }}" data-fat="{{ mf.fat.value | default: 0 }}" data-fiber="{{ mf.fiber.value | default: 0 }}" data-sugar="{{ mf.sugar.value | default: 0 }}" data-sodium="{{ mf.sodium.value | default: 0 }}" data-satfat="{{ mf.sat_fat.value | default: 0 }}" data-calcium="{{ mf.calcium.value | default: 0 }}" data-iron="{{ mf.iron.value | default: 0 }}" data-potassium="{{ mf.potassium.value | default: 0 }}" data-magnesium="{{ mf.magnesium.value | default: 0 }}" data-vitc="{{ mf.vitamin_c.value | default: 0 }}" data-vita="{{ mf.vitamin_a.value | default: 0 }}" data-pm-block="{{ pm_block | strip }}" data-pm-week="{{ pm_week }}" data-pid="{{ product.id }}" data-vid="{{ product.selected_or_first_available_variant.id }}" data-price="{{ product.selected_or_first_available_variant.price | divided_by: 100 }}" data-handle="{{ product.handle }}"
+  {% if seasonal %}data-seasonal="true" {% endif %}data-handle="{{ product.handle }}" data-title="{{ product.title | escape }}" data-label="{{ tx_ptitle | escape }}" data-category="{{ category }}" data-tier="{{ tier }}" data-diets="{{ diets }}" data-allergens="{{ allergens | escape }}" data-ingredients="{{ ingredients | escape }}">
+  <div class="fn-dish__media">
+    {%- if product.featured_image -%}
+      {{ product.featured_image | image_url: width: 480 | image_tag: loading: 'lazy', widths: '240, 360, 480', sizes: '(min-width: 1100px) 22vw, 46vw', alt: tx_ptitle }}
+    {%- else -%}
+      <span class="dish__ph" aria-hidden="true">{% render 'dish-placeholder', category: category %}</span>
+    {%- endif -%}
+    <span class="fn-count" data-fn-count hidden></span>
+    {%- if seasonal -%}<span class="fn-ribbon">{{ 'season.limited' | t }}</span>{%- endif -%}
+    <div class="dish__blocked" role="note"><div><strong>{{ 'dish.blocked_title' | t }}</strong>{{ 'dish.blocked_text' | t }}</div></div>
+  </div>
+  <span class="fn-up" data-fn-up hidden></span>
+  {% render 'dish-detail', product: product %}
+  <div class="fn-dish__body">
+    {% render 'tier-badge', tier: tier %}
+    <h3 class="fn-dish__title">{{ tx_ptitle }}</h3>
+    {%- if card_text != blank -%}<p class="dish__desc">{{ card_text }}</p>{%- endif -%}
+    {%- if mf.calories.value or mf.carbs.value -%}
+      <p class="dish__facts">{%- if mf.calories.value %}{{ mf.calories.value }} kcal {{ 'wk2.per_plate' | t }}{% endif -%}{%- if mf.calories.value and mf.carbs.value %} · {% endif -%}{%- if mf.carbs.value %}{{ mf.carbs.value }} {{ 'dish.carbs_g' | t }}{% endif -%}</p>
+    {%- endif -%}
+    <div class="fn-warnbox" data-fn-warnbox hidden><button type="button" class="fn-warnbtn" data-fn-warnbtn aria-expanded="false" aria-label="{{ 'js.warn_label' | t }}"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 3.2 1.9 20.5h20.2L12 3.2z" fill="currentColor"/><path d="M12 9.6v5.2M12 17.4v.1" stroke="#1a1200" stroke-width="2.2" stroke-linecap="round"/></svg></button><p class="fn-warn" data-fn-warn role="note"></p></div>
+    <span class="compat" data-compat></span>
+    <div class="fn-note" data-fn-note><button class="fn-note__t" type="button" data-fn-note-t>✎ {{ 'funnel.note_t' | t }}</button><div class="fn-note__box" data-fn-note-box hidden><div class="fn-note__chips" data-fn-note-chips></div><input type="text" class="fn-note__in" maxlength="120" data-fn-note-in placeholder="{{ 'funnel.mods_ph' | t }}" aria-label="{{ 'funnel.mods_note' | t }}"></div></div>
+    <div class="fn-dish__row">
+      <span class="dish__price"><span data-fn-price>{% render 'plan-price', tier: tier, kind: 'meal', money: true %}</span><small> {{ 'funnel.per_meal' | t }}</small></span>
+      <button class="btn btn--outline btn--sm fn-add" type="button" data-add data-pick>{{ 'funnel.pick' | t }}</button>
+    </div>
+  </div>
+</article>
+{%- endif -%}

@@ -1,0 +1,59 @@
+<section class="section auth-sec signup" {{ section.shopify_attributes }}>
+  <div class="container auth-wrap">
+    <div class="auth">
+      <aside class="auth__art" aria-hidden="false">
+        <span class="fn-flame"></span>
+        <p class="eyebrow">{{ 'login.art_eye' | t }}</p>
+        <h2>{{ 'login.art_t' | t }}</h2>
+        <ol class="auth__list"><li>{{ 'login.art_1' | t }}</li><li>{{ 'login.art_2' | t }}</li><li>{{ 'login.art_3' | t }}</li></ol>
+      </aside>
+      <div class="auth__card">
+        <nav class="auth__tabs" aria-label="{{ 'general.account' | t }}"><a href="{{ routes.account_login_url }}">{{ 'login.tab_in' | t }}</a><a class="is-on" href="{{ routes.account_register_url }}" aria-current="page">{{ 'login.tab_new' | t }}</a></nav>
+        <h1 class="auth__h">{{ 'login.new_t' | t }}</h1>
+        <p class="auth__sub">{{ 'login.new_sub' | t }}</p>
+        {%- form 'create_customer', novalidate: 'novalidate', class: 'signup__form' -%}
+          {%- if form.errors -%}<div class="alert alert--warn" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+          <div class="steps" data-steps>
+            <ol class="steps__nav" aria-label="{{ 'reg.steps' | t }}">
+              <li data-step-dot class="is-on"><span>01</span>{{ 'reg.s1' | t }}</li>
+              <li data-step-dot><span>02</span>{{ 'reg.s5' | t }}</li>
+            </ol>
+            <div class="steps__bar" aria-hidden="true"><i data-steps-bar></i></div>
+
+            <fieldset class="step is-on" data-step>
+              <legend>{{ 'reg.two_t1' | t }}</legend>
+              <div class="form-grid">
+                <div class="field"><label for="reg-first">{{ 'form.first_name' | t }}</label><input class="input" id="reg-first" name="customer[first_name]" autocomplete="given-name" required></div>
+                <div class="field"><label for="reg-last">{{ 'form.last_name' | t }}</label><input class="input" id="reg-last" name="customer[last_name]" autocomplete="family-name" required></div>
+                <div class="field"><label for="reg-email">{{ 'form.email' | t }}</label><input class="input" id="reg-email" type="email" name="customer[email]" autocomplete="email" required></div>
+                <div class="field field--pw"><label for="reg-pass">{{ 'form.password' | t }}</label>
+                  <div class="pw"><input class="input" id="reg-pass" type="password" name="customer[password]" autocomplete="new-password" required><button class="pw__t" type="button" data-pw-toggle data-t-show="{{ 'login.show' | t }}" data-t-hide="{{ 'login.hide' | t }}">{{ 'login.show' | t }}</button></div></div>
+                <div class="field"><label for="reg-phone">{{ 'form.phone' | t }}</label><input class="input" id="reg-phone" type="tel" name="customer[phone]" autocomplete="tel"></div>
+                <div class="field"><label for="reg-ref">{{ 'form.referral_optional' | t }}</label><input class="input" id="reg-ref" data-ref-save placeholder="JUANFIT" autocomplete="off" style="text-transform:uppercase"></div>
+              </div>
+            </fieldset>
+
+            <fieldset class="step" data-step>
+              <legend>{{ 'reg.two_t2' | t }}</legend>
+              <p class="text-muted">{{ 'reg.s5_text' | t }}</p>
+              <label class="check check--box"><input type="checkbox" name="contract" data-signup-contract required> <span>{{ 'cart.contract_label' | t }} <a href="/pages/terminos" target="_blank" rel="noopener" style="text-decoration:underline">{{ 'footer.terms' | t }}</a></span></label>
+              <p class="auth__note">{{ 'reg.two_note' | t }}</p>
+              <input type="hidden" name="customer[tags]" value="suscriptor">
+              <button class="btn btn--gold btn--block" type="submit" data-signup-submit disabled>{{ 'register.title' | t }}</button>
+            </fieldset>
+
+            <div class="steps__actions">
+              <button class="text-link" type="button" data-step-prev hidden>{{ 'reg.back' | t }}</button>
+              <button class="btn btn--gold" type="button" data-step-next>{{ 'reg.next' | t }}</button>
+            </div>
+          </div>
+        {%- endform -%}
+        <p class="auth__switch">{{ 'reg.have_account' | t }} <a href="{{ routes.account_login_url }}">{{ 'login.title' | t }}</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Crear cuenta", "settings": [] }
+{% endschema %}

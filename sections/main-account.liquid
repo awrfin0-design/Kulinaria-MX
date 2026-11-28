@@ -1,0 +1,74 @@
+{%- liquid
+  assign mf = customer.metafields.kulinaria
+  assign portal = settings.subscription_portal_url | default: routes.account_url
+  assign code = mf.referral_code.value
+  if code == blank
+    assign cid = customer.id | append: ''
+    assign code = cid | slice: -6, 6 | prepend: 'KUL'
+  endif
+  assign paid = mf.referrals_paid.value | default: 0
+  assign pct = paid | times: 10 | at_most: 100
+  assign wallet = mf.wallet_balance.value | default: 0
+-%}
+<section class="section" {{ section.shopify_attributes }}>
+  <div class="container">
+    {%- unless customer -%}
+      <div class="section__head">
+        <span class="eyebrow">{{ 'general.account' | t }}</span>
+        <h2>{{ 'account.login_needed' | t }}</h2>
+        <div class="btn-row"><a class="btn btn--gold" href="{% render 'login-url', back: '/pages/cuenta' %}">{{ 'login.enter' | t }}</a></div>
+      </div>
+    {%- else -%}
+    <div class="section__head">
+      <span class="eyebrow">{{ 'general.account' | t }}</span>
+      <h2>{{ 'acct.hello_page' | t }} {{ customer.first_name | default: customer.email }}</h2>
+      <p class="lede">{{ 'acct.signed_as' | t }} <strong>{{ customer.email }}</strong></p>
+      <p class="text-muted">{{ 'acct.intro_page' | t }}</p>
+      <p class="btn-row"><a class="btn btn--gold" href="/pages/cuenta-semana">{{ 'account.my_week' | t }}</a><a class="btn btn--ghost" href="{{ routes.account_logout_url }}">{{ 'account.logout' | t }}</a></p>
+    </div>
+
+    <p class="countdown" data-cutoff>{{ 'cutoff.confirm_dishes' | t }} <strong data-cutoff-value>…</strong></p>
+
+    <div class="hub">
+      {%- render 'onboarding-banner' -%}
+      <section class="hub__card" data-hub-week>
+        <h3>{{ 'acct.hub_week_t' | t }}</h3>
+        <p class="hub__big" data-hub-week-main data-t-none="{{ 'acct.hub_week_none' | t }}" data-t-some="{{ 'acct.hub_week_some' | t }}">…</p>
+        <div class="btn-row"><a class="btn btn--gold btn--sm" href="/pages/cuenta-semana">{{ 'account.my_week' | t }}</a><a class="btn btn--outline btn--sm" href="/pages/cuenta-pausas">{{ 'account.pause_deliveries' | t }}</a></div>
+      </section>
+      <section class="hub__card" data-hub-profile data-t-none="{{ 'acct.hub_profile_none' | t }}" data-t-allergies="{{ 'acct.hub_allergies' | t }}" data-t-dislikes="{{ 'acct.hub_dislikes' | t }}" data-t-diets="{{ 'acct.hub_diets' | t }}" data-t-people="{{ 'acct.hub_people' | t }}">
+        <h3>{{ 'acct.hub_profile_t' | t }}</h3>
+        <div class="hub__list" data-hub-profile-body>…</div>
+        <div class="btn-row"><a class="btn btn--outline btn--sm" href="/pages/bienvenida?edit=1">{{ 'acct.hub_profile_cta' | t }}</a></div>
+      </section>
+      <section class="hub__card">
+        <h3>{{ 'acct.hub_benefits_t' | t }}</h3>
+        <dl class="hub__kv"><div><dt>{{ 'acct.hub_wallet' | t }}</dt><dd>{{ wallet | times: 100 | money_without_trailing_zeros }}</dd></div><div><dt>{{ 'acct.hub_code' | t }}</dt><dd>{{ code }}</dd></div><div><dt>{{ 'acct.hub_refs' | t }}</dt><dd>{{ paid }}</dd></div></dl>
+        <p class="text-muted" style="font-size:.9rem">{{ 'acct.hub_benefits_p' | t }}</p>
+        <div class="btn-row"><a class="btn btn--outline btn--sm" href="/collections/kulinaria-store">{{ 'acct.hub_store' | t }}</a></div>
+      </section>
+      <section class="hub__card">
+        <h3>{{ 'account.deliveries_containers' | t }}</h3>
+        {%- if customer.default_address -%}<p style="margin:0">{{ customer.default_address | format_address }}</p>{%- else -%}<p class="text-muted" style="margin:0">{{ 'account.no_address' | t }}</p>{%- endif -%}
+        <ul class="plan-list" style="margin:0;font-size:.88rem"><li>{{ 'account.policy_wait' | t }}</li><li>{{ 'account.policy_pickup' | t }}</li></ul>
+        <div class="btn-row"><a class="btn btn--outline btn--sm" href="/pages/bienvenida?edit=1">{{ 'account.manage_addresses' | t }}</a></div>
+      </section>
+    </div>
+
+    <h3 style="margin-top:var(--space-2xl)">{{ 'acct.orders_title' | t }}</h3>
+    {%- if customer.orders.size == 0 -%}
+      <p class="text-muted">{{ 'acct.orders_none' | t }}</p>
+    {%- else -%}
+      <div class="adm-tablewrap"><table class="acct-orders"><thead><tr><th>{{ 'acct.order' | t }}</th><th>{{ 'acct.order_date' | t }}</th><th>{{ 'acct.order_status' | t }}</th><th>{{ 'acct.order_total' | t }}</th></tr></thead><tbody>
+        {%- for order in customer.orders limit: 10 -%}
+          <tr><td><strong>{{ order.name }}</strong></td><td>{{ order.created_at | date: '%d/%m/%Y' }}</td><td>{{ order.financial_status_label }}{% if order.fulfillment_status_label != blank %} · {{ order.fulfillment_status_label }}{% endif %}</td><td>{{ order.total_price | money_without_trailing_zeros }}</td></tr>
+        {%- endfor -%}
+      </tbody></table></div>
+    {%- endif -%}
+    {%- endunless -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Mi cuenta (resumen)", "settings": [] }
+{% endschema %}

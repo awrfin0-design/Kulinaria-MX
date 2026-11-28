@@ -1,0 +1,70 @@
+<footer class="site-footer tone-dark" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        {% render 'logo', tone: 'invert' %}
+        <p class="text-muted" style="margin-top:var(--space-md);max-width:34ch">{{ 'footer.blurb' | t }}</p>
+        {% render 'service-badge' %}
+        {% render 'social-links' %}
+      </div>
+
+      <div>
+        <h4>{{ 'footer.explore' | t }}</h4>
+        <ul>
+          {%- assign explore = section.settings.menu_explore -%}
+          {%- if explore != blank and explore.links.size > 0 -%}
+            {%- for link in explore.links -%}{%- capture tx_ltitle -%}{% render 'tx', s: link.title %}{%- endcapture -%}<li><a href="{{ link.url }}">{{ tx_ltitle }}</a></li>{%- endfor -%}
+          {%- else -%}
+            <li><a href="/collections/menu-semanal">{{ 'nav.weekly_menu' | t }}</a></li>
+            <li><a href="/pages/planes">{{ 'nav.plans' | t }}</a></li>
+            <li><a href="/pages/carta-kulinaria">{{ 'nav.carta' | t }}</a></li>
+            <li><a href="/collections/kulinaria-store">{{ 'nav.store' | t }}</a></li>
+            <li><a href="/pages/embajadores">{{ 'nav.ambassadors' | t }}</a></li>
+          {%- endif -%}
+        </ul>
+      </div>
+
+      <div>
+        <h4>{{ 'nav.help' | t }}</h4>
+        <ul>
+          {%- assign help = section.settings.menu_help -%}
+          {%- if help != blank and help.links.size > 0 -%}
+            {%- for link in help.links -%}{%- capture tx_ltitle -%}{% render 'tx', s: link.title %}{%- endcapture -%}<li><a href="{{ link.url }}">{{ tx_ltitle }}</a></li>{%- endfor -%}
+          {%- else -%}
+            <li><a href="/pages/nosotros">{{ 'nav.about' | t }}</a></li>
+            <li><a href="/pages/filosofia">{{ 'nav.philosophy' | t }}</a></li>
+            <li><a href="/pages/ayuda">{{ 'nav.help_legal' | t }}</a></li>
+          {%- endif -%}
+        </ul>
+      </div>
+
+      <div>
+        <h4>{{ 'footer.contact' | t }}</h4>
+        <ul>
+          {%- if settings.contact_phone != blank -%}<li><a href="tel:{{ settings.contact_phone | remove: ' ' }}">{{ settings.contact_phone }}</a></li>{%- endif -%}
+          {%- if settings.contact_email != blank -%}<li><a href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }}</a></li>{%- endif -%}
+          {%- if settings.whatsapp_number != blank -%}<li><a href="https://api.whatsapp.com/send/?phone={{ settings.whatsapp_number }}&type=phone_number&app_absent=0" rel="noopener">WhatsApp</a></li>{%- endif -%}
+        </ul>
+      </div>
+    </div>
+
+    <p class="footer-mega" data-scroll="in" aria-hidden="true">Arte del fuego</p>
+
+    <div class="footer-bottom">
+      <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}{{ 'footer.rights' | t }}</span>
+      {%- if settings.show_author_credit -%}      <span class="footer-credit">{{ 'footer.made_by' | t }} {%- if settings.author_url != blank %} <a href="{{ settings.author_url }}" target="_blank" rel="noopener">{{ settings.author_name | default: 'Alan Waizel' }}</a>{%- else %} {{ settings.author_name | default: 'Alan Waizel' }}{%- endif %} · <a href="{{ settings.agency_url | default: 'https://vellumandquill.com' }}" target="_blank" rel="noopener">{{ settings.agency_name | default: 'Vellum &amp; Quill' }}</a></span>{%- endif -%}
+      <span class="footer-legal"><a href="/pages/terminos">{{ 'footer.terms' | t }}</a> · <a href="/pages/privacidad">{{ 'footer.privacy' | t }}</a></span>
+      <span>{{ 'footer.digital_only' | t }}</span>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Pie de página",
+  "settings": [
+    { "type": "link_list", "id": "menu_explore", "label": "Menú: Explorar", "default": "footer" },
+    { "type": "link_list", "id": "menu_help", "label": "Menú: Ayuda" }
+  ]
+}
+{% endschema %}

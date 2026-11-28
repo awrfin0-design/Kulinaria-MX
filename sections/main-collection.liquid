@@ -1,0 +1,96 @@
+{%- liquid
+  assign layout = section.settings.layout
+  assign cats = 'al-fuego,desayunos,bowls,diario,keto-low-carb,fit-proteina,veggie,sin-gluten,ligero,junior,entradas,snacks-postres' | split: ','
+  assign diets = 'keto,sin-gluten,vegetariano,vegano,bajo-calorias,bajo-carbos,alto-proteina' | split: ','
+  assign tiers = 'selecto,exclusivo,signature,reserve' | split: ','
+-%}
+{%- paginate collection.products by 48 -%}
+<section class="section" {{ section.shopify_attributes }}>
+  <div class="container">
+    <div class="section__head">
+      {%- if layout == 'menu' -%}
+        <p style="margin-top:var(--space-lg)"><span class="countdown" data-cutoff>{{ 'cutoff.confirm_dishes' | t }} <strong data-cutoff-value>…</strong></span></p>
+        <p class="legal-note">{{ 'cutoff.auto_order' | t }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if collection.products.size == 0 -%}
+      <p class="alert">{{ 'collection.empty' | t }}</p>
+    {%- elsif layout == 'menu' -%}
+      <div class="menu-shell" data-filters data-dgate-scope>
+        {% render 'diet-gate' %}
+        {%- assign seasonal_coll = collections['temporada'] -%}
+        {%- if seasonal_coll.products.size > 0 -%}
+          <div class="season-toggle" role="group" aria-label="{{ 'season.aria' | t }}">
+            <button class="season-pill" type="button" data-filter="season" data-value="week" aria-pressed="true">{{ 'season.week' | t }}</button>
+            <button class="season-pill season-pill--s" type="button" data-filter="season" data-value="season" aria-pressed="false">&#10022; {{ 'season.season' | t }} <small>{{ 'season.limited' | t }}</small></button>
+          </div>
+          <p class="season-note" data-season-note hidden>{{ 'season.note' | t }}</p>
+        {%- endif -%}
+        <div class="filter-sticky">
+          <div class="chips" role="group" aria-label="{{ 'collection.category' | t }}" data-dropdown="single" data-dd-label="{{ 'collection.category' | t }}">
+            <button class="chip" type="button" data-filter="category" data-value="all" aria-pressed="true">{{ 'menu_group.all' | t }}</button>
+            {%- for c in cats -%}{%- assign ck = 'menu_group.' | append: c -%}
+              <button class="chip" type="button" data-filter="category" data-value="{{ c }}" aria-pressed="false">{{ ck | t }}</button>
+            {%- endfor -%}
+          </div>
+          <span class="filter-count"><strong data-count>{{ collection.products_count }}</strong> {{ 'collection.dishes' | t }}</span>
+        </div>
+
+        <div class="filter-secondary">
+          <div class="filter-bar__row">
+            <span class="filter-bar__label">{{ 'collection.level' | t }}</span>
+            <div class="chips" data-dropdown="single" data-dd-label="{{ 'collection.level' | t }}">
+              <button class="chip" type="button" data-filter="tier" data-value="all" aria-pressed="true">{{ 'collection.all_plural' | t }}</button>
+              {%- for tr in tiers -%}{%- assign tk = 'tier.' | append: tr -%}
+                <button class="chip" type="button" data-filter="tier" data-value="{{ tr }}" aria-pressed="false">{{ tk | t }}</button>
+              {%- endfor -%}
+            </div>
+          </div>
+          {%- unless customer -%}
+            <div><a class="btn btn--ghost" href="/pages/perfil">{{ 'collection.declare_allergies' | t }}</a></div>
+          {%- endunless -%}
+        </div>
+
+        <div class="dish-grid">
+          {%- for product in collection.products -%}{%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}{% render 'dish-card', product: product %}{%- endfor -%}
+          {%- for product in seasonal_coll.products -%}{% render 'dish-card', product: product, seasonal: true, show_all: true %}{%- endfor -%}
+        </div>
+        <p class="alert" data-empty hidden>{{ 'collection.no_match' | t }}</p>
+      </div>
+    {%- else -%}
+      <div class="dish-grid">
+        {%- for product in collection.products -%}
+          <article class="dish">
+            <a class="dish__media surface-slate" href="{{ product.url }}" aria-label="{{ tx_ptitle | escape }}">
+              {%- if product.featured_image -%}{{ product.featured_image | image_url: width: 640 | image_tag: loading: 'lazy', alt: tx_ptitle }}{%- else -%}<span class="dish__ph surface-walnut" aria-hidden="true">{% render 'logo', mark: true %}</span>{%- endif -%}
+              <span class="dish__pill" aria-hidden="true">{{ 'collection.view_product' | t }}</span>
+            </a>
+            <div class="dish__body">
+              <h3 class="dish__title"><a href="{{ product.url }}">{{ tx_ptitle }}</a></h3>
+              <div class="dish__meta"><span class="dish__price">{{ product.price | money_without_trailing_zeros }}</span><a class="dish__go" href="{{ product.url }}" aria-label="{{ 'collection.view' | t }} {{ product.title | escape }}">→</a></div>
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if paginate.pages > 1 -%}
+      <div class="btn-row" style="justify-content:center">
+        {%- if paginate.previous -%}<a class="btn btn--outline" href="{{ paginate.previous.url }}">{{ 'general.previous' | t }}</a>{%- endif -%}
+        {%- if paginate.next -%}<a class="btn btn--outline" href="{{ paginate.next.url }}">{{ 'general.next' | t }}</a>{%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Colección",
+  "settings": [
+    { "type": "select", "id": "layout", "label": "Diseño", "default": "menu", "options": [
+      { "value": "menu", "label": "Especiales de la semana (con filtros y alérgenos)" }, { "value": "store", "label": "Kulinaria Store" } ] }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,71 @@
+{%- comment -%} One request dialog for the whole site. Buttons written as href="dialog:<kind>~<what>" open it: consulta, plan, evento, entrenador, clase, cupon. {%- endcomment -%}
+<div class="hxd" data-hx-dialog hidden role="dialog" aria-modal="true" aria-labelledby="hxd-t" data-endpoint="{{ shop.metafields.kulinaria.sheet_url.value | escape }}" data-price="600" data-gated="{{ settings.gated_requests | default: 'clase,consulta,entrenador,cupon' | escape }}" data-busy="{{ settings.event_busy_dates | escape }}" data-lead="{{ settings.event_lead_days | default: 3 }}" data-wd="{{ 'hxd.cal_wd' | t }}" data-months="{{ 'hxd.cal_months' | t }}" data-t-date="{{ 'hxd.err_date' | t }}" data-t-chosen="{{ 'hxd.cal_chosen' | t }}" data-t-pick="{{ 'hxd.cal_pick' | t }}"
+  data-t-consulta="{{ 'hxd.t_consulta' | t }}" data-t-plan="{{ 'hxd.t_plan' | t }}" data-t-cupon="{{ 'hxd.t_cupon' | t }}" data-t-evento="{{ 'hxd.t_evento' | t }}" data-t-entrenador="{{ 'hxd.t_entrenador' | t }}" data-t-clase="{{ 'hxd.t_clase' | t }}" data-t-sede="{{ 'hxd.t_sede' | t }}" data-t-gimnasio="{{ 'hxd.t_gimnasio' | t }}" data-s-sede="{{ 'hxd.s_sede' | t }}" data-s-gimnasio="{{ 'hxd.s_gimnasio' | t }}"
+  data-s-consulta="{{ 'hxd.s_consulta' | t }}" data-s-evento="{{ 'hxd.s_evento' | t }}" data-s-entrenador="{{ 'hxd.s_entrenador' | t }}" data-s-clase="{{ 'hxd.s_clase' | t }}" data-s-plan="{{ 'hxd.s' | t }}" data-s-cupon="{{ 'hxd.s' | t }}"
+  data-t-cupsend="{{ 'hxd.cp_send' | t }}" data-t-err="{{ 'hxd.err' | t }}" data-t-last="{{ 'hxd.err_last' | t }}" data-t-bk-pend="{{ 'circle.booked' | t }}" data-t-bk-wait="{{ 'circle.booked_wait' | t }}" data-t-bk-conf="{{ 'circle.booked_conf' | t }}" data-t-sent="{{ 'circle.sent' | t }}" data-login="{% render 'login-url', back: request.path %}">
+  <div class="hxd__bg" data-hxd-close></div>
+  <div class="hxd__box">
+    <button class="hxd__x" type="button" data-hxd-close aria-label="{{ 'hxd.close' | t }}">&times;</button>
+    <form class="hxd__form" data-hxd-form novalidate>
+      <h3 id="hxd-t" data-hxd-title></h3>
+      <p class="hxd__chip" data-hxd-chip></p>
+      <p class="hxd__s" data-hxd-sub></p>
+      <div class="hxd__g" data-for="consulta">
+        <label>{{ 'hxd.goal' | t }}<select name="objetivo"><option value="{{ 'hxd.g1' | t }}">{{ 'hxd.g1' | t }}</option><option value="{{ 'hxd.g2' | t }}">{{ 'hxd.g2' | t }}</option><option value="{{ 'hxd.g3' | t }}">{{ 'hxd.g3' | t }}</option><option value="{{ 'hxd.g4' | t }}">{{ 'hxd.g4' | t }}</option><option value="{{ 'hxd.g5' | t }}">{{ 'hxd.g5' | t }}</option></select></label>
+        <div class="hxd__row"><label>{{ 'hxd.mode' | t }}<select name="modalidad"><option value="{{ 'hxd.mode1' | t }}">{{ 'hxd.mode1' | t }}</option><option value="{{ 'hxd.mode2' | t }}">{{ 'hxd.mode2' | t }}</option></select></label><label>{{ 'hxd.day' | t }}<select name="dia"><option value="{{ 'hxd.d1' | t }}">{{ 'hxd.d1' | t }}</option><option value="{{ 'hxd.d2' | t }}">{{ 'hxd.d2' | t }}</option><option value="{{ 'hxd.d3' | t }}">{{ 'hxd.d3' | t }}</option><option value="{{ 'hxd.d4' | t }}">{{ 'hxd.d4' | t }}</option><option value="{{ 'hxd.d5' | t }}">{{ 'hxd.d5' | t }}</option><option value="{{ 'hxd.d6' | t }}">{{ 'hxd.d6' | t }}</option></select></label></div>
+        <label>{{ 'hxd.time' | t }}<select name="horario"><option value="{{ 'hxd.tm1' | t }}">{{ 'hxd.tm1' | t }}</option><option value="{{ 'hxd.tm2' | t }}">{{ 'hxd.tm2' | t }}</option><option value="{{ 'hxd.tm3' | t }}">{{ 'hxd.tm3' | t }}</option></select></label>
+      </div>
+      <div class="hxd__g" data-for="plan"><label>{{ 'hxd.start' | t }}<input type="date" name="fecha_inicio" data-min-today></label><label>{{ 'hxd.gift' | t }}<select name="regalo"><option value="{{ 'hxd.g_kfw' | t }}">{{ 'hxd.g_kfw' | t }}</option><option value="{{ 'hxd.g_barber' | t }}">{{ 'hxd.g_barber' | t }}</option><option value="{{ 'hxd.g_none' | t }}">{{ 'hxd.g_none' | t }}</option></select></label></div>
+      <div class="hxd__g" data-for="evento">
+        <label>{{ 'hxd.ev_type' | t }}<select name="tipo_evento"><option value="{{ 'hxd.ev1' | t }}">{{ 'hxd.ev1' | t }}</option><option value="{{ 'hxd.ev2' | t }}">{{ 'hxd.ev2' | t }}</option><option value="{{ 'hxd.ev3' | t }}">{{ 'hxd.ev3' | t }}</option><option value="{{ 'hxd.ev4' | t }}">{{ 'hxd.ev4' | t }}</option><option value="{{ 'hxd.ev6' | t }}">{{ 'hxd.ev6' | t }}</option><option value="{{ 'hxd.ev5' | t }}">{{ 'hxd.ev5' | t }}</option></select></label>
+        <div class="hxd__cal" data-hxd-cal>
+          <div class="hxd__calhead"><span>{{ 'hxd.ev_date' | t }}</span><div><button type="button" data-hxd-calnav="-1" aria-label="{{ 'hxd.cal_prev' | t }}">&lsaquo;</button><b data-hxd-callbl></b><button type="button" data-hxd-calnav="1" aria-label="{{ 'hxd.cal_next' | t }}">&rsaquo;</button></div></div>
+          <div class="hxd__calgrid" data-hxd-calgrid role="grid"></div>
+          <p class="hxd__calkey"><i class="is-free"></i>{{ 'hxd.cal_free' | t }} <i class="is-busy"></i>{{ 'hxd.cal_busy' | t }}</p>
+          <p class="hxd__calpick" data-hxd-calpick>{{ 'hxd.cal_pick' | t }}</p>
+          <input type="hidden" name="fecha">
+        </div>
+        <div class="hxd__row"><label>{{ 'hxd.ev_guests' | t }}<input type="number" name="invitados" min="2" max="500" value="8"></label><label>{{ 'hxd.ev_courses' | t }}<select name="tiempos"><option value="{{ 'hxd.c3' | t }}">{{ 'hxd.c3' | t }}</option><option value="{{ 'hxd.c4' | t }}">{{ 'hxd.c4' | t }}</option><option value="{{ 'hxd.c5' | t }}">{{ 'hxd.c5' | t }}</option></select></label></div>
+        <label>{{ 'hxd.ev_budget' | t }}<select name="presupuesto"><option value="{{ 'hxd.b1' | t }}">{{ 'hxd.b1' | t }}</option><option value="{{ 'hxd.b2' | t }}">{{ 'hxd.b2' | t }}</option><option value="{{ 'hxd.b3' | t }}">{{ 'hxd.b3' | t }}</option><option value="{{ 'hxd.b4' | t }}">{{ 'hxd.b4' | t }}</option></select></label>
+        <label>{{ 'hxd.ev_city' | t }}<input type="text" name="lugar" maxlength="120"></label>
+        <label>{{ 'hxd.ev_allergy' | t }}<input type="text" name="alergias" maxlength="160"></label>
+      </div>
+      <div class="hxd__g" data-for="entrenador">
+        <label>{{ 'hxd.tr_trainer' | t }}<select name="entrenador"><option value="">{{ 'hxd.tr_any' | t }}</option><option value="Carla">Carla</option><option value="Ramón">Ramón</option><option value="Elena">Elena</option><option value="Fernando">Fernando</option><option value="Jaime">Jaime</option></select></label>
+        <div class="hxd__row"><label>{{ 'hxd.tr_goal' | t }}<select name="meta"><option value="{{ 'hxd.tg1' | t }}">{{ 'hxd.tg1' | t }}</option><option value="{{ 'hxd.tg2' | t }}">{{ 'hxd.tg2' | t }}</option><option value="{{ 'hxd.tg3' | t }}">{{ 'hxd.tg3' | t }}</option><option value="{{ 'hxd.tg4' | t }}">{{ 'hxd.tg4' | t }}</option></select></label><label>{{ 'hxd.mode' | t }}<select name="modalidad_ent"><option value="{{ 'hxd.mode1' | t }}">{{ 'hxd.mode1' | t }}</option><option value="{{ 'hxd.mode2' | t }}">{{ 'hxd.mode2' | t }}</option></select></label></div>
+        <div class="hxd__row"><label>{{ 'hxd.tr_days' | t }}<select name="dias_semana"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label><label>{{ 'hxd.tr_zone' | t }}<input type="text" name="zona" maxlength="80"></label></div>
+      </div>
+      <div class="hxd__lock hxd__lock--gate" data-hxd-gate hidden><p>{{ 'hxd.gate_t' | t }}</p><a class="btn btn--gold" href="/pages/pedido?plan=block">{{ 'hxd.cp_cta' | t }}</a></div>
+      <div class="hxd__g" data-for="sede">
+        <label>{{ 'hxd.sd_gym' | t }}<input type="text" name="sede" maxlength="80"></label>
+        <label>{{ 'hxd.sd_zone' | t }}<input type="text" name="zona_sede" maxlength="80"></label>
+      </div>
+      <div class="hxd__g" data-for="gimnasio">
+        <label>{{ 'hxd.gy_name' | t }}<input type="text" name="gimnasio" maxlength="100"></label>
+        <div class="hxd__row"><label>{{ 'hxd.gy_role' | t }}<select name="cargo"><option value="{{ 'hxd.gy_r1' | t }}">{{ 'hxd.gy_r1' | t }}</option><option value="{{ 'hxd.gy_r2' | t }}">{{ 'hxd.gy_r2' | t }}</option><option value="{{ 'hxd.gy_r3' | t }}">{{ 'hxd.gy_r3' | t }}</option></select></label><label>{{ 'hxd.gy_sites' | t }}<input type="number" name="sedes" min="1" max="200" value="1"></label></div>
+        <div class="hxd__row"><label>{{ 'hxd.gy_date' | t }}<input type="date" name="fecha_reunion" data-min-today></label><label>{{ 'hxd.time' | t }}<select name="horario_reunion"><option value="{{ 'hxd.tm1' | t }}">{{ 'hxd.tm1' | t }}</option><option value="{{ 'hxd.tm2' | t }}">{{ 'hxd.tm2' | t }}</option></select></label></div>
+        <label>{{ 'hxd.gy_city' | t }}<input type="text" name="ciudad" maxlength="80"></label>
+      </div>
+      <div class="hxd__g" data-for="clase">
+        <label>{{ 'hxd.last' | t }}<input type="text" name="apellido" maxlength="60" autocomplete="family-name"></label>
+        <label>{{ 'hxd.cl_seats' | t }}<select name="lugares"><option>1</option><option>2</option><option>3</option><option>4</option></select></label>
+      </div>
+      <div class="hxd__g hxd__coupon" data-for="cupon">
+        <div class="hxd__code" data-hxd-coupon hidden><span>{{ 'hxd.cp_code' | t }}</span><b data-hxd-code></b><small>{{ 'hxd.cp_how' | t }}</small></div>
+        <div class="hxd__lock" data-hxd-couponlock hidden><p>{{ 'hxd.cp_lock' | t }}</p><a class="btn btn--gold" href="/pages/pedido?plan=block">{{ 'hxd.cp_cta' | t }}</a></div>
+      </div>
+      <div class="hxd__row" data-hxd-common><label>{{ 'hxd.name' | t }}<input type="text" name="name" autocomplete="name" required value="{{ customer.name | escape }}"></label><label>{{ 'hxd.email' | t }}<input type="email" name="email" autocomplete="email" required value="{{ customer.email | escape }}"></label></div>
+      <label data-hxd-common>{{ 'hxd.phone' | t }}<input type="tel" name="phone" autocomplete="tel" placeholder="{{ 'hxd.phone_ph' | t }}"></label>
+      <label data-hxd-common>{{ 'hxd.notes' | t }}<textarea name="notas" rows="2" maxlength="500"></textarea></label>
+      <label class="check hxd__consent" data-hxd-common><input type="checkbox" name="consent" required> <span>{{ 'hxd.consent' | t }}</span></label>
+      <p class="hxd__err" data-hxd-err role="alert" hidden></p>
+      <button class="btn btn--gold hxd__go" type="submit" data-hxd-go>{{ 'hxd.send' | t }}</button>
+    </form>
+    <div class="hxd__ok" data-hxd-ok hidden>
+      <b aria-hidden="true">&#10003;</b>
+      <h3>{{ 'hxd.ok_t' | t }}</h3>
+      <p>{{ 'hxd.ok_p' | t }}</p>
+      <button class="btn btn--outline" type="button" data-hxd-close>{{ 'hxd.close' | t }}</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,130 @@
+<section class="section" {{ section.shopify_attributes }}>
+  <div class="container">
+    {%- if cart.item_count == 0 -%}
+      <div class="panel" style="text-align:center">
+        <p class="lede" style="margin-inline:auto">{{ 'cart.empty' | t }}</p>
+        <div class="btn-row" style="justify-content:center">
+          <a class="btn btn--gold" href="/collections/menu-semanal">{{ 'general.view_week_menu' | t }}</a>
+          <a class="btn btn--outline" href="{{ settings.plans_url | default: '/pages/planes' }}">{{ 'nav.cta' | t }}</a>
+        </div>
+      </div>
+    {%- else -%}
+      <form action="{{ routes.cart_url }}" method="post" class="cart" data-cart-form>
+        {%- comment -%} The details were captured once (order builder); pre-fill Shopify's checkout so nobody types them again. {%- endcomment -%}
+        {%- assign a = cart.attributes -%}
+        {%- if a.correo != blank and customer == nil -%}<input type="hidden" name="checkout[email]" value="{{ a.correo | escape }}">{%- endif -%}
+        {%- if a.nombre != blank -%}{%- assign nm_first = a.nombre | split: ' ' | first -%}
+          <input type="hidden" name="checkout[shipping_address][first_name]" value="{{ nm_first | escape }}">
+          <input type="hidden" name="checkout[shipping_address][last_name]" value="{{ a.nombre | remove_first: nm_first | strip | escape }}">{%- endif -%}
+        {%- if a.calle != blank -%}<input type="hidden" name="checkout[shipping_address][address1]" value="{{ a.calle | escape }}">{%- endif -%}
+        {%- if a.cluster != blank -%}<input type="hidden" name="checkout[shipping_address][address2]" value="{{ a.cluster | escape }}">{%- endif -%}
+        {%- if a.cp != blank -%}<input type="hidden" name="checkout[shipping_address][zip]" value="{{ a.cp | escape }}">{%- endif -%}
+        {%- if a.telefono != blank -%}<input type="hidden" name="checkout[shipping_address][phone]" value="{{ a.telefono | escape }}">{%- endif -%}
+        <div>
+          {%- for item in cart.items -%}{%- capture tx_ititle -%}{% render 'tx', s: item.product.title %}{%- endcapture -%}{%- capture tx_ivar -%}{% render 'tx', s: item.variant.title %}{%- endcapture -%}{%- capture tx_iplan -%}{% render 'tx', s: item.selling_plan_allocation.selling_plan.name %}{%- endcapture -%}
+            <div class="cart-line">
+              <a href="{{ item.url }}">
+                {%- if item.image -%}{{ item.image | image_url: width: 192 | image_tag: loading: 'lazy', alt: tx_ititle }}{%- else -%}<span class="dish__ph surface-slate" style="width:96px;font-size:2rem">{% render 'logo', mark: true %}</span>{%- endif -%}
+              </a>
+              <div>
+                <h3 style="margin:0 0 4px"><a href="{{ item.url }}">{{ tx_ititle }}</a></h3>
+                {%- unless item.product.has_only_default_variant -%}<p class="text-muted" style="margin:0">{{ tx_ivar }}</p>{%- endunless -%}
+                {%- if item.selling_plan_allocation -%}<p class="cart-line__plan" style="margin:0">{{ tx_iplan }}</p>{%- endif -%}
+                {%- for prop in item.properties -%}{%- assign pk = prop | first -%}{%- assign pv = prop | last -%}{%- capture tx_pkey -%}{% render 'tx', s: pk %}{%- endcapture -%}{%- capture tx_pval -%}{% render 'tx', s: pv %}{%- endcapture -%}
+                  {%- unless pk contains '_' -%}<p class="cart-line__prop text-muted" style="margin:2px 0 0;font-size:.9rem"><strong>{{ tx_pkey }}:</strong> {{ tx_pval }}</p>{%- endunless -%}
+                {%- endfor -%}
+                {%- if item.properties._regalo_bienvenida -%}<p class="cart-line__plan" style="margin:0">{{ 'cart.welcome_gift_line' | t }}</p>{%- endif -%}
+                <a class="btn btn--ghost" style="padding-left:0" href="{{ item.url_to_remove }}">{{ 'cart.remove' | t }}</a>
+              </div>
+              <div style="text-align:right">
+                <input class="input qty" type="number" name="updates[]" value="{{ item.quantity }}" min="0" max="{% if item.product.type == 'plan' %}1{% else %}99{% endif %}"{% if item.product.type == 'mejora' %} readonly tabindex="-1"{% endif %} aria-label="{{ 'cart.quantity_of' | t }} {{ item.product.title | escape }}">
+                <p class="dish__price" style="margin:8px 0 0">
+                  {%- if item.original_line_price != item.final_line_price -%}<s class="text-muted" style="font-size:.9rem">{{ item.original_line_price | money }}</s> {%- endif -%}
+                  {{ item.final_line_price | money }}
+                </p>
+              </div>
+            </div>
+          {%- endfor -%}
+          <button class="btn btn--outline" type="submit" name="update" style="margin-top:var(--space-lg)">{{ 'cart.update' | t }}</button>
+          <button class="btn btn--ghost" type="button" data-cart-clear data-confirm="{{ 'cart.clear_confirm' | t }}" style="margin-top:var(--space-lg)">{{ 'cart.clear' | t }}</button>
+        </div>
+
+        <aside class="summary">
+          <div class="panel">
+            <h3>{{ 'cart.referral_title' | t }}</h3>
+            <p class="text-muted">{{ 'cart.referral_text' | t }}</p>
+            <div class="field">
+              <label for="ref">{{ 'cart.code' | t }}</label>
+              <input class="input" id="ref" name="attributes[codigo_referencia]" value="{{ cart.attributes.codigo_referencia }}" placeholder="JUANFIT" data-referral autocomplete="off" style="text-transform:uppercase">
+            </div>
+
+            <div class="field">
+              <label for="disc">{{ 'cart.discount_label' | t }}</label>
+              <input class="input" id="disc" name="discount" value="{{ cart.discount_applications.first.title }}" placeholder="BIENVENIDO10" data-discount autocomplete="off" style="text-transform:uppercase">
+              <p class="text-muted" style="font-size:.85rem;margin:4px 0 0">{{ 'cart.discount_hint' | t }}</p>
+            </div>
+
+            <div data-gift hidden style="margin-top:var(--space-lg)">
+              <h3>{{ 'cart.gift_title' | t }}</h3>
+              <p class="text-muted">{{ 'cart.gift_text' | t }}</p>
+              {%- assign gift_col = settings.welcome_gift_collection -%}
+              <div class="gift-options">
+                {%- if gift_col != blank -%}
+                  {%- assign gift_n = 0 -%}
+                  {%- for product in gift_col.products -%}{%- capture tx_gtitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}
+                    {%- for variant in product.variants -%}
+                      {%- assign gift_n = gift_n | plus: 1 -%}
+                      <label><input type="radio" name="gift" value="{{ variant.id }}" {% if gift_n == 1 %}checked{% endif %}>
+                        <span>{{ tx_gtitle }}{% unless product.has_only_default_variant %} · {{ variant.title }}{% endunless %} <s class="text-muted">{{ variant.price | money_without_trailing_zeros }}</s> <strong style="color:var(--accent)">$0</strong></span></label>
+                    {%- endfor -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  <p class="alert">{{ 'cart.gift_missing' | t }}</p>
+                {%- endif -%}
+              </div>
+              {%- if gift_col != blank -%}<button class="btn btn--outline btn--block" type="button" data-gift-add style="margin-top:var(--space-md)">{{ 'cart.gift_add' | t }}</button>{%- endif -%}
+            </div>
+            <p class="alert alert--ok" data-referral-msg hidden style="margin-top:var(--space-md)">{{ 'cart.referral_saved' | t }}</p>
+          </div>
+
+          <div class="panel panel--gold">
+            {%- if cart.total_discount > 0 -%}
+              <p class="alert alert--ok">{{ 'cart.saved_pre' | t }} {{ cart.total_discount | money }}{% if cart.attributes.codigo_referencia != blank %} {{ 'cart.saved_post' | t }}{% endif %}!</p>
+            {%- endif -%}
+            <div class="summary__row"><span class="text-muted">{{ 'cart.subtotal' | t }}</span><span>{{ cart.items_subtotal_price | money }}</span></div>
+            <div class="summary__row" style="margin-top:var(--space-md)"><strong>{{ 'cart.total' | t }}</strong><span class="summary__total gold-text">{{ cart.total_price | money }}</span></div>
+            <p class="text-muted" style="font-size:.85rem">{{ 'cart.digital_only' | t }}</p>
+
+            {%- assign has_sp = false -%}{%- for item in cart.items -%}{%- if item.selling_plan_allocation -%}{%- assign has_sp = true -%}{%- endif -%}{%- endfor -%}
+            <div class="cart-rec"><strong>{{ 'cart.rec_title' | t }}</strong><p>{% if has_sp %}{{ 'cart.rec_auto' | t }}{% else %}{{ 'cart.rec_manual' | t }}{% endif %} {{ 'cart.rec_extra' | t }}</p></div>
+            <label class="check" style="margin:var(--space-lg) 0">
+              <input type="checkbox" name="attributes[contrato_aceptado]" value="sí" data-contract {% if cart.attributes.contrato_aceptado == 'sí' %}checked{% endif %}>
+              <span>
+                {{ 'cart.contract_label' | t }}
+                {%- if settings.contract_page != blank %} <a href="{{ settings.contract_page.url }}" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline">{{ 'cart.read_contract' | t }}</a>{% endif -%}
+              </span>
+            </label>
+
+            <label class="cart-kitchen"><strong>{{ 'cart.kitchen_t' | t }}</strong><span class="text-muted">{{ 'cart.kitchen_h' | t }}</span><textarea name="note" class="input" rows="3" maxlength="400" data-cart-note placeholder="{{ 'cart.kitchen_ph' | t }}">{{ cart.note | escape }}</textarea></label>
+
+            {%- if customer -%}
+              <div class="alert alert--warn" data-cart-profile hidden><p style="margin:0 0 8px">{{ 'cart.profile_needed' | t }}</p><a class="btn btn--gold btn--sm" href="/pages/bienvenida">{{ 'cart.profile_cta' | t }}</a></div>
+              {% render 'service-badge' %}
+              <button class="btn btn--gold btn--block" type="submit" name="checkout" data-checkout disabled>{{ 'cart.checkout' | t }}</button>
+            {%- else -%}
+              <p class="alert alert--warn">{{ 'cart.login_needed' | t }}</p>
+              <a class="btn btn--gold btn--block" href="{% render 'login-url', back: routes.cart_url %}">{{ 'cart.login_cta' | t }}</a>
+            {%- endif -%}
+          </div>
+        </aside>
+      </form>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Carrito",
+  "settings": []
+}
+{% endschema %}

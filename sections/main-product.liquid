@@ -1,0 +1,119 @@
+{%- capture tx_protein -%}{% render 'tx', s: settings.protein_note %}{%- endcapture -%}
+{%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}{%- capture tx_pdesc -%}{% render 'tx', s: product.description %}{%- endcapture -%}
+{%- liquid
+  assign mf = product.metafields.kulinaria
+  assign tier = mf.tier.value | default: 'selecto'
+  assign allergens = mf.allergens.value | join: '|'
+  assign ingredients = mf.ingredients.value | join: '|'
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+<section class="section" {{ section.shopify_attributes }}>
+  <div class="container product" data-dish-detail data-allergens="{{ allergens | escape }}" data-ingredients="{{ ingredients | escape }}">
+
+    {%- comment -%} One single top-down plated photo per dish. {%- endcomment -%}
+    <div class="product__media surface-walnut">
+      {%- if product.featured_image -%}
+        {{ product.featured_image | image_url: width: 1100 | image_tag: loading: 'eager', alt: tx_ptitle }}
+      {%- else -%}
+        <span class="dish__ph surface-slate" aria-hidden="true">{% render 'dish-placeholder', category: product.metafields.kulinaria.category.value %}</span>
+      {%- endif -%}
+    </div>
+
+    <div class="product__info">
+      <div>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:var(--space-md)">
+          {% render 'tier-badge', tier: tier %}
+          {%- if mf.category.value != blank -%}<span class="eyebrow" style="margin:0">{%- assign cat_key = 'category.' | append: mf.category.value -%}{{ cat_key | t }}</span>{%- endif -%}
+        </div>
+        <h1 style="font-size:clamp(2rem,3.4vw,3rem)">{{ tx_ptitle }}</h1>
+        <div class="price-row"><p class="tagline" style="font-size:2rem;margin:0" data-price>{%- if mf.category.value != blank -%}{% render 'plan-price', tier: mf.tier.value, kind: 'meal', money: true %}<small style="font-size:1rem"> {{ 'funnel.per_meal' | t }}</small>{%- else -%}{{ current_variant.price | money_without_trailing_zeros }}{%- endif -%}</p>{%- if mf.tier.value != blank -%}<button class="info-dot" type="button" data-sheet="pricing" aria-label="{{ 'sheet.info' | t }}"><i aria-hidden="true">i</i></button>{%- endif -%}</div>
+      </div>
+
+      <div class="alert" data-allergen-alert hidden role="alert"></div>
+
+      {%- if product.description != blank -%}<div class="richtext lede" >{{ tx_pdesc }}</div>{%- endif -%}
+
+      {%- if mf.calories.value or mf.carbs.value -%}
+        <div class="spec-list">
+          {%- if mf.calories.value -%}<div class="spec"><b>{{ mf.calories.value }}</b><span>{{ 'product.calories' | t }}</span></div>{%- endif -%}
+          {%- if mf.carbs.value -%}<div class="spec"><b>{{ mf.carbs.value }} g</b><span>{{ 'product.carbs' | t }}</span></div>{%- endif -%}
+        </div>
+        <p class="legal-note">{{ tx_protein }}</p>
+      {%- endif -%}
+
+      {%- if mf.ingredients.value.size > 0 -%}
+        <div>
+          <h3>{{ 'product.ingredients' | t }}</h3>
+          <p class="text-muted">{{ 'product.ingredients_note' | t }}</p>
+          <div class="chips">{%- for i in mf.ingredients.value -%}<span class="chip" style="cursor:default">{% render 'term', prefix: 'ingredient', value: i %}</span>{%- endfor -%}</div>
+        </div>
+      {%- endif -%}
+
+      {%- if mf.allergens.value.size > 0 -%}
+        <div>
+          <h3>{{ 'product.contains' | t }}</h3>
+          <div class="chips">{%- for a in mf.allergens.value -%}<span class="tier-badge tier-badge--exclusivo">{% render 'term', prefix: 'allergen', value: a %}</span>{%- endfor -%}</div>
+        </div>
+      {%- endif -%}
+
+      {%- if mf.tier.value != blank -%}
+        {%- capture mw_state -%}{% render 'menu-week', product: product %}{%- endcapture -%}
+        {%- if mw_state == 'off' and mf.category.value != blank -%}<p class="alert alert--warn" role="note">{{ 'calendar.off_menu' | t }}</p>{%- endif -%}
+        <div class="meal-card">
+          <p class="meal-card__price">{% render 'plan-price', tier: mf.tier.value, kind: 'meal', money: true %}<small> {{ 'funnel.per_meal' | t }}</small></p>
+          <p class="text-muted">{{ 'product.in_plan_text' | t }}</p>
+          <a class="btn btn--gold btn--block" data-add href="/pages/pedido?dish={{ product.handle }}">{{ 'product.build_plan' | t }}</a>
+          <p class="meal-card__weeks"><a class="text-link" href="/pages/planes">{{ 'product.see_plans' | t }}</a></p>
+        </div>
+      {%- else -%}
+      {%- capture mw_state -%}{% render 'menu-week', product: product %}{%- endcapture -%}
+      {%- if mw_state == 'off' -%}<p class="alert alert--warn" role="note">{{ 'calendar.off_menu' | t }}</p>{%- endif -%}
+      {%- form 'product', product, id: 'product-form', class: 'product-form' -%}
+        {%- if product.variants.size > 1 -%}
+          <div class="field"><label for="variant">{{ 'product.option' | t }}</label>
+            <select class="select" id="variant" name="id">
+              {%- for v in product.variants -%}<option value="{{ v.id }}" {% if v == current_variant %}selected{% endif %} {% unless v.available %}disabled{% endunless %}>{{ v.title }} · {{ v.price | money_without_trailing_zeros }}</option>{%- endfor -%}
+            </select></div>
+        {%- else -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+        {%- endif -%}
+
+        {% render 'selling-plan-picker', product: product %}
+
+        <div class="btn-row" style="align-items:center">
+          <input class="input qty" type="number" name="quantity" value="1" min="1" aria-label="{{ 'order.quantity' | t }}">
+          <button class="btn btn--gold" type="submit" data-add {% unless current_variant.available and mw_state == 'on' %}disabled{% endunless %}>
+            {%- if current_variant.available -%}{{ 'products.add_to_selection' | t }}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
+          </button>
+        </div>
+      {%- endform -%}
+      {%- endif -%}
+
+      <p class="text-muted" style="font-size:.85rem">{{ 'cutoff.confirm_selection' | t }} <strong data-cutoff style="color:var(--accent)"><span data-cutoff-value>…</span></strong></p>
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  {%- if product.featured_image %}"image": {{ product.featured_image | image_url: width: 1100 | prepend: 'https:' | json }},{% endif %}
+  "description": {{ product.description | strip_html | json }},
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "price": {{ current_variant.price | divided_by: 100.0 | json }},
+    "availability": "{% if current_variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+    "url": {{ canonical_url | json }}
+  }
+}
+</script>
+
+{% schema %}
+{
+  "name": "Ficha de platillo",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,223 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "parent_label": "Embajadores",
+        "parent_link": "/pages/embajadores",
+        "eyebrow": "Comunidad",
+        "heading": "El círculo *privado*",
+        "text": "Clases con nuestras embajadoras.",
+        "button_label": "Empezar mi bloque",
+        "button_link": "/pages/pedido",
+        "art": "hs-emb"
+      }
+    },
+    "classes": {
+      "type": "circle-classes",
+      "settings": {
+        "eyebrow": "Comunidad",
+        "heading": "El círculo privado.",
+        "text": "Clases y experiencias deportivas con nuestras embajadoras, solo para clientes del bloque de 4 semanas.",
+        "price": 600
+      },
+      "blocks": {
+        "c0": {
+          "type": "class",
+          "settings": {
+            "desc": "Partidos y ejercicios guiados de pádel en pareja: saque, bandeja y juego en pared. Para todos los niveles; la clase se adapta al grupo.",
+            "sport": "padel",
+            "title": "Torneo Relámpago de Pádel",
+            "host": "Ren Jiménez",
+            "date": "Sáb 29 Nov",
+            "time": "09:00 AM",
+            "venue": "Club Pádel Lomas",
+            "spots": "3",
+            "art": "hs-padel"
+          }
+        },
+        "c1": {
+          "type": "class",
+          "settings": {
+            "desc": "Clínica de tenis con técnica de derecha y revés, saque y juego de puntos. Traemos las pelotas; tú trae tu raqueta y ganas.",
+            "sport": "tenis",
+            "title": "Clínica de Tenis de Alto Impacto",
+            "host": "Anny De Vasquez",
+            "date": "Dom 30 Nov",
+            "time": "10:30 AM",
+            "venue": "Raqueta Club",
+            "spots": "",
+            "art": "hs-tenis"
+          }
+        },
+        "c2": {
+          "type": "class",
+          "settings": {
+            "desc": "Rodada guiada en grupo con ritmo cómodo y regreso acompañado. Trae tu bici, casco e hidratación.",
+            "sport": "ciclismo",
+            "title": "Rodada Nocturna de Ritmo",
+            "host": "BeccaQueen",
+            "date": "Mié 03 Dic",
+            "time": "08:00 PM",
+            "venue": "Andares",
+            "spots": "",
+            "art": "hs-rodada"
+          }
+        },
+        "c3": {
+          "type": "class",
+          "settings": {
+            "desc": "Sesión de basketball con calentamiento, fundamentos y partido corto. Ideal para convivir y moverte.",
+            "sport": "basketball",
+            "title": "Reta Privada de Basketball",
+            "host": "Anny De Vasquez",
+            "date": "Jue 04 Dic",
+            "time": "07:30 PM",
+            "venue": "Arena Norte",
+            "spots": "5",
+            "art": ""
+          }
+        },
+        "c4": {
+          "type": "class",
+          "settings": {
+            "desc": "Carrera grupal con calentamiento, ritmos por nivel y enfriamiento. Todos terminan juntos.",
+            "sport": "running",
+            "title": "Trail Matutino de Running",
+            "host": "BeccaQueen",
+            "date": "Lun 08 Dic",
+            "time": "07:00 AM",
+            "venue": "Parque Central",
+            "spots": "4",
+            "art": ""
+          }
+        },
+        "c5": {
+          "type": "class",
+          "settings": {
+            "desc": "Entrenamiento funcional en grupo: fuerza, movilidad y acondicionamiento con progresiones para cada nivel.",
+            "sport": "funcional",
+            "title": "Circuito Funcional Total Body",
+            "host": "Ren Jiménez",
+            "date": "Mar 09 Dic",
+            "time": "06:00 PM",
+            "venue": "Fitness Studio Zona 10",
+            "spots": "",
+            "art": "hs-circuito"
+          }
+        },
+        "c6": {
+          "type": "class",
+          "settings": {
+            "desc": "Partidos y ejercicios guiados de pádel en pareja: saque, bandeja y juego en pared. Para todos los niveles; la clase se adapta al grupo.",
+            "sport": "padel",
+            "title": "Torneo de Pádel para Principiantes",
+            "host": "Ren Jiménez",
+            "date": "Sáb 13 Dic",
+            "time": "09:00 AM",
+            "venue": "Club Pádel Lomas",
+            "spots": "",
+            "art": "hs-padel"
+          }
+        },
+        "c7": {
+          "type": "class",
+          "settings": {
+            "desc": "Clínica de tenis con técnica de derecha y revés, saque y juego de puntos. Traemos las pelotas; tú trae tu raqueta y ganas.",
+            "sport": "tenis",
+            "title": "Clínica de Tenis Signature",
+            "host": "Anny De Vasquez",
+            "date": "Dom 14 Dic",
+            "time": "10:30 AM",
+            "venue": "Raqueta Club",
+            "spots": "",
+            "art": "hs-tenis"
+          }
+        },
+        "c8": {
+          "type": "class",
+          "settings": {
+            "desc": "Rodada guiada en grupo con ritmo cómodo y regreso acompañado. Trae tu bici, casco e hidratación.",
+            "sport": "ciclismo",
+            "title": "Sesión de Ciclismo de Ritmo de Élite",
+            "host": "BeccaQueen",
+            "date": "Mié 17 Dic",
+            "time": "08:00 PM",
+            "venue": "Circuito Andares",
+            "spots": "",
+            "art": "hs-rodada"
+          }
+        },
+        "c9": {
+          "type": "class",
+          "settings": {
+            "desc": "Entrenamiento funcional en grupo: fuerza, movilidad y acondicionamiento con progresiones para cada nivel.",
+            "sport": "funcional",
+            "title": "Funcional Reserve Trail",
+            "host": "Ren Jiménez",
+            "date": "Jue 18 Dic",
+            "time": "07:00 AM",
+            "venue": "Parque Central",
+            "spots": "",
+            "art": "hs-circuito"
+          }
+        },
+        "c10": {
+          "type": "class",
+          "settings": {
+            "desc": "Sesión de basketball con calentamiento, fundamentos y partido corto. Ideal para convivir y moverte.",
+            "sport": "basketball",
+            "title": "Basketball Reserve Reta",
+            "host": "Anny De Vasquez",
+            "date": "Mar 23 Dic",
+            "time": "07:30 PM",
+            "venue": "Arena Norte",
+            "spots": "",
+            "art": ""
+          }
+        },
+        "c11": {
+          "type": "class",
+          "settings": {
+            "desc": "Partidos y ejercicios guiados de pádel en pareja: saque, bandeja y juego en pared. Para todos los niveles; la clase se adapta al grupo.",
+            "sport": "padel",
+            "title": "Torneo de Pádel Signature",
+            "host": "Ren Jiménez",
+            "date": "Sáb 27 Dic",
+            "time": "09:00 AM",
+            "venue": "Club Pádel Lomas",
+            "spots": "",
+            "art": "hs-padel"
+          }
+        }
+      },
+      "block_order": [
+        "c0",
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5",
+        "c6",
+        "c7",
+        "c8",
+        "c9",
+        "c10",
+        "c11"
+      ]
+    }
+  },
+  "order": [
+    "head",
+    "classes"
+  ]
+}

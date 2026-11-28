@@ -1,0 +1,25 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "art": "air-breakfast",
+        "heading": "Aviso de *privacidad*",
+        "text": "",
+        "parent_label": "Ayuda y legales",
+        "parent_link": "/pages/ayuda",
+        "eyebrow": "Legal"
+      }
+    },
+    "main": {
+      "type": "legal-doc",
+      "settings": {
+        "doc": "privacy"
+      }
+    }
+  },
+  "order": [
+    "head",
+    "main"
+  ]
+}

@@ -1,0 +1,23 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "admin-hub",
+      "settings": {
+        "admin_emails": "awrfin0@gmail.com, equipo@kulinariamx.com",
+        "admin_endpoint": "https://script.google.com/macros/s/AKfycbwYkVqw5yBQuw_zlI-8RylSAewSSkl9_s10hGyGL049k_rqXNN5iihhj49T8Vt6fC5S8Q/exec"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

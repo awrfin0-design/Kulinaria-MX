@@ -1,0 +1,186 @@
+{
+  "sections": {
+    "head": {
+      "type": "page-head",
+      "settings": {
+        "eyebrow": "Ayuda y legales",
+        "heading": "¿Necesitas *ayuda?*",
+        "text": "Reunimos el contrato de adhesión y las políticas en un solo lugar claro.",
+        "button_label": "Leer contrato y términos",
+        "button_link": "/pages/terminos",
+        "art": "air-glass"
+      },
+      "blocks": {
+        "n0": {
+          "type": "link",
+          "settings": {
+            "label": "Ayuda",
+            "link": "/pages/ayuda"
+          }
+        },
+        "n1": {
+          "type": "link",
+          "settings": {
+            "label": "Contrato y términos",
+            "link": "/pages/terminos"
+          }
+        },
+        "n2": {
+          "type": "link",
+          "settings": {
+            "label": "Aviso de privacidad",
+            "link": "/pages/privacidad"
+          }
+        }
+      },
+      "block_order": [
+        "n0",
+        "n1",
+        "n2"
+      ]
+    },
+    "s1": {
+      "type": "feature-grid",
+      "settings": {
+        "layout": "grid",
+        "columns": "3",
+        "background": "base",
+        "eyebrow": "Políticas",
+        "heading": "Lo que *debes saber*"
+      },
+      "blocks": {
+        "b0": {
+          "type": "item",
+          "settings": {
+            "title": "Reparto y espera",
+            "text": "<p>Cortesía de 5 minutos; luego el operador sigue su ruta y puedes recoger sin costo con horario acordado.</p>",
+            "link": "/pages/terminos",
+            "link_label": "Leer cláusula"
+          }
+        },
+        "b1": {
+          "type": "item",
+          "settings": {
+            "title": "Pagos digitales",
+            "text": "<p>Todo se liquida en la web; no se acepta efectivo.</p>",
+            "link": "/pages/terminos",
+            "link_label": "Leer cláusula"
+          }
+        },
+        "b2": {
+          "type": "item",
+          "settings": {
+            "title": "Envases de vidrio",
+            "text": "<p>$100 MXN mínimo por envase dañado o extraviado; lavarlos es opcional.</p>",
+            "link": "/pages/terminos",
+            "link_label": "Leer cláusula"
+          }
+        },
+        "b3": {
+          "type": "item",
+          "settings": {
+            "title": "No reembolso y saldo",
+            "text": "<p>Sin cancelación ni devolución al liquidar; lo no preparado queda como saldo.</p>",
+            "link": "/pages/terminos",
+            "link_label": "Leer cláusula"
+          }
+        },
+        "b4": {
+          "type": "item",
+          "settings": {
+            "title": "Pausas y caducidad",
+            "text": "<p>Ventanas martes 10:00 AM y viernes 7:00 PM; reanudar en 30 días naturales.</p>",
+            "link": "/pages/terminos",
+            "link_label": "Leer cláusula"
+          }
+        },
+        "b5": {
+          "type": "item",
+          "settings": {
+            "title": "Gramajes y alérgenos",
+            "text": "<p>Peso en crudo con merma por cocción; el cliente declara sus alergias en el registro.</p>",
+            "link": "/pages/terminos",
+            "link_label": "Leer cláusula"
+          }
+        }
+      },
+      "block_order": [
+        "b0",
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5"
+      ]
+    },
+    "s2": {
+      "type": "faq",
+      "settings": {
+        "eyebrow": "Ayuda",
+        "heading": "Preguntas *frecuentes*",
+        "background": "base"
+      },
+      "blocks": {
+        "q1": {
+          "type": "item",
+          "settings": {
+            "question": "¿Hasta cuándo puedo elegir mis platillos?",
+            "answer": "<p>Hasta el sábado 10:00 AM. Si no eliges, armamos tu pedido con tu plan, historial y alergias.</p>"
+          }
+        },
+        "q2": {
+          "type": "item",
+          "settings": {
+            "question": "¿Puedo pausar mi suscripción?",
+            "answer": "<p>Sí. Jueves y viernes: hasta el martes 10:00 AM. Lunes a miércoles: hasta el viernes 7:00 PM. Lo no preparado queda como saldo a favor.</p>"
+          }
+        },
+        "q3": {
+          "type": "item",
+          "settings": {
+            "question": "¿Cómo se paga?",
+            "answer": "<p>Todo se cobra de forma digital en la web al hacer el pedido. No se acepta efectivo.</p>"
+          }
+        },
+        "q4": {
+          "type": "item",
+          "settings": {
+            "question": "¿Qué pasa con los envases de vidrio?",
+            "answer": "<p>Cuídalos: un envase dañado o extraviado genera un cargo mínimo de $100 MXN. Lavarlos no es obligatorio.</p>"
+          }
+        },
+        "q5": {
+          "type": "item",
+          "settings": {
+            "question": "¿Hay reembolsos?",
+            "answer": "<p>Compramos insumos en volumen: una vez liquidada la suscripción no hay cancelación ni reembolso.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ]
+    },
+    "s3": {
+      "type": "contact-form",
+      "settings": {
+        "kind": "general",
+        "eyebrow": "Contacto",
+        "heading": "¿Necesitas *ayuda?*",
+        "text": "Escríbenos y te respondemos lo antes posible.",
+        "button_label": "Enviar mensaje"
+      }
+    }
+  },
+  "order": [
+    "head",
+    "s1",
+    "s2",
+    "s3"
+  ]
+}
+

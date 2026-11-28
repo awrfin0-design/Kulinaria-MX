@@ -1,0 +1,35 @@
+{%- capture tx_s_link_label -%}{% render 'tx', s: section.settings.link_label %}{%- endcapture -%}
+{%- capture tx_s_announcement -%}{% render 'tx', s: section.settings.announcement %}{%- endcapture -%}
+<header class="site-header" {{ section.shopify_attributes }}>
+  {%- if tx_s_announcement != blank -%}
+    <div class="site-header__ann">
+      <p class="announcement">
+        {{ tx_s_announcement }}
+        {%- if section.settings.show_countdown -%}<span data-cutoff> {{ 'cutoff.closes_in' | t }} <strong data-cutoff-value>…</strong></span>{%- endif -%}
+        {%- if section.settings.link != blank and tx_s_link_label != blank %} · <a href="{{ section.settings.link }}">{{ tx_s_link_label }}</a>{% endif -%}
+      </p>
+    </div>
+  {%- endif -%}
+  <div class="container">
+    <div class="site-header__bar">
+      <a class="site-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">{% render 'logo', tone: 'auto' %}</a>
+
+      <div class="header-actions">
+        {% render 'account-menu' %}
+        <button class="burger" type="button" data-menu-open aria-haspopup="dialog" aria-controls="menu-overlay" aria-expanded="false" aria-label="{{ 'nav.open' | t }}"><i></i><i></i></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Encabezado",
+  "settings": [
+    { "type": "text", "id": "announcement", "label": "Anuncio superior", "default": "Cierre de pedidos: sábados a las 10:00 AM." },
+    { "type": "checkbox", "id": "show_countdown", "label": "Mostrar cuenta regresiva en el anuncio", "default": true },
+    { "type": "text", "id": "link_label", "label": "Texto del enlace del anuncio", "default": "Ver el menú" },
+    { "type": "url", "id": "link", "label": "Enlace del anuncio" }
+  ]
+}
+{% endschema %}

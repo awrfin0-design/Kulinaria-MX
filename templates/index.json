@@ -1,0 +1,606 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+  * (hero links may be dialog:<tipo>~<detalle> to open a request form)
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "heading": "Alta cocina adaptable a tu estilo de vida.",
+        "heading_em": "",
+        "text": "",
+        "button_label": "Diseñar mi plan",
+        "button2_label": "",
+        "button2_link": "/collections/menu-semanal",
+        "show_countdown": false,
+        "slide_seconds": 4
+      },
+      "blocks": {
+        "s1": {
+          "type": "slide",
+          "settings": {
+            "layout": "photo-left",
+            "tag": "Embajadoras Kulinaria • Estilo de vida",
+            "heading": "Transforma tu mente. Conquista tu físico.",
+            "text": "Tu nutrición abre la puerta a nuestro círculo privado. Entrena, compite y vive experiencias deportivas exclusivas junto a quienes lideran el cambio.",
+            "list_title": "Experiencias y comunidad",
+            "badge": "KFW · Arte en movimiento",
+            "strip_title": "Próximos eventos • Exclusivo Familia Kulinaria",
+            "strip_link_label": "Ver más fechas +",
+            "art": "hs-emb",
+            "strip_link": "/pages/circulo-privado",
+            "bullets": "Eventos deportivos y activaciones exclusivas\nEntrenamientos grupales y retos fitness\nAcceso VIP a la comunidad Kulinaria",
+            "cards": "photo:hs-tenis|Clínica de tenis|Coach: Jessica|Mié 26 Nov|/pages/circulo-privado?deporte=tenis\nphoto:hs-circuito|Circuito funcional|Coach: Paulina|Sáb 29 Nov|/pages/circulo-privado?deporte=funcional\nphoto:hs-rodada|Rodada nocturna|Coach: Ren Jiménez|Mié 03 Dic|/pages/circulo-privado?deporte=ciclismo\nphoto:hs-padel|Torneo de pádel|Coach: Anny|Sáb 06 Dic|/pages/circulo-privado?deporte=padel",
+            "cta_title": "Acceso Familia Kulinaria",
+            "cta_text": "Adquiere tu bloque de 4 semanas para desbloquear ubicaciones, horarios y ser parte de nuestra comunidad exclusiva.",
+            "cta_label": "Empezar mi bloque",
+            "cta_link": "/pages/circulo-privado"
+          }
+        },
+        "s2": {
+          "type": "slide",
+          "settings": {
+            "layout": "photo-right",
+            "tag": "Beneficio exclusivo • Familia Kulinaria",
+            "heading": "Tu nutrición adaptable, respaldada por expertos.",
+            "foot": "Ángel Otero • Licenciado en Nutrición (Campeón Mr. México y Mr. Puebla) | Kasa Kulinaria.",
+            "strip_title": "Nuestros planes de nutrición adaptables",
+            "strip_link_label": "Explora nuestro enfoque integral en nutrición y bienestar +",
+            "art": "hs-nutri",
+            "strip_link": "/pages/filosofia",
+            "bullets": "kidney|Atención de Ángel Otero, Lic. en Nutrición (Mr. México y Mr. Puebla)\nclip|Plan 100% adaptable a tu estilo de vida y objetivos\napple|Enfoque integral basado en tu salud y resultados",
+            "button_label": "Reservar consulta",
+            "button_link": "dialog:consulta~Consulta nutricional con Ángel Otero",
+            "cards": "scale|Plan de pérdida de peso.|Programa enfocado en la quema de grasa y hábitos saludables.||dialog:consulta~Plan de pérdida de peso\ndumbbell|Plan de aumento de masa muscular.|Nutrición para el crecimiento muscular y fuerza.||dialog:consulta~Plan de aumento de masa muscular\nrun|Nutrición deportiva de élite.|Optimización del rendimiento para atletas competitivos.||dialog:consulta~Nutrición deportiva de élite\nshield|Programa de salud integral.|Enfoque general para el bienestar y vitalidad a largo plazo.||dialog:consulta~Programa de salud integral\ncalendar|Consulta individual.|Sesión privada con Ángel Otero para metas específicas.||dialog:consulta~Consulta individual"
+          }
+        },
+        "s3": {
+          "type": "slide",
+          "settings": {
+            "layout": "tiers",
+            "tag": "Beneficios exclusivos • Compromiso Kulinaria",
+            "heading": "Multiplica tu inversión. Desbloquea recompensas.",
+            "text": "Elige tu plan por adelantado y obtén consultas, cortes, prendas y acceso VIP de regalo.",
+            "strip_title": "Ecosistema de aliados Kulinaria • Tus llaves de acceso",
+            "strip_link_label": "Desbloquea todo el ecosistema con tu plan Kulinaria +",
+            "strip_link": "/pages/embajadores",
+            "cards": "doctor|Ángel Otero||Reclamar beneficio|dialog:consulta~Beneficio: consulta con Ángel Otero\nshirt|KFW Fitness Wear||Ver recompensas|/collections/kulinaria-store\nbarber|Magnate Barbería||Canjear cupón|dialog:cupon~Cupón Magnate Barbería\nusers|+20 Entrenadores||Ver entrenadores|/pages/embajadores-entrenadores\ndumbbell|Gimnasios Hermanos||Ver sedes|/pages/embajadores-gimnasios\nstar|Salones & Eventos VIP||Explorar ahora|/pages/circulo-privado",
+            "plans": "1 Bloque (4 Semanas)|Inicio Inteligente||Consulta Nutricional con Ángel Otero, Lic. en Nutrición: ~$850 MXN~ → *$699 MXN* (Ahorras $151);;*Elige un regalo:* 1 artículo (límite de valor $449) de la tienda KFW o 1 corte cortesía de Magnate Barbería|Elegir mi ahorro|/pages/pedido?plan=block\n2 Bloques (8 Semanas)|Transformación Total|La más elegida|Consulta Ángel Otero, Lic. en Nutrición: ~$850 MXN~ → *¡Gratis!*;;Artículo Oficial KFW (prenda, gorra o tumbler): ~$449 MXN~ → *¡Gratis!*;;2 Experiencias y Eventos VIP con Embajadores: ~$398 MXN~ → *¡Gratis!*|Obtener $997 en regalos y descuentos|dialog:plan~Plan de 2 bloques (8 semanas)\n3 Bloques (12 Semanas)|Estilo de Vida Completo|Nivel VIP|Consulta Ángel Otero, Lic. en Nutrición: ~$850 MXN~ → *¡Gratis!*;;*Gratis:* Kit completo KFW Merch;;*VIP Pass:* eventos exclusivos con modelos y entrenadores;;*Cortesías:* Magnate Barbería y salones de belleza aliados|Desbloquear mi pase VIP|dialog:plan~Plan de 3 bloques (12 semanas)"
+          }
+        },
+        "s4": {
+          "type": "slide",
+          "settings": {
+            "layout": "photo-left",
+            "tag": "Carta Kulinaria • Cenas íntimas",
+            "heading": "Tu mesa privada. Nuestro chef ejecutivo.",
+            "text": "Vive una velada gastronómica exclusiva a puerta cerrada, diseñada a la medida para ti y tus invitados.",
+            "list_title": "Lo que incluye la experiencia",
+            "list2_title": "Ocasiones especiales",
+            "list2_text": "Cenas románticas, aniversarios, cumpleaños y cenas de compromiso.",
+            "strip_title": "Modalidades Carta Kulinaria • Experiencias a la medida",
+            "art": "hs-chef",
+            "bullets": "Menú de degustación personalizado (3 a 5 tiempos)\nInsumos premium, cristalería y limpieza total",
+            "cards": "photo:hs-cenas|Cenas íntimas|Chef ejecutivo a puerta cerrada.||dialog:evento~Cena íntima\nphoto:hs-reuniones|Reuniones sociales|Celebraciones privadas con servicio total.||dialog:evento~Reunión social\nphoto:hs-corporativo|Eventos corporativos|Catering ejecutivo y experiencias de marca.||dialog:evento~Evento corporativo\ncalendar|Logística integral|Planeación de menú, tiempos y personal on-site.||dialog:evento~Logística integral",
+            "cta_title": "Reserva tu fecha",
+            "cta_text": "Consulta disponibilidad y diseña tu menú con nuestros chefs.",
+            "cta_label": "Reservar fecha",
+            "cta_link": "dialog:evento~Solo reservar fecha"
+          }
+        },
+        "s5": {
+          "type": "slide",
+          "settings": {
+            "layout": "rewards",
+            "tag": "Beneficios exclusivos • Pago inmediato por bloque",
+            "heading": "Multiplica tus resultados y desbloquea recompensas.",
+            "text": "Al asegurar 1, 2 o 3 bloques de 4 semanas, accedes automáticamente a descuentos directos, merch oficial KFW y beneficios en toda nuestra red de aliados.",
+            "button_label": "Desbloquear descuentos",
+            "button_link": "/pages/pedido?plan=block",
+            "rows": "1 Bloque (4 semanas)|Consulta nutricional en $699 MXN (Ahorras $151) + Cupones aliados.\n2 Bloques (8 semanas)|Descuento preferencial + Prenda Merch KFW + Tarifas en coaches.\n3 Bloques (12 semanas)|Consulta nutricional GRATIS + Kit Merch KFW + Pase VIP a experiencias.",
+            "cards": "house|Nutrición de casa|Consultas preferenciales o sin costo.||dialog:consulta~Nutrición de casa\nshirt|Merch oficial KFW|Ropa deportiva de regalo en tienda.||/collections/kulinaria-store\nusers|+20 Entrenadores|Tarifas exclusivas de entrenamiento.||/pages/embajadores-entrenadores\ndumbbell|Gimnasios hermanos|Precios especiales en +15 sedes.||/pages/embajadores-gimnasios\nbarber|Magnate Barbería & Belleza|Cortes de cortesía y tratamientos.||dialog:cupon~Magnate Barbería & Belleza\nticket|Experiencias VIP|Acceso gratuito a eventos con modelos.||/pages/circulo-privado",
+            "strip_title": "Tu red de aliados Kulinaria",
+            "strip_link": "/pages/embajadores",
+            "strip_link_label": "Ver todos los beneficios +"
+          }
+        },
+        "s0": {
+          "type": "slide",
+          "settings": {
+            "layout": "banner",
+            "art": "air-steak",
+            "heading": "Cero compras. Cero cocina. Cero estrés.",
+            "text": "Elige tu ciclo de 4 semanas y recibe tus platillos frescos directamente en casa.",
+            "button_label": "Diseñar mi plan",
+            "button_link": "/pages/pedido?plan=block",
+            "strip_title": "Por qué Kulinaria",
+            "cards": "calendar|100% adaptable|Tu ciclo de 4 semanas, a tu medida.||\nbarber|Alta cocina|Platillos de autor, listos para disfrutar.||\nshield|Sin complicaciones|Cero compras, cero cocina, cero estrés.||/pages/planes",
+            "tag": ""
+          }
+        }
+      },
+      "block_order": [
+        "s0",
+        "s1",
+        "s2",
+        "s3",
+        "s5",
+        "s4"
+      ]
+    },
+    "funnel": {
+      "type": "order-funnel",
+      "settings": {
+        "eyebrow": "Haz tu pedido",
+        "heading": "Arma tu pedido en *4 pasos*",
+        "text": "Del enfoque al contrato: elige, guardamos tus datos y listo. La próxima vez es un clic.",
+        "collection": "menu-semanal",
+        "limit": 12,
+        "phone_teaser": false
+      },
+      "blocks": {
+        "d0": {
+          "type": "diet",
+          "settings": {
+            "label": "Keto",
+            "slug": "keto",
+            "text": "Alto en grasas buenas, bajo en carbohidratos.",
+            "art": "dish-5"
+          }
+        },
+        "d1": {
+          "type": "diet",
+          "settings": {
+            "label": "Libre de gluten",
+            "slug": "sin-gluten",
+            "text": "Sin gluten ni trazas, cocinado por separado.",
+            "art": "dish-1"
+          }
+        },
+        "d2": {
+          "type": "diet",
+          "settings": {
+            "label": "Vegetariano",
+            "slug": "vegetariano",
+            "text": "Sin carne, con huevo y lácteos.",
+            "art": "dish-3"
+          }
+        },
+        "d3": {
+          "type": "diet",
+          "settings": {
+            "label": "Vegano",
+            "slug": "vegano",
+            "text": "100% basado en plantas.",
+            "art": "dish-6"
+          }
+        },
+        "d4": {
+          "type": "diet",
+          "settings": {
+            "label": "Bajas calorías",
+            "slug": "bajo-calorias",
+            "text": "Ligero y saciante, controlado en calorías.",
+            "art": "dish-8"
+          }
+        },
+        "d5": {
+          "type": "diet",
+          "settings": {
+            "label": "Bajos carbohidratos",
+            "slug": "bajo-carbos",
+            "text": "Pocos carbohidratos, más verdura y proteína.",
+            "art": "dish-2"
+          }
+        },
+        "d6": {
+          "type": "diet",
+          "settings": {
+            "label": "Alta proteína",
+            "slug": "alto-proteina",
+            "text": "Proteína de alto rendimiento para entrenar.",
+            "art": "dish-4"
+          }
+        }
+      },
+      "block_order": [
+        "d0",
+        "d1",
+        "d2",
+        "d3",
+        "d4",
+        "d5",
+        "d6"
+      ]
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "eyebrow": "Ayuda",
+        "heading": "Preguntas *frecuentes*",
+        "background": "base"
+      },
+      "blocks": {
+        "q1": {
+          "type": "item",
+          "settings": {
+            "question": "¿Hasta cuándo puedo elegir mis platillos?",
+            "answer": "<p>Hasta el sábado 10:00 AM. Si no eliges, armamos tu pedido con tu plan, historial y alergias.</p>"
+          }
+        },
+        "q2": {
+          "type": "item",
+          "settings": {
+            "question": "¿Puedo pausar mi suscripción?",
+            "answer": "<p>Sí. Jueves y viernes: hasta el martes 10:00 AM. Lunes a miércoles: hasta el viernes 7:00 PM. Lo no preparado queda como saldo a favor.</p>"
+          }
+        },
+        "q3": {
+          "type": "item",
+          "settings": {
+            "question": "¿Cómo se paga?",
+            "answer": "<p>Todo se cobra de forma digital en la web al hacer el pedido. No se acepta efectivo.</p>"
+          }
+        },
+        "q4": {
+          "type": "item",
+          "settings": {
+            "question": "¿Qué pasa con los envases de vidrio?",
+            "answer": "<p>Cuídalos: un envase dañado o extraviado genera un cargo mínimo de $100 MXN. Lavarlos no es obligatorio.</p>"
+          }
+        },
+        "q5": {
+          "type": "item",
+          "settings": {
+            "question": "¿Hay reembolsos?",
+            "answer": "<p>Compramos insumos en volumen: una vez liquidada la suscripción no hay cancelación ni reembolso.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ]
+    },
+    "cta": {
+      "type": "cta-banner",
+      "settings": {}
+    },
+    "welcome": {
+      "type": "welcome-video",
+      "settings": {
+        "eyebrow": "Bienvenido",
+        "heading": "Hola, bienvenidos",
+        "text": "Alta cocina adaptable a tu estilo de vida.",
+        "art": "hs-welcome"
+      }
+    },
+    "marquee": {
+      "type": "marquee",
+      "settings": {
+        "label": "Arte del fuego",
+        "speed": 80
+      },
+      "blocks": {
+        "m0": {
+          "type": "item",
+          "settings": {
+            "text": "Cocina de autor entregada en tu puerta"
+          }
+        },
+        "m1": {
+          "type": "item",
+          "settings": {
+            "text": "Cortes y pescados sellados al fuego"
+          }
+        },
+        "m2": {
+          "type": "item",
+          "settings": {
+            "text": "Envases de vidrio reutilizables y listos para calentar"
+          }
+        },
+        "m3": {
+          "type": "item",
+          "settings": {
+            "text": "Un menú rotativo cada semana, con tu perfil de alergias al frente"
+          }
+        },
+        "m4": {
+          "type": "item",
+          "settings": {
+            "text": "Pausas flexibles y saldo a favor, sin efectivo"
+          }
+        },
+        "m5": {
+          "type": "item",
+          "settings": {
+            "text": "Pedidos hasta el sábado a las 10:00 AM"
+          }
+        },
+        "m6": {
+          "type": "item",
+          "settings": {
+            "text": "Ingredientes y alérgenos declarados en cada platillo"
+          }
+        }
+      },
+      "block_order": [
+        "m0",
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5",
+        "m6"
+      ]
+    },
+    "trainers": {
+      "type": "trainers-showcase",
+      "settings": {
+        "eyebrow": "Equipo campeón Kulinaria",
+        "heading": "Los mejores entrenadores de tu ciudad.",
+        "text": "Al unirte a Kulinaria, obtienes acceso exclusivo para entrenar de forma personalizada con nuestros atletas campeones.",
+        "list_title": "Palmarés de nuestro equipo",
+        "bullets": "1x|Campeón Mundial IFBB Elite Pro\n2x|Mr. México Absoluto\n1x|Campeón North American\n1x|Subcampeón Atlanta Pro\n1x|3er Lugar Pittsburgh Pro",
+        "link_label": "Ver todos los logros +",
+        "cta_title": "Roster élite de entrenadores",
+        "cta_text": "Explora a todos nuestros atletas y entrenadores certificados para elegir al ideal para tus metas.",
+        "cta_label": "Elegir a mi entrenador",
+        "art": "tr-duo",
+        "cta_link": "dialog:entrenador~"
+      },
+      "blocks": {
+        "t0": {
+          "type": "trainer",
+          "settings": {
+            "name": "Carla",
+            "role": "IFBB Elite Pro.",
+            "spec": "Especialista en recomposición corporal.",
+            "place": "Club Lomas · 2.4 km",
+            "art": "tr-carla",
+            "bio": "Especialista en recomposición corporal: pierde grasa y gana músculo sin dietas extremas.",
+            "accolades": "Profesional IFBB Elite Pro\nEntrenadora certificada en nutrición deportiva",
+            "train": "Fuerza progresiva tres días por semana, cardio inteligente y revisión mensual de medidas. Todo alineado con tu plan Kulinaria.",
+            "link": "dialog:entrenador~Carla"
+          }
+        },
+        "t1": {
+          "type": "trainer",
+          "settings": {
+            "name": "Ramón",
+            "role": "Mr. México.",
+            "spec": "Preparación física de alto rendimiento.",
+            "place": "La Vista · 3.5 km",
+            "art": "tr-ramon",
+            "bio": "Preparación física de alto rendimiento para quien quiere llevar su nivel más lejos.",
+            "accolades": "Mr. México\nPreparador físico de atletas",
+            "train": "Bloques de potencia e hipertrofia con periodización clara y control de carga semana a semana.",
+            "link": "dialog:entrenador~Ramón"
+          }
+        },
+        "t2": {
+          "type": "trainer",
+          "settings": {
+            "name": "Elena",
+            "role": "Trainer cert.",
+            "spec": "Entrenamiento funcional y fuerza.",
+            "place": "Cholula · 5.1 km",
+            "art": "tr-elena",
+            "bio": "Entrenamiento funcional y fuerza para moverte mejor y con confianza.",
+            "accolades": "Entrenadora certificada\nFuncional y fuerza",
+            "train": "Circuitos funcionales y fuerza base, con progresión pensada para cualquier nivel.",
+            "link": "dialog:entrenador~Elena"
+          }
+        },
+        "t3": {
+          "type": "trainer",
+          "settings": {
+            "name": "Fernando",
+            "role": "Mr. México.",
+            "spec": "Hipertrofia y acondicionamiento.",
+            "place": "Zavaleta · 4.2 km",
+            "art": "tr-fernando",
+            "bio": "Hipertrofia y acondicionamiento con técnica cuidada.",
+            "accolades": "Mr. México\nEspecialista en hipertrofia",
+            "train": "Rutinas por grupo muscular, énfasis en técnica y recuperación, coordinadas con tu nutrición.",
+            "link": "dialog:entrenador~Fernando"
+          }
+        },
+        "t4": {
+          "type": "trainer",
+          "settings": {
+            "name": "Jaime",
+            "role": "IFBB Elite Pro.",
+            "spec": "Atleta de élite y asesoría integral.",
+            "place": "Angelópolis · 1.8 km",
+            "art": "tr-jaime",
+            "bio": "Atleta de élite que ofrece asesoría integral de entrenamiento y alimentación.",
+            "accolades": "Profesional IFBB Elite Pro\nAsesoría integral",
+            "train": "Planes completos de entrenamiento y comida, con seguimiento cercano y metas por etapas.",
+            "link": "dialog:entrenador~Jaime"
+          }
+        }
+      },
+      "block_order": [
+        "t0",
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ]
+    },
+    "kfw": {
+      "type": "kfw-showcase",
+      "settings": {
+        "eyebrow": "KFW • Kulinaria Fitness Wear",
+        "heading": "Viste la disciplina. Domina tu estilo.",
+        "text": "Indumentaria deportiva de alto rendimiento diseñada para cada entrenamiento.",
+        "button_label": "Explorar colección",
+        "strip_title": "Colección oficial KFW",
+        "collection": "kulinaria-store",
+        "art": "kfw-duo"
+      },
+      "blocks": {
+        "k0": {
+          "type": "product",
+          "settings": {
+            "title": "Enterizos & tops",
+            "text": "Prendas integrales y de soporte para mujer.",
+            "art": "kfw-tops"
+          }
+        },
+        "k1": {
+          "type": "product",
+          "settings": {
+            "title": "Compresión & joggers",
+            "text": "Ajuste inteligente para máximo rendimiento.",
+            "art": "kfw-joggers"
+          }
+        },
+        "k2": {
+          "type": "product",
+          "settings": {
+            "title": "Hoodies & shorts",
+            "text": "Versatilidad y confort antes y después.",
+            "art": "kfw-hoodie"
+          }
+        },
+        "k3": {
+          "type": "product",
+          "settings": {
+            "title": "Gorras & botellas",
+            "text": "Accesorios técnicos e hidratación premium.",
+            "art": "kfw-cap"
+          }
+        }
+      },
+      "block_order": [
+        "k0",
+        "k1",
+        "k2",
+        "k3"
+      ]
+    },
+    "gyms": {
+      "type": "gyms-network",
+      "settings": {
+        "tag": "Gimnasios hermanos · Red estratégica",
+        "heading": "Alianzas que impulsan",
+        "heading_em": "tu rendimiento.",
+        "text": "Más de 15 gimnasios partners unidos por una misma visión de comunidad y alto desempeño. Además de nuestro servicio a domicilio, puedes elegir cualquiera de estas sedes como punto de entrega para recoger tus pedidos Kulinaria.",
+        "btn1_label": "Explorar sedes",
+        "btn1_link": "/pages/embajadores-gimnasios",
+        "btn2_label": "Afiliar gimnasio",
+        "btn2_link": "dialog:gimnasio~Afiliar gimnasio",
+        "map_button": "Buscar sede en mi zona",
+        "map_link": "dialog:sede~",
+        "zone": "Lomas de Angelópolis",
+        "logos_title": "Colección oficial KFW",
+        "affil_tag": "Afilia tu gimnasio",
+        "affil_title": "Afilia tu gimnasio",
+        "affil_text": "¿Dueño o gerente? Suma tu sede a la red Kulinaria.",
+        "affil_btn": "Agendar reunión",
+        "affil_link": "dialog:gimnasio~Agendar reunión"
+      },
+      "blocks": {
+        "g0": {
+          "type": "gym",
+          "settings": {
+            "name": "Sports|World",
+            "style": "stack",
+            "glyph": "ring"
+          }
+        },
+        "g1": {
+          "type": "gym",
+          "settings": {
+            "name": "Empire|Fitness",
+            "style": "stack",
+            "glyph": "shield"
+          }
+        },
+        "g2": {
+          "type": "gym",
+          "settings": {
+            "name": "smart|fit",
+            "style": "lower",
+            "glyph": "none"
+          }
+        },
+        "g3": {
+          "type": "gym",
+          "settings": {
+            "name": "Anytime|Fitness",
+            "style": "stack",
+            "glyph": "bolt"
+          }
+        },
+        "g4": {
+          "type": "gym",
+          "settings": {
+            "name": "Prime|Fitness",
+            "style": "italic",
+            "glyph": "p"
+          }
+        },
+        "g5": {
+          "type": "gym",
+          "settings": {
+            "name": "Crownit",
+            "style": "crown",
+            "glyph": "crown",
+            "sub": "Fitness Club"
+          }
+        },
+        "g6": {
+          "type": "gym",
+          "settings": {
+            "name": "Stone Fit",
+            "style": "plain",
+            "glyph": "none"
+          }
+        },
+        "g7": {
+          "type": "gym",
+          "settings": {
+            "name": "Lomas|Training",
+            "style": "stack",
+            "glyph": "none"
+          }
+        }
+      },
+      "block_order": [
+        "g0",
+        "g1",
+        "g2",
+        "g3",
+        "g4",
+        "g5",
+        "g6",
+        "g7"
+      ]
+    }
+  },
+  "order": [
+    "hero",
+    "welcome",
+    "marquee",
+    "funnel",
+    "trainers",
+    "kfw",
+    "gyms",
+    "faq",
+    "cta"
+  ]
+}
