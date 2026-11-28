@@ -1691,8 +1691,8 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
     for (const th of ['fuego', 'llama']) {
       await page.evaluate((t) => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); localStorage.setItem('kx-theme', t); localStorage.setItem('kx-test-orders', '0'); }, th);
       await page.goto(URL0 + '#/home'); await page.reload(); await page.waitForTimeout(250);
-      const L = await page.evaluate(() => { const l = document.getElementById('loader'); if (!l) return null; const cs = getComputedStyle(l); return { bg: cs.backgroundImage, color: cs.color, flame: !!l.querySelector('.loader__flame'), k: !!l.querySelector('.loader__k'), bar: !!l.querySelector('[data-loader-bar]'), pct: !!l.querySelector('[data-loader-pct]') }; });
-      ok('loader (' + th + '): flame + K mark + progress bar, themed background', L && L.flame && L.k && L.bar && L.pct && /gradient/.test(L.bg), JSON.stringify(L));
+      const L = await page.evaluate(() => { const l = document.getElementById('loader'); if (!l) return null; const cs = getComputedStyle(l); return { bg: cs.backgroundImage, color: cs.color, flame: l.querySelectorAll('.loader__word i').length === 9, k: /Kulinaria/.test((l.querySelector('.loader__word') || {}).textContent || ''), bar: !!l.querySelector('[data-loader-bar]'), pct: !!l.querySelector('[data-loader-pct]') }; });
+      ok('loader (' + th + '): the word Kulinaria revealed letter by letter + progress bar, themed background', L && L.flame && L.k && L.bar && L.pct && /gradient/.test(L.bg), JSON.stringify(L));
     }
     await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx-seen', '1'); localStorage.setItem('kx-test-orders', '0'); });
     await page.goto(URL0 + '#/home'); await page.reload(); await page.waitForTimeout(900);

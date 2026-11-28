@@ -2730,7 +2730,7 @@
 
   function initLoader() {
     if (!root.classList.contains('has-loader')) return;
-    var t0 = performance.now(), pct = $('[data-loader-pct]'), bar = $('[data-loader-bar]'), done = false, MIN = 1300, MAX = 2600;
+    var t0 = performance.now(), pct = $('[data-loader-pct]'), bar = $('[data-loader-bar]'), done = false, MIN = 2300, MAX = 3400;
     var finish = function () {
       if (done) return; done = true;
       root.classList.add('is-loaded');

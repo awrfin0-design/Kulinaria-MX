@@ -77,16 +77,9 @@
     <a class="skip-link" href="#main">{{ 'general.skip_to_content' | t }}</a>
 
     <div class="loader" id="loader" role="status" aria-label="{{ 'loader.label' | t }}">
-      <div class="loader__waves" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="loader__inner">
         <div class="loader__stage" aria-hidden="true">
-          <svg class="loader__flame" viewBox="0 0 120 160" focusable="false">
-            <defs><linearGradient id="lf-g" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#E05400"/><stop offset=".55" stop-color="#FF6200"/><stop offset="1" stop-color="#FFB070"/></linearGradient></defs>
-            <path class="lf__glow" d="M60 6C57 40 18 58 18 104a42 42 0 0 0 84 0c0-32-22-46-29-74-4 10-8 19-13 28-4-15-4-35 0-52z"/>
-            <path class="lf__outer" d="M60 6C57 40 18 58 18 104a42 42 0 0 0 84 0c0-32-22-46-29-74-4 10-8 19-13 28-4-15-4-35 0-52z"/>
-            <path class="lf__inner" d="M60 66c-2 20-22 30-22 52a22 22 0 0 0 44 0c0-18-14-26-18-44-2 6-4 10-8 14-2-8-1-16 4-22z"/>
-          </svg>
-          <span class="loader__k">{% render 'logo', mark: true %}</span>
+          <span class="loader__word">{%- assign lw = 'Kulinaria' | split: '' -%}{%- for ch in lw -%}<i style="--i:{{ forloop.index0 }}">{{ ch }}</i>{%- endfor -%}</span>
         </div>
         <p class="loader__tag">{{ 'loader.tagline' | t }}</p>
         <span class="loader__bar" aria-hidden="true"><i data-loader-bar></i></span>
