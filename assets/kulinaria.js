@@ -958,6 +958,12 @@
       var n = c.item_count || 0;
       if (count) { count.hidden = !n; count.textContent = n; }
       if (total) total.textContent = n ? money0(c.total_price / 100) : '';
+      var lst = $('[data-acct-cart-list]', root);
+      if (lst) {   // name the products in the cart (first three, then "and N more")
+        var its = c.items || [], more = Math.max(0, its.length - 3), e1 = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; }); };
+        lst.hidden = !its.length;
+        lst.innerHTML = its.slice(0, 3).map(function (it) { return '<li><span>' + e1(it.product_title) + (it.variant_title && it.variant_title !== 'Default Title' ? ' · ' + e1(it.variant_title) : '') + '</span><b>&times; ' + it.quantity + '</b></li>'; }).join('') + (more ? '<li class="is-more">' + e1(String(lst.getAttribute('data-t-more') || '').replace('[n]', more)) + '</li>' : '');
+      }
       if (txt) txt.textContent = !n ? txt.getAttribute('data-t-empty') : n === 1 ? txt.getAttribute('data-t-one') : String(txt.getAttribute('data-t-many') || '').replace('[n]', n);
     };
     var money0 = function (v) { try { return new Intl.NumberFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(v); } catch (e) { return '$' + Math.round(v); } };
@@ -1023,13 +1029,19 @@
       var wbtn = t.closest('[data-fn-warnbtn]');
       if (wbtn) { e.preventDefault(); var bx = wbtn.closest('[data-fn-warnbox]'), on = !bx.classList.contains('is-open'); $$('[data-fn-warnbox].is-open').forEach(function (x) { x.classList.remove('is-open'); var b3 = $('[data-fn-warnbtn]', x); if (b3) b3.setAttribute('aria-expanded', 'false'); }); bx.classList.toggle('is-open', on); wbtn.setAttribute('aria-expanded', on ? 'true' : 'false'); return; }
       if (!t.closest('[data-fn-warnbox]')) $$('[data-fn-warnbox].is-open').forEach(function (x) { x.classList.remove('is-open'); });
-      var hit = t.closest('.dish__media, .dish__title a, .dish__go, .fn-dish__media, .fn-dish__title, [data-tr-card]');
+      var hit = t.closest('.dish__media, .dish__title a, .dish__go, .fn-dish__media, .fn-dish__title, [data-tr-card], [data-pc-card]');
       if (!hit) { var cc = t.closest('[data-has-detail]'); if (cc && !t.closest('a, button, input, select, textarea, label, .fn-warnbox, .fn-note, .fn-mods, [data-fn-note]')) hit = cc; }
       if (!hit || t.closest('[data-pick], button')) return;
       var card = hit.closest('[data-has-detail]'); if (!card) return;
       e.preventDefault(); open(card);
     });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) close(); if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.hasAttribute && e.target.hasAttribute('data-tr-card')) { e.preventDefault(); open(e.target); } });
+    document.addEventListener('submit', function (e) {      // merchandise: "Agregar al carrito" in the panel adds the chosen option and goes to the cart
+      var f = e.target; if (!f || !f.matches || !f.matches('[data-kf-form]')) return; e.preventDefault();
+      var btn = $('button[type=submit]', f); if (btn) btn.disabled = true;
+      var go = function () { close(); location.href = '/cart'; };
+      try { fetch('/cart/add.js', { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(f) }).then(function (r) { if (!r.ok) throw new Error('add'); go(); }).catch(function () { if (btn) btn.disabled = false; location.href = '/cart'; }); } catch (x) { go(); }
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) close(); if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.hasAttribute && (e.target.hasAttribute('data-tr-card') || e.target.hasAttribute('data-pc-card'))) { e.preventDefault(); open(e.target); } });
   }
 
   /* ---------- plan credits: weeks left, meals planned and which weeks can still be chosen (asked from the Sheet; signed-in customers only) ---------- */
@@ -1193,17 +1205,23 @@
       var on = pills.filter(function (x) { return x.classList.contains('is-on'); })[0]; if (on && on.getAttribute('data-sport') !== 'all') on.click();
       paint();
     };
-    var fetchLive = function () {
-      var ep = root.getAttribute('data-endpoint'); if (!ep) return;
-      fetch(ep + (ep.indexOf('?') > -1 ? '&' : '?') + 'action=classes').then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok && j.classes && j.classes.length) rebuild(j.classes); }).catch(function () {});
+    var fetchLive = function () {       // the class list is only requested (and only served) for a signed-in customer with an active 4-week block
+      var ep = root.getAttribute('data-endpoint'), a0 = acct(); if (!ep || !member || !a0) return;
+      fetch(ep + (ep.indexOf('?') > -1 ? '&' : '?') + 'action=classes&cid=' + encodeURIComponent(a0.cid) + '&token=' + encodeURIComponent(a0.token)).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok && j.classes && j.classes.length) rebuild(j.classes); }).catch(function () {});
+    };
+    var fillStatic = function () {       // the theme's own cards live in a <template>: they only enter the page for a member
+      var g = $('[data-circle-grid]', root), t = $('[data-circle-tpl]', root); if (!g || !t || $('.circle__card', g)) return;
+      g.insertAdjacentHTML('beforeend', t.innerHTML); cards = $$('.circle__card', root);
+      var on = pills.filter(function (x) { return x.classList.contains('is-on'); })[0]; if (on && on.getAttribute('data-sport') !== 'all') on.click();
     };
     var paint = function () {
       root.classList.toggle('is-member', member); root.classList.toggle('is-locked', !member);
+      var bd = $('[data-circle-body]', root); if (bd) bd.hidden = !member; if (member) fillStatic();
       if (gate) gate.hidden = member; if (welcome) welcome.hidden = !member;
       cards.forEach(function (c) { var b = $('[data-circle-book]', c); if (b) { b.setAttribute('aria-disabled', member ? 'false' : 'true'); b.tabIndex = member ? 0 : -1; } });
     };
-    paint(); fetchLive(); document.addEventListener('kx:circle-refresh', fetchLive);
-    loadCredits(function (c) { member = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); paint(); });
+    paint(); document.addEventListener('kx:circle-refresh', fetchLive);
+    loadCredits(function (c) { member = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); paint(); if (member) fetchLive(); });
     var pickSport = function (sp, hit) {
       var p0 = pills.filter(function (x) { return x.getAttribute('data-sport') === sp; })[0]; if (!p0) return;
       p0.click(); if (hit) { var c0 = cards.filter(function (c) { return !c.hidden; })[0]; if (c0) { c0.classList.add('is-hit'); setTimeout(function () { c0.classList.remove('is-hit'); }, 2600); var g0 = $('[data-circle-filters]', root); if (g0) setTimeout(function () { g0.scrollIntoView({ block: 'start', behavior: REDUCE ? 'auto' : 'smooth' }); }, 120); } }

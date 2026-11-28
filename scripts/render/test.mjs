@@ -1350,16 +1350,19 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   ok('hero on a phone: the cube works at phone width, the item fits and its controls are inside the screen', await page.evaluate((h) => { const e = document.querySelector(h), c = e.querySelector('.hero__ctl').getBoundingClientRect(), on = e.querySelector('.hs.is-cur').getBoundingClientRect(); return document.documentElement.scrollWidth <= innerWidth + 1 && c.right <= innerWidth + 1 && on.right <= innerWidth + 1 && on.width > 300; }, HR));
   await page.setViewportSize({ width: 1440, height: 900 });
 
-  // ---- private circle: everybody can preview the classes, only a 4-week block opens them
+  // ---- private circle: the calendar is only for a signed-in customer with an active 4-week block
   await page.setViewportSize({ width: 1440, height: 860 });
   const CR = '[data-page="pg/circulo-privado"]';
   await base(); await page.evaluate(() => localStorage.setItem('kx-test-orders', '0'));
   await page.goto(`${URL0}#/pg/circulo-privado`); await page.reload(); await page.waitForTimeout(1200);
-  const cl = await page.evaluate((c) => { const r = document.querySelector(c + ' [data-circle]'); const card = r.querySelector('.circle__card'); return { locked: r.classList.contains('is-locked'), cards: r.querySelectorAll('.circle__card').length, gate: !r.querySelector('[data-circle-gate]').hidden, lockIcons: [...r.querySelectorAll('.circle__lock')].filter((x) => getComputedStyle(x).display !== 'none').length, bookTxt: card.querySelector('[data-circle-book]').innerText, price: /600/.test(r.innerText), detail: /Ren Jiménez/.test(card.innerText) && /09:00/.test(card.innerText), pills: [...r.querySelectorAll('[data-circle-filters] [data-sport]')].map((x) => x.getAttribute('data-sport')).join() }; }, CR);
-  ok('private circle (no block): 12 classes are visible as a preview with a lock on every card and the $600 price', cl.locked && cl.cards === 12 && cl.gate && cl.lockIcons === 12 && cl.price && cl.detail, JSON.stringify(cl));
-  ok('private circle: the sport filters are there (Todas + pádel, tenis, ciclismo, basketball, running, funcional)', cl.pills === 'all,padel,tenis,ciclismo,basketball,running,funcional', cl.pills);
-  await page.evaluate((c) => document.querySelector(c + ' [data-circle-book]').click(), CR); await page.waitForTimeout(300);
-  ok('private circle: a locked card does not book anything and the banner points to "Empezar mi bloque"', await page.evaluate((c) => !document.querySelector(c + ' .circle__card.is-sent') && /pedido/.test(document.querySelector(c + ' .circle__gatebtn').getAttribute('href')), CR));
+  const cl = await page.evaluate((c) => { const r = document.querySelector(c + ' [data-circle]'); const body = r.querySelector('[data-circle-body]'); return { locked: r.classList.contains('is-locked'), cards: r.querySelectorAll('.circle__card').length, bodyHidden: body.hidden || getComputedStyle(body).display === 'none', gate: !r.querySelector('[data-circle-gate]').hidden, seen: /Ren Jiménez|Torneo|Clínica|09:00|Raqueta/.test(r.innerText), href: r.querySelector('.circle__gatebtn').getAttribute('href') }; }, CR);
+  ok('private circle (no block): no class, date or seat is on the page: only the lock banner', cl.locked && cl.cards === 0 && cl.bodyHidden && cl.gate && !cl.seen, JSON.stringify(cl));
+  ok('private circle (no block): the banner points to "Empezar mi bloque"', /pedido/.test(cl.href), cl.href);
+  await page.evaluate(() => localStorage.setItem('kx-test-orders', '2'));
+  await page.reload(); await page.waitForTimeout(1200);
+  const cm0 = await page.evaluate((c) => { const r = document.querySelector(c + ' [data-circle]'); return { cards: r.querySelectorAll('.circle__card').length, pills: [...r.querySelectorAll('[data-circle-filters] [data-sport]')].map((x) => x.getAttribute('data-sport')).join(), price: /600/.test(r.innerText), detail: /Ren Jiménez/.test(r.innerText) && /09:00/.test(r.innerText) }; }, CR);
+  ok('private circle (active block): the 12 classes appear with the $600 price', cm0.cards === 12 && cm0.price && cm0.detail, JSON.stringify(cm0));
+  ok('private circle: the sport filters are there (Todas + pádel, tenis, ciclismo, basketball, running, funcional)', cm0.pills === 'all,padel,tenis,ciclismo,basketball,running,funcional', cm0.pills);
   await page.evaluate((c) => document.querySelector(c + ' [data-circle-filters] [data-sport="tenis"]').click(), CR); await page.waitForTimeout(200);
   ok('private circle: the tennis filter shows only the 2 tennis classes', (await page.evaluate((c) => [...document.querySelectorAll(c + ' .circle__card:not([hidden])')].map((x) => x.getAttribute('data-sport')), CR)).join() === 'tenis,tenis');
   await page.evaluate(() => localStorage.setItem('kx-test-orders', '2'));
@@ -1638,7 +1641,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
     if (q.action === 'classes') body = { ok: true, classes: live }; else if (q.action === 'book') { bookCalls.push(q); body = { ok: true, state: bookState, id: 'r1', left: 5 }; } else if (q.action === 'coupon') body = { ok: true, code: 'KMAG-SRV42', partner: 'magnate', expires: '2099-01-01' };
     await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(body) }); });
   await page.goto(`${URL0}#/pg/circulo-privado`); await page.reload(); await page.waitForTimeout(1200);
-  await page.evaluate(() => { document.querySelector('[data-circle]').setAttribute('data-endpoint', 'https://script.example/exec'); document.querySelector('[data-hx-dialog]').setAttribute('data-endpoint', 'https://script.example/exec'); document.dispatchEvent(new CustomEvent('kx:circle-refresh')); }); await page.waitForTimeout(700);
+  await page.evaluate(() => { document.querySelector('#kx-account').setAttribute('data-endpoint', 'https://script.example/exec'); document.querySelector('[data-circle]').setAttribute('data-endpoint', 'https://script.example/exec'); document.querySelector('[data-hx-dialog]').setAttribute('data-endpoint', 'https://script.example/exec'); document.dispatchEvent(new CustomEvent('kx:circle-refresh')); }); await page.waitForTimeout(700);
   const lv = await page.evaluate(() => { const cs = [...document.querySelectorAll('[data-page="pg/circulo-privado"] .circle__card')]; return { n: cs.length, keys: cs.map((c) => c.getAttribute('data-key')).join(), txt: cs.map((c) => c.textContent.replace(/\s+/g, ' ')), dis: cs.map((c) => c.querySelector('[data-circle-book]').disabled), pills: [...document.querySelectorAll('[data-page="pg/circulo-privado"] [data-circle-filters] [data-sport]:not([hidden])')].map((p) => p.getAttribute('data-sport')).join() }; });
   ok('the circle page shows the classes of the sheet (not the typed ones), with seats left, full + waiting list, status and the price', lv.n === 3 && lv.keys === 'tenis-a,padel-b,run-c' && /Quedan 9 lugares/.test(lv.txt[0]) && /Faltan 3 para confirmar/.test(lv.txt[0]) && /Llena/.test(lv.txt[1]) && /En espera: 2/.test(lv.txt[1]) && /Clase confirmada/.test(lv.txt[1]) && /\$600/.test(lv.txt[0]), JSON.stringify([lv.txt[1].slice(0, 220)]));
   ok('a cancelled class cannot be booked and the sport pills only list the sports that have classes', lv.dis[2] === true && lv.pills === 'all,padel,tenis,running' || lv.pills.split(',').sort().join() === 'all,padel,running,tenis', lv.pills);
@@ -1760,6 +1763,15 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
     // swapping a dish: the picker opens on a tab that has dishes
     await page.evaluate((f) => document.querySelector(f + ' [data-bd-focus="0:0"]').click(), FN); await page.waitForTimeout(300);
     await page.keyboard.press('Escape'); await page.waitForTimeout(200);
+  }
+
+  // ---- v165: signed-out visitors get the sign-in gate, never the calendar; the cart summary names the products
+  {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx-seen', '1'); });
+    await page.goto(G2 + '#/pg/circulo-privado'); await page.reload(); await page.waitForTimeout(1200);
+    const so = await page.evaluate(() => { const r = document.querySelector('[data-page="pg/circulo-privado"] [data-circle]'); const g = r.querySelector('[data-circle-gate]'); return { cards: r.querySelectorAll('.circle__card').length, gate: !g.hidden, txt: g.innerText.replace(/\s+/g, ' ').slice(0, 160), seen: /Ren Jiménez|Torneo|09:00/.test(r.innerText) }; });
+    ok('private circle (signed out): only the "sign in" gate, no classes, no dates', so.cards === 0 && so.gate && !so.seen && /Inicia sesión/i.test(so.txt), JSON.stringify(so));
   }
 
   // ---- phones: nothing wider than the screen, the total bar is inside the screen

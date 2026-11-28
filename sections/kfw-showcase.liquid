@@ -23,13 +23,32 @@
       <div class="kf__cards{% if kf_n > 0 %} kf__cards--live{% endif %}" data-kf-cards>
         {%- if kf_n > 0 -%}
           {%- for product in kf_col.products limit: section.settings.limit -%}
-            <a class="kf__card kf__card--p" href="{{ product.url }}" data-kf-product>
+            {%- capture kf_img -%}{%- if product.featured_image -%}<img src="{{ product.featured_image | image_url: width: 900 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" loading="lazy" width="900" height="{{ 900 | divided_by: product.featured_image.aspect_ratio | round }}">{%- else -%}{% render 'photo', image: blank, art: 'kfw-duo', alt: '', class: '', width: 800 %}{%- endif -%}{%- endcapture -%}
+            <div class="kf__card kf__card--p" role="button" tabindex="0" data-has-detail data-pc-card data-kf-product>
               <span class="kf__cph">
-                {%- if product.featured_image -%}<img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" loading="lazy" width="600" height="{{ 600 | divided_by: product.featured_image.aspect_ratio | round }}">{%- else -%}{% render 'photo', image: blank, art: 'kfw-duo', alt: '', class: '', width: 400 %}{%- endif -%}
+                {{ kf_img }}
                 {%- unless product.available -%}<em class="kf__flag">{{ 'kfw.sold_out' | t }}</em>{%- elsif product.compare_at_price > product.price -%}<em class="kf__flag kf__flag--sale">{{ 'kfw.sale' | t }}</em>{%- endunless -%}
               </span>
-              <span class="kf__ctext"><strong>{{ product.title }}</strong>{%- if product.type != blank -%}<small>{{ product.type }}</small>{%- endif -%}<b class="kf__price">{%- if product.price_varies -%}{{ 'kfw.from' | t }} {% endif -%}{{ product.price | money_without_trailing_zeros }}{%- if product.compare_at_price > product.price -%} <s>{{ product.compare_at_price | money_without_trailing_zeros }}</s>{%- endif -%}</b></span>
-            </a>
+              <span class="kf__ctext"><strong>{{ product.title }}</strong>{%- if product.type != blank -%}<small>{{ product.type }}</small>{%- endif -%}<b class="kf__price">{%- if product.price_varies -%}{{ 'kfw.from' | t }} {% endif -%}{{ product.price | money_without_trailing_zeros }}{%- if product.compare_at_price > product.price -%} <s>{{ product.compare_at_price | money_without_trailing_zeros }}</s>{%- endif -%}</b><i class="tr__more">{{ 'kfw.view' | t }}</i></span>
+              <div data-dish-detail data-url="{{ product.url }}" data-title="{{ product.title | escape }}" hidden>
+                <div class="dd__media">{{ kf_img }}</div>
+                <div class="dd__body">
+                  <span class="tp__role">{{ product.type | default: 'KFW' }}</span>
+                  <h2 class="dd__title">{{ product.title }}</h2>
+                  <p class="kf__pprice">{%- if product.price_varies -%}{{ 'kfw.from' | t }} {% endif -%}{{ product.price | money_without_trailing_zeros }}{%- if product.compare_at_price > product.price -%} <s>{{ product.compare_at_price | money_without_trailing_zeros }}</s>{%- endif -%}</p>
+                  {%- assign kf_desc = product.description | strip_html | strip -%}
+                  {%- if kf_desc != blank -%}<p class="dd__desc">{{ kf_desc | truncate: 320 }}</p>{%- endif -%}
+                  <form class="kf__form" data-kf-form action="/cart/add" method="post">
+                    {%- if product.variants.size > 1 -%}
+                      <label class="kf__sel"><span>{{ 'kfw.option' | t }}</span>
+                        <select name="id">{%- for v in product.variants -%}<option value="{{ v.id }}"{% unless v.available %} disabled{% endunless %}{% if v.id == product.selected_or_first_available_variant.id %} selected{% endif %}>{{ v.title }}{% unless v.available %} · {{ 'kfw.sold_out' | t }}{% endunless %}</option>{%- endfor -%}</select>
+                      </label>
+                    {%- else -%}<input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">{%- endif -%}
+                    <button class="btn btn--gold" type="submit"{% unless product.available %} disabled{% endunless %}>{{ 'kfw.add' | t }}</button>
+                  </form>
+                </div>
+              </div>
+            </div>
           {%- endfor -%}
         {%- else -%}
         {%- for block in section.blocks -%}{%- assign bs = block.settings -%}

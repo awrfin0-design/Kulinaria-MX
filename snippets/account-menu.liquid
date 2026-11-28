@@ -41,6 +41,13 @@
       <p class="acct__cart-n" data-acct-cart-text data-t-one="{{ 'acct.cart_one' | t }}" data-t-many="{{ 'acct.cart_many' | t }}" data-t-empty="{{ 'acct.cart_empty' | t }}">
         {%- if cart.item_count == 0 -%}{{ 'acct.cart_empty' | t }}{%- elsif cart.item_count == 1 -%}{{ 'acct.cart_one' | t }}{%- else -%}{{ 'acct.cart_many' | t | replace: '[n]', cart.item_count }}{%- endif -%}
       </p>
+      <ul class="acct__cart-list" data-acct-cart-list data-t-more="{{ 'acct.cart_more' | t }}"{% if cart.item_count == 0 %} hidden{% endif %}>
+        {%- for item in cart.items limit: 3 -%}
+          {%- capture tx_it -%}{% render 'tx', s: item.product.title %}{%- endcapture -%}
+          <li><span>{{ tx_it }}{% unless item.variant.title == 'Default Title' %} · {{ item.variant.title }}{% endunless %}</span><b>&times; {{ item.quantity }}</b></li>
+        {%- endfor -%}
+        {%- if cart.items.size > 3 -%}<li class="is-more">{{ 'acct.cart_more' | t | replace: '[n]', cart.items.size | minus: 3 }}</li>{%- endif -%}
+      </ul>
       <a class="btn btn--gold btn--sm btn--block" href="{{ routes.cart_url }}">{{ 'acct.view_cart' | t }}</a>
       <button class="acct__clear" type="button" data-cart-clear data-confirm="{{ 'cart.clear_confirm' | t }}"{% if cart.item_count == 0 %} hidden{% endif %}>{{ 'cart.clear' | t }}</button>
     </div>

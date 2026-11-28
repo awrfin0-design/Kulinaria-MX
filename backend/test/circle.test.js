@@ -49,7 +49,8 @@ const adm = (p) => get(Object.assign({ key: 'k' }, p));
 // a class in 3 days, capacity 3, minimum 2, confirmation deadline 24 h before
 adm({ action: 'circle_class_save', ckey: 'padel-x', sport: 'padel', title: 'Torneo de Pádel', coach: 'Anny', date: iso(3), time: '09:00', venue: 'Club', cap: 3, min: 2, price: 600, limit: 24 });
 adm({ action: 'circle_class_save', ckey: 'tenis-y', sport: 'tenis', title: 'Clínica de Tenis', coach: 'Jess', date: iso(3), time: '09:00', venue: 'Raqueta', cap: 5, min: 4, price: 600, limit: 24 });
-const lst = get({ action: 'classes' });
+const lst = get({ action: 'classes', cid: '1', token: 'tok1' });
+ok('the class calendar is NOT public: no account, a forged token, or a customer without the 4-week block get nothing', get({ action: 'classes' }).error === 'members_only' && get({ action: 'classes', cid: '1', token: 'bad' }).error === 'members_only' && get({ action: 'classes', cid: '2', token: 'tok2' }).error === 'members_only');
 ok('the public list shows both classes with seats and no personal data', lst.classes.length >= 2 && lst.classes.find((c) => c.key === 'padel-x').left === 3 && !JSON.stringify(lst).includes('@'), lst.classes[0]);
 const book1 = (cid, cls, seats, email) => get({ action: 'book', cid: String(cid), token: 'tok' + cid, cls, seats: String(seats), name: 'Ana', last: 'Pérez', email: email || 'ana@x.com', phone: '1' });
 ok('a visitor without a block cannot book (members only)', get({ action: 'book', cid: '2', token: 'tok2', cls: 'padel-x', seats: '1', name: 'Bob', email: 'b@x.com' }).error === 'members_only');
@@ -61,7 +62,7 @@ ok('booking the same class twice with the same e-mail does not duplicate', book1
 members[3] = { hasPlan: true, plan: 'block' }; vm.runInContext('creditsFor_ = function (cid) { return ' + JSON.stringify(members) + '[cid] || { hasPlan: false }; };', ctx);
 const b3 = book1(3, 'padel-x', 2, 'luis@x.com');
 ok('over the capacity the booking goes to the waiting list', b3.ok && b3.state === 'En espera' && mails.some((m) => m.to === 'luis@x.com' && /lista de espera/.test(m.htmlBody)), b3);
-ok('the public seats count only Pendiente + Confirmada', get({ action: 'classes' }).classes.find((c) => c.key === 'padel-x').taken === 2);
+ok('the public seats count only Pendiente + Confirmada', get({ action: 'classes', cid: '1', token: 'tok1' }).classes.find((c) => c.key === 'padel-x').taken === 2);
 // one more person for tenis (below its minimum of 4)
 members[4] = { hasPlan: true, plan: 'block' }; vm.runInContext('creditsFor_ = function (cid) { return ' + JSON.stringify(members) + '[cid] || { hasPlan: false }; };', ctx);
 book1(4, 'tenis-y', 1, 'eva@x.com');
@@ -135,7 +136,7 @@ mails.length = 0;
 run('leadAdd_({ kind: "gimnasio", name: "Luis G", email: "lg@x.com", fields: { tipo: "gimnasio", gimnasio: "Titan" } })');
 ok('a partner-gym application is acknowledged to the applicant', mails.some((m) => m.to === 'lg@x.com' && /recibimos|got your request/.test(m.subject)));
 adm({ action: 'circle_class_save', ckey: 'desc-q', sport: 'tenis', title: 'Con descripción', coach: 'Ren', date: iso(6), time: '10:00', venue: 'Club', cap: 8, min: 6, price: 600, limit: 24, desc: 'Clínica de saque y derecha para todos los niveles.' });
-ok('a class description saved in the admin is shown in the public list', (get({ action: 'classes' }).classes.find((c) => c.key === 'desc-q') || {}).desc === 'Clínica de saque y derecha para todos los niveles.');
+ok('a class description saved in the admin is shown in the public list', (get({ action: 'classes', cid: '1', token: 'tok1' }).classes.find((c) => c.key === 'desc-q') || {}).desc === 'Clínica de saque y derecha para todos los niveles.');
 adm({ action: 'circle_dir_save', tab: 'trainer', name: 'Carla', role: 'IFBB', zone: 'Lomas', email: 'carla@x.com', phone: '+52 222 111 2233', active: 'Sí' });
 ok('a trainer\'s direct contact is given to a member with a block', (() => { const r = get({ action: 'trainer', cid: '1', token: 'tok1', name: 'Carla' }); return r.ok && r.found && r.email === 'carla@x.com' && /222/.test(r.whatsapp); })());
 ok('...and never to someone without a block, or with a forged token', get({ action: 'trainer', cid: '2', token: 'tok2', name: 'Carla' }).error === 'members_only' && get({ action: 'trainer', cid: '1', token: 'bad', name: 'Carla' }).error === 'members_only');

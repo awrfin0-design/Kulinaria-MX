@@ -24,13 +24,19 @@
       {%- if tx_s_text != blank -%}<p>{{ tx_s_text }}</p>{%- endif -%}
     </header>
 
-    <div class="circle__gate" data-circle-gate hidden>
+    <div class="circle__gate" data-circle-gate>
       <span class="circle__gateico"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#cs-lock"/></svg></span>
+      {%- if customer -%}
       <div class="circle__gatetxt"><strong>{{ 'circle.lock_t' | t }}</strong><span>{{ 'circle.lock_s' | t | replace: '[p]', price_m }}</span></div>
       <a class="btn btn--gold circle__gatebtn" href="{{ section.settings.cta_link | default: '/pages/pedido' }}">{{ 'circle.lock_cta' | t }}</a>
+      {%- else -%}
+      <div class="circle__gatetxt"><strong>{{ 'circle.login_t' | t }}</strong><span>{{ 'circle.login_s' | t | replace: '[p]', price_m }}</span></div>
+      <a class="btn btn--gold circle__gatebtn" href="{% render 'login-url', back: '/pages/circulo-privado' %}">{{ 'login.enter' | t }}</a>
+      {%- endif -%}
     </div>
     <p class="circle__welcome" data-circle-welcome hidden>{{ 'circle.welcome' | t }}</p>
 
+    <div class="circle__body" data-circle-body hidden>
     <div class="circle__filters" role="group" aria-label="{{ 'circle.filters' | t }}" data-circle-filters>
       <button class="circle__pill is-on" type="button" data-sport="all" aria-pressed="true">{{ 'circle.all' | t }} (<span data-circle-all>{{ section.blocks.size }}</span>)</button>
       {%- assign seen = '' -%}
@@ -42,6 +48,7 @@
     </div>
 
     <div class="circle__grid" data-circle-grid>
+      <template data-circle-tpl>
       {%- for block in section.blocks -%}{%- assign bs = block.settings -%}
         {%- capture tx_t -%}{% render 'tx', s: bs.title %}{%- endcapture -%}
         {%- capture tx_v -%}{% render 'tx', s: bs.venue %}{%- endcapture -%}
@@ -77,8 +84,10 @@
           <span class="circle__lock" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#cs-lock"/></svg></span>
         </article>
       {%- endfor -%}
+      </template>
     </div>
     <p class="circle__note">{{ 'circle.note' | t | replace: '[p]', price_m }}</p>
+    </div>
   </div>
 </section>
 

@@ -983,7 +983,7 @@ function cMailBook_(res, cls, state) {
 /* ---------- public API (GET) ---------- */
 function circlePublic_(p) {
   var act = String(p.action);
-  if (act === 'classes') return { ok: true, classes: circleClassesPublic_() };
+  if (act === 'classes') return circleMember_(p.cid, p.token) ? { ok: true, classes: circleClassesPublic_() } : { ok: false, error: 'members_only' };   // the calendar and the seats are only shown to a signed-in customer with an active 4-week block
   if (act === 'book') return circleBook_(p);
   if (act === 'coupon') return circleCoupon_(p);
   if (act === 'coupon_check') return circleCouponCheck_(p);
