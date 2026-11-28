@@ -1,9 +1,11 @@
 {%- comment -%}
   Is this dish on the menu in a given week?  Prints "on" or "off" (capture it:  {%- capture mw -%}{% render 'menu-week', product: product %}{%- endcapture -%}).
   Params: product · offset (weeks from this one, default 0)
-  Metafield kulinaria.weeks (list of text) = the weeks the dish runs. Each entry is ANY date inside that week, written YYYY-MM-DD (e.g. 2026-11-09).
-  - weeks empty  -> the dish follows the tag only: always on this week, never in the future calendar
-  - weeks filled -> the dish shows only in those weeks (weeks start on Monday)
+  The menu runs by itself, nothing has to be edited every week:
+  - metafield kulinaria.weeks (list of YYYY-MM-DD dates, any day inside the week)  -> optional override: the dish shows ONLY in those weeks
+  - else metafield kulinaria.rotation (text, e.g. "0,1")                           -> 3-week rotation: the dish shows in the weeks whose cycle number (0, 1 or 2) is in the list
+  - else (nothing set)                                                             -> the dish is on the menu every week
+  Weeks start on Monday.
 {%- endcomment -%}
 {%- liquid
   assign off_n = offset | default: 0 | plus: 0
@@ -17,10 +19,22 @@
   assign want_ts = want_ts | plus: shift
   assign want_key = want_ts | date: '%Y-%m-%d'
   assign weeks = product.metafields.kulinaria.weeks.value
+  assign rotation = product.metafields.kulinaria.rotation.value | default: '' | strip
   assign result = 'off'
   if weeks == blank
-    if off_n == 0
+    if rotation == blank
       assign result = 'on'
+    else
+      assign cyc_days = want_key | date: '%s' | plus: 0 | divided_by: 86400
+      assign cyc_idx = cyc_days | plus: 3 | divided_by: 7 | modulo: 3
+      assign cyc_list = rotation | split: ','
+      for cp in cyc_list
+        assign cp_n = cp | strip | plus: 0
+        if cp_n == cyc_idx
+          assign result = 'on'
+          break
+        endif
+      endfor
     endif
   else
     for w in weeks
