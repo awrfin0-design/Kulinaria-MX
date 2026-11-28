@@ -16,29 +16,44 @@
       <h2>{% render 'headline', text: tx_s_heading %}</h2>
       {%- if tx_s_text != blank -%}<p class="lede">{{ tx_s_text }}</p>{%- endif -%}
     </div>
-    <div class="menu-calendar__grid">
-      {%- assign last_week = section.settings.weeks | default: 4 | minus: 1 -%}
+    {%- assign last_week = section.settings.weeks | default: 4 | minus: 1 -%}
+    {%- capture mc_panels -%}
+      {%- assign mc_counts = '' -%}
       {%- for i in (0..last_week) -%}
         {%- assign shift = i | times: 7 | times: day -%}
         {%- assign wk_ts = mon_ts | plus: shift -%}
-        {%- assign wk_label = wk_ts | date: '%d/%m' -%}
         {%- assign n = 0 -%}
-        <article class="menu-calendar__week{% if i == 0 %} is-now{% endif %}">
-          <h3>{% if i == 0 %}{{ 'calendar.this_week' | t }}{% else %}{{ 'calendar.week_of' | t: date: wk_label }}{% endif %}</h3>
-          <ul>
+        <div class="mc__panel" role="tabpanel" data-mc-panel="{{ i }}"{% unless i == 0 %} hidden{% endunless %}>
+          <ul class="mc__grid">
             {%- if coll != blank -%}
               {%- for product in coll.products -%}{%- capture tx_ptitle -%}{% render 'tx', s: product.title %}{%- endcapture -%}
                 {%- capture mw_state -%}{% render 'menu-week', product: product, offset: i %}{%- endcapture -%}
                 {%- if mw_state == 'on' -%}
                   {%- assign n = n | plus: 1 -%}
-                  <li><a href="{{ product.url }}">{{ tx_ptitle }}</a> <span>{{ product.price | money_without_trailing_zeros }}</span></li>
+                  {%- assign mc_tier = product.metafields.kulinaria.tier.value | default: 'selecto' -%}{%- assign mc_tk = 'tier.' | append: mc_tier -%}
+                  <li><a class="mc__card" href="{{ product.url }}">
+                    <span class="mc__img">{%- if product.featured_image -%}<img src="{{ product.featured_image | image_url: width: 220 }}" alt="" loading="lazy" width="72" height="72">{%- endif -%}</span>
+                    <span class="mc__txt"><b>{{ tx_ptitle }}</b><small>{{ mc_tk | t }}</small></span>
+                    <em>{{ product.price | money_without_trailing_zeros }}</em>
+                  </a></li>
                 {%- endif -%}
               {%- endfor -%}
             {%- endif -%}
-            {%- if n == 0 -%}<li class="text-muted">{{ 'calendar.empty' | t }}</li>{%- endif -%}
+            {%- if n == 0 -%}<li class="mc__empty">{{ 'calendar.empty' | t }}</li>{%- endif -%}
           </ul>
-        </article>
+        </div>
+        {%- assign mc_counts = mc_counts | append: n | append: ',' -%}
       {%- endfor -%}
+    {%- endcapture -%}
+    {%- assign mc_count_list = mc_counts | split: ',' -%}
+    <div class="mc" data-mc>
+      <div class="mc__tabs" role="tablist">
+        {%- for i in (0..last_week) -%}
+          {%- assign shift = i | times: 7 | times: day -%}{%- assign wk_ts = mon_ts | plus: shift -%}{%- assign wk_label = wk_ts | date: '%d/%m' -%}
+          <button class="mc__tab{% if i == 0 %} is-on{% endif %}" type="button" role="tab" aria-selected="{% if i == 0 %}true{% else %}false{% endif %}" data-mc-tab="{{ i }}">{% if i == 0 %}{{ 'calendar.this_week' | t }}{% else %}{{ 'calendar.week_of' | t: date: wk_label }}{% endif %} <small>{{ mc_count_list[i] }}</small></button>
+        {%- endfor -%}
+      </div>
+      {{ mc_panels }}
     </div>
   </div>
 </section>

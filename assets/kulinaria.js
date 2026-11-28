@@ -1165,6 +1165,19 @@
   }
 
 
+
+  /* ---------- weekly menu calendar: one tab per week, one compact grid at a time ---------- */
+  function initMenuCalendar() {
+    $$('[data-mc]').forEach(function (root) {
+      root.addEventListener('click', function (e) {
+        var t = e.target.closest && e.target.closest('[data-mc-tab]'); if (!t) return;
+        var i = t.getAttribute('data-mc-tab');
+        $$('[data-mc-tab]', root).forEach(function (b) { var on = b === t; b.classList.toggle('is-on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); });
+        $$('[data-mc-panel]', root).forEach(function (p) { p.hidden = p.getAttribute('data-mc-panel') !== i; });
+      });
+    });
+  }
+
   /* ---------- partner-gym map: a real map of Puebla (Leaflet + OpenStreetMap/CARTO tiles), pins per chain, filter by chain, "near me" ---------- */
   function initGymMap() {
     var root = $('[data-gymmap]'); if (!root) return;
@@ -1178,7 +1191,7 @@
     var fit = function () { if (!map) return; var vis = marks.filter(function (m) { return !filter || m.d.chain === filter; }); if (!vis.length) return; var b = L.latLngBounds(vis.map(function (m) { return [m.d.lat, m.d.lng]; })); if (vis.length === 1) map.setView(b.getCenter(), 15); else map.fitBounds(b, { padding: [40, 40], maxZoom: 15 }); };
     var apply = function () {
       paintList(); if (!map) return;
-      marks.forEach(function (m) { var on = !filter || m.d.chain === filter; if (on) { if (!map.hasLayer(m.m)) m.m.addTo(map); } else if (map.hasLayer(m.m)) map.removeLayer(m.m); });
+      marks.forEach(function (m) { var on = !filter || m.d.chain === filter; if (!map.hasLayer(m.m)) m.m.addTo(map); m.m.setOpacity(on ? 1 : 0.22); m.m.setZIndexOffset(on && filter ? 1000 : 0); var el = m.m.getElement(); if (el) { el.classList.toggle('is-dim', !on); el.classList.toggle('is-hi', on && !!filter); } });   // every pin stays; the chosen chain is highlighted
       if (filter) fit();
     };
     var build = function () {
@@ -3255,7 +3268,7 @@
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
     [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initWave, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile, initDietGate,
-      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initHeroDialog, initCircle, initGymMap, initFire, initTilt, initPeek].forEach(run);
+      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initHeroDialog, initCircle, initGymMap, initMenuCalendar, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
   });
