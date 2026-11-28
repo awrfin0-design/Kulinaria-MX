@@ -1799,6 +1799,17 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
     ok('...and "show all" brings every sede back', await page.evaluate(() => document.querySelectorAll('[data-page="home"] [data-gymmap-list] li:not([hidden])').length >= 15));
   }
 
+  // ---- v168: the weekly menu is tabbed by week, with compact photo cards
+  {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx-seen', '1'); });
+    await page.goto(`${URL0}#/menu`); await page.reload(); await page.waitForTimeout(1000);
+    const mc = await page.evaluate(() => { const r = document.querySelector('[data-page="menu"] [data-mc]'); const tabs = [...r.querySelectorAll('[data-mc-tab]')]; return { tabs: tabs.length, on: tabs.filter((t) => t.classList.contains('is-on')).length, panels: [...r.querySelectorAll('[data-mc-panel]')].filter((p) => !p.hidden).length, cards: r.querySelectorAll('[data-mc-panel="0"] .mc__card').length, img: r.querySelectorAll('[data-mc-panel="0"] .mc__img img').length }; });
+    ok('weekly menu: one tab per week, only the current week open, dishes as compact photo cards', mc.tabs >= 3 && mc.on === 1 && mc.panels === 1 && mc.cards >= 3 && mc.img >= 1, JSON.stringify(mc));
+    await page.evaluate(() => document.querySelector('[data-page="menu"] [data-mc-tab="1"]').click()); await page.waitForTimeout(200);
+    ok('weekly menu: choosing another week swaps the grid', await page.evaluate(() => { const r = document.querySelector('[data-page="menu"] [data-mc]'); return !r.querySelector('[data-mc-panel="1"]').hidden && r.querySelector('[data-mc-panel="0"]').hidden; }));
+  }
+
   // ---- phones: nothing wider than the screen, the total bar is inside the screen
   await page.setViewportSize({ width: 390, height: 844 });
   await base({ guest: true }); await open(true);
