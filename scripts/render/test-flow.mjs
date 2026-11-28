@@ -535,7 +535,7 @@ await page.goto(URL0);
     { key: 'run-c', sport: 'running', title: 'Rodada de 10K', coach: 'Ren', date: '2026-12-14', time: '07:00', venue: 'Parque', cap: 20, min: 5, price: 0, status: 'Cancelada', art: '', taken: 0, left: 20, full: false, waiting: 0, limit: 24 }];
   const bookCalls = []; let bookState = 'Pendiente';
   await page.route('https://script.example/**', async (route) => { const u = new URL(route.request().url()), q = Object.fromEntries(u.searchParams); let body = { ok: true };
-    if (q.action === 'classes') body = { ok: true, classes: live }; else if (q.action === 'book') { bookCalls.push(q); body = { ok: true, state: bookState, id: 'r1', left: 5 }; } else if (q.action === 'coupon') body = { ok: true, code: 'KMAG-SRV42', partner: 'magnate', expires: '2099-01-01' };
+    if (q.action === 'credits') body = { ok: true, hasPlan: true, plan: 'block', weeksLeft: 3, weeksTotal: 4, mealsPlanned: 0, mealsMax: 20, endsOn: '2099-01-01', editable: [] }; else if (q.action === 'classes') body = q.cid && q.token ? { ok: true, classes: live } : { ok: false, error: 'members_only' }; else if (q.action === 'book') { bookCalls.push(q); body = { ok: true, state: bookState, id: 'r1', left: 5 }; } else if (q.action === 'coupon') body = { ok: true, code: 'KMAG-SRV42', partner: 'magnate', expires: '2099-01-01' };
     await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(body) }); });
   await page.goto(`${URL0}#/pg/circulo-privado`); await page.reload(); await page.waitForTimeout(1200);
   await page.evaluate(() => { document.querySelector('#kx-account').setAttribute('data-endpoint', 'https://script.example/exec'); document.querySelector('[data-circle]').setAttribute('data-endpoint', 'https://script.example/exec'); document.querySelector('[data-hx-dialog]').setAttribute('data-endpoint', 'https://script.example/exec'); document.dispatchEvent(new CustomEvent('kx:circle-refresh')); }); await page.waitForTimeout(700);
@@ -669,6 +669,20 @@ await page.goto(URL0);
     await page.goto(G2 + '#/pg/circulo-privado'); await page.reload(); await page.waitForTimeout(1200);
     const so = await page.evaluate(() => { const r = document.querySelector('[data-page="pg/circulo-privado"] [data-circle]'); const g = r.querySelector('[data-circle-gate]'); return { cards: r.querySelectorAll('.circle__card').length, gate: !g.hidden, txt: g.innerText.replace(/\s+/g, ' ').slice(0, 160), seen: /Ren Jiménez|Torneo|09:00/.test(r.innerText) }; });
     ok('private circle (signed out): only the "sign in" gate, no classes, no dates', so.cards === 0 && so.gate && !so.seen && /Inicia sesión/i.test(so.txt), JSON.stringify(so));
+  }
+
+  // ---- v166: merchandise (hoodie, shirt, shaker...) opens the same side panel as dishes and trainers
+  {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx-seen', '1'); localStorage.setItem('kx-test-orders', '0'); });
+    await page.goto(`${URL0}#/home`); await page.reload(); await page.waitForTimeout(1000);
+    const n = await page.evaluate(() => document.querySelectorAll('[data-page="home"] .kf [data-pc-card]').length);
+    ok('KFW: product cards are buttons that open a panel', n >= 1, String(n));
+    await page.evaluate(() => { const c = document.querySelector('[data-page="home"] .kf [data-pc-card]'); c.scrollIntoView({ block: 'center' }); }); await page.waitForTimeout(300);
+    await page.evaluate(() => document.querySelector('[data-page="home"] .kf [data-pc-card]').click()); await page.waitForTimeout(700);
+    const kp = await page.evaluate(() => { const p = document.querySelector('[data-dish-panel]'), c = p.querySelector('[data-dp-content]'); return { open: !p.hidden, title: (c.querySelector('.dd__title') || {}).textContent, price: /\$\s?\d/.test((c.querySelector('.kf__pprice') || {}).textContent || ''), form: !!c.querySelector('[data-kf-form] button[type=submit]'), full: !p.querySelector('[data-dp-full]').hidden, href: p.querySelector('[data-dp-full]').getAttribute('href') }; });
+    ok('KFW panel: name, price, add-to-cart form and a "full page" link', kp.open && kp.title && kp.price && kp.form && kp.full && /products/.test(kp.href), JSON.stringify(kp));
+    await page.keyboard.press('Escape'); await page.waitForTimeout(400);
   }
 
   // ---- phones: nothing wider than the screen, the total bar is inside the screen
