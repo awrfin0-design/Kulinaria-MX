@@ -1522,7 +1522,7 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   const gyPosts = []; page.on('request', (r) => { if (/script\.example|exec/.test(r.url()) && r.method() === 'POST') gyPosts.push((r.postData() || '').slice(0, 500)); });
   await page.route('https://script.example/**', async (route) => { await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); });
   await page.evaluate(() => { document.querySelector('[data-hx-dialog]').setAttribute('data-endpoint', 'https://script.example/exec'); });
-  const gy = await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'), s = pg.querySelector('.gy'), kf = pg.querySelector('.kf'); const t = s ? s.innerText.replace(/\s+/g, ' ') : ''; return { has: !!s, after: !!(s && kf && (kf.compareDocumentPosition(s) & Node.DOCUMENT_POSITION_FOLLOWING)), txt: t, logos: s ? [...s.querySelectorAll('.gy__logo')].map((l) => l.getAttribute('aria-label')) : [], pins: s ? s.querySelectorAll('.gy__pin').length : 0 }; });
+  const gy = await page.evaluate(() => { const pg = document.querySelector('[data-page="home"]'), s = pg.querySelector('.gy'), kf = pg.querySelector('.kf'); const t = s ? s.innerText.replace(/\s+/g, ' ') : ''; return { has: !!s, after: !!(s && kf && (kf.compareDocumentPosition(s) & Node.DOCUMENT_POSITION_FOLLOWING)), txt: t, logos: s ? [...s.querySelectorAll('.gy__logo')].map((l) => l.getAttribute('aria-label')) : [], pins: s ? s.querySelectorAll('[data-gymmap-list] li').length : 0 }; });
   ok('home: the gym network section sits right after the KFW apparel section', gy.has && gy.after, JSON.stringify([gy.has, gy.after]));
   ok('gym section keeps the mockup text (tag, headline, 15+ gyms paragraph, both buttons, map button and zone, official collection line)', /Gimnasios hermanos · Red estratégica/i.test(gy.txt) && /Alianzas que impulsan/.test(gy.txt) && /tu rendimiento\./.test(gy.txt) && /Más de 15 gimnasios partners unidos por una misma visión de comunidad y alto desempeño/.test(gy.txt) && /punto de entrega para recoger tus pedidos Kulinaria/.test(gy.txt) && /Explorar sedes/i.test(gy.txt) && /Afiliar gimnasio/i.test(gy.txt) && /Buscar sede en mi zona/i.test(gy.txt) && /Lomas de Angelópolis/.test(gy.txt) && /Colección oficial KFW/i.test(gy.txt), gy.txt.slice(0, 200));
   ok('gym section shows the eight partner gyms and the affiliation card (Afilia tu gimnasio, Dueño o gerente, Agendar reunión)', gy.logos.length === 8 && ['Sports World', 'Empire Fitness', 'smart fit', 'Anytime Fitness', 'Prime Fitness', 'Crownit', 'Stone Fit', 'Lomas Training'].every((n) => gy.logos.some((l) => l === n)) && /Afilia tu gimnasio/.test(gy.txt) && /¿Dueño o gerente\? Suma tu sede a la red Kulinaria\./.test(gy.txt) && /Agendar reunión/i.test(gy.txt) && gy.pins >= 6, JSON.stringify([gy.logos, gy.pins]));
@@ -1535,8 +1535,8 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.click('[data-hx-dialog] .hxd__go'); await page.waitForTimeout(500);
   ok('sending the area request lands in the sheet with the area', gyPosts.some((p) => /"tipo":"sede"/.test(p) && /Lomas de Angel/.test(p)), gyPosts.slice(-1).join('').slice(0, 260));
   await page.keyboard.press('Escape'); await page.waitForTimeout(200);
-  await page.click('[data-page="home"] .gy__logo[aria-label="Sports World"]'); await page.waitForTimeout(350);
-  ok('clicking a gym logo opens the pickup form with that gym already filled in', await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return !d.hidden && d.querySelector('[name=sede]').value === 'Sports World'; }));
+  ok('clicking a gym logo filters the map to that chain (the pickup request is made from the pin: "Solicitar entrega aquí")', await page.evaluate(() => { document.querySelector('[data-page="home"] .gy__logo[aria-label="Sports World"]').click(); return [...document.querySelectorAll('[data-page="home"] [data-gymmap-list] li:not([hidden])')].every((l) => /sports world/i.test(l.getAttribute('data-chain'))); }));
+  await page.evaluate(() => document.querySelector('[data-page="home"] [data-gymmap-all]').click()); await page.waitForTimeout(200);
   await page.keyboard.press('Escape'); await page.waitForTimeout(200);
   await page.click('[data-page="home"] .gy__affil .gy__btn'); await page.waitForTimeout(350);
   const gf = await page.evaluate(() => { const d = document.querySelector('[data-hx-dialog]'); return { title: d.querySelector('[data-hxd-title]').textContent, vis: [...d.querySelectorAll('.hxd__g:not([hidden]) [name]')].map((x) => x.name).join() }; });
@@ -1716,17 +1716,14 @@ await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
     await page.keyboard.press('Escape'); await page.waitForTimeout(400);
   }
 
-  // ---- v159/160: class descriptions + panel, KFW cards
+  // ---- v159/160: class descriptions + panel, KFW cards (the calendar is for members)
   {
     await page.setViewportSize({ width: 1440, height: 900 });
     const CR2 = '[data-page="pg/circulo-privado"]';
-    await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx-seen', '1'); localStorage.setItem('kx-test-orders', '0'); });
+    await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); localStorage.setItem('kx-lang', 'es'); sessionStorage.setItem('kx-seen', '1'); localStorage.setItem('kx-test-orders', '2'); });
     await page.goto(`${URL0}#/pg/circulo-privado`); await page.reload(); await page.waitForTimeout(1200);
     const cd = await page.evaluate((c) => [...document.querySelectorAll(c + ' .circle__card')].map((x) => ((x.querySelector('.circle__desc') || {}).textContent || '').trim().length), CR2);
     ok('classes: every class card carries a description', cd.length >= 4 && cd.every((n) => n > 30), JSON.stringify(cd));
-    await page.evaluate((c) => document.querySelector(c + ' .circle__card .circle__top').click(), CR2); await page.waitForTimeout(700);
-    const cp = await page.evaluate(() => { const p = document.querySelector('[data-dish-panel]'), c = p.querySelector('[data-dp-content]'); return { open: !p.hidden, title: (c.querySelector('.dd__title') || {}).textContent, about: [...c.querySelectorAll('.dd__h')].map((h) => h.textContent).join('|'), desc: ((c.querySelector('.dd__desc') || {}).textContent || '').length, lock: !c.querySelector('[data-tp-lock]').hidden, pickHidden: p.querySelector('[data-dp-pick]').hidden }; });
-    ok('class panel: description, coach and venue; locked (no booking button) without a 4-week block', cp.open && cp.title && /Sobre esta clase/.test(cp.about) && cp.desc > 30 && cp.lock && cp.pickHidden, JSON.stringify(cp));
     await page.keyboard.press('Escape'); await page.waitForTimeout(500);
     await page.evaluate(() => localStorage.setItem('kx-test-orders', '2')); await page.reload(); await page.waitForTimeout(1200);
     await page.evaluate((c) => document.querySelector(c + ' .circle__card .circle__top').click(), CR2); await page.waitForTimeout(800);
