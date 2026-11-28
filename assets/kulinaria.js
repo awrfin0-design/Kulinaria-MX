@@ -1172,7 +1172,7 @@
     var cv = $('[data-gymmap-canvas]', root), list = $$('[data-gymmap-list] li'), allBtn = $('[data-gymmap-all]', root), nearBtn = $('[data-gymmap-near]', root);
     var L = null, map = null, tiles = null, marks = [], filter = '', starting = false;
     var esc3 = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
-    var tileUrl = function () { return 'https://{s}.basemaps.cartocdn.com/' + (document.documentElement.getAttribute('data-theme') === 'llama' ? 'light_all' : 'dark_all') + '/{z}/{x}/{y}{r}.png'; };
+    var tileUrl = function () { return 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'; };   // OpenStreetMap standard tiles; the dark look in Fuego is done with CSS
     var pin = '<svg viewBox="0 0 24 32" width="28" height="36" aria-hidden="true"><path fill="#ff6200" stroke="#fff" stroke-width="1.4" d="M12 1C5.9 1 1 5.8 1 11.8 1 19.8 12 31 12 31s11-11.2 11-19.2C23 5.8 18.1 1 12 1z"/><circle cx="12" cy="11.5" r="4" fill="#111"/></svg>';
     var paintList = function () { list.forEach(function (li) { li.hidden = !!filter && li.getAttribute('data-chain') !== filter; }); if (allBtn) allBtn.hidden = !filter; $$('[data-gymmap-chain]').forEach(function (a) { a.classList.toggle('is-on', !!filter && a.getAttribute('data-gymmap-chain') === filter); }); };
     var fit = function () { if (!map) return; var vis = marks.filter(function (m) { return !filter || m.d.chain === filter; }); if (!vis.length) return; var b = L.latLngBounds(vis.map(function (m) { return [m.d.lat, m.d.lng]; })); if (vis.length === 1) map.setView(b.getCenter(), 15); else map.fitBounds(b, { padding: [40, 40], maxZoom: 15 }); };
@@ -1184,7 +1184,7 @@
     var build = function () {
       if (map || !window.L) return; L = window.L;
       map = L.map(cv, { scrollWheelZoom: false, zoomControl: true }).setView([+root.getAttribute('data-lat') || 19.03, +root.getAttribute('data-lng') || -98.24], +root.getAttribute('data-zoom') || 12);
-      tiles = L.tileLayer(tileUrl(), { attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19, subdomains: 'abcd' }).addTo(map);
+      tiles = L.tileLayer(tileUrl(), { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors', maxZoom: 19 }).addTo(map);
       var icon = L.divIcon({ className: 'gy__mk', html: pin, iconSize: [28, 36], iconAnchor: [14, 36], popupAnchor: [0, -32] });
       data.forEach(function (d) {
         var pop = '<div class="gy__pop"><strong>' + esc3(d.chain) + '</strong><span>' + esc3(d.sede) + '</span><small>' + esc3(d.addr || d.zone) + '</small><em>' + esc3(root.getAttribute('data-t-approx')) + '</em><a href="dialog:sede~' + esc3(d.chain + ' · ' + d.sede) + '">' + esc3(root.getAttribute('data-t-req')) + '</a></div>';
