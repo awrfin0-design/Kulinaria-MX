@@ -39,6 +39,7 @@
     "cart": "Cart",
     "cart_empty": "Your cart is empty.",
     "cart_one": "1 item in your cart.",
+    "cart_more": "and [n] more",
     "cart_many": "[n] items in your cart.",
     "view_cart": "View cart and pay",
     "todo": "Complete your allergy profile",
@@ -260,6 +261,8 @@
     "left": "[n] seats left",
     "no_pay": "Free",
     "about": "About this class",
+    "login_t": "Sign in to see the classes",
+    "login_s": "The class calendar is exclusive to customers with an active 4-week block. Sign in with your account; if you do not have a block yet, start one and it unlocks. Each class is [p].",
     "lock_t": "Private circle preview",
     "lock_s": "Classes are exclusive to customers with an active 4-week block. Each class costs [p].",
     "lock_cta": "Start my block",
@@ -489,9 +492,19 @@
     "reach": "Contact {{ name }}"
   },
   "kfw": {
+    "add": "Add to cart",
+    "option": "Size / option",
+    "view": "View details",
     "sold_out": "Sold out",
     "sale": "Sale",
     "from": "From"
+  },
+  "gymmap": {
+    "all": "Show all locations",
+    "request": "Request pickup here",
+    "near_fail": "We could not find you. Pick a location on the map or tell us your area.",
+    "approx": "Approximate location by area",
+    "title": "Locations in Puebla"
   },
   "dish": {
     "nutrition": "Nutrition facts",

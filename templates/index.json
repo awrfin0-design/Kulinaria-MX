@@ -517,6 +517,7 @@
         "g0": {
           "type": "gym",
           "settings": {
+            "locations": "Sports World Angelópolis | Angelópolis | 19.0292 | -98.2436 | Zona Angelópolis, Puebla\nSports World La Paz | La Paz | 19.0536 | -98.2153 | La Paz, Puebla\nSports World Cholula | Cholula | 19.0640 | -98.3010 | San Andrés Cholula",
             "name": "Sports|World",
             "style": "stack",
             "glyph": "ring"
@@ -525,6 +526,7 @@
         "g1": {
           "type": "gym",
           "settings": {
+            "locations": "Empire Fitness Centro | Centro histórico | 19.0433 | -98.1981 | Centro, Puebla\nEmpire Fitness Zavaleta | Zavaleta | 19.0176 | -98.2284 | Zavaleta, Puebla",
             "name": "Empire|Fitness",
             "style": "stack",
             "glyph": "shield"
@@ -533,6 +535,7 @@
         "g2": {
           "type": "gym",
           "settings": {
+            "locations": "Smart Fit La Vista | La Vista | 19.0213 | -98.2480 | La Vista, Puebla\nSmart Fit Atlixcáyotl | Atlixcáyotl | 19.0145 | -98.2440 | Blvd. Atlixcáyotl, Puebla\nSmart Fit Centro | Centro histórico | 19.0450 | -98.1950 | Centro, Puebla",
             "name": "smart|fit",
             "style": "lower",
             "glyph": "none"
@@ -541,6 +544,7 @@
         "g3": {
           "type": "gym",
           "settings": {
+            "locations": "Anytime Fitness Lomas | Lomas de Angelópolis | 19.0105 | -98.2890 | Lomas de Angelópolis\nAnytime Fitness Angelópolis | Angelópolis | 19.0310 | -98.2400 | Zona Angelópolis, Puebla",
             "name": "Anytime|Fitness",
             "style": "stack",
             "glyph": "bolt"
@@ -549,6 +553,7 @@
         "g4": {
           "type": "gym",
           "settings": {
+            "locations": "Prime Fitness La Paz | La Paz | 19.0510 | -98.2200 | La Paz, Puebla\nPrime Fitness Cholula | Cholula | 19.0610 | -98.2960 | San Pedro Cholula",
             "name": "Prime|Fitness",
             "style": "italic",
             "glyph": "p"
@@ -557,6 +562,7 @@
         "g5": {
           "type": "gym",
           "settings": {
+            "locations": "Crownit Fitness Club | Angelópolis | 19.0270 | -98.2480 | Zona Angelópolis, Puebla",
             "name": "Crownit",
             "style": "crown",
             "glyph": "crown",
@@ -566,6 +572,7 @@
         "g6": {
           "type": "gym",
           "settings": {
+            "locations": "Stone Fit Zavaleta | Zavaleta | 19.0200 | -98.2350 | Zavaleta, Puebla\nStone Fit La Vista | La Vista | 19.0230 | -98.2510 | La Vista, Puebla",
             "name": "Stone Fit",
             "style": "plain",
             "glyph": "none"
@@ -574,6 +581,7 @@
         "g7": {
           "type": "gym",
           "settings": {
+            "locations": "Lomas Training | Lomas de Angelópolis | 19.0060 | -98.2850 | Lomas de Angelópolis",
             "name": "Lomas|Training",
             "style": "stack",
             "glyph": "none"

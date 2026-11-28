@@ -958,6 +958,12 @@
       var n = c.item_count || 0;
       if (count) { count.hidden = !n; count.textContent = n; }
       if (total) total.textContent = n ? money0(c.total_price / 100) : '';
+      var lst = $('[data-acct-cart-list]', root);
+      if (lst) {   // name the products in the cart (first three, then "and N more")
+        var its = c.items || [], more = Math.max(0, its.length - 3), e1 = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; }); };
+        lst.hidden = !its.length;
+        lst.innerHTML = its.slice(0, 3).map(function (it) { return '<li><span>' + e1(it.product_title) + (it.variant_title && it.variant_title !== 'Default Title' ? ' · ' + e1(it.variant_title) : '') + '</span><b>&times; ' + it.quantity + '</b></li>'; }).join('') + (more ? '<li class="is-more">' + e1(String(lst.getAttribute('data-t-more') || '').replace('[n]', more)) + '</li>' : '');
+      }
       if (txt) txt.textContent = !n ? txt.getAttribute('data-t-empty') : n === 1 ? txt.getAttribute('data-t-one') : String(txt.getAttribute('data-t-many') || '').replace('[n]', n);
     };
     var money0 = function (v) { try { return new Intl.NumberFormat(cfg.lang === 'en' ? 'en-US' : 'es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(v); } catch (e) { return '$' + Math.round(v); } };
@@ -1023,13 +1029,19 @@
       var wbtn = t.closest('[data-fn-warnbtn]');
       if (wbtn) { e.preventDefault(); var bx = wbtn.closest('[data-fn-warnbox]'), on = !bx.classList.contains('is-open'); $$('[data-fn-warnbox].is-open').forEach(function (x) { x.classList.remove('is-open'); var b3 = $('[data-fn-warnbtn]', x); if (b3) b3.setAttribute('aria-expanded', 'false'); }); bx.classList.toggle('is-open', on); wbtn.setAttribute('aria-expanded', on ? 'true' : 'false'); return; }
       if (!t.closest('[data-fn-warnbox]')) $$('[data-fn-warnbox].is-open').forEach(function (x) { x.classList.remove('is-open'); });
-      var hit = t.closest('.dish__media, .dish__title a, .dish__go, .fn-dish__media, .fn-dish__title, [data-tr-card]');
+      var hit = t.closest('.dish__media, .dish__title a, .dish__go, .fn-dish__media, .fn-dish__title, [data-tr-card], [data-pc-card]');
       if (!hit) { var cc = t.closest('[data-has-detail]'); if (cc && !t.closest('a, button, input, select, textarea, label, .fn-warnbox, .fn-note, .fn-mods, [data-fn-note]')) hit = cc; }
       if (!hit || t.closest('[data-pick], button')) return;
       var card = hit.closest('[data-has-detail]'); if (!card) return;
       e.preventDefault(); open(card);
     });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) close(); if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.hasAttribute && e.target.hasAttribute('data-tr-card')) { e.preventDefault(); open(e.target); } });
+    document.addEventListener('submit', function (e) {      // merchandise: "Agregar al carrito" in the panel adds the chosen option and goes to the cart
+      var f = e.target; if (!f || !f.matches || !f.matches('[data-kf-form]')) return; e.preventDefault();
+      var btn = $('button[type=submit]', f); if (btn) btn.disabled = true;
+      var go = function () { close(); location.href = '/cart'; };
+      try { fetch('/cart/add.js', { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(f) }).then(function (r) { if (!r.ok) throw new Error('add'); go(); }).catch(function () { if (btn) btn.disabled = false; location.href = '/cart'; }); } catch (x) { go(); }
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) close(); if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.hasAttribute && (e.target.hasAttribute('data-tr-card') || e.target.hasAttribute('data-pc-card'))) { e.preventDefault(); open(e.target); } });
   }
 
   /* ---------- plan credits: weeks left, meals planned and which weeks can still be chosen (asked from the Sheet; signed-in customers only) ---------- */
@@ -1152,6 +1164,63 @@
     });
   }
 
+
+  /* ---------- partner-gym map: a real map of Puebla (Leaflet + OpenStreetMap/CARTO tiles), pins per chain, filter by chain, "near me" ---------- */
+  function initGymMap() {
+    var root = $('[data-gymmap]'); if (!root) return;
+    var data = []; try { data = JSON.parse(($('[data-gymmap-data]', root) || {}).textContent || '[]'); } catch (e) { data = []; }
+    var cv = $('[data-gymmap-canvas]', root), list = $$('[data-gymmap-list] li'), allBtn = $('[data-gymmap-all]', root), nearBtn = $('[data-gymmap-near]', root);
+    var L = null, map = null, tiles = null, marks = [], filter = '', starting = false;
+    var esc3 = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+    var tileUrl = function () { return 'https://{s}.basemaps.cartocdn.com/' + (document.documentElement.getAttribute('data-theme') === 'llama' ? 'light_all' : 'dark_all') + '/{z}/{x}/{y}{r}.png'; };
+    var pin = '<svg viewBox="0 0 24 32" width="28" height="36" aria-hidden="true"><path fill="#ff6200" stroke="#fff" stroke-width="1.4" d="M12 1C5.9 1 1 5.8 1 11.8 1 19.8 12 31 12 31s11-11.2 11-19.2C23 5.8 18.1 1 12 1z"/><circle cx="12" cy="11.5" r="4" fill="#111"/></svg>';
+    var paintList = function () { list.forEach(function (li) { li.hidden = !!filter && li.getAttribute('data-chain') !== filter; }); if (allBtn) allBtn.hidden = !filter; $$('[data-gymmap-chain]').forEach(function (a) { a.classList.toggle('is-on', !!filter && a.getAttribute('data-gymmap-chain') === filter); }); };
+    var fit = function () { if (!map) return; var vis = marks.filter(function (m) { return !filter || m.d.chain === filter; }); if (!vis.length) return; var b = L.latLngBounds(vis.map(function (m) { return [m.d.lat, m.d.lng]; })); if (vis.length === 1) map.setView(b.getCenter(), 15); else map.fitBounds(b, { padding: [40, 40], maxZoom: 15 }); };
+    var apply = function () {
+      paintList(); if (!map) return;
+      marks.forEach(function (m) { var on = !filter || m.d.chain === filter; if (on) { if (!map.hasLayer(m.m)) m.m.addTo(map); } else if (map.hasLayer(m.m)) map.removeLayer(m.m); });
+      if (filter) fit();
+    };
+    var build = function () {
+      if (map || !window.L) return; L = window.L;
+      map = L.map(cv, { scrollWheelZoom: false, zoomControl: true }).setView([+root.getAttribute('data-lat') || 19.03, +root.getAttribute('data-lng') || -98.24], +root.getAttribute('data-zoom') || 12);
+      tiles = L.tileLayer(tileUrl(), { attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19, subdomains: 'abcd' }).addTo(map);
+      var icon = L.divIcon({ className: 'gy__mk', html: pin, iconSize: [28, 36], iconAnchor: [14, 36], popupAnchor: [0, -32] });
+      data.forEach(function (d) {
+        var pop = '<div class="gy__pop"><strong>' + esc3(d.chain) + '</strong><span>' + esc3(d.sede) + '</span><small>' + esc3(d.addr || d.zone) + '</small><em>' + esc3(root.getAttribute('data-t-approx')) + '</em><a href="dialog:sede~' + esc3(d.chain + ' · ' + d.sede) + '">' + esc3(root.getAttribute('data-t-req')) + '</a></div>';
+        marks.push({ d: d, m: L.marker([d.lat, d.lng], { icon: icon, title: d.chain + ' · ' + d.sede, keyboard: true }).addTo(map).bindPopup(pop) });
+      });
+      new MutationObserver(function () { if (tiles) tiles.setUrl(tileUrl()); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      root.classList.add('is-ready'); apply();
+      setTimeout(function () { map.invalidateSize(); }, 300);
+    };
+    var load = function () {
+      if (starting) return; starting = true;
+      if (window.L) { build(); return; }
+      var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'; document.head.appendChild(css);
+      var sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'; sc.onload = build; sc.onerror = function () { root.classList.add('is-nomap'); };
+      document.head.appendChild(sc);
+    };
+    if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); load(); } }, { rootMargin: '300px' }); io.observe(root); } else load();
+    var setFilter = function (name) { filter = name || ''; load(); apply(); };
+    document.addEventListener('click', function (e) {
+      var ch = e.target.closest && e.target.closest('[data-gymmap-chain]');
+      if (ch && $('[data-gymmap]')) { e.preventDefault(); e.stopPropagation(); var nm = ch.getAttribute('data-gymmap-chain'); setFilter(filter === nm ? '' : nm); root.scrollIntoView({ block: 'center', behavior: REDUCE ? 'auto' : 'smooth' }); return; }
+      var fo = e.target.closest && e.target.closest('[data-gymmap-focus]');
+      if (fo) { var li = fo.closest('li'); load(); var go = function () { if (!map) { setTimeout(go, 200); return; } var mk = marks.filter(function (m) { return Math.abs(m.d.lat - (+li.getAttribute('data-lat'))) < 1e-6 && Math.abs(m.d.lng - (+li.getAttribute('data-lng'))) < 1e-6; })[0]; if (mk) { if (!map.hasLayer(mk.m)) { filter = ''; apply(); } map.setView([mk.d.lat, mk.d.lng], 15); mk.m.openPopup(); } root.scrollIntoView({ block: 'center', behavior: REDUCE ? 'auto' : 'smooth' }); }; go(); return; }
+      if (e.target.closest && e.target.closest('[data-gymmap-all]')) { setFilter(''); if (map) map.setView([+root.getAttribute('data-lat') || 19.03, +root.getAttribute('data-lng') || -98.24], +root.getAttribute('data-zoom') || 12); return; }
+      if (e.target.closest && e.target.closest('[data-gymmap-near]')) {
+        e.preventDefault(); load();
+        var fail = function () { document.dispatchEvent(new CustomEvent('kx:open-dialog', { detail: { kind: 'sede', what: '' } })); };
+        if (!navigator.geolocation) { fail(); return; }
+        navigator.geolocation.getCurrentPosition(function (p) {
+          var go2 = function () { if (!map) { setTimeout(go2, 200); return; } filter = ''; apply(); var best = null, bd = 1e12; marks.forEach(function (m) { var dx = (m.d.lat - p.coords.latitude) * 111, dy = (m.d.lng - p.coords.longitude) * 105, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = m; } }); if (best) { map.setView([best.d.lat, best.d.lng], 14); best.m.openPopup(); } };
+          go2();
+        }, fail, { timeout: 8000 });
+      }
+    }, true);
+  }
+
   /* ---------- private circle (classes): everybody can preview; booking needs an active 4-week block ---------- */
   function initCircle() {
     var root = $('[data-circle]'); if (!root) return;
@@ -1193,17 +1262,23 @@
       var on = pills.filter(function (x) { return x.classList.contains('is-on'); })[0]; if (on && on.getAttribute('data-sport') !== 'all') on.click();
       paint();
     };
-    var fetchLive = function () {
-      var ep = root.getAttribute('data-endpoint'); if (!ep) return;
-      fetch(ep + (ep.indexOf('?') > -1 ? '&' : '?') + 'action=classes').then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok && j.classes && j.classes.length) rebuild(j.classes); }).catch(function () {});
+    var fetchLive = function () {       // the class list is only requested (and only served) for a signed-in customer with an active 4-week block
+      var ep = root.getAttribute('data-endpoint'), a0 = acct(); if (!ep || !member || !a0) return;
+      fetch(ep + (ep.indexOf('?') > -1 ? '&' : '?') + 'action=classes&cid=' + encodeURIComponent(a0.cid) + '&token=' + encodeURIComponent(a0.token)).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok && j.classes && j.classes.length) rebuild(j.classes); }).catch(function () {});
+    };
+    var fillStatic = function () {       // the theme's own cards live in a <template>: they only enter the page for a member
+      var g = $('[data-circle-grid]', root), t = $('[data-circle-tpl]', root); if (!g || !t || $('.circle__card', g)) return;
+      g.insertAdjacentHTML('beforeend', t.innerHTML); cards = $$('.circle__card', root);
+      var on = pills.filter(function (x) { return x.classList.contains('is-on'); })[0]; if (on && on.getAttribute('data-sport') !== 'all') on.click();
     };
     var paint = function () {
       root.classList.toggle('is-member', member); root.classList.toggle('is-locked', !member);
+      var bd = $('[data-circle-body]', root); if (bd) bd.hidden = !member; if (member) fillStatic();
       if (gate) gate.hidden = member; if (welcome) welcome.hidden = !member;
       cards.forEach(function (c) { var b = $('[data-circle-book]', c); if (b) { b.setAttribute('aria-disabled', member ? 'false' : 'true'); b.tabIndex = member ? 0 : -1; } });
     };
-    paint(); fetchLive(); document.addEventListener('kx:circle-refresh', fetchLive);
-    loadCredits(function (c) { member = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); paint(); });
+    paint(); document.addEventListener('kx:circle-refresh', fetchLive);
+    loadCredits(function (c) { member = !!(c && c.hasPlan && c.plan === 'block' && c.weeksLeft > 0); paint(); if (member) fetchLive(); });
     var pickSport = function (sp, hit) {
       var p0 = pills.filter(function (x) { return x.getAttribute('data-sport') === sp; })[0]; if (!p0) return;
       p0.click(); if (hit) { var c0 = cards.filter(function (c) { return !c.hidden; })[0]; if (c0) { c0.classList.add('is-hit'); setTimeout(function () { c0.classList.remove('is-hit'); }, 2600); var g0 = $('[data-circle-filters]', root); if (g0) setTimeout(function () { g0.scrollIntoView({ block: 'start', behavior: REDUCE ? 'auto' : 'smooth' }); }, 120); } }
@@ -3180,7 +3255,7 @@
   var run = function (fn) { try { fn(); } catch (e) { if (window.console) console.warn('[kulinaria] ' + (fn.name || 'init') + ' failed', e); } };
   document.addEventListener('DOMContentLoaded', function () {
     [bindIdentity, initWordmark, initSheets, initSitemapToggles, initSwipeDots, initLoader, initTheme, initWave, initParticles, initMenu, initCountdown, initSteps, initFunnel, initOnboarding, initPw, pullProfile, initReturning, initHomeBar, initOnbBanner, initMyWeek, initMyPause, initDishPanel, initAccountMenu, initClearCart, initLeads, initAccountHub, initDietChips, initFilters, initDropdowns, initProfileForm, initCart, initRefSave, applyProfile, initDietGate,
-      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initHeroDialog, initCircle, initFire, initTilt, initPeek].forEach(run);
+      initSplit, initReveal, initChrome, initScrollVars, initPointer, initRail, initVideos, initBand, initHeroCarousel, initHeroDialog, initCircle, initGymMap, initFire, initTilt, initPeek].forEach(run);
     document.documentElement.classList.add('motion-ready');
     window.addEventListener('load', function () { run(initWordmarkScan); });
   });

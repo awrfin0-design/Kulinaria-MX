@@ -39,6 +39,7 @@
     "cart": "Carrito",
     "cart_empty": "Tu carrito está vacío.",
     "cart_one": "1 producto en tu carrito.",
+    "cart_more": "y [n] más",
     "cart_many": "[n] productos en tu carrito.",
     "view_cart": "Ver carrito y pagar",
     "todo": "Completa tu perfil de alergias",
@@ -260,6 +261,8 @@
     "left": "Quedan [n] lugares",
     "no_pay": "Sin costo",
     "about": "Sobre esta clase",
+    "login_t": "Inicia sesión para ver las clases",
+    "login_s": "El calendario de clases es exclusivo para clientes con un bloque de 4 semanas activo. Entra con tu cuenta; si aún no tienes bloque, empieza uno y se desbloquea. Cada clase cuesta [p].",
     "lock_t": "Vista previa del círculo privado",
     "lock_s": "Las clases son exclusivas para clientes con un bloque de 4 semanas activo. Cada clase cuesta [p].",
     "lock_cta": "Empezar mi bloque",
@@ -489,9 +492,19 @@
     "reach": "Contactar a {{ name }}"
   },
   "kfw": {
+    "add": "Agregar al carrito",
+    "option": "Talla / opción",
+    "view": "Ver detalles",
     "sold_out": "Agotado",
     "sale": "Oferta",
     "from": "Desde"
+  },
+  "gymmap": {
+    "all": "Mostrar todas las sedes",
+    "request": "Solicitar entrega aquí",
+    "near_fail": "No pudimos ubicarte. Elige una sede en el mapa o cuéntanos tu zona.",
+    "approx": "Ubicación aproximada por zona",
+    "title": "Sedes en Puebla"
   },
   "dish": {
     "nutrition": "Información nutricional",
