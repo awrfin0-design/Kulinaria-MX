@@ -146,6 +146,7 @@ ok('a week whose cut-off has passed cannot be paused', pause({ mode: 'weeks', we
 ok('only Mondays can be paused', pause({ mode: 'weeks', weeks: ['2026-11-17'] }).ok === false);
 let pr = pause({ mode: 'weeks', weeks: ['2026-11-16'] });
 ok('pausing one week keeps the weeks left and pushes the end of the plan one week later', pr.ok && pr.weeksLeft === 4 && pr.endsOn === '2026-12-07' && pr.paused.join() === '2026-11-16', JSON.stringify(pr));
+ok('a pause is a signal: the team gets an e-mail and the customer a confirmation with the new end of the plan', mails.some((m) => /Pausa de entregas/.test(JSON.stringify(m)) && /a@b\.c/.test(JSON.stringify(m))) && mails.some((m) => /pausa quedó registrada/.test(JSON.stringify(m)) && /2026-12-07/.test(JSON.stringify(m))), mails.slice(-3).map((m) => JSON.stringify(m).slice(0, 120)).join(' | '));
 fn.rebuildDeliveries_(NOW);
 const rows7 = sheets.Entregas.rows.slice(1).filter((x) => x[1] === 'Ana Pérez').map((x) => x[0]);
 ok('Entregas: the paused Monday disappears and the extra week appears at the end', rows7.indexOf('2026-11-16') < 0 && rows7.indexOf('2026-12-07') >= 0, rows7.join());

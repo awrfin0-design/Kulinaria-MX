@@ -426,9 +426,21 @@ function pauseSet_(cid, token, p) {
     if (last > 1) sh.getRange(2, 1, last - 1, 5).clearContent();
     if (all.length) { sh.getRange(2, 3, all.length, 1).setNumberFormat('@'); sh.getRange(2, 1, all.length, 5).setValues(all); }
     try { rebuildDeliveries_(now); } catch (err) { /* reports must never block a pause */ }
-    var res = creditsFor_(cid, now); res.ok = true; return res;
+    var res = creditsFor_(cid, now); res.ok = true;
+    try { pauseNotify_(email, mode, weeks, res); } catch (errN) { /* a failed e-mail never blocks a pause */ }
+    return res;
   } finally { lock.releaseLock(); }
 }
+
+/** the signal: every pause (or resume) e-mails the team (ALERT_EMAILS) and confirms to the customer, with the weeks and the new end of the plan */
+function pauseNotify_(email, mode, weeks, res) {
+  var list = weeks.slice().sort().join(', '), end = res && res.endsOn ? String(res.endsOn) : '';
+  var what = mode === 'weeks' ? 'Pausa las semanas del ' + list : mode === 'from' ? 'Pausa indefinida desde el lunes ' + list + ' (hasta que reanude)' : 'Reanuda el lunes ' + list;
+  var owner = PropertiesService.getScriptProperties().getProperty('ALERT_EMAILS');
+  if (owner) MailApp.sendEmail({ to: owner, subject: 'Pausa de entregas · ' + email, htmlBody: '<p><b>' + email + '</b></p><p>' + what + '.</p>' + (end ? '<p>Su plan termina ahora el <b>' + end + '</b>.</p>' : '') + '<p>Se ve en la hoja <b>Pausas</b> y en <b>Entregas / Resumen</b> (clientes en pausa).</p>' });
+  if (email) MailApp.sendEmail({ to: email, subject: mode === 'resume' ? 'Kulinaria · reanudamos tus entregas' : 'Kulinaria · tu pausa quedó registrada', htmlBody: '<p>Hola,</p><p>' + what + '. Las semanas pausadas no se consumen: tu plan se recorre una semana por cada semana en pausa.</p>' + (end ? '<p>Tu plan termina ahora el <b>' + end + '</b>.</p>' : '') + '<p>Si algo no es correcto, responde a este correo.</p><p>Kulinaria MX</p>' });
+}
+
 function emailOfCid_(cid) {
   var ss = SpreadsheetApp.getActiveSpreadsheet(), a = ss.getSheetByName('Clientes'), b = ss.getSheetByName('Perfiles'), i, v;
   if (a && a.getLastRow() > 1) { v = a.getRange(2, 1, a.getLastRow() - 1, 6).getValues(); for (i = 0; i < v.length; i++) if (String(v[i][0]) === String(cid) && v[i][5]) return String(v[i][5]).toLowerCase(); }
